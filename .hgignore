@@ -1,0 +1,45 @@
+# use glob syntax.
+syntax: glob
+*.elc
+*.pyc
+*~
+*.obj
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*.vssscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.[Cc]ache
+*.ilk
+*.log
+*.lib
+*.sbr
+*.scc
+*.so
+*build
+[Bb]in
+[Dd]ebug*/
+obj/
+[Rr]elease*/
+_ReSharper*/
+[Tt]humbs.db
+[Tt]est[Rr]esult*
+[Bb]uild[Ll]og.*
+*.[Pp]ublish.xml
+*.resharper
+*.opensdf
+*.sdf
+ipch/
+x64/
+
+# switch to regexp syntax.
+syntax: regexp
+^\.pc/
