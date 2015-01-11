@@ -1,0 +1,1 @@
+add_subdirectory(poutreBase  ${TEMPORARY_DIRECTORY}/poutreBaseTests)
