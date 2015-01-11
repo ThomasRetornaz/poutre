@@ -2,8 +2,6 @@
 set(INTERPROCEDURAL_OPTIMIZATION_RELEASE)
 
 message(STATUS "host processor " ${CMAKE_HOST_SYSTEM_PROCESSOR} " target processor " ${CMAKE_SYSTEM_PROCESSOR})
-# Allow the developer to enable mmx support
-option(USE_SSE    "Enable SEE instructions,target processor must support it" ON)
 option(USE_SSE2   "Enable SEE2 instructions,target processor must support it" ON)
 #option(USE_SSE3   "Enable SEE3 instructions,target processor must support it" ON)
 
@@ -58,16 +56,14 @@ if(MSVC)
   #/GF pools strings as read-only.
 
   #TODO remove some flag not compatible with 64 bits
-  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Ox /Oi /Ob2 /Ot /Oy /GF /GL /D\"_SECURE_SCL=0\"")
+  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Ox /Oi /Ob2 /Ot /Oy /GF /GL")
   set(CMAKE_C_FLAGS_RELEASE   "${CMAKE_C_FLAGS_RELEASE} /Ox /Oi /Ob2 /Oy /GF /GL")
-  if(USE_SSE2)
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /arch:SSE2")
-    set(CMAKE_C_FLAGS_RELEASE   "${CMAKE_C_FLAGS_RELEASE} /arch:SSE2")
-  elseif(USE_SSE)
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /arch:SSE")
-    set(CMAKE_C_FLAGS_RELEASE   "${CMAKE_C_FLAGS_RELEASE} /arch:SSE")
-  endif()
-  
+  if(NOT CMAKE_CL_64) #default enable on x64 arch
+      if(USE_SSE2)
+        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /arch:SSE2")
+        set(CMAKE_C_FLAGS_RELEASE   "${CMAKE_C_FLAGS_RELEASE} /arch:SSE2")
+      endif()
+  endif()  
   #set(value_tmp ${CMAKE_CXX_FLAGS_RELEASE})
   #unset(CMAKE_CXX_FLAGS_RELEASE CACHE)
   #set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE} CACHE STRING "Release flags (overwritten) for CPP files")
@@ -75,6 +71,7 @@ if(MSVC)
   #message("Flags for MSVC ${CMAKE_CXX_FLAGS_RELEASE}")
   
   set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG")
+  set(CMAKE_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG")
   #unset(CMAKE_SHARED_LINKER_FLAGS_RELEASE CACHE)
   #set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${value_tmp}" CACHE STRING "Release flags (overwritten) for CPP files")
 
@@ -136,12 +133,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_C_FLAGS           "${CMAKE_C_FLAGS} -fPIC"          )
   endif()
   
-  if(USE_MMX)
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -mmmx")
-  endif()
-  if(USE_SEE)
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -msse")  
-  endif()
   if(USE_SEE2)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -msse2")
   endif()
