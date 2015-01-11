@@ -12,7 +12,6 @@ if(MSVC)
     set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS OFF)
   endif()
 endif()
-set_property(GLOBAL PROPERTY thirdpartiesdependencies)
 
 
 # --------------------------------------------------------------------------------
@@ -111,8 +110,15 @@ if(NOT POUTRE_BOOST_FROM_SYSTEM)
   add_files_to_python_packaging(FILES ${BoostFilesToInstall})
 endif()
 
+# jsoncpp
+add_subdirectory(jsoncpp)
+SET(JSONCPP_INCLUDE_DIR ${JSONCPP_INCLUDE_DIR} PARENT_SCOPE)
+
 # nt2
 add_subdirectory(nt2)
+SET(NT2_INCLUDE_DIR ${NT2_INCLUDE_DIR} PARENT_SCOPE)
+
+
 
 # Python libraries
 
