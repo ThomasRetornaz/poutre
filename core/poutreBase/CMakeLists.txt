@@ -1,6 +1,6 @@
 
 
-set(PoutreBaseSubdirectory ${POUTRE_CORE_DIR}/PoutreBase)
+set(PoutreBaseSubdirectory ${POUTRE_CORE_DIR}/poutreBase)
 
 #generate_library_version(${PoutreBaseSubdirectory}/src/current_configuration_generated.cpp)
 
@@ -44,30 +44,3 @@ install_POUTRE_targets(
   CONFIGURATION Release 
   HEADER_FILES ${PoutreBaseSRC}
   )
-
-# Test project
-set(PoutreBaseTestSubdirectory ${POUTRE_CORE_TEST_DIR}/PoutreBaseCoreTests)
-set(PoutreBaseTestSRC
-)
-
-# add_executable(PoutreBaseTests ${PoutreBaseTestSRC})
-# target_link_libraries(PoutreBaseTests PoutreBase ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
-# add_test(NAME PoutreBaseTests-1 
-         # COMMAND PoutreBaseTests)
-# set_property(TARGET PoutreBaseTests PROPERTY FOLDER "UnitTests/")
-# test_environment_setup(PoutreBaseTests-1)
-
-# set(PoutreBasePythonSubdirectory ${POUTRE_PYTHONEXT_DIR}/PoutreBasePython)
-# set(PoutreBasePythonSRC
-# )
-
-
-# add_python_library(PoutreBasePython "${PoutreBasePythonSRC}" "PoutreBase")
-# target_include_directories(PoutreBasePython 
-                           # PRIVATE ${PoutreBasePythonSubdirectory}/include)
-# add_to_python_packaging(PoutreBasePython)
-
-# add_test(NAME PoutreBaseTestsPython-1 
-         # COMMAND ${PYTHON_EXECUTABLE} ${PoutreBasePythonSubdirectory}/common_test.py $<TARGET_FILE_DIR:PoutreBasePython>)
-# test_environment_setup(PoutreBaseTestsPython-1)
-

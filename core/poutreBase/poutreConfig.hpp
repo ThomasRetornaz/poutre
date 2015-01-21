@@ -60,7 +60,31 @@ namespace poutre
 
 #endif
 
-}
+//to be moved
+#include "boost/format.hpp"
+#define POUTRE_RUNTIME_ERROR( MSG ) throw std::runtime_error(boost::format("Throw %s at %s(%lu)") % MSG % __FILE__ % __LINE__);
+#define POUTRE_CHECK( CONDITION, MSG )           \
+   {                                                        \
+      if ( !( CONDITION ) )                                 \
+      {                                                     \
+         POUTRE_RUNTIME_ERROR( MSG );               \
+      }                                                     \
+   }
+#ifdef _DEBUG   
+#define POUTRE_ASSERTCHECK( CONDITION, MSG ){                                                        \
+    if ( !( CONDITION ) )                                 \
+      {                                                     \
+#if defined(_MSC_VER)
+         __debugbreakpoint();               \
+#else		 
+#endif
+      }                                                     \
+   }
+#else
+#define POUTRE_ASSERTCHECK( CONDITION, MSG )
+#endif
+
+} //namespace
 
 #endif
 
