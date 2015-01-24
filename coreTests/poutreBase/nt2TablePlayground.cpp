@@ -14,7 +14,7 @@
 
 BOOST_AUTO_TEST_SUITE(playground)
 
-/*
+
 BOOST_AUTO_TEST_CASE(matrixdefault)
   {
 
@@ -37,5 +37,5 @@ BOOST_AUTO_TEST_CASE(matrix)
 
   NT2_DISPLAY(x);
   }
-*/
+
 BOOST_AUTO_TEST_SUITE_END()
