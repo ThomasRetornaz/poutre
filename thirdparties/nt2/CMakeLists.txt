@@ -2,21 +2,19 @@ cmake_minimum_required(VERSION 2.8)
 project(nt2Builder)
 include(ExternalProject)
 
-# find_package(Git)
-# if(NOT GIT_FOUND)
-    # message(FATAL_ERROR "Git not found")
-# endif()
-  
+find_package(Git)
+if(NOT GIT_FOUND)
+  message(FATAL_ERROR "Git not found")
+endif()
+
+if(GNUCXX)  
 set(nt2_PREFIX E:/programmation/nt2)
-#set(nt2_INSTALL_DIR E:/programmation/nt2)
-#set(nt2_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${nt2_INSTALL_DIR})
+else()
+set(nt2_PREFIX /home/thomas/nt2install)
+endif()
+
+
 #todo list include to install ?
-
-message("nt2_PREFIX='${nt2_PREFIX}'")
-message("nt2_INSTALL_DIR='${nt2_INSTALL_DIR}'")
-#message("nt2_CMAKE_ARGS='${nt2_CMAKE_ARGS}'")
-#message("GIT_EXECUTABLE='${GIT_EXECUTABLE}'")
-
 # ExternalProject_Add(nt2dep
   # PREFIX ${nt2_PREFIX}
   # GIT_REPOSITORY https://github.com/MetaScale/nt2.git
@@ -26,7 +24,10 @@ message("nt2_INSTALL_DIR='${nt2_INSTALL_DIR}'")
   # INSTALL_COMMAND "" 
 # ) #SET CONFIGURE_COMMAND, BUILD_COMMAND and INSTALL_COMMAND to "" compile nothing
 
-set(NT2_DIR ${nt2_PREFIX}/cmake)
+set(NT2_ROOT ${nt2_PREFIX})
+set(NT2_DIR ${nt2_PREFIX}/share/nt2/cmake)
+set(NT2_INCLUDE_ROOT ${nt2_PREFIX}/include)
+
 find_package(NT2 REQUIRED)
 set_property(TARGET nt2 PROPERTY FOLDER "Dependencies/")
 set_property(TARGET nt2_bench PROPERTY FOLDER "Dependencies/")

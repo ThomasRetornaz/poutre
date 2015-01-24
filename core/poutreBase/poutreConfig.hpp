@@ -1,6 +1,7 @@
 #ifndef POUTRE_CONFIG__HPP__
 #define POUTRE_CONFIG__HPP__
 
+#include "boost/format.hpp" //to be removed ?
 
 /*!@file
  * Common configuration definitions. This file should not depend on any other file.
@@ -19,7 +20,7 @@ namespace poutre
 
 #else
   #define poutreDeprecated __attribute__((deprecated))
-  #define poutreDeprecatedMSG(x) yayiDeprecated
+  #define poutreDeprecatedMSG(x) poutreDeprecated
 
   #if defined(__LP64__)
     #define POUTRE_64BITS
@@ -61,7 +62,6 @@ namespace poutre
 #endif
 
 //to be moved
-#include "boost/format.hpp"
 #define POUTRE_RUNTIME_ERROR( MSG ) throw std::runtime_error(boost::format("Throw %s at %s(%lu)") % MSG % __FILE__ % __LINE__);
 #define POUTRE_CHECK( CONDITION, MSG )           \
    {                                                        \
@@ -70,16 +70,23 @@ namespace poutre
          POUTRE_RUNTIME_ERROR( MSG );               \
       }                                                     \
    }
-#ifdef _DEBUG   
+
+#ifdef _DEBUG
+#if defined(_MSC_VER)
 #define POUTRE_ASSERTCHECK( CONDITION, MSG ){                                                        \
     if ( !( CONDITION ) )                                 \
       {                                                     \
-#if defined(_MSC_VER)
          __debugbreakpoint();               \
-#else		 
-#endif
       }                                                     \
    }
+#else
+#define POUTRE_ASSERTCHECK( CONDITION, MSG ){                                                        \
+    if ( !( CONDITION ) )                                 \
+      {                                                     \
+         __builtin_trap();               \
+      }                                                     \
+   }
+#endif
 #else
 #define POUTRE_ASSERTCHECK( CONDITION, MSG )
 #endif

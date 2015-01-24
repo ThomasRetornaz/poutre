@@ -1,6 +1,6 @@
 
 # Test project
-set(PoutreNeuralNetsTestSubdirectory ${POUTRE_CORE_TEST_DIR}/PoutreNeuralNets)
+set(PoutreNeuralNetsTestSubdirectory ${POUTRE_CORE_TEST_DIR}/poutreNeuralNets)
 set(PoutreNeuralNetsTestSRC
     ${PoutreNeuralNetsTestSubdirectory}/main.hpp
     ${PoutreNeuralNetsTestSubdirectory}/main.cpp

@@ -39,7 +39,7 @@ void TestClassA::Deserialize(Json::Value& root)
     const Json::Value& jsonarray = root.get("m_array",Json::Value(Json::arrayValue));
     m_array.clear();
     m_array.reserve(jsonarray.size());
-    for each (const Json::Value& val in jsonarray)
+    for (const auto& val: jsonarray)
       {
       m_array.push_back(val.asFloat());
       }
@@ -53,7 +53,7 @@ void TestClassA::Serialize(Json::Value& root)
   root["m_TestString"] = m_TestString;
   root["m_bTestBool"] = m_bTestBool;
   const Json::Value& array = root["m_array"];
-  for each (const float& var in m_array)
+  for (const auto& var: m_array)
     {
     root["m_array"].append(var).asFloat();
     }

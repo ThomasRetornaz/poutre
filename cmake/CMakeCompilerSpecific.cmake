@@ -1,10 +1,8 @@
 
-set(INTERPROCEDURAL_OPTIMIZATION_RELEASE)
-
+include(CheckCXXCompilerFlag)
 message(STATUS "host processor " ${CMAKE_HOST_SYSTEM_PROCESSOR} " target processor " ${CMAKE_SYSTEM_PROCESSOR})
 option(USE_SSE2   "Enable SEE2 instructions,target processor must support it" ON)
 #option(USE_SSE3   "Enable SEE3 instructions,target processor must support it" ON)
-
 
 ###### MSVC ######
 if(MSVC)
@@ -142,6 +140,16 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 
   set(CMAKE_CXX_FLAGS_RELEASE   "${CMAKE_CXX_FLAGS_RELEASE} -O3"  )
   set(CMAKE_C_FLAGS_RELEASE     "${CMAKE_C_FLAGS_RELEASE} -O3"    )
+
+  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+  CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+  if(COMPILER_SUPPORTS_CXX11)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+  elseif(COMPILER_SUPPORTS_CXX0X)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+  else()
+    message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+  endif()
 
   if(APPLE)
     set(CMAKE_OSX_ARCHITECTURES "i386;x86_64")

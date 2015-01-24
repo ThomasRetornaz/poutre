@@ -1,6 +1,6 @@
 
 # Test project
-set(PoutreBaseTestSubdirectory ${POUTRE_CORE_TEST_DIR}/PoutreBase)
+set(PoutreBaseTestSubdirectory ${POUTRE_CORE_TEST_DIR}/poutreBase)
 set(PoutreBaseTestSRC
     ${PoutreBaseTestSubdirectory}/main.hpp
     ${PoutreBaseTestSubdirectory}/main.cpp

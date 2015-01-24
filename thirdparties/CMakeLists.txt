@@ -107,7 +107,7 @@ if(NOT POUTRE_BOOST_FROM_SYSTEM)
     DESTINATION ${POUTRE_LIBRARIES_INSTALLATION_RELATIVE_PATH}
     COMPONENT core)
 
-  add_files_to_python_packaging(FILES ${BoostFilesToInstall})
+  #add_files_to_python_packaging(FILES ${BoostFilesToInstall})
 endif()
 
 # jsoncpp
