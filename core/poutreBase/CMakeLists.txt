@@ -9,8 +9,9 @@ set(PoutreBaseSRC
   ${PoutreBaseSubdirectory}/poutreConfig.hpp
   ${PoutreBaseSubdirectory}/poutreTypes.hpp
   ${PoutreBaseSubdirectory}/poutreJsonSerialization.hpp
-  ${PoutreBaseSubdirectory}/poutreJsonSerialization.cpp
+  ${PoutreBaseSubdirectory}/src/poutreJsonSerialization.cpp
   ${PoutreBaseSubdirectory}/poutreRegistrar.hpp
+  ${PoutreBaseSubdirectory}/poutreChronos.hpp
   ${PoutreBaseSubdirectory}/src/dummy.cpp
   # auto generated file
   #${PoutreBaseSubdirectory}/src/current_configuration_generated.cpp
@@ -21,7 +22,7 @@ target_include_directories(PoutreBase
   PRIVATE ${PoutreBaseSubdirectory}
   PRIVATE ${PoutreBaseSubdirectory}/include
   PRIVATE ${PoutreBaseSubdirectory}/src
-  PRIVATE ${JSONCPP_INCLUDE_DIR}
+  #PRIVATE ${JSONCPP_INCLUDE_DIR}
   )
 
 target_link_libraries(PoutreBase 
@@ -31,6 +32,8 @@ target_link_libraries(PoutreBase
   # PRIVATE ${Boost_THREAD_LIBRARY} 
   # PRIVATE ${Boost_SYSTEM_LIBRARY}
   PRIVATE jsoncpp
+  INTERFACE Eigen
+  INTERFACE BoostSimd
   )
 set_target_properties(PoutreBase PROPERTIES FOLDER "Core/")
 

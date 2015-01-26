@@ -13,8 +13,8 @@ set(jsoncppSRC
 
 add_library(jsoncpp ${jsoncppSRC} ${jsoncppInclude})
 target_include_directories(jsoncpp
-                           PRIVATE ${jsoncppSubdirectory}
-                           PRIVATE ${jsoncppSubdirectory}/json
+                           PUBLIC ${jsoncppSubdirectory}
+                           PUBLIC ${jsoncppSubdirectory}/json
                            )
 set_target_properties(jsoncpp PROPERTIES FOLDER "Dependencies/")		
 IF(BUILD_SHARED_LIBS)
@@ -25,5 +25,5 @@ ENDIF(BUILD_SHARED_LIBS)
   # TARGET jsoncpp 
   # CONFIGURATION Release 
   # HEADER_FILES ${jsoncppSRC})
-set(JSONCPP_INCLUDE_DIR  ${jsoncppSubdirectory} PARENT_SCOPE)
+#set(JSONCPP_INCLUDE_DIR  ${jsoncppSubdirectory} PARENT_SCOPE)
   

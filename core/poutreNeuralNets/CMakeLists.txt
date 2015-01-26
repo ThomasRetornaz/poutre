@@ -5,6 +5,7 @@ set(PoutreNNSubdirectory ${POUTRE_CORE_DIR}/poutreNeuralNets)
 #generate_library_version(${PoutreNNSubdirectory}/src/current_configuration_generated.cpp)
 
 set(PoutreNeuralNetsSRC
+  ${PoutreNNSubdirectory}/poutreNeuralNets.hpp
   ${PoutreNNSubdirectory}/src/dummy.cpp
   # auto generated file
   #${PoutreNNSubdirectory}/src/current_configuration_generated.cpp
@@ -13,9 +14,7 @@ set(PoutreNeuralNetsSRC
 add_library(PoutreNeuralNets ${PoutreNeuralNetsSRC})
 target_include_directories(PoutreNeuralNets 
   PRIVATE ${PoutreNNSubdirectory}
-  PRIVATE ${PoutreNNSubdirectory}/include
-  PRIVATE ${PoutreNNSubdirectory}/src
-  PRIVATE ${PoutreBase}
+  PUBLIC ${PoutreNNSubdirectory}/include
   PRIVATE ${JSONCPP_INCLUDE_DIR}
   )
 
@@ -26,6 +25,8 @@ target_link_libraries(PoutreNeuralNets
   # PRIVATE ${Boost_THREAD_LIBRARY} 
   # PRIVATE ${Boost_SYSTEM_LIBRARY}
   PRIVATE jsoncpp
+  INTERFACE Eigen
+  INTERFACE BoostSimd
   PoutreBase 
   )
 set_target_properties(PoutreNeuralNets PROPERTIES FOLDER "Core/")

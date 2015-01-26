@@ -29,7 +29,7 @@ if(UNIX AND NOT APPLE AND NOT POUTRE_BOOST_FROM_SYSTEM)
 endif()
 
 set(Boost_ADDITIONAL_VERSIONS   
-    "1.54" "1.54.0" "1.55" "1.55.0" "1.56" "1.56.0")
+    "1.56" "1.56.0" "1.57" "1.57.0" )
 # use of the cmake special package
 
 # disable auto link
@@ -60,7 +60,7 @@ else()
 endif()
 set(Boost_NO_BOOST_CMAKE ON)
 
-set(POUTRE_boost_version_minimal 1.54)
+set(POUTRE_boost_version_minimal 1.56)
 
 find_package(Boost ${POUTRE_boost_version_minimal}
              REQUIRED 
@@ -112,11 +112,18 @@ endif()
 
 # jsoncpp
 add_subdirectory(jsoncpp)
-SET(JSONCPP_INCLUDE_DIR ${JSONCPP_INCLUDE_DIR} PARENT_SCOPE)
+#SET(JSONCPP_INCLUDE_DIR ${JSONCPP_INCLUDE_DIR} PARENT_SCOPE)
 
-# nt2
-add_subdirectory(nt2)
-SET(NT2_INCLUDE_DIR ${NT2_INCLUDE_DIR} PARENT_SCOPE)
+# nt2 unusable for the moment wait new release 
+# add_subdirectory(nt2)
+# SET(NT2_INCLUDE_DIR ${NT2_INCLUDE_DIR} PARENT_SCOPE)
+# todo add boost::simd here
+
+# eigen
+add_subdirectory(eigen)
+
+# boostsimd
+add_subdirectory(boostsimd)
 
 
 

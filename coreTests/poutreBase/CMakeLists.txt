@@ -4,7 +4,11 @@ set(PoutreBaseTestSubdirectory ${POUTRE_CORE_TEST_DIR}/poutreBase)
 set(PoutreBaseTestSRC
     ${PoutreBaseTestSubdirectory}/main.hpp
     ${PoutreBaseTestSubdirectory}/main.cpp
-    ${PoutreBaseTestSubdirectory}/nt2TablePlayground.cpp
+	#dummy tests to validate proper import of third parties dependencies
+    #${PoutreBaseTestSubdirectory}/nt2TablePlayground.cpp
+	#${PoutreBaseTestSubdirectory}/eigenCleanImport.cpp
+	#${PoutreBaseTestSubdirectory}/boostSimdCleanImport.cpp
+	${PoutreBaseTestSubdirectory}/chronos.cpp
     ${PoutreBaseTestSubdirectory}/jsonSerialize.cpp
     ${PoutreBaseTestSubdirectory}/registrar.cpp
 )
@@ -15,9 +19,11 @@ set_target_properties(PoutreBaseTests PROPERTIES
                       FOLDER "Core/")
 
 target_link_libraries(PoutreBaseTests 
-    PoutreBase
-    jsoncpp	
-    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    PRIVATE PoutreBase
+	PRIVATE jsoncpp
+	INTERFACE Eigen
+	INTERFACE BoostSimd
+    PRIVATE ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 	
 add_test(NAME PoutreBaseTests-1 

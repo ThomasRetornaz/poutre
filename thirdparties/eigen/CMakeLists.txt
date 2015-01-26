@@ -1,0 +1,47 @@
+cmake_minimum_required(VERSION 3.0)
+#project(Eigen)
+#http://eigen.tuxfamily.org/index.php?title=Main_Page
+message("Create ExternalProject Eigen has thirdpartie lib")
+include(ExternalProject)
+
+# clone approach
+# find_package(Hg REQUIRED)
+# ExternalProject_Add(Eigendep
+  # HG_REPOSITORY https://bitbucket.org/eigen/eigen/
+  # HG_TAG 3.2
+  # PREFIX ${CMAKE_CURRENT_BINARY_DIR}
+  # CONFIGURE_COMMAND ""
+  # BUILD_COMMAND ""
+  # INSTALL_COMMAND "" 
+  # ) #SET CONFIGURE_COMMAND, BUILD_COMMAND and INSTALL_COMMAND to "" compile nothing
+
+# archive approach
+ExternalProject_Add(Eigendep #see http://www.cmake.org/cmake/help/v3.0/module/ExternalProject.html
+  URL http://bitbucket.org/eigen/eigen/get/3.2.4.zip
+  PREFIX ${CMAKE_CURRENT_BINARY_DIR}
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ""
+  INSTALL_COMMAND "" 
+  ) #SET CONFIGURE_COMMAND, BUILD_COMMAND and INSTALL_COMMAND to "" compile nothing
+  
+  
+add_library(Eigen INTERFACE)
+target_include_directories(Eigen INTERFACE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/src/Eigendep> #we can do better
+)
+#D:\build\poutrebuildmsvc2013\thirdparties\eigen\src\Eigendep\Eigen
+
+set_target_properties(Eigendep PROPERTIES FOLDER "Dependencies/")	
+#set_target_properties(Eigen PROPERTIES FOLDER "Dependencies/")	
+
+#think about this later
+# install(TARGETS Eigen EXPORT eigenExport)
+# install(EXPORT eigenExport NAMESPACE Upstream::
+  # DESTINATION lib/cmake/Eigen
+# )
+# install(FILES
+    # ${CMAKE_CURRENT_SOURCE_DIR}/src/eigen.h
+    # ${CMAKE_CURRENT_SOURCE_DIR}/src/vector.h
+    # ${CMAKE_CURRENT_SOURCE_DIR}/src/matrix.h
+  # DESTINATION include/Eigen
+# )
