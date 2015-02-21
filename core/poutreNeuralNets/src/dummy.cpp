@@ -1,7 +1,11 @@
 #include <iostream>
 #include <poutreNeuralNets/poutreNeuralNets.hpp>
 
-namespace
+
+namespace poutre
   {
-  size_t a = 0;
+  void dummy(void)
+    {
+    size_t a = 0;
+    }
   }

@@ -1,8 +1,6 @@
 #ifndef POUTRE_CONFIG__HPP__
 #define POUTRE_CONFIG__HPP__
 
-#include "boost/format.hpp" //to be removed ?
-
 /*!@file
  * Common configuration definitions. This file should not depend on any other file.
  */
@@ -59,36 +57,6 @@ namespace poutre
 #		error You should activate the exception handling for PROJECT_NAME__ to make it run correcly
 #	endif
 
-#endif
-
-//to be moved
-#define POUTRE_RUNTIME_ERROR( MSG ) throw std::runtime_error(boost::format("Throw %s at %s(%lu)") % MSG % __FILE__ % __LINE__);
-#define POUTRE_CHECK( CONDITION, MSG )           \
-   {                                                        \
-      if ( !( CONDITION ) )                                 \
-      {                                                     \
-         POUTRE_RUNTIME_ERROR( MSG );               \
-      }                                                     \
-   }
-
-#ifdef _DEBUG
-#if defined(_MSC_VER)
-#define POUTRE_ASSERTCHECK( CONDITION, MSG ){                                                        \
-    if ( !( CONDITION ) )                                 \
-      {                                                     \
-         __debugbreakpoint();               \
-      }                                                     \
-   }
-#else
-#define POUTRE_ASSERTCHECK( CONDITION, MSG ){                                                        \
-    if ( !( CONDITION ) )                                 \
-      {                                                     \
-         __builtin_trap();               \
-      }                                                     \
-   }
-#endif
-#else
-#define POUTRE_ASSERTCHECK( CONDITION, MSG )
 #endif
 
 } //namespace

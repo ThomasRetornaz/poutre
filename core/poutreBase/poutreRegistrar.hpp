@@ -6,6 +6,10 @@
 #include <poutreBase/poutreBase.hpp>
 #endif
 
+#ifndef POUTRE_TRACE__HPP__
+#include <poutreBase/poutreTrace.hpp>
+#endif
+
 #include <unordered_map>
 #include <string>
 #include <functional>
@@ -22,7 +26,7 @@ namespace poutre
   class Registrar
     {
     public:
-      typedef std::unordered_map< std::string, std::function<Interface*(void)>> KeyFactoryMap;
+      using  KeyFactoryMap = std::unordered_map< std::string, std::function<Interface*(void)>>;
       //typedef std::unordered_map< std::string, std::function<std::unique_ptr<Interface>(void)>> KeyFactoryMap;
       static Registrar& getInstance()
         {
@@ -40,7 +44,7 @@ namespace poutre
       void Register(const std::string& key, std::function<Interface*(void)> ImplFactoryFunction)
         {
         auto it = m_keyfactory_map.find(key);
-        if (it != m_keyfactory_map.end()) throw(std::runtime_error("Registrar::Add key already used"));
+        if (it != m_keyfactory_map.end()) POUTRE_RUNTIME_ERROR("Registrar::Add key already used");
         m_keyfactory_map[key] = ImplFactoryFunction;
         }
     };

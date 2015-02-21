@@ -7,10 +7,11 @@ set(PoutreBaseTestSRC
 	#dummy tests to validate proper import of third parties dependencies
     #${PoutreBaseTestSubdirectory}/nt2TablePlayground.cpp
 	#${PoutreBaseTestSubdirectory}/eigenCleanImport.cpp
-	#${PoutreBaseTestSubdirectory}/boostSimdCleanImport.cpp
+	${PoutreBaseTestSubdirectory}/boostSimdCleanImport.cpp
 	${PoutreBaseTestSubdirectory}/chronos.cpp
     ${PoutreBaseTestSubdirectory}/jsonSerialize.cpp
     ${PoutreBaseTestSubdirectory}/registrar.cpp
+	${PoutreBaseTestSubdirectory}/trace.cpp
 )
 
 add_executable(PoutreBaseTests ${PoutreBaseTestSRC})

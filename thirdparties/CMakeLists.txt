@@ -14,6 +14,7 @@ if(MSVC)
 endif()
 
 
+
 # --------------------------------------------------------------------------------
 # boost
 if(NOT BOOST_ROOT)
@@ -29,7 +30,7 @@ if(UNIX AND NOT APPLE AND NOT POUTRE_BOOST_FROM_SYSTEM)
 endif()
 
 set(Boost_ADDITIONAL_VERSIONS   
-    "1.56" "1.56.0" "1.57" "1.57.0" )
+    "1.57" "1.57.0" )
 # use of the cmake special package
 
 # disable auto link
@@ -60,11 +61,21 @@ else()
 endif()
 set(Boost_NO_BOOST_CMAKE ON)
 
-set(POUTRE_boost_version_minimal 1.56)
+set(POUTRE_boost_version_minimal 1.57)
 
 find_package(Boost ${POUTRE_boost_version_minimal}
              REQUIRED 
-             COMPONENTS date_time filesystem system thread regex unit_test_framework python graph)
+             COMPONENTS 
+						#date_time 
+						#filesystem 
+						system 
+						thread 
+						regex 
+						unit_test_framework 
+						python 
+						graph 
+						log
+						log_setup)
 set(Boost_INCLUDE_DIRS ${Boost_INCLUDE_DIRS} PARENT_SCOPE)
 set(Boost_LIBRARY_DIRS ${Boost_LIBRARY_DIRS} PARENT_SCOPE)
 set(Boost_VERSION      ${Boost_VERSION}      PARENT_SCOPE)
@@ -76,24 +87,28 @@ set(_POUTRE_current_boost_version  ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}
 set(BoostFilesToInstall
   ${Boost_PYTHON_LIBRARY_RELEASE}
   ${Boost_SYSTEM_LIBRARY_RELEASE}
-  #${Boost_GRAPH_LIBRARY_RELEASE}
-  #${Boost_REGEX_LIBRARY_RELEASE}
-  ${Boost_DATE_TIME_LIBRARY_RELEASE}
+  ${Boost_GRAPH_LIBRARY_RELEASE}  
+  #${Boost_DATE_TIME_LIBRARY_RELEASE}
   ${Boost_THREAD_LIBRARY_RELEASE}
-  ${Boost_FILESYSTEM_LIBRARY_RELEASE}
+  #${Boost_FILESYSTEM_LIBRARY_RELEASE}
   ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY_RELEASE}
+  ${Boost_REGEX_LIBRARY_RELEASE}
+  ${Boost_LOG_LIBRARY_RELEASE}  
+  ${Boost_LOG_SETUP_LIBRARY_RELEASE}  
   )
 set(BoostFilesToInstall ${BoostFilesToInstall} PARENT_SCOPE)
 
 # to avoid a change in behaviour introduced between cmake 2.8.7 and 2.8.11
-set(Boost_DATE_TIME_LIBRARY           ${Boost_DATE_TIME_LIBRARY}            PARENT_SCOPE)
-set(Boost_FILESYSTEM_LIBRARY          ${Boost_FILESYSTEM_LIBRARY}           PARENT_SCOPE)
+#set(Boost_DATE_TIME_LIBRARY           ${Boost_DATE_TIME_LIBRARY}            PARENT_SCOPE)
+#set(Boost_FILESYSTEM_LIBRARY          ${Boost_FILESYSTEM_LIBRARY}           PARENT_SCOPE)
 set(Boost_SYSTEM_LIBRARY              ${Boost_SYSTEM_LIBRARY}               PARENT_SCOPE)
 set(Boost_THREAD_LIBRARY              ${Boost_THREAD_LIBRARY}               PARENT_SCOPE)
-#set(Boost_REGEX_LIBRARY               ${Boost_REGEX_LIBRARY}                PARENT_SCOPE)
+set(Boost_REGEX_LIBRARY               ${Boost_REGEX_LIBRARY}                PARENT_SCOPE)
 set(Boost_UNIT_TEST_FRAMEWORK_LIBRARY ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}  PARENT_SCOPE)
 set(Boost_PYTHON_LIBRARY              ${Boost_PYTHON_LIBRARY}               PARENT_SCOPE)
-#set(Boost_GRAPH_LIBRARY               ${Boost_GRAPH_LIBRARY}                PARENT_SCOPE)
+set(Boost_GRAPH_LIBRARY               ${Boost_GRAPH_LIBRARY}                PARENT_SCOPE)
+set(Boost_LOG_LIBRARY                 ${Boost_LOG_LIBRARY}                  PARENT_SCOPE)
+set(Boost_LOG_SETUP_LIBRARY           ${Boost_LOG_SETUP_LIBRARY}                PARENT_SCOPE)
 
 message(STATUS "Boost library found in " ${Boost_LIBRARY_DIRS})
 message(STATUS "Boost major.minor.subminor=${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_SUBMINOR_VERSION}")

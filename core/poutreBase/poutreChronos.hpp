@@ -15,9 +15,9 @@ namespace poutre
   class /*BASE_API*/ Timer
     {
     public:
-      typedef std::chrono::high_resolution_clock high_resolution_clock;
-      typedef std::chrono::duration<float,std::milli> float_milliseconds; //switch to other duration through template<rep,duration> ?
-      typedef float_milliseconds::rep timerep;
+      using  high_resolution_clock = std::chrono::high_resolution_clock;
+      using  float_milliseconds = std::chrono::duration<float, std::milli>; //switch to other duration through template<rep,duration> ?
+      using  timerep = float_milliseconds::rep; //todo use decltype(auto)
       Timer(void) :m_start(), m_accu(0), m_nbiter(0)
         {
         }

@@ -1,8 +1,6 @@
 
 include(CheckCXXCompilerFlag)
 message(STATUS "host processor " ${CMAKE_HOST_SYSTEM_PROCESSOR} " target processor " ${CMAKE_SYSTEM_PROCESSOR})
-option(USE_SSE2   "Enable SEE2 instructions,target processor must support it" ON)
-#option(USE_SSE3   "Enable SEE3 instructions,target processor must support it" ON)
 
 ###### MSVC ######
 if(MSVC)
@@ -36,7 +34,6 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /bigobj")
     message(STATUS "- MSVC: Enabled extended object-support for debug-compiles")
 
-    set(USE_SSE OFF)
   endif()
 
   #64 bits only ?
@@ -56,12 +53,7 @@ if(MSVC)
   #TODO remove some flag not compatible with 64 bits
   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Ox /Oi /Ob2 /Ot /Oy /GF /GL")
   set(CMAKE_C_FLAGS_RELEASE   "${CMAKE_C_FLAGS_RELEASE} /Ox /Oi /Ob2 /Oy /GF /GL")
-  if(NOT CMAKE_CL_64) #default enable on x64 arch
-      if(USE_SSE2)
-        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /arch:SSE2")
-        set(CMAKE_C_FLAGS_RELEASE   "${CMAKE_C_FLAGS_RELEASE} /arch:SSE2")
-      endif()
-  endif()  
+
   #set(value_tmp ${CMAKE_CXX_FLAGS_RELEASE})
   #unset(CMAKE_CXX_FLAGS_RELEASE CACHE)
   #set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE} CACHE STRING "Release flags (overwritten) for CPP files")
@@ -102,7 +94,7 @@ if(MSVC)
   
   
   #This option is to enable the /MP switch for Visual Studio 2005 and above compilers
-  OPTION(WIN32_USE_MP "Set to ON to build with the /MP option (Visual Studio 2005 and above)." OFF)
+  OPTION(WIN32_USE_MP "Set to ON to build with the /MP option (Visual Studio 2005 and above)." ON)
   MARK_AS_ADVANCED(WIN32_USE_MP)
   if(WIN32_USE_MP)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
@@ -131,13 +123,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_C_FLAGS           "${CMAKE_C_FLAGS} -fPIC"          )
   endif()
   
-  if(USE_SEE2)
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -msse2")
-  endif()
-  if(USE_SEE3)
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -msse3")
-  endif()
-
   set(CMAKE_CXX_FLAGS_RELEASE   "${CMAKE_CXX_FLAGS_RELEASE} -O3"  )
   set(CMAKE_C_FLAGS_RELEASE     "${CMAKE_C_FLAGS_RELEASE} -O3"    )
 

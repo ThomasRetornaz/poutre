@@ -19,6 +19,7 @@
 
 namespace poutre
   {
+  BASE_API void dummy(void);
 
   }
 #endif
