@@ -29,16 +29,13 @@ target_include_directories(PoutreBase
   )
 
 target_link_libraries(PoutreBase 
-  # PRIVATE ${Boost_GRAPH_LIBRARY} 
-  # PRIVATE ${Boost_DATE_TIME_LIBRARY} 
-  # PRIVATE ${Boost_REGEX_LIBRARY} 
-  PRIVATE ${Boost_THREAD_LIBRARY} 
-  PRIVATE ${Boost_SYSTEM_LIBRARY} 
-  PRIVATE ${Boost_LOG_LIBRARY}
-  PRIVATE ${Boost_LOG_SETUP_LIBRARY}
-  PRIVATE jsoncpp
-  INTERFACE Eigen
-  INTERFACE BoostSimd
+  PUBLIC ${Boost_THREAD_LIBRARY}  
+  PUBLIC ${Boost_SYSTEM_LIBRARY} 
+  PUBLIC ${Boost_LOG_LIBRARY}
+  PUBLIC ${Boost_LOG_SETUP_LIBRARY}
+  PUBLIC jsoncpp 
+  INTERFACE Eigen  
+  INTERFACE BoostSimd 
   )
 set_target_properties(PoutreBase PROPERTIES FOLDER "Core/")
 #force custom target before start
@@ -48,6 +45,7 @@ add_dependencies(PoutreBase Eigendep)
 IF(BUILD_SHARED_LIBS)
   SET_TARGET_PROPERTIES(PoutreBase PROPERTIES COMPILE_FLAGS -DJSON_DLL)
   SET_TARGET_PROPERTIES(PoutreBase PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DLL) #FIXME not true should be linked with boost
+  SET_TARGET_PROPERTIES(PoutreBase PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DYN_LINK) #FIXME not true should be linked with boost
 ENDIF(BUILD_SHARED_LIBS)
 
 

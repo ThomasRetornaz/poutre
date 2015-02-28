@@ -20,12 +20,21 @@ set_target_properties(PoutreBaseTests PROPERTIES
                       FOLDER "Core/")
 
 target_link_libraries(PoutreBaseTests 
-    PRIVATE PoutreBase
-	PRIVATE jsoncpp
-	INTERFACE Eigen
-	INTERFACE BoostSimd
-    PRIVATE ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+	INTERFACE Eigen 
+	INTERFACE BoostSimd 
+    PRIVATE ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}  
+	# ${Boost_THREAD_LIBRARY} 
+	# ${Boost_SYSTEM_LIBRARY} 
+	# ${Boost_LOG_LIBRARY}
+	# ${Boost_LOG_SETUP_LIBRARY}
+	PUBLIC PoutreBase
 )
+
+IF(BUILD_SHARED_LIBS)
+  #SET_TARGET_PROPERTIES(PoutreBaseTests PROPERTIES COMPILE_FLAGS -DJSON_DLL)
+  SET_TARGET_PROPERTIES(PoutreBaseTests PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DLL) #FIXME not true should be linked with boost
+  SET_TARGET_PROPERTIES(PoutreBaseTests PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DYN_LINK) #FIXME not true should be linked with boost
+ENDIF(BUILD_SHARED_LIBS)
 	
 add_test(NAME PoutreBaseTests-1 
          COMMAND PoutreBaseTests)
