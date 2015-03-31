@@ -11,51 +11,52 @@
 
 namespace poutre
   {
-  
+
   class /*BASE_API*/ Timer
     {
     public:
       using  high_resolution_clock = std::chrono::high_resolution_clock;
-      using  float_milliseconds = std::chrono::duration<float, std::milli>; //switch to other duration through template<rep,duration> ?
+      using  float_milliseconds = std::chrono::duration < float, std::milli > ; //switch to other duration through template<rep,duration> ?
       using  timerep = float_milliseconds::rep; //todo use decltype(auto)
       Timer(void) :m_start(), m_accu(0), m_nbiter(0)
         {
         }
-      ~Timer(void)
+      ~Timer(void) NOEXCEPT
         {
         }
-      void Start()
+        void Start( ) NOEXCEPT
         {
         m_nbiter++;
         m_start = high_resolution_clock::now();
         }
-      void Stop()
-        {
-        m_accu += std::chrono::duration_cast<float_milliseconds>(high_resolution_clock::now() - m_start).count();
-        }
+          void Stop( ) NOEXCEPT
+      {
+      m_accu += std::chrono::duration_cast<float_milliseconds>(high_resolution_clock::now() - m_start).count();
+      }
 
-      const timerep GetCumulativeTime() const
-        {
-        return m_accu;
-        }
+        const timerep GetCumulativeTime( ) const NOEXCEPT
+      {
+      return m_accu;
+      }
 
-      const std::size_t NbIter() const
-        {
-        return m_nbiter;
-        }
+        const std::size_t NbIter( ) const NOEXCEPT
+      {
+      return m_nbiter;
+      }
 
-      const timerep GetMeanTime() const
-        {
-        if (m_nbiter == 0) { return static_cast<timerep>(0); }
-        return m_accu / static_cast<timerep>(m_nbiter);
-        }
+        const timerep GetMeanTime( ) const NOEXCEPT
+      {
+      if (m_nbiter == 0) { return static_cast<timerep>(0); }
+      return m_accu / static_cast<timerep>(m_nbiter);
+      }
 
-      const std::string to_str() const
-        {
-        std::stringstream sstr;
-        sstr << "Cumulative time  in ms: " << GetCumulativeTime() << "\n Nb iter " << m_nbiter << "\n Mean time in ms" << GetMeanTime();
-        return sstr.str();
-        }
+        const std::string to_str( ) const NOEXCEPT
+      {
+      std::stringstream sstr;
+      sstr << "Cumulative time  in ms: " << GetCumulativeTime() << "\n Nb iter " << m_nbiter << "\n Mean time in ms" << GetMeanTime();
+      return sstr.str();
+      }
+
     private:
       friend std::ostream & operator<<(std::ostream &os, Timer& timer);
       std::chrono::high_resolution_clock::time_point m_start;
@@ -65,9 +66,9 @@ namespace poutre
 
 
   std::ostream & operator<<(std::ostream &os, Timer& timer)
-    {      
-     os << timer.to_str();
-     return os;
+    {
+    os << timer.to_str();
+    return os;
     }
 
   //@todo think about conccurrency issues

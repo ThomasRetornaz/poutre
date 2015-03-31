@@ -4,34 +4,60 @@ set(PoutreIPSubdirectory ${POUTRE_CORE_DIR}/poutreImageProcessing)
 
 #generate_library_version(${PoutreNNSubdirectory}/src/current_configuration_generated.cpp)
 
-set(PoutreIPSRC
-  ${PoutreIPSubdirectory}/src/dummy.cpp
+set(PoutreIPSRC_DETAILS
+  ${PoutreIPSubdirectory}/core/include/poutreImageProcessingIterator.hpp
+  ${PoutreIPSubdirectory}/core/include/poutreImageProcessingContainer.hpp
+
+  ${PoutreIPSubdirectory}/core/include/poutreImageProcessingUnaryOp.hpp
+  ${PoutreIPSubdirectory}/core/include/poutreImageProcessingBinaryOp.hpp
+  ${PoutreIPSubdirectory}/core/include/poutreImageProcessingTernaryOp.hpp
+  ${PoutreIPSubdirectory}/core/include/poutreImageProcessingQuaternaryOp.hpp
+  )
+
+set(PoutreIPSRC_PUBLICHEADERS  
+  ${PoutreIPSubdirectory}/poutreImageProcessing.hpp
+  ${PoutreIPSubdirectory}/core/poutreImageProcessingInterface.hpp
+  ${PoutreIPSubdirectory}/core/poutreImageProcessingType.hpp
+	)
+
+set(PoutreIPSRC_CPP
+  #${PoutreIPSubdirectory}/core/src/dummy.cpp
+  ${PoutreIPSubdirectory}/core/src/poutreImageProcessingType.cpp
+  ${PoutreIPSubdirectory}/core/src/poutreImageProcessingContainer.cpp
+  ${PoutreIPSubdirectory}/core/src/poutreImageProcessingInterface.cpp
   # auto generated file
-  #${PoutreIPSubdirectory}/src/current_configuration_generated.cpp
+  #${PoutreIPSubdirectory}/src/current_configuration_generated.cpp   
   )
+source_group(details FILES ${PoutreIPSRC_DETAILS})
+source_group(src FILES ${PoutreIPSRC_CPP})
+source_group(header FILES ${PoutreIPSRC_PUBLICHEADERS})
 
-add_library(PoutreNeuralNets ${PoutreNeuralNetsSRC})
-target_include_directories(PoutreNeuralNets 
-  PRIVATE ${PoutreIPSubdirectory}
-  PRIVATE ${PoutreIPSubdirectory}/include
-  PRIVATE ${PoutreIPSubdirectory}/src
-  PRIVATE ${PoutreBase}
-  PRIVATE ${JSONCPP_INCLUDE_DIR}
-  )
+set(PoutreIPSRC
+	${PoutreIPSRC_DETAILS}
+	${PoutreIPSRC_CPP}
+	${PoutreIPSRC_PUBLICHEADERS}
+	)
 
-target_link_libraries(PoutreImageProcessing
-  # PRIVATE ${Boost_GRAPH_LIBRARY} 
-  # PRIVATE ${Boost_DATE_TIME_LIBRARY} 
-  # PRIVATE ${Boost_REGEX_LIBRARY} 
-  # PRIVATE ${Boost_THREAD_LIBRARY} 
-  # PRIVATE ${Boost_SYSTEM_LIBRARY}
-  PRIVATE jsoncpp
-  PoutreBase 
+add_library(PoutreImageProcessing ${PoutreIPSRC})
+# target_include_directories(PoutreImageProcessing 
+  # PRIVATE ${PoutreIPSubdirectory}
+  # PRIVATE ${PoutreIPSubdirectory}/core
+  # PRIVATE ${PoutreBase}
+  # PRIVATE ${JSONCPP_INCLUDE_DIR}
+  # )
+
+target_link_libraries(PoutreImageProcessing 
+  PUBLIC jsoncpp 
+  #INTERFACE Eigen  
+  INTERFACE BoostSimd 
+  PUBLIC   PoutreBase 
   )
 set_target_properties(PoutreImageProcessing PROPERTIES FOLDER "Core/")
 
 IF(BUILD_SHARED_LIBS)
-  SET_TARGET_PROPERTIES(PoutreImageProcessing PROPERTIES COMPILE_FLAGS -DJSON_DLL)
+  SET_TARGET_PROPERTIES(PoutreBase PROPERTIES COMPILE_FLAGS -DJSON_DLL)
+  SET_TARGET_PROPERTIES(PoutreBase PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DLL) #FIXME not true should be linked with boost
+  SET_TARGET_PROPERTIES(PoutreBase PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DYN_LINK) #FIXME not true should be linked with boost
 ENDIF(BUILD_SHARED_LIBS)
 
 

@@ -10,37 +10,25 @@
 
 namespace poutre
   {
-  typedef bool                    pbool;
+  using  pbool = bool;
+  using  pUINT8 = unsigned char;
+  using  pINT8 = signed char;
+  using  pUINT32 = uint32_t;
+  using  pINT32 = int32_t;
+  using  pFLOAT = float;
+  //using  pDOUBLE = double;
+  using  pINT64 = int64_t;
+  using  pUINT64 = uint64_t;
 
-  typedef unsigned char           pUINT8;
-  typedef signed char             pINT8;
-  typedef unsigned short int      pUINT16;
-  typedef signed short int        pINT16;
-  typedef uint32_t                pUINT32;
-  typedef int32_t                 pINT32;
-  typedef float                   pFLOAT;
-  typedef double                  pDOUBLE;
-#ifdef _WIN32
-  typedef __int64                 pINT64;
-  typedef unsigned __int64        pUINT64;
-#else
-  typedef long long int           pINT64;   
-  typedef unsigned long long int  pUINT64;  
-#endif
-
-  typedef pINT32                   scoord;
-  typedef pFLOAT                   rcoord;
+  using  scoord = pINT32; //scalar coordinate
+  using  rcoord = pFLOAT; //real coordinate
 
 #ifdef POUTRE_64BITS
-  typedef pINT64                 offset;
+  using  offset = pINT64;
 #else
-  typedef pINT32                 offset;
+  using  offset = pINT32;
 #endif
-
-  typedef std::string             str_type;
-  typedef std::wstring            wstr_type;
-
-  typedef pFLOAT REAL_TYPE; //todo make this configurable trough cmake or add dispatch
-
-  }
+  using  str_type = std::string;
+  using  prealtype = pFLOAT; 
+}
 #endif

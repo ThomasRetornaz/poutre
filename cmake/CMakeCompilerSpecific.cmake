@@ -98,7 +98,10 @@ if(MSVC)
   MARK_AS_ADVANCED(WIN32_USE_MP)
   if(WIN32_USE_MP)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+    message(STATUS "Set /MP on for msvc")
   endif()
+
+
   
  
   # Boost specific

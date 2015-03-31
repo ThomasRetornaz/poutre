@@ -5,8 +5,38 @@
  * Common configuration definitions. This file should not depend on any other file.
  */
 
+
 namespace poutre
   {
+
+
+#if defined(noexcept)
+#define NOEXCEPT noexcept
+#else
+#define NOEXCEPT throw()
+#endif
+
+#ifndef NDEBUG
+#define NOEXCEPTRELONLY 
+#else
+#define NOEXCEPTRELONLY NOEXCEPT
+#endif
+
+// POUTRE_STRONG_INLINE is a stronger version of inline directive mostly to enforce inlining for MSVC compiler:using __forceinline on MSVC/INTEL,but still doesn't use GCC's/clang always_inline.
+#if (defined _MSC_VER) || (defined(__ICC) || defined(__INTEL_COMPILER))
+#define POUTRE_STRONG_INLINE __forceinline
+#else
+#define POUTRE_STRONG_INLINE inline
+#endif
+
+// POUTRE_ALWAYS_INLINE is the strongest version of inline directive, using __forceinline on MSVC/INTEL,and always inline for GCC/clang.
+#if (defined _MSC_VER) || (defined(__ICC) || defined(__INTEL_COMPILER))
+#define POUTRE_ALWAYS_INLINE __forceinline
+#elif defined(__clang__) || ((defined(__GNUC__) || defined(__GNUG__))
+#define POUTRE_ALWAYS_INLINE __attribute__((always_inline))
+#else
+#define POUTRE_ALWAYS_INLINE 
+#endif
 
 #if defined(_WIN32) || defined(_WIN64)
   #define poutreDeprecated __declspec(deprecated)
