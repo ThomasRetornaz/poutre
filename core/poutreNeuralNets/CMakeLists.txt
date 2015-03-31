@@ -4,20 +4,29 @@ set(PoutreNNSubdirectory ${POUTRE_CORE_DIR}/poutreNeuralNets)
 
 #generate_library_version(${PoutreNNSubdirectory}/src/current_configuration_generated.cpp)
 
-set(PoutreNeuralNetsSRC
+set(PoutreNeuralNetsSRC_DETAILS
+  )
+
+set(PoutreNeuralNetsSRC_PUBLICHEADERS  
   ${PoutreNNSubdirectory}/poutreNeuralNets.hpp
+)
+
+set(PoutreNeuralNetsSRC_CPP
   ${PoutreNNSubdirectory}/src/dummy.cpp
   # auto generated file
-  #${PoutreNNSubdirectory}/src/current_configuration_generated.cpp
+  #${PoutreBaseSubdirectory}/src/current_configuration_generated.cpp
   )
+source_group(details FILES ${PoutreNeuralNetsSRC_DETAILS})
+source_group(src FILES ${PoutreNeuralNetsSRC_CPP})
+source_group(header FILES ${PoutreNeuralNetsSRC_PUBLICHEADERS})
+
+set(PoutreNeuralNetsSRC
+	${PoutreNeuralNetsSRC_DETAILS}
+	${PoutreNeuralNetsSRC_PUBLICHEADERS}
+	${PoutreNeuralNetsSRC_CPP}
+	)
 
 add_library(PoutreNeuralNets ${PoutreNeuralNetsSRC})
-target_include_directories(PoutreNeuralNets 
-  PRIVATE ${PoutreNNSubdirectory}
-  PUBLIC ${PoutreNNSubdirectory}/include
-  PRIVATE ${JSONCPP_INCLUDE_DIR}
-  )
-
 target_link_libraries(PoutreNeuralNets 
   # PRIVATE ${Boost_GRAPH_LIBRARY} 
   # PRIVATE ${Boost_DATE_TIME_LIBRARY} 

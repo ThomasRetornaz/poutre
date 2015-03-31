@@ -1,4 +1,4 @@
-#include <poutreJsonSerialization.hpp>
+#include <poutreBase/poutreJsonSerialization.hpp>
 #include <json/json.h>
 
 namespace poutre

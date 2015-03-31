@@ -4,7 +4,10 @@ set(PoutreBaseSubdirectory ${POUTRE_CORE_DIR}/poutreBase)
 
 #generate_library_version(${PoutreBaseSubdirectory}/src/current_configuration_generated.cpp)
 
-set(PoutreBaseSRC
+set(PoutreBaseSRCDETAILS
+  )
+
+set(PoutreBaseSRC_PUBLICHEADERS  
   ${PoutreBaseSubdirectory}/poutreBase.hpp
   ${PoutreBaseSubdirectory}/poutreConfig.hpp
   ${PoutreBaseSubdirectory}/poutreTypes.hpp
@@ -12,21 +15,30 @@ set(PoutreBaseSRC
   ${PoutreBaseSubdirectory}/poutreTrace.hpp
   ${PoutreBaseSubdirectory}/poutreRegistrar.hpp
   ${PoutreBaseSubdirectory}/poutreChronos.hpp
+)
+
+set(PoutreBaseSRC_CPP
   ${PoutreBaseSubdirectory}/src/poutreJsonSerialization.cpp
   ${PoutreBaseSubdirectory}/src/poutreTrace.cpp
-  #${PoutreBaseSubdirectory}/src/dummy.cpp
-  
   # auto generated file
   #${PoutreBaseSubdirectory}/src/current_configuration_generated.cpp
   )
+source_group(details FILES ${PoutreBaseSRC_DETAILS})
+source_group(src FILES ${PoutreBaseSRC_CPP})
+source_group(header FILES ${PoutreBaseSRC_PUBLICHEADERS})
+
+set(PoutreBaseSRC
+	${PoutreBaseSRC_DETAILS}
+	${PoutreBaseSRC_CPP}
+	${PoutreBaseSRC_PUBLICHEADERS}
+	)
 
 add_library(PoutreBase ${PoutreBaseSRC})
-target_include_directories(PoutreBase 
-  PRIVATE ${PoutreBaseSubdirectory}
-  PRIVATE ${PoutreBaseSubdirectory}/include
-  PRIVATE ${PoutreBaseSubdirectory}/src
-  #PRIVATE ${JSONCPP_INCLUDE_DIR}
-  )
+# target_include_directories(PoutreBase 
+  # PRIVATE ${PoutreBaseSubdirectory}
+  # PRIVATE ${PoutreBaseSubdirectory}/include
+  # PRIVATE ${PoutreBaseSubdirectory}/src
+  # )
 
 target_link_libraries(PoutreBase 
   PUBLIC ${Boost_THREAD_LIBRARY}  
