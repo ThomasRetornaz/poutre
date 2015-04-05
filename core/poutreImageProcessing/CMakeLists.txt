@@ -7,6 +7,7 @@ set(PoutreIPSubdirectory ${POUTRE_CORE_DIR}/poutreImageProcessing)
 set(PoutreIPSRC_DETAILS
   ${PoutreIPSubdirectory}/core/include/poutreImageProcessingIterator.hpp
   ${PoutreIPSubdirectory}/core/include/poutreImageProcessingContainer.hpp
+  ${PoutreIPSubdirectory}/core/include/poutreImageProcessingContainerCopieConvert.hpp
 
   ${PoutreIPSubdirectory}/core/include/poutreImageProcessingUnaryOp.hpp
   ${PoutreIPSubdirectory}/core/include/poutreImageProcessingBinaryOp.hpp
@@ -18,6 +19,7 @@ set(PoutreIPSRC_PUBLICHEADERS
   ${PoutreIPSubdirectory}/poutreImageProcessing.hpp
   ${PoutreIPSubdirectory}/core/poutreImageProcessingInterface.hpp
   ${PoutreIPSubdirectory}/core/poutreImageProcessingType.hpp
+  ${PoutreIPSubdirectory}/core/poutreImageProcessingInterfaceCopieConvert.hpp
 	)
 
 set(PoutreIPSRC_CPP
@@ -25,6 +27,7 @@ set(PoutreIPSRC_CPP
   ${PoutreIPSubdirectory}/core/src/poutreImageProcessingType.cpp
   ${PoutreIPSubdirectory}/core/src/poutreImageProcessingContainer.cpp
   ${PoutreIPSubdirectory}/core/src/poutreImageProcessingInterface.cpp
+  ${PoutreIPSubdirectory}/core/src/poutreImageProcessingContainerCopieConvert.cpp
   # auto generated file
   #${PoutreIPSubdirectory}/src/current_configuration_generated.cpp   
   )

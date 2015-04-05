@@ -4,6 +4,47 @@
 namespace poutre
   {
 
+  
+  std::ostream& operator<<(std::ostream& os, ImgType imgType)
+    {
+    switch (imgType)
+      {
+        case ImgType::ImgType_Dense:
+          os << "Dense";
+          break;
+        case ImgType::ImgType_Sparse:
+          os << "Sparse";
+          break;
+        default://  ImgType::ImgType_Undef; 
+          os << "Unknown PType";
+          break;
+      }
+    return os;
+    }
+
+  
+  std::istream& operator>>(std::istream& is, ImgType& imgType)
+    {
+    imgType = ImgType::ImgType_Undef;
+
+    if (!is.good( ))
+      return is;
+
+    std::string strType;
+    is >> strType;
+    if (is.bad( ))
+      return is;
+
+    if (strType == "Dense")
+      imgType = ImgType::ImgType_Dense;
+    else if (strType == "Sparse")
+      imgType = ImgType::ImgType_Sparse;
+    else
+      {
+      POUTRE_RUNTIME_ERROR("Unable to read ImgType from stream");
+      }
+    }
+
   std::ostream& operator<<(std::ostream& os, PType p)
     {
     switch (p)

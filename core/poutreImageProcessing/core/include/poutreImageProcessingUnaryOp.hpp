@@ -128,17 +128,19 @@ namespace poutre
     void operator()(ImageIn& img, UnOp f) const
       {
       //TODO use multithread approch here dispatch on dims and so on 
+      //also dispatch on iterator categories
       pImageUnaryIterOp<ImageIn::m_ptype, ImageIn::m_ptype, UnOp>( )(img.begin( ), img.end( ), img.begin( ),f);
       }
     };
 
   template<class ImageIn,class ImageOut, class UnOp>
-  struct pApplyImageUnaryIterOpInPlace
+  struct pApplyImageUnaryIterOp
     {
     void operator()(const ImageIn& imgIn, ImageOut& imgOut, UnOp f) const
       {
       //TODO PRECONDITIONS
       //TODO use multithread approch here dispatch on dims and so on 
+      //also dispatch on iterator categories
       pImageUnaryIterOp<ImageIn::m_ptype, ImageOut::m_ptype, UnOp>( )(imgIn.begin( ), imgIn.end( ), imgOut.begin( ), f);
       }
     };

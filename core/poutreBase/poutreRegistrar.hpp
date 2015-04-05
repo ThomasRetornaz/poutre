@@ -30,14 +30,20 @@ namespace poutre
       //typedef std::unordered_map< std::string, std::function<std::unique_ptr<Interface>(void)>> KeyFactoryMap;
       static Registrar& getInstance()
         {
-        static Registrar instance; // Guaranteed to be destroyed.
+        static Registrar instance; // Guaranteed to be destroyed. AND http://preshing.com/20130930/double-checked-locking-is-fixed-in-cpp11/
         // Instantiated on first use.
         return instance;
         }
+
+      Registrar(const Registrar&) = delete;
+      Registrar& operator=(const Registrar&) = delete;
+      Registrar(Registrar&& other) = delete;
+      Registrar& operator= (Registrar&& other) = delete;
+
     private:
       Registrar(){};
-      Registrar(const Registrar&);
-      Registrar& operator=(const Registrar&);
+
+
       KeyFactoryMap m_keyfactory_map;
     public:
       //void Register(const std::string& key, std::function<std::unique_ptr<Interface>(void)> ImplFactoryFunction)

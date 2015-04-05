@@ -13,13 +13,17 @@ namespace poutre
 #if defined(noexcept)
 #define NOEXCEPT noexcept
 #else
+#ifdef _MSVC_VER
+#define NOEXCEPT _NOEXCEPT 
+#else
 #define NOEXCEPT throw()
+#endif
 #endif
 
 #ifndef NDEBUG
-#define NOEXCEPTRELONLY 
+#define NOEXCEPTRELONLYNDEBUG 
 #else
-#define NOEXCEPTRELONLY NOEXCEPT
+#define NOEXCEPTRELONLYNDEBUG NOEXCEPT
 #endif
 
 // POUTRE_STRONG_INLINE is a stronger version of inline directive mostly to enforce inlining for MSVC compiler:using __forceinline on MSVC/INTEL,but still doesn't use GCC's/clang always_inline.

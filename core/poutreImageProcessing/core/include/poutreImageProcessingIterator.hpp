@@ -32,13 +32,12 @@ namespace poutre
       pdense_iterator(DataType* ptr = nullptr, DataType* ptrorig = nullptr) :m_ptr(ptr), m_ptrorig(ptrorig){}
       pdense_iterator(const pdense_iterator<DataType>& rawIterator) = default;
       pdense_iterator<DataType>&                  operator=(const pdense_iterator<DataType>& rawIterator) = default;
-      //pdense_iterator<DataType>&                  operator=(DataType* ptr, DataType* ptrorig){ m_ptr = ptr; m_ptrorig = ptrorig; return (*this); }
 
       ~pdense_iterator(){}
 
       operator bool() const
         {
-        if (m_ptr) && (m_ptrorig) return true;
+        if ((m_ptr) && (m_ptrorig)) return true;
         return false;
         }
 
@@ -50,10 +49,8 @@ namespace poutre
       pdense_iterator<DataType>&                  operator++(){ ++m_ptr; return (*this); }
       pdense_iterator<DataType>&                  operator--(){ --m_ptr; return (*this); }
 
-      //pdense_iterator<DataType>                   operator++(){ auto temp(*this); ++m_ptr; return temp; }
-      //pdense_iterator<DataType>                   operator--(){ auto temp(*this); --m_ptr; return temp; }
-      //pdense_iterator<DataType>                   operator+(const std::ptrdiff_t& movement){ auto oldPtr = m_ptr; m_ptr += movement; auto temp(*this); m_ptr = oldPtr; return temp; }
-      //pdense_iterator<DataType>                   operator-(const std::ptrdiff_t& movement){ auto oldPtr = m_ptr; m_ptr -= movement; auto temp(*this); m_ptr = oldPtr; return temp; }
+      pdense_iterator<DataType>                   operator++(int){ auto temp(*this); ++m_ptr; return temp; }
+      pdense_iterator<DataType>                   operator--(int) { auto temp(*this); --m_ptr; return temp; }
 
       ptrdiff_t                                   operator-(const pdense_iterator<DataType>& rawIterator){ return std::distance(rawIterator.getPtr(), this->getPtr()); }
 
@@ -90,19 +87,16 @@ namespace poutre
 
       pdense_reverse_iterator<DataType>&           operator=(const pdense_reverse_iterator<DataType>& rawReverseIterator) = default;
       pdense_reverse_iterator<DataType>&           operator=(const pdense_iterator<DataType>& rawIterator){ this->m_ptr = rawIterator.getPtr(); this->m_ptrorig = rawIterator.getOrigPtr(); return (*this); }
-      //pdense_reverse_iterator<DataType>&           operator=(DataType* ptr, DataType* ptrorig){ this->setPtr(ptr); this->setOrigPtr(ptrorig); return (*this); }
 
       pdense_reverse_iterator<DataType>&           operator+=(const std::ptrdiff_t& movement){ this->m_ptr -= movement; return (*this); }
       pdense_reverse_iterator<DataType>&           operator-=(const std::ptrdiff_t& movement){ this->m_ptr += movement; return (*this); }
       pdense_reverse_iterator<DataType>&           operator++(){ --this->m_ptr; return (*this); }
       pdense_reverse_iterator<DataType>&           operator--(){ ++this->m_ptr; return (*this); }
-      //pdense_reverse_iterator<DataType>            operator++(){ auto temp(*this); --this->m_ptr; return temp; }
-      //pdense_reverse_iterator<DataType>            operator--(){ auto temp(*this); ++this->m_ptr; return temp; }
-      //pdense_reverse_iterator<DataType>            operator+(const int& movement){ auto oldPtr = this->m_ptr; this->m_ptr -= movement; auto temp(*this); this->m_ptr = oldPtr; return temp; }
-      //pdense_reverse_iterator<DataType>            operator-(const int& movement){ auto oldPtr = this->m_ptr; this->m_ptr += movement; auto temp(*this); this->m_ptr = oldPtr; return temp; }
+      pdense_reverse_iterator<DataType>            operator++(int){ auto temp(*this); --this->m_ptr; return temp; }
+      pdense_reverse_iterator<DataType>            operator--(int) { auto temp(*this); ++this->m_ptr; return temp; }
 
       ptrdiff_t                                    operator-(const pdense_reverse_iterator<DataType>& rawReverseIterator){/*todo assert same orig?*/ return std::distance(this->getPtr(), rawReverseIterator.getPtr()); }
-
+      const offset                                 getOffset( )const { return m_ptr - m_ptrorig; }
       pdense_iterator<DataType>                    base(){ pdense_iterator<DataType> forwardIterator(this->m_ptr, this->m_ptrorig); ++forwardIterator; return forwardIterator; }
     };
 

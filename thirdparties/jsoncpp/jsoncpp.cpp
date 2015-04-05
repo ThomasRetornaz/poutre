@@ -857,8 +857,9 @@ bool Reader::decodeUnicodeCodePoint(Token& token,
           "additional six characters expected to parse unicode surrogate pair.",
           token,
           current);
-    unsigned int surrogatePair;
+
     if (*(current++) == '\\' && *(current++) == 'u') {
+      unsigned int surrogatePair;
       if (decodeUnicodeEscapeSequence(token, current, end, surrogatePair)) {
         unicode = 0x10000 + ((unicode & 0x3FF) << 10) + (surrogatePair & 0x3FF);
       } else

@@ -52,7 +52,7 @@ void TestClassA::Serialize(Json::Value& root)
   root["m_fTestFloat"] = m_fTestFloat;
   root["m_TestString"] = m_TestString;
   root["m_bTestBool"] = m_bTestBool;
-  const Json::Value& array = root["m_array"];
+  //const Json::Value& array = root["m_array"];
   for (const auto& var: m_array)
     {
     root["m_array"].append(var).asFloat();

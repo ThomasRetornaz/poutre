@@ -5,6 +5,7 @@ set(poutreImageProcessingTestSRC
     ${poutreImageProcessingTestSubdirectory}/main.hpp
     ${poutreImageProcessingTestSubdirectory}/main.cpp
 	${poutreImageProcessingTestSubdirectory}/ImageContainer.cpp
+	${poutreImageProcessingTestSubdirectory}/ImageCopieConvert.cpp
 )
 
 add_executable(poutreImageProcessingTests ${poutreImageProcessingTestSRC})
