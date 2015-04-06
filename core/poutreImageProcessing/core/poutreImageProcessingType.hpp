@@ -29,6 +29,21 @@ namespace poutre
   //! operator>> for ImgType
   BASE_API std::istream& operator>>(std::istream&, ImgType&);
 
+  enum class CompoundType
+    {
+    CompoundType_Undef,                                         //!< Undefined
+    CompoundType_Scalar,                                        //!< scalar 
+    CompoundType_3Planes,                                       //!< 3 channels 
+    CompoundType_4Planes,                                       //!< 4 channels 
+    CompoundType_Container,                                     //!< generic container
+    };
+
+  //! operator<< for ImgType
+  BASE_API std::ostream& operator<<(std::ostream&, CompoundType);
+
+  //! operator>> for ImgType
+  BASE_API std::istream& operator>>(std::istream&, CompoundType&);
+
   enum class PType
     {
     PType_Undef = 0,       //!< Undefined type 
@@ -40,6 +55,12 @@ namespace poutre
     PType_GrayINT64 = 1 << 5,  //!< Int64 pixel, think about integrale image
     _PixelType_Max = 1 << 5 //keep sync with the max value
     };
+
+//#ifdef POUTRE_64BITS
+//  typedef PType::PType_GrayINT64  PTypeLabel;
+//#else
+//  using PTypeLabel = PType::PType_GrayINT32;
+//#endif
 
   //! operator<< for PType
   BASE_API std::ostream& operator<<(std::ostream&, PType);

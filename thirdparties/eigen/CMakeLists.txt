@@ -23,14 +23,12 @@ ExternalProject_Add(Eigendep #see http://www.cmake.org/cmake/help/v3.0/module/Ex
   BUILD_COMMAND ""
   INSTALL_COMMAND "" 
   ) #SET CONFIGURE_COMMAND, BUILD_COMMAND and INSTALL_COMMAND to "" compile nothing
-  
+ExternalProject_Get_Property( Eigendep source_dir )  
   
 add_library(Eigen INTERFACE)
 target_include_directories(Eigen INTERFACE
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/src/Eigendep> #we can do better
+  $<BUILD_INTERFACE:${source_dir}> #we can do better
 )
-#D:\build\poutrebuildmsvc2013\thirdparties\eigen\src\Eigendep\Eigen
-
 set_target_properties(Eigendep PROPERTIES FOLDER "Dependencies/")	
 #set_target_properties(Eigen PROPERTIES FOLDER "Dependencies/")	
 

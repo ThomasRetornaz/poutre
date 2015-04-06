@@ -125,20 +125,23 @@ if(NOT POUTRE_BOOST_FROM_SYSTEM)
   #add_files_to_python_packaging(FILES ${BoostFilesToInstall})
 endif()
 
+# nt2 unusable for the moment wait new release 
+add_subdirectory(nt2)
+SET(NT2_COMPILE_FLAGS ${NT2_COMPILE_FLAGS} PARENT_SCOPE) #we can do better
+SET(NT2_LINK_FLAGS ${NT2_LINK_FLAGS} PARENT_SCOPE) #we can do better
+# boostsimd
+#add_subdirectory(boostsimd)
+SET(NT2_COMPILE_FLAGS ${NT2_COMPILE_FLAGS} PARENT_SCOPE) 
+
 # jsoncpp
 add_subdirectory(jsoncpp)
 #SET(JSONCPP_INCLUDE_DIR ${JSONCPP_INCLUDE_DIR} PARENT_SCOPE)
 
-# nt2 unusable for the moment wait new release 
-# add_subdirectory(nt2)
-# SET(NT2_INCLUDE_DIR ${NT2_INCLUDE_DIR} PARENT_SCOPE)
-# todo add boost::simd here
+
 
 # eigen
 add_subdirectory(eigen)
 
-# boostsimd
-add_subdirectory(boostsimd)
 
 
 

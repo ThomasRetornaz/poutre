@@ -18,9 +18,9 @@ BOOST_AUTO_TEST_CASE(ctor)
   auto expectedcoords = { 3, 4 };
   BOOST_CHECK_EQUAL_COLLECTIONS(coords.begin( ), coords.end( ), expectedcoords.begin( ), expectedcoords.end( ));
 
-  std::cout << "**************************************************" << std::endl;
+  /*std::cout << "**************************************************" << std::endl;
   std::cout << img << std::endl;
-  std::cout << "**************************************************" << std::endl;
+  std::cout << "**************************************************" << std::endl;*/
   }
 
 BOOST_AUTO_TEST_CASE(clone)
@@ -54,9 +54,9 @@ BOOST_AUTO_TEST_CASE(clone)
     BOOST_CHECK_EQUAL(var, 10);
     }
 
-  std::cout << "**************************************************" << std::endl;
+ /* std::cout << "**************************************************" << std::endl;
   std::cout << (*cloned) << std::endl;
-  std::cout << "**************************************************" << std::endl;
+  std::cout << "**************************************************" << std::endl;*/
   }
 
 BOOST_AUTO_TEST_CASE(Factory)

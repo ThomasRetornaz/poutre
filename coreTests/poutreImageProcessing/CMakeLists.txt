@@ -4,6 +4,7 @@ set(poutreImageProcessingTestSubdirectory ${POUTRE_CORE_TEST_DIR}/poutreImagePro
 set(poutreImageProcessingTestSRC
     ${poutreImageProcessingTestSubdirectory}/main.hpp
     ${poutreImageProcessingTestSubdirectory}/main.cpp
+  ${poutreImageProcessingTestSubdirectory}/ImageProcessingType.cpp
 	${poutreImageProcessingTestSubdirectory}/ImageContainer.cpp
 	${poutreImageProcessingTestSubdirectory}/ImageCopieConvert.cpp
 )

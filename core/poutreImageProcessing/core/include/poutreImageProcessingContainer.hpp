@@ -98,8 +98,29 @@ namespace poutre
           m_data = m_allocator.allocate(m_numelemwithpaddingifany);
           }
         }
-      DenseImage(const std::initializer_list<size_t>& dims) :DenseImage(dims)
+      DenseImage(const std::initializer_list<size_t>& dims) :m_data(nullptr), m_size_list( ), m_allocator( ), m_numelemwithpaddingifany(0)
         {
+        if (dims.size( ) != m_numdims) POUTRE_RUNTIME_ERROR("Invalid input initializer regarding NumDims of DenseImage container");
+        std::copy(dims.begin( ), dims.end( ), m_size_list.begin( ));
+
+
+        //compute full array size with include possible padding for each first stride
+        if (!m_size_list.empty( ))
+          {
+          //if (m_numdims == 2)
+          //  {
+          //  m_numelemwithpadding = ((m_size_list[0] + default_padding_size - 1) & ~(default_padding_size - 1));
+          //  }
+          //else
+          //  {
+          m_numelemwithpaddingifany = m_size_list[0];
+          //  }
+          for (size_t i = 1; i < m_size_list.size( ); i++)
+            {
+            m_numelemwithpaddingifany *= m_size_list[i];
+            }
+          m_data = m_allocator.allocate(m_numelemwithpaddingifany);
+          }
         }
       ~DenseImage( ) NOEXCEPT
         {

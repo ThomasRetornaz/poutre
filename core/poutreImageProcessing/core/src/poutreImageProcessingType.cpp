@@ -5,6 +5,58 @@ namespace poutre
   {
 
   
+  std::ostream& operator<<(std::ostream& os, CompoundType ct)
+    {
+    switch (ct)
+      {
+        case CompoundType::CompoundType_Scalar:
+          {
+          os << "Scalar";
+          }break;
+        case CompoundType::CompoundType_3Planes:
+          {
+          os << "3Planes";
+          }break;
+        case CompoundType::CompoundType_4Planes:
+          {
+          os << "4Planes";
+          }break;
+        case CompoundType::CompoundType_Container:
+          {
+          os << "Container";
+          } break;
+        default: //  CompoundType::CompoundType_Undef; 
+          os << "Unknown PType";
+      }//switch
+    return os;
+    }
+
+  std::istream& operator>>(std::istream& is, CompoundType& ct)
+    {
+    ct=CompoundType::CompoundType_Undef;
+    if (!is.good( ))
+      return is;
+
+    std::string strType;
+    is >> strType;
+    if (is.bad( ))
+      return is;
+
+    if (strType == "Scalar")
+      ct = CompoundType::CompoundType_Scalar;
+    else if (strType == "3Planes")
+      ct = CompoundType::CompoundType_3Planes;
+    else if (strType == "4Planes")
+      ct = CompoundType::CompoundType_4Planes;
+    else if (strType == "Container")
+      ct = CompoundType::CompoundType_Container;
+    else
+      {
+      POUTRE_RUNTIME_ERROR("Unable to read CompoundType from stream");
+      }
+    return is;
+    }
+
   std::ostream& operator<<(std::ostream& os, ImgType imgType)
     {
     switch (imgType)
@@ -43,6 +95,7 @@ namespace poutre
       {
       POUTRE_RUNTIME_ERROR("Unable to read ImgType from stream");
       }
+    return is;
     }
 
   std::ostream& operator<<(std::ostream& os, PType p)

@@ -23,10 +23,6 @@ if(MSVC)
   
   # Setup 64bit and 64bit windows systems
   if(CMAKE_CL_64)
-    set(PLATFORM_LINKFLAGS "${PLATFORM_LINKFLAGS} /MACHINE:X64")
-    # This definition is necessary to work around a bug with Intellisense described
-    # here: http://tinyurl.com/2cb428.  Syntax highlighting is important for proper
-    # debugger functionality.
     add_definitions("-D_WIN64")
     message(STATUS "- MSVC: 64-bit platform, enforced -D_WIN64 parameter")
 

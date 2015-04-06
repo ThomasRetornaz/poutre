@@ -9,7 +9,7 @@ namespace poutre
     return i_img1.Clone( );
     }
 
-  std::unique_ptr<IInterface> GetSameCoordinates(const IInterface& i_img1, PType ptype)
+  std::unique_ptr<IInterface> GetSameCoord(const IInterface& i_img1, PType ptype)
     {
     auto imgType=i_img1.GetImgType( );
     switch (imgType)

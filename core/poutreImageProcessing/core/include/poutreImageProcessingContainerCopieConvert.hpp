@@ -9,20 +9,16 @@
 namespace poutre
   {
 
-  template <PType ptypeOther, class allocator>
-  struct get_same_allocator
+  /*
+  template <PType ptypeOther, PType ptype, class allocator>
+  struct get_same_allocator_t
     {
     };
 
   template <PType ptypeOther, PType ptype>
-  struct get_same_allocator<ptypeOther, boost::simd::allocator < TypeTraits<ptype>::storage_type, TypeTraits<ptype>::alignement >
+  struct get_same_allocator_t<ptypeOther, typename boost::simd::allocator < TypeTraits<ptype>::storage_type, TypeTraits<ptype>::alignement >>
     {
-    using type = boost::simd::allocator < TypeTraits<ptypeOther>::storage_type, TypeTraits<ptypeOther>::alignement >;
-    };
-
-  template <ImgType imgTypeOther, PType ptypeOther, class ImageIn>
-  struct get_same_t
-    {
+    using type = boost::simd::allocator < typename  TypeTraits<ptypeOther>::storage_type, TypeTraits<ptypeOther>::alignement >;
     };
 
   template <PType ptypeOther, class ImageIn>
@@ -31,11 +27,10 @@ namespace poutre
     using type = DenseImage <
       ptypeOther,
       ImageIn::m_numdims,
-      get_same_allocator<ptypeOther, ImageIn::m_ptype>
-    > ;
-
+      typename get_same_allocator_t<ptypeOther, ImageIn::m_ptype, typename ImageIn::allocator_type>::type>
+      >;
     };
-
+  */
 
   }
 #endif POUTREIMAGEPROCESSINGCONTAINERCOPIECONVERT_HPP__

@@ -112,6 +112,12 @@ message(STATUS "Configuring the python packaging")
 #add_subdirectory(${THIRD_PARTIES_PATH} ${TEMPORARY_DIRECTORY}/thirdParties)
 add_subdirectory(${THIRD_PARTIES_PATH})
 add_definitions(-DBOOST_TEST_DYN_LINK)
+#add_compile_options(${NT2_COMPILE_FLAGS}) #USE CACHE INSTEAD ? #USE dispatch to properly set ?
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${NT2_COMPILE_FLAGS}")
+set(CMAKE_C_FLAGS_RELEASE   "${CMAKE_C_FLAGS_RELEASE} ${NT2_COMPILE_FLAGS}")
+#todo filter duplicate and conflict
+Set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} ${NT2_LINK_FLAGS}")
+set(CMAKE_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} ${NT2_LINK_FLAGS}")
 
 # warning the order is important
 include_directories(${POUTRE_CORE_DIR})
