@@ -90,39 +90,6 @@ namespace poutre
 
 
 
-#define POUTRE_RUNTIME_ERROR( MSG ) throw std::runtime_error((boost::format("Throw %s at %s(%d)") % MSG % __FILE__ % __LINE__).str())
-#define POUTRE_CHECK( CONDITION, MSG )           \
-             {                                             \
-      if ( !( CONDITION ) )                      \
-                      {                                          \
-         POUTRE_RUNTIME_ERROR( MSG );            \
-                      }                                          \
-             }
-
-#ifdef _DEBUG
-#if defined(_MSC_VER)
-#define POUTRE_ASSERTCHECK( CONDITION, MSG ){    \
-    if ( !( CONDITION ) )                        \
-                  {                                          \
-         __debugbreakpoint();                    \
-                  }                                          \
-             }
-#else
-#define POUTRE_ASSERTCHECK( CONDITION, MSG ){    \
-    if ( !( CONDITION ) )                        \
-                  {                                          \
-         __builtin_trap();                       \
-                  }                                          \
-             }
-#endif
-#else
-#define POUTRE_ASSERTCHECK( CONDITION, MSG )
-#endif
-
-
-
-
-
   } //namespace poutre
 
 #endif //POUTRE_TRACE__HPP__

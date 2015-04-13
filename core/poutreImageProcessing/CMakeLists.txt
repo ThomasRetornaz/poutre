@@ -8,6 +8,7 @@ set(PoutreIPSRC_DETAILS
   ${PoutreIPSubdirectory}/core/include/poutreImageProcessingIterator.hpp
   ${PoutreIPSubdirectory}/core/include/poutreImageProcessingContainer.hpp
   ${PoutreIPSubdirectory}/core/include/poutreImageProcessingContainerCopieConvert.hpp
+  ${PoutreIPSubdirectory}/core/include/poutreImageProcessingCompare.hpp
 
   ${PoutreIPSubdirectory}/core/include/poutreImageProcessingUnaryOp.hpp
   ${PoutreIPSubdirectory}/core/include/poutreImageProcessingBinaryOp.hpp

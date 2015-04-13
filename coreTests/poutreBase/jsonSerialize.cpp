@@ -3,6 +3,7 @@
 #include <iostream>
 #include <poutreBase/poutreJsonSerialization.hpp>
 #include <json/json.h>
+#include <boost/algorithm/string/trim_all.hpp>
 
 class TestClassA : public poutre::InterfaceJsonSerializable
   {
@@ -69,13 +70,21 @@ BOOST_AUTO_TEST_CASE(serializer)
   poutre::JsonSerializer::Serialize(&testClass, output);
   std::string expected= "\
 {\n\
-   \"m_TestString\" : \"foo\",\n\
-   \"m_array\" : [ 1.100000023841858, 2.099999904632568, 3.099999904632568 ],\n\
-   \"m_bTestBool\" : true,\n\
-   \"m_fTestFloat\" : 3.14159,\n\
-   \"m_nTestInt\" : 42\n\
+\"m_TestString\" : \"foo\",\n\
+\"m_array\" : [ 1.1000000238418579, 2.0999999046325684, 3.0999999046325684 ],\n\
+\"m_bTestBool\" : true,\n\
+\"m_fTestFloat\" : 3.1415899999999999,\n\
+\"m_nTestInt\" : 42\n\
 }\n";
+
+
+  boost::algorithm::trim_all(output);
+  boost::algorithm::trim_all(expected);
+  
   BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(), output.begin(), output.end());
+
+  std::cout << "testClass Serialized expected\n" << expected<< "\n\n\n";
+
   std::cout << "testClass Serialized Output\n" << output << "\n\n\n";
   }
 

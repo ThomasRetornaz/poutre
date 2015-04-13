@@ -33,6 +33,7 @@ namespace poutre
 
   //stolen from
   //#include <boost/simd/sdk/simd/algorithm.hpp>
+  #include <boost/simd/sdk/simd/algorithm.hpp>
   template<PType ptypeIn, class UnOp>
   struct pImageUnaryIterOpInPlace
     {
@@ -56,6 +57,7 @@ namespace poutre
         *begin = f(*begin);
 
       //main loop 
+      //TODO UNROLL ?
       if (simd::is_aligned(begin, N * sizeof(value_type)))
         {
         for (; begin != end3; begin += N, out += N)
@@ -104,6 +106,7 @@ namespace poutre
         *beginout = f(*beginin);
 
       //main loop
+      //TODO UNROLL ?
       if (simd::is_aligned(beginin, N * sizeof(value_typeIn)) && simd::is_aligned(beginout, N * sizeof(value_typeOut)))
         {
         for (; beginin != end3; beginin += N, beginout += N)
@@ -140,7 +143,7 @@ namespace poutre
       {
       //TODO PRECONDITIONS
       //TODO use multithread approch here dispatch on dims and so on 
-      //also dispatch on iterator categories
+      //also dispatch on iterator categories and types
       pImageUnaryIterOp<ImageIn::m_ptype, ImageOut::m_ptype, UnOp>( )(imgIn.begin( ), imgIn.end( ), imgOut.begin( ), f);
       }
     };
