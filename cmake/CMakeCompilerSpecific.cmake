@@ -45,8 +45,7 @@ if(MSVC)
   #and /Ot (Favor Fast Code)
   #AND /Oy (Frame-Pointer Omission) TODO check on x64
   #/GF pools strings as read-only.
-
-  #TODO remove some flag not compatible with 64 bits
+  #/GL global optim https://msdn.microsoft.com/fr-fr/library/vstudio/0zza0de8(v=vs.120).aspx
   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Ox /Oi /Ob2 /Ot /Oy /GF /GL")
   set(CMAKE_C_FLAGS_RELEASE   "${CMAKE_C_FLAGS_RELEASE} /Ox /Oi /Ob2 /Oy /GF /GL")
 
@@ -56,8 +55,12 @@ if(MSVC)
   #set(CMAKE_C_FLAGS_RELEASE CACHE STRING "Release flags (overwritten) for C files")
   #message("Flags for MSVC ${CMAKE_CXX_FLAGS_RELEASE}")
   
-  set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG")
-  set(CMAKE_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG")
+   # Linker
+   
+   #https://msdn.microsoft.com/fr-fr/library/bxwfs976.aspx
+   set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG /OPT:REF")
+   set(CMAKE_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE}  /LTCG /OPT:REF")
+   
   #unset(CMAKE_SHARED_LINKER_FLAGS_RELEASE CACHE)
   #set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${value_tmp}" CACHE STRING "Release flags (overwritten) for CPP files")
 
@@ -66,7 +69,7 @@ if(MSVC)
   #4250: 'class1' : inherits 'class2::member' via dominance  polymorphism generate 10^50 warning ....	
   #4702 unreachable code 
   #4715 not all control paths return a value
-  foreach(warning 4250 4702 4745 ) 
+  foreach(warning 4250 4702 4715) 
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd${warning}")
   endforeach(warning)
  
@@ -132,7 +135,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   elseif(COMPILER_SUPPORTS_CXX0X)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
   else()
-    message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+    message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
   endif()
 
   if(APPLE)
