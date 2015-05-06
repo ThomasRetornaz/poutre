@@ -10,7 +10,9 @@ namespace poutre
   
   BASE_API std::unique_ptr<IInterface> GetSame(const IInterface& i_img1);
 
-  BASE_API std::unique_ptr<IInterface> GetSameCoord(const IInterface& i_img1,PType ptype);
+  BASE_API std::unique_ptr<IInterface> GetSameCoord(const IInterface& i_img1, CompoundType ctype, PType ptype);
+
+  BASE_API std::unique_ptr<IInterface> GetSameCoord(const IInterface& i_img1, PType ptype);
 
   }
 #endif POUTREIMAGEPROCESSINGINTERFACECOPIECONVERT_HPP__

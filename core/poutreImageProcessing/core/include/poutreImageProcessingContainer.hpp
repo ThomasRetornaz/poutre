@@ -28,20 +28,19 @@
 namespace poutre
   {
   //!FIXME dispatch on coord and allow unset dims
-  //!FIXME dispatch on type on allow scalar/compound
   template <
-    PType ptype,
+    class valuetype,
     std::size_t NumDims = 2,
-  class allocator_type_t = boost::simd::allocator < TypeTraits<ptype>::storage_type, TypeTraits<ptype>::alignement >
+    class allocator_type_t = boost::simd::allocator < TypeTraits<valuetype>::storage_type, TypeTraits<valuetype>::alignement >
   >
   class DenseImage : public IInterface
     {
     public:
 
-      using  self_type = DenseImage < ptype, NumDims, allocator_type_t > ;
+      using  self_type = DenseImage < valuetype, NumDims, allocator_type_t >;
       using  parent_type = IInterface;
 
-      using  value_type = typename TypeTraits<ptype>::storage_type;
+      using  value_type = valuetype;//typename TypeTraits<ptype>::storage_type;
       using  pointer = typename allocator_type_t::pointer;
       using  const_pointer = typename  allocator_type_t::const_pointer;
       using  reference = value_type&;
@@ -62,11 +61,14 @@ namespace poutre
       using allocator_type = allocator_type_t;
 
     
-      static const PType m_ptype = ptype;
+      static const PType m_ptype = TypeTraits<value_type>::pixel_type;
+      static const CompoundType m_ctype = TypeTraits<value_type>::compound_type;
+
+
       static const size_t m_numdims = NumDims;
-      static const size_t alignement = TypeTraits<ptype>::alignement;
+      static const size_t alignement = TypeTraits<valuetype>::alignement;
       static const ImgType m_imgtype = ImgType::ImgType_Dense;
-      //static const size_t default_padding_size = TypeTraits<ptype>::default_padding_size;
+
     private:
       pointer m_data;
       size_list_t m_size_list;
@@ -219,6 +221,8 @@ namespace poutre
               }
             size_t GetNumDims( ) const NOEXCEPT{ return m_numdims; }
 
+            CompoundType GetCType( ) const NOEXCEPT  override{ return m_ctype; }
+
             PType GetPType( ) const NOEXCEPT  override{ return m_ptype; }
 
             ImgType GetImgType( ) const NOEXCEPT  override{ return m_imgtype; }
@@ -238,6 +242,7 @@ namespace poutre
               std::ostringstream out;
               out << "Image" << std::endl;
               out << "\tType: " << this->GetImgType( ) << std::endl;
+              out << "\tCtype: " << this->GetCType( ) << std::endl;
               out << "\tPtype: " << this->GetPType( ) << std::endl;
               const auto &numDims = this->GetNumDims( );
               out << "\tNumdim: " << numDims << std::endl;
@@ -315,33 +320,42 @@ namespace poutre
       }
 
 
-
   //todo define macros
-  extern template class DenseImage < PType::PType_Bin, 1 >;
-  extern template class DenseImage < PType::PType_GrayUINT8, 1 >;
-  extern template class DenseImage < PType::PType_GrayINT32, 1 >;
-  extern template class DenseImage < PType::PType_F32, 1 >;
-  extern template class DenseImage < PType::PType_GrayINT64, 1 >;
+  extern template class DenseImage <pUINT8, 1 >;
+  extern template class DenseImage <pINT32, 1 >;
+  extern template class DenseImage <pFLOAT, 1 >;
+  extern template class DenseImage <pINT64, 1 >;
+  extern template class DenseImage <pDOUBLE, 1 >;
 
-  extern template class DenseImage < PType::PType_Bin, 2 > ;
-  extern template class DenseImage < PType::PType_GrayUINT8, 2 > ;
-  extern template class DenseImage < PType::PType_GrayINT32, 2 > ;
-  extern template class DenseImage < PType::PType_F32, 2 > ;
-  extern template class DenseImage < PType::PType_GrayINT64, 2 > ;
-
-  extern template class DenseImage < PType::PType_Bin, 3 >;
-  extern template class DenseImage < PType::PType_GrayUINT8, 3 >;
-  extern template class DenseImage < PType::PType_GrayINT32, 3 >;
-  extern template class DenseImage < PType::PType_F32, 3 >;
-  extern template class DenseImage < PType::PType_GrayINT64, 3 >;
-
-  extern template class DenseImage < PType::PType_Bin, 4 >;
-  extern template class DenseImage < PType::PType_GrayUINT8, 4 >;
-  extern template class DenseImage < PType::PType_GrayINT32, 4 >;
-  extern template class DenseImage < PType::PType_F32, 4 >;
-  extern template class DenseImage < PType::PType_GrayINT64, 4 >;
-
+  extern template class DenseImage < pUINT8, 2 >;
+  extern template class DenseImage < pINT32, 2 >;
+  extern template class DenseImage < pFLOAT, 2 >;
+  extern template class DenseImage < pINT64, 2 >;
+  extern template class DenseImage < pDOUBLE, 2 >;
   
+  extern template class DenseImage <compound_pixel < pUINT8, 3 >>;
+  extern template class DenseImage <compound_pixel < pINT32, 3 >>;
+  extern template class DenseImage <compound_pixel < pFLOAT, 3 >>;
+  extern template class DenseImage <compound_pixel < pINT64, 3 >>;
+  extern template class DenseImage <compound_pixel < pDOUBLE, 3 >>;
+
+  extern template class DenseImage <compound_pixel < pUINT8, 4 >>;
+  extern template class DenseImage <compound_pixel < pINT32, 4 >>;
+  extern template class DenseImage <compound_pixel < pFLOAT, 4 >>;
+  extern template class DenseImage <compound_pixel < pINT64, 4 >>;
+  extern template class DenseImage <compound_pixel < pDOUBLE, 4 >>;
+
+  extern template class DenseImage < pUINT8, 3 >;
+  extern template class DenseImage < pINT32, 3 >;
+  extern template class DenseImage < pFLOAT, 3 >;
+  extern template class DenseImage < pINT64, 3 >;
+  extern template class DenseImage < pDOUBLE, 3 >;
+
+  extern template class DenseImage < pUINT8, 4 >;
+  extern template class DenseImage < pINT32, 4 >;
+  extern template class DenseImage < pFLOAT, 4 >;
+  extern template class DenseImage < pINT64, 4 >;
+  extern template class DenseImage < pDOUBLE, 4 >;
 
   }
 #endif POUTREIMAGEPROCESSINGCONTAINER_HPP__

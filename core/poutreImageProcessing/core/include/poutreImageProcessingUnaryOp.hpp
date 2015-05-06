@@ -33,7 +33,6 @@ namespace poutre
 
   //stolen from
   //#include <boost/simd/sdk/simd/algorithm.hpp>
-  #include <boost/simd/sdk/simd/algorithm.hpp>
   template<PType ptypeIn, class UnOp>
   struct pImageUnaryIterOpInPlace
     {

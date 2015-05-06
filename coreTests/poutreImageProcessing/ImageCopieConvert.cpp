@@ -8,7 +8,7 @@ BOOST_AUTO_TEST_SUITE(poutreImageProcessingCopyConvert)
 
 BOOST_AUTO_TEST_CASE(getsame)
   {
-  using ImageType = poutre::DenseImage < poutre::PType::PType_GrayUINT8 > ;
+  using ImageType = poutre::DenseImage < poutre::pUINT8 >;
   using ImageTypeInterface = std::unique_ptr < poutre::IInterface > ;
   ImageType img({ 3, 4 });
   BOOST_CHECK_EQUAL(img.GetPType( ), poutre::PType::PType_GrayUINT8);
@@ -22,6 +22,7 @@ BOOST_AUTO_TEST_CASE(getsame)
   BOOST_CHECK_NE(&(*getSame), &(img));
   //!= data address
   BOOST_CHECK_NE(&(*((*getSame).datas( ))), &(*(img.datas( ))));
+  BOOST_CHECK_EQUAL((*getSame).GetCType( ), poutre::CompoundType::CompoundType_Scalar);
   BOOST_CHECK_EQUAL((*getSame).GetPType( ), poutre::PType::PType_GrayUINT8);
   BOOST_CHECK_EQUAL((*getSame).GetImgType( ), poutre::ImgType::ImgType_Dense);
   BOOST_CHECK_EQUAL((*getSame).size( ), 12);
@@ -41,17 +42,18 @@ BOOST_AUTO_TEST_CASE(getsame)
 
 BOOST_AUTO_TEST_CASE(getsamecoord)
   {
-  using ImageTypeBase = poutre::DenseImage < poutre::PType::PType_GrayUINT8 >;
+  using ImageTypeBase = poutre::DenseImage < poutre::pUINT8 >;
   using ImageTypeInterface = std::unique_ptr < poutre::IInterface >;
   ImageTypeBase img({ 3, 4 });
   BOOST_CHECK_EQUAL(img.GetPType( ), poutre::PType::PType_GrayUINT8);
   img.assign(10);
 
 
-  using ImageType = poutre::DenseImage < poutre::PType::PType_F32 >;
+  using ImageType = poutre::DenseImage < poutre::pFLOAT>;
   ImageTypeInterface getSameii = poutre::GetSameCoord(img, poutre::PType::PType_F32);
 
   ImageType* getSame = dynamic_cast<ImageType*>(getSameii.get( ));
+  BOOST_CHECK_EQUAL((*getSame).GetCType( ), poutre::CompoundType::CompoundType_Scalar);
   BOOST_CHECK_EQUAL((*getSame).GetPType( ), poutre::PType::PType_F32);
   BOOST_CHECK_EQUAL((*getSame).GetImgType( ), poutre::ImgType::ImgType_Dense);
   BOOST_CHECK_EQUAL((*getSame).size( ), 12);

@@ -5,14 +5,19 @@
 
 BOOST_AUTO_TEST_SUITE(poutreImageProcessingType)
 
+BOOST_AUTO_TEST_CASE(NativeType)
+  {
+  BOOST_CHECK(poutre::get_dim<poutre::pUINT8>::dim == 1);
+  }
+
 BOOST_AUTO_TEST_CASE(ptype)
   {
-      {
-      auto ct = poutre::PType::PType_Bin;
-      std::ostringstream os;
-      os << ct;
-      BOOST_CHECK_EQUAL("Bin", os.str( ));
-      }
+      //{
+      //auto ct = poutre::PType::PType_Bin;
+      //std::ostringstream os;
+      //os << ct;
+      //BOOST_CHECK_EQUAL("Bin", os.str( ));
+      //}
       {
       auto ct = poutre::PType::PType_GrayUINT8;
       std::ostringstream os;
@@ -37,13 +42,19 @@ BOOST_AUTO_TEST_CASE(ptype)
             os << ct;
             BOOST_CHECK_EQUAL("F32", os.str( ));
               }
+    {
+    auto ct = poutre::PType::PType_D64;
+    std::ostringstream os;
+    os << ct;
+    BOOST_CHECK_EQUAL("D64", os.str( ));
+      }
 
-      {
+   /*   {
       std::istringstream stream("Bin");
       auto ct = poutre::PType::PType_Undef;
       stream >> ct;
       BOOST_CHECK_EQUAL(ct, poutre::PType::PType_Bin);
-        }
+        }*/
 
         {
         std::istringstream stream("GUINT8");
@@ -64,12 +75,20 @@ BOOST_AUTO_TEST_CASE(ptype)
                             stream >> ct;
                             BOOST_CHECK_EQUAL(ct, poutre::PType::PType_GrayINT64);
                               }
-                                      {
-                                      std::istringstream stream("F32");
-                                      auto ct = poutre::PType::PType_Undef;
-                                      stream >> ct;
-                                      BOOST_CHECK_EQUAL(ct, poutre::PType::PType_F32);
-                                        }
+                                        {
+                                        std::istringstream stream("F32");
+                                        auto ct = poutre::PType::PType_Undef;
+                                        stream >> ct;
+                                        BOOST_CHECK_EQUAL(ct, poutre::PType::PType_F32);
+                                          }
+
+   {
+   std::istringstream stream("D64");
+   auto ct = poutre::PType::PType_Undef;
+   stream >> ct;
+   BOOST_CHECK_EQUAL(ct, poutre::PType::PType_D64);
+   }
+
   }
 
 BOOST_AUTO_TEST_CASE(imgtype)
@@ -121,12 +140,12 @@ BOOST_AUTO_TEST_CASE(basictypecompound)
           os << ct;
           BOOST_CHECK_EQUAL("4Planes", os.str( ));
             }
-          {
+        /*  {
           auto ct = poutre::CompoundType::CompoundType_Container;
           std::ostringstream os;
           os << ct;
           BOOST_CHECK_EQUAL("Container", os.str( ));
-            }
+            }*/
 
           {
           std::istringstream stream("Scalar");
@@ -135,12 +154,12 @@ BOOST_AUTO_TEST_CASE(basictypecompound)
           BOOST_CHECK_EQUAL(ct, poutre::CompoundType::CompoundType_Scalar);
             }
 
-          {
+        /*  {
           std::istringstream stream("Container");
           auto ct = poutre::CompoundType::CompoundType_Undef;
           stream >> ct;
           BOOST_CHECK_EQUAL(ct, poutre::CompoundType::CompoundType_Container);
-            }
+            }*/
 
           {
           std::istringstream stream("3Planes");
@@ -158,9 +177,30 @@ BOOST_AUTO_TEST_CASE(basictypecompound)
 
   }
 
+BOOST_AUTO_TEST_CASE(compound_pixel_container)
+  {
+  using c5G8 = poutre::compound_pixel<poutre::pUINT8, 5>;
+  BOOST_CHECK(poutre::get_dim<c5G8>::dim == 5);
+  c5G8 p00(10);
+  c5G8 p0({ 10, 10, 10, 10, 10 });
+  BOOST_CHECK_EQUAL(p00,p0);
+  BOOST_CHECK_EQUAL(p00[0], 10);
+  BOOST_CHECK_EQUAL(p00[3], 10);
+  p00[4] = 11;
+  BOOST_CHECK_EQUAL(p00[4], 11);
+  BOOST_CHECK_NE(p00, p0);
+  
+  //c5G8 pc = p00;
+  //BOOST_CHECK(pc == p00);
+  //BOOST_CHECK(&pc != &p00);
+
+
+  }
+
 BOOST_AUTO_TEST_CASE(compound_pixel_3)
   {
   using c3G8 = poutre::compound_pixel<poutre::pUINT8,3>;
+  BOOST_CHECK(poutre::get_dim<c3G8>::dim == 3);
   c3G8 p00;
   BOOST_CHECK(p00.m_a0== 0);
   BOOST_CHECK(p00.m_a1 == 0);
@@ -199,6 +239,7 @@ BOOST_AUTO_TEST_CASE(compound_pixel_3)
 BOOST_AUTO_TEST_CASE(compound_pixel_4)
   {
   using c4G8 = poutre::compound_pixel<poutre::pUINT8, 4>;
+  BOOST_CHECK(poutre::get_dim<c4G8>::dim == 4);
   c4G8 p00;
   BOOST_CHECK(p00.m_a0 == 0);
   BOOST_CHECK(p00.m_a1 == 0);

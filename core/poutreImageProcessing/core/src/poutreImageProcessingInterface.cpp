@@ -27,6 +27,8 @@ namespace poutre
     {
     if (i_img1.GetImgType( ) != i_img2.GetImgType( ))
       return false;
+    if (i_img1.GetCType( ) != i_img2.GetCType( ))
+      return false;
     if (i_img1.GetPType( ) != i_img2.GetPType( ))
       return false;
     return true;
@@ -43,32 +45,108 @@ namespace poutre
     if (!AsTypesCompatible(i_img1, i_img2)) POUTRE_RUNTIME_ERROR(i_msg);
     }
 
-
+  //TODO FACTOEIZE DISPATCH
 
   template<size_t numDims>
-  std::unique_ptr<IInterface> CreateDenseDipatchDims(const std::vector<std::size_t>& dims, PType ptype)
+  std::unique_ptr<IInterface> CreateDenseDipatchPTypeScalar(const std::vector<std::size_t>& dims, PType ptype)
     {
     switch (ptype)
       {
-        case PType::PType_Bin:
-          return std::unique_ptr<IInterface>(new DenseImage < PType::PType_Bin, numDims>(dims));
+        //todo think about bool/binary here
         case PType::PType_GrayUINT8:
-          return std::unique_ptr<IInterface>(new DenseImage < PType::PType_GrayUINT8, numDims>(dims));
+          return std::unique_ptr<IInterface>(new DenseImage < pUINT8, numDims>(dims));
         case PType::PType_GrayINT32:
-          return std::unique_ptr<IInterface>(new DenseImage < PType::PType_GrayINT32, numDims>(dims));
+          return std::unique_ptr<IInterface>(new DenseImage < pINT32, numDims>(dims));
         case PType::PType_F32:
-          return std::unique_ptr<IInterface>(new DenseImage < PType::PType_F32, numDims>(dims));
+          return std::unique_ptr<IInterface>(new DenseImage < pFLOAT, numDims>(dims));
         case PType::PType_GrayINT64:
-          return std::unique_ptr<IInterface>(new DenseImage < PType::PType_GrayINT64, numDims>(dims));
+          return std::unique_ptr<IInterface>(new DenseImage < pINT64, numDims>(dims));
+        case PType::PType_D64:
+          return std::unique_ptr<IInterface>(new DenseImage < pDOUBLE, numDims>(dims));
         default:
           {
-          POUTRE_RUNTIME_ERROR(("Unsupported type:" + boost::lexical_cast<std::string>(ptype)));
+          POUTRE_RUNTIME_ERROR(("CreateDenseDipatchPTypeScalar:: Unsupported scalar type:" + boost::lexical_cast<std::string>(ptype)));
           return std::unique_ptr < IInterface >( );
           }
       }
     }
 
-  std::unique_ptr<IInterface> CreateDense(const std::vector<std::size_t>& dims, PType ptype)
+
+  template<size_t numDims>
+  std::unique_ptr<IInterface> CreateDenseDipatchPType3PLanes(const std::vector<std::size_t>& dims, PType ptype)
+    {
+    switch (ptype)
+      {
+      //todo think about bool/binary here
+        case PType::PType_GrayUINT8:
+          return std::unique_ptr<IInterface>(new DenseImage < compound_pixel<pUINT8,3>, numDims>(dims));
+        case PType::PType_GrayINT32:
+          return std::unique_ptr<IInterface>(new DenseImage < compound_pixel<pINT32,3>, numDims>(dims));
+        case PType::PType_F32:
+          return std::unique_ptr<IInterface>(new DenseImage < compound_pixel<pFLOAT,3>, numDims>(dims));
+        case PType::PType_GrayINT64:
+          return std::unique_ptr<IInterface>(new DenseImage < compound_pixel<pINT64,3>, numDims>(dims));
+        case PType::PType_D64:
+          return std::unique_ptr<IInterface>(new DenseImage < compound_pixel<pDOUBLE,3>, numDims>(dims));
+        default:
+          {
+          POUTRE_RUNTIME_ERROR(("CreateDenseDipatchPType3PLanes:: Unsupported compound type 3 with " + boost::lexical_cast<std::string>(ptype)));
+          return std::unique_ptr < IInterface >( );
+          }
+      }
+    }
+
+  template<size_t numDims>
+  std::unique_ptr<IInterface> CreateDenseDipatchPType4PLanes(const std::vector<std::size_t>& dims, PType ptype)
+    {
+    switch (ptype)
+      {
+      //todo think about bool/binary here
+        case PType::PType_GrayUINT8:
+          return std::unique_ptr<IInterface>(new DenseImage < compound_pixel<pUINT8, 4>, numDims>(dims));
+        case PType::PType_GrayINT32:
+          return std::unique_ptr<IInterface>(new DenseImage < compound_pixel<pINT32, 4>, numDims>(dims));
+        case PType::PType_F32:
+          return std::unique_ptr<IInterface>(new DenseImage < compound_pixel<pFLOAT, 4>, numDims>(dims));
+        case PType::PType_GrayINT64:
+          return std::unique_ptr<IInterface>(new DenseImage < compound_pixel<pINT64, 4>, numDims>(dims));
+        case PType::PType_D64:
+          return std::unique_ptr<IInterface>(new DenseImage < compound_pixel<pDOUBLE, 4>, numDims>(dims));
+        default:
+          {
+          POUTRE_RUNTIME_ERROR(("CreateDenseDipatchPType3PLanes:: Unsupported compound type 3 with " + boost::lexical_cast<std::string>(ptype)));
+          return std::unique_ptr < IInterface >( );
+          }
+      }
+    }
+
+
+  template<size_t numDims>
+  std::unique_ptr<IInterface> CreateDenseDipatchDims(const std::vector<std::size_t>& dims,CompoundType ctype, PType ptype)
+    {
+    switch (ctype)
+      {
+        case CompoundType::CompoundType_Scalar:
+          {
+          return  CreateDenseDipatchPTypeScalar<numDims>(dims, ptype);
+          }break;
+        case CompoundType::CompoundType_3Planes:
+          {
+          return  CreateDenseDipatchPType3PLanes<numDims>(dims, ptype);
+          }break;
+        case CompoundType::CompoundType_4Planes:
+          {
+          return  CreateDenseDipatchPType4PLanes<numDims>(dims, ptype);
+          }break;
+        default:
+          {
+          POUTRE_RUNTIME_ERROR(("Unsupported compound type:" + boost::lexical_cast<std::string>(ctype)));
+          return std::unique_ptr < IInterface >( );
+          }
+      }
+    }
+
+  std::unique_ptr<IInterface> CreateDense(const std::vector<std::size_t>& dims,CompoundType ctype, PType ptype)
     {
     const auto& numDims = dims.size( );
     switch (numDims)
@@ -79,19 +157,19 @@ namespace poutre
           }break;
         case 1:
           {
-          return CreateDenseDipatchDims<1>(dims,ptype);
+          return CreateDenseDipatchDims<1>(dims,ctype,ptype);
           }break;
         case 2:
           {
-          return CreateDenseDipatchDims<2>(dims, ptype);
+          return CreateDenseDipatchDims<2>(dims,ctype,ptype);
           }break;
         case 3:
           {
-          return CreateDenseDipatchDims<3>(dims, ptype);
+          return CreateDenseDipatchDims<3>(dims,ctype, ptype);
           }break;
         case 4:
           {
-          return CreateDenseDipatchDims<4>(dims, ptype);
+          return CreateDenseDipatchDims<4>(dims,ctype, ptype);
           }break;
         default:
           {

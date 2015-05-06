@@ -21,6 +21,7 @@ namespace poutre
     public:
       virtual std::unique_ptr<IInterface> Clone() const = 0;
       virtual PType GetPType() const = 0;
+      virtual CompoundType GetCType( ) const = 0;
       virtual ImgType GetImgType( ) const = 0;
       virtual std::vector<std::size_t> GetCoords( ) const = 0;
       virtual std::size_t GetNumDims( ) const = 0;
@@ -43,7 +44,7 @@ namespace poutre
   //TODO dispatch with sparse type
   //BASE_API std::unique_ptr<IInterface> Create(const std::initializer_list<size_t>& dims, ImgType imgType, PType ptype);
 
-  BASE_API std::unique_ptr<IInterface> CreateDense(const std::vector<std::size_t>& dims, PType ptype);
+  BASE_API std::unique_ptr<IInterface> CreateDense(const std::vector<std::size_t>& dims,CompoundType ctype, PType ptype);
 
   }
 #endif POUTREIMAGEPROCESSINGINTERFACE_HPP__

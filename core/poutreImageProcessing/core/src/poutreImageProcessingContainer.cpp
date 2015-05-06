@@ -4,29 +4,40 @@ namespace poutre
   {
 
   //todo define macros
-  template class DenseImage < PType::PType_Bin, 1 >;
-  template class DenseImage < PType::PType_GrayUINT8, 1 >;
-  template class DenseImage < PType::PType_GrayINT32, 1 >;
-  template class DenseImage < PType::PType_F32, 1 >;
-  template class DenseImage < PType::PType_GrayINT64, 1 >;
+  template class DenseImage < pUINT8, 1 > ;
+  template class DenseImage < pINT32, 1 > ;
+  template class DenseImage < pFLOAT, 1 > ;
+  template class DenseImage < pINT64, 1 > ;
+  template class DenseImage < pDOUBLE, 1 > ;
 
-  template class DenseImage < PType::PType_Bin, 2 >;
-  template class DenseImage < PType::PType_GrayUINT8, 2 >;
-  template class DenseImage < PType::PType_GrayINT32, 2 >;
-  template class DenseImage < PType::PType_F32, 2 >;
-  template class DenseImage < PType::PType_GrayINT64, 2 >;
+  template class DenseImage < pUINT8, 2 > ;
+  template class DenseImage < pINT32, 2 > ;
+  template class DenseImage < pFLOAT, 2 > ;
+  template class DenseImage < pINT64, 2 > ;
+  template class DenseImage < pDOUBLE, 2 > ;
 
-  extern template class DenseImage < PType::PType_Bin, 3 >;
-  extern template class DenseImage < PType::PType_GrayUINT8, 3 >;
-  extern template class DenseImage < PType::PType_GrayINT32, 3 >;
-  extern template class DenseImage < PType::PType_F32, 3 >;
-  extern template class DenseImage < PType::PType_GrayINT64, 3 >;
+  template class DenseImage < compound_pixel < pUINT8, 3 > > ;
+  template class DenseImage < compound_pixel < pINT32, 3 > > ;
+  template class DenseImage < compound_pixel < pFLOAT, 3 > > ;
+  template class DenseImage < compound_pixel < pINT64, 3 > > ;
+  template class DenseImage < compound_pixel < pDOUBLE, 3 > > ;
 
-  extern template class DenseImage < PType::PType_Bin, 4 >;
-  extern template class DenseImage < PType::PType_GrayUINT8, 4 >;
-  extern template class DenseImage < PType::PType_GrayINT32, 4 >;
-  extern template class DenseImage < PType::PType_F32, 4 >;
-  extern template class DenseImage < PType::PType_GrayINT64, 4 >;
+  template class DenseImage < compound_pixel < pUINT8, 4 > > ;
+  template class DenseImage < compound_pixel < pINT32, 4 > > ;
+  template class DenseImage < compound_pixel < pFLOAT, 4 > > ;
+  template class DenseImage < compound_pixel < pINT64, 4 > > ;
+  template class DenseImage < compound_pixel < pDOUBLE, 4 > > ;
 
+  template class DenseImage < pUINT8, 3 > ;
+  template class DenseImage < pINT32, 3 > ;
+  template class DenseImage < pFLOAT, 3 > ;
+  template class DenseImage < pINT64, 3 > ;
+  template class DenseImage < pDOUBLE, 3 > ;
+
+  template class DenseImage < pUINT8, 4 > ;
+  template class DenseImage < pINT32, 4 > ;
+  template class DenseImage < pFLOAT, 4 > ;
+  template class DenseImage < pINT64, 4 > ;
+  template class DenseImage < pDOUBLE, 4 > ;
 
   }
