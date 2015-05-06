@@ -49,7 +49,7 @@ namespace poutre
     logger.add_attribute("TimeStamp", boost::log::attributes::local_clock());             // each log line gets a timestamp
 
     // add a text sink
-    typedef boost::log::sinks::synchronous_sink<boost::log::sinks::text_ostream_backend> text_sink;
+    using text_sink = boost::log::sinks::synchronous_sink<boost::log::sinks::text_ostream_backend>;
     boost::shared_ptr<text_sink> sink = boost::make_shared<text_sink>();
 
     // add a logfile stream to our sink

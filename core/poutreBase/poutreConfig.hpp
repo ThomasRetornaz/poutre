@@ -1,6 +1,8 @@
 #ifndef POUTRE_CONFIG__HPP__
 #define POUTRE_CONFIG__HPP__
 
+#include <boost/format.hpp>
+
 /*!@file
  * Common configuration definitions. This file should not depend on any other file.
  */
@@ -95,6 +97,7 @@ namespace poutre
 
 
 #define POUTRE_RUNTIME_ERROR( MSG ) throw std::runtime_error((boost::format("Throw %s at %s(%d)") % MSG % __FILE__ % __LINE__).str())
+#define POUTRE_NEVER_REACH_HERE POUTRE_RUNTIME_ERROR( "Code should never reach here, WTF Oo")
 #define POUTRE_CHECK( CONDITION, MSG )           \
                {                                             \
       if ( !( CONDITION ) )                      \
