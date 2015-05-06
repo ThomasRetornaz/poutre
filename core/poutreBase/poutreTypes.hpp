@@ -17,7 +17,7 @@ namespace poutre
   using  pUINT32 = std::uint32_t;
   using  pINT32 = std::int32_t;
   using  pFLOAT = float;
-  //using  pDOUBLE = double;
+  using  pDOUBLE = long double;
   using  pINT64 = std::int64_t;
   using  pUINT64 = std::uint64_t;
 
