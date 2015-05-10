@@ -62,39 +62,13 @@ namespace poutre
     _PixelType_Max = 1 << 6 //keep sync with the max value
     };
 
-  //#ifdef POUTRE_64BITS
-  //  typedef PType::PType_GrayINT64  PTypeLabel;
-  //#else
-  //  using PTypeLabel = PType::PType_GrayINT32;
-  //#endif
-
   //! operator<< for PType
   BASE_API std::ostream& operator<<(std::ostream&, PType);
 
   //! operator>> for PType
   BASE_API std::istream& operator>>(std::istream&, PType&);
 
-  /*!
-  * @brief Compare Operator
-  */
-  enum class CompOpType
-    {
-    CompOpUndef = 0,       //!< Undefined type 
-    CompOpEqual = 1 << 0, //!p1==p2 
-    CompOpDiff = 1 << 1,     //!p1!=p2 
-    CompOpSup = 1 << 2,      //!p1>p2 
-    CompOpSupEqual = 1 << 3, //!p1>=p2 
-    CompOpInf = 1 << 4,      //!p1<p2
-    CompOpInfEqual = 1 << 5,  //!p1<=p2
-    _CompOp_Max = 1 << 5 //sync with the max value
-    };
-
-  //! operator<< for CompOpType
-  BASE_API std::ostream& operator<<(std::ostream&, CompOpType);
-
-  //! operator>> for CompOpType
-  BASE_API std::istream& operator>>(std::istream&, CompOpType&);
-
+  
 
 
   template <typename storage_type, std::size_t NumDims>
@@ -109,40 +83,40 @@ namespace poutre
       using  const_reference = value_type const &;
       using  difference_type = std::ptrdiff_t;
       using  size_type = std::size_t;
-      static const size_t m_numdims = NumDims;
+      POUTRE_STATIC_CONSTEXPR size_t m_numdims = NumDims;
       using pixcontainer = std::array<storage_type, NumDims>;
     public:
       pixcontainer m_pixcontainer;
     public:
-      compound_pixel() NOEXCEPT : m_pixcontainer()
+      POUTRE_CONSTEXPR compound_pixel( ) POUTRE_NOEXCEPT : m_pixcontainer( )
         {
         }
 
-        compound_pixel(const value_type& a)  NOEXCEPT 
+      POUTRE_CONSTEXPR compound_pixel(const value_type& a) POUTRE_NOEXCEPT : m_pixcontainer( )
           {
           m_pixcontainer.assign(a);
           }
 
-            compound_pixel(const std::initializer_list<value_type>& values) /*:m_pixcontainer()*/
+       POUTRE_CONSTEXPR compound_pixel(const std::initializer_list<value_type>& values) :m_pixcontainer()
             {
             if (values.size( ) != m_numdims) 
               POUTRE_RUNTIME_ERROR("Invalid input initializer regarding NumDims of compound_pixel container");
             std::copy(values.begin( ), values.end(), m_pixcontainer.begin());
             }
 
-          compound_pixel(const self_type& rhs) NOEXCEPT
+       POUTRE_CONSTEXPR compound_pixel(const self_type& rhs) POUTRE_NOEXCEPT
           {
           std::copy(rhs.begin( ), rhs.end( ), m_pixcontainer.begin( ));
           }
 
             //is this really needed ?
-            compound_pixel(self_type&& rhs) /*NOEXCEPT*/
+            compound_pixel(self_type&& rhs) /*POUTRE_NOEXCEPT*/
             {
             *this = std::move(rhs);
             }
 
           //is this really needed ?
-          self_type& operator= (self_type&& rhs) /*NOEXCEPT*/
+          self_type& operator= (self_type&& rhs) /*POUTRE_NOEXCEPT*/
             {
             if (this != &rhs) // ?? http://scottmeyers.blogspot.fr/2014/06/the-drawbacks-of-implementing-move.html
               {
@@ -160,32 +134,32 @@ namespace poutre
           //  }
 
 
-          reference operator[] (size_type n) NOEXCEPTRELONLYNDEBUG
+          reference operator[] (size_type n) POUTRE_NOEXCEPTONLYNDEBUG
             {
             POUTRE_ASSERTCHECK(n >= 0, "compound_pixel operator[n] n must be in >=0");
             POUTRE_ASSERTCHECK(n < m_numdims, "compound_pixel operator[n] n must be in [0,m_numdims[");
             return m_pixcontainer[n];
             }
-              const_reference operator[] (size_type n) const NOEXCEPTRELONLYNDEBUG
+              const_reference operator[] (size_type n) const POUTRE_NOEXCEPTONLYNDEBUG
               {
               POUTRE_ASSERTCHECK(n >= 0, "compound_pixel operator[n] n must be in >=0");
               POUTRE_ASSERTCHECK(n < m_numdims, "compound_pixel operator[n] n must be in [0,m_numdims[");
               return m_pixcontainer[n];
               }
 
-                bool operator==(const self_type& rhs) const NOEXCEPT
+                bool operator==(const self_type& rhs) const POUTRE_NOEXCEPT
                 {
                 return  std::equal(m_pixcontainer.cbegin( ), m_pixcontainer.cend( ), rhs.m_pixcontainer.cbegin());
                 }
-                  bool operator!=(const self_type& rhs) const NOEXCEPT
+                  bool operator!=(const self_type& rhs) const POUTRE_NOEXCEPT
                   {
                   return  !(std::equal(m_pixcontainer.cbegin( ), m_pixcontainer.cend( ), rhs.m_pixcontainer.cbegin( )));
                   }
 
       /* template<typename storagetype, size_t NumDim>
-       friend std::istream& operator<<(std::istream& in, const compound_pixel < storage_type, NumDims>& rhs) NOEXCEPT;*/
+       friend std::istream& operator<<(std::istream& in, const compound_pixel < storage_type, NumDims>& rhs) POUTRE_NOEXCEPT;*/
 
-         friend std::ostream& operator<<(std::ostream& out, const compound_pixel < storage_type, NumDims>& rhs) NOEXCEPT
+         friend std::ostream& operator<<(std::ostream& out, const compound_pixel < storage_type, NumDims>& rhs) POUTRE_NOEXCEPT
          {
          for (const auto& val : rhs.m_pixcontainer)
            {
@@ -217,28 +191,28 @@ namespace poutre
       value_type m_a0, m_a1, m_a2;
 
     public:
-      compound_pixel( ) NOEXCEPT : m_a0(0), m_a1(0), m_a2(0)
+      POUTRE_CONSTEXPR compound_pixel( ) POUTRE_NOEXCEPT : m_a0(0), m_a1(0), m_a2(0)
         {
         }
-      compound_pixel(const value_type& a0, const value_type& a1, const value_type& a2) NOEXCEPT : m_a0(a0), m_a1(a1), m_a2(a2)  {}
-      compound_pixel(const value_type& a)  NOEXCEPT : m_a0(a), m_a1(a), m_a2(a)  {}
-      compound_pixel(const self_type& rhs) NOEXCEPT : m_a0(rhs.m_a0), m_a1(rhs.m_a1), m_a2(rhs.m_a2)  {}
+      POUTRE_CONSTEXPR compound_pixel(const value_type& a0, const value_type& a1, const value_type& a2) POUTRE_NOEXCEPT : m_a0(a0), m_a1(a1), m_a2(a2)  {}
+      POUTRE_CONSTEXPR compound_pixel(const value_type& a)  POUTRE_NOEXCEPT : m_a0(a), m_a1(a), m_a2(a)  {}
+      POUTRE_CONSTEXPR compound_pixel(const self_type& rhs) POUTRE_NOEXCEPT : m_a0(rhs.m_a0), m_a1(rhs.m_a1), m_a2(rhs.m_a2)  {}
 
       //is this really needed ?
-      compound_pixel(self_type&& rhs) NOEXCEPT
+      compound_pixel(self_type&& rhs) POUTRE_NOEXCEPT
         { *this = std::move(rhs); }
         //is this really needed ?
-        self_type& operator= (self_type&& rhs) NOEXCEPT
+        self_type& operator= (self_type&& rhs) POUTRE_NOEXCEPT
         { m_a0 = rhs.m_a0; m_a1 = rhs.m_a1; m_a2 = rhs.m_a2; return *this; }
 
         
         template<class other_storage_type
         , typename std::enable_if<std::is_convertible<other_storage_type, storage_type>::value>::type* = nullptr>
-        compound_pixel(const compound_pixel<other_storage_type, m_numdims>& rhs) NOEXCEPT : m_a0(static_cast<storage_type>(rhs.m_a0)), m_a1(static_cast<storage_type>(rhs.m_a1)), m_a2(static_cast<storage_type>(rhs.m_a2))
+        compound_pixel(const compound_pixel<other_storage_type, m_numdims>& rhs) POUTRE_NOEXCEPT : m_a0(static_cast<storage_type>(rhs.m_a0)), m_a1(static_cast<storage_type>(rhs.m_a1)), m_a2(static_cast<storage_type>(rhs.m_a2))
         {
         }
 
-      reference operator[] (size_type n) NOEXCEPTRELONLYNDEBUG
+      reference operator[] (size_type n) POUTRE_NOEXCEPTONLYNDEBUG
         {
         POUTRE_ASSERTCHECK(n >= 0, "compound_pixel 4 operator[n] n must be in [0,3[");
         POUTRE_ASSERTCHECK(n < 3, "compound_pixel 4 operator[n] n must be in [0,3[");
@@ -246,7 +220,7 @@ namespace poutre
         if (n == 1) return m_a1;
         if (n == 2) return m_a2;
         }
-          const_reference operator[] (size_type n) const NOEXCEPTRELONLYNDEBUG
+          const_reference operator[] (size_type n) const POUTRE_NOEXCEPTONLYNDEBUG
           {
           POUTRE_ASSERTCHECK(n >= 0, "compound_pixel 4 operator[n] n must be in [0,3[");
           POUTRE_ASSERTCHECK(n < 3, "compound_pixel 4 operator[n] n must be in [0,3[");
@@ -255,18 +229,18 @@ namespace poutre
           if (n == 2) return m_a2;
           }
 
-            bool operator==(const self_type& rhs) const NOEXCEPT
+            bool operator==(const self_type& rhs) const POUTRE_NOEXCEPT
             {
             return  (m_a0 == rhs.m_a0) && (m_a1 == rhs.m_a1) && (m_a2 == rhs.m_a2);
             }
-              bool operator!=(const self_type& rhs) const NOEXCEPT
+              bool operator!=(const self_type& rhs) const POUTRE_NOEXCEPT
               {
               return  (m_a0 != rhs.m_a0) || (m_a1 != rhs.m_a1) || (m_a2 != rhs.m_a2);
               }
       /*template<typename storagetype>
-      friend std::istream& operator<<(std::istream& in, const compound_pixel < storage_type, 3>& rhs) NOEXCEPT;*/
+      friend std::istream& operator<<(std::istream& in, const compound_pixel < storage_type, 3>& rhs) POUTRE_NOEXCEPT;*/
 
-      friend std::ostream& operator<<(std::ostream& out, const compound_pixel < storage_type, 3>& rhs) NOEXCEPT
+      friend std::ostream& operator<<(std::ostream& out, const compound_pixel < storage_type, 3>& rhs) POUTRE_NOEXCEPT
         {
         out << rhs.m_a0;
         out << ",";
@@ -301,30 +275,30 @@ namespace poutre
       value_type m_a0, m_a1, m_a2, m_a3;
 
     public:
-      compound_pixel( ) NOEXCEPT : m_a0(0), m_a1(0), m_a2(0), m_a3(0)
+      POUTRE_CONSTEXPR compound_pixel( ) POUTRE_NOEXCEPT : m_a0(0), m_a1(0), m_a2(0), m_a3(0)
         {
         }
-      compound_pixel(const value_type& a0, const value_type& a1, const value_type& a2, const value_type& a3) NOEXCEPT : m_a0(a0), m_a1(a1), m_a2(a2), m_a3(a3)  {}
-      compound_pixel(const value_type& a)  NOEXCEPT : m_a0(a), m_a1(a), m_a2(a), m_a3(a)  {}
-      compound_pixel(const self_type& rhs) NOEXCEPT : m_a0(rhs.m_a0), m_a1(rhs.m_a1), m_a2(rhs.m_a2), m_a3(rhs.m_a3)  {}
+      POUTRE_CONSTEXPR compound_pixel(const value_type& a0, const value_type& a1, const value_type& a2, const value_type& a3) POUTRE_NOEXCEPT : m_a0(a0), m_a1(a1), m_a2(a2), m_a3(a3)  {}
+      POUTRE_CONSTEXPR compound_pixel(const value_type& a)  POUTRE_NOEXCEPT : m_a0(a), m_a1(a), m_a2(a), m_a3(a)  {}
+      POUTRE_CONSTEXPR compound_pixel(const self_type& rhs) POUTRE_NOEXCEPT : m_a0(rhs.m_a0), m_a1(rhs.m_a1), m_a2(rhs.m_a2), m_a3(rhs.m_a3)  {}
 
       //is this really needed ?
-      compound_pixel(self_type&& rhs) NOEXCEPT
+      compound_pixel(self_type&& rhs) POUTRE_NOEXCEPT
         { *this = std::move(rhs); }
 
         //is this really needed ?
-        self_type& operator= (self_type&& rhs) NOEXCEPT
+        self_type& operator= (self_type&& rhs) POUTRE_NOEXCEPT
         { m_a0 = rhs.m_a0; m_a1 = rhs.m_a1; m_a2 = rhs.m_a2; m_a3 = rhs.m_a3; return *this; }
 
         // foo2 overload is enabled via a parameter
         template<class other_storage_type
         , typename std::enable_if<std::is_convertible<other_storage_type, storage_type>::value>::type* = nullptr
         >
-        compound_pixel(const compound_pixel<other_storage_type, m_numdims>& rhs) NOEXCEPT : m_a0(static_cast<storage_type>(rhs.m_a0)), m_a1(static_cast<storage_type>(rhs.m_a1)), m_a2(static_cast<storage_type>(rhs.m_a2)), m_a3(static_cast<storage_type>(rhs.m_a3))
+        compound_pixel(const compound_pixel<other_storage_type, m_numdims>& rhs) POUTRE_NOEXCEPT : m_a0(static_cast<storage_type>(rhs.m_a0)), m_a1(static_cast<storage_type>(rhs.m_a1)), m_a2(static_cast<storage_type>(rhs.m_a2)), m_a3(static_cast<storage_type>(rhs.m_a3))
         {
         }
 
-      reference operator[] (size_type n) NOEXCEPTRELONLYNDEBUG
+      reference operator[] (size_type n) POUTRE_NOEXCEPTONLYNDEBUG
         {
         POUTRE_ASSERTCHECK(n >= 0, "compound_pixel 4 operator[n] n must be in [0,4[");
         POUTRE_ASSERTCHECK(n < 4, "compound_pixel 4 operator[n] n must be in [0,4[");
@@ -334,7 +308,7 @@ namespace poutre
         if (n == 3) return m_a3;
         
         }
-          const_reference operator[] (size_type n) const NOEXCEPTRELONLYNDEBUG
+          const_reference operator[] (size_type n) const POUTRE_NOEXCEPTONLYNDEBUG
           {
           POUTRE_ASSERTCHECK(n >= 0, "compound_pixel 4 operator[n] n must be in [0,4[");
           POUTRE_ASSERTCHECK(n < 4, "compound_pixel 4 operator[n] n must be in [0,4[");
@@ -344,18 +318,18 @@ namespace poutre
           if (n == 3) return m_a3;          
           }
 
-            bool operator==(const self_type& rhs) const NOEXCEPT
+            bool operator==(const self_type& rhs) const POUTRE_NOEXCEPT
             {
             return  (m_a0 == rhs.m_a0) && (m_a1 == rhs.m_a1) && (m_a2 == rhs.m_a2) && (m_a3 == rhs.m_a3);
             }
-              bool operator!=(const self_type& rhs) const NOEXCEPT
+              bool operator!=(const self_type& rhs) const POUTRE_NOEXCEPT
               {
               return  (m_a0 != rhs.m_a0) || (m_a1 != rhs.m_a1) || (m_a2 != rhs.m_a2) || (m_a3 != rhs.m_a3);
               }
      /* template<typename storagetype>
-      friend std::istream& operator<<(std::istream& in, const compound_pixel < storage_type, 4>& rhs) NOEXCEPT;*/
+      friend std::istream& operator<<(std::istream& in, const compound_pixel < storage_type, 4>& rhs) POUTRE_NOEXCEPT;*/
 
-      friend std::ostream& operator<<(std::ostream& out, const compound_pixel < storage_type, 4>& rhs) NOEXCEPT
+      friend std::ostream& operator<<(std::ostream& out, const compound_pixel < storage_type, 4>& rhs) POUTRE_NOEXCEPT
         {
         out << rhs.m_a0;
         out << ",";
@@ -419,31 +393,14 @@ namespace poutre
     static const PType pixel_type = PType::PType_GrayUINT8;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
-    static const size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
+    POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
 
-    static const size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
+    POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
 
-    inline static storage_type lowest( ) { return std::numeric_limits<storage_type>::lowest( ); }
-    inline static storage_type min( ) { return std::numeric_limits<storage_type>::min( ); }
-    inline static storage_type max( ) { return std::numeric_limits<storage_type>::max( ); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::lowest( ); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::min( ); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::max( ); }
     };
-
-  //template<>
-  //struct TypeTraits < PType::PType_Bin >//TODO switch to bitapacking later
-  //  {
-  //  using storage_type = pUINT8;
-  //  using safe_signed_type = pINT32;
-  //  using str_type = pUINT32;
-  //  using accu_type = pUINT64;
-  //  static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
-
-  //  static const size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
-  //  static const size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
-
-  //  inline static storage_type lowest( ) { return std::numeric_limits<storage_type>::lowest( ); }
-  //  inline static storage_type min( ) { return std::numeric_limits<storage_type>::min( ); }
-  //  inline static storage_type max( ) { return std::numeric_limits<storage_type>::max( ); }
-  //  };
 
   template<>
   struct TypeTraits <pINT32>
@@ -456,12 +413,12 @@ namespace poutre
     static const PType pixel_type = PType::PType_GrayINT32;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
-    static const size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
-    static const size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
+    BOOST_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
+    BOOST_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
 
-    inline static storage_type lowest( ) { return std::numeric_limits<storage_type>::lowest( ); }
-    inline static storage_type min( ) { return std::numeric_limits<storage_type>::min( ); }
-    inline static storage_type max( ) { return std::numeric_limits<storage_type>::max( ); }
+    BOOST_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::lowest( ); }
+    BOOST_STATIC_CONSTEXPR storage_type min( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::min( ); }
+    BOOST_STATIC_CONSTEXPR storage_type max( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::max( ); }
     };
 
   template<>
@@ -475,12 +432,12 @@ namespace poutre
     static const PType pixel_type = PType::PType_F32;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
-    static const size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
-    static const size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
+    POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
+    POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
 
-    inline static storage_type lowest( ) { return std::numeric_limits<storage_type>::lowest( ); }
-    inline static storage_type min( ) { return std::numeric_limits<storage_type>::min( ); }
-    inline static storage_type max( ) { return std::numeric_limits<storage_type>::max( ); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::lowest( ); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::min( ); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::max( ); }
     };
 
   template<>
@@ -494,12 +451,12 @@ namespace poutre
     static const PType pixel_type = PType::PType_D64;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
-    static const size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
-    static const size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
+    POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
+    POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
 
-    inline static storage_type lowest( ) { return std::numeric_limits<storage_type>::lowest( ); }
-    inline static storage_type min( ) { return std::numeric_limits<storage_type>::min( ); }
-    inline static storage_type max( ) { return std::numeric_limits<storage_type>::max( ); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::lowest( ); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::min( ); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::max( ); }
     };
 
   template<>
@@ -513,12 +470,12 @@ namespace poutre
     static const PType pixel_type = PType::PType_GrayINT64;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
-    static const size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
-    static const size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
+    POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
+    POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
 
-    inline static storage_type lowest( ) { return std::numeric_limits<storage_type>::lowest( ); }
-    inline static storage_type min( ) { return std::numeric_limits<storage_type>::min( ); }
-    inline static storage_type max( ) { return std::numeric_limits<storage_type>::max( ); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::lowest( ); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::min( ); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::max( ); }
     };
 
 
@@ -537,23 +494,23 @@ namespace poutre
 
     static const PType pixel_type = TypeTraits<valuetype>::pixel_type;
     static const CompoundType compound_type = CompoundType::CompoundType_3Planes;
-    static const size_t default_padding_size = 1;
-    static const size_t alignement = 1;
+    POUTRE_STATIC_CONSTEXPR size_t default_padding_size = 1;
+    POUTRE_STATIC_CONSTEXPR size_t alignement = 1;
 
    //todo decltype
-    inline static storage_type lowest( ) 
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT
       { 
       return compound_pixel<valuetype, 3>(std::numeric_limits<valuetype>::lowest( ), std::numeric_limits<valuetype>::lowest( ), std::numeric_limits<valuetype>::lowest( ));
       }
    
     //todo decltype
-    inline static storage_type min( )
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR  storage_type min( ) POUTRE_NOEXCEPT
       {
       return compound_pixel<valuetype, 3>(std::numeric_limits<valuetype>::min( ), std::numeric_limits<valuetype>::min( ), std::numeric_limits<valuetype>::min( ));
       }
 
     //todo decltype
-    inline static storage_type max()
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR  storage_type max( ) POUTRE_NOEXCEPT
       {
       return compound_pixel<valuetype, 3>(std::numeric_limits<valuetype>::max( ), std::numeric_limits<valuetype>::max( ), std::numeric_limits<valuetype>::max( ));
       }
@@ -569,24 +526,25 @@ namespace poutre
 
     static const PType pixel_type = TypeTraits<valuetype>::pixel_type;
     static const CompoundType compound_type = CompoundType::CompoundType_4Planes;
-    static const size_t default_padding_size = 1;
-    static const size_t alignement = 1;
+
+    POUTRE_STATIC_CONSTEXPR size_t default_padding_size = 1;
+    POUTRE_STATIC_CONSTEXPR size_t alignement = 1;
 
     
     //todo decltype
-    inline static storage_type lowest( )
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT
       {
       return compound_pixel<valuetype, 4>(std::numeric_limits<valuetype>::lowest( ), std::numeric_limits<valuetype>::lowest( ), std::numeric_limits<valuetype>::lowest( ), std::numeric_limits<valuetype>::lowest( ));
       }
 
     //todo decltype
-    inline static storage_type min( )
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR  storage_type min( ) POUTRE_NOEXCEPT
       {
       return compound_pixel<valuetype, 4>(std::numeric_limits<valuetype>::min( ), std::numeric_limits<valuetype>::min( ), std::numeric_limits<valuetype>::min( ), std::numeric_limits<valuetype>::min( ));
       }
         
     //todo decltype
-    inline static storage_type max( )
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR  storage_type max( ) POUTRE_NOEXCEPT
       {
       return compound_pixel<valuetype, 4>(std::numeric_limits<valuetype>::max( ), std::numeric_limits<valuetype>::max( ), std::numeric_limits<valuetype>::max( ), std::numeric_limits<valuetype>::max( ));
       }
