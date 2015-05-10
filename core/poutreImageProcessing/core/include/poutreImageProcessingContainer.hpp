@@ -27,6 +27,8 @@
 
 namespace poutre
   {
+  //Maybe inherit/compose with nt2::table or blaze::DenseMatrix or Eigen::DenseMatrix would be more effective depending on algorithms 
+
   //!FIXME dispatch on coord and allow unset dims
   template <
     class valuetype,
@@ -124,7 +126,7 @@ namespace poutre
           m_data = m_allocator.allocate(m_numelemwithpaddingifany);
           }
         }
-      ~DenseImage( ) NOEXCEPT
+      ~DenseImage( ) POUTRE_NOEXCEPT
         {
         if (m_data) m_allocator.deallocate(m_data, m_numelemwithpaddingifany);
         }
@@ -132,23 +134,23 @@ namespace poutre
           //std::array like interface
 
           //Capacity
-          const size_type size( ) NOEXCEPT
+          const size_type size( ) POUTRE_NOEXCEPT
           {
           return m_numelemwithpaddingifany;
           }
-            const size_type max_size( ) NOEXCEPT
+            const size_type max_size( ) POUTRE_NOEXCEPT
             {
             return this->size( );
             }
 
-              const bool empty( ) NOEXCEPT
+              const bool empty( ) POUTRE_NOEXCEPT
               {
               return this->size( ) == 0;
               }
 
                 //Element access
-            reference operator[] (size_type n) NOEXCEPT{ return m_data[n]; }
-            const_reference operator[] (size_type n) const NOEXCEPT{ return m_data[n]; }
+            reference operator[] (size_type n) POUTRE_NOEXCEPT{ return m_data[n]; }
+            const_reference operator[] (size_type n) const POUTRE_NOEXCEPT{ return m_data[n]; }
 
               reference at(size_type n)
               {
@@ -161,12 +163,12 @@ namespace poutre
               return m_data[n];
               }
 
-            reference front( )  NOEXCEPT{ return m_data[0]; }
-            const_reference front( ) const NOEXCEPT{ return m_data[0]; }
-            reference back( )  NOEXCEPT{ return m_data[m_numelemwithpaddingifany - 1]; }
-            const_reference back( ) const  NOEXCEPT{ return m_data[m_numelemwithpaddingifany - 1]; }
-            pointer datas( ) NOEXCEPT{ return m_data; }
-            const_pointer datas( ) const NOEXCEPT{ return m_data; }
+            reference front( )  POUTRE_NOEXCEPT{ return m_data[0]; }
+            const_reference front( ) const POUTRE_NOEXCEPT{ return m_data[0]; }
+            reference back( )  POUTRE_NOEXCEPT{ return m_data[m_numelemwithpaddingifany - 1]; }
+            const_reference back( ) const  POUTRE_NOEXCEPT{ return m_data[m_numelemwithpaddingifany - 1]; }
+            pointer datas( ) POUTRE_NOEXCEPT{ return m_data; }
+            const_pointer datas( ) const POUTRE_NOEXCEPT{ return m_data; }
 
               //Modifiers
               void assign(const value_type& val)
@@ -180,7 +182,7 @@ namespace poutre
               std::fill(this->begin( ), this->end( ), val);
               }
 
-            void swap(self_type& rhs) //NOEXCEPT(NOEXCEPT (swap(declval<value_type&>( ), declval<value_type&>( )))) //wait MSVC2013 noexcept impl ...
+            void swap(self_type& rhs) //POUTRE_NOEXCEPT(POUTRE_NOEXCEPT (swap(declval<value_type&>( ), declval<value_type&>( )))) //wait MSVC2013 noexcept impl ...
               {
               if (this != &rhs)
                 {
@@ -194,21 +196,21 @@ namespace poutre
 
 
 
-            iterator begin( ) NOEXCEPT{ return iterator(m_data, m_data); }
+            iterator begin( ) POUTRE_NOEXCEPT{ return iterator(m_data, m_data); }
 
-            const_iterator cbegin( ) const NOEXCEPT{ return const_iterator(m_data, m_data); }
+            const_iterator cbegin( ) const POUTRE_NOEXCEPT{ return const_iterator(m_data, m_data); }
 
-            iterator end( ) NOEXCEPT{ return iterator(m_data + m_numelemwithpaddingifany, m_data); }
+            iterator end( ) POUTRE_NOEXCEPT{ return iterator(m_data + m_numelemwithpaddingifany, m_data); }
 
-            const_iterator cend( ) const NOEXCEPT{ return const_iterator(m_data + m_numelemwithpaddingifany, m_data); }
+            const_iterator cend( ) const POUTRE_NOEXCEPT{ return const_iterator(m_data + m_numelemwithpaddingifany, m_data); }
 
-            reverse_iterator rbegin( ) NOEXCEPT{ return (reverse_iterator(m_data + m_numelemwithpaddingifany - 1, m_data)); }
+            reverse_iterator rbegin( ) POUTRE_NOEXCEPT{ return (reverse_iterator(m_data + m_numelemwithpaddingifany - 1, m_data)); }
 
-            const_reverse_iterator crbegin( ) const NOEXCEPT{ return (const_reverse_iterator(m_data + m_numelemwithpaddingifany - 1, m_data)); }
+            const_reverse_iterator crbegin( ) const POUTRE_NOEXCEPT{ return (const_reverse_iterator(m_data + m_numelemwithpaddingifany - 1, m_data)); }
 
-            reverse_iterator rend( ) NOEXCEPT{ return (reverse_iterator(m_data - 1, m_data)); }
+            reverse_iterator rend( ) POUTRE_NOEXCEPT{ return (reverse_iterator(m_data - 1, m_data)); }
 
-            const_reverse_iterator crend( ) const NOEXCEPT{ return (const_reverse_iterator(m_data - 1, m_data)); }
+            const_reverse_iterator crend( ) const POUTRE_NOEXCEPT{ return (const_reverse_iterator(m_data - 1, m_data)); }
 
               //end std::array like interface
 
@@ -219,13 +221,13 @@ namespace poutre
               std::copy(m_size_list.begin( ), m_size_list.end( ), out.begin( ));
               return out;
               }
-            size_t GetNumDims( ) const NOEXCEPT{ return m_numdims; }
+            size_t GetNumDims( ) const POUTRE_NOEXCEPT{ return m_numdims; }
 
-            CompoundType GetCType( ) const NOEXCEPT  override{ return m_ctype; }
+            CompoundType GetCType( ) const POUTRE_NOEXCEPT  override{ return m_ctype; }
 
-            PType GetPType( ) const NOEXCEPT  override{ return m_ptype; }
+            PType GetPType( ) const POUTRE_NOEXCEPT  override{ return m_ptype; }
 
-            ImgType GetImgType( ) const NOEXCEPT  override{ return m_imgtype; }
+            ImgType GetImgType( ) const POUTRE_NOEXCEPT  override{ return m_imgtype; }
 
               std::unique_ptr<IInterface> Clone( ) const override
               {//FIXME
@@ -298,7 +300,7 @@ namespace poutre
     };
 
     template <class coordinate_container>
-    POUTRE_STRONG_INLINE coordinate_container GetCoordsFomOffset(const coordinate_container &coord, offset offset) NOEXCEPTRELONLYNDEBUG
+    POUTRE_STRONG_INLINE coordinate_container GetCoordsFomOffset(const coordinate_container &coord, offset offset) POUTRE_NOEXCEPTONLYNDEBUG
       {
       POUTRE_ASSERTCHECK(offset >= 0, "offset must be >=0");
       coordinate_container ret;
