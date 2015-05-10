@@ -12,22 +12,19 @@ namespace poutre
   {
 
 
-#if defined(noexcept)
-#define NOEXCEPT noexcept
-#else
-#ifdef _MSVC_VER
-#define NOEXCEPT _NOEXCEPT 
-#else
-#define NOEXCEPT throw()
-#endif
-#endif
+#define POUTRE_NOEXCEPT BOOST_NOEXCEPT_OR_NOTHROW
 
 #ifndef NDEBUG
-#define NOEXCEPTRELONLYNDEBUG 
+#define POUTRE_NOEXCEPTONLYNDEBUG 
 #else
-#define NOEXCEPTRELONLYNDEBUG NOEXCEPT
+#define POUTRE_NOEXCEPTONLYNDEBUG POUTRE_NOEXCEPT
 #endif
 
+#define POUTRE_STATIC_CONSTEXPR BOOST_STATIC_CONSTEXPR
+#define POUTRE_CONSTEXPR BOOST_CONSTEXPR
+#define POUTRE_CONSTEXPR_OR_CONST BOOST_CONSTEXPR_OR_CONST
+
+  
 // POUTRE_STRONG_INLINE is a stronger version of inline directive mostly to enforce inlining for MSVC compiler:using __forceinline on MSVC/INTEL,but still doesn't use GCC's/clang always_inline.
 #if (defined _MSC_VER) || (defined(__ICC) || defined(__INTEL_COMPILER))
 #define POUTRE_STRONG_INLINE __forceinline
@@ -36,13 +33,7 @@ namespace poutre
 #endif
 
 // POUTRE_ALWAYS_INLINE is the strongest version of inline directive, using __forceinline on MSVC/INTEL,and always inline for GCC/clang.
-#if (defined _MSC_VER) || (defined(__ICC) || defined(__INTEL_COMPILER))
-#define POUTRE_ALWAYS_INLINE __forceinline
-#elif defined(__clang__) || ((defined(__GNUC__) || defined(__GNUG__))
-#define POUTRE_ALWAYS_INLINE __attribute__((always_inline))
-#else
-#define POUTRE_ALWAYS_INLINE 
-#endif
+#define POUTRE_ALWAYS_INLINE BOOST_FORCEINLINE 
 
 #if defined(_WIN32) || defined(_WIN64)
   #define poutreDeprecated __declspec(deprecated)
