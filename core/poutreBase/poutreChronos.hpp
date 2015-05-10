@@ -21,36 +21,36 @@ namespace poutre
       Timer(void) :m_start(), m_accu(0), m_nbiter(0)
         {
         }
-      ~Timer(void) NOEXCEPT
+      ~Timer(void) POUTRE_NOEXCEPT
         {
         }
-        void Start( ) NOEXCEPT
+        void Start( ) POUTRE_NOEXCEPT
         {
         m_nbiter++;
         m_start = high_resolution_clock::now();
         }
-          void Stop( ) NOEXCEPT
+          void Stop( ) POUTRE_NOEXCEPT
       {
       m_accu += std::chrono::duration_cast<float_milliseconds>(high_resolution_clock::now() - m_start).count();
       }
 
-        const timerep GetCumulativeTime( ) const NOEXCEPT
+        const timerep GetCumulativeTime( ) const POUTRE_NOEXCEPT
       {
       return m_accu;
       }
 
-        const std::size_t NbIter( ) const NOEXCEPT
+        const std::size_t NbIter( ) const POUTRE_NOEXCEPT
       {
       return m_nbiter;
       }
 
-        const timerep GetMeanTime( ) const NOEXCEPT
+        const timerep GetMeanTime( ) const POUTRE_NOEXCEPT
       {
       if (m_nbiter == 0) { return static_cast<timerep>(0); }
       return m_accu / static_cast<timerep>(m_nbiter);
       }
 
-        const std::string to_str( ) const NOEXCEPT
+        const std::string to_str( ) const POUTRE_NOEXCEPT
       {
       std::stringstream sstr;
       sstr << "Cumulative time  in ms: " << GetCumulativeTime() << "\n Nb iter " << m_nbiter << "\n Mean time in ms" << GetMeanTime();
