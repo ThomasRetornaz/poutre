@@ -12,6 +12,9 @@ set(PoutreBaseTestSRC
     ${PoutreBaseTestSubdirectory}/jsonSerialize.cpp
     ${PoutreBaseTestSubdirectory}/registrar.cpp
 	${PoutreBaseTestSubdirectory}/trace.cpp
+    #${PoutreBaseTestSubdirectory}/geometry.cpp
+	${PoutreBaseTestSubdirectory}/multiDimBoundIndex.cpp
+	${PoutreBaseTestSubdirectory}/types.cpp
 )
 
 add_executable(PoutreBaseTests ${PoutreBaseTestSRC})
