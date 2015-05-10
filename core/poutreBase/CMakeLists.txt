@@ -15,11 +15,17 @@ set(PoutreBaseSRC_PUBLICHEADERS
   ${PoutreBaseSubdirectory}/poutreTrace.hpp
   ${PoutreBaseSubdirectory}/poutreRegistrar.hpp
   ${PoutreBaseSubdirectory}/poutreChronos.hpp
+  ${PoutreBaseSubdirectory}/poutreGeometry.hpp
+  ${PoutreBaseSubdirectory}/poutreMultiDimBoundIndex.hpp
+  ${PoutreBaseSubdirectory}/poutreMultiDimBoundIndexDetails.hpp
 )
 
 set(PoutreBaseSRC_CPP
   ${PoutreBaseSubdirectory}/src/poutreJsonSerialization.cpp
   ${PoutreBaseSubdirectory}/src/poutreTrace.cpp
+  ${PoutreBaseSubdirectory}/src/poutreGeometry.cpp
+  ${PoutreBaseSubdirectory}/src/poutreMultiDimBoundIndex.cpp
+  ${PoutreBaseSubdirectory}/src/poutreType.cpp
   # auto generated file
   #${PoutreBaseSubdirectory}/src/current_configuration_generated.cpp
   )
