@@ -26,7 +26,7 @@
 
 #ifdef _MSC_VER
 #pragma warning( push )
-#pragma warning( disable : 4244 )
+#pragma warning( disable : 4425 )//4425 improper support constexpr
 #endif
 
 namespace poutre
@@ -81,7 +81,7 @@ namespace poutre
       }
 
       template <int Rank,typename std::enable_if<Rank == 1, void>::type* = nullptr>
-      POUTRE_CONSTEXPR bounds(const value_type& a)  POUTRE_NOEXCEPT
+      POUTRE_CONSTEXPR explicit bounds(const value_type& a)  POUTRE_NOEXCEPT
       {
          m_size_list[0]=a;
       }
@@ -101,23 +101,33 @@ namespace poutre
           m_size_list[2] = a2;
           }
 
-      POUTRE_CONSTEXPR bounds(const std::initializer_list<value_type>& rhs) POUTRE_NOEXCEPTONLYNDEBUG
+
+      POUTRE_CXX14_CONSTEXPR bounds(const std::initializer_list<value_type>& rhs) POUTRE_NOEXCEPT
+            {
+            //!FIXME add check on rhs size for non c++14 constexpr
+#if !defined(BOOST_NO_CXX14_CONSTEXPR)
+            static_assert(rhs.size()==Rank,"Ill formed initializer list");
+#endif 
+            //   details::helper_assign_container_op<self_type, AssignOpType::AssignOp, Rank>::op(rhs, *this);
+            //safe but silly behavior if no static assertion
+            std::copy_n(rhs.begin( ), std::min<ptrdiff_t>((ptrdiff_t)rank, rhs.size( )), m_size_list.begin( ));
+            }
+
+      POUTRE_CXX14_CONSTEXPR explicit bounds(const value_type (&rhs)[Rank]) POUTRE_NOEXCEPT
       {
-         /*POUTRE_ASSERTCHECK(rhs.size( ) == rank, "Invalid input initializer regarding NumDims of bounds container");
-         std::copy(rhs.begin( ), rhs.end( ), m_size_list.begin( ));*/
-         //!FIXME
+         details::helper_assign_container_op<self_type, AssignOpType::AssignOp, Rank>::op(rhs, *this);
       }
 
       POUTRE_CONSTEXPR bounds(const self_type& rhs) POUTRE_NOEXCEPT
       {
-         std::copy(rhs.m_size_list.begin( ), rhs.m_size_list.end( ), m_size_list.begin( ));
+      details::helper_assign_container_op<self_type, AssignOpType::AssignOp, Rank>::op(rhs, *this);
       }
 
-      self_type& operator=(const self_type &rhs) POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR self_type& operator=(const self_type &rhs) POUTRE_NOEXCEPT
       {
          if (this != &rhs)
          {
-            std::copy(rhs.m_size_list.begin( ), rhs.m_size_list.end( ), m_size_list.begin( ));
+         details::helper_assign_container_op<self_type, AssignOpType::AssignOp, Rank>::op(rhs, *this);
          }
          return *this;
       }
@@ -129,7 +139,7 @@ namespace poutre
       }
 
       //is this really needed ?
-      self_type& operator= (self_type&& rhs) POUTRE_NOEXCEPT
+      self_type& operator= (self_type&& rhs) POUTRE_NOEXCEPT_IF(is_nothrow_move_constructible<self_type::array_storage>::value && is_nothrow_move_assignable<self_type::array_storage>::value)
       {
          if (this != &rhs) // ?? http://scottmeyers.blogspot.fr/2014/06/the-drawbacks-of-implementing-move.html
          {
@@ -142,35 +152,44 @@ namespace poutre
       /** @name Accessing Components
       */
       /**@{*/
-      reference operator[] (size_type n) POUTRE_NOEXCEPTONLYNDEBUG
+      POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR reference operator[] (size_type n) POUTRE_NOEXCEPT
       {
-         POUTRE_ASSERTCHECK(n >= 0, "bounds operator[n] n must be in >=0");
-         POUTRE_ASSERTCHECK(n < rank, "bounds operator[n] n must be in [0,m_numdims[");
+         //POUTRE_ASSERTCHECK(n >= 0, "bounds operator[n] n must be in >=0");
+         //POUTRE_ASSERTCHECK(n < rank, "bounds operator[n] n must be in [0,m_numdims[");
+         //!FIXME add check on rhs size for non c++14 constexpr ?
+         #if !defined(BOOST_NO_CXX14_CONSTEXPR)
+         static_assert(rhs.size( ) == Rank, "Ill formed initializer list");
+         #endif 
+
          return m_size_list[n];
       }
 
-      const_reference operator[] (size_type n) const POUTRE_NOEXCEPTONLYNDEBUG
+      POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR const_reference operator[] (size_type n) const POUTRE_NOEXCEPT
       {
-         POUTRE_ASSERTCHECK(n >= 0, "bounds operator[n] n must be in >=0");
-         POUTRE_ASSERTCHECK(n < rank, "bounds operator[n] n must be in [0,m_numdims[");
-         return m_size_list[n];
+        //POUTRE_ASSERTCHECK(n >= 0, "bounds operator[n] n must be in >=0");
+        //POUTRE_ASSERTCHECK(n < rank, "bounds operator[n] n must be in [0,m_numdims[");
+        //!FIXME add check on rhs size for non c++14 constexpr ?
+        #if !defined(BOOST_NO_CXX14_CONSTEXPR)
+        static_assert(rhs.size( ) == Rank, "Ill formed initializer list");
+        #endif 
+        return m_size_list[n];
       }
 
       /**@}*/
       /** @name Comparison Operators
       */
       /**@{*/
-      bool operator==(const self_type& rhs) const POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR bool operator==(const self_type& rhs) const POUTRE_NOEXCEPT
       {
-         return  std::equal(m_size_list.cbegin( ), m_size_list.cend( ), rhs.m_size_list.cbegin( ));
+      return  details::helper_comp_equal_container_op<self_type, Rank>::op(rhs, *this);
       }
-      bool operator!=(const self_type& rhs) const POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR bool operator!=(const self_type& rhs) const POUTRE_NOEXCEPT
       {
-         return  !(std::equal(m_size_list.cbegin( ), m_size_list.cend( ), rhs.m_size_list.cbegin( )));
+      return  !details::helper_comp_equal_container_op<self_type, Rank>::op(rhs, *this);
       }
       /**@}*/
 
-      friend std::ostream& operator<<(std::ostream& out, const bounds <rank>& rhs) POUTRE_NOEXCEPT
+      friend std::ostream& operator<<(std::ostream& out, const self_type& rhs) POUTRE_NOEXCEPT
       {
          for (const auto& val : rhs.m_size_list)
          {
@@ -181,81 +200,79 @@ namespace poutre
       }
 
         /** @name Arithmetic Operators
-        * Apply vector like operation on bounds aka translate
+        * Apply vector like operation on bounds with index aka translate
         */
         /**@{*/
-      bounds  operator+(const index<rank>& rhs) const POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR bounds  operator+(const index<rank>& rhs) const POUTRE_NOEXCEPT
       {
-         bounds<rank> tmp = *this; //return a fresh new object
-         for (size_t i = 0; i < rank; i++)
-            tmp[i] += rhs[i];
-         return tmp;
-      }
-      bounds  operator-(const index<rank>& rhs) const POUTRE_NOEXCEPT
-      {
-         bounds<rank> tmp = *this; //return a fresh new object
-         for (size_t i = 0; i < rank; i++)
-            tmp[i] -= rhs[i];
+         self_type tmp(*this); //return a fresh new object
+         details::helper_assign_container_op<self_type, AssignOpType::AssignOpAdd, Rank>::op(rhs, tmp);
          return tmp;
       }
 
-      bounds& operator+=(const index<rank>& rhs) POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR bounds  operator-(const index<rank>& rhs) const POUTRE_NOEXCEPT
       {
-      for (size_t i = 0; i < rank; i++)
+         self_type tmp(*this); //return a fresh new object
+         details::helper_assign_container_op<self_type, AssignOpType::AssignOpMinus, Rank>::op(rhs, tmp);
+         return tmp;
+      }
+
+      POUTRE_CXX14_CONSTEXPR bounds& operator+=(const index<rank>& rhs) POUTRE_NOEXCEPT
+      {
+      details::helper_assign_container_op<self_type, AssignOpType::AssignOpAdd, Rank>::op(rhs, *this);
+      return *this;
+      }
+
+      POUTRE_CXX14_CONSTEXPR bounds& operator-=(const index<rank>& rhs) POUTRE_NOEXCEPT
+      {
+      details::helper_assign_container_op<self_type, AssignOpType::AssignOpMinus, Rank>::op(rhs, *this);
+      return *this;
+      }
+
+      POUTRE_CXX14_CONSTEXPR bounds& operator+=(const value_type& rhs) POUTRE_NOEXCEPT
         {
-        (*this)[i] += rhs[i];
+        details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpAdd, Rank>::op(rhs, *this);
+        return *this;
         }
-         return *this;
-      }
-      bounds& operator-=(const index<rank>& rhs) POUTRE_NOEXCEPT
-      {
-         for (size_t i = 0; i < rank; i++)
-         {
-            (*this)[i] -= rhs[i];
-         }
-         return *this;
-      }
+
+      POUTRE_CXX14_CONSTEXPR bounds& operator-=(const value_type& rhs) POUTRE_NOEXCEPT
+          {
+          details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpMinus, Rank>::op(rhs, *this);
+          return *this;
+          }
+
         /**@}*/
 
         /** @name Scaling Operators 
         */
         /**@{*/
       template <typename ArithmeticType, typename std::enable_if<std::is_arithmetic<ArithmeticType>::value>::type* = nullptr>
-
-         bounds  operator*(ArithmeticType v) const POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR   bounds  operator*(ArithmeticType v) const POUTRE_NOEXCEPT
       {
-         auto tmp = *this; //return a fresh new object
-         for (size_t i = 0; i < rank; i++)
-            tmp[i] *= v;
+         self_type tmp(*this); //return a fresh new object
+         details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpMul, Rank>::op(v, tmp);
          return tmp;
       }
 
      template <typename ArithmeticType, typename std::enable_if<std::is_arithmetic<ArithmeticType>::value>::type* = nullptr>
-         bounds  operator/(ArithmeticType v) const POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR   bounds  operator/(ArithmeticType v) const POUTRE_NOEXCEPT
       {
-         auto tmp = *this; //return a fresh new object
-         for (size_t i = 0; i < rank; i++)
-            tmp[i] /= v;
+         self_type tmp(*this); //return a fresh new object
+         details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpDiv, Rank>::op(v, tmp);
          return tmp;
       }
 
       template <typename ArithmeticType, typename std::enable_if<std::is_arithmetic<ArithmeticType>::value>::type* = nullptr>
-         bounds& operator*=(ArithmeticType v) POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR   bounds& operator*=(ArithmeticType v) POUTRE_NOEXCEPT
       {
-         for (size_t i = 0; i < rank; i++)
-         {
-            (*this)[i] *= v;
-         }
+         details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpMul, Rank>::op(v, *this);
          return *this;
       }
 
       template <typename ArithmeticType, typename std::enable_if<std::is_arithmetic<ArithmeticType>::value>::type* = nullptr>
-         bounds& operator/=(ArithmeticType v) POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR   bounds& operator/=(ArithmeticType v) POUTRE_NOEXCEPT
       {
-         for (size_t i = 0; i < rank; i++)
-         {
-            (*this)[i] /= v;
-         }
+         details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpDiv, Rank>::op(v, *this);
          return *this;
       }
         /**@}*/
@@ -269,13 +286,14 @@ namespace poutre
         return volume;
         }
 
-      //!checks whether the passed index  is contained within  bounds  –  returns true if every component of idx is equal or greater than zero and is less than the corresponding component of *this.
-      POUTRE_CONSTEXPR bool  contains(const index<rank>& idx) const POUTRE_NOEXCEPT
+      //!checks whether the passed index  is contained within  bounds  
+      //returns true if every component of idx is equal or greater than zero and is less than the corresponding component of *this.
+      POUTRE_CXX14_CONSTEXPR bool  contains(const index<rank>& idx) const POUTRE_NOEXCEPT
           {
           for (size_t i = 0; i < rank; i++)
             {
             if (idx[i] < 0) return false;
-            if (idx[i] >= (*this)[i]) return false; //FIXME > or >= ?????
+            if (idx[i] >= (*this)[i]) return false; 
             }
           return true;
           }
@@ -349,22 +367,32 @@ namespace poutre
         m_size_list[2] = a2;
        }
 
-      POUTRE_CONSTEXPR index(const std::initializer_list<value_type>& rhs) POUTRE_NOEXCEPTONLYNDEBUG
+      POUTRE_CONSTEXPR index(const std::initializer_list<value_type>& rhs) POUTRE_NOEXCEPT
       {
-         POUTRE_ASSERTCHECK(rhs.size( ) == rank, "Invalid input initializer regarding NumDims of index container");
-         std::copy(rhs.begin( ), rhs.end( ), m_size_list.begin( ));
+      //!FIXME add check on rhs size for non c++14 constexpr
+      #if !defined(BOOST_NO_CXX14_CONSTEXPR)
+         static_assert(rhs.size( ) == Rank, "Ill formed initializer list");
+      #endif 
+         //details::helper_assign_container_op<self_type, AssignOpType::AssignOp, Rank>::op(rhs, *this);
+         //safe but silly behavior if no static assertion
+         std::copy_n(rhs.begin( ), std::min<ptrdiff_t>((ptrdiff_t)rank, rhs.size( )), m_size_list.begin( ));
       }
+
+      POUTRE_CXX14_CONSTEXPR explicit index(const value_type(&rhs)[Rank]) POUTRE_NOEXCEPT
+        {
+        details::helper_assign_container_op<self_type, AssignOpType::AssignOp, Rank>::op(rhs, *this);
+        }
 
       POUTRE_CONSTEXPR index(const self_type& rhs) POUTRE_NOEXCEPT
       {
-         std::copy(rhs.m_size_list.begin( ), rhs.m_size_list.end( ), m_size_list.begin( ));
+      details::helper_assign_container_op<self_type, AssignOpType::AssignOp, Rank>::op(rhs, *this);
       }
 
-      self_type& operator=(const self_type &rhs) POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR self_type& operator=(const self_type &rhs) POUTRE_NOEXCEPT
       {
          if (this != &rhs)
          {
-            std::copy(rhs.m_size_list.begin( ), rhs.m_size_list.end( ), m_size_list.begin( ));
+           details::helper_assign_container_op<self_type, AssignOpType::AssignOp, Rank>::op(rhs, *this);
          }
          return *this;
       }
@@ -389,34 +417,42 @@ namespace poutre
 
       /** @name Accessing Components
        */
-      /**@{*/       
-      reference operator[] (size_type n) POUTRE_NOEXCEPTONLYNDEBUG
+      /**@{*/   
+      POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR reference operator[] (size_type n) POUTRE_NOEXCEPT
       {
-         POUTRE_ASSERTCHECK(n >= 0, "index operator[n] n must be in >=0");
+        /* POUTRE_ASSERTCHECK(n >= 0, "index operator[n] n must be in >=0");
          POUTRE_ASSERTCHECK(n < rank, "index operator[n] n must be in [0,m_numdims[");
-         return m_size_list[n];
+         return m_size_list[n];*/
+        #if !defined(BOOST_NO_CXX14_CONSTEXPR)
+        static_assert(rhs.size( ) == Rank, "Ill formed initializer list");
+        #endif 
+        return m_size_list[n];
       }
 
-      const_reference operator[] (size_type n) const POUTRE_NOEXCEPTONLYNDEBUG
+      POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR const_reference operator[] (size_type n) const POUTRE_NOEXCEPT
       {
-         POUTRE_ASSERTCHECK(n >= 0, "index operator[n] n must be in >=0");
-         POUTRE_ASSERTCHECK(n < rank, "index operator[n] n must be in [0,m_numdims[");
+         //POUTRE_ASSERTCHECK(n >= 0, "index operator[n] n must be in >=0");
+         //POUTRE_ASSERTCHECK(n < rank, "index operator[n] n must be in [0,m_numdims[");
+         //return m_size_list[n];
+         #if !defined(BOOST_NO_CXX14_CONSTEXPR)
+         static_assert(rhs.size( ) == Rank, "Ill formed initializer list");
+         #endif 
          return m_size_list[n];
       }
       /**@}*/      
 
-      
+
       /** @name Comparison Operators
-       */
+      */
       /**@{*/
-      bool operator==(const self_type& rhs) const POUTRE_NOEXCEPT
-      {
-         return  std::equal(m_size_list.cbegin( ), m_size_list.cend( ), rhs.m_size_list.cbegin( ));
-      }
-      bool operator!=(const self_type& rhs) const POUTRE_NOEXCEPT
-      {
-         return  !(std::equal(m_size_list.cbegin( ), m_size_list.cend( ), rhs.m_size_list.cbegin( )));
-      }
+      POUTRE_CXX14_CONSTEXPR bool operator==(const self_type& rhs) const POUTRE_NOEXCEPT
+        {
+        return  details::helper_comp_equal_container_op<self_type, Rank>::op(rhs, *this);
+        }
+      POUTRE_CXX14_CONSTEXPR bool operator!=(const self_type& rhs) const POUTRE_NOEXCEPT
+        {
+        return  !details::helper_comp_equal_container_op<self_type, Rank>::op(rhs, *this);
+        }
       /**@}*/
       
 
@@ -443,81 +479,86 @@ namespace poutre
         * The  unary  operator+  returns  a copy of *this,  while  the  unary  operator-  returns  a  copy  of  the  object  with  all 
         * components negated.
         */
-      self_type  operator+(const self_type& rhs) const POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR self_type  operator+(const self_type& rhs) const POUTRE_NOEXCEPT
         {
-        auto tmp = *this; //return a fresh new object
-        for (size_t i = 0; i < rank; i++)
-          tmp[i] += rhs[i];
+        self_type tmp(*this); //return a fresh new object
+        details::helper_assign_container_op<self_type, AssignOpType::AssignOpAdd, Rank>::op(rhs, tmp);
         return tmp;
         }
 
-      self_type  operator-(const self_type& rhs) const POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR self_type  operator-(const self_type& rhs) const POUTRE_NOEXCEPT
           {
-          auto tmp = *this; //return a fresh new object
-          for (size_t i = 0; i < rank; i++)
-            tmp[i] -= rhs[i];
+          self_type tmp(*this); //return a fresh new object
+          details::helper_assign_container_op<self_type, AssignOpType::AssignOpMinus, Rank>::op(rhs, tmp);
           return tmp;
           }
 
-      self_type& operator+=(const self_type& rhs) POUTRE_NOEXCEPT
+         POUTRE_CXX14_CONSTEXPR self_type& operator+=(const self_type& rhs) POUTRE_NOEXCEPT
          {
-         for (size_t i = 0; i < rank; i++)
-           {
-           (*this)[i] += rhs[i];
-           }
+         details::helper_assign_container_op<self_type, AssignOpType::AssignOpAdd, Rank>::op(rhs, *this);
          return *this;
          }
-      self_type& operator-=(const self_type& rhs) POUTRE_NOEXCEPT
+
+         POUTRE_CXX14_CONSTEXPR self_type& operator-=(const self_type& rhs) POUTRE_NOEXCEPT
          {
-         for (size_t i = 0; i < rank; i++)
-           {
-           (*this)[i] -= rhs[i];
-           }
+         details::helper_assign_container_op<self_type, AssignOpType::AssignOpMinus, Rank>::op(rhs, *this);
          return *this;
          }
 
       template <int Rank, typename std::enable_if<Rank == 1, void>::type* = nullptr>
-      self_type& operator++() POUTRE_NOEXCEPT
+         POUTRE_CXX14_CONSTEXPR self_type& operator++() POUTRE_NOEXCEPT
            {
-           (*this).m_size_list[0]+=1;
+           (*this)[0]+=1;
            return *this;
            }
 
       template <int Rank, typename std::enable_if<Rank == 1, void>::type* = nullptr>
-      self_type  operator++(int) POUTRE_NOEXCEPT
+         POUTRE_CXX14_CONSTEXPR self_type  operator++(int)POUTRE_NOEXCEPT
              {
-             auto tmp = *this; //return a fresh new object
-             tmp.m_size_list[0] += 1;
+             self_type tmp(*this); //return a fresh new object
+             tmp[0] += 1;
              return tmp;
              }
 
       template <int Rank, typename std::enable_if<Rank == 1, void>::type* = nullptr>
-      self_type& operator--() POUTRE_NOEXCEPT
+         POUTRE_CXX14_CONSTEXPR self_type& operator--() POUTRE_NOEXCEPT
                {
-               (*this).m_size_list[0]-=1;
+               (*this)[0]-=1;
                return *this;
                }
 
       template <int Rank, typename std::enable_if<Rank == 1, void>::type* = nullptr>
-      self_type  operator--(int) POUTRE_NOEXCEPT
+               POUTRE_CXX14_CONSTEXPR self_type  operator--(int)POUTRE_NOEXCEPT
                  {
-                 auto tmp = *this; //return a fresh new object
-                 tmp.m_size_list[0] -= 1;
+                 self_type tmp(*this); //return a fresh new object
+                 tmp[0] -= 1;
                  return tmp;
                  }
  
-      self_type operator+() const POUTRE_NOEXCEPT
+                   
+                   POUTRE_CXX14_CONSTEXPR self_type operator+() const POUTRE_NOEXCEPT
                    {
-                   return *this;//return a fresh new object
+                   return *this;
                    }
 
-      self_type operator-() const POUTRE_NOEXCEPT
+                     POUTRE_CXX14_CONSTEXPR self_type operator-() const POUTRE_NOEXCEPT
                      {
                      auto tmp = *this; //return a fresh new object
-                     for (size_t i = 0; i < rank; i++)
-                       tmp[i] = -tmp[i];
+                     details::helper_assign_container_op<self_type, AssignOpType::AssignOpNegate, Rank>::op(tmp, tmp);
                      return tmp;
                      }
+
+                       POUTRE_CXX14_CONSTEXPR self_type& operator+=(const value_type& rhs) POUTRE_NOEXCEPT
+                       {
+                       details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpAdd, Rank>::op(rhs, *this);
+                       return *this;
+                       }
+
+                         POUTRE_CXX14_CONSTEXPR self_type& operator-=(const value_type& rhs) POUTRE_NOEXCEPT
+                         {
+                         details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpMinus, Rank>::op(rhs, *this);
+                         return *this;
+                         }
 
       /**@}*/
 
@@ -527,63 +568,55 @@ namespace poutre
        
 
       template <typename ArithmeticType, typename std::enable_if<std::is_arithmetic<ArithmeticType>::value>::type* = nullptr>
-        self_type  operator*(ArithmeticType v) const POUTRE_NOEXCEPT
+                     POUTRE_CXX14_CONSTEXPR self_type  operator*(ArithmeticType v) const POUTRE_NOEXCEPT
       {
-         auto tmp = *this; //return a fresh new object
-         for (size_t i = 0; i < rank; i++)
-            tmp[i] *= v;
+         self_type tmp(*this); //return a fresh new object
+         details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpMul, Rank>::op(v, tmp);
          return tmp;
       }
 
       template <typename ArithmeticType, typename std::enable_if<std::is_arithmetic<ArithmeticType>::value>::type* = nullptr>
-      self_type  operator/(ArithmeticType v) const POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR self_type  operator/(ArithmeticType v) const POUTRE_NOEXCEPT
       {
-         auto tmp = *this; //return a fresh new object
-         for (size_t i = 0; i < rank; i++)
-            tmp[i] /= v;
+         self_type tmp(*this); //return a fresh new object
+         details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpDiv, Rank>::op(v, tmp);
          return tmp;
       }
 
       template <typename ArithmeticType, typename std::enable_if<std::is_arithmetic<ArithmeticType>::value>::type* = nullptr>
-      self_type& operator*=(ArithmeticType v) POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR self_type& operator*=(ArithmeticType v) POUTRE_NOEXCEPT
       {
-         for (size_t i = 0; i < rank; i++)
-         {
-            (*this)[i] *= v;
-         }
+         details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpMul, Rank>::op(v, *this);
          return *this;
       }
       template <typename ArithmeticType, typename std::enable_if<std::is_arithmetic<ArithmeticType>::value>::type* = nullptr>
-      self_type& operator/=(ArithmeticType v) POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR self_type& operator/=(ArithmeticType v) POUTRE_NOEXCEPT
       {
-         for (size_t i = 0; i < rank; i++)
-         {
-            (*this)[i] /= v;
-         }
+         details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpDiv, Rank>::op(v, *this);
          return *this;
       }
       /**@}*/
    };
 
      template <int rank>
-     bounds<rank>  operator+(const index<rank>& lhs, const bounds<rank>& rhs) POUTRE_NOEXCEPT
+     POUTRE_CXX14_CONSTEXPR bounds<rank>  operator+(const index<rank>& lhs, const bounds<rank>& rhs) POUTRE_NOEXCEPT
      {
-     auto tmp = rhs;
-     return tmp + lhs;
+     bounds<rank> tmp(rhs);
+     return (tmp + lhs);
      }
 
      template <int rank,typename ArithmeticType, typename std::enable_if<std::is_arithmetic<ArithmeticType>::value>::type* = nullptr>
-     bounds<rank> operator*(ArithmeticType v, const bounds<rank>& rhs) POUTRE_NOEXCEPT
+     POUTRE_CXX14_CONSTEXPR bounds<rank> operator*(ArithmeticType v, const bounds<rank>& rhs) POUTRE_NOEXCEPT
      {
-     auto tmp = rhs;
-     return tmp*v;
+     bounds<rank> tmp(rhs);
+     return (tmp*v);
      }
 
     template <int rank,typename ArithmeticType, typename std::enable_if<std::is_arithmetic<ArithmeticType>::value>::type* = nullptr>
-    index<rank>  operator*(ArithmeticType v, const index<rank>& rhs) POUTRE_NOEXCEPT
+     POUTRE_CXX14_CONSTEXPR index<rank>  operator*(ArithmeticType v, const index<rank>& rhs) POUTRE_NOEXCEPT
       {
-      auto tmp = rhs;
-      return tmp*v;
+      index<rank> tmp(rhs);
+      return (tmp*v);
       }
   
 
@@ -707,15 +740,15 @@ namespace poutre
 
 //! @} doxygroup: multidimensionnale_group   
 
-   extern template class bounds < 1 > ;
-   extern template class bounds < 2 > ;
-   extern template class bounds < 3 > ;
-   extern template class bounds < 4 > ;
+   //extern template class bounds < 1 > ;
+   //extern template class bounds < 2 > ;
+   //extern template class bounds < 3 > ;
+   //extern template class bounds < 4 > ;
 
-   extern template class index <1>;
-   extern template class index <2>;
-   extern template class index <3>;
-   extern template class index <4>;
+   //extern template class index <1>;
+   //extern template class index <2>;
+   //extern template class index <3>;
+   //extern template class index <4>;
 
    typedef bounds <1> bounds_1;
    typedef bounds <2> bounds_2;

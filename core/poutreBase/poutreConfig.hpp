@@ -13,6 +13,8 @@ namespace poutre
 
 
 #define POUTRE_NOEXCEPT BOOST_NOEXCEPT_OR_NOTHROW
+#define POUTRE_NOEXCEPT_IF(Predicate) BOOST_NOEXCEPT_IF(Predicate)
+
 
 #ifndef NDEBUG
 #define POUTRE_NOEXCEPTONLYNDEBUG 
@@ -23,6 +25,7 @@ namespace poutre
 #define POUTRE_STATIC_CONSTEXPR BOOST_STATIC_CONSTEXPR
 #define POUTRE_CONSTEXPR BOOST_CONSTEXPR
 #define POUTRE_CONSTEXPR_OR_CONST BOOST_CONSTEXPR_OR_CONST
+#define POUTRE_CXX14_CONSTEXPR  BOOST_CXX14_CONSTEXPR
 
   
 // POUTRE_STRONG_INLINE is a stronger version of inline directive mostly to enforce inlining for MSVC compiler:using __forceinline on MSVC/INTEL,but still doesn't use GCC's/clang always_inline.
@@ -102,7 +105,7 @@ namespace poutre
 #define POUTRE_ASSERTCHECK( CONDITION, MSG ){    \
     if ( !( CONDITION ) )                        \
                         {                                          \
-         __debugbreakpoint();                    \
+         __debugbreak();                    \
                         }                                          \
                }
 #else

@@ -23,8 +23,20 @@ BOOST_AUTO_TEST_CASE(bounds)
   BOOST_CHECK_EQUAL(bnd1[2], 4);
   BOOST_CHECK_EQUAL(bnd1.size( ), 8);
 
+  //Arith
+  poutre::bounds<3> bnd4 = bnd1;  // bnd4 is {0,1,3} and bdnd1 unchanged
+  bnd4 -= 1;
+  BOOST_CHECK_EQUAL(bnd4[0], 0);
+  BOOST_CHECK_EQUAL(bnd4[1], 1);
+  BOOST_CHECK_EQUAL(bnd4[2], 3);
+
+  bnd4 += 2;
+  BOOST_CHECK_EQUAL(bnd4[0], 2);
+  BOOST_CHECK_EQUAL(bnd4[1], 3);
+  BOOST_CHECK_EQUAL(bnd4[2], 5);
+
   //scaling
-  poutre::bounds<3> bnd3 = bnd1 * 1.5f;  // bnd3 is {1,3,6} and bdnd1 unchanged
+  poutre::bounds<3> bnd3 = bnd1*1.5f;  // bnd3 is {1,3,6} and bdnd1 unchanged
   BOOST_CHECK_EQUAL(bnd3[0], 1);
   BOOST_CHECK_EQUAL(bnd3[1], 3);
   BOOST_CHECK_EQUAL(bnd3[2], 6);
@@ -48,6 +60,9 @@ BOOST_AUTO_TEST_CASE(index)
   //Scaling
   poutre::index<2> idx{ 2, 3 };
   poutre::index<2> res = idx * 1.5f;  // res is {3, 4}
+  BOOST_CHECK_EQUAL(idx[0], 2);
+  BOOST_CHECK_EQUAL(idx[1], 3);
+
   BOOST_CHECK_EQUAL(res[0], 3);
   BOOST_CHECK_EQUAL(res[1], 4);
   }

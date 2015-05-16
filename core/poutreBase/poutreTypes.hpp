@@ -86,7 +86,8 @@ namespace poutre
     AssignOpMul = 1 << 3,    //!r*=a0
     AssignOpDiv = 1 << 4,    //!r/=a0
     AssignOpMod = 1 << 5,    //!r/=a0
-    _AssignOpType_Max = 1 << 5 //sync with the max value
+    AssignOpNegate = 1 << 6,    //!r/=-a0
+    _AssignOpType_Max = 1 << 6 //sync with the max value
     };
 
   //! operator<< for AssignOpType
