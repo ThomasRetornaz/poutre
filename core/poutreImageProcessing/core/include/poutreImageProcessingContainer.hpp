@@ -1,16 +1,25 @@
-#ifndef POUTREIMAGEPROCESSINGCONTAINER_HPP__
-#define POUTREIMAGEPROCESSINGCONTAINER_HPP__
+
+//==============================================================================
+//                  Copyright (c) 2015 - Thomas Retornaz                      //
+//                     thomas.retornaz@mines-paris.org                        //
+//          Distributed under the Boost Software License, Version 1.0.        //
+//                 See accompanying file LICENSE.txt or copy at               //
+//                     http://www.boost.org/LICENSE_1_0.txt                   //
+//==============================================================================
+
+#ifndef POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
+#define POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
 
 
-#ifndef POUTREIMAGEPROCESSINGINTERFACE_HPP__
+#ifndef POUTRE_IMAGEPROCESSING_INTERFACE_HPP__
 #include <poutreImageProcessing/core/poutreImageProcessingInterface.hpp>
 #endif
 
-#ifndef POUTREIMAGEPROCESSINGTYPE_HPP__
+#ifndef POUTRE_IMAGEPROCESSING_TYPE_HPP__
 #include <poutreImageProcessing/core/poutreImageProcessingType.hpp>
 #endif
 
-#ifndef POUTREIMAGEPROCESSINGITERATOR_HPP__
+#ifndef POUTRE_IMAGEPROCESSING_ITERATOR_HPP__
 #include <poutreImageProcessing/core/include/poutreImageProcessingIterator.hpp>
 #endif
 
@@ -360,4 +369,4 @@ namespace poutre
   extern template class DenseImage < pDOUBLE, 4 >;
 
   }
-#endif POUTREIMAGEPROCESSINGCONTAINER_HPP__
+#endif //POUTRE_IMAGEPROCESSING_CONTAINER_HPP__

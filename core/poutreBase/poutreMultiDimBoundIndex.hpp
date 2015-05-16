@@ -1,5 +1,14 @@
-#ifndef POUTREMULTIDIMBOUNDINDEX_HPP__
-#define POUTREMULTIDIMBOUNDINDEX_HPP__
+
+//==============================================================================
+//                  Copyright (c) 2015 - Thomas Retornaz                      //
+//                     thomas.retornaz@mines-paris.org                        //
+//          Distributed under the Boost Software License, Version 1.0.        //
+//                 See accompanying file LICENSE.txt or copy at               //
+//                     http://www.boost.org/LICENSE_1_0.txt                   //
+//==============================================================================
+
+#ifndef POUTRE_MULTIDIMBOUNDINDEX_HPP__
+#define POUTRE_MULTIDIMBOUNDINDEX_HPP__
 
 /**
  * @file   poutreMultiDimBoundIndex.hpp
@@ -13,12 +22,12 @@
 #include <poutreBase/poutreConfig.hpp>
 #endif
 
-#ifndef POUTRETYPE_HPP__
+#ifndef POUTRE_TYPE_HPP__
 #include <poutreBase/poutreTypes.hpp>
 #endif
 
-#ifndef POUTREMULTIDIMBOUNDINDEX_DETAILS_HPP__
-#include <poutreBase/poutreMultiDimBoundIndexDetails.hpp>
+#ifndef POUTRE_CONTAINER_HELPER_HPP__
+#include <poutreBase/poutreContainerHelper.hpp>
 #endif
 
 #include <stdexcept>
@@ -767,4 +776,4 @@ namespace poutre
 #pragma warning( pop ) 
 #endif
 
-#endif //POUTREMULTIDIMBOUNDINDEX_HPP__
+#endif //POUTRE_MULTIDIMBOUNDINDEX_HPP__

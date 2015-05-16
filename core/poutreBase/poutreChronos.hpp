@@ -1,11 +1,20 @@
-#ifndef POUTRECHRONOS_HPP__
-#define POUTRECHRONOS_HPP__
+
+//==============================================================================
+//                  Copyright (c) 2015 - Thomas Retornaz                      //
+//                     thomas.retornaz@mines-paris.org                        //
+//          Distributed under the Boost Software License, Version 1.0.        //
+//                 See accompanying file LICENSE.txt or copy at               //
+//                     http://www.boost.org/LICENSE_1_0.txt                   //
+//==============================================================================
+
+#ifndef POUTRE_CHRONOS_HPP__
+#define POUTRE_CHRONOS_HPP__
 
 #include <chrono>
 #include <iostream>
 #include <sstream>
 
-#ifndef POUTREBASE_HPP__
+#ifndef POUTRE_BASE_HPP__
 #include <poutreBase/poutreBase.hpp>
 #endif
 
@@ -88,4 +97,4 @@ namespace poutre
         }
     };
   }
-#endif //POUTRECHRONOS
+#endif //POUTRE_CHRONOS_HPP__

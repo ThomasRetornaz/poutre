@@ -1,5 +1,14 @@
-#ifndef POUTREGEOMETRY_HPP__
-#define POUTREGEOMETRY_HPP__
+
+//==============================================================================
+//                  Copyright (c) 2015 - Thomas Retornaz                      //
+//                     thomas.retornaz@mines-paris.org                        //
+//          Distributed under the Boost Software License, Version 1.0.        //
+//                 See accompanying file LICENSE.txt or copy at               //
+//                     http://www.boost.org/LICENSE_1_0.txt                   //
+//==============================================================================
+
+#ifndef POUTRE_GEOMETRY_HPP__
+#define POUTRE_GEOMETRY_HPP__
 
 /**
  * @file   poutreGeometry.hpp
@@ -9,7 +18,7 @@
  * 
  */
 
-#ifndef POUTRETYPE_HPP__
+#ifndef POUTRE_TYPE_HPP__
 #include <poutreBase/poutreTypes.hpp>
 #endif
 
@@ -70,4 +79,4 @@ namespace poutre
 //#pragma warning( pop ) 
 //#endif
 
-#endif
+#endif //POUTRE_GEOMETRY_HPP__

@@ -1,11 +1,20 @@
-#ifndef POUTREIMAGEPROCESSINGTYPE_HPP__
-#define POUTREIMAGEPROCESSINGTYPE_HPP__
 
-#ifndef POUTREIMAGEPROCESSING_HPP__
+//==============================================================================
+//                  Copyright (c) 2015 - Thomas Retornaz                      //
+//                     thomas.retornaz@mines-paris.org                        //
+//          Distributed under the Boost Software License, Version 1.0.        //
+//                 See accompanying file LICENSE.txt or copy at               //
+//                     http://www.boost.org/LICENSE_1_0.txt                   //
+//==============================================================================
+
+#ifndef POUTRE_IMAGEPROCESSING_TYPE_HPP__
+#define POUTRE_IMAGEPROCESSING_TYPE_HPP__
+
+#ifndef POUTRE_IMAGEPROCESSING_HPP__
 #include <poutreImageProcessing/poutreImageProcessing.hpp>
 #endif
 
-#ifndef POUTRETYPE_HPP__
+#ifndef POUTRE_TYPE_HPP__
 #include <poutreBase/poutreTypes.hpp>
 #endif
 
@@ -29,10 +38,10 @@ namespace poutre
     };
 
   //! operator<< for ImgType
-  BASE_API std::ostream& operator<<(std::ostream&, ImgType);
+  IMP_API std::ostream& operator<<(std::ostream&, ImgType);
 
   //! operator>> for ImgType
-  BASE_API std::istream& operator>>(std::istream&, ImgType&);
+  IMP_API std::istream& operator>>(std::istream&, ImgType&);
 
   enum class CompoundType
     {
@@ -44,10 +53,10 @@ namespace poutre
     };
 
   //! operator<< for ImgType
-  BASE_API std::ostream& operator<<(std::ostream&, CompoundType);
+  IMP_API std::ostream& operator<<(std::ostream&, CompoundType);
 
   //! operator>> for ImgType
-  BASE_API std::istream& operator>>(std::istream&, CompoundType&);
+  IMP_API std::istream& operator>>(std::istream&, CompoundType&);
 
   enum class PType
     {
@@ -63,10 +72,10 @@ namespace poutre
     };
 
   //! operator<< for PType
-  BASE_API std::ostream& operator<<(std::ostream&, PType);
+  IMP_API std::ostream& operator<<(std::ostream&, PType);
 
   //! operator>> for PType
-  BASE_API std::istream& operator>>(std::istream&, PType&);
+  IMP_API std::istream& operator>>(std::istream&, PType&);
 
   
 
@@ -551,4 +560,4 @@ namespace poutre
     };
 
   }
-#endif //POUTREIMAGEPROCESSINGTYPE_HPP__
+#endif //POUTRE_IMAGEPROCESSING_TYPE_HPP__

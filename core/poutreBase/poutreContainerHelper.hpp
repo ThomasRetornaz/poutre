@@ -1,8 +1,17 @@
-#ifndef POUTREMULTIDIMBOUNDINDEX_DETAILS_HPP__
-#define POUTREMULTIDIMBOUNDINDEX_DETAILS_HPP__
+
+//==============================================================================
+//                  Copyright (c) 2015 - Thomas Retornaz                      //
+//                     thomas.retornaz@mines-paris.org                        //
+//          Distributed under the Boost Software License, Version 1.0.        //
+//                 See accompanying file LICENSE.txt or copy at               //
+//                     http://www.boost.org/LICENSE_1_0.txt                   //
+//==============================================================================
+
+#ifndef POUTRE_CONTAINER_HELPER_HPP__
+#define POUTRE_CONTAINER_HELPER_HPP__
 
 /**
- * @file   poutreMultiDimBoundIndexDetails.hpp
+ * @file   poutreContainerHelper.hpp
  * @author Thomas Retornaz
  * @brief  
  * 
@@ -440,4 +449,4 @@ namespace details
 #pragma warning( pop ) 
 #endif
 
-#endif //POUTREMULTIDIMBOUNDINDEX_DETAILS_HPP__
+#endif //POUTRE_CONTAINER_HELPER_HPP__

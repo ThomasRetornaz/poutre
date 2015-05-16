@@ -1,8 +1,17 @@
-#ifndef POUTREIMAGEPROCESSINGCONTAINERCOPIECONVERT_HPP__
-#define POUTREIMAGEPROCESSINGCONTAINERCOPIECONVERT_HPP__
+
+//==============================================================================
+//                  Copyright (c) 2015 - Thomas Retornaz                      //
+//                     thomas.retornaz@mines-paris.org                        //
+//          Distributed under the Boost Software License, Version 1.0.        //
+//                 See accompanying file LICENSE.txt or copy at               //
+//                     http://www.boost.org/LICENSE_1_0.txt                   //
+//==============================================================================
+
+#ifndef POUTRE_IMAGEPROCESSING_CONTAINER_COPIECONVERT_HPP__
+#define POUTRE_IMAGEPROCESSING_CONTAINER_COPIECONVERT_HPP__
 
 
-#ifndef POUTREIMAGEPROCESSINGCONTAINER_HPP__
+#ifndef POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
 #include <poutreImageProcessing/core/include/poutreImageProcessingContainer.hpp>
 #endif
 
@@ -33,4 +42,4 @@ namespace poutre
   */
 
   }
-#endif POUTREIMAGEPROCESSINGCONTAINERCOPIECONVERT_HPP__
+#endif //POUTRE_IMAGEPROCESSING_CONTAINER_COPIECONVERT_HPP__

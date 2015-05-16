@@ -1,7 +1,16 @@
-#ifndef POUTREJSONSERIALIZATION_HPP__
-#define POUTREJSONSERIALIZATION_HPP__
 
-#ifndef POUTREBASE_HPP__
+//==============================================================================
+//                  Copyright (c) 2015 - Thomas Retornaz                      //
+//                     thomas.retornaz@mines-paris.org                        //
+//          Distributed under the Boost Software License, Version 1.0.        //
+//                 See accompanying file LICENSE.txt or copy at               //
+//                     http://www.boost.org/LICENSE_1_0.txt                   //
+//==============================================================================
+
+#ifndef POUTRE_JSON_SERIALIZATION_HPP__
+#define POUTRE_JSON_SERIALIZATION_HPP__
+
+#ifndef POUTRE_BASE_HPP__
 #include <poutreBase/poutreBase.hpp>
 #endif
 
@@ -35,4 +44,4 @@ namespace poutre
     };
 
   }
-#endif //POUTREJSONSERIALIZATION_HPP__
+#endif //POUTRE_JSON_SERIALIZATION_HPP__
