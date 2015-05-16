@@ -1,9 +1,9 @@
-#Most of the initial cmake skeleton  was stolen from yayi project see https://bitbucket.org/renficiaud/yayi.git. 
-#if(WIN32)
-#cmake_minimum_required (VERSION 3.2)
-#else()
+#Most of the initial cmake skeleton  was heavely inspired from yayi project see https://bitbucket.org/renficiaud/yayi.git. and rapidjosn 
+if(WIN32)
+cmake_minimum_required (VERSION 3.0)
+else()
 cmake_minimum_required (VERSION 2.8)
-#endif()
+endif()
 
 project(Poutre)
 
@@ -36,16 +36,16 @@ set(ENABLE_HDF5  FALSE CACHE BOOL "Enable HDF5 support (you should have it alrea
 set(ENABLE_NUMPY FALSE CACHE BOOL "Enable NumPy support for IOPython (should be installed in your python distribution")
 
 set(POUTRE_SOURCE_DIR         ${CMAKE_CURRENT_SOURCE_DIR}   CACHE PATH "Base of the input directory")
-set(POUTRE_root_dir         ${POUTRE_SOURCE_DIR}   CACHE PATH "Base of the input directory")
+set(POUTRE_ROOT_DIR         ${POUTRE_SOURCE_DIR}   CACHE PATH "Base of the input directory")
 
 # General library settings
 set(POUTRE_CORE_DIR
-    ${POUTRE_root_dir}/core
+    ${POUTRE_ROOT_DIR}/core
     CACHE PATH
     "Root path of the Core of POUTRE")
 
 set(POUTRE_CORE_TEST_DIR
-    ${POUTRE_root_dir}/coreTests
+    ${POUTRE_ROOT_DIR}/coreTests
     CACHE PATH
     "Root path of the Core of POUTRE's tests")
 
@@ -55,7 +55,7 @@ set(POUTRE_CORE_TEST_DIR
     # "Python extension root path of POUTRE")
 
 set(THIRD_PARTIES_PATH
-    ${POUTRE_root_dir}/thirdparties
+    ${POUTRE_ROOT_DIR}/thirdparties
     CACHE PATH
     "Directory of the external third parties installation (built outside the project)")
 
@@ -103,7 +103,7 @@ endif()
 include(CMakeParseArguments)
 include(cmake/CMakeVersion.cmake)
 include(cmake/CMakeInstallUtils.cmake)
-include(cmake/CMakePCHUtils.cmake NO_POLICY_SCOPE)
+#include(cmake/CMakePCHUtils.cmake NO_POLICY_SCOPE)
 include(cmake/CMakeInstallUtils.cmake)
 #include(cmake/CMakePythonUtils.cmake)
 include(cmake/CMakeTestUtils.cmake)
@@ -139,18 +139,17 @@ add_subdirectory (${POUTRE_CORE_TEST_DIR})
 # creates the python package
 #create_python_package()
 
-# this should be at the end, in order to retrieve all the include paths (could be also a bit earlier)
-message(STATUS "[POUTREDoc] Configuring the documentation")
-#include(cmake/CMakeDoc.cmake)
+message(STATUS "Configuring the documentation")
+include(cmake/CMakeDoc.cmake)
 
 add_custom_target(
   CMakeFiles
   SOURCES
   cmake/CMakeCompilerSpecific.cmake
   # cmake/CMakeCPackConf.cmake
-  # cmake/CMakeDoc.cmake
+  cmake/CMakeDoc.cmake
   cmake/CMakeInstallUtils.cmake
-  cmake/CMakePCHUtils.cmake
+  #cmake/CMakePCHUtils.cmake
   # cmake/CMakePythonPackage.cmake
   # cmake/CMakePythonUtils.cmake
   cmake/CMakeTestUtils.cmake
