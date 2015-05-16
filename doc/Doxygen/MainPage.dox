@@ -1,0 +1,22 @@
+/*!
+
+@mainpage
+
+This documentation expose the c++ API of \b Poutre 
+
+If you are eager, you could go to the short \ref getting_started tutorial tutorial. 
+
+Then, you could have a look to a longuer tutorial which covers the most aspects of the poutre library through this page.
+
+@tableofcontents
+
+@section lic Licence
+Poutre is distributed under the Boost licence, and the official licence as well as the possibility offered by the licence can be found 
+<a href="http://www.boost.org/users/license.html">here</a>. 
+
+@subpage getting_started "Guetting Started"
+@subpage configuration_and_installation "Configuration and Installation"
+*/
+ 
+ 
+
