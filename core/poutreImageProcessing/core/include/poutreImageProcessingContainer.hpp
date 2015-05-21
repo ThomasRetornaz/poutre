@@ -10,6 +10,21 @@
 #ifndef POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
 #define POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
 
+#include <boost/simd/memory/allocator.hpp>
+#include <boost/simd/memory/is_aligned.hpp>
+#include <array>
+#include <memory>
+#include <utility>
+#include <vector>
+#include <sstream>
+
+#ifndef POUTRE_CONFIG__HPP__
+#include <poutreBase/poutreConfig.hpp>
+#endif
+
+#ifndef POUTRE_DENSE_ITERATOR_HPP__
+#include <poutreBase/poutreDenseIterator.hpp>
+#endif
 
 #ifndef POUTRE_IMAGEPROCESSING_INTERFACE_HPP__
 #include <poutreImageProcessing/core/poutreImageProcessingInterface.hpp>
@@ -18,21 +33,6 @@
 #ifndef POUTRE_IMAGEPROCESSING_TYPE_HPP__
 #include <poutreImageProcessing/core/poutreImageProcessingType.hpp>
 #endif
-
-#ifndef POUTRE_IMAGEPROCESSING_ITERATOR_HPP__
-#include <poutreImageProcessing/core/include/poutreImageProcessingIterator.hpp>
-#endif
-
-#ifndef POUTRE_CONFIG__HPP__
-#include <poutreBase/poutreConfig.hpp>
-#endif
-
-#include <boost/simd/memory/allocator.hpp>
-#include <boost/simd/memory/is_aligned.hpp>
-#include <array>
-#include <memory>
-#include <utility>
-#include <vector>
 
 namespace poutre
   {

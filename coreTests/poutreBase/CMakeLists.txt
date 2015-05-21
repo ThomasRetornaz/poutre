@@ -9,11 +9,12 @@ set(PoutreBaseTestSRC
 	#${PoutreBaseTestSubdirectory}/eigenCleanImport.cpp
 	${PoutreBaseTestSubdirectory}/boostSimdCleanImport.cpp
 	${PoutreBaseTestSubdirectory}/chronos.cpp
-    ${PoutreBaseTestSubdirectory}/jsonSerialize.cpp
-    ${PoutreBaseTestSubdirectory}/registrar.cpp
+  ${PoutreBaseTestSubdirectory}/jsonSerialize.cpp
+  ${PoutreBaseTestSubdirectory}/registrar.cpp
 	${PoutreBaseTestSubdirectory}/trace.cpp
-    #${PoutreBaseTestSubdirectory}/geometry.cpp
+  ${PoutreBaseTestSubdirectory}/geometry.cpp
 	${PoutreBaseTestSubdirectory}/multiDimBoundIndex.cpp
+	${PoutreBaseTestSubdirectory}/static_array.cpp
 	${PoutreBaseTestSubdirectory}/types.cpp
 )
 

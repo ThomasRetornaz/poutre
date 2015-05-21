@@ -9,6 +9,7 @@
 
 #include <poutreImageProcessing/core/include/poutreImageProcessingContainerCopieConvert.hpp>
 #include <poutreImageProcessing/core/poutreImageProcessingInterfaceCopieConvert.hpp>
+#include <boost/lexical_cast.hpp>
 
 namespace poutre
   {
