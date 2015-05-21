@@ -10,7 +10,7 @@
 #include "main.hpp"
 #include <iostream>
 #include <thread>
-#include <poutreBase/poutreMultiDimBoundIndex.hpp>
+#include <poutreBase/poutreCoordinate.hpp>
 
 BOOST_AUTO_TEST_SUITE(bound_index)
 

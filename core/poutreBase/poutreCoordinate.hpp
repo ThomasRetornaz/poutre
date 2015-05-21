@@ -7,11 +7,11 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_MULTIDIMBOUNDINDEX_HPP__
-#define POUTRE_MULTIDIMBOUNDINDEX_HPP__
+#ifndef POUTRE_COORDINATE_HPP__
+#define POUTRE_COORDINATE_HPP__
 
 /**
- * @file   poutreMultiDimBoundIndex.hpp
+ * @file   poutreCoordinate.hpp
  * @author Thomas Retornaz
  * @brief
  *
@@ -610,4 +610,4 @@ namespace poutre
 #pragma warning( pop ) 
 #endif
 
-#endif //POUTRE_MULTIDIMBOUNDINDEX_HPP__
+#endif //POUTRE_COORDINATE_HPP__

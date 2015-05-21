@@ -7,7 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#include <poutreBase/poutreMultiDimBoundIndex.hpp>
+#include <poutreBase/poutreCoordinate.hpp>
 
 namespace poutre
   {

@@ -13,7 +13,7 @@ set(PoutreBaseTestSRC
   ${PoutreBaseTestSubdirectory}/registrar.cpp
 	${PoutreBaseTestSubdirectory}/trace.cpp
   ${PoutreBaseTestSubdirectory}/geometry.cpp
-	${PoutreBaseTestSubdirectory}/multiDimBoundIndex.cpp
+	${PoutreBaseTestSubdirectory}/coordinate.cpp
 	${PoutreBaseTestSubdirectory}/static_array.cpp
 	${PoutreBaseTestSubdirectory}/types.cpp
 )

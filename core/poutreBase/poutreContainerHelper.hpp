@@ -461,7 +461,6 @@ namespace details
       {      
       POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(bnds const & bnd, idx const & id) POUTRE_NOEXCEPT
         {
-        static_assert(bnds::rank == idx::rank);
         return (id[0] >= 0) && (id[0] < bnd[0]);
         }
      };
@@ -471,9 +470,7 @@ namespace details
       {
       POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(bnds const & bnd, idx const & id) POUTRE_NOEXCEPT
         {
-        static_assert(bnds::rank == idx::rank);
-        return (id[0] >= 0) && (id[0] < bnd[0]) 
-               && (id[1] >= 0) && (id[1] < bnd[1]);
+        return ((id[0] >= 0) && (id[0] < bnd[0]) && (id[1] >= 0) && (id[1] < bnd[1]));
         }
       };
 
@@ -482,7 +479,6 @@ namespace details
       {
       POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(bnds const & bnd, idx const & id) POUTRE_NOEXCEPT
         {
-        static_assert(bnds::rank == idx::rank);
         return (id[0] >= 0) && (id[0] < bnd[0]) 
                && (id[1] >= 0) && (id[1] < bnd[1])
                && (id[2] >= 0) && (id[2] < bnd[2]);
