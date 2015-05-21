@@ -12,7 +12,7 @@
 #include <thread>
 #include <poutreBase/poutreMultiDimBoundIndex.hpp>
 
-BOOST_AUTO_TEST_SUITE(geometrybase)
+BOOST_AUTO_TEST_SUITE(bound_index)
 
 BOOST_AUTO_TEST_CASE(bounds)
   {

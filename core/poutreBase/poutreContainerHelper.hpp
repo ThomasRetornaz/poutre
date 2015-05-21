@@ -439,6 +439,55 @@ namespace details
       }
     };
 
+
+
+  template <class bnds, class idx, int Rank = bnds::rank>
+  struct helper_contains_container_op
+    {
+    POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(bnds const & bnd, idx const & id) POUTRE_NOEXCEPT
+      {
+      static_assert(bnds::rank == idx::rank);
+      for ( size_t i = 0; i < Rank; i++ )
+        {
+        if ( id[i] < 0 ) return false;
+        if ( id[i] >= bnd[i] ) return false;
+        }
+      return true;
+      }
+    };
+
+    template <class bnds, class idx>
+    struct helper_contains_container_op<bnds, idx, 1>
+      {      
+      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(bnds const & bnd, idx const & id) POUTRE_NOEXCEPT
+        {
+        static_assert(bnds::rank == idx::rank);
+        return (id[0] >= 0) && (id[0] < bnd[0]);
+        }
+     };
+
+    template <class bnds, class idx>
+    struct helper_contains_container_op<bnds, idx, 2>
+      {
+      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(bnds const & bnd, idx const & id) POUTRE_NOEXCEPT
+        {
+        static_assert(bnds::rank == idx::rank);
+        return (id[0] >= 0) && (id[0] < bnd[0]) 
+               && (id[1] >= 0) && (id[1] < bnd[1]);
+        }
+      };
+
+    template <class bnds, class idx>
+    struct helper_contains_container_op<bnds, idx, 3>
+      {
+      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(bnds const & bnd, idx const & id) POUTRE_NOEXCEPT
+        {
+        static_assert(bnds::rank == idx::rank);
+        return (id[0] >= 0) && (id[0] < bnd[0]) 
+               && (id[1] >= 0) && (id[1] < bnd[1])
+               && (id[2] >= 0) && (id[2] < bnd[2]);
+        }
+      };
   }//namespace details
    
    
