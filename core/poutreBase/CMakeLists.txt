@@ -18,6 +18,7 @@ set(PoutreBaseSRC_PUBLICHEADERS
   ${PoutreBaseSubdirectory}/poutreGeometry.hpp
   ${PoutreBaseSubdirectory}/poutreMultiDimBoundIndex.hpp
   ${PoutreBaseSubdirectory}/poutreContainerHelper.hpp
+  ${PoutreBaseSubdirectory}/poutreDenseIterator.hpp  
   ${PoutreBaseSubdirectory}/poutreStaticContainer.hpp
 )
 

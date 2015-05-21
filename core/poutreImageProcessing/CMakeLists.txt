@@ -5,7 +5,6 @@ set(PoutreIPSubdirectory ${POUTRE_CORE_DIR}/poutreImageProcessing)
 #generate_library_version(${PoutreNNSubdirectory}/src/current_configuration_generated.cpp)
 
 set(PoutreIPSRC_DETAILS
-  ${PoutreIPSubdirectory}/core/include/poutreImageProcessingIterator.hpp
   ${PoutreIPSubdirectory}/core/include/poutreImageProcessingContainer.hpp
   ${PoutreIPSubdirectory}/core/include/poutreImageProcessingContainerCopieConvert.hpp
   ${PoutreIPSubdirectory}/core/include/poutreImageProcessingCompare.hpp
