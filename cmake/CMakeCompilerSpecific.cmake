@@ -46,7 +46,7 @@ if(MSVC)
   #AND /Oy (Frame-Pointer Omission) TODO check on x64
   #/GF pools strings as read-only.
   #/GL global optim https://msdn.microsoft.com/fr-fr/library/vstudio/0zza0de8(v=vs.120).aspx
-  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Ox /Oi /Ob2 /Ot /Oy /GF /GL")
+  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Ox /Oi /Ob2 /Ot /Oy /GF /GL /D_SCL_SECURE_NO_WARNINGS /D\"_SECURE_SCL=0\" /D\"_HAS_ITERATOR_DEBUGGING=0\"") #remove all kind off safe_stl in release mode, default in "modern" visual compiler
   set(CMAKE_C_FLAGS_RELEASE   "${CMAKE_C_FLAGS_RELEASE} /Ox /Oi /Ob2 /Oy /GF /GL")
 
   #set(value_tmp ${CMAKE_CXX_FLAGS_RELEASE})
@@ -143,3 +143,11 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   endif()
 endif()
 
+#ADD clang here
+
+#openMP for all
+find_package(OpenMP)
+if (OPENMP_FOUND)
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+endif()
