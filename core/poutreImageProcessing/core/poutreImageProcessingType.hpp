@@ -10,6 +10,11 @@
 #ifndef POUTRE_IMAGEPROCESSING_TYPE_HPP__
 #define POUTRE_IMAGEPROCESSING_TYPE_HPP__
 
+#include <limits>
+#include <type_traits>
+#include <boost/simd/preprocessor/parameters.hpp> //default alignment
+#include <stdexcept>
+
 #ifndef POUTRE_IMAGEPROCESSING_HPP__
 #include <poutreImageProcessing/poutreImageProcessing.hpp>
 #endif
@@ -22,11 +27,9 @@
 #include <poutreBase/poutreConfig.hpp>
 #endif
 
-#include <limits>
-#include <type_traits>
-#include <boost/simd/preprocessor/parameters.hpp> //default alignment
-#include <stdexcept>
-#include <array>
+#ifndef POUTRE_STATIC_CONTAINER_HPP__
+#include <poutreBase/poutreStaticContainer.hpp>
+#endif
 
 namespace poutre
   {
@@ -77,293 +80,19 @@ namespace poutre
   //! operator>> for PType
   IMP_API std::istream& operator>>(std::istream&, PType&);
 
-  
+  template<typename value_type, int Rank> using compound_pixel = static_array<value_type, Rank>;
 
+  //extern template class compound_pixel < pUINT8, 3 > ;
+  //extern template class compound_pixel < pINT32, 3 >;
+  //extern template class compound_pixel < pFLOAT, 3 > ;
+  //extern template class compound_pixel < pINT64, 3 > ;
+  //extern template class compound_pixel < pDOUBLE, 3 >;
 
-  template <typename storage_type, std::size_t NumDims>
-  class compound_pixel
-    {
-    public:
-      using  self_type = compound_pixel < storage_type, NumDims > ;
-      using  value_type = storage_type;
-      using  pointer = value_type*;
-      using  const_pointer = const value_type*;
-      using  reference = value_type&;
-      using  const_reference = value_type const &;
-      using  difference_type = std::ptrdiff_t;
-      using  size_type = std::size_t;
-      POUTRE_STATIC_CONSTEXPR size_t m_numdims = NumDims;
-      using pixcontainer = std::array<storage_type, NumDims>;
-    public:
-      pixcontainer m_pixcontainer;
-    public:
-      POUTRE_CONSTEXPR compound_pixel( ) POUTRE_NOEXCEPT : m_pixcontainer( )
-        {
-        }
-
-      POUTRE_CONSTEXPR compound_pixel(const value_type& a) POUTRE_NOEXCEPT : m_pixcontainer( )
-          {
-          m_pixcontainer.assign(a);
-          }
-
-       POUTRE_CONSTEXPR compound_pixel(const std::initializer_list<value_type>& values) :m_pixcontainer()
-            {
-            if (values.size( ) != m_numdims) 
-              POUTRE_RUNTIME_ERROR("Invalid input initializer regarding NumDims of compound_pixel container");
-            std::copy(values.begin( ), values.end(), m_pixcontainer.begin());
-            }
-
-       POUTRE_CONSTEXPR compound_pixel(const self_type& rhs) POUTRE_NOEXCEPT
-          {
-          std::copy(rhs.begin( ), rhs.end( ), m_pixcontainer.begin( ));
-          }
-
-            //is this really needed ?
-            compound_pixel(self_type&& rhs) /*POUTRE_NOEXCEPT*/
-            {
-            *this = std::move(rhs);
-            }
-
-          //is this really needed ?
-          self_type& operator= (self_type&& rhs) /*POUTRE_NOEXCEPT*/
-            {
-            if (this != &rhs) // ?? http://scottmeyers.blogspot.fr/2014/06/the-drawbacks-of-implementing-move.html
-              {
-              m_pixcontainer = std::move(rhs::m_pixcontainer);
-              }
-            return *this;
-            }
-
-          //template<class other_container_type
-          //  , typename std::enable_if<std::is_convertible<other_container_type::value_type, storage_type>::value>::type* = nullptr>
-          //  compound_pixel(const other_container_type& values) : m_pixcontainer{}
-          //  {
-          //  if (container.size( ) != m_numdims) POUTRE_RUNTIME_ERROR("Invalid input container regarding NumDims of compound_pixel container");
-          //  std::copy(values.begin( ), values.end( ), m_pixcontainer.begin( ));
-          //  }
-
-
-          reference operator[] (size_type n) POUTRE_NOEXCEPTONLYNDEBUG
-            {
-            POUTRE_ASSERTCHECK(n >= 0, "compound_pixel operator[n] n must be in >=0");
-            POUTRE_ASSERTCHECK(n < m_numdims, "compound_pixel operator[n] n must be in [0,m_numdims[");
-            return m_pixcontainer[n];
-            }
-              const_reference operator[] (size_type n) const POUTRE_NOEXCEPTONLYNDEBUG
-              {
-              POUTRE_ASSERTCHECK(n >= 0, "compound_pixel operator[n] n must be in >=0");
-              POUTRE_ASSERTCHECK(n < m_numdims, "compound_pixel operator[n] n must be in [0,m_numdims[");
-              return m_pixcontainer[n];
-              }
-
-                bool operator==(const self_type& rhs) const POUTRE_NOEXCEPT
-                {
-                return  std::equal(m_pixcontainer.cbegin( ), m_pixcontainer.cend( ), rhs.m_pixcontainer.cbegin());
-                }
-                  bool operator!=(const self_type& rhs) const POUTRE_NOEXCEPT
-                  {
-                  return  !(std::equal(m_pixcontainer.cbegin( ), m_pixcontainer.cend( ), rhs.m_pixcontainer.cbegin( )));
-                  }
-
-      /* template<typename storagetype, size_t NumDim>
-       friend std::istream& operator<<(std::istream& in, const compound_pixel < storage_type, NumDims>& rhs) POUTRE_NOEXCEPT;*/
-
-         friend std::ostream& operator<<(std::ostream& out, const compound_pixel < storage_type, NumDims>& rhs) POUTRE_NOEXCEPT
-         {
-         for (const auto& val : rhs.m_pixcontainer)
-           {
-           out << val;
-           out << ",";
-           }
-         return out;
-         }
-
-    };
-
-  template <typename storage_type>
-  class compound_pixel < storage_type, 3 >
-    {
-    public:
-      using  self_type = compound_pixel < storage_type, 3 > ;
-
-      using  value_type = storage_type;
-      using  pointer = value_type*;
-      using  const_pointer = const value_type*;
-      using  reference = value_type&;
-      using  const_reference = value_type const &;
-      using  difference_type = std::ptrdiff_t;
-      using  size_type = std::size_t;
-
-      static const size_t m_numdims = 3;
-
-    public:
-      value_type m_a0, m_a1, m_a2;
-
-    public:
-      POUTRE_CONSTEXPR compound_pixel( ) POUTRE_NOEXCEPT : m_a0(0), m_a1(0), m_a2(0)
-        {
-        }
-      POUTRE_CONSTEXPR compound_pixel(const value_type& a0, const value_type& a1, const value_type& a2) POUTRE_NOEXCEPT : m_a0(a0), m_a1(a1), m_a2(a2)  {}
-      POUTRE_CONSTEXPR compound_pixel(const value_type& a)  POUTRE_NOEXCEPT : m_a0(a), m_a1(a), m_a2(a)  {}
-      POUTRE_CONSTEXPR compound_pixel(const self_type& rhs) POUTRE_NOEXCEPT : m_a0(rhs.m_a0), m_a1(rhs.m_a1), m_a2(rhs.m_a2)  {}
-
-      //is this really needed ?
-      compound_pixel(self_type&& rhs) POUTRE_NOEXCEPT
-        { *this = std::move(rhs); }
-        //is this really needed ?
-        self_type& operator= (self_type&& rhs) POUTRE_NOEXCEPT
-        { m_a0 = rhs.m_a0; m_a1 = rhs.m_a1; m_a2 = rhs.m_a2; return *this; }
-
-        
-        template<class other_storage_type
-        , typename std::enable_if<std::is_convertible<other_storage_type, storage_type>::value>::type* = nullptr>
-        compound_pixel(const compound_pixel<other_storage_type, m_numdims>& rhs) POUTRE_NOEXCEPT : m_a0(static_cast<storage_type>(rhs.m_a0)), m_a1(static_cast<storage_type>(rhs.m_a1)), m_a2(static_cast<storage_type>(rhs.m_a2))
-        {
-        }
-
-      reference operator[] (size_type n) POUTRE_NOEXCEPTONLYNDEBUG
-        {
-        POUTRE_ASSERTCHECK(n >= 0, "compound_pixel 4 operator[n] n must be in [0,3[");
-        POUTRE_ASSERTCHECK(n < 3, "compound_pixel 4 operator[n] n must be in [0,3[");
-        if (n == 0) return m_a0;
-        if (n == 1) return m_a1;
-        if (n == 2) return m_a2;
-        }
-          const_reference operator[] (size_type n) const POUTRE_NOEXCEPTONLYNDEBUG
-          {
-          POUTRE_ASSERTCHECK(n >= 0, "compound_pixel 4 operator[n] n must be in [0,3[");
-          POUTRE_ASSERTCHECK(n < 3, "compound_pixel 4 operator[n] n must be in [0,3[");
-          if (n == 0) return m_a0;
-          if (n == 1) return m_a1;
-          if (n == 2) return m_a2;
-          }
-
-            bool operator==(const self_type& rhs) const POUTRE_NOEXCEPT
-            {
-            return  (m_a0 == rhs.m_a0) && (m_a1 == rhs.m_a1) && (m_a2 == rhs.m_a2);
-            }
-              bool operator!=(const self_type& rhs) const POUTRE_NOEXCEPT
-              {
-              return  (m_a0 != rhs.m_a0) || (m_a1 != rhs.m_a1) || (m_a2 != rhs.m_a2);
-              }
-      /*template<typename storagetype>
-      friend std::istream& operator<<(std::istream& in, const compound_pixel < storage_type, 3>& rhs) POUTRE_NOEXCEPT;*/
-
-      friend std::ostream& operator<<(std::ostream& out, const compound_pixel < storage_type, 3>& rhs) POUTRE_NOEXCEPT
-        {
-        out << rhs.m_a0;
-        out << ",";
-        out << rhs.m_a1;
-        out << ",";
-        out << rhs.m_a2;
-        out << ",";
-        return out;
-        }
-    };
-
-
-
-
-  template <typename storage_type>
-  class compound_pixel < storage_type, 4 >
-    {
-    public:
-      using  self_type = compound_pixel < storage_type, 4 > ;
-
-      using  value_type = storage_type;
-      using  pointer = value_type*;
-      using  const_pointer = const value_type*;
-      using  reference = value_type&;
-      using  const_reference = value_type const &;
-      using  difference_type = std::ptrdiff_t;
-      using  size_type = std::size_t;
-
-      static const size_t m_numdims = 4;
-
-    public:
-      value_type m_a0, m_a1, m_a2, m_a3;
-
-    public:
-      POUTRE_CONSTEXPR compound_pixel( ) POUTRE_NOEXCEPT : m_a0(0), m_a1(0), m_a2(0), m_a3(0)
-        {
-        }
-      POUTRE_CONSTEXPR compound_pixel(const value_type& a0, const value_type& a1, const value_type& a2, const value_type& a3) POUTRE_NOEXCEPT : m_a0(a0), m_a1(a1), m_a2(a2), m_a3(a3)  {}
-      POUTRE_CONSTEXPR compound_pixel(const value_type& a)  POUTRE_NOEXCEPT : m_a0(a), m_a1(a), m_a2(a), m_a3(a)  {}
-      POUTRE_CONSTEXPR compound_pixel(const self_type& rhs) POUTRE_NOEXCEPT : m_a0(rhs.m_a0), m_a1(rhs.m_a1), m_a2(rhs.m_a2), m_a3(rhs.m_a3)  {}
-
-      //is this really needed ?
-      compound_pixel(self_type&& rhs) POUTRE_NOEXCEPT
-        { *this = std::move(rhs); }
-
-        //is this really needed ?
-        self_type& operator= (self_type&& rhs) POUTRE_NOEXCEPT
-        { m_a0 = rhs.m_a0; m_a1 = rhs.m_a1; m_a2 = rhs.m_a2; m_a3 = rhs.m_a3; return *this; }
-
-        // foo2 overload is enabled via a parameter
-        template<class other_storage_type
-        , typename std::enable_if<std::is_convertible<other_storage_type, storage_type>::value>::type* = nullptr
-        >
-        compound_pixel(const compound_pixel<other_storage_type, m_numdims>& rhs) POUTRE_NOEXCEPT : m_a0(static_cast<storage_type>(rhs.m_a0)), m_a1(static_cast<storage_type>(rhs.m_a1)), m_a2(static_cast<storage_type>(rhs.m_a2)), m_a3(static_cast<storage_type>(rhs.m_a3))
-        {
-        }
-
-      reference operator[] (size_type n) POUTRE_NOEXCEPTONLYNDEBUG
-        {
-        POUTRE_ASSERTCHECK(n >= 0, "compound_pixel 4 operator[n] n must be in [0,4[");
-        POUTRE_ASSERTCHECK(n < 4, "compound_pixel 4 operator[n] n must be in [0,4[");
-        if (n == 0) return m_a0;
-        if (n == 1) return m_a1;
-        if (n == 2) return m_a2;
-        if (n == 3) return m_a3;
-        
-        }
-          const_reference operator[] (size_type n) const POUTRE_NOEXCEPTONLYNDEBUG
-          {
-          POUTRE_ASSERTCHECK(n >= 0, "compound_pixel 4 operator[n] n must be in [0,4[");
-          POUTRE_ASSERTCHECK(n < 4, "compound_pixel 4 operator[n] n must be in [0,4[");
-          if (n == 0) return m_a0;
-          if (n == 1) return m_a1;
-          if (n == 2) return m_a2;
-          if (n == 3) return m_a3;          
-          }
-
-            bool operator==(const self_type& rhs) const POUTRE_NOEXCEPT
-            {
-            return  (m_a0 == rhs.m_a0) && (m_a1 == rhs.m_a1) && (m_a2 == rhs.m_a2) && (m_a3 == rhs.m_a3);
-            }
-              bool operator!=(const self_type& rhs) const POUTRE_NOEXCEPT
-              {
-              return  (m_a0 != rhs.m_a0) || (m_a1 != rhs.m_a1) || (m_a2 != rhs.m_a2) || (m_a3 != rhs.m_a3);
-              }
-     /* template<typename storagetype>
-      friend std::istream& operator<<(std::istream& in, const compound_pixel < storage_type, 4>& rhs) POUTRE_NOEXCEPT;*/
-
-      friend std::ostream& operator<<(std::ostream& out, const compound_pixel < storage_type, 4>& rhs) POUTRE_NOEXCEPT
-        {
-        out << rhs.m_a0;
-        out << ",";
-        out << rhs.m_a1;
-        out << ",";
-        out << rhs.m_a2;
-        out << ",";
-        out << rhs.m_a3;
-        out << ",";
-        return out;
-        }
-
-    };
-
-  extern template class compound_pixel < pUINT8, 3 > ;
-  extern template class compound_pixel < pINT32, 3 >;
-  extern template class compound_pixel < pFLOAT, 3 > ;
-  extern template class compound_pixel < pINT64, 3 > ;
-  extern template class compound_pixel < pDOUBLE, 3 >;
-
-  extern template class compound_pixel < pUINT8, 4 > ;
-  extern template class compound_pixel < pINT32, 4 >;
-  extern template class compound_pixel < pFLOAT, 4 > ;
-  extern template class compound_pixel < pINT64, 4 > ;
-  extern template class compound_pixel < pDOUBLE, 4 >;
+  //extern template class compound_pixel < pUINT8, 4 > ;
+  //extern template class compound_pixel < pINT32, 4 >;
+  //extern template class compound_pixel < pFLOAT, 4 > ;
+  //extern template class compound_pixel < pINT64, 4 > ;
+  //extern template class compound_pixel < pDOUBLE, 4 >;
 
   typedef compound_pixel < pUINT8, 3 > c3pUINT8;
   typedef compound_pixel < pINT32, 3 > c3pINT32;

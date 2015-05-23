@@ -18,7 +18,7 @@ BOOST_AUTO_TEST_CASE(static_array_init)
   {
       {
       //ctor specialization
-      //poutre::static_array<int, 1> array1(1);
+      poutre::static_array<int, 1> array1(1);
       poutre::static_array<int, 2> array2(1, 2);
       poutre::static_array<int, 3> array3(1, 2, 4);
       }

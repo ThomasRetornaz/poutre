@@ -16,6 +16,11 @@ BOOST_AUTO_TEST_SUITE(bound_index)
 
 BOOST_AUTO_TEST_CASE(bounds)
   {
+  poutre::bounds < 1 > bnd0(5);
+  BOOST_CHECK_EQUAL(bnd0[0], 5);
+  BOOST_CHECK_EQUAL(bnd0.at(0), 5);
+  BOOST_CHECK_EQUAL(bnd0.size( ), 5);
+
   auto bnd1 = poutre::bounds < 3 > { 3, 1, 4 };
   auto idx = poutre::index < 3 > { 2, -1, 0 };
 
@@ -76,5 +81,75 @@ BOOST_AUTO_TEST_CASE(index)
   BOOST_CHECK_EQUAL(res[1], 4);
   }
 
+BOOST_AUTO_TEST_CASE(index_ordering)
+  {
+      
+  poutre::index<2> idx{ 2, 3 };
+  poutre::index<2> idx2{ 1, 3 };
+  poutre::index<2> idx3{ 3, 3 };
 
+  BOOST_CHECK(idx2<idx);
+  BOOST_CHECK(idx3>idx);
+
+  BOOST_CHECK(idx<=idx);
+  BOOST_CHECK(idx>=idx);
+  }
+
+BOOST_AUTO_TEST_CASE(bounds_iterator_1d)
+  {
+  poutre::bounds < 1 > bnd1D(10);
+  auto itbnd1d = bnd1D.begin();
+  auto itend= bnd1D.end();
+
+
+  std::cout << "**********idx start********" << std::endl;
+  for ( const auto& idx : bnd1D )
+    {
+    std::cout << idx << " ";
+    }
+  std::cout << "**********idx end********" << std::endl;
+
+  auto bnd1dit = begin(bnd1D);
+  auto endit = end(bnd1D);
+
+  std::cout << "**********idx start********" << std::endl;
+  for ( const auto& idx : bnd1D )
+    {
+    std::cout << idx << " ";
+    }
+  std::cout << "**********idx end********" << std::endl;
+
+  }
+
+BOOST_AUTO_TEST_CASE(bounds_iterator_2d)
+  {
+  poutre::bounds < 2 > bnd2D{2,4};
+  auto it= bnd2D.begin( );
+  auto itend = bnd2D.end( );
+
+  std::cout << "**********idx start********" << std::endl;
+  for ( const auto& idx : bnd2D )
+    {
+    std::cout << idx << " ";
+    }
+  std::cout << "**********idx end********" << std::endl;
+  //auto bnd1dit = begin(bnd1D);
+  //auto endit = end(bnd1D);
+  }
+
+BOOST_AUTO_TEST_CASE(bounds_iterator_3d)
+  {
+  poutre::bounds < 3 > bnd{ 1,2,3 };
+  auto it = bnd.begin( );
+  auto itend = bnd.end( );
+
+  std::cout << "**********idx start********" << std::endl;
+  for ( const auto& idx : bnd )
+    {
+    std::cout << idx << " ";
+    }
+  std::cout << "**********idx end********" << std::endl;
+  //auto bnd1dit = begin(bnd1D);
+  //auto endit = end(bnd1D);
+  }
 BOOST_AUTO_TEST_SUITE_END( )

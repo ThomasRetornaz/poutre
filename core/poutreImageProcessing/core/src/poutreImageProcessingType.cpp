@@ -13,18 +13,18 @@
 namespace poutre
   {
 
-  
-  template class compound_pixel < pUINT8, 3 >;
-  template class compound_pixel < pINT32, 3 >;
-  template class compound_pixel < pFLOAT, 3 >;
-  template class compound_pixel < pINT64, 3 >;
-  template class compound_pixel < pDOUBLE, 3 >;
+  //
+  //template class compound_pixel < pUINT8, 3 >;
+  //template class compound_pixel < pINT32, 3 >;
+  //template class compound_pixel < pFLOAT, 3 >;
+  //template class compound_pixel < pINT64, 3 >;
+  //template class compound_pixel < pDOUBLE, 3 >;
 
-  template class compound_pixel < pUINT8, 4 >;
-  template class compound_pixel < pINT32, 4 >;
-  template class compound_pixel < pFLOAT, 4 >;
-  template class compound_pixel < pINT64, 4 >;
-  template class compound_pixel < pDOUBLE, 4 >;
+  //template class compound_pixel < pUINT8, 4 >;
+  //template class compound_pixel < pINT32, 4 >;
+  //template class compound_pixel < pFLOAT, 4 >;
+  //template class compound_pixel < pINT64, 4 >;
+  //template class compound_pixel < pDOUBLE, 4 >;
 
 
 

@@ -171,6 +171,15 @@ namespace poutre
          }
       };
 
+         template <typename value_type>
+         struct helper_comp_op<value_type, CompOpType::CompOpInf>
+           {
+           POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(const value_type &A0, const value_type &A1) POUTRE_NOEXCEPT
+             {
+             return (A0 < A1);
+             }
+           };
+
       template <typename value_type>
          struct helper_comp_op<value_type, CompOpType::CompOpSup>
       {
@@ -199,58 +208,78 @@ namespace poutre
       };
 
       template <class container, int Rank = container::rank>
-         struct helper_comp_equal_container_op
-      {
-         using value_type = typename container::value_type;
-         POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(container const & A0, container const & A1) POUTRE_NOEXCEPT
-         {
-            for (size_t i = 0; i < Rank; i++)
-            { 
-               if (!helper_comp_op<value_type, CompOpType::CompOpEqual>::op(A0[i], A1[i])) return false;
-            }
-            return true;
-         }
+         struct helper_comp_lexicographic_less_container_op
+           {
+           using value_type = typename container::value_type;
+           POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(container const & A0, container const & A1) POUTRE_NOEXCEPT
+             {
+             for ( ptrdiff_t i = Rank - 1; i >= 0; --i )
+               {
+               if ( A0[i] == A1[i] ) continue;
+               return (A0[i] < A1[i]);
+               }
+             return false;
+             }
+           };
+
+
+     template <class container, int Rank = container::rank>
+       struct helper_comp_lexicographic_sup_container_op
+           {
+           POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(container const & A0, container const & A1) POUTRE_NOEXCEPT
+             {
+             for ( ptrdiff_t i = Rank - 1; i >= 0; i-- )
+               {
+               if ( A0[i] == A1[i] ) continue;
+               return (A0[i] > A1[i]);
+               }
+             return false;
+             }
+           };
+
+     template <class container, int Rank = container::rank>
+     struct helper_comp_equal_container_op
+     {
+     using value_type = typename container::value_type;
+     POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(container const & A0, container const & A1) POUTRE_NOEXCEPT
+     {
+     for ( size_t i = 0; i < Rank; i++ )
+       {
+       if ( A0[i] != A1[i]) return false;
+       }
+       return true;
+       }
       };
 
-      template <class container>
-         struct helper_comp_equal_container_op<container, 1>
-      {
-         using value_type = typename container::value_type;
-         POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(container const & A0, container const & A1) POUTRE_NOEXCEPT
+     template <class container>
+     struct helper_comp_equal_container_op<container, 1>
+       {
+       using value_type = typename container::value_type;
+       POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(container const & A0, container const & A1) POUTRE_NOEXCEPT
          {
-            return helper_comp_op<value_type, CompOpType::CompOpEqual>::op(A0[0], A1[0]);
+         return A0[0]==A1[0];
          }
-      };
+       };
 
-      template <class container>
-         struct helper_comp_equal_container_op<container, 2>
-      {
-         using value_type = typename container::value_type;
-         POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(container const & A0, container const & A1) POUTRE_NOEXCEPT
+     template <class container>
+     struct helper_comp_equal_container_op<container, 2>
+       {
+       using value_type = typename container::value_type;
+       POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(container const & A0, container const & A1) POUTRE_NOEXCEPT
          {
-            return (helper_comp_op<value_type, CompOpType::CompOpEqual>::op(A0[0], A1[0]) && helper_comp_op<value_type, CompOpType::CompOpEqual>::op(A0[1], A1[1]));
+         return ((A0[0]==A1[0]) && (A0[1]==A1[1]));
          }
-      };
+       };
 
-      template <class container>
-         struct helper_comp_equal_container_op<container, 3>
-      {
-         using value_type = typename container::value_type;
-         POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(container const & A0, container const & A1) POUTRE_NOEXCEPT
+     template <class container>
+     struct helper_comp_equal_container_op<container, 3>
+       {
+       using value_type = typename container::value_type;
+       POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(container const & A0, container const & A1) POUTRE_NOEXCEPT
          {
-            return (helper_comp_op<value_type, CompOpType::CompOpEqual>::op(A0[0], A1[0]) && helper_comp_op<value_type, CompOpType::CompOpEqual>::op(A0[1], A1[1]) && helper_comp_op<value_type, CompOpType::CompOpEqual>::op(A0[2], A1[2]));
+         return ((A0[0] == A1[0]) && (A0[1] == A1[1]) && (A0[2] == A1[2]));
          }
-      };
-
-      template <class container>
-         struct helper_comp_equal_container_op<container, 4>
-      {
-         using value_type = typename container::value_type;
-         POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(container const & A0, container const & A1) POUTRE_NOEXCEPT
-         {
-            return (helper_comp_op<value_type, CompOpType::CompOpEqual>::op(A0[0], A1[0]) && helper_comp_op<value_type, CompOpType::CompOpEqual>::op(A0[1], A1[1]) && helper_comp_op<value_type, CompOpType::CompOpEqual>::op(A0[2], A1[2]) && helper_comp_op<value_type, CompOpType::CompOpEqual>::op(A0[3], A1[3]));
-         }
-      };
+       };
 
       template <class container, ArithOpType arithop, int Rank = container::rank>
          struct helper_arith_container_op
@@ -260,7 +289,7 @@ namespace poutre
          {
             for (size_t i = 0; i < rank; i++) 
             { 
-               helper_comp_op<value_type, ArithOpType>(A0[i], A1[i], res[i]); 
+            helper_comp_op<value_type, arithop>::op(A0[i], A1[i], res[i]);
             }
          }
       };
@@ -437,7 +466,7 @@ namespace poutre
             helper_assign_op<othervaluetype, value_type, assignop>::op(A0, res[0]);
             helper_assign_op<othervaluetype, value_type, assignop>::op(A0, res[1]);
             helper_assign_op<othervaluetype, value_type, assignop>::op(A0, res[2]);
-            helper_assign_op<othervaluetype, value_type, assignop>::op(A0, res[4]);
+            helper_assign_op<othervaluetype, value_type, assignop>::op(A0, res[3]);
          }
       };
 

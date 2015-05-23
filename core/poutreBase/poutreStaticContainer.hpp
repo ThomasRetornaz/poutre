@@ -43,6 +43,8 @@
 #pragma warning( disable : 4425 )//4425 improper support constexpr
 #endif
 
+//#include <amp.h>
+
 namespace poutre
 {
 
@@ -118,9 +120,40 @@ namespace poutre
 //}
 
 
+POUTRE_CONSTEXPR explicit static_array_base(value_type a) POUTRE_NOEXCEPT
+{
+static_assert(Rank == 1, "static_array_base(value_type) is only supported on static_array_base<T, 1>");
+m_array[0] = value_type(a);
+}
+
+
+POUTRE_CONSTEXPR static_array_base(value_type a0, value_type a1) POUTRE_NOEXCEPT
+{
+static_assert(Rank == 2, "static_array_base(value_type,value_type) is only supported on static_array_base<T, 2>");
+m_array[0] = value_type(a0);
+m_array[1] = value_type(a1);
+}
+
+POUTRE_CONSTEXPR static_array_base(value_type a0, value_type  a1, value_type a2) POUTRE_NOEXCEPT
+{
+static_assert(Rank == 3,"static_array_base(value_type,value_type,value_type) is only supported on static_array_base<T, 3>");
+m_array[0] = a0;
+m_array[1] = a1;
+m_array[2] = a2;
+}
+
+POUTRE_CONSTEXPR static_array_base(value_type a0, value_type  a1, value_type a2, value_type a3) POUTRE_NOEXCEPT
+  {
+  static_assert(Rank == 4, "static_array_base(value_type,value_type,value_type,value_type) is only supported on static_array_base<T, 4>");
+  m_array[0] = a0;
+  m_array[1] = a1;
+  m_array[2] = a2;
+  m_array[3] = a3;
+  }
+
       POUTRE_CXX14_CONSTEXPR static_array_base(const std::initializer_list<value_type>& rhs) 
       {
-         POUTRE_CHECK(rhs.size( ) == rank, "Ill formed initializer list: rhs.size() must equal NumElmnt")
+         POUTRE_CHECK(rhs.size( ) == rank, "Ill formed initializer list: rhs.size() must equal Rank")
 //details::helper_assign_container_op<self_type, AssignOpType::AssignOp, NumElmnt>::op(rhs, *this);
 //safe but silly behavior if no static assertion
 //std::copy_n(rhs.begin( ), std::min<ptrdiff_t>((ptrdiff_t)rank, rhs.size( )), m_size_list.begin( ));
@@ -459,32 +492,27 @@ namespace poutre
 
    public:
 
-
+   
       POUTRE_CONSTEXPR static_array( ) :parent( ) POUTRE_NOEXCEPT_IF(parent( ))
       {
       }
 
-      //redefine specialisation du to conflict with ctor with initializer_list
-      template <typename other>
-         POUTRE_CONSTEXPR explicit static_array(typename std::enable_if<std::is_convertible<other, value_type>::value && Rank == 1, value_type>::type a) /*: parent(a)*/  POUTRE_NOEXCEPT
-      {
-         m_array[0] = value_type(a);
-      }
+      POUTRE_CONSTEXPR explicit static_array(value_type a) :parent(a) POUTRE_NOEXCEPT_IF(parent(a))
+        {
+        }
 
-      template <typename other>
-         POUTRE_CONSTEXPR static_array(typename std::enable_if<std::is_convertible<other, value_type>::value && Rank == 2, value_type>::type a0, other a1) /*: parent(a0,a1)*/ POUTRE_NOEXCEPT
-      {
-         m_array[0] = value_type(a0);
-         m_array[1] = value_type(a1);
-      }
 
-      template <typename other>
-         POUTRE_CONSTEXPR static_array(typename std::enable_if<std::is_convertible<other, value_type>::value && Rank == 3, value_type>::type a0, other a1,value_type a2) /*: parent(a0, a1, a2) */ POUTRE_NOEXCEPT
-      {
-         m_array[0] = value_type(a0);
-         m_array[1] = value_type(a1);
-         m_array[2] = value_type(a2);
-      }
+      POUTRE_CONSTEXPR static_array(value_type a0, value_type a1) : parent(a0, a1) POUTRE_NOEXCEPT_IF(parent(a0, a1))
+          {
+          }
+
+      POUTRE_CONSTEXPR static_array(value_type a0, value_type  a1, value_type a2) : parent(a0, a1, a2) POUTRE_NOEXCEPT_IF(parent(a0, a1, a2))
+            {
+            }
+
+      POUTRE_CONSTEXPR static_array(value_type a0, value_type  a1, value_type a2, value_type a3) : parent(a0, a1, a2, a3) POUTRE_NOEXCEPT_IF(parent(a0, a1, a2, a3))
+         {
+         }
 
       POUTRE_CXX14_CONSTEXPR static_array(const std::initializer_list<value_type>& rhs) : parent(rhs) 
       {
@@ -494,6 +522,7 @@ namespace poutre
       {
       }
 
+     
       POUTRE_CONSTEXPR static_array(const parent& rhs) : parent(rhs) POUTRE_NOEXCEPT
       {
       }

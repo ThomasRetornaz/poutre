@@ -190,8 +190,9 @@ BOOST_AUTO_TEST_CASE(compound_pixel_container)
   {
   using c5G8 = poutre::compound_pixel<poutre::pUINT8, 5>;
   BOOST_CHECK(poutre::get_dim<c5G8>::dim == 5);
-  c5G8 p00(10);
-  c5G8 p0({ 10, 10, 10, 10, 10 });
+  c5G8 p00;
+  p00.assign(10);
+  c5G8 p0={ 10, 10, 10, 10, 10 };
   BOOST_CHECK_EQUAL(p00,p0);
   BOOST_CHECK_EQUAL(p00[0], 10);
   BOOST_CHECK_EQUAL(p00[3], 10);
@@ -210,15 +211,16 @@ BOOST_AUTO_TEST_CASE(compound_pixel_3)
   {
   using c3G8 = poutre::compound_pixel<poutre::pUINT8,3>;
   BOOST_CHECK(poutre::get_dim<c3G8>::dim == 3);
-  c3G8 p00;
-  BOOST_CHECK(p00.m_a0== 0);
-  BOOST_CHECK(p00.m_a1 == 0);
-  BOOST_CHECK(p00.m_a2 == 0);
+  c3G8 p00(0,1,2);
+  BOOST_CHECK(p00[0] == 0);
+  BOOST_CHECK(p00[1] == 1);
+  BOOST_CHECK(p00[2] == 2);
 
-  c3G8 p0(12);
-  BOOST_CHECK(p0.m_a0 == 12);
-  BOOST_CHECK(p0.m_a1 == 12);
-  BOOST_CHECK(p0.m_a2 == 12);
+  c3G8 p0; //default uninitialized
+  p0.fill(12);
+  BOOST_CHECK(p0[0] == 12);
+  BOOST_CHECK(p0[1] == 12);
+  BOOST_CHECK(p0[2] == 12);
 
   c3G8 p(1,2,3);
   BOOST_CHECK(p0 != p);
@@ -239,29 +241,31 @@ BOOST_AUTO_TEST_CASE(compound_pixel_3)
   BOOST_CHECK(pc[1] == 4);
   BOOST_CHECK(pc[2] == 5);
 
-  p0 = std::move(pc);
-  BOOST_CHECK(p0[0] == 3);
-  BOOST_CHECK(p0[1] == 4);
-  BOOST_CHECK(p0[2] == 5);
+  //p0 = std::move(pc);
+  //BOOST_CHECK(p0[0] == 3);
+  //BOOST_CHECK(p0[1] == 4);
+  //BOOST_CHECK(p0[2] == 5);
   }
 
 BOOST_AUTO_TEST_CASE(compound_pixel_4)
   {
   using c4G8 = poutre::compound_pixel<poutre::pUINT8, 4>;
   BOOST_CHECK(poutre::get_dim<c4G8>::dim == 4);
-  c4G8 p00;
-  BOOST_CHECK(p00.m_a0 == 0);
-  BOOST_CHECK(p00.m_a1 == 0);
-  BOOST_CHECK(p00.m_a2 == 0);
-  BOOST_CHECK(p00.m_a3 == 0);
+  c4G8 p00(0,1,2,3);
+  BOOST_CHECK(p00[0] == 0);
+  BOOST_CHECK(p00[1] == 1);
+  BOOST_CHECK(p00[2] == 2);
+  BOOST_CHECK(p00[3] == 3);
 
-  c4G8 p0(12);
-  BOOST_CHECK(p0.m_a0 == 12);
-  BOOST_CHECK(p0.m_a1 == 12);
-  BOOST_CHECK(p0.m_a2 == 12);
-  BOOST_CHECK(p0.m_a3 == 12);
+  c4G8 p0;  //default uninitialized
+  p0.assign(0);
+  p0+=12;
+  BOOST_CHECK(p0[0] == 12);
+  BOOST_CHECK(p0[1] == 12);
+  BOOST_CHECK(p0[2] == 12);
+  BOOST_CHECK(p0[3] == 12);
 
-  c4G8 p(1, 2, 3, 4);
+  c4G8 p={1, 2, 3, 4};
   BOOST_CHECK(p0 != p);
   BOOST_CHECK(p[0] == 1);
   BOOST_CHECK(p[1] == 2);
@@ -284,11 +288,11 @@ BOOST_AUTO_TEST_CASE(compound_pixel_4)
   BOOST_CHECK(pc[2] == 5);
   BOOST_CHECK(pc[3] == 6);
 
-  p0 = std::move(pc);
-  BOOST_CHECK(p0[0] == 3);
-  BOOST_CHECK(p0[1] == 4);
-  BOOST_CHECK(p0[2] == 5);
-  BOOST_CHECK(p0[3] == 6);
+  //p0 = std::move(pc);
+  //BOOST_CHECK(p0[0] == 3);
+  //BOOST_CHECK(p0[1] == 4);
+  //BOOST_CHECK(p0[2] == 5);
+  //BOOST_CHECK(p0[3] == 6);
   }
 
 BOOST_AUTO_TEST_SUITE_END( )

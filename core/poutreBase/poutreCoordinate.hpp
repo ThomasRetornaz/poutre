@@ -83,6 +83,9 @@ namespace poutre
       using self_type = bounds < Rank > ;
       using static_array_base<ptrdiff_t, Rank>::static_array_base < ptrdiff_t, Rank > ;
 
+      using const_iterator = typename bounds_iterator<Rank>;
+      using iterator = typename bounds_iterator<Rank>;
+      
       using parent::rank;
       using parent::data;
       using parent::back;
@@ -117,31 +120,14 @@ namespace poutre
 
       /**@{*/
 
-      POUTRE_CONSTEXPR bounds( ) :parent( ) POUTRE_NOEXCEPT_IF(parent( ))
-      {
-      }
+     POUTRE_CONSTEXPR bounds( ) :parent( ) POUTRE_NOEXCEPT_IF(parent( ))
+       {
+       details::helper_assign_container_valueop<self_type, AssignOpType::AssignOp, Rank>::op(0, *this);
+       }
 
-      //redefine specialisation du to conflict with ctor with initializer_list
-      template <typename other>
-         POUTRE_CONSTEXPR explicit bounds(typename std::enable_if<std::is_convertible<other, value_type>::value && Rank == 1, value_type>::type a)   POUTRE_NOEXCEPT
-      {
-         m_array[0] = value_type(a);
-      }
-
-      template <typename other>
-         POUTRE_CONSTEXPR bounds(typename std::enable_if<std::is_convertible<other, value_type>::value && Rank == 2, value_type>::type a0, other a1) POUTRE_NOEXCEPT
-      {
-         m_array[0] = value_type(a0);
-         m_array[1] = value_type(a1);
-      }
-
-      template <typename other>
-         POUTRE_CONSTEXPR bounds(typename std::enable_if<std::is_convertible<other, value_type>::value && Rank == 3, value_type>::type a0, other a1, value_type a2) /*: parent(a0, a1, a2) */ POUTRE_NOEXCEPT
-      {
-         m_array[0] = value_type(a0);
-         m_array[1] = value_type(a1);
-         m_array[2] = value_type(a2);
-      }
+     POUTRE_CONSTEXPR explicit bounds(value_type a) :parent(a) POUTRE_NOEXCEPT_IF(parent(a))
+       {
+       }
 
       POUTRE_CXX14_CONSTEXPR bounds(const std::initializer_list<value_type>& rhs) : parent(rhs)
       {
@@ -219,23 +205,21 @@ namespace poutre
       }
 
 
-      //const_iterator begin( ) const POUTRE_NOEXCEPT
-      //  {
-      //  return const_iterator(*this);
-      //  }
+      const_iterator begin( ) const POUTRE_NOEXCEPT
+        {
+        return const_iterator(*this);
+        }
 
-      //const_iterator end( ) const POUTRE_NOEXCEPT
-      //  {
-      //  //FIXME
-      //  return const_iterator(*this);
-      //  }
+      const_iterator end( ) const POUTRE_NOEXCEPT
+        {
+          //define index end 
+          index<rank > m_idxend(*this);
+          m_idxend -=1;
+          const_iterator tmp(*this, m_idxend);
+          return ++tmp;
+        }
 
    };
-
-
-
-
-
 
 
    /**
@@ -298,44 +282,26 @@ namespace poutre
 
       /**@{*/
 
-      POUTRE_CONSTEXPR index( ) :parent( ) POUTRE_NOEXCEPT_IF(parent( ))
-      {
-      }
+     POUTRE_CONSTEXPR index( ) :parent( ) POUTRE_NOEXCEPT_IF(parent( ))
+       {
+       details::helper_assign_container_valueop<self_type, AssignOpType::AssignOp, Rank>::op(0,*this);
+       }
 
-      //redefine specialisation du to conflict with ctor with initializer_list
-      template <typename other>
-         POUTRE_CONSTEXPR explicit index(typename std::enable_if<std::is_convertible<other, value_type>::value && Rank == 1, value_type>::type a)   POUTRE_NOEXCEPT
-      {
-         m_array[0] = value_type(a);
-      }
+     POUTRE_CONSTEXPR explicit index(value_type a) :parent(a) POUTRE_NOEXCEPT_IF(parent(a))
+       {
+       }
 
-      template <typename other>
-         POUTRE_CONSTEXPR index(typename std::enable_if<std::is_convertible<other, value_type>::value && Rank == 2, value_type>::type a0, other a1) POUTRE_NOEXCEPT
-      {
-         m_array[0] = value_type(a0);
-         m_array[1] = value_type(a1);
-      }
+     POUTRE_CXX14_CONSTEXPR index(const std::initializer_list<value_type>& rhs) : parent(rhs)
+       {
+       }
 
-      template <typename other>
-         POUTRE_CONSTEXPR index(typename std::enable_if<std::is_convertible<other, value_type>::value && Rank == 3, value_type>::type a0, other a1, value_type a2) /*: parent(a0, a1, a2) */ POUTRE_NOEXCEPT
-      {
-         m_array[0] = value_type(a0);
-         m_array[1] = value_type(a1);
-         m_array[2] = value_type(a2);
-      }
+     POUTRE_CXX14_CONSTEXPR explicit index(const value_type(&rhs)[Rank]) : parent(rhs) POUTRE_NOEXCEPT_IF(parent(rhs))
+       {
+       }
 
-      POUTRE_CXX14_CONSTEXPR index(const std::initializer_list<value_type>& rhs) : parent(rhs)
-      {
-      }
-
-      POUTRE_CXX14_CONSTEXPR explicit index(const value_type(&rhs)[Rank]) : parent(rhs) POUTRE_NOEXCEPT_IF(parent(rhs))
-      {
-      }
-
-
-      POUTRE_CONSTEXPR index(const parent& rhs) : parent(rhs) POUTRE_NOEXCEPT_IF(parent(rhs))
-        {
-        }
+     POUTRE_CONSTEXPR index(const parent& rhs) : parent(rhs) POUTRE_NOEXCEPT_IF(parent(rhs))
+       {
+       }
 
       /**@}*/
 
@@ -432,6 +398,26 @@ namespace poutre
          return *this;
       }
 
+     POUTRE_CXX14_CONSTEXPR bool operator<(const self_type& rhs) const POUTRE_NOEXCEPT
+        {
+        return  details::helper_comp_lexicographic_less_container_op<self_type>::op(*this,rhs);
+        }
+
+     POUTRE_CXX14_CONSTEXPR bool operator<=(const self_type& rhs) const POUTRE_NOEXCEPT
+        {
+        return  !details::helper_comp_lexicographic_sup_container_op<self_type>::op(*this, rhs);
+        }
+
+     POUTRE_CXX14_CONSTEXPR bool operator>(const self_type& rhs) const POUTRE_NOEXCEPT
+        {
+        return  details::helper_comp_lexicographic_sup_container_op<self_type>::op(*this, rhs);
+        }
+
+     POUTRE_CXX14_CONSTEXPR bool operator>=(const self_type& rhs) const POUTRE_NOEXCEPT
+        {
+        return  !details::helper_comp_lexicographic_less_container_op<self_type>::op(*this, rhs);
+        }
+
       /**@}*/
 
 
@@ -475,6 +461,7 @@ namespace poutre
    {
       static_assert(Rank > 0,
                     "bounds_iterator requires a Rank>0");
+      POUTRE_STATIC_CONSTEXPR int rank=Rank;
    public:
       using parent = std::iterator < std::random_access_iterator_tag, index<Rank>, ptrdiff_t, const index<Rank>, const index<Rank> > ;
       using self_type = bounds_iterator < Rank > ;
@@ -482,19 +469,27 @@ namespace poutre
    protected:
       bounds<Rank> m_bnd;
       index<Rank>  m_idx;
+      index<Rank>  m_idxstart;
+      index<Rank>  m_idxend;
 
    public:
-      bounds_iterator(const bounds<Rank>& bnd, const index<Rank>& curr = index < Rank > {}) POUTRE_NOEXCEPT : m_bnd(bnd), m_idx(curr)
+     bounds_iterator(const bounds<Rank>& bnd, const index<Rank>& curr = index < Rank > {}) POUTRE_NOEXCEPT : m_bnd(bnd), m_idx(curr), m_idxstart(curr), m_idxend(m_bnd)
       {
-         //The precondition is that bnd.contains(curr) unless bnd.size() = 0.
-         if ( bnd.size( ) != 0 && bnd.contains(m_idx) )
-         {
-            bnd += m_idx;
-         }
-         else
-         {//invalidate bounds 
-            bnd = bounds < Rank >( );
-         }
+        //The precondition is that bnd.contains(curr) unless bnd.size() = 0.
+      if ( bnd.size( ) != 0 && bnd.contains(curr) )
+        {
+        m_idxend -= 1;
+        ++m_idxend[0];
+        }
+      else
+        {
+        //invalidate bounds 
+        m_bnd.assign(0);
+        m_idx.assign(0);
+        m_idxstart.assign(0);
+        m_idxend.assign(0);
+        ++m_idxend[0];
+        }
       }
 
       bounds_iterator(const self_type& rhs) = default;
@@ -519,31 +514,61 @@ namespace poutre
       }
 
 
-      /*bool operator<(const bounds_iterator& rhs) const POUTRE_NOEXCEPT
-        bool operator<=(const bounds_iterator& rhs) const POUTRE_NOEXCEPT
-        bool operator>(const bounds_iterator& rhs) const POUTRE_NOEXCEPT
-        bool operator>=(const bounds_iterator& rhs) const POUTRE_NOEXCEPT*/
+      bool operator<(const bounds_iterator& rhs) const POUTRE_NOEXCEPT
+        {
+        return m_idx<rhs.m_idx;
+        }
 
-      bounds_iterator& operator++()
+      bool operator<=(const bounds_iterator& rhs) const POUTRE_NOEXCEPT
+          {
+          return m_idx<=rhs.m_idx;
+          }
+      bool operator>(const bounds_iterator& rhs) const POUTRE_NOEXCEPT
+            {
+            return m_idx>rhs.m_idx;
+            }
+      bool operator>=(const bounds_iterator& rhs) const POUTRE_NOEXCEPT
+              {
+              return m_idx>=rhs.m_idx;
+              }
+
+      bounds_iterator& operator++() //todo profile for low rank, may unroll
       {
          for ( auto i = rank - 1; i >= 0; --i )
          {
-            if ( ++m_idx[i] < m_bounds[i] )
-               return;
-            m_idx[i] = 0;
+            if ( ++m_idx[i] < m_bnd[i] )
+              return *this;
+            m_idx[i] = m_idxstart[i];
          }
-         //FIXME
-         //m_idx = unspecified past - the - end value;
+         m_idx = m_idxend;
          return *this;
       }
 
+
       bounds_iterator  operator++(int)
       {
-         return ++tmp(*this);
+         auto tmp(*this);
+         return ++tmp;
+
       }
 
-      /* bounds_iterator& operator--();
-         bounds_iterator  operator--(int);*/
+      bounds_iterator& operator--() //todo profile for low rank, may unroll
+        {
+        for ( auto i = rank - 1; i >= 0; --i )
+          {
+          if ( --m_idx[i] >= m_idxstart[i] )
+            return *this;
+          m_idx[i] = m_bnd[i]-1;
+          }
+        m_idx = m_idxstart;
+        return *this;
+        }
+      
+
+      bounds_iterator  operator--(int)
+         {
+         return --tmp(*this);
+         }
 
       /* bounds_iterator  operator+(difference_type n) const;
          bounds_iterator& operator+=(difference_type n);
@@ -552,33 +577,36 @@ namespace poutre
 
          difference_type  operator-(const bounds_iterator& rhs) const;
 
-         reference operator*() const;
-         pointer   operator->() const;
+         pointer   operator->() const;  //implement or throw ?
+
          reference operator[](difference_type n) const;*/
 
       //!Note here a return by value
-      value_type                  operator*() POUTRE_NOEXCEPT{ return m_idx; }
+      reference                  operator*() POUTRE_NOEXCEPT{ return m_idx; }
 
       //!Note here a return by value
-      value_type                  operator*() const  POUTRE_NOEXCEPT{ return m_idx; }
+      reference                  operator*() const  POUTRE_NOEXCEPT{ return m_idx; }
 
 
-      //const offset                              getOffset( ) const POUTRE_NOEXCEPT { return m_ptr - m_ptrorig; }
 
       };
 
       template <int Rank> bounds_iterator<Rank> begin(const bounds<Rank>& bnd) POUTRE_NOEXCEPT
       {
-         return  bounds_iterator(bnd);
+         return  bnd.begin();
       }
 
       template <int Rank> bounds_iterator<Rank> end(const bounds<Rank>& bnd) POUTRE_NOEXCEPT
       {
-         //FIXME
-         return  bounds_iterator(bnd);
+         return  bnd.end();
       }
 
 
+ /*     template <int Rank>
+      bounds_iterator<Rank> operator+(typename bounds_iterator<Rank>::difference_type n, const bounds_iterator<Rank>& rhs)
+        {
+
+        }*/
 
 
       //! @} doxygroup: coordinate_group   

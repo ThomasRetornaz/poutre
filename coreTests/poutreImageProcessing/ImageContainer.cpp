@@ -115,7 +115,7 @@ BOOST_AUTO_TEST_CASE(Factory)
         auto coords = (*img).GetCoords( );
         auto expectedcoords = { 3, 4 };
         BOOST_CHECK_EQUAL_COLLECTIONS(coords.begin( ), coords.end( ), expectedcoords.begin( ), expectedcoords.end( ));
-        BOOST_CHECK(dynamic_cast<poutre::DenseImage < poutre::pDOUBLE>*>(img.get( )));
+        BOOST_CHECK(dynamic_cast<poutre::DenseImage < poutre::pINT64>*>(img.get( )));
           }
           {
           BOOST_CHECK_THROW(poutre::CreateDense({ 3, 4 }, poutre::CompoundType::CompoundType_Scalar, poutre::PType::PType_Undef), std::runtime_error);
