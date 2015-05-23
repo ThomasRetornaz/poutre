@@ -1973,14 +1973,14 @@ PREDEFINED             = DOXYGEN_SHOULD_SKIP_THIS \
 	IMP_LOCAL= \
 	BASE_API= \
 	BASE_LOCAL= \
-    POUTRE_CONSTEXPR= constexpr\
-	POUTRE_STATIC_CONSTEXPR= constexpr\
-	POUTRE_CONSTEXPR_OR_CONST= constexpr\
-	POUTRE_CXX14_CONSTEXPR= constexpr\
-	POUTRE_NOEXCEPT= noexcept\
-	POUTRE_NOEXCEPTONLYNDEBUG= noexcept(NDEBUG)\ 	
-	POUTRE_STRONG_INLINE= inline\
-	POUTRE_ALWAYS_INLINE= inline
+    POUTRE_CONSTEXPR=constexpr\
+	POUTRE_STATIC_CONSTEXPR=constexpr\
+	POUTRE_CONSTEXPR_OR_CONST=constexpr\
+	POUTRE_CXX14_CONSTEXPR=constexpr\
+	POUTRE_NOEXCEPT=noexcept\
+	POUTRE_NOEXCEPTONLYNDEBUG=noexcept(NDEBUG)\ 	
+	POUTRE_STRONG_INLINE=inline\
+	POUTRE_ALWAYS_INLINE=inline
 	
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this
 # tag can be used to specify a list of macro names that should be expanded. The
