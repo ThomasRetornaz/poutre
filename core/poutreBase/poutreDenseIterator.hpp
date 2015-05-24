@@ -10,6 +10,13 @@
 #ifndef POUTRE_DENSE_ITERATOR_HPP__
 #define POUTRE_DENSE_ITERATOR_HPP__
 
+/**
+ * @file   poutreDenseIterator.hpp
+ * @author Thomas Retornaz
+ * @brief  Define iterator capabilities over contiguous allocated contener
+ * 
+ * 
+ */
 
 #include <iterator>
 
@@ -20,11 +27,7 @@
 
 namespace poutre
 {
-
-
-   //adapted from https://github.com/navyenzo/blIteratorAPI
-
-   // Raw pdense_iterator with random access  
+   //!Raw dense iterator with random access  
    template<typename DataType>
       class pdense_iterator : public std::iterator < std::random_access_iterator_tag,
       DataType,
@@ -140,7 +143,7 @@ namespace poutre
       pointer                                 m_ptrorig;
    };
 
-
+   //!Raw reversed dense iterator with random access  
    template<typename DataType>
       class pdense_reverse_iterator : public pdense_iterator < DataType >
    {

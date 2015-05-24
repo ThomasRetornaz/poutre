@@ -10,6 +10,14 @@
 #ifndef POUTRE_BASE_HPP__
 #define POUTRE_BASE_HPP__
 
+/**
+ * @file   poutreBase.hpp
+ * @author Thomas Retornaz
+ * @brief  Define import/export for shared libraries
+ * 
+ * 
+ */
+
 #ifndef POUTRE_CONFIG__HPP__
 #include <poutreBase/poutreConfig.hpp>
 #endif

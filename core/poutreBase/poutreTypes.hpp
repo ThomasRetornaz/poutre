@@ -10,6 +10,14 @@
 #ifndef POUTRE_TYPE_HPP__
 #define POUTRE_TYPE_HPP__
 
+/**
+ * @file   poutreTypes.hpp
+ * @author Thomas Retornaz
+ * @brief  Common type alias and helpers
+ * 
+ * 
+ */
+
 #ifndef POUTRE_BASE_HPP__
 #include <poutreBase/poutreBase.hpp>
 #endif
@@ -20,23 +28,23 @@
 
 namespace poutre
   {
-  using  pbool = bool;
-  using  pUINT8 = unsigned char;
-  using  pINT8 = signed char;
-  using  pUINT32 = std::uint32_t;
-  using  pINT32 = std::int32_t;
-  using  pFLOAT = float;
-  using  pDOUBLE = long double;
-  using  pINT64 = std::int64_t;
-  using  pUINT64 = std::uint64_t;
+  using  pbool = bool; //!boolean type
+  using  pUINT8 = unsigned char; //!UINT8 type
+  using  pINT8 = signed char; //!INT8 type
+  using  pUINT32 = std::uint32_t; //!UINT32 type
+  using  pINT32 = std::int32_t; //!INT32 type
+  using  pFLOAT = float;        //!Float/Real type (default real type)
+  using  pDOUBLE = long double; //!Float/Real type
+  using  pINT64 = std::int64_t; //!INT64 type
+  using  pUINT64 = std::uint64_t; //!UINT64 type
 
-  using  scoord = pINT32; //scalar coordinate
-  using  rcoord = pFLOAT; //real coordinate
+  using  scoord = pINT32; //!scalar coordinate
+  using  rcoord = pFLOAT; //!real coordinate
 
-  using  offset = std::ptrdiff_t;
+  using  offset = std::ptrdiff_t; //!offset
 
-  using  str_type = std::string;
-  using  prealtype = pFLOAT; 
+  using  str_type = std::string;  //! string type
+  using  prealtype = pFLOAT;  //! real type @see @c pFLOAT
 
 
 

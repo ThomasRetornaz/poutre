@@ -13,7 +13,8 @@
 /**
  * @file   poutreContainerHelper.hpp
  * @author Thomas Retornaz
- * @brief  
+ * @brief  Boiler plate code to unroolling operator @c ArithOpType,@c
+ * CompOpType,@c AssignOp for small size
  * 
  * 
  */

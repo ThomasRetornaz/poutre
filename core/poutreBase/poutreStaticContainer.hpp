@@ -13,9 +13,8 @@
 /**
  * @file   poutreStaticContainer.hpp
  * @author Thomas Retornaz
- * @brief
- *
- *
+ * @brief Define something similar to std::array but enforce
+ * constexpr, inlining and optimisations  for small array size.
  */
 
 #ifndef POUTRE_CONFIG__HPP__
@@ -120,36 +119,36 @@ namespace poutre
 //}
 
 
-POUTRE_CONSTEXPR explicit static_array_base(value_type a) POUTRE_NOEXCEPT
-{
-static_assert(Rank == 1, "static_array_base(value_type) is only supported on static_array_base<T, 1>");
-m_array[0] = value_type(a);
-}
+      POUTRE_CONSTEXPR explicit static_array_base(value_type a) POUTRE_NOEXCEPT
+      {
+         static_assert(Rank == 1, "static_array_base(value_type) is only supported on static_array_base<T, 1>");
+         m_array[0] = value_type(a);
+      }
 
 
-POUTRE_CONSTEXPR static_array_base(value_type a0, value_type a1) POUTRE_NOEXCEPT
-{
-static_assert(Rank == 2, "static_array_base(value_type,value_type) is only supported on static_array_base<T, 2>");
-m_array[0] = value_type(a0);
-m_array[1] = value_type(a1);
-}
+      POUTRE_CONSTEXPR static_array_base(value_type a0, value_type a1) POUTRE_NOEXCEPT
+      {
+         static_assert(Rank == 2, "static_array_base(value_type,value_type) is only supported on static_array_base<T, 2>");
+         m_array[0] = value_type(a0);
+         m_array[1] = value_type(a1);
+      }
 
-POUTRE_CONSTEXPR static_array_base(value_type a0, value_type  a1, value_type a2) POUTRE_NOEXCEPT
-{
-static_assert(Rank == 3,"static_array_base(value_type,value_type,value_type) is only supported on static_array_base<T, 3>");
-m_array[0] = a0;
-m_array[1] = a1;
-m_array[2] = a2;
-}
+      POUTRE_CONSTEXPR static_array_base(value_type a0, value_type  a1, value_type a2) POUTRE_NOEXCEPT
+      {
+         static_assert(Rank == 3,"static_array_base(value_type,value_type,value_type) is only supported on static_array_base<T, 3>");
+         m_array[0] = a0;
+         m_array[1] = a1;
+         m_array[2] = a2;
+      }
 
-POUTRE_CONSTEXPR static_array_base(value_type a0, value_type  a1, value_type a2, value_type a3) POUTRE_NOEXCEPT
-  {
-  static_assert(Rank == 4, "static_array_base(value_type,value_type,value_type,value_type) is only supported on static_array_base<T, 4>");
-  m_array[0] = a0;
-  m_array[1] = a1;
-  m_array[2] = a2;
-  m_array[3] = a3;
-  }
+      POUTRE_CONSTEXPR static_array_base(value_type a0, value_type  a1, value_type a2, value_type a3) POUTRE_NOEXCEPT
+      {
+         static_assert(Rank == 4, "static_array_base(value_type,value_type,value_type,value_type) is only supported on static_array_base<T, 4>");
+         m_array[0] = a0;
+         m_array[1] = a1;
+         m_array[2] = a2;
+         m_array[3] = a3;
+      }
 
       POUTRE_CXX14_CONSTEXPR static_array_base(const std::initializer_list<value_type>& rhs) 
       {
@@ -333,28 +332,33 @@ POUTRE_CONSTEXPR static_array_base(value_type a0, value_type  a1, value_type a2,
 /** @name Accessing Components
  */
 /**@{*/
-      POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR reference operator[] (size_type n) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR reference operator[] (difference_type n) POUTRE_NOEXCEPTONLYNDEBUG
       {
+         POUTRE_ASSERTCHECK(n < rank, "static_array_base.at(n) n must be in [0,rank)");
+         POUTRE_ASSERTCHECK(n >= 0, "static_array_base.at(n) n must be in [0,rank)");
          return m_array[n];
       }
 
-      POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR const_reference operator[] (size_type n) const POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR const_reference operator[] (difference_type n) const POUTRE_NOEXCEPTONLYNDEBUG
       {
-
+         POUTRE_ASSERTCHECK(n < rank, "static_array_base.at(n) n must be in [0,rank)");
+         POUTRE_ASSERTCHECK(n >= 0, "static_array_base.at(n) n must be in [0,rank)");
          return m_array[n];
       }
 
-//! Access element with bound checking
-      POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR reference at(size_type n)
+      //! Access element with bound checking
+      POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR reference at(difference_type n)
       {	
-         POUTRE_CHECK(n < rank, "static_array_base operator[n] n must be in [0,rank)");
+         POUTRE_CHECK(n < rank, "static_array_base.at(n) n must be in [0,rank)");
+         POUTRE_CHECK(n >=0, "static_array_base.at(n) n must be in [0,rank)");
          return m_array[n];
       }
 
 //! Access const element with bound checking
-      POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR   const_reference at(size_type n) const 
+      POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR   const_reference at(difference_type n) const
       {
-         POUTRE_CHECK(n < rank, "static_array_base operator[n] n must be in [0,rank)");
+         POUTRE_CHECK(n < rank, "static_array_base.at(n) n must be in [0,rank)");
+         POUTRE_CHECK(n >= 0, "static_array_base.at(n) n must be in [0,rank)");
          return m_array[n];
       }
 
@@ -492,27 +496,29 @@ POUTRE_CONSTEXPR static_array_base(value_type a0, value_type  a1, value_type a2,
 
    public:
 
-   
+      /** @name Construction and Assignment   
+       */
+      /**@{*/
       POUTRE_CONSTEXPR static_array( ) :parent( ) POUTRE_NOEXCEPT_IF(parent( ))
       {
       }
 
       POUTRE_CONSTEXPR explicit static_array(value_type a) :parent(a) POUTRE_NOEXCEPT_IF(parent(a))
-        {
-        }
+      {
+      }
 
 
       POUTRE_CONSTEXPR static_array(value_type a0, value_type a1) : parent(a0, a1) POUTRE_NOEXCEPT_IF(parent(a0, a1))
-          {
-          }
+      {
+      }
 
       POUTRE_CONSTEXPR static_array(value_type a0, value_type  a1, value_type a2) : parent(a0, a1, a2) POUTRE_NOEXCEPT_IF(parent(a0, a1, a2))
-            {
-            }
+      {
+      }
 
       POUTRE_CONSTEXPR static_array(value_type a0, value_type  a1, value_type a2, value_type a3) : parent(a0, a1, a2, a3) POUTRE_NOEXCEPT_IF(parent(a0, a1, a2, a3))
-         {
-         }
+      {
+      }
 
       POUTRE_CXX14_CONSTEXPR static_array(const std::initializer_list<value_type>& rhs) : parent(rhs) 
       {
@@ -526,7 +532,7 @@ POUTRE_CONSTEXPR static_array_base(value_type a0, value_type  a1, value_type a2,
       POUTRE_CONSTEXPR static_array(const parent& rhs) : parent(rhs) POUTRE_NOEXCEPT
       {
       }
-
+      /**@}*/
 
       /** @name Iteration
        */

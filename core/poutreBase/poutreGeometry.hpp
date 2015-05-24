@@ -13,7 +13,7 @@
 /**
  * @file   poutreGeometry.hpp
  * @author Thomas Retornaz
- * @brief  
+ * @brief  Define points, bounds suitable for geometricals artithmetic
  * 
  * 
  */
@@ -56,20 +56,20 @@ namespace poutre
  //extern template class point_rcoord<3>;
  //extern template class point_rcoord<4>;
 
- typedef point_scoord<1> pt1D_scoord;
- typedef point_scoord<2> pt2D_scoord;
- typedef point_scoord<3> pt3D_scoord;
- typedef point_scoord<4> pt4D_scoord;
+ typedef point_scoord<1> pt1D_scoord; //!alias scalar point 1D
+ typedef point_scoord<2> pt2D_scoord; //!alias scalar point 2D
+ typedef point_scoord<3> pt3D_scoord; //!alias scalar point 3D
+ typedef point_scoord<4> pt4D_scoord; //!alias scalar point 4D
 
- typedef bounding_box<1> bb1D_scoord;
- typedef bounding_box<2> bb2D_scoord;
- typedef bounding_box<3> bb3D_scoord;
- typedef bounding_box<4> bb4D_scoord;
+ typedef bounding_box<1> bb1D_scoord; //!alias boundingbox 1D
+ typedef bounding_box<2> bb2D_scoord; //!alias boundingbox 2D
+ typedef bounding_box<3> bb3D_scoord; //!alias boundingbox 3D
+ typedef bounding_box<4> bb4D_scoord; //!alias boundingbox 4D
 
- typedef point_rcoord<1> pt1D_rcoord;
- typedef point_rcoord<2> pt2D_rcoord;
- typedef point_rcoord<3> pt3D_rcoord;
- typedef point_rcoord<4> pt4D_rcoord;
+ typedef point_rcoord<1> pt1D_rcoord; //!alias real point 1D
+ typedef point_rcoord<2> pt2D_rcoord; //!alias real point 2D
+ typedef point_rcoord<3> pt3D_rcoord; //!alias real point 3D
+ typedef point_rcoord<4> pt4D_rcoord; //!alias real point 4D
 
 
 

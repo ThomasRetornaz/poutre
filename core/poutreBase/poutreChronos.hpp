@@ -10,6 +10,14 @@
 #ifndef POUTRE_CHRONOS_HPP__
 #define POUTRE_CHRONOS_HPP__
 
+/**
+ * @file   poutreChronos.hpp
+ * @author Thomas Retornaz
+ * @brief  Define helper objects around std::chrono facilities
+ * 
+ * 
+ */
+
 #include <chrono>
 #include <iostream>
 #include <sstream>
@@ -20,13 +28,24 @@
 
 namespace poutre
   {
+/**
+ * @addtogroup timer_group Helper objects around std::chrono facilities
+ *
+ *@{
+ */     
 
-  class /*BASE_API*/ Timer
+/**
+ * @brief Simple Timer class (wrapping std::chronos) with classical
+ * start,stop interface and serialisation capabilites 
+ */
+class /*BASE_API*/ Timer
     {
     public:
       using  high_resolution_clock = std::chrono::high_resolution_clock;
       using  float_milliseconds = std::chrono::duration < float, std::milli > ; //switch to other duration through template<rep,duration> ?
-      using  timerep = float_milliseconds::rep; //todo use decltype(auto)
+      using  timerep = float_milliseconds::rep; //todo use
+                                                //decltype(auto)
+       
       Timer(void) :m_start(), m_accu(0), m_nbiter(0)
         {
         }
@@ -80,8 +99,12 @@ namespace poutre
     return os;
     }
 
-  //@todo think about conccurrency issues
-  class /*BASE_API*/ ScopedTimer
+/**
+ * @brief Scoped (RAII) timer, start and stop of embeded timer are automatically triggered 
+ *
+ * @todo think about conccurrency issues
+ */
+class /*BASE_API*/ ScopedTimer//! @} doxygroup: timer_group
     {
     private:
       Timer& m_timer;
@@ -97,4 +120,8 @@ namespace poutre
         }
     };
   }
+
+/**
+*@}
+*/ 
 #endif //POUTRE_CHRONOS_HPP__

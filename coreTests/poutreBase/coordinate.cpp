@@ -11,6 +11,7 @@
 #include <iostream>
 #include <thread>
 #include <poutreBase/poutreCoordinate.hpp>
+#include <boost/foreach.hpp>
 
 BOOST_AUTO_TEST_SUITE(bound_index)
 
@@ -89,67 +90,48 @@ BOOST_AUTO_TEST_CASE(index_ordering)
   poutre::index<2> idx3{ 3, 3 };
 
   BOOST_CHECK(idx2<idx);
+  BOOST_CHECK(idx2<=idx);
   BOOST_CHECK(idx3>idx);
+  BOOST_CHECK(idx3>=idx);
 
   BOOST_CHECK(idx<=idx);
   BOOST_CHECK(idx>=idx);
+  BOOST_CHECK(idx == idx);
+  BOOST_CHECK(idx != idx2);
+  BOOST_CHECK(idx2 != idx3);
   }
 
 BOOST_AUTO_TEST_CASE(bounds_iterator_1d)
   {
+  using idx = poutre::index< 1 >;
   poutre::bounds < 1 > bnd1D(10);
-  auto itbnd1d = bnd1D.begin();
-  auto itend= bnd1D.end();
 
+  std::vector<idx> expected = { {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9} };
+  std::vector<idx> rexpected = { {9}, {8}, {7}, {6}, {5}, {4}, {3}, {2}, {1}, {0} };
 
-  std::cout << "**********idx start********" << std::endl;
-  for ( const auto& idx : bnd1D )
-    {
-    std::cout << idx << " ";
-    }
-  std::cout << "**********idx end********" << std::endl;
-
-  auto bnd1dit = begin(bnd1D);
-  auto endit = end(bnd1D);
-
-  std::cout << "**********idx start********" << std::endl;
-  for ( const auto& idx : bnd1D )
-    {
-    std::cout << idx << " ";
-    }
-  std::cout << "**********idx end********" << std::endl;
+  BOOST_CHECK_EQUAL_COLLECTIONS(bnd1D.begin( ), bnd1D.end( ), expected.begin( ), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(begin(bnd1D), end(bnd1D), expected.begin( ), expected.end( ));
 
   }
 
 BOOST_AUTO_TEST_CASE(bounds_iterator_2d)
   {
   poutre::bounds < 2 > bnd2D{2,4};
-  auto it= bnd2D.begin( );
-  auto itend = bnd2D.end( );
-
-  std::cout << "**********idx start********" << std::endl;
-  for ( const auto& idx : bnd2D )
-    {
-    std::cout << idx << " ";
-    }
-  std::cout << "**********idx end********" << std::endl;
-  //auto bnd1dit = begin(bnd1D);
-  //auto endit = end(bnd1D);
+  using idx = poutre::index< 2 >;
+  
+  std::vector<idx> expected = { idx{ 0, 0 }, idx{ 0, 1 }, idx{ 0, 2 }, idx{ 0, 3 }, idx{ 1, 0 }, idx{ 1, 1 }, idx{ 1, 2 }, idx{ 1, 3 } };
+  BOOST_CHECK_EQUAL_COLLECTIONS(bnd2D.cbegin( ), bnd2D.cend( ), expected.begin( ), expected.end( ));
+  BOOST_CHECK_EQUAL_COLLECTIONS(cbegin(bnd2D), cend(bnd2D), expected.begin( ), expected.end( ));
+   
   }
 
 BOOST_AUTO_TEST_CASE(bounds_iterator_3d)
   {
   poutre::bounds < 3 > bnd{ 1,2,3 };
-  auto it = bnd.begin( );
-  auto itend = bnd.end( );
+  using idx = poutre::index< 3 >;
 
-  std::cout << "**********idx start********" << std::endl;
-  for ( const auto& idx : bnd )
-    {
-    std::cout << idx << " ";
-    }
-  std::cout << "**********idx end********" << std::endl;
-  //auto bnd1dit = begin(bnd1D);
-  //auto endit = end(bnd1D);
+  std::vector<idx> expected = { idx{0, 0, 0}, idx{0, 0, 1}, idx{0, 0, 2}, idx{0, 1, 0}, idx{0, 1, 1}, idx{0, 1, 2} };
+  BOOST_CHECK_EQUAL_COLLECTIONS(bnd.cbegin( ), bnd.cend( ), expected.begin( ), expected.end( ));
+  BOOST_CHECK_EQUAL_COLLECTIONS(cbegin(bnd), cend(bnd), expected.begin( ), expected.end( ));
   }
 BOOST_AUTO_TEST_SUITE_END( )

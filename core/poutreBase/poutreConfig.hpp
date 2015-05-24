@@ -11,8 +11,12 @@
 
 #include <boost/format.hpp>
 
-/*!@file
- * Common configuration definitions. This file should not depend on any other file.
+/**
+ * @file   poutreConfig.hpp
+ * @author Thomas Retornaz
+ * @brief  Various macro and alias
+ * 
+ * 
  */
 
 

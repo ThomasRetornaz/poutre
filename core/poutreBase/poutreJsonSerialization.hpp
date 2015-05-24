@@ -10,6 +10,14 @@
 #ifndef POUTRE_JSON_SERIALIZATION_HPP__
 #define POUTRE_JSON_SERIALIZATION_HPP__
 
+/**
+ * @file   poutreJsonSerialization.hpp
+ * @author Thomas Retornaz
+ * @brief  Define json serialization interface
+ * 
+ * 
+ */
+
 #ifndef POUTRE_BASE_HPP__
 #include <poutreBase/poutreBase.hpp>
 #endif
@@ -28,6 +36,9 @@ namespace poutre
   {
   //completely grabed from http://www.danielsoltyka.com/programming/2011/04/15/simple-class-serialization-with-jsoncpp/ tutorial :)
 
+  /**
+   * @brief Interface class. 
+   */
   class BASE_API InterfaceJsonSerializable
     {
     public:
@@ -35,7 +46,10 @@ namespace poutre
       virtual void Serialize(Json::Value& root) = 0;
       virtual void Deserialize(Json::Value& root) = 0;
     };
-
+     
+  /**
+   * @brief Default json serailizer object
+   */
   class BASE_API JsonSerializer : boost::noncopyable
     {
     public:

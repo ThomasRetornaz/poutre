@@ -10,6 +10,14 @@
 #ifndef POUTRE_IMAGEPROCESSING_HPP__
 #define POUTRE_IMAGEPROCESSING_HPP__
 
+/**
+ * @file   poutreImageProcessing.hpp
+ * @author Thomas Retornaz
+ * @brief  Define import/export for shared librairies
+ * 
+ * 
+ */
+
 #ifndef POUTRE_CONFIG__HPP__
 #include <poutreBase/poutreConfig.hpp>
 #endif

@@ -10,6 +10,13 @@
 #ifndef POUTRE_TRACE__HPP__
 #define POUTRE_TRACE__HPP__
 
+/**
+ * @file   poutreTrace.hpp
+ * @author Thomas Retornaz
+ * @brief  Trace capabilities
+ * 
+ * 
+ */
 
 
 #include <boost/log/sources/global_logger_storage.hpp>
@@ -32,10 +39,6 @@
 #ifndef POUTRE_CONFIG__HPP__
 #include <poutreBase/poutreConfig.hpp>
 #endif
-
-/*!@file
- * Common
- */
 
 namespace poutre
   {

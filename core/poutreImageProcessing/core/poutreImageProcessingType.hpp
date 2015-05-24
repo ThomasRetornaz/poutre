@@ -10,6 +10,14 @@
 #ifndef POUTRE_IMAGEPROCESSING_TYPE_HPP__
 #define POUTRE_IMAGEPROCESSING_TYPE_HPP__
 
+/**
+ * @file   poutreImageProcessingType.hpp
+ * @author Thomas Retornaz
+ * @brief  Define type and alias for Image
+ * 
+ * 
+ */
+
 #include <limits>
 #include <type_traits>
 #include <boost/simd/preprocessor/parameters.hpp> //default alignment
@@ -33,6 +41,11 @@
 
 namespace poutre
   {
+/**
+ * @addtogroup image_processing_type_group Image Processing Types
+ * @ingroup image_processing_group 
+ *@{
+ */     
   enum class ImgType
     {
     ImgType_Undef = 0,          //!< Undefined type 
@@ -118,6 +131,7 @@ namespace poutre
     static const size_t dim = NumDims;
     };
 
+  //! Define TypeTraits  
   template<class valuetype>
   struct TypeTraits {};
 
@@ -287,6 +301,6 @@ namespace poutre
       return compound_pixel<valuetype, 4>(std::numeric_limits<valuetype>::max( ), std::numeric_limits<valuetype>::max( ), std::numeric_limits<valuetype>::max( ), std::numeric_limits<valuetype>::max( ));
       }
     };
-
+//! @} doxygroup: 
   }
 #endif //POUTRE_IMAGEPROCESSING_TYPE_HPP__
