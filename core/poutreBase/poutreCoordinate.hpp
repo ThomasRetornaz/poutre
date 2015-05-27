@@ -508,35 +508,35 @@ namespace poutre
       {
       }
 
-      operator bool( ) const
+    /*  operator bool( ) const
       {
          return (0 != m_bounds.size( ));
-      }
+      }*/
 
-      bool         operator==(const self_type& rhs) const POUTRE_NOEXCEPT
+      bool  operator==(const self_type& rhs) const POUTRE_NOEXCEPT
       {
          return (m_idx == rhs.m_idx);
       }
-      bool         operator!=(const self_type& rhs) const POUTRE_NOEXCEPT
+      bool  operator!=(const self_type& rhs) const POUTRE_NOEXCEPT
       {
          return (m_idx != rhs.m_idx);
       }
 
 
-      bool operator<(const bounds_iterator& rhs) const POUTRE_NOEXCEPT
+      bool operator<(const self_type& rhs) const POUTRE_NOEXCEPT
       {
          return m_idx<rhs.m_idx;
       }
 
-      bool operator<=(const bounds_iterator& rhs) const POUTRE_NOEXCEPT
+        bool operator<=(const self_type& rhs) const POUTRE_NOEXCEPT
       {
          return m_idx<=rhs.m_idx;
       }
-      bool operator>(const bounds_iterator& rhs) const POUTRE_NOEXCEPT
+        bool operator>(const self_type& rhs) const POUTRE_NOEXCEPT
       {
          return m_idx>rhs.m_idx;
       }
-      bool operator>=(const bounds_iterator& rhs) const POUTRE_NOEXCEPT
+        bool operator>=(const self_type& rhs) const POUTRE_NOEXCEPT
       {
          return m_idx>=rhs.m_idx;
       }
@@ -549,7 +549,7 @@ namespace poutre
                return *this;
             m_idx[i] = m_idxstart[i];
          }
-         m_idx = m_idxend;
+         m_idx = m_idxend; //set to end
          return *this;
       }
 
@@ -569,7 +569,7 @@ namespace poutre
                return *this;
             m_idx[i] = m_bnd[i]-1;
          }
-         m_idx = m_idxstart;
+         m_idx = m_idxstart;--m_idx[0]; //just before m_idxstart
          return *this;
       }
       
@@ -581,27 +581,49 @@ namespace poutre
 
       bounds_iterator  operator+(difference_type n) const POUTRE_NOEXCEPTONLYNDEBUG
       {
-        
+      auto tmp(*this);
+      poutre::details::shift_op<bounds<Rank>, index<Rank>>::op(tmp.m_bnd, tmp.m_idx, n, tmp.m_idx);
+      if ( !tmp.m_bnd.contains(tmp.m_idx) )
+        {
+        tmp.m_idx = tmp.m_idxend;
+        }
+      return (tmp);
       }
 
       bounds_iterator& operator+=(difference_type n) POUTRE_NOEXCEPTONLYNDEBUG
       {
-
+      poutre::details::shift_op<bounds<Rank>, index<Rank>>::op(m_bnd, m_idx, n, m_idx);
+      if (!m_bnd.contains(m_idx) )
+        {
+        m_idx = m_idxend;
+        }
+      return (*this);
       }
 
       bounds_iterator  operator-(difference_type n) const POUTRE_NOEXCEPTONLYNDEBUG
       {
-
+      auto tmp(*this);
+      poutre::details::shift_op<bounds<Rank>, index<Rank>>::op(tmp.m_bnd, tmp.m_idx, -n, tmp.m_idx);
+      if ( !tmp.m_bnd.contains(tmp.m_idx) )
+        {
+        tmp.m_idx = tmp.m_idxstart; --tmp.m_idx[0];
+        }
+      return (tmp);
       }
 
       bounds_iterator& operator-=(difference_type n) POUTRE_NOEXCEPTONLYNDEBUG
       {
-
+      poutre::details::shift_op<bounds<Rank>, index<Rank>>::op(m_bnd, m_idx, -n, m_idx);
+      if (!m_bnd.contains(m_idx) )
+        {
+        m_idx = m_idxstart; --m_idx[0];
+        }
+      return (*this);
       }
 
       difference_type  operator-(const bounds_iterator& rhs) const POUTRE_NOEXCEPTONLYNDEBUG
       {
-
+      return details::get_offset<bounds<Rank>, index<Rank>>::op(m_bnd, m_idx) - details::get_offset<bounds<Rank>, index<Rank>>::op(rhs.m_bnd, rhs.m_idx);
       }
 
       //   pointer   operator->() const;  //implement or throw ?
@@ -613,9 +635,10 @@ namespace poutre
       }
 
       //!Note here a return by value
-      reference                  operator*() const  POUTRE_NOEXCEPT {return m_idx;}
-
-
+      reference                  operator*() const  POUTRE_NOEXCEPT 
+      {
+      return m_idx;
+      }
 
    };
 
@@ -646,6 +669,38 @@ namespace poutre
       return (tmp+n);
    }
 
+    template <int Rank>
+    bool  operator==(const bounds_iterator<Rank>& lhs, const bounds_iterator<Rank>& rhs)  POUTRE_NOEXCEPT
+    {
+    return (lhs == rhs);
+    }
+
+    template <int Rank>
+    bool  operator!=(const bounds_iterator<Rank>& lhs, const bounds_iterator<Rank>& rhs)  POUTRE_NOEXCEPT
+    {
+    return (lhs != rhs);
+    }
+
+    template <int Rank>
+    bool operator<(const bounds_iterator<Rank>& lhs, const bounds_iterator<Rank>& rhs)  POUTRE_NOEXCEPT
+    {
+    return lhs<rhs;
+    }
+    template <int Rank>
+    bool operator<=(const bounds_iterator<Rank>& lhs, const bounds_iterator<Rank>& rhs)  POUTRE_NOEXCEPT
+    {
+    return lhs <= rhs;
+    }
+    template <int Rank>
+    bool operator>(const bounds_iterator<Rank>& lhs, const bounds_iterator<Rank>& rhs)  POUTRE_NOEXCEPT
+    {
+    return lhs>rhs;
+    }
+    template <int Rank>
+    bool operator>=(const bounds_iterator<Rank>& lhs, const bounds_iterator<Rank>& rhs)  POUTRE_NOEXCEPT
+    {
+    return lhs >= rhs;
+    }
 
    //! @} doxygroup: coordinate_group   
 

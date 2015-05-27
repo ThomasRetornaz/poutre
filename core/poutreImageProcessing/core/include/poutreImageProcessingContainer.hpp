@@ -308,29 +308,6 @@ namespace poutre
         }
     };
 
-    template <class coordinate_container>
-    POUTRE_STRONG_INLINE coordinate_container GetCoordsFomOffset(const coordinate_container &coord, offset offset) POUTRE_NOEXCEPTONLYNDEBUG
-      {
-      POUTRE_ASSERTCHECK(offset >= 0, "offset must be >=0");
-      coordinate_container ret;
-      auto numcoord = coord.size( );
-      auto i = 0;
-      for (; i < numcoord && offset != 0; i++)
-        {
-        auto current= coord[i];
-        POUTRE_ASSERTCHECK(current > 0, "Sub coord is <0 at " + std::to_string(i) + ",see " + std::to_string(current));
-        auto dv = std::div(offset,curent);
-        ret[i] = dv.rem;//offset % current;
-        offset = dv.quot;//offset=offset/current
-        }
-      for (; i < numcoord; i++)
-        {
-        ret[i] = 0;
-        }
-      return ret;
-      }
-
-
   //todo define macros
   extern template class DenseImage <pUINT8, 1 >;
   extern template class DenseImage <pINT32, 1 >;

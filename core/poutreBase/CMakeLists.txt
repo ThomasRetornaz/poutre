@@ -20,6 +20,7 @@ set(PoutreBaseSRC_PUBLICHEADERS
   ${PoutreBaseSubdirectory}/poutreContainerHelper.hpp
   ${PoutreBaseSubdirectory}/poutreDenseIterator.hpp  
   ${PoutreBaseSubdirectory}/poutreStaticContainer.hpp
+  ${PoutreBaseSubdirectory}/poutreContainerView.hpp
 )
 
 set(PoutreBaseSRC_CPP

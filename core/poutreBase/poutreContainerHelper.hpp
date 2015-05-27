@@ -29,8 +29,129 @@
 namespace poutre
 {
 
+
+  //forward declare
+  template <int Rank> class index;
+  template <int Rank> class bounds;
+
    namespace details
    {
+
+   template <class bnds, class idx, int Rank = bnds::rank>
+   struct get_offset
+     {
+     POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR offset op(bnds const &i_bnd, idx const &i_idx) POUTRE_NOEXCEPT
+       {
+       static_assert(bnds::rank == idx::rank, "get_offset: all provided container must share same rank");
+       offset current_offset = i_idx[0]; //at least rank==1
+       ptrdiff_t stride = i_bnd[0];
+       for ( auto i = 1; i < Rank; ++i )
+         {
+         current_offset += i_idx[i] * stride;
+         stride *= i_bnd[i];
+         }
+       return current_offset;
+       }
+    };
+
+    //specialize 1D
+    template <class bnds, class idx>
+    struct get_offset<bnds, idx, 1>
+      {
+      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR offset op(bnds const &i_bnd, idx const &i_idx) POUTRE_NOEXCEPT
+        {
+        return i_idx[0];
+        }
+      };
+
+    //specialize 2D
+    template <class bnds, class idx>
+    struct get_offset<bnds, idx, 2>
+      {
+      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR offset op(const bnds &i_bnd, const idx &i_idx) POUTRE_NOEXCEPT
+        {
+        return (i_idx[0] + i_idx[1] * i_bnd[0]);
+        }
+      };
+
+   //template <class coordinate_container>
+   //POUTRE_STRONG_INLINE coordinate_container GetCoordsFomOffset(const coordinate_container &coord, offset offset) POUTRE_NOEXCEPTONLYNDEBUG
+   //  {
+   //  POUTRE_ASSERTCHECK(offset >= 0, "offset must be >=0");
+   //  coordinate_container ret;
+   //  auto numcoord = coord.size( );
+   //  auto i = 0;
+   //  for (; i < numcoord && offset != 0; i++)
+   //    {
+   //    auto current= coord[i];
+   //    POUTRE_ASSERTCHECK(current > 0, "Sub coord is <0 at " + std::to_string(i) + ",see " + std::to_string(current));
+   //    auto dv = std::div(offset,curent);
+   //    ret[i] = dv.rem;//offset % current;
+   //    offset = dv.quot;//offset=offset/current
+   //    }
+   //  for (; i < numcoord; i++)
+   //    {
+   //    ret[i] = 0;
+   //    }
+   //  return ret;
+   //  }
+
+   template <class bnds, class idx, int Rank = bnds::rank>
+   struct shift_op
+     {
+     POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(bnds const &i_bnd, idx const &i_idx, offset shift, idx &o_idx) POUTRE_NOEXCEPT
+       {
+       static_assert(bnds::rank == idx::rank, "shift_op: all provided container must share same rank");
+       //quick exit
+       if ( shift == 0 )
+         {
+         helper_assign_container_op<idx, AssignOpType::AssignOp>::op(i_idx, o_idx);
+         return;
+         }
+       //current offset belong to in
+       offset current_offset = get_offset<bnds,idx>::op(i_bnd, i_idx);
+       //shift
+       current_offset += shift;
+       //recreate idx
+       auto i = 0;
+       for ( ; i < Rank && current_offset != 0; ++i )
+         {
+         auto dv = std::div(current_offset, i_bnd[i]);
+         o_idx[i] = dv.rem;//offset % current;
+         current_offset = dv.quot;//offset=offset/current
+         }
+       for ( ; i < Rank; i++ )
+         {
+         o_idx[i] = 0;
+         }
+       return;
+       }
+     };
+
+     //specialize 1D
+     template <class bnds, class idx>
+     struct shift_op<bnds, idx, 1>
+       {
+       POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(const bnds &i_bnd, const idx &i_idx, offset shift, idx &o_idx) POUTRE_NOEXCEPT
+         {
+         o_idx[0] = i_idx[0] + shift;return;
+         }
+       };
+
+     //specialize 2D
+     template <class bnds, class idx>
+     struct shift_op<bnds, idx, 2>
+       {
+       POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(const bnds &i_bnd, const idx &i_idx, offset shift, idx &o_idx) POUTRE_NOEXCEPT
+         {
+         offset offset = i_idx[0] + i_bnd[0] * i_idx[1] + shift;
+         auto dv = std::div(offset, i_bnd[0]);
+         o_idx[0] = dv.rem;//offset % current;
+         o_idx[1] = dv.quot;//offset=offset/current
+         return;
+         }
+       };
+
       //unrolling helper for small rank eg from 1 to 4
       //All of this may be over engineered until c++14 constexpr capabilities were implemented in all compiler
       //NOTE c++14 we need return void see http://en.cppreference.com/w/cpp/language/constexpr 
