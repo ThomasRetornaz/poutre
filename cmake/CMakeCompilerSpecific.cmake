@@ -4,7 +4,10 @@ message(STATUS "host processor " ${CMAKE_HOST_SYSTEM_PROCESSOR} " target process
 
 ###### MSVC ######
 if(MSVC)
-
+  if(MSVC_VERSION LESS 1800)
+    message(FATAL_ERROR "Visual Studio 2013 (aka Visual Studio 12) or later is required.")
+  endif()
+  
   message("Flags for MSVC")
 
   # supress these annoying message

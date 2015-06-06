@@ -104,7 +104,9 @@ BOOST_AUTO_TEST_CASE(index_ordering)
 BOOST_AUTO_TEST_CASE(bounds_iterator_1d)
   {
   using idx = poutre::index< 1 >;
-  poutre::bounds < 1 > bnd1D(10);
+  using bnd = poutre::bounds < 1 >;
+  using iterator = poutre::bounds_iterator< 1 >;
+  bnd bnd1D(10);
 
   std::vector<idx> expected = { {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9} };
   //TODO ?
@@ -116,13 +118,24 @@ BOOST_AUTO_TEST_CASE(bounds_iterator_1d)
   /*BOOST_CHECK_EQUAL_COLLECTIONS(bnd1D.rbegin( ), bnd1D.rend( ), rexpected.begin( ), rexpected.end( ));
   BOOST_CHECK_EQUAL_COLLECTIONS(rbegin(bnd1D), rend(bnd1D), rexpected.begin( ), rexpected.end( ));*/
 
-  poutre::bounds_iterator< 1 > it(bnd1D);
+  iterator it(bnd1D);
   ++it;
   BOOST_CHECK_EQUAL(it-bnd1D.begin(),1);
-  poutre::bounds_iterator< 1 > it5(bnd1D, poutre::index< 1 >(5));
+  iterator it5(bnd1D, poutre::index< 1 >(5));
   BOOST_CHECK_EQUAL(it5 - bnd1D.begin( ), 5);
   --it5;
   BOOST_CHECK_EQUAL(it5 - bnd1D.begin( ), 4);
+  
+  idx res;
+  poutre::details::get_coord_from_offset<bnd,idx>::op(bnd1D,4,res);
+  BOOST_CHECK(res==idx{4});
+    
+  auto off=poutre::details::get_offset_from_coord<bnd, idx>::op(bnd1D, res);
+  BOOST_CHECK_EQUAL(off, 4);
+
+  idx outofbound = {15};
+  iterator itFromOut(bnd1D, outofbound);
+  BOOST_CHECK(itFromOut==bnd1D.end( ));
   }
 
 BOOST_AUTO_TEST_CASE(bounds_iterator_2d)
@@ -138,22 +151,71 @@ BOOST_AUTO_TEST_CASE(bounds_iterator_2d)
   
   iterator it(bnd2D);
   ++it;
+  idx test{ 0, 1 };
+  BOOST_CHECK(test==*it);
   BOOST_CHECK_EQUAL(it - bnd2D.begin( ), 1);
-  iterator it5(bnd2D, idx{1,0});
-  BOOST_CHECK_EQUAL(it5 - bnd2D.begin( ), 5);
-  --it5;
+  test = idx{ 1, 0 };
+  iterator it5(bnd2D, test);
+  BOOST_CHECK_EQUAL(*it5, test);
   BOOST_CHECK_EQUAL(it5 - bnd2D.begin( ), 4);
+  --it5;
+  test = idx{ 0, 3 };
+  BOOST_CHECK_EQUAL(*it5, test);
+  BOOST_CHECK_EQUAL(it5 - bnd2D.begin( ), 3);
 
+
+  idx res;
+  idx expectedidx = {1,1};
+  poutre::details::get_coord_from_offset<bnd, idx>::op(bnd2D, 5, res);
+  BOOST_CHECK_EQUAL(res, expectedidx);
+
+  auto off = poutre::details::get_offset_from_coord<bnd, idx>::op(bnd2D, res);
+  BOOST_CHECK_EQUAL(off, 5);
+
+  idx outofbound = { 15,15 };
+  iterator itFromOut(bnd2D, outofbound);
+  BOOST_CHECK(itFromOut == bnd2D.end( ));
   }
 
 BOOST_AUTO_TEST_CASE(bounds_iterator_3d)
   {
-  poutre::bounds < 3 > bnd{ 1,2,3 };
   using idx = poutre::index< 3 >;
+  using bound = poutre::bounds< 3 >;
+  using iterator = poutre::bounds_iterator< 3 >;
+
+  bound bnd{ 1, 2, 3 };
+ 
 
   std::vector<idx> expected = { idx{0, 0, 0}, idx{0, 0, 1}, idx{0, 0, 2}, idx{0, 1, 0}, idx{0, 1, 1}, idx{0, 1, 2} };
   BOOST_CHECK_EQUAL_COLLECTIONS(bnd.cbegin( ), bnd.cend( ), expected.begin( ), expected.end( ));
   BOOST_CHECK_EQUAL_COLLECTIONS(cbegin(bnd), cend(bnd), expected.begin( ), expected.end( ));
+
+  iterator it(bnd);
+  ++it;
+  idx expectedidx{ 0, 0, 1 };
+  BOOST_CHECK_EQUAL(expectedidx , *it);
+  BOOST_CHECK_EQUAL(it - bnd.begin( ), 1);
+  idx start{ 0, 1, 1 };
+  iterator it2(bnd, start);
+  BOOST_CHECK_EQUAL(*it2, start);
+  BOOST_CHECK_EQUAL(it2 - bnd.begin( ), 4);
+  --it2;
+  expectedidx = idx{ 0, 1, 0 };
+  BOOST_CHECK_EQUAL(*it2, expectedidx);
+  BOOST_CHECK_EQUAL(it2 - bnd.begin( ), 3);
+
+
+  idx res;
+  idx expidx = idx{ 0, 1, 2 };
+  poutre::details::get_coord_from_offset<bound, idx>::op(bnd, 5, res);
+  BOOST_CHECK_EQUAL(res, expidx);
+
+  auto off = poutre::details::get_offset_from_coord<bound, idx>::op(bnd, res);
+  BOOST_CHECK_EQUAL(off, 5);
+
+  idx outofbound = { 15, 15,15 };
+  iterator itFromOut(bnd, outofbound);
+  BOOST_CHECK(itFromOut == bnd.end( ));
   }
 
 BOOST_AUTO_TEST_CASE(shift)
@@ -188,13 +250,13 @@ BOOST_AUTO_TEST_CASE(shift)
 
       //shift by 1 # ++
       poutre::details::shift_op<poutre::bounds<2>, poutre::index<2>>::op(bnd, idx, poutre::offset(1), outidx);
-      BOOST_CHECK_EQUAL(outidx[0], 0);
+      BOOST_CHECK_EQUAL(outidx[0], 2);
       BOOST_CHECK_EQUAL(outidx[1], 3);
 
       //shift by -1 # --
       poutre::details::shift_op<poutre::bounds<2>, poutre::index<2>>::op(bnd, idx, poutre::offset(-1), outidx);
-      BOOST_CHECK_EQUAL(outidx[0], 1);
-      BOOST_CHECK_EQUAL(outidx[1], 2);
+      BOOST_CHECK_EQUAL(outidx[0], 2);
+      BOOST_CHECK_EQUAL(outidx[1], 1);
       }
 
       {//3D
@@ -210,15 +272,15 @@ BOOST_AUTO_TEST_CASE(shift)
 
       //shift by 1 # ++
       poutre::details::shift_op<poutre::bounds<3>, poutre::index<3>>::op(bnd, idx, poutre::offset(1), outidx);
-      BOOST_CHECK_EQUAL(outidx[0], 0);
+      BOOST_CHECK_EQUAL(outidx[0], 2);
       BOOST_CHECK_EQUAL(outidx[1], 3);
-      BOOST_CHECK_EQUAL(outidx[2], 1);
+      BOOST_CHECK_EQUAL(outidx[2], 0);
 
       //shift by -1 # --
       poutre::details::shift_op<poutre::bounds<3>, poutre::index<3>>::op(bnd, idx, poutre::offset(-1), outidx);
-      BOOST_CHECK_EQUAL(outidx[0], 1);
+      BOOST_CHECK_EQUAL(outidx[0], 2);
       BOOST_CHECK_EQUAL(outidx[1], 2);
-      BOOST_CHECK_EQUAL(outidx[2], 1);
+      BOOST_CHECK_EQUAL(outidx[2], 0);
       }
   }
 

@@ -40,8 +40,14 @@
 #include <poutreBase/poutreConfig.hpp>
 #endif
 
+/**
+* @addtogroup trace_group Trace facilities
+*
+*@{
+*/
 namespace poutre
   {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 
   // just log messages with severity >= SEVERITY_THRESHOLD are written
 #define SEVERITY_THRESHOLD  boost::log::trivial::warning
@@ -88,21 +94,25 @@ namespace poutre
 
     return logger;
     }
+#endif DOXYGEN_SHOULD_SKIP_THIS
 
 
-
-  // ===== log macros =====
+  /** @name Global logger macros
+  */
+  /**@{*/
 #define POUTRE_TRACE   BOOST_LOG_SEV(poutre::global_logger::get(),boost::log::trivial::trace)
 #define POUTRE_DEBUG   BOOST_LOG_SEV(poutre::global_logger::get(),boost::log::trivial::debug)
 #define POUTRE_INFO    BOOST_LOG_SEV(poutre::global_logger::get(),boost::log::trivial::info)
 #define POUTRE_WARNING BOOST_LOG_SEV(poutre::global_logger::get(),boost::log::trivial::warning)
 #define POUTRE_ERROR   BOOST_LOG_SEV(poutre::global_logger::get(),boost::log::trivial::error)
 #define POUTRE_FATAL   BOOST_LOG_SEV(poutre::global_logger::get(),boost::log::trivial::fatal)
-
+  /**@}*/
 
 
 
   } //namespace poutre
+
+// !@} doxygroup: image_processing_group
 
 #endif //POUTRE_TRACE__HPP__
 

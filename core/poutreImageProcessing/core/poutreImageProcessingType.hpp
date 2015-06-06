@@ -93,7 +93,7 @@ namespace poutre
   //! operator>> for PType
   IMP_API std::istream& operator>>(std::istream&, PType&);
 
-  template<typename value_type, int Rank> using compound_pixel = static_array<value_type, Rank>;
+  template<typename value_type, ptrdiff_t Rank> using compound_pixel = static_array<value_type, Rank>;
 
   //extern template class compound_pixel < pUINT8, 3 > ;
   //extern template class compound_pixel < pINT32, 3 >;
@@ -119,12 +119,14 @@ namespace poutre
   typedef compound_pixel < pINT64, 4 > c4pINT64;
   typedef compound_pixel < pDOUBLE, 4 > c4pDOUBLE;
 
+  //!Helper to retrieve dim off pixel storage type
   template <class storagetype>
   struct get_dim
     {
     static const size_t dim= 1;
     };
 
+  //!Helper to retrieve dim off compound_pixel 
   template <class storagetype, std::size_t NumDims>
   struct get_dim< compound_pixel<storagetype, NumDims> >
     {
@@ -135,6 +137,7 @@ namespace poutre
   template<class valuetype>
   struct TypeTraits {};
 
+  //! TypeTraits pUINT8
   template<>
   struct TypeTraits <pUINT8>
     {
@@ -154,6 +157,7 @@ namespace poutre
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::max( ); }
     };
 
+  //! TypeTraits pINT32
   template<>
   struct TypeTraits <pINT32>
     {
@@ -173,6 +177,7 @@ namespace poutre
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max( ) POUTRE_NOEXCEPT{ return std::numeric_limits<storage_type>::max( ); }
     };
 
+  //! TypeTraits pFLOAT
   template<>
   struct TypeTraits <pFLOAT>
     {
@@ -192,6 +197,7 @@ namespace poutre
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::max( ); }
     };
 
+  //! TypeTraits pDOUBLE
   template<>
   struct TypeTraits <pDOUBLE>
     {
@@ -211,6 +217,7 @@ namespace poutre
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::max( ); }
     };
 
+  //! TypeTraits pINT64 
   template<>
   struct TypeTraits < pINT64 >
     {
@@ -230,12 +237,13 @@ namespace poutre
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::max( ); }
     };
 
-
+  //! TypeTraits compound_pixel
   template <class valuetype, std::size_t NumDims>
   struct TypeTraits < compound_pixel<valuetype, NumDims> >
     {
     };
 
+  //! TypeTraits compound_pixel 3 channel
   template <class valuetype>
   struct TypeTraits < compound_pixel<valuetype, 3> >
     {
@@ -268,6 +276,7 @@ namespace poutre
       }
     };
 
+  //! TypeTraits compound_pixel 4 channel
   template <class valuetype>
   struct TypeTraits < compound_pixel<valuetype, 4> >
     {

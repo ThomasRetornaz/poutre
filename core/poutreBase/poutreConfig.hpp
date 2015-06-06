@@ -19,6 +19,7 @@
  * 
  */
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 
 namespace poutre
   {
@@ -133,7 +134,7 @@ namespace poutre
 #endif
 
 } //namespace
-
+#endif DOXYGEN_SHOULD_SKIP_THIS
 #endif
 
 

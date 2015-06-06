@@ -37,19 +37,20 @@ namespace poutre
     */
 
   //forward declare
-  template <class T, int Rank = 1> class array_view;
+  template <class T, ptrdiff_t Rank = 1> class array_view;
   //forward declare
-  template <class T, int Rank = 1> class strided_array_view;
+  template <class T, ptrdiff_t Rank = 1> class strided_array_view;
 
 
 
-   //An array_view is a potentially multidimensional view on a sequence of uniformly strided objects of a uniform type, contiguous in the least significant dimension.
-
-  template <class valuetype, int Rank = 1>
+  /**
+  * @brief An array_view is a potentially multidimensional view on a sequence of uniformly strided objects of a uniform type, contiguous in the least significant dimension.
+  */
+  template <class valuetype, ptrdiff_t Rank = 1>
   class array_view
     {
     public:
-      POUTRE_STATIC_CONSTEXPR int rank = Rank;
+      POUTRE_STATIC_CONSTEXPR ptrdiff_t rank = Rank;
       using index_type = index<Rank>;
       using bounds_type = bounds<Rank>;
 
@@ -73,7 +74,6 @@ namespace poutre
     public:
       /** @name Construction and Assignment
       */
-
       /**@{*/
       POUTRE_CONSTEXPR array_view( ) POUTRE_NOEXCEPT;
 
@@ -112,7 +112,7 @@ namespace poutre
       */
       /**@{*/
 
-      POUTRE_CONSTEXPR reference operator[](const index_type& idx) const;
+      POUTRE_CONSTEXPR reference operator[](const index_type& idx) const POUTRE_NOEXCEPTONLYNDEBUG;
       /**@}*/
 
       /** @name Slicing and sectioning
@@ -129,7 +129,80 @@ namespace poutre
       /**@}*/
     };
 
-   //A strided_array_view is a potentially multidimensional view on a sequence of uniformly strided objects of a uniform type
+
+  /**
+  * @brief An strided_array_view is a potentially multidimensional view on a sequence of  strided objects of a uniform type
+  */
+  template <class valuetype, ptrdiff_t Rank = 1>
+  class strided_array_view
+    {
+    public:
+      POUTRE_STATIC_CONSTEXPR ptrdiff_t rank = Rank;
+      using index_type = index<Rank>;
+      using bounds_type = bounds<Rank>;
+
+      using size_type = size_t;
+      using value_type = valuetype;
+      using const_value_type = std::add_const_t < value_type >;
+      using pointer = std::add_pointer_t < value_type >;
+      using reference = typename std::add_lvalue_reference < value_type >::type;
+      using const_pointer = std::add_pointer_t < const_value_type >;
+      using const_reference = typename std::add_lvalue_reference < const_value_type >::type;
+      using difference_type = std::ptrdiff_t;
+
+      using self_type = strided_array_view < value_type, rank >;
+    private:
+      bounds_type m_sview_bnd;
+      index_type m_stride_idx;
+      pointer m_data;
+
+    public:
+
+      /** @name Construction and Assignment
+      */
+      /**@{*/
+
+      POUTRE_CONSTEXPR strided_array_view( ) POUTRE_NOEXCEPT;
+
+      template <class U>
+      POUTRE_CONSTEXPR strided_array_view(const array_view<U, Rank>& rhs) POUTRE_NOEXCEPT;
+      template <class U>
+      POUTRE_CONSTEXPR strided_array_view(const strided_array_view<U, Rank>& rhs) POUTRE_NOEXCEPT;
+
+      POUTRE_CONSTEXPR strided_array_view(pointer ptr, bounds_type bounds, index_type stride);
+
+      template <class U>
+      POUTRE_CONSTEXPR strided_array_view& operator=(const strided_array_view<U, Rank>& rhs) POUTRE_NOEXCEPT;
+
+      /**@}*/
+
+      /** @name Observers
+      */
+      /**@{*/
+      POUTRE_CONSTEXPR bounds_type bounds( ) const POUTRE_NOEXCEPT;
+      POUTRE_CONSTEXPR size_type   size( ) const POUTRE_NOEXCEPT;
+      POUTRE_CONSTEXPR index_type  stride( ) const POUTRE_NOEXCEPT;
+      /**@}*/
+
+      /** @name Access
+      */
+      /**@{*/
+      POUTRE_CONSTEXPR reference operator[](const index_type& idx) const  POUTRE_NOEXCEPTONLYNDEBUG;
+      /**@}*/
+
+      /** @name Slicing and sectioning
+      */
+      /**@{*/
+      POUTRE_CONSTEXPR strided_array_view<T, Rank - 1>
+        operator[](ptrdiff_t slice) const;      // only if Rank > 1
+
+      POUTRE_CONSTEXPR strided_array_view<T, Rank>
+        section(const index_type& origin, const bounds_type& section_bnd) const;
+      POUTRE_CONSTEXPR strided_array_view<T, Rank>
+        section(const index_type& origin) const;
+      /**@}*/
+    };
+}
 
    //! @} doxygroup: coordinate_group   
 

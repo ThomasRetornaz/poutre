@@ -42,9 +42,9 @@ namespace poutre
 {
 
    //forward declare
-   template <int Rank> class index;
-   template <int Rank> class bounds;
-   template <int Rank> class bounds_iterator;
+   template <ptrdiff_t Rank> class index;
+   template <ptrdiff_t Rank> class bounds;
+   template <ptrdiff_t Rank> class bounds_iterator;
 
 
    /*!
@@ -57,12 +57,13 @@ namespace poutre
    /**
     * @brief bounds has N-dimensional rectangle semantic
     * bounds is a type that represents rectangular bounds on an N-dimensional discrete space
+    * \image bounds_index.svg
     * @return
     */
 
    template
       <
-      int Rank
+      ptrdiff_t Rank
       > class bounds :public static_array_base < ptrdiff_t, Rank > //TODO restrain alignement capabilities if any
    {
    public:
@@ -233,10 +234,11 @@ namespace poutre
 
    /**
     * @brief  index is a type that represents an offset or a point in such space
+    * \image bounds_index.svg
     */
    template
       <
-      int Rank
+      ptrdiff_t Rank
       > class index :public static_array_base < ptrdiff_t, Rank > //TODO restrain alignement capabilities if any
    {
    public:
@@ -355,27 +357,27 @@ namespace poutre
       }
 
 
-      template <int Rank, typename std::enable_if<Rank == 1, void>::type* = nullptr>
+      template <ptrdiff_t Rank, typename std::enable_if<Rank == 1, void>::type* = nullptr>
          POUTRE_CXX14_CONSTEXPR self_type& operator++() POUTRE_NOEXCEPT
       {
          (++(*this)[0]);
          return *this;
       }
 
-      template <int Rank, typename std::enable_if<Rank == 1, void>::type* = nullptr>
+      template <ptrdiff_t Rank, typename std::enable_if<Rank == 1, void>::type* = nullptr>
          POUTRE_CXX14_CONSTEXPR self_type  operator++(int) POUTRE_NOEXCEPT
       {
          return (index < Rank > {(*this)[0]++});
       }
 
-      template <int Rank, typename std::enable_if<Rank == 1, void>::type* = nullptr>
+      template <ptrdiff_t Rank, typename std::enable_if<Rank == 1, void>::type* = nullptr>
          POUTRE_CXX14_CONSTEXPR self_type& operator--() POUTRE_NOEXCEPT
       {
          (--(*this)[0]);
          return *this;
       }
 
-      template <int Rank, typename std::enable_if<Rank == 1, void>::type* = nullptr>
+      template <ptrdiff_t Rank, typename std::enable_if<Rank == 1, void>::type* = nullptr>
          POUTRE_CXX14_CONSTEXPR self_type  operator--(int) POUTRE_NOEXCEPT
       {
          return (index < Rank > {(*this)[0]--});
@@ -432,25 +434,25 @@ namespace poutre
 
    };
 
-   template <int Rank>
+   template <ptrdiff_t Rank>
       POUTRE_CXX14_CONSTEXPR bounds<Rank>  operator+(const index<Rank>& lhs, const bounds<Rank>& rhs) POUTRE_NOEXCEPT
    {
       return (bounds<Rank>(rhs) +lhs);
    }
 
-   template <int Rank>
+   template <ptrdiff_t Rank>
       POUTRE_CXX14_CONSTEXPR bounds<Rank> operator*(ptrdiff_t v, const bounds<Rank>& rhs) POUTRE_NOEXCEPT
    {      
       return (bounds<Rank>(rhs)*v);
    }
 
-   template <int Rank>
+   template <ptrdiff_t Rank>
       POUTRE_CXX14_CONSTEXPR index<Rank>  operator*(ptrdiff_t v, const index<Rank>& rhs) POUTRE_NOEXCEPT
    {
       return (index<Rank>(rhs)*v);
    }
 
-
+    
    /**
     * @brief Iterator over bounds NOT an iterator on value_type of a container
     *
@@ -460,17 +462,17 @@ namespace poutre
     * imaginary space imposed by  the  bounds. Dereferencing the iterator returns  an  index  object designating
     * the current element in the space.
     */
-   template <int Rank>
+   template <ptrdiff_t Rank>
       class bounds_iterator : public std::iterator <
       std::random_access_iterator_tag,
       index<Rank>,
       ptrdiff_t,
-      const index<Rank>,
+      const index<Rank>, // NOTE HERE BY VALUE
       const index<Rank>> //NOTE HERE BY VALUE
    {
       static_assert(Rank > 0,
                     "bounds_iterator requires a Rank>0");
-      POUTRE_STATIC_CONSTEXPR int rank=Rank;
+      POUTRE_STATIC_CONSTEXPR ptrdiff_t rank = Rank;
    public:
       using parent = std::iterator < std::random_access_iterator_tag,index<Rank>, ptrdiff_t, const index<Rank>, const index<Rank> > ;
       using self_type = bounds_iterator < Rank > ;
@@ -478,27 +480,29 @@ namespace poutre
    protected:
       bounds<Rank> m_bnd;
       index<Rank>  m_idx;
-      index<Rank>  m_idxstart;
       index<Rank>  m_idxend;
 
    public:
-      bounds_iterator(const bounds<Rank>& bnd, const index<Rank>& curr = index < Rank > {}) POUTRE_NOEXCEPT : m_bnd(bnd), m_idx(curr), m_idxstart(curr), m_idxend(m_bnd)
+      bounds_iterator(const bounds<Rank>& bnd, const index<Rank>& curr = index < Rank > {}) POUTRE_NOEXCEPT : m_bnd(bnd), m_idx(curr), m_idxend(m_bnd)
       {
          //The precondition is that bnd.contains(curr) unless bnd.size() = 0.
-         if ( bnd.size( ) != 0 && bnd.contains(curr) )
+         if ( bnd.size( ) != 0)
          {
             m_idxend -= 1;
-            ++m_idxend[0];
+            ++m_idxend[Rank-1];
+            if ( !bnd.contains(m_idx) ) 
+              {
+              m_idx = m_idxend;
+              }
          }
          else
-         {
-            //invalidate bounds 
+           {
+            //invalidate whole 
             m_bnd.assign(0);
-            m_idx.assign(0);
-            m_idxstart.assign(0);
             m_idxend.assign(0);
             ++m_idxend[0];
-         }
+            m_idx = m_idxend;
+            }
       }
 
       bounds_iterator(const self_type& rhs) = default;
@@ -515,7 +519,7 @@ namespace poutre
 
       bool  operator==(const self_type& rhs) const POUTRE_NOEXCEPT
       {
-         return (m_idx == rhs.m_idx);
+         return (m_idx == rhs.m_idx); //TODO ALSO check bound ?
       }
       bool  operator!=(const self_type& rhs) const POUTRE_NOEXCEPT
       {
@@ -547,7 +551,7 @@ namespace poutre
          {
             if ( ++m_idx[i] < m_bnd[i] )
                return *this;
-            m_idx[i] = m_idxstart[i];
+            m_idx[i] = 0;
          }
          m_idx = m_idxend; //set to end
          return *this;
@@ -565,11 +569,11 @@ namespace poutre
       {
          for ( auto i = rank - 1; i >= 0; --i )
          {
-            if ( --m_idx[i] >= m_idxstart[i] )
+            if ( --m_idx[i] >= 0 )
                return *this;
             m_idx[i] = m_bnd[i]-1;
          }
-         m_idx = m_idxstart;--m_idx[0]; //just before m_idxstart
+         m_idx.assign(0); --m_idx[rank-1]; //just before start
          return *this;
       }
       
@@ -606,7 +610,7 @@ namespace poutre
       poutre::details::shift_op<bounds<Rank>, index<Rank>>::op(tmp.m_bnd, tmp.m_idx, -n, tmp.m_idx);
       if ( !tmp.m_bnd.contains(tmp.m_idx) )
         {
-        tmp.m_idx = tmp.m_idxstart; --tmp.m_idx[0];
+        tmp.m_idx.assign(0); --tmp.m_idx[Rank - 1]; //just before start
         }
       return (tmp);
       }
@@ -616,20 +620,20 @@ namespace poutre
       poutre::details::shift_op<bounds<Rank>, index<Rank>>::op(m_bnd, m_idx, -n, m_idx);
       if (!m_bnd.contains(m_idx) )
         {
-        m_idx = m_idxstart; --m_idx[0];
+        m_idx.assign(0); --m_idx[Rank - 1]; //just before start
         }
       return (*this);
       }
 
       difference_type  operator-(const bounds_iterator& rhs) const POUTRE_NOEXCEPTONLYNDEBUG
       {
-      return details::get_offset<bounds<Rank>, index<Rank>>::op(m_bnd, m_idx) - details::get_offset<bounds<Rank>, index<Rank>>::op(rhs.m_bnd, rhs.m_idx);
+      return details::get_offset_from_coord<bounds<Rank>, index<Rank>>::op(m_bnd, m_idx) - details::get_offset_from_coord<bounds<Rank>, index<Rank>>::op(rhs.m_bnd, rhs.m_idx);
       }
 
       //   pointer   operator->() const;  //implement or throw ?
 
       //! 
-      reference operator[](difference_type n) const POUTRE_NOEXCEPT_IF(m_idx[n])
+      difference_type operator[](difference_type n) const POUTRE_NOEXCEPT_IF(m_idx[n])
       {
          return m_idx[n];
       }
@@ -642,61 +646,61 @@ namespace poutre
 
    };
 
-   template <int Rank> bounds_iterator<Rank> begin(const bounds<Rank>& bnd) POUTRE_NOEXCEPT
+   template <ptrdiff_t Rank> bounds_iterator<Rank> begin(const bounds<Rank>& bnd) POUTRE_NOEXCEPT
    {
       return  bnd.begin();
    }
 
-   template <int Rank> bounds_iterator<Rank> end(const bounds<Rank>& bnd) POUTRE_NOEXCEPT
+   template <ptrdiff_t Rank> bounds_iterator<Rank> end(const bounds<Rank>& bnd) POUTRE_NOEXCEPT
    {
       return  bnd.end();
    }
 
-   template <int Rank> bounds_iterator<Rank> cbegin(const bounds<Rank>& bnd) POUTRE_NOEXCEPT
+   template <ptrdiff_t Rank> bounds_iterator<Rank> cbegin(const bounds<Rank>& bnd) POUTRE_NOEXCEPT
    {
       return  bnd.cbegin( );
    }
 
-   template <int Rank> bounds_iterator<Rank> cend(const bounds<Rank>& bnd) POUTRE_NOEXCEPT
+   template <ptrdiff_t Rank> bounds_iterator<Rank> cend(const bounds<Rank>& bnd) POUTRE_NOEXCEPT
    {
       return  bnd.cend( );
    }
 
-   template <int Rank>
+   template <ptrdiff_t Rank>
       bounds_iterator<Rank> operator+(typename bounds_iterator<Rank>::difference_type n, const bounds_iterator<Rank>& rhs)
    {
       auto tmp(rhs);
       return (tmp+n);
    }
 
-    template <int Rank>
+    template <ptrdiff_t Rank>
     bool  operator==(const bounds_iterator<Rank>& lhs, const bounds_iterator<Rank>& rhs)  POUTRE_NOEXCEPT
     {
     return (lhs == rhs);
     }
 
-    template <int Rank>
+    template <ptrdiff_t Rank>
     bool  operator!=(const bounds_iterator<Rank>& lhs, const bounds_iterator<Rank>& rhs)  POUTRE_NOEXCEPT
     {
     return (lhs != rhs);
     }
 
-    template <int Rank>
+    template <ptrdiff_t Rank>
     bool operator<(const bounds_iterator<Rank>& lhs, const bounds_iterator<Rank>& rhs)  POUTRE_NOEXCEPT
     {
     return lhs<rhs;
     }
-    template <int Rank>
+    template <ptrdiff_t Rank>
     bool operator<=(const bounds_iterator<Rank>& lhs, const bounds_iterator<Rank>& rhs)  POUTRE_NOEXCEPT
     {
     return lhs <= rhs;
     }
-    template <int Rank>
+    template <ptrdiff_t Rank>
     bool operator>(const bounds_iterator<Rank>& lhs, const bounds_iterator<Rank>& rhs)  POUTRE_NOEXCEPT
     {
     return lhs>rhs;
     }
-    template <int Rank>
+    template <ptrdiff_t Rank>
     bool operator>=(const bounds_iterator<Rank>& lhs, const bounds_iterator<Rank>& rhs)  POUTRE_NOEXCEPT
     {
     return lhs >= rhs;

@@ -55,12 +55,11 @@ namespace poutre
 
 /**
  * @brief Something similar to std::array but we enforce here constexpr capabilities, inlining and specializations for small array size.
- * @ingroup static_array_group
- * @return
+ * @ingroup static_array_group 
  */
    template
       < class valuetype,
-      int Rank
+      ptrdiff_t Rank
 //TODO ADD ALIGNEMENT CAPABILITIES ?
       > class static_array_base
    {
@@ -69,7 +68,7 @@ namespace poutre
       static_assert(std::is_arithmetic<valuetype>::value, "static_array_base only support arithmetic type");
 
    public:
-      POUTRE_STATIC_CONSTEXPR int rank = Rank;
+     POUTRE_STATIC_CONSTEXPR ptrdiff_t rank = Rank;
 
       using size_type = size_t;
       using value_type = valuetype;
@@ -86,7 +85,7 @@ namespace poutre
            
 
    protected:
-      array_storage m_array;
+      array_storage m_array; //!actual storage has static sized buffer
 
    public:
 /** @name Construction and Assignment
@@ -449,7 +448,7 @@ namespace poutre
 
    template
       < class valuetype,
-      int Rank
+      ptrdiff_t Rank
 //TODO ADD ALIGNEMENT CAPABILITIES ?
       > class static_array :public static_array_base<valuetype, Rank>
    {
