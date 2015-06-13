@@ -44,7 +44,7 @@ PROJECT_NUMBER         = @POUTRE_VERSION@
 # for a project that appears at the top of each page and should give viewer a
 # quick idea about the purpose of the project. Keep the description short.
 
-PROJECT_BRIEF          = "Image processing and Deep Learning"
+PROJECT_BRIEF          = "Image processing and Deep Learning template library"
 
 # With the PROJECT_LOGO tag one can specify an logo or icon that is included in
 # the documentation. The maximum height of the logo should not exceed 55 pixels
@@ -68,7 +68,7 @@ OUTPUT_DIRECTORY       = "@DOXY_OUTPUT_DIR@"
 # performance problems for the file system.
 # The default value is: NO.
 
-CREATE_SUBDIRS         = YES
+CREATE_SUBDIRS         = NO
 
 # If the ALLOW_UNICODE_NAMES tag is set to YES, doxygen will allow non-ASCII
 # characters to appear in the names of generated files. If set to NO, non-ASCII
@@ -133,7 +133,7 @@ ALWAYS_DETAILED_SEC    = NO
 # operators of the base classes will not be shown.
 # The default value is: NO.
 
-INLINE_INHERITED_MEMB  = YES
+INLINE_INHERITED_MEMB  = NO
 
 # If the FULL_PATH_NAMES tag is set to YES doxygen will prepend the full path
 # before files name in the file list and in the header files. If set to NO the
@@ -333,7 +333,7 @@ SIP_SUPPORT            = NO
 # should set this option to NO.
 # The default value is: YES.
 
-IDL_PROPERTY_SUPPORT   = YES
+IDL_PROPERTY_SUPPORT   = NO
 
 # If member grouping is used in the documentation and the DISTRIBUTE_GROUP_DOC
 # tag is set to YES, then doxygen will reuse the documentation of the first
@@ -482,7 +482,7 @@ HIDE_FRIEND_COMPOUNDS  = YES
 # blocks will be appended to the function's detailed documentation block.
 # The default value is: NO.
 
-HIDE_IN_BODY_DOCS      = NO
+HIDE_IN_BODY_DOCS      = YES
 
 # The INTERNAL_DOCS tag determines if documentation that is typed after a
 # \internal command is included. If the tag is set to NO then the documentation
@@ -505,7 +505,7 @@ CASE_SENSE_NAMES       = YES
 # scope will be hidden.
 # The default value is: NO.
 
-HIDE_SCOPE_NAMES       = NO
+HIDE_SCOPE_NAMES       = YES
 
 # If the SHOW_INCLUDE_FILES tag is set to YES then doxygen will put a list of
 # the files that are included by a file in the documentation of that file.
@@ -545,7 +545,7 @@ SORT_MEMBER_DOCS       = YES
 # this will also influence the order of the classes in the class list.
 # The default value is: NO.
 
-SORT_BRIEF_DOCS        = NO
+SORT_BRIEF_DOCS        = YES
 
 # If the SORT_MEMBERS_CTORS_1ST tag is set to YES then doxygen will sort the
 # (brief and detailed) documentation of class members so that constructors and
@@ -635,7 +635,7 @@ MAX_INITIALIZER_LINES  = 30
 # will mention the files that were used to generate the documentation.
 # The default value is: YES.
 
-SHOW_USED_FILES        = YES
+SHOW_USED_FILES        = NO
 
 # Set the SHOW_FILES tag to NO to disable the generation of the Files page. This
 # will remove the Files entry from the Quick Index and from the Folder Tree View
@@ -649,7 +649,7 @@ SHOW_FILES             = YES
 # Folder Tree View (if specified).
 # The default value is: YES.
 
-SHOW_NAMESPACES        = YES
+SHOW_NAMESPACES        = NO
 
 # The FILE_VERSION_FILTER tag can be used to specify a program or script that
 # doxygen should invoke to get the current version for each file (typically from
@@ -813,6 +813,7 @@ EXCLUDE_SYMLINKS       = YES
 
 EXCLUDE_PATTERNS       = *.py \
                          */.hg/*
+                        */.git/*
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
 # (namespaces, classes, functions, etc.) that should be excluded from the
@@ -1407,7 +1408,7 @@ ENUM_VALUES_PER_LINE   = 4
 # Minimum value: 0, maximum value: 1500, default value: 250.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-TREEVIEW_WIDTH         = 250
+TREEVIEW_WIDTH         = 200
 
 # When the EXT_LINKS_IN_WINDOW option is set to YES doxygen will open links to
 # external symbols imported via tag files in a separate window.
@@ -1928,7 +1929,7 @@ ENABLE_PREPROCESSING   = YES
 # The default value is: NO.
 # This tag requires that the tag ENABLE_PREPROCESSING is set to YES.
 
-MACRO_EXPANSION        = YES
+MACRO_EXPANSION        = NO
 
 # If the EXPAND_ONLY_PREDEF and MACRO_EXPANSION tags are both set to YES then
 # the macro expansion is limited to the macros specified with the PREDEFINED and
@@ -1967,23 +1968,23 @@ INCLUDE_FILE_PATTERNS  =
 # is assumed. To prevent a macro definition from being undefined via #undef or
 # recursively expanded use the := operator instead of the = operator.
 # This tag requires that the tag ENABLE_PREPROCESSING is set to YES.
+PREDEFINED             =    DOXYGEN_SHOULD_SKIP_THIS= \
+                            IMP_API= \
+                            IMP_LOCAL= \
+                            BASE_API= \
+                            BASE_LOCAL= \
+                            NN_LOCAL= \
+                            NN_API= \
+                            POUTRE_CONSTEXPR=constexpr\
+                            POUTRE_STATIC_CONSTEXPR=constexpr\
+                            POUTRE_CONSTEXPR_OR_CONST=constexpr\
+                            POUTRE_CXX14_CONSTEXPR=constexpr\
+                            POUTRE_NOEXCEPT=noexcept\
+                            POUTRE_NOEXCEPTONLYNDEBUG=noexcept(NDEBUG)\
+                            POUTRE_STRONG_INLINE=inline\
+                            POUTRE_ALWAYS_INLINE=inline
 
-PREDEFINED             = DOXYGEN_SHOULD_SKIP_THIS \
-	IMP_API= \
-	IMP_LOCAL= \
-	BASE_API= \
-	BASE_LOCAL= \
-	NN_LOCAL= \
-	NN_API= \
-    POUTRE_CONSTEXPR=constexpr\
-	POUTRE_STATIC_CONSTEXPR=constexpr\
-	POUTRE_CONSTEXPR_OR_CONST=constexpr\
-	POUTRE_CXX14_CONSTEXPR=constexpr\
-	POUTRE_NOEXCEPT=noexcept\
-	POUTRE_NOEXCEPTONLYNDEBUG=noexcept(NDEBUG)\ 	
-	POUTRE_STRONG_INLINE=inline\
-	POUTRE_ALWAYS_INLINE=inline
-	
+
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this
 # tag can be used to specify a list of macro names that should be expanded. The
 # macro definition that is found in the sources will be used. Use the PREDEFINED
@@ -2065,7 +2066,7 @@ PERL_PATH              = /usr/bin/perl
 # powerful graphs.
 # The default value is: YES.
 
-CLASS_DIAGRAMS         = YES
+CLASS_DIAGRAMS         = NO
 
 # You can define message sequence charts within doxygen comments using the \msc
 # command. Doxygen will then run the mscgen tool (see:

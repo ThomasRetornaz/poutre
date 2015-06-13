@@ -29,8 +29,8 @@
 namespace poutre
   {
 /**
- * @addtogroup timer_group Helper objects around std::chrono facilities
- *
+ * @addtogroup timer_group Timing facilities
+ * @ingroup poutre_base
  *@{
  */     
 

@@ -49,7 +49,7 @@ namespace poutre
 
 /*!
  * @defgroup static_array_group Static Array
- * @ingroup array_group
+ * @ingroup container_group
  * @{
  */
 
@@ -69,7 +69,7 @@ namespace poutre
 
    public:
      POUTRE_STATIC_CONSTEXPR ptrdiff_t rank = Rank;
-
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
       using size_type = size_t;
       using value_type = valuetype;
       using const_value_type = std::add_const_t < value_type > ;
@@ -81,7 +81,7 @@ namespace poutre
       using size_type = std::size_t;
       using self_type = static_array_base < valuetype, rank >;
       using array_storage = valuetype[rank];
-
+#endif //#ifndef DOXYGEN_SHOULD_SKIP_THIS
            
 
    protected:

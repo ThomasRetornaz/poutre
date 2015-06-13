@@ -16,6 +16,7 @@ set(PoutreBaseTestSRC
 	${PoutreBaseTestSubdirectory}/coordinate.cpp
 	${PoutreBaseTestSubdirectory}/static_array.cpp
 	${PoutreBaseTestSubdirectory}/types.cpp
+	${PoutreBaseTestSubdirectory}/containerview.cpp
 )
 
 add_executable(PoutreBaseTests ${PoutreBaseTestSRC})

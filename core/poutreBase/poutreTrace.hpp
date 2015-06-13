@@ -42,7 +42,7 @@
 
 /**
 * @addtogroup trace_group Trace facilities
-*
+* @ingroup poutre_base
 *@{
 */
 namespace poutre

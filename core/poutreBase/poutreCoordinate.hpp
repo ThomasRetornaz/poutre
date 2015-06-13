@@ -40,12 +40,12 @@
 
 namespace poutre
 {
-
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
    //forward declare
    template <ptrdiff_t Rank> class index;
    template <ptrdiff_t Rank> class bounds;
    template <ptrdiff_t Rank> class bounds_iterator;
-
+#endif
 
    /*!
     * @defgroup coordinate_group_group Define coordinates  with bounds, index, View and Strided view other multi-dimentionnal array
@@ -67,7 +67,7 @@ namespace poutre
       > class bounds :public static_array_base < ptrdiff_t, Rank > //TODO restrain alignement capabilities if any
    {
    public:
-
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
       //inherit from parent
       using parent = static_array_base < ptrdiff_t, Rank > ;
       using size_type = parent::size_type;
@@ -110,6 +110,7 @@ namespace poutre
       using parent::operator/;
       using parent::operator*;
       using parent::operator%;
+#endif //#ifndef DOXYGEN_SHOULD_SKIP_THIS
 
    protected:
       using parent::m_array;
@@ -577,6 +578,21 @@ namespace poutre
          return *this;
       }
       
+        //size_t _Off(_Sizarray& _Indexarr) const
+        //{	// return offset for an array of indexes, then increment
+        //size_t _Idx, _Ans = _Start;
+
+        //for ( _Idx = 0; _Idx < _Indexarr.size( ); ++_Idx )
+        //  _Ans += _Indexarr[_Idx] * _Stride[_Idx];	// compute offset
+
+        //while ( 0 < _Idx-- )
+        //  if ( ++_Indexarr[_Idx] < _Len[_Idx] )
+        //    break;	// increment done, quit
+        //  else
+        //    _Indexarr[_Idx] = 0;	// carry to more-significant index
+        //return (_Ans);
+        //}
+
 
       bounds_iterator  operator--(int) POUTRE_NOEXCEPTONLYNDEBUG
       {
