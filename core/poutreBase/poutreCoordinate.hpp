@@ -473,7 +473,7 @@ namespace poutre
    {
       static_assert(Rank > 0,
                     "bounds_iterator requires a Rank>0");
-      POUTRE_STATIC_CONSTEXPR ptrdiff_t rank = Rank;
+      POUTRE_STATIC_CONSTEXPR ptrdiff_t rank= Rank;
    public:
       using parent = std::iterator < std::random_access_iterator_tag,index<Rank>, ptrdiff_t, const index<Rank>, const index<Rank> > ;
       using self_type = bounds_iterator < Rank > ;

@@ -28,8 +28,6 @@
 #pragma warning( disable : 4425 )//4425 improper support constexpr
 #endif
 
-#include <vector>
-
 ////http://stackoverflow.com/questions/26606865/static-for-cycle
 //#include <tuple>
 //
@@ -126,6 +124,21 @@ namespace poutre
 
 
 
+namespace details
+  {
+  //from http://stackoverflow.com/questions/11056714/c-type-traits-to-extract-template-parameter-class
+  template<typename T>
+  struct extract_value_type
+    {
+    typedef T value_type;
+    };
+
+  template<template<typename, typename ...> class X, typename T, typename ...Args>
+  struct extract_value_type<X<T, Args...>>   //specialization
+    {
+    typedef T value_type;
+    };
+  } //namespace details
 
    /*!
     * @defgroup view_group Container View and Strided View
@@ -134,15 +147,22 @@ namespace poutre
     * @{
     */
 
-#define VIEW_ACESS(data,idx,stride,rank)           \
-                   {                                             \
-                  ptrdiff_t offset = 0;           \
-                  for ( auto i = 0; i < Rank; ++i )          \
-                                      {          \
-                  offset += idx[i] * stride[i];          \
-                                      }          \
-                  return *(data + offset);       \
+#define VIEW_ACESS(data,idx,stride,rank)            \
+                   {                                \
+                  ptrdiff_t offset = 0;             \
+                  for ( auto i = 0; i < Rank; ++i ) \
+                                      {             \
+                  offset += idx[i] * stride[i];     \
+                                      }             \
+                  return *(data + offset);          \
                    }
+
+#define INIT_DEFAULT_STRIDE(bound,stride,rank) \
+   stride[rank - 1] = 1;                       \
+   for ( ptrdiff_t i = Rank - 2; i >= 0; i-- ) \
+    {                                          \
+    stride[i] = stride[i + 1] * bound[i + 1];  \
+    }
 
   /**
   * @brief An array_view is a potentially multidimensional view on a sequence of uniformly strided objects of a uniform type, contiguous in the least significant dimension.
@@ -153,7 +173,7 @@ namespace poutre
     //convenient friendship
     template<class T, ptrdiff_t Rank> friend class strided_array_view;
     public:
-      POUTRE_STATIC_CONSTEXPR ptrdiff_t rank = Rank;
+      POUTRE_STATIC_CONSTEXPR ptrdiff_t rank= Rank;
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
       using index_type = index<Rank>;
       using bounds_type = bounds<Rank>;
@@ -172,24 +192,23 @@ namespace poutre
 #endif
       
     private:
-      bounds_type m_bnd;
+      bounds_type m_bnd;      
       pointer m_data;
-  
     public:
       /** @name Construction and Assignment
       */
       /**@{*/
 
       //!Default ctor
-      POUTRE_CONSTEXPR array_view( ) :m_bnd( ), m_data(nullptr) POUTRE_NOEXCEPT_IF(m_bnd())
+      POUTRE_CONSTEXPR array_view( ) :m_bnd( ), m_data(nullptr) POUTRE_NOEXCEPT_IF(m_bnd( ))
       {
       }
-
       template <class Viewable>
-      //TODO fix SFINAE behavior!!!!! 
-      //typename std::enable_if<std::is_same<typename std::remove_cv<T>::type, typename std::remove_cv<typename Viewable::value_type>::type>::value
-      //&&std::is_convertible<typename std::add_pointer<typename Viewable::value_type>::type, pointer>::value
-      //&& Rank == 1*/>::type* = nullptr>
+      //template <class Viewable,
+      //  typename std::enable_if<
+      //  std::is_same<typename std::remove_cv<T>::type, typename std::remove_cv<typename details::extract_value_type<Viewable>::value_type>::type>::value
+      //  && std::is_convertible<typename std::add_pointer<typename details::extract_value_type<Viewable>::value_type>::type, pointer>::value
+      //  && Rank == 1 /*,int */>::type* = nullptr>
       //!ctor from viewable object, mainly contiguous container C providing C.data(),C.size() interface and using the same value_type
       //@warning only available for rank==1
       POUTRE_CONSTEXPR array_view(Viewable&& vw) :m_bnd(vw.size( )), m_data(vw.data())
@@ -288,21 +307,17 @@ namespace poutre
       {
       return m_bnd.size();
       }
+      
 
       //!Getter stride of view
       POUTRE_CXX14_CONSTEXPR index_type  stride( ) const POUTRE_NOEXCEPT
         {
-        //todo caching in ctor ?
         index_type stride;
-        stride[Rank - 1] = 1;
-        for (ptrdiff_t i=Rank-2;i>=0;i--)
-          {
-          stride[i] = stride[i + 1] * m_bnd[i + 1];
-          }
+        INIT_DEFAULT_STRIDE(m_bnd, stride, Rank);
         return stride;
         }
 
-      //!Getter raw access to underlying data ptr
+      //!Getter raw access to underlying data ptr to the contiguous sequence on which the view was created. 
       POUTRE_CONSTEXPR pointer data( ) const POUTRE_NOEXCEPT
       {
       return m_data;
@@ -314,7 +329,7 @@ namespace poutre
       */
       /**@{*/
       //!Accessor to underlying data through indexing
-      POUTRE_CXX14_CONSTEXPR reference operator[](const index_type& idx) const /*POUTRE_NOEXCEPTONLYNDEBUG*/
+      POUTRE_CXX14_CONSTEXPR reference operator[](const index_type& idx) const POUTRE_NOEXCEPTONLYNDEBUG
         {
         POUTRE_ASSERTCHECK(m_bnd.contains(idx) == true,"Out of bound");
         VIEW_ACESS(this->data(), idx, this->stride(),Rank);
@@ -333,8 +348,8 @@ namespace poutre
           POUTRE_CHECK(slice<m_bnd[0], "Slicing slice must be < bounds()[0]");
 
           //Slice bound
-          bounds<Rank-1> bnd_slice;
-          for ( auto i = 0; i<Rank - 2; i++ )
+          poutre::bounds<Rank-1> bnd_slice;
+          for ( auto i = 0; i<Rank - 1; i++ )
             {
             bnd_slice[i] = m_bnd[i + 1];
             }
@@ -342,7 +357,7 @@ namespace poutre
           //Compute prt shift
           index_type idxslice;
           idxslice[0] = slice;          
-          pointer data_slice = datas( ) + details::get_offset_from_coord(m_bnd, idxslice);
+          pointer data_slice = m_data + details::get_offset_from_coord<bounds_type, index_type>::op(m_bnd, idxslice);
 
           return array_view<T, Rank - 1>(data_slice,bnd_slice);
           }
@@ -353,10 +368,12 @@ namespace poutre
         //@warning Requires: bounds().contains(origin + idx) == true for any index_type idx such that (bounds() - origin).contains(idx) == true. 
         section(const index_type& origin, const bounds_type& section_bnd) const
         {
+        //precondition
         POUTRE_CHECK(m_bnd.contains(origin), "section(origin,section_bnd) origin is Out of bound");
-        POUTRE_CHECK(m_bnd.contains((section_bnd + origin) - 1), "section(origin,section_bnd) section_bnd shifted by origins is out of bound");
+        index_type shifted = section_bnd + origin; shifted -= 1;
+        POUTRE_CHECK(m_bnd.contains(shifted), "section(origin,section_bnd) section_bnd shifted by origins is out of bound");
 
-        pointer data_section = datas( ) + details::get_offset_from_coord(m_bnd, origin);
+        pointer data_section = m_data + details::get_offset_from_coord<bounds_type, index_type>::op(m_bnd, origin);
         return strided_array_view<T, Rank>(data_section, section_bnd, stride());
         }
 
@@ -368,7 +385,7 @@ namespace poutre
         POUTRE_CHECK(m_bnd.contains(origin), "section(origin,section_bnd) origin is Out of bound");
 
         bounds_type section_bnd = m_bnd - origin;
-        pointer data_section = datas( ) + details::get_offset_from_coord(m_bnd, origin);
+        pointer data_section = m_data + details::get_offset_from_coord<bounds_type, index_type>::op(m_bnd, origin);
         return strided_array_view<T, Rank>(data_section, section_bnd, stride( ));
         }
       /**@}*/
@@ -384,7 +401,7 @@ namespace poutre
     //convenient friendship
     template<class T, ptrdiff_t Rank> friend class array_view;
     public:
-      POUTRE_STATIC_CONSTEXPR ptrdiff_t rank = Rank;
+      POUTRE_STATIC_CONSTEXPR ptrdiff_t rank= Rank;
       using index_type = index<Rank>;
       using bounds_type = bounds<Rank>;
 
@@ -411,6 +428,7 @@ namespace poutre
       //!Empty ctor
       POUTRE_CONSTEXPR strided_array_view( ) :m_bnd( ), m_stride_idx( ), m_data(nullptr) POUTRE_NOEXCEPT_IF(POUTRE_NOEXCEPT_IF(m_bnd( )) && POUTRE_NOEXCEPT_IF(m_stride_idx( )))
         {
+        INIT_DEFAULT_STRIDE(m_bnd, m_stride_idx, Rank);
         }
 
       template <class U,
@@ -419,7 +437,7 @@ namespace poutre
         std::is_same<std::remove_cv_t<U>, std::remove_cv_t<value_type>>::value
       >::type* = nullptr>
       //!Ctor from array_view
-      POUTRE_CONSTEXPR strided_array_view(const array_view<U, Rank>& rhs) :m_bnd(rhs.m_bnd), m_stride_idx( ), m_data(rhs.m_data) POUTRE_NOEXCEPT_IF(POUTRE_NOEXCEPT_IF(m_bnd(rhs.m_bnd)) && POUTRE_NOEXCEPT_IF(m_stride_idx( )))
+      POUTRE_CONSTEXPR strided_array_view(const array_view<U, Rank>& rhs) :m_bnd(rhs.m_bnd), m_stride_idx(rhs.stride()), m_data(rhs.m_data) POUTRE_NOEXCEPT_IF(POUTRE_NOEXCEPT_IF(m_bnd(rhs.m_bnd)) && POUTRE_NOEXCEPT_IF(m_stride_idx( )))
         {
         }
 
@@ -520,7 +538,7 @@ namespace poutre
         //compute shift
         index_type idxslice;
         idxslice[0] = slice;
-        pointer data_slice = datas( ) + details::get_offset_from_coord(m_bnd, idxslice);
+        pointer data_slice = datas( ) + details::get_offset_from_coord<bounds_type, index_type>::op(m_bnd, idxslice);
 
         return strided_array_view<T, Rank - 1>(data_slice, bnd_slice, stride_slice);
         }
@@ -533,7 +551,7 @@ namespace poutre
         POUTRE_CHECK(m_bnd.contains(origin), "section(origin,section_bnd) origin is Out of bound");
         POUTRE_CHECK(m_bnd.contains(section_bnd+origin-1), "section(origin,section_bnd) section_bnd shifted by origins is out of bound");
 
-        pointer data_section = datas( ) + details::get_offset_from_coord(m_bnd, origin);
+        pointer data_section = datas( ) + details::get_offset_from_coord<bounds_type, index_type>::op(m_bnd, origin);
         return strided_array_view<T, Rank>(data_section, section_bnd, m_stride_idx);
         }
 
@@ -545,7 +563,7 @@ namespace poutre
         POUTRE_CHECK(m_bnd.contains(origin), "section(origin,section_bnd) origin is Out of bound");
 
         bounds_type section_bnd = m_bnd-origin;
-        pointer data_section = datas( ) + details::get_offset_from_coord(m_bnd, origin);
+        pointer data_section = m_data + details::get_offset_from_coord<bounds_type, index_type>::op(m_bnd, origin);
         return strided_array_view<T, Rank>(data_section, section_bnd, m_stride_idx);
         }
       /**@}*/

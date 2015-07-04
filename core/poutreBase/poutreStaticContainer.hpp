@@ -68,7 +68,7 @@ namespace poutre
       static_assert(std::is_arithmetic<valuetype>::value, "static_array_base only support arithmetic type");
 
    public:
-     POUTRE_STATIC_CONSTEXPR ptrdiff_t rank = Rank;
+     POUTRE_STATIC_CONSTEXPR ptrdiff_t rank= Rank;
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
       using size_type = size_t;
       using value_type = valuetype;
