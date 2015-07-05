@@ -105,7 +105,7 @@ elseif(DOXYGEN_CONFIG_FILE)
     COMMENT "Generating doxygen documentation"
     DEPENDS ${DOXYGEN_CONFIG_FILE}
     SOURCES 
-      ${POUTRE_root_dir}/cmake/CMakeDoc.cmake
+      ${POUTRE_ROOT_DIR}/cmake/CMakeDoc.cmake
       ${POUTRE_DOXYGEN_PATH}/Doxyfile
       ${DOXY_CONFIG_FILE}
       ${doxygen_pages}

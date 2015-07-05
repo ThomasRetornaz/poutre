@@ -58,7 +58,7 @@ target_link_libraries(PoutreBase
   INTERFACE Eigen  
   INTERFACE BoostSimd 
   )
-set_target_properties(PoutreBase PROPERTIES FOLDER "Core/")
+set_target_properties(PoutreBase PROPERTIES FOLDER "CoreCPP/")
 #force custom target before start
 add_dependencies(PoutreBase BoostSimd)
 add_dependencies(PoutreBase Eigendep)
@@ -71,7 +71,8 @@ ENDIF(BUILD_SHARED_LIBS)
 
 
 install_POUTRE_targets(
-  TARGET PoutreBase 
-  CONFIGURATION Release 
+  TARGET PoutreBase
+  CONFIGURATION Release
   HEADER_FILES ${PoutreBaseSRC}
   )
+

@@ -181,7 +181,7 @@ if(ENABLE_NUMPY)
 endif()
 
 # HDF5 IO capabilities
-if(ENABLE_HDF5)
+if(0)
   if(WIN32)
     #TODO use /install__Windows_x86 default path
     set(HDF5 hdf5)

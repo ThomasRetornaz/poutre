@@ -5,7 +5,7 @@
 # boost.test is in a shared library).
 macro(test_environment_setup test_name)
 
-  #message(STATUS "test_environment_setup with ${test_name}")
+  message(STATUS "test_environment_setup with ${test_name} and ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY_RELEASE}")
 
   # getting BOOST path, from boost.test release version (debug non always available)
   get_filename_component(boost_unit_test_location ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY_RELEASE} PATH)

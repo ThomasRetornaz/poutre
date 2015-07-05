@@ -67,7 +67,11 @@ namespace poutre
       > class bounds :public static_array_base < ptrdiff_t, Rank > //TODO restrain alignement capabilities if any
    {
    public:
+	   
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+   public:
+	   POUTRE_STATIC_CONSTEXPR ptrdiff_t rank = Rank;
+
       //inherit from parent
       using parent = static_array_base < ptrdiff_t, Rank > ;
       using size_type = parent::size_type;
@@ -87,8 +91,7 @@ namespace poutre
       using const_iterator = typename bounds_iterator<Rank>;
       using iterator = typename bounds_iterator<Rank>;
       
-      using parent::rank;
-      using parent::data;
+	  using parent::data;
       using parent::back;
       using parent::front;
       using parent::at;
@@ -110,6 +113,7 @@ namespace poutre
       using parent::operator/;
       using parent::operator*;
       using parent::operator%;
+	   
 #endif //#ifndef DOXYGEN_SHOULD_SKIP_THIS
 
    protected:
@@ -215,7 +219,7 @@ namespace poutre
       const_iterator end( ) const POUTRE_NOEXCEPT
       {
          //define index end 
-         index<rank > m_idxend(*this);
+         index<rank> m_idxend(*this);
          m_idxend -=1;
          const_iterator tmp(*this, m_idxend);
          return ++tmp;

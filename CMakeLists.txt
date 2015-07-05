@@ -1,9 +1,9 @@
 #Most of the initial cmake skeleton  was heavely inspired from yayi project see https://bitbucket.org/renficiaud/yayi.git. and rapidjosn 
-if(WIN32)
+#if(WIN32)
 cmake_minimum_required (VERSION 3.0)
-else()
-cmake_minimum_required (VERSION 2.8)
-endif()
+#else()
+#cmake_minimum_required (VERSION 2.8)
+#endif()
 
 project(Poutre)
 
@@ -104,7 +104,6 @@ include(CMakeParseArguments)
 include(cmake/CMakeVersion.cmake)
 include(cmake/CMakeInstallUtils.cmake)
 #include(cmake/CMakePCHUtils.cmake NO_POLICY_SCOPE)
-include(cmake/CMakeInstallUtils.cmake)
 #include(cmake/CMakePythonUtils.cmake)
 include(cmake/CMakeTestUtils.cmake)
 
@@ -148,7 +147,7 @@ add_custom_target(
   cmake/CMakeCompilerSpecific.cmake
   # cmake/CMakeCPackConf.cmake
   cmake/CMakeDoc.cmake
-  cmake/CMakeInstallUtils.cmake
+  #cmake/CMakeInstallUtils.cmake
   #cmake/CMakePCHUtils.cmake
   # cmake/CMakePythonPackage.cmake
   # cmake/CMakePythonUtils.cmake

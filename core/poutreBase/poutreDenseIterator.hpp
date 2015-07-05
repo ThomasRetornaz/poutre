@@ -37,6 +37,8 @@ namespace poutre
    {
    public:
       using parent = std::iterator < std::random_access_iterator_tag, DataType, std::ptrdiff_t, DataType*, DataType& > ;
+	  using reference = typename parent::reference;
+      using pointer = typename parent::pointer;	   
       using self_type = pdense_iterator < DataType > ;
 
       pdense_iterator(DataType* ptr = nullptr, DataType* ptrorig = nullptr) :m_ptr(ptr), m_ptrorig(ptrorig)
@@ -149,6 +151,10 @@ namespace poutre
    {
    public:
       using parent = pdense_iterator < DataType > ;
+      using reference = typename parent::reference;
+      using pointer = typename parent::pointer;	   
+      using parent::m_ptr;
+      using parent::m_ptrorig;
       using self_type = pdense_reverse_iterator < DataType > ;
 
       pdense_reverse_iterator(DataType* ptr = nullptr, DataType* ptrorig = nullptr) :parent(ptr, ptrorig)

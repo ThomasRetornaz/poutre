@@ -8,6 +8,7 @@
 //==============================================================================
 
 #include <poutreBase/poutreTypes.hpp>
+#include <sstream>
 
 namespace poutre
   {

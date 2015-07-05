@@ -1,4 +1,9 @@
-cmake_minimum_required(VERSION 3.0)
+if(WIN32)
+cmake_minimum_required (VERSION 3.2)
+else()
+cmake_minimum_required (VERSION 2.8)
+endif()
+
 #project(Eigen)
 #http://eigen.tuxfamily.org/index.php?title=Main_Page
 message("Create ExternalProject Eigen has thirdpartie lib")

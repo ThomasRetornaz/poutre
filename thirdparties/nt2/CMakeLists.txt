@@ -1,4 +1,8 @@
-cmake_minimum_required(VERSION 2.8)
+if(WIN32)
+cmake_minimum_required (VERSION 3.2)
+else()
+cmake_minimum_required (VERSION 2.8)
+endif()
 project(nt2Builder)
 
 

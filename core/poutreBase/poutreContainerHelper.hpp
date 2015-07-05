@@ -31,115 +31,6 @@ namespace poutre
    namespace details
    {
 
-   template <class bnds, class idx, ptrdiff_t Rank = bnds::rank>
-   struct get_offset_from_coord
-     {
-     POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR offset op(bnds const &i_bnd, idx const &i_idx) POUTRE_NOEXCEPT
-       {
-       static_assert(bnds::rank == idx::rank, "get_offset: all provided container must share same rank");
-       offset current_offset = i_idx[Rank-1]; //at least rank==1
-       ptrdiff_t stride = i_bnd[Rank - 1];
-       for ( auto i = Rank-2; i >=0; --i )
-         {
-         current_offset += i_idx[i] * stride;
-         stride *= i_bnd[i];
-         }
-       return current_offset;
-       }
-    };
-
-    //specialize 1D
-    template <class bnds, class idx>
-    struct get_offset_from_coord<bnds, idx, 1>
-      {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR offset op(bnds const &i_bnd, idx const &i_idx) POUTRE_NOEXCEPT
-        {
-        return i_idx[0];
-        }
-      };
-
-    //specialize 2D
-    template <class bnds, class idx>
-    struct get_offset_from_coord<bnds, idx, 2>
-      {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR offset op(const bnds &i_bnd, const idx &i_idx) POUTRE_NOEXCEPT
-        {
-        return (i_idx[1] + i_idx[0] * i_bnd[1]);
-        }
-      };
-
-
-    template <class bnds, class idx, ptrdiff_t Rank = bnds::rank>
-    struct get_coord_from_offset
-      {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(bnds const &i_bnd,offset off, idx &o_idx) POUTRE_NOEXCEPTONLYNDEBUG
-        {
-        static_assert(bnds::rank == idx::rank, "get_offset: all provided container must share same rank");
-        POUTRE_ASSERTCHECK(off >= 0, "get_offset: provided offset must be >0");
-#ifndef NDEBUG
-        //compute max allowed offset
-        
-#endif
-        //recreate idx
-        auto i = Rank - 1;
-        for ( ; i >= 0 && off != 0; --i )
-          {
-          POUTRE_ASSERTCHECK(i_bnd[i] >= 0, "get_offset: bnd[i] must be >0");
-          auto dv = std::div(off, i_bnd[i]);
-          o_idx[i] = dv.rem;//offset % current;
-          off = dv.quot;//offset=offset/current
-          }
-        for ( ; i >= 0; --i )
-          {
-          o_idx[i] = 0;
-          }
-        }
-      };
-
-    template <class bnds, class idx>
-    struct get_coord_from_offset<bnds, idx, 1>
-      {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(bnds const &i_bnd, offset off, idx &o_idx) POUTRE_NOEXCEPTONLYNDEBUG
-        {
-        POUTRE_ASSERTCHECK(off >= 0, "get_offset: provided offset must be >0");
-        POUTRE_ASSERTCHECK(off < i_bnd[0], "get_offset: provided offset out of bound");
-        o_idx[0] = off;
-        }
-      };
-
-    template <class bnds, class idx>
-    struct get_coord_from_offset<bnds, idx, 2>
-      {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(bnds const &i_bnd, offset off, idx &o_idx) POUTRE_NOEXCEPTONLYNDEBUG
-        {
-        POUTRE_ASSERTCHECK(off >= 0, "get_offset: provided offset must be >0");
-        auto dv = std::div(off, i_bnd[1]);
-        o_idx[1] = dv.rem;//offset % current;
-        o_idx[0] = dv.quot;//offset=offset/current
-        return;
-        }
-      };
-
-   template <class bnds, class idx, ptrdiff_t Rank = bnds::rank>
-   struct shift_op
-     {
-     POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(bnds const &i_bnd, idx const &i_idx, offset shift, idx &o_idx) POUTRE_NOEXCEPT
-       {
-       static_assert(bnds::rank == idx::rank, "shift_op: all provided container must share same rank");
-       //quick exit
-       if ( shift == 0 )
-         {
-         helper_assign_container_op<idx, AssignOpType::AssignOp>::op(i_idx, o_idx);
-         return;
-         }
-       //current offset belong to in
-       offset current_offset = get_offset_from_coord<bnds, idx>::op(i_bnd, i_idx);
-       //shift
-       current_offset += shift;
-       //recreate idx
-       get_coord_from_offset<bnds, idx>::op(i_bnd,current_offset,o_idx);
-       }
-     };
 
       //unrolling helper for small rank eg from 1 to 4
       //All of this may be over engineered until c++14 constexpr capabilities were implemented in all compiler
@@ -398,7 +289,7 @@ namespace poutre
          using value_type = typename container::value_type;
          POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR void op(container const & A0, container const & A1, container &res) POUTRE_NOEXCEPT
          {
-            for (size_t i = 0; i < rank; i++) 
+            for (size_t i = 0; i < Rank; i++) 
             { 
             helper_comp_op<value_type, arithop>::op(A0[i], A1[i], res[i]);
             }
@@ -461,7 +352,7 @@ namespace poutre
          {
             for (size_t i = 0; i < Rank; i++)
             {
-               helper_assign_op<containerother::value_type, value_type, assignop>::op(A0[1], res[1]);
+               helper_assign_op<typename containerother::value_type, value_type, assignop>::op(A0[1], res[1]);
             }
          }
       };
@@ -474,7 +365,7 @@ namespace poutre
          template<class containerother>
             POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(containerother const & A0, container &res) POUTRE_NOEXCEPT
          {
-            helper_assign_op<containerother::value_type, value_type, assignop>::op(A0[0], res[0]);
+            helper_assign_op<typename containerother::value_type, value_type, assignop>::op(A0[0], res[0]);
          }
       };
 
@@ -485,8 +376,8 @@ namespace poutre
          template<class containerother>
             POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(containerother const & A0, container &res) POUTRE_NOEXCEPT
          {
-            helper_assign_op<containerother::value_type, value_type, assignop>::op(A0[0], res[0]);
-            helper_assign_op<containerother::value_type, value_type, assignop>::op(A0[1], res[1]);
+            helper_assign_op<typename containerother::value_type, value_type, assignop>::op(A0[0], res[0]);
+            helper_assign_op<typename containerother::value_type, value_type, assignop>::op(A0[1], res[1]);
          }
       };
 
@@ -497,9 +388,9 @@ namespace poutre
          template<class containerother>
             POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(containerother const & A0, container &res) POUTRE_NOEXCEPT
          {
-            helper_assign_op<containerother::value_type, value_type, assignop>::op(A0[0], res[0]);
-            helper_assign_op<containerother::value_type, value_type, assignop>::op(A0[1], res[1]);
-            helper_assign_op<containerother::value_type, value_type, assignop>::op(A0[2], res[2]);
+            helper_assign_op<typename containerother::value_type, value_type, assignop>::op(A0[0], res[0]);
+            helper_assign_op<typename containerother::value_type, value_type, assignop>::op(A0[1], res[1]);
+            helper_assign_op<typename containerother::value_type, value_type, assignop>::op(A0[2], res[2]);
          }
       };
 
@@ -510,10 +401,10 @@ namespace poutre
          template<class containerother>
             POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(containerother const & A0, container &res) POUTRE_NOEXCEPT
          {
-            helper_assign_op<containerother::value_type, value_type, assignop>::op(A0[0], res[0]);
-            helper_assign_op<containerother::value_type, value_type, assignop>::op(A0[1], res[1]);
-            helper_assign_op<containerother::value_type, value_type, assignop>::op(A0[2], res[2]);
-            helper_assign_op<containerother::value_type, value_type, assignop>::op(A0[3], res[3]);
+            helper_assign_op<typename containerother::value_type, value_type, assignop>::op(A0[0], res[0]);
+            helper_assign_op<typename containerother::value_type, value_type, assignop>::op(A0[1], res[1]);
+            helper_assign_op<typename containerother::value_type, value_type, assignop>::op(A0[2], res[2]);
+            helper_assign_op<typename containerother::value_type, value_type, assignop>::op(A0[3], res[3]);
          }
       };
   
@@ -587,7 +478,7 @@ namespace poutre
          struct helper_contains_container_op
       {
          POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(bnds const & bnd, idx const & id) POUTRE_NOEXCEPT
-         {
+		  {
             static_assert(bnds::rank == idx::rank);
             for ( size_t i = 0; i < Rank; i++ )
             {
@@ -626,6 +517,118 @@ namespace poutre
                && (id[2] >= 0) && (id[2] < bnd[2]);
          }
       };
+
+
+	      template <class bnds, class idx, ptrdiff_t Rank = bnds::rank>
+   struct get_offset_from_coord
+     {
+     POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR offset op(bnds const &i_bnd, idx const &i_idx) POUTRE_NOEXCEPT
+       {
+       static_assert(bnds::rank == idx::rank, "get_offset: all provided container must share same rank");
+       offset current_offset = i_idx[Rank-1]; //at least rank==1
+       ptrdiff_t stride = i_bnd[Rank - 1];
+       for ( auto i = Rank-2; i >=0; --i )
+         {
+         current_offset += i_idx[i] * stride;
+         stride *= i_bnd[i];
+         }
+       return current_offset;
+       }
+    };
+
+    //specialize 1D
+    template <class bnds, class idx>
+    struct get_offset_from_coord<bnds, idx, 1>
+      {
+      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR offset op(bnds const &i_bnd, idx const &i_idx) POUTRE_NOEXCEPT
+        {
+        return i_idx[0];
+        }
+      };
+
+    //specialize 2D
+    template <class bnds, class idx>
+    struct get_offset_from_coord<bnds, idx, 2>
+      {
+      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR offset op(const bnds &i_bnd, const idx &i_idx) POUTRE_NOEXCEPT
+        {
+        return (i_idx[1] + i_idx[0] * i_bnd[1]);
+        }
+      };
+
+
+    template <class bnds, class idx, ptrdiff_t Rank = bnds::rank>
+    struct get_coord_from_offset
+      {
+      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(bnds const &i_bnd,offset off, idx &o_idx) POUTRE_NOEXCEPTONLYNDEBUG
+        {
+        static_assert(bnds::rank == idx::rank, "get_offset: all provided container must share same rank");
+        POUTRE_ASSERTCHECK(off >= 0, "get_offset: provided offset must be >0");
+#ifndef NDEBUG
+        //compute max allowed offset
+        
+#endif
+        //recreate idx
+        auto i = Rank - 1;
+        for ( ; i >= 0 && off != 0; --i )
+          {
+          POUTRE_ASSERTCHECK(i_bnd[i] >= 0, "get_offset: bnd[i] must be >0");
+          auto dv = std::div(off, i_bnd[i]);
+          o_idx[i] = dv.rem;//offset % current;
+          off = dv.quot;//offset=offset/current
+          }
+        for ( ; i >= 0; --i )
+          {
+          o_idx[i] = 0;
+          }
+        }
+      };
+
+    template <class bnds, class idx>
+    struct get_coord_from_offset<bnds, idx, 1>
+      {
+      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(bnds const &i_bnd, offset off, idx &o_idx) POUTRE_NOEXCEPTONLYNDEBUG
+        {
+        POUTRE_ASSERTCHECK(off >= 0, "get_offset: provided offset must be >0");
+        POUTRE_ASSERTCHECK(off < i_bnd[0], "get_offset: provided offset out of bound");
+        o_idx[0] = off;
+        }
+      };
+
+    template <class bnds, class idx>
+    struct get_coord_from_offset<bnds, idx, 2>
+      {
+      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(bnds const &i_bnd, offset off, idx &o_idx) POUTRE_NOEXCEPTONLYNDEBUG
+        {
+        POUTRE_ASSERTCHECK(off >= 0, "get_offset: provided offset must be >0");
+        auto dv = std::div(off, i_bnd[1]);
+        o_idx[1] = dv.rem;//offset % current;
+        o_idx[0] = dv.quot;//offset=offset/current
+        return;
+        }
+      };
+
+   template <class bnds, class idx, ptrdiff_t Rank = bnds::rank>
+   struct shift_op
+     {
+     POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(bnds const &i_bnd, idx const &i_idx, offset shift, idx &o_idx) POUTRE_NOEXCEPT
+       {
+       static_assert(bnds::rank == idx::rank, "shift_op: all provided container must share same rank");
+       //quick exit
+       if ( shift == 0 )
+         {
+			 helper_assign_container_op<idx, AssignOpType::AssignOp>::op(i_idx, o_idx);
+			 return;
+         }
+       //current offset belong to in
+       offset current_offset = get_offset_from_coord<bnds, idx>::op(i_bnd, i_idx);
+       //shift
+       current_offset += shift;
+       //recreate idx
+       get_coord_from_offset<bnds, idx>::op(i_bnd,current_offset,o_idx);
+       }
+     };
+
    }//namespace details
 
 } //namespace

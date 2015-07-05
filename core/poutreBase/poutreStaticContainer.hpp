@@ -36,7 +36,7 @@
 #include <stdexcept>
 //#include <array>
 #include <iterator>
-
+#include <sstream>
 #ifdef _MSC_VER
 #pragma warning( push )
 #pragma warning( disable : 4425 )//4425 improper support constexpr
@@ -68,24 +68,26 @@ namespace poutre
       static_assert(std::is_arithmetic<valuetype>::value, "static_array_base only support arithmetic type");
 
    public:
-     POUTRE_STATIC_CONSTEXPR ptrdiff_t rank = Rank;
+	   POUTRE_STATIC_CONSTEXPR ptrdiff_t rank = Rank;
+	   
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+	   
       using size_type = size_t;
       using value_type = valuetype;
-      using const_value_type = std::add_const_t < value_type > ;
-      using pointer = std::add_pointer_t < value_type > ;
+	  using const_value_type = typename std::add_const<value_type>::type;
+	  using pointer = typename std::add_pointer < value_type >::type ;
       using reference = typename std::add_lvalue_reference < value_type >::type;
-      using const_pointer = std::add_pointer_t < const_value_type > ;
+	  using const_pointer = typename std::add_pointer < const_value_type >::type ;
       using const_reference = typename std::add_lvalue_reference < const_value_type >::type;
       using difference_type = std::ptrdiff_t;
-      using size_type = std::size_t;
-      using self_type = static_array_base < valuetype, rank >;
-      using array_storage = valuetype[rank];
+	  using self_type = static_array_base < valuetype, rank >;
+	   
 #endif //#ifndef DOXYGEN_SHOULD_SKIP_THIS
            
 
    protected:
-      array_storage m_array; //!actual storage has static sized buffer
+	   
+	   value_type m_array[Rank]; //!actual storage has static sized buffer
 
    public:
 /** @name Construction and Assignment
@@ -118,21 +120,21 @@ namespace poutre
 //}
 
 
-      POUTRE_CONSTEXPR explicit static_array_base(value_type a) POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR explicit static_array_base(value_type a) POUTRE_NOEXCEPT
       {
          static_assert(Rank == 1, "static_array_base(value_type) is only supported on static_array_base<T, 1>");
          m_array[0] = value_type(a);
       }
 
 
-      POUTRE_CONSTEXPR static_array_base(value_type a0, value_type a1) POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR static_array_base(value_type a0, value_type a1) POUTRE_NOEXCEPT
       {
          static_assert(Rank == 2, "static_array_base(value_type,value_type) is only supported on static_array_base<T, 2>");
          m_array[0] = value_type(a0);
          m_array[1] = value_type(a1);
       }
 
-      POUTRE_CONSTEXPR static_array_base(value_type a0, value_type  a1, value_type a2) POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR static_array_base(value_type a0, value_type  a1, value_type a2) POUTRE_NOEXCEPT
       {
          static_assert(Rank == 3,"static_array_base(value_type,value_type,value_type) is only supported on static_array_base<T, 3>");
          m_array[0] = a0;
@@ -140,7 +142,7 @@ namespace poutre
          m_array[2] = a2;
       }
 
-      POUTRE_CONSTEXPR static_array_base(value_type a0, value_type  a1, value_type a2, value_type a3) POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR static_array_base(value_type a0, value_type  a1, value_type a2, value_type a3) POUTRE_NOEXCEPT
       {
          static_assert(Rank == 4, "static_array_base(value_type,value_type,value_type,value_type) is only supported on static_array_base<T, 4>");
          m_array[0] = a0;
@@ -333,20 +335,20 @@ namespace poutre
 /**@{*/
       POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR reference operator[] (difference_type n) POUTRE_NOEXCEPTONLYNDEBUG
       {
-         POUTRE_ASSERTCHECK(n < rank, "static_array_base.at(n) n must be in [0,rank)");
-         POUTRE_ASSERTCHECK(n >= 0, "static_array_base.at(n) n must be in [0,rank)");
+         POUTRE_ASSERTCHECK(n < rank, "static_array_base[n] n must be in [0,rank)");
+         POUTRE_ASSERTCHECK(n >= 0, "static_array_base[n] n must be in [0,rank)");
          return m_array[n];
       }
 
       POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR const_reference operator[] (difference_type n) const POUTRE_NOEXCEPTONLYNDEBUG
       {
-         POUTRE_ASSERTCHECK(n < rank, "static_array_base.at(n) n must be in [0,rank)");
-         POUTRE_ASSERTCHECK(n >= 0, "static_array_base.at(n) n must be in [0,rank)");
+         POUTRE_ASSERTCHECK(n < rank, "static_array_base[n] n must be in [0,rank)");
+         POUTRE_ASSERTCHECK(n >= 0, "static_array_base[n] n must be in [0,rank)");
          return m_array[n];
       }
 
       //! Access element with bound checking
-      POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR reference at(difference_type n)
+      POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR reference at(difference_type n)
       {	
          POUTRE_CHECK(n < rank, "static_array_base.at(n) n must be in [0,rank)");
          POUTRE_CHECK(n >=0, "static_array_base.at(n) n must be in [0,rank)");
@@ -354,7 +356,7 @@ namespace poutre
       }
 
 //! Access const element with bound checking
-      POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR   const_reference at(difference_type n) const
+      POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR const_reference at(difference_type n) const
       {
          POUTRE_CHECK(n < rank, "static_array_base.at(n) n must be in [0,rank)");
          POUTRE_CHECK(n >= 0, "static_array_base.at(n) n must be in [0,rank)");
@@ -362,7 +364,7 @@ namespace poutre
       }
 
 //!Return first element of mutable sequence
-      POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR reference front( ) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR reference front( ) POUTRE_NOEXCEPT
       {
          return m_array[0];
       }
@@ -374,7 +376,7 @@ namespace poutre
       }
 
 //!Return last element of mutable sequence
-      POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR reference back( ) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR reference back( ) POUTRE_NOEXCEPT
       {	
          return m_array[rank - 1];
       }
@@ -386,7 +388,7 @@ namespace poutre
       }
 
 //! Return pointer to mutable data array
-      POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR pointer data( ) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR pointer data( ) POUTRE_NOEXCEPT
       {	
          return m_array;
       }
@@ -422,7 +424,7 @@ namespace poutre
    }
 
    template <typename value_type, int size> 
-      POUTRE_CXX14_CONSTEXPR void swap(static_array_base<value_type, size>& lhs, static_array_base<value_type, size>& rhs) POUTRE_NOEXCEPT_IF(lhs.swap(rhs))
+	   POUTRE_CXX14_CONSTEXPR void swap(static_array_base<value_type, size>& lhs, static_array_base<value_type, size>& rhs) POUTRE_NOEXCEPT //POUTRE_NOEXCEPT_IF(lhs.swap(rhs))
    {	
       (lhs.swap(rhs));
    }
@@ -455,10 +457,18 @@ namespace poutre
    public:
 
       //inherit from parent
-      using parent = static_array_base < valuetype, Rank >;
-      using self_type = static_array < valuetype, Rank >;
-      using static_array_base<valuetype, Rank>::static_array_base<valuetype, Rank>;
+	  using value_type=valuetype;
+	   
+      using parent = static_array_base < value_type, Rank >;
+      using self_type = static_array < value_type, Rank >;
+      using static_array_base<value_type, Rank>::static_array_base<value_type, Rank>;
 
+	  using parent::reference;
+	  using parent::difference_type;
+      using parent::const_pointer;
+	  using parent::pointer;
+      using parent::const_reference;
+	   
       using parent::rank;
       using parent::data;
       using parent::back;

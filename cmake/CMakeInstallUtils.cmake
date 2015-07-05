@@ -3,6 +3,7 @@
 
 function(install_lib_and_dll file_names path_to_install component)
   foreach(loop_var ${file_names})
+    message("file ${loop_var} ")
     get_filename_component(filepathabs ${loop_var} ABSOLUTE)
     get_filename_component(filepath ${filepathabs} PATH)
     get_filename_component(filename ${filepathabs} NAME_WE)
@@ -17,6 +18,7 @@ endfunction(install_lib_and_dll)
 
 function(install_realpath_with_rename file_names path_to_install component configuration)
   foreach(loop_var ${file_names})
+    message("file ${loop_var} ")
     get_filename_component(filepathreal ${loop_var} REALPATH)
     get_filename_component(filename ${loop_var} NAME)
   
@@ -65,7 +67,7 @@ function(install_POUTRE_targets)
 
 
   # installing the header files
-  get_filename_component(POUTREabs ${POUTRE_root_dir} ABSOLUTE)
+  get_filename_component(POUTREabs ${POUTRE_ROOT_DIR} ABSOLUTE)
   
   foreach(loop_var ${my_install_HEADER_FILES})
     get_filename_component(filepathabs ${loop_var} ABSOLUTE)
