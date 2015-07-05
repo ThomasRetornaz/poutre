@@ -27,8 +27,9 @@ namespace poutre
 
 #define POUTRE_NOEXCEPT BOOST_NOEXCEPT_OR_NOTHROW
 	  
-#define POUTRE_NOEXCEPT_IF(Predicate) BOOST_NOEXCEPT_IF(Predicate)
+#define POUTRE_NOEXCEPT_IF(Predicate) BOOST_NOEXCEPT_IF((Predicate))
 
+#define POUTRE_NOEXCEPT_EXPR(Predicate) BOOST_NOEXCEPT_EXPR((Predicate))
 
 #ifndef NDEBUG
 #define POUTRE_NOEXCEPTONLYNDEBUG 
@@ -138,7 +139,7 @@ namespace poutre
 #endif
 
 } //namespace
-#endif DOXYGEN_SHOULD_SKIP_THIS
+#endif //DOXYGEN_SHOULD_SKIP_THIS
 #endif
 
 

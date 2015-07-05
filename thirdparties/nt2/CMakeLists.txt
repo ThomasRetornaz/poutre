@@ -1,8 +1,4 @@
-if(WIN32)
-cmake_minimum_required (VERSION 3.2)
-else()
-cmake_minimum_required (VERSION 2.8)
-endif()
+cmake_minimum_required (VERSION 3.0)
 project(nt2Builder)
 
 
@@ -47,8 +43,7 @@ set(NT2_DIR ${nt2_PREFIX}/cmake)
 find_package(NT2 REQUIRED)
 include(${NT2_USE_FILE})
 include_directories(${NT2_INCLUDE_DIR})
-#MESSAGE(FATAL_ERROR "NT2_INCLUDE_DIR ${NT2_INCLUDE_DIR}")
-#MESSAGE(FATAL_ERROR "NT2_COMPILE_FLAGS ${NT2_COMPILE_FLAGS}")
+SET(NT2_INCLUDE_DIR ${NT2_INCLUDE_DIR} PARENT_SCOPE) #we can do better
 
 # add_library(BoostSimd INTERFACE)
 # set_property(TARGET BoostSimd

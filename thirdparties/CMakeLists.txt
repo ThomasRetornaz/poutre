@@ -66,8 +66,8 @@ set(POUTRE_boost_version_minimal 1.57)
 find_package(Boost ${POUTRE_boost_version_minimal}
              REQUIRED 
              COMPONENTS 
-						#date_time 
-						#filesystem 
+						date_time 
+						filesystem 
 						system 
 						thread 
 						regex 
@@ -88,9 +88,9 @@ set(BoostFilesToInstall
   ${Boost_PYTHON_LIBRARY_RELEASE}
   ${Boost_SYSTEM_LIBRARY_RELEASE}
   ${Boost_GRAPH_LIBRARY_RELEASE}  
-  #${Boost_DATE_TIME_LIBRARY_RELEASE}
+  ${Boost_DATE_TIME_LIBRARY_RELEASE}
   ${Boost_THREAD_LIBRARY_RELEASE}
-  #${Boost_FILESYSTEM_LIBRARY_RELEASE}
+  ${Boost_FILESYSTEM_LIBRARY_RELEASE}
   ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY_RELEASE}
   ${Boost_REGEX_LIBRARY_RELEASE}
   ${Boost_LOG_LIBRARY_RELEASE}  
@@ -99,8 +99,8 @@ set(BoostFilesToInstall
 set(BoostFilesToInstall ${BoostFilesToInstall} PARENT_SCOPE)
 
 # to avoid a change in behaviour introduced between cmake 2.8.7 and 2.8.11
-#set(Boost_DATE_TIME_LIBRARY           ${Boost_DATE_TIME_LIBRARY}            PARENT_SCOPE)
-#set(Boost_FILESYSTEM_LIBRARY          ${Boost_FILESYSTEM_LIBRARY}           PARENT_SCOPE)
+set(Boost_DATE_TIME_LIBRARY           ${Boost_DATE_TIME_LIBRARY}            PARENT_SCOPE)
+set(Boost_FILESYSTEM_LIBRARY          ${Boost_FILESYSTEM_LIBRARY}           PARENT_SCOPE)
 set(Boost_SYSTEM_LIBRARY              ${Boost_SYSTEM_LIBRARY}               PARENT_SCOPE)
 set(Boost_THREAD_LIBRARY              ${Boost_THREAD_LIBRARY}               PARENT_SCOPE)
 set(Boost_REGEX_LIBRARY               ${Boost_REGEX_LIBRARY}                PARENT_SCOPE)
@@ -129,6 +129,7 @@ endif()
 add_subdirectory(nt2)
 SET(NT2_COMPILE_FLAGS ${NT2_COMPILE_FLAGS} PARENT_SCOPE) #we can do better
 SET(NT2_LINK_FLAGS ${NT2_LINK_FLAGS} PARENT_SCOPE) #we can do better
+SET(NT2_INCLUDE_DIR ${NT2_INCLUDE_DIR} PARENT_SCOPE) #we can do better
 # boostsimd
 #add_subdirectory(boostsimd)
 SET(NT2_COMPILE_FLAGS ${NT2_COMPILE_FLAGS} PARENT_SCOPE) 

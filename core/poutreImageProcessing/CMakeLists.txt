@@ -1,4 +1,4 @@
-
+include_directories(${POUTRE_CORE_DIR})
 
 set(PoutreIPSubdirectory ${POUTRE_CORE_DIR}/poutreImageProcessing)
 
@@ -50,10 +50,16 @@ add_library(PoutreImageProcessing ${PoutreIPSRC})
   # )
 
 target_link_libraries(PoutreImageProcessing 
+  PUBLIC ${Boost_THREAD_LIBRARY}  
+  PUBLIC ${Boost_SYSTEM_LIBRARY} 
+  PUBLIC ${Boost_FILESYSTEM_LIBRARY}
+  PUBLIC ${Boost_LOG_LIBRARY}
+  PUBLIC ${Boost_LOG_SETUP_LIBRARY}
   PUBLIC jsoncpp 
   #INTERFACE Eigen  
   INTERFACE BoostSimd 
   PUBLIC   PoutreBase 
+
   )
 set_target_properties(PoutreImageProcessing PROPERTIES FOLDER "Core/")
 

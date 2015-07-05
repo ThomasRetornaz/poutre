@@ -479,7 +479,7 @@ namespace poutre
       {
          POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(bnds const & bnd, idx const & id) POUTRE_NOEXCEPT
 		  {
-            static_assert(bnds::rank == idx::rank);
+            static_assert(bnds::rank == idx::rank, "helper_contains_container_op: all provided container must share same rank");
             for ( size_t i = 0; i < Rank; i++ )
             {
                if ( id[i] < 0 ) return false;
@@ -632,7 +632,7 @@ namespace poutre
    }//namespace details
 
 } //namespace
-#endif DOXYGEN_SHOULD_SKIP_THIS
+#endif //DOXYGEN_SHOULD_SKIP_THIS
 
 #ifdef _MSC_VER
 #pragma warning( pop ) 

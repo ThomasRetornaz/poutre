@@ -14,10 +14,7 @@
 
 namespace poutre
   {
-
-  template class std::vector < std::size_t > ;
-
-  std::ostream& operator<<(std::ostream& stream, const IInterface& img)
+	  std::ostream& operator<<(std::ostream& stream, const IInterface& img)
     {
     stream << img.str( );
     return stream;

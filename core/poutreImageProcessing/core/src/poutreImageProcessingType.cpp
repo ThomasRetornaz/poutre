@@ -8,7 +8,7 @@
 //==============================================================================
 
 #include <poutreImageProcessing/core/poutreImageProcessingType.hpp>
-#include <PoutreBase/poutreTrace.hpp>
+#include <poutreBase/poutreTrace.hpp>
 
 namespace poutre
   {

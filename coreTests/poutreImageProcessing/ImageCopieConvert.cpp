@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_CASE(getsame)
   ImageType* getSame = dynamic_cast<ImageType*>(getSameii.get( ));
   BOOST_CHECK(getSame);
   //!= address
-  BOOST_CHECK_NE(&(*getSame), &(img));
+  BOOST_CHECK_NE(getSame, &(img));
   //!= data address
   BOOST_CHECK_NE(&(*((*getSame).datas( ))), &(*(img.datas( ))));
   BOOST_CHECK_EQUAL((*getSame).GetCType( ), poutre::CompoundType::CompoundType_Scalar);

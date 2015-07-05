@@ -94,7 +94,7 @@ namespace poutre
 
     return logger;
     }
-#endif DOXYGEN_SHOULD_SKIP_THIS
+#endif //DOXYGEN_SHOULD_SKIP_THIS
 
 
   /** @name Global logger macros

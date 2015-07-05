@@ -32,8 +32,6 @@
 
 namespace poutre
 {
-   extern template class std::vector<std::size_t>;
-
 /**
  * @addtogroup image_processing_group Image Processing Group
  *

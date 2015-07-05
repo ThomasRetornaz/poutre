@@ -74,8 +74,7 @@ namespace poutre
 
       //inherit from parent
       using parent = static_array_base < ptrdiff_t, Rank > ;
-      using size_type = parent::size_type;
-      using value_type = typename parent::value_type;
+	  using value_type = typename parent::value_type;
       using const_value_type = typename  parent::const_value_type;
       using pointer = typename parent::pointer;
       using reference = typename  parent::reference;
@@ -83,13 +82,16 @@ namespace poutre
       using const_pointer = typename  parent::const_pointer;
       using const_reference = typename  parent::const_reference;
       using difference_type = typename parent::difference_type;
-      using size_type = parent::size_type;
+      using size_type = typename parent::size_type;
 
       using self_type = bounds < Rank > ;
-      using static_array_base<ptrdiff_t, Rank>::static_array_base < ptrdiff_t, Rank > ;
+	  using const_iterator =  bounds_iterator<Rank>;
+      using iterator =  bounds_iterator<Rank>;
+	   
+	   //using static_array_base<ptrdiff_t, Rank>::static_array_base < ptrdiff_t, Rank > ;
+	  using parent::parent;
+	   
 
-      using const_iterator = typename bounds_iterator<Rank>;
-      using iterator = typename bounds_iterator<Rank>;
       
 	  using parent::data;
       using parent::back;
@@ -117,7 +119,7 @@ namespace poutre
 #endif //#ifndef DOXYGEN_SHOULD_SKIP_THIS
 
    protected:
-      using parent::m_array;
+       using parent::m_array;
 
 
    public:
@@ -126,12 +128,14 @@ namespace poutre
 
       /**@{*/
 
-      POUTRE_CONSTEXPR bounds( ) :parent( ) POUTRE_NOEXCEPT_IF(parent( ))
-      {
+      POUTRE_CXX14_CONSTEXPR  bounds( ) POUTRE_NOEXCEPT_IF(POUTRE_NOEXCEPT_EXPR(parent()))
+		  :parent( )
+	  {
          details::helper_assign_container_valueop<self_type, AssignOpType::AssignOp, Rank>::op(0, *this);
       }
 
-      POUTRE_CONSTEXPR explicit bounds(value_type a) :parent(a) POUTRE_NOEXCEPT_IF(parent(a))
+      POUTRE_CONSTEXPR explicit bounds(value_type a) POUTRE_NOEXCEPT_IF(POUTRE_NOEXCEPT_EXPR(parent(a)))
+		  :parent(a)
       {
       }
 
@@ -139,11 +143,13 @@ namespace poutre
       {
       }
 
-      POUTRE_CXX14_CONSTEXPR explicit bounds(const value_type(&rhs)[Rank]) : parent(rhs) POUTRE_NOEXCEPT_IF(parent(rhs))
+      POUTRE_CXX14_CONSTEXPR explicit bounds(const value_type(&rhs)[Rank]) POUTRE_NOEXCEPT_IF(POUTRE_NOEXCEPT_EXPR(parent(rhs)))
+		  : parent(rhs)
       {
       }
 
-      POUTRE_CONSTEXPR bounds(const parent& rhs) : parent(rhs) POUTRE_NOEXCEPT_IF(parent(rhs))
+      POUTRE_CONSTEXPR bounds(const parent& rhs) POUTRE_NOEXCEPT_IF(POUTRE_NOEXCEPT_EXPR(parent(rhs)))
+		  : parent(rhs) 
       {
       }
 
@@ -195,7 +201,7 @@ namespace poutre
 
 
       //!returns  a  hyper  volume  of  the  rectangular  space  enclosed  by  *this,  i.e.  the  product  of  all components.
-      POUTRE_CONSTEXPR size_type size( ) const POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR size_type size( ) const POUTRE_NOEXCEPT
       {
          size_t volume = m_array[0]; //at least rank==1
          for ( size_t i = 1; i < rank; i++ ) volume *= m_array[i];
@@ -250,8 +256,7 @@ namespace poutre
 
       //inherit from parent
       using parent = static_array_base < ptrdiff_t, Rank > ;
-      using size_type = parent::size_type;
-      using value_type = typename parent::value_type;
+	  using value_type = typename parent::value_type;
       using const_value_type = typename  parent::const_value_type;
       using pointer = typename  parent::pointer;
       using reference = typename parent::reference;
@@ -259,11 +264,12 @@ namespace poutre
       using const_pointer = typename parent::const_pointer;
       using const_reference = typename parent::const_reference;
       using difference_type = typename parent::difference_type;
-      using size_type = parent::size_type;
+      using size_type = typename parent::size_type;
 
       using self_type = index < Rank > ;
-      using static_array_base<ptrdiff_t, Rank>::static_array_base < ptrdiff_t, Rank > ;
-
+	   //using static_array_base<ptrdiff_t, Rank>::static_array_base < ptrdiff_t, Rank > ;
+	  using parent::parent;
+	   
       using parent::rank;
       using parent::data;
       using parent::back;
@@ -298,12 +304,14 @@ namespace poutre
 
       /**@{*/
 
-      POUTRE_CONSTEXPR index( ) :parent( ) POUTRE_NOEXCEPT_IF(parent( ))
+      POUTRE_CXX14_CONSTEXPR index( ) POUTRE_NOEXCEPT_IF(POUTRE_NOEXCEPT_EXPR(parent()))
+		  :parent( )
       {
          details::helper_assign_container_valueop<self_type, AssignOpType::AssignOp, Rank>::op(0,*this);
       }
 
-      POUTRE_CONSTEXPR explicit index(value_type a) :parent(a) POUTRE_NOEXCEPT_IF(parent(a))
+      POUTRE_CONSTEXPR explicit index(value_type a) POUTRE_NOEXCEPT_IF(POUTRE_NOEXCEPT_EXPR(parent(a)))
+		  :parent(a) 
       {
       }
 
@@ -311,11 +319,13 @@ namespace poutre
       {
       }
 
-      POUTRE_CXX14_CONSTEXPR explicit index(const value_type(&rhs)[Rank]) : parent(rhs) POUTRE_NOEXCEPT_IF(parent(rhs))
+      POUTRE_CXX14_CONSTEXPR explicit index(const value_type(&rhs)[Rank]) POUTRE_NOEXCEPT_IF(POUTRE_NOEXCEPT_EXPR(parent(rhs)))
+		  : parent(rhs)
       {
       }
 
-      POUTRE_CONSTEXPR index(const parent& rhs) : parent(rhs) POUTRE_NOEXCEPT_IF(parent(rhs))
+      POUTRE_CONSTEXPR index(const parent& rhs) POUTRE_NOEXCEPT_IF(POUTRE_NOEXCEPT_EXPR(parent(rhs)))
+		  : parent(rhs)
       {
       }
 
@@ -362,27 +372,27 @@ namespace poutre
       }
 
 
-      template <ptrdiff_t Rank, typename std::enable_if<Rank == 1, void>::type* = nullptr>
+	   template <ptrdiff_t R=Rank,typename std::enable_if<R == 1, void>::type* = nullptr>
          POUTRE_CXX14_CONSTEXPR self_type& operator++() POUTRE_NOEXCEPT
       {
          (++(*this)[0]);
          return *this;
       }
 
-      template <ptrdiff_t Rank, typename std::enable_if<Rank == 1, void>::type* = nullptr>
+      template <ptrdiff_t R=Rank,typename std::enable_if<R == 1, void>::type* = nullptr>
          POUTRE_CXX14_CONSTEXPR self_type  operator++(int) POUTRE_NOEXCEPT
       {
          return (index < Rank > {(*this)[0]++});
       }
 
-      template <ptrdiff_t Rank, typename std::enable_if<Rank == 1, void>::type* = nullptr>
+      template <ptrdiff_t R=Rank,typename std::enable_if<R == 1, void>::type* = nullptr>
          POUTRE_CXX14_CONSTEXPR self_type& operator--() POUTRE_NOEXCEPT
       {
          (--(*this)[0]);
          return *this;
       }
 
-      template <ptrdiff_t Rank, typename std::enable_if<Rank == 1, void>::type* = nullptr>
+      template <ptrdiff_t R=Rank,typename std::enable_if<R == 1, void>::type* = nullptr>
          POUTRE_CXX14_CONSTEXPR self_type  operator--(int) POUTRE_NOEXCEPT
       {
          return (index < Rank > {(*this)[0]--});
@@ -477,18 +487,22 @@ namespace poutre
    {
       static_assert(Rank > 0,
                     "bounds_iterator requires a Rank>0");
-      POUTRE_STATIC_CONSTEXPR ptrdiff_t rank = Rank;
+      POUTRE_STATIC_CONSTEXPR ptrdiff_t rank= Rank;
    public:
       using parent = std::iterator < std::random_access_iterator_tag,index<Rank>, ptrdiff_t, const index<Rank>, const index<Rank> > ;
       using self_type = bounds_iterator < Rank > ;
-
+	  using difference_type=typename parent::difference_type;
+	  using reference=typename parent::reference;
+	  using pointer=typename parent::pointer;
+	  
    protected:
       bounds<Rank> m_bnd;
       index<Rank>  m_idx;
       index<Rank>  m_idxend;
 
    public:
-      bounds_iterator(const bounds<Rank>& bnd, const index<Rank>& curr = index < Rank > {}) POUTRE_NOEXCEPT : m_bnd(bnd), m_idx(curr), m_idxend(m_bnd)
+      bounds_iterator(const bounds<Rank>& bnd, const index<Rank>& curr = index < Rank > {}) POUTRE_NOEXCEPT
+		  : m_bnd(bnd), m_idx(curr), m_idxend(m_bnd)
       {
          //The precondition is that bnd.contains(curr) unless bnd.size() = 0.
          if ( bnd.size( ) != 0)
@@ -582,23 +596,7 @@ namespace poutre
          return *this;
       }
       
-        //size_t _Off(_Sizarray& _Indexarr) const
-        //{	// return offset for an array of indexes, then increment
-        //size_t _Idx, _Ans = _Start;
-
-        //for ( _Idx = 0; _Idx < _Indexarr.size( ); ++_Idx )
-        //  _Ans += _Indexarr[_Idx] * _Stride[_Idx];	// compute offset
-
-        //while ( 0 < _Idx-- )
-        //  if ( ++_Indexarr[_Idx] < _Len[_Idx] )
-        //    break;	// increment done, quit
-        //  else
-        //    _Indexarr[_Idx] = 0;	// carry to more-significant index
-        //return (_Ans);
-        //}
-
-
-      bounds_iterator  operator--(int) POUTRE_NOEXCEPTONLYNDEBUG
+	 bounds_iterator  operator--(int) POUTRE_NOEXCEPTONLYNDEBUG
       {
          return --tmp(*this);
       }
@@ -653,7 +651,7 @@ namespace poutre
       //   pointer   operator->() const;  //implement or throw ?
 
       //! 
-      difference_type operator[](difference_type n) const POUTRE_NOEXCEPT_IF(m_idx[n])
+      difference_type operator[](difference_type n) const POUTRE_NOEXCEPT
       {
          return m_idx[n];
       }
@@ -738,15 +736,15 @@ namespace poutre
    //extern template class index <3>;
    //extern template class index <4>;
 
-   typedef bounds <1> bounds_1; //!alias bounds 1D
-   typedef bounds <2> bounds_2; //!alias bounds 2D
-   typedef bounds <3> bounds_3; //!alias bounds 3D
-   typedef bounds <4> bounds_4; //!alias bounds 4D
+   typedef bounds<1> bounds_1; //!alias bounds 1D
+   typedef bounds<2> bounds_2; //!alias bounds 2D
+   typedef bounds<3> bounds_3; //!alias bounds 3D
+   typedef bounds<4> bounds_4; //!alias bounds 4D
 
-   typedef index <1> index_1; //!alias index 1D
-   typedef index <2> index_2; //!alias index 2D
-   typedef index <3> index_3; //!alias index 3D
-   typedef index <4> index_4; //!alias index 4D
+   typedef index<1> index_1; //!alias index 1D
+   typedef index<2> index_2; //!alias index 2D
+   typedef index<3> index_3; //!alias index 3D
+   typedef index<4> index_4; //!alias index 4D
 
 
 } //namespace

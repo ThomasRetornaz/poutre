@@ -42,13 +42,13 @@ namespace poutre
   template <
     class valuetype,
     std::size_t NumDims = 2,
-    class allocator_type_t = boost::simd::allocator < TypeTraits<valuetype>::storage_type, TypeTraits<valuetype>::alignement >
+    class allocator_type_t = boost::simd::allocator < typename TypeTraits<valuetype>::storage_type, TypeTraits<valuetype>::alignement >
   >
   class DenseImage : public IInterface
     {
     public:
 
-      using  self_type = DenseImage < valuetype, NumDims, allocator_type_t >;
+
       using  parent_type = IInterface;
 
       using  value_type = valuetype;//typename TypeTraits<ptype>::storage_type;
@@ -76,16 +76,18 @@ namespace poutre
       static const CompoundType m_ctype = TypeTraits<value_type>::compound_type;
 
 
-      static const size_t m_numdims = NumDims;
-      static const size_t alignement = TypeTraits<valuetype>::alignement;
+		static const std::size_t m_numdims = NumDims;
+      static const std::size_t alignement = TypeTraits<valuetype>::alignement;
       static const ImgType m_imgtype = ImgType::ImgType_Dense;
 
     private:
       pointer m_data;
       size_list_t m_size_list;
       allocator_type m_allocator;
-      size_t m_numelemwithpaddingifany;
+	  size_type m_numelemwithpaddingifany;
 
+	public:
+	      using  self_type = DenseImage < valuetype, NumDims, allocator_type_t >;	
     public:
       DenseImage(const std::vector<size_t>& dims) :m_data(nullptr), m_size_list( ), m_allocator( ), m_numelemwithpaddingifany(0)
         {
@@ -272,7 +274,8 @@ namespace poutre
               }
     protected:
       //protected copyctor used through clone
-      self_type(const self_type& rhs) :m_data(nullptr), m_numelemwithpaddingifany(rhs.m_numelemwithpaddingifany), m_size_list(rhs.m_size_list), m_allocator(rhs.m_allocator)
+      DenseImage(const self_type& rhs)
+		  : m_data(nullptr), m_numelemwithpaddingifany(rhs.m_numelemwithpaddingifany),m_size_list(rhs.m_size_list), m_allocator(rhs.m_allocator)
         {
         m_data = m_allocator.allocate(m_numelemwithpaddingifany);
         std::copy(rhs.m_data, rhs.m_data + m_numelemwithpaddingifany, m_data);
@@ -282,7 +285,7 @@ namespace poutre
       self_type& operator=(const self_type& other) = delete;
 
       //move constructor 
-      self_type(self_type&& rhs) :m_data(nullptr), m_numelemwithpaddingifany(0), m_size_list(),m_allocator()
+      DenseImage(self_type&& rhs) :m_data(nullptr), m_numelemwithpaddingifany(0), m_size_list(),m_allocator()
           {
           *this = std::move(rhs);
           }

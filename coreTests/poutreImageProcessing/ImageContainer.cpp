@@ -46,7 +46,7 @@ BOOST_AUTO_TEST_CASE(clone)
   ImageType* cloned = dynamic_cast<ImageType*>(clonedinterface.get( ));
   BOOST_CHECK(cloned);
   //!= address
-  BOOST_CHECK_NE(&(*cloned), &(img));
+  BOOST_CHECK_NE(cloned, &(img));
   //!= data address
   BOOST_CHECK_NE(&(*((*cloned).datas( ))), &(*(img.datas( ))));
   BOOST_CHECK_EQUAL((*cloned).GetPType( ), poutre::PType::PType_GrayUINT8);
