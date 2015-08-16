@@ -61,7 +61,7 @@ target_link_libraries(PoutreImageProcessing
   PUBLIC   PoutreBase 
 
   )
-set_target_properties(PoutreImageProcessing PROPERTIES FOLDER "Core/")
+set_target_properties(PoutreImageProcessing PROPERTIES FOLDER "CoreCPP/")
 
 IF(BUILD_SHARED_LIBS)
   SET_TARGET_PROPERTIES(PoutreBase PROPERTIES COMPILE_FLAGS -DJSON_DLL)

@@ -154,6 +154,7 @@ namespace poutre
     * @{
     */
 
+//@todo unroll
 #define VIEW_ACESS(data,idx,stride,rank)            \
                    {                                \
                   ptrdiff_t offset = 0;             \
@@ -164,6 +165,7 @@ namespace poutre
                   return *(data + offset);          \
                    }
 
+//@todo unroll
 #define INIT_DEFAULT_STRIDE(bound,stride,rank) \
    stride[rank - 1] = 1;                       \
    for ( ptrdiff_t i = Rank - 2; i >= 0; i-- ) \
@@ -200,7 +202,8 @@ namespace poutre
 #endif
       
     private:
-      bounds_type m_bnd;      
+      bounds_type m_bnd;
+      index_type m_stride_idx;
       pointer m_data;
 		
     public:
@@ -209,10 +212,11 @@ namespace poutre
       /**@{*/
 
       //!Default ctor
-      POUTRE_CONSTEXPR array_view( ) POUTRE_NOEXCEPT_IF(POUTRE_NOEXCEPT_EXPR(bounds_type()))
-		  :m_bnd(), m_data(nullptr) 
-      {
-      }
+      POUTRE_CXX14_CONSTEXPR array_view( ) POUTRE_NOEXCEPT_IF(POUTRE_NOEXCEPT_EXPR(bounds_type( )) && POUTRE_NOEXCEPT_EXPR(index_type( )))
+        :m_bnd( ), m_stride_idx( ), m_data(nullptr)
+        {
+        INIT_DEFAULT_STRIDE(m_bnd, m_stride_idx, Rank);
+        }
       template <class Viewable>
       //template <class Viewable,
       //  typename std::enable_if<
@@ -221,9 +225,10 @@ namespace poutre
       //  && Rank == 1 /*,int */>::type* = nullptr>
       //!ctor from viewable object, mainly contiguous container C providing C.data(),C.size() interface and using the same value_type
       //@warning only available for rank==1
-      POUTRE_CONSTEXPR array_view(Viewable&& vw) :m_bnd(vw.size( )), m_data(vw.data())
+      POUTRE_CXX14_CONSTEXPR array_view(Viewable&& vw) :m_bnd(vw.size( )), m_stride_idx( ), m_data(vw.data( ))
       {
       static_assert(Rank == 1, "array_view(Viewable&& vw) is only allowed for rank=1 view");
+      INIT_DEFAULT_STRIDE(m_bnd, m_stride_idx, Rank);
       }
       
       template <class U, ptrdiff_t AnyRank,
@@ -234,7 +239,7 @@ namespace poutre
       //!ctor from other array_view with AnyRank is only allowed for flattened view (ie Rank=1)
       //@warning only available for rank==1
       POUTRE_CONSTEXPR array_view(const array_view<U, AnyRank>& rhs) POUTRE_NOEXCEPT
-		  :m_bnd(rhs.m_bnd.size()), m_data(rhs.m_data) 
+      :m_bnd(rhs.m_bnd.size( )), m_stride_idx(rhs.m_stride_idx), m_data(rhs.m_data)
       {
       }
 
@@ -259,8 +264,8 @@ namespace poutre
 		  std::is_same<typename std::remove_cv<U>::type, typename std::remove_cv<value_type>::type>::value
       >::type* = nullptr>
       //!copy ctor      
-		  POUTRE_CONSTEXPR array_view(const array_view<U, Rank>& rhs) POUTRE_NOEXCEPT_IF(POUTRE_NOEXCEPT_EXPR((m_bnd(rhs.m_bnd))))
-		  :m_bnd(rhs.m_bnd), m_data(rhs.m_data) 
+      POUTRE_CONSTEXPR array_view(const array_view<U, Rank>& rhs) POUTRE_NOEXCEPT_IF(POUTRE_NOEXCEPT_EXPR((m_bnd(rhs.m_bnd))) && POUTRE_NOEXCEPT_EXPR((m_stride_idx(rhs.m_stride_idx))))
+      :m_bnd(rhs.m_bnd), m_stride_idx(rhs.m_stride_idx), m_data(rhs.m_data)
         {
 
         }
@@ -268,27 +273,31 @@ namespace poutre
       
       template <class Viewable>
       //TODO fix SFINAE behavior!!!!! 
-      //typename std::enable_if<std::is_same<typename std::remove_cv<T>::type, typename std::remove_cv<typename Viewable::value_type>::type>::value
-      //&&std::is_convertible<typename std::add_pointer<typename Viewable::value_type>::type, pointer>::value
-      //>::type* = nullptr>
+      /*  typename std::enable_if<
+        std::is_convertible<typename std::add_pointer<typename details::extract_value_type<Viewable>::value_type>::type, pointer>::value &&
+        std::is_same<typename std::remove_cv<typename details::extract_value_type<Viewable>::value_type>::type, typename std::remove_cv<value_type>::type>::value
+      >::type* = nullptr>*/
+
       //!ctor from an other view
       //@note This constructor may be used to create an array_view with a different rank and/or bounds than the original array_view, i.e. reshape the view.
-      POUTRE_CXX14_CONSTEXPR array_view(Viewable&& vw, bounds_type bound) :m_bnd(bound), m_data(vw.data())
+      POUTRE_CXX14_CONSTEXPR array_view(Viewable&& vw, bounds_type bound) :m_bnd(bound), m_stride_idx(), m_data(vw.data( ))
       {
       if ( vw.size( ) < bound.size( ) )
         {
         POUTRE_RUNTIME_ERROR("array_view(Viewable&& vw, bounds_type bound) can't create view, provided bounds overfit vw");
         }
+      INIT_DEFAULT_STRIDE(m_bnd, m_stride_idx, Rank);
       }
       
       //!ctor from nude ptr 
       //@warning Requires: [ptr, ptr + bounds.size()) is a valid range. 
-      POUTRE_CXX14_CONSTEXPR array_view(pointer ptr, bounds_type bound) : m_bnd(bound), m_data(ptr)
+      POUTRE_CXX14_CONSTEXPR array_view(pointer ptr, bounds_type bound) : m_bnd(bound), m_stride_idx( ), m_data(ptr)
         {
         if ( !m_data && bound.size( ) != 0 )
           {
           POUTRE_RUNTIME_ERROR("array_view(pointer ptr, bounds_type bound) null ptr is allowed only if bound.size()==0");
           }
+        INIT_DEFAULT_STRIDE(m_bnd, m_stride_idx, Rank);
         }
       
       template <class U,
@@ -300,6 +309,7 @@ namespace poutre
       POUTRE_CXX14_CONSTEXPR self_type& operator=(const array_view<U, Rank>& rhs) POUTRE_NOEXCEPT
         {
         m_bnd = rhs.m_bnd;
+        m_stride_idx = rhs.m_stride_idx;
         m_data = rhs.m_data;
         return *this;
 		}
@@ -325,9 +335,7 @@ namespace poutre
       //!Getter stride of view
       POUTRE_CXX14_CONSTEXPR index_type  stride( ) const POUTRE_NOEXCEPT
         {
-			index_type stride; //FIXME cache in CTOR 
-        INIT_DEFAULT_STRIDE(m_bnd, stride, Rank);
-        return stride;
+        return m_stride_idx;
         }
 
       //!Getter raw access to underlying data ptr to the contiguous sequence on which the view was created. 
@@ -346,7 +354,7 @@ namespace poutre
         {
         POUTRE_ASSERTCHECK(m_bnd.contains(idx) == true,"Out of bound");
         //VIEW_ACESS(this->data(), idx, this->stride(),Rank);
-		VIEW_ACESS(m_data, idx, this->stride(),Rank);
+        VIEW_ACESS(m_data, idx, m_stride_idx, Rank);
         }
       /**@}*/
 

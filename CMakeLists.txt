@@ -1,12 +1,6 @@
 #Most of the initial cmake skeleton  was heavely inspired from yayi project see https://bitbucket.org/renficiaud/yayi.git. and rapidjosn 
-#if(WIN32)
 cmake_minimum_required (VERSION 3.0)
-#else()
-#cmake_minimum_required (VERSION 2.8)
-#endif()
-
 project(Poutre)
-
 
 # some global properties
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)

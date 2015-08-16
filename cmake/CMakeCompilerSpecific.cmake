@@ -1,4 +1,4 @@
-
+cmake_minimum_required (VERSION 3.0)
 include(CheckCXXCompilerFlag)
 message(STATUS "host processor " ${CMAKE_HOST_SYSTEM_PROCESSOR} " target processor " ${CMAKE_SYSTEM_PROCESSOR})
 

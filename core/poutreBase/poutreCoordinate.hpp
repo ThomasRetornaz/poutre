@@ -87,10 +87,11 @@ namespace poutre
       using self_type = bounds < Rank > ;
 	  using const_iterator =  bounds_iterator<Rank>;
       using iterator =  bounds_iterator<Rank>;
-	   
-	   //using static_array_base<ptrdiff_t, Rank>::static_array_base < ptrdiff_t, Rank > ;
+#ifdef _MSC_VER	   
+	  using static_array_base<ptrdiff_t, Rank>::static_array_base < ptrdiff_t, Rank > ;
+#else
 	  using parent::parent;
-	   
+#endif	   
 
       
 	  using parent::data;
@@ -267,8 +268,11 @@ namespace poutre
       using size_type = typename parent::size_type;
 
       using self_type = index < Rank > ;
-	   //using static_array_base<ptrdiff_t, Rank>::static_array_base < ptrdiff_t, Rank > ;
+#ifdef _MSC_VER	 
+	   using static_array_base<ptrdiff_t, Rank>::static_array_base < ptrdiff_t, Rank > ;
+#else
 	  using parent::parent;
+#endif
 	   
       using parent::rank;
       using parent::data;
@@ -564,8 +568,9 @@ namespace poutre
          return m_idx>=rhs.m_idx;
       }
 
-      bounds_iterator& operator++() POUTRE_NOEXCEPTONLYNDEBUG //todo profile for low rank, may unroll
+      bounds_iterator& operator++() POUTRE_NOEXCEPTONLYNDEBUG 
       {
+         //@todo profile for low rank, may unroll
          for ( auto i = rank - 1; i >= 0; --i )
          {
             if ( ++m_idx[i] < m_bnd[i] )
@@ -584,8 +589,9 @@ namespace poutre
 
       }
 
-      bounds_iterator& operator--() POUTRE_NOEXCEPTONLYNDEBUG//todo profile for low rank, may unroll
+      bounds_iterator& operator--() POUTRE_NOEXCEPTONLYNDEBUG
       {
+         //@todo profile for low rank, may unroll
          for ( auto i = rank - 1; i >= 0; --i )
          {
             if ( --m_idx[i] >= 0 )

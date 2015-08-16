@@ -461,8 +461,11 @@ namespace poutre
 	   
       using parent = static_array_base < value_type, Rank >;
       using self_type = static_array < value_type, Rank >;
-	   //using static_array_base<value_type, Rank>::static_array_base<value_type, Rank>;
+#ifdef _MSC_VER
+	   using static_array_base<value_type, Rank>::static_array_base<value_type, Rank>;
+#else
       using parent::parent;
+#endif
 	  using parent::reference;
 	  using parent::difference_type;
       using parent::const_pointer;

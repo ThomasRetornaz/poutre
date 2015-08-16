@@ -30,8 +30,9 @@ if(UNIX AND NOT APPLE AND NOT POUTRE_BOOST_FROM_SYSTEM)
 endif()
 
 set(Boost_ADDITIONAL_VERSIONS   
-    "1.57" "1.57.0" )
-# use of the cmake special package
+    "1.57" "1.57.0" 
+	"1.58" "1.58.0"
+	"1.59" "1.59.0")
 
 # disable auto link
 add_definitions(-DBOOST_ALL_NO_LIB)
@@ -108,7 +109,7 @@ set(Boost_UNIT_TEST_FRAMEWORK_LIBRARY ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}  PARE
 set(Boost_PYTHON_LIBRARY              ${Boost_PYTHON_LIBRARY}               PARENT_SCOPE)
 set(Boost_GRAPH_LIBRARY               ${Boost_GRAPH_LIBRARY}                PARENT_SCOPE)
 set(Boost_LOG_LIBRARY                 ${Boost_LOG_LIBRARY}                  PARENT_SCOPE)
-set(Boost_LOG_SETUP_LIBRARY           ${Boost_LOG_SETUP_LIBRARY}                PARENT_SCOPE)
+set(Boost_LOG_SETUP_LIBRARY           ${Boost_LOG_SETUP_LIBRARY}            PARENT_SCOPE)
 
 message(STATUS "Boost library found in " ${Boost_LIBRARY_DIRS})
 message(STATUS "Boost major.minor.subminor=${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_SUBMINOR_VERSION}")
@@ -139,7 +140,10 @@ add_subdirectory(jsoncpp)
 #SET(JSONCPP_INCLUDE_DIR ${JSONCPP_INCLUDE_DIR} PARENT_SCOPE)
 
 
-
+# png
+add_subdirectory(png)
+# jpeg
+add_subdirectory(jpeg)
 # eigen
 add_subdirectory(eigen)
 
