@@ -25,19 +25,28 @@
 #include <poutreBase/poutreTypes.hpp>
 #endif
 
+namespace std
+  {
+  struct contiguous_iterator_tag : std::random_access_iterator_tag
+    {
+    };
+  }
+
 namespace poutre
 {
+  
+
    //!Raw dense iterator with random access  
    template<typename DataType>
-      class pdense_iterator : public std::iterator < std::random_access_iterator_tag,
+   class pdense_iterator : public std::iterator < std::contiguous_iterator_tag,
       DataType,
       std::ptrdiff_t,
       DataType*,
       DataType& >
    {
    public:
-      using parent = std::iterator < std::random_access_iterator_tag, DataType, std::ptrdiff_t, DataType*, DataType& > ;
-	  using reference = typename parent::reference;
+      using parent = std::iterator < std::contiguous_iterator_tag, DataType, std::ptrdiff_t, DataType*, DataType& >;
+      using reference = typename parent::reference;
       using pointer = typename parent::pointer;	   
       using self_type = pdense_iterator < DataType > ;
 

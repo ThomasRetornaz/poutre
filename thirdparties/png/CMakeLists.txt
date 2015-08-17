@@ -9,7 +9,7 @@ if(PNG_FOUND)
 else()
     message("LibPNG not found on the system so grab one trough internet")  
 	message("Create ExternalProject PNG has thirdpartie lib")
-	SET(libpng_PREFIX ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+	SET(libpng_PREFIX ${TEMPORARY_DIRECTORY})
 	IF(BUILD_SHARED_LIBS)
 		SET(PNG_SHARED ON)
 		SET(BUILD_SHARED_LIBS TRUE)
@@ -35,7 +35,7 @@ else()
 	    PREFIX ${libpng_PREFIX}
 		URL http://zlib.net/zlib128.zip
 		URL_MD5 126f8676442ffbd97884eb4d6f32afb4
-		INSTALL_DIR ""
+		INSTALL_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 		CMAKE_ARGS ${libpng_CMAKE_ARGS}
 		# CONFIGURE_COMMAND ""
 		# BUILD_COMMAND ""
@@ -53,6 +53,7 @@ else()
 	  # CONFIGURE_COMMAND ""
 	  # BUILD_COMMAND ""
 	  # INSTALL_COMMAND "" 
+	  INSTALL_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 	   CMAKE_ARGS ${libpng_CMAKE_ARGS} -DCMAKE_PREFIX_PATH=${install_dir} # to find zlib
 	  ) #SET CONFIGURE_COMMAND, BUILD_COMMAND and INSTALL_COMMAND to "" compile nothing
 	  

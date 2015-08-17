@@ -141,9 +141,11 @@ add_subdirectory(jsoncpp)
 
 
 # png
-add_subdirectory(png)
+#add_subdirectory(png)
 # jpeg
 add_subdirectory(jpeg)
+# tiff
+#add_subdirectory(tiff)
 # eigen
 add_subdirectory(eigen)
 

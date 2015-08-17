@@ -58,12 +58,13 @@ set(TEMPORARY_DIRECTORY
     CACHE PATH
     "Directory for temporary files")
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-set(POUTRE_HEADER_INSTALLATION_RELATIVE_PATH          "include")
-set(POUTRE_LIBRARIES_INSTALLATION_RELATIVE_PATH       "lib")
-set(POUTRE_DOCUMENTATION_INSTALLATION_RELATIVE_PATH   "documentation")
+set(POUTRE_BINARY_INSTALLATION_RELATIVE_PATH          "bin" CACHE PATH "Where to install binaries")
+set(POUTRE_HEADER_INSTALLATION_RELATIVE_PATH          "include" CACHE PATH "Where to install headers")
+set(POUTRE_LIBRARIES_INSTALLATION_RELATIVE_PATH       "lib" CACHE PATH "Where to install libraries")
+set(POUTRE_DOCUMENTATION_INSTALLATION_RELATIVE_PATH   "documentation" CACHE PATH "Where to install doc")
 
 # this is where the python package is located. The POUTRE binaries will be copied
 # into this place when creating the python package. This is also used for the Sphinx documentation.
@@ -97,7 +98,6 @@ endif()
 include(CMakeParseArguments)
 include(cmake/CMakeVersion.cmake)
 include(cmake/CMakeInstallUtils.cmake)
-#include(cmake/CMakePCHUtils.cmake NO_POLICY_SCOPE)
 #include(cmake/CMakePythonUtils.cmake)
 include(cmake/CMakeTestUtils.cmake)
 
@@ -141,8 +141,7 @@ add_custom_target(
   cmake/CMakeCompilerSpecific.cmake
   # cmake/CMakeCPackConf.cmake
   cmake/CMakeDoc.cmake
-  #cmake/CMakeInstallUtils.cmake
-  #cmake/CMakePCHUtils.cmake
+  cmake/CMakeInstallUtils.cmake
   # cmake/CMakePythonPackage.cmake
   # cmake/CMakePythonUtils.cmake
   cmake/CMakeTestUtils.cmake

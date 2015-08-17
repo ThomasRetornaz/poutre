@@ -144,17 +144,30 @@ namespace poutre
       }
     };
 
-  template<class ImageIn,class ImageOut, class UnOp>
+  //struct pApplyImageUnaryIterOp
+  //  {
+  //  template<class ImageIn, class ImageOut, class UnOp>
+  //  void operator()(const ImageIn& imgIn, ImageOut& imgOut, UnOp f) const
+  //    {
+  //    //TODO PRECONDITIONS
+  //    //TODO use multithread approch here dispatch on dims and so on 
+  //    //also dispatch on iterator categories and types
+  //    pImageUnaryIterOp<ImageIn::m_ptype, ImageOut::m_ptype, UnOp>( )(imgIn.begin( ), imgIn.end( ), imgOut.begin( ), f);
+  //    }
+  //  };
+
+  //more generic version
+  template <class tag>
   struct pApplyImageUnaryIterOp
     {
-    void operator()(const ImageIn& imgIn, ImageOut& imgOut, UnOp f) const
+    template <class UnOp, class IterIn, class IterOut, class ImageIn, class ImageOut>
+    void operator()(op_& op, IterIn it, const IterIn ite, IterOut itout, ImageIn&, ImageOut&) const
       {
-      //TODO PRECONDITIONS
-      //TODO use multithread approch here dispatch on dims and so on 
-      //also dispatch on iterator categories and types
-      pImageUnaryIterOp<ImageIn::m_ptype, ImageOut::m_ptype, UnOp>( )(imgIn.begin( ), imgIn.end( ), imgOut.begin( ), f);
+      for ( ; it != ite; ++it, ++itout )
+        {
+        *itout=op(*it);
+        }
       }
     };
-
   }
 #endif//POUTRE_IMAGEPROCESSING_UNARYOP_HPP__
