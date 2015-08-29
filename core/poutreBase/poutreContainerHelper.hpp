@@ -24,6 +24,10 @@
 #pragma warning( disable : 4244 )//4244 'conversion' conversion from 'type1' to 'type2', possible loss of data -> due to cast in operator / %  ...
 #endif
 
+#ifndef POUTRE_CONFIG__HPP__
+#include <poutreBase/poutreConfig.hpp>
+#endif
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
 namespace poutre

@@ -25,31 +25,36 @@
 #include <poutreBase/poutreTypes.hpp>
 #endif
 
-namespace std
-  {
-  struct contiguous_iterator_tag : std::random_access_iterator_tag
-    {
-    };
-  }
 
 namespace poutre
 {
+
+  struct strided_iterator_tag : std::random_access_iterator_tag
+    {
+    };
+    
+  struct contiguous_iterator_tag : std::random_access_iterator_tag
+    {
+    };
   
 
    //!Raw dense iterator with random access  
    template<typename DataType>
-   class pdense_iterator : public std::iterator < std::contiguous_iterator_tag,
+   class pdense_iterator : public std::iterator < contiguous_iterator_tag,
       DataType,
       std::ptrdiff_t,
       DataType*,
       DataType& >
    {
    public:
-      using parent = std::iterator < std::contiguous_iterator_tag, DataType, std::ptrdiff_t, DataType*, DataType& >;
+      using parent = std::iterator < contiguous_iterator_tag, DataType, std::ptrdiff_t, DataType*, DataType& >;
       using reference = typename parent::reference;
       using pointer = typename parent::pointer;	   
+      using difference_type = typename parent::difference_type;
+      using value_type	= typename parent::value_type;
+      using iterator_category =typename parent::iterator_category;
       using self_type = pdense_iterator < DataType > ;
-
+              
       pdense_iterator(DataType* ptr = nullptr, DataType* ptrorig = nullptr) :m_ptr(ptr), m_ptrorig(ptrorig)
       {
       }
@@ -161,7 +166,10 @@ namespace poutre
    public:
       using parent = pdense_iterator < DataType > ;
       using reference = typename parent::reference;
-      using pointer = typename parent::pointer;	   
+      using pointer = typename parent::pointer;	 
+      using difference_type = typename parent::difference_type;
+      using value_type	= typename parent::value_type;
+      using iterator_category =typename parent::iterator_category;      
       using parent::m_ptr;
       using parent::m_ptrorig;
       using self_type = pdense_reverse_iterator < DataType > ;

@@ -155,7 +155,8 @@ namespace poutre
   //    pImageUnaryIterOp<ImageIn::m_ptype, ImageOut::m_ptype, UnOp>( )(imgIn.begin( ), imgIn.end( ), imgOut.begin( ), f);
   //    }
   //  };
-
+  
+    
   //more generic version
   template <class tag>
   struct pApplyImageUnaryIterOp
