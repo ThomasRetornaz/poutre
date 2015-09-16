@@ -68,7 +68,7 @@ namespace poutre
       static_assert(std::is_arithmetic<valuetype>::value, "static_array_base only support arithmetic type");
    protected:
 	  valuetype m_array[Rank]; //!actual storage has static sized buffer
-
+          //typename std::aligned_storage<sizeof(valuetype), alignof(valuetype)>::type m_array[Rank];  
 	   
    public:
 	  POUTRE_STATIC_CONSTEXPR ptrdiff_t rank = Rank;
@@ -98,28 +98,31 @@ namespace poutre
       {
       }
 
-//template <typename other>
-//POUTRE_CONSTEXPR explicit static_array_base(typename std::enable_if<std::is_convertible<other, value_type>::value && NumElmnt == 1, value_type>::type a) POUTRE_NOEXCEPT
-//{
-//m_array[0] = value_type(a);
-//}
-//
-//template <typename other>
+// template <typename other=valuetype, 
+//	 class = typename std::enable_if<std::is_convertible<other, value_type>::value> && typename std::enable_if<Rank==1>::type >      
+//POUTRE_CONSTEXPR explicit static_array_base( other a)z POUTRE_NOEXCEPT
+//    {
+//    m_array[0] = value_type(a);
+//    }
+
+//template <typename other,
+//     typename std::enable_if<Rank==2>::type* = nullptr>      
 //POUTRE_CONSTEXPR static_array_base(typename std::enable_if<std::is_convertible<other, value_type>::value && NumElmnt == 2, value_type>::type a0, other a1) POUTRE_NOEXCEPT
 //{
 //m_array[0] = value_type(a0);
 //m_array[1] = value_type(a1);
 //}
 //
-//template <typename other>
+//template <typename other,
+//             typename std::enable_if<Rank==1>::type* = nullptr>      
 //POUTRE_CONSTEXPR static_array_base(typename std::enable_if<std::is_convertible<other, value_type>::value && NumElmnt == 3, value_type>::type a0, other a1, value_type a2) POUTRE_NOEXCEPT
 //{
 //m_array[0] = a0;
 //m_array[1] = a1;
 //m_array[2] = a2;
 //}
-
-
+//
+//
       POUTRE_CXX14_CONSTEXPR explicit static_array_base(value_type a) POUTRE_NOEXCEPT
       {
          static_assert(Rank == 1, "static_array_base(value_type) is only supported on static_array_base<T, 1>");
@@ -127,14 +130,14 @@ namespace poutre
       }
 
 
-      POUTRE_CXX14_CONSTEXPR static_array_base(value_type a0, value_type a1) POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR explicit static_array_base(value_type a0, value_type a1) POUTRE_NOEXCEPT
       {
          static_assert(Rank == 2, "static_array_base(value_type,value_type) is only supported on static_array_base<T, 2>");
          m_array[0] = value_type(a0);
          m_array[1] = value_type(a1);
       }
 
-      POUTRE_CXX14_CONSTEXPR static_array_base(value_type a0, value_type  a1, value_type a2) POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR explicit static_array_base(value_type a0, value_type  a1, value_type a2) POUTRE_NOEXCEPT
       {
          static_assert(Rank == 3,"static_array_base(value_type,value_type,value_type) is only supported on static_array_base<T, 3>");
          m_array[0] = a0;
@@ -142,7 +145,7 @@ namespace poutre
          m_array[2] = a2;
       }
 
-      POUTRE_CXX14_CONSTEXPR static_array_base(value_type a0, value_type  a1, value_type a2, value_type a3) POUTRE_NOEXCEPT
+      POUTRE_CXX14_CONSTEXPR explicit static_array_base(value_type a0, value_type  a1, value_type a2, value_type a3) POUTRE_NOEXCEPT
       {
          static_assert(Rank == 4, "static_array_base(value_type,value_type,value_type,value_type) is only supported on static_array_base<T, 4>");
          m_array[0] = a0;

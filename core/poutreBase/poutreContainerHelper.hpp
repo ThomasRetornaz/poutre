@@ -522,8 +522,7 @@ namespace poutre
          }
       };
 
-
-	      template <class bnds, class idx, ptrdiff_t Rank = bnds::rank>
+   template <class bnds, class idx, ptrdiff_t Rank = bnds::rank>
    struct get_offset_from_coord
      {
      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR offset op(bnds const &i_bnd, idx const &i_idx) POUTRE_NOEXCEPT

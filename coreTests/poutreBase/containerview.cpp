@@ -24,11 +24,11 @@ BOOST_AUTO_TEST_CASE(init)
   view1DINt dummyview;
   BOOST_CHECK_EQUAL(dummyview.size( ), 0);
   BOOST_CHECK(dummyview.data( ) == nullptr);
-  BOOST_CHECK(dummyview.stride( ) == poutre::index_1{1}); //stride is 1 for empty view
+  BOOST_CHECK(dummyview.stride( ) == poutre::idx1d{1}); //stride is 1 for empty view
   //BOOST_CHECK_THROW(dummyview[idxtype{ 0 }],std::runtime_error); //throw in debug
   //BOOST_CHECK_THROW(dummyview[5], std::runtime_error); //can't slice
   //on 1D
-  BOOST_CHECK_THROW(dummyview.section(poutre::bounds_1{ 3 }), std::runtime_error); //section
+  BOOST_CHECK_THROW(dummyview.section(poutre::bd1d{ 3 }), std::runtime_error); //section
 
   //sview
   using sview1DINt = poutre::strided_array_view < int,1 >;
@@ -38,10 +38,10 @@ BOOST_AUTO_TEST_CASE(init)
   //empty sview
   sview1DINt dummysview;
   BOOST_CHECK_EQUAL(dummysview.size( ), 0);
-  BOOST_CHECK(dummysview.stride( ) == poutre::index_1{ 1 }); //stride is 1 for empty stridedview
+  BOOST_CHECK(dummysview.stride( ) == poutre::idx1d{ 1 }); //stride is 1 for empty stridedview
   //BOOST_CHECK_THROW(dummysview[idxtype{ 0 }], std::runtime_error); //throw in debug
   //BOOST_CHECK_THROW(dummysview[5], std::runtime_error); //can't slice on 1D
-  BOOST_CHECK_THROW(dummysview.section(poutre::bounds_1{ 3 }), std::runtime_error); //section
+  BOOST_CHECK_THROW(dummysview.section(poutre::bd1d{ 3 }), std::runtime_error); //section
   }
 
 
@@ -56,34 +56,36 @@ BOOST_AUTO_TEST_CASE(basic_usage_view_over_vector)
   BOOST_CHECK_EQUAL(mif.size( ), 10);
   auto view = poutre::array_view < int,1 >(mif);
   BOOST_CHECK_EQUAL(view.size( ), 10);
-  BOOST_CHECK(view.bound( ) == poutre::bounds_1{ 10 });
+  BOOST_CHECK(view.bound( ) == poutre::bd1d{ 10 });
   //assignment through view
-  view[poutre::index_1{ 0 }] = 42; //grmmlll poutre::index_1{} to force resolution operator[index] and not slice ....
+  view[poutre::idx1d{ 0 }] = 42; //grmmlll poutre::idx1d{} to force resolution operator[index] and not slice ....
   BOOST_CHECK_EQUAL(mif[0], 42);  // v == 42
   //copy view
   auto viewcopy(view);
-  BOOST_CHECK_EQUAL(viewcopy[poutre::index_1{ 0 }], 42);  // v == 42
+  BOOST_CHECK_EQUAL(viewcopy[poutre::idx1d{ 0 }], 42);  // v == 42
   auto viewcopy2=view;
-  BOOST_CHECK_EQUAL(viewcopy2[poutre::index_1{ 0 }], 42);  // v == 42
+  BOOST_CHECK_EQUAL(viewcopy2[poutre::idx1d{ 0 }], 42);  // v == 42
   //array view from ptr and bounds
   auto viewptr = view1DINt(mif.data( ), { (ptrdiff_t)mif.size( )});
-  BOOST_CHECK_EQUAL(viewptr[poutre::index_1{ 0 }], 42);  // v == 42
+  BOOST_CHECK_EQUAL(viewptr[poutre::idx1d{ 0 }], 42);  // v == 42
 
+  /*  FIXME
   auto view2d = poutre::array_view<int, 2>(mif, { 2, 5 });  // 2D view over vec
   BOOST_CHECK_EQUAL(view2d.size( ),10);
-  BOOST_CHECK(view2d.bound( ) == (poutre::bounds_2{ 2, 5 }));
-  BOOST_CHECK(view2d.stride( ) == (poutre::index_2{ 5, 1 }));
-  BOOST_CHECK_EQUAL(view2d[(poutre::index_2{ 0, 0 })], 42);
+  BOOST_CHECK(view2d.bound( ) == (poutre::bd2d{ 2, 5 }));
+  BOOST_CHECK(view2d.stride( ) == (poutre::idx2d{ 1, 1 }));
+  BOOST_CHECK_EQUAL(view2d[(poutre::idx2d{ 0, 0 })], 42);
 
   auto av1 = poutre::array_view<int, 1>(mif, { 5 });  // 1D view over vec with explicit sub bound
-  BOOST_CHECK(av1.bound( ) == (poutre::bounds_1{ 5 }));
-  BOOST_CHECK(av1.stride( ) == (poutre::index_1{ 1 }));
-  BOOST_CHECK_EQUAL(av1[poutre::index_1{ 0 }], 42);
+  BOOST_CHECK(av1.bound( ) == (poutre::bd1d{ 5 }));
+  BOOST_CHECK(av1.stride( ) == (poutre::idx1d{ 1 }));
+  BOOST_CHECK_EQUAL(av1[poutre::idx1d{ 0 }], 42);
 
   auto av1DFrom2D = poutre::array_view<int, 1>(view2d, { 2 });  // 1D view from 2D view      }
-  BOOST_CHECK(av1DFrom2D.bound( ) == (poutre::bounds_1{ 2 }));
-  BOOST_CHECK(av1DFrom2D.stride( ) == (poutre::index_1{ 1 }));
-  BOOST_CHECK_EQUAL(av1DFrom2D[poutre::index_1{ 0 }], 42);
+  BOOST_CHECK(av1DFrom2D.bound( ) == (poutre::bd1d{ 2 }));
+  BOOST_CHECK(av1DFrom2D.stride( ) == (poutre::idx1d{ 1 }));
+  BOOST_CHECK_EQUAL(av1DFrom2D[poutre::idx1d{ 0 }], 42);
+  */ 
   }
 
 
@@ -93,70 +95,205 @@ BOOST_AUTO_TEST_CASE(section_and_slice_1d)
   using view2DINt = poutre::array_view < int, 2 >;
   using view1DFLOAT = poutre::array_view < float,1 >;
 
-  //1D view over std::vector
+  BOOST_MESSAGE("1D view over std::vector");
   std::vector<int> mif = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
   BOOST_CHECK_EQUAL(mif.size( ), 10);
   auto view = poutre::array_view < int,1 >(mif);
 
-  //get section of 1d view start at idx 2 
-  auto section = view.section(poutre::index_1{ 2 });
+  BOOST_MESSAGE("get section of 1d view start at idx 2 ");
+  auto section = view.section(poutre::idx1d{ 2 });
   BOOST_CHECK_EQUAL(section.size( ), 8);
-  BOOST_CHECK(section.stride( ) ==  poutre::index_1{1});
-  BOOST_CHECK(section.bound( ) == (poutre::bounds_1{ 8 }));
-  BOOST_CHECK_EQUAL(section[(poutre::index_1{ 0 })], 2);
-  BOOST_CHECK_EQUAL(section[(poutre::index_1{ 1 })], 3);
+  BOOST_CHECK(section.stride( ) ==  poutre::idx1d{1});
+  BOOST_CHECK(section.bound( ) == (poutre::bd1d{ 8 }));
+  BOOST_CHECK_EQUAL(section[(poutre::idx1d{ 0 })], 2);
+  BOOST_CHECK_EQUAL(section[(poutre::idx1d{ 1 })], 3);
   //get section of 1d view start at idx 2 with additional bound
-  auto sectionwithbound = view.section(poutre::index_1{ 2 }, (poutre::bounds_1{ 3 }));
+  auto sectionwithbound = view.section(poutre::idx1d{ 2 }, (poutre::bd1d{ 3 }));
   BOOST_CHECK_EQUAL(sectionwithbound.size( ), 3);
-  BOOST_CHECK(sectionwithbound.stride( ) == (poutre::index_1{ 1 }));
-  BOOST_CHECK(sectionwithbound.bound( ) == (poutre::bounds_1{ 3 }));
-  BOOST_CHECK_EQUAL(sectionwithbound[poutre::index_1{ 0 }], 2);
-  BOOST_CHECK_EQUAL(sectionwithbound[poutre::index_1{ 1 }], 3);
+  BOOST_CHECK(sectionwithbound.stride( ) == (poutre::idx1d{ 1 }));
+  BOOST_CHECK(sectionwithbound.bound( ) == (poutre::bd1d{ 3 }));
+  BOOST_CHECK_EQUAL(sectionwithbound[poutre::idx1d{ 0 }], 2);
+  BOOST_CHECK_EQUAL(sectionwithbound[poutre::idx1d{ 1 }], 3);
+  
   //throw on invalid parameter
-  BOOST_CHECK_THROW(view.section(poutre::index_1{ 9 }), std::runtime_error);
-  BOOST_CHECK_THROW(view.section(poutre::index_1{ 0 }, (poutre::bounds_1{ 11 })),std::runtime_error);
+  BOOST_CHECK_THROW(view.section(poutre::idx1d{ 10 }), std::runtime_error);
+  BOOST_CHECK_THROW(view.section(poutre::idx1d{ 0 }, (poutre::bd1d{ 11 })),std::runtime_error);
 
   }
 
 
 BOOST_AUTO_TEST_CASE(section_and_slice_2d)
+  { 
+// view 1d view 2d  with section {{1,2},{3,2}} highlighted
+//    
+//  * * * * * * * 7 8 * * * 12 13 * * * 17 18 * * * * * *
+//    
+//  * *  *  * *   
+//  * *  7  8 *
+//  * * 12 13 *
+//  * * 17 18 *
+//  * *  *  * *
+    
+  std::vector<int> mif(25);
+  for (auto i=0;i<25;++i)
   {
-  std::vector<int> mif = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-  // 2D view over vec
-  auto view2d = poutre::array_view<int, 2>(mif, { 2, 5 });
-  BOOST_CHECK_EQUAL(view2d.size( ), 10);
-  BOOST_CHECK_EQUAL(view2d.bound( ), (poutre::bounds_2{ 2, 5 }));
-  BOOST_CHECK_EQUAL(view2d.stride( ), (poutre::index_2{ 5, 1 }));
+      mif[i]=i;
+  }
+  
+  {
+  //auto view2d = poutre::array_view<int, 2>(poutre::array_view<int, 1>(mif), { 5, 5 });
+  auto view2d = poutre::array_view<int, 2>(mif, { 5, 5 });
+  BOOST_CHECK_EQUAL(view2d.size( ), 25);
+  BOOST_CHECK_EQUAL(view2d.bound( ), (poutre::bd2d{ 5, 5 }));
+  BOOST_CHECK_EQUAL(view2d.stride( ), (poutre::idx2d{ 5, 1 }));
+  
+  BOOST_MESSAGE("get slice of 2d view");
+  
+  auto slicesefirstline = view2d[0];
+  BOOST_CHECK_EQUAL(slicesefirstline.size( ), 5);
+  BOOST_CHECK_EQUAL(slicesefirstline[poutre::idx1d{ 0 }], 0);
+  BOOST_CHECK_EQUAL(slicesefirstline[poutre::idx1d{ 1 }], 1);
+  BOOST_CHECK_EQUAL(slicesefirstline[poutre::idx1d{ 2 }], 2);
+  BOOST_CHECK_EQUAL(slicesefirstline[poutre::idx1d{ 3 }], 3);
+  BOOST_CHECK_EQUAL(slicesefirstline[poutre::idx1d{ 4 }], 4);
+  
+  auto slicesecondline = view2d[1];
+  BOOST_CHECK_EQUAL(slicesecondline.size( ), 5);
+  BOOST_CHECK_EQUAL(slicesecondline[poutre::idx1d{ 0 }], 5);
+  BOOST_CHECK_EQUAL(slicesecondline[poutre::idx1d{ 1 }], 6);
+  BOOST_CHECK_EQUAL(slicesecondline[poutre::idx1d{ 2 }], 7);
+  BOOST_CHECK_EQUAL(slicesecondline[poutre::idx1d{ 3 }], 8);
+  BOOST_CHECK_EQUAL(slicesecondline[poutre::idx1d{ 4 }], 9);
+  
+  auto slicethrirdline = view2d[2];
+  BOOST_CHECK_EQUAL(slicethrirdline.size( ), 5);
+  BOOST_CHECK_EQUAL(slicethrirdline[poutre::idx1d{ 0 }], 10);
+  BOOST_CHECK_EQUAL(slicethrirdline[poutre::idx1d{ 1 }], 11);
+  BOOST_CHECK_EQUAL(slicethrirdline[poutre::idx1d{ 2 }], 12);
+  BOOST_CHECK_EQUAL(slicethrirdline[poutre::idx1d{ 3 }], 13);
+  BOOST_CHECK_EQUAL(slicethrirdline[poutre::idx1d{ 4 }], 14);
+  
+  
+  }
+  
+  {
+  BOOST_MESSAGE("get section of 2d view");
+  auto view2d = poutre::array_view<int, 2>(mif, { 5, 5 });
+  auto section2d = view2d.section(poutre::idx2d{1,2});
+  BOOST_CHECK_EQUAL(section2d.size( ),12);
+  BOOST_CHECK_EQUAL(section2d.bound(),(poutre::bd2d({4,3})));  
+  BOOST_CHECK_EQUAL(section2d.stride(),(poutre::idx2d({5,1})));  
+  
+  
+  BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,0 })], 7);
+  BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,1 })], 8);
+  BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,2 })], 9);
+  BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 1,0 })], 12);
+  BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 1,1 })], 13);
+  BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 1,2 })], 14);
+  BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 2,0 })], 17);
+  BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 2,1 })], 18);
+  BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 2,2 })], 19);
+  
+  //slice on strided view
+  auto slice = section2d[0];
+  BOOST_CHECK_EQUAL(slice.size( ),3);
+  BOOST_CHECK_EQUAL(slice.bound(),(poutre::bd1d({3})));  
+  BOOST_CHECK_EQUAL(slice.stride(),(poutre::idx1d({1})));  
+  
+  BOOST_CHECK_EQUAL(slice[poutre::idx1d({0})], 7);
+  BOOST_CHECK_EQUAL(slice[poutre::idx1d({1})], 8);
+  BOOST_CHECK_EQUAL(slice[poutre::idx1d({2})], 9);
 
-  //get slice of 2d view
-  auto slice = view2d[1];
-  BOOST_CHECK_EQUAL(slice.size( ), 5);
-  BOOST_CHECK_EQUAL(slice[poutre::index_1{ 0 }], 5);
-  BOOST_CHECK_EQUAL(slice[poutre::index_1{ 1 }], 6);
-  BOOST_CHECK_EQUAL(slice[poutre::index_1{ 2 }], 7);
-  BOOST_CHECK_EQUAL(slice[poutre::index_1{ 3 }], 8);
-  BOOST_CHECK_EQUAL(slice[poutre::index_1{ 4 }], 9);
-//#ifndef NDEBUG
-//  BOOST_CHECK_THROW(slice[poutre::index_1{ 5 }],std::runtime_error);
-//#endif
-
-  //get section of 2d view
-  auto section = view2d.section(poutre::index_2{1,3});
-  BOOST_CHECK_EQUAL(section.size( ), 3);
-  //BOOST_CHECK(section.stride( ) == (poutre::index_2{1,1}));
-  //BOOST_CHECK(section.bound( ) == (poutre::bounds_2{1,3}));
-  //BOOST_CHECK_EQUAL(section[idxtype{ 0 }], 2);
-  //BOOST_CHECK_EQUAL(section[idxtype{ 1 }], 3);
+  
+  auto slice2 = section2d[1];
+  BOOST_CHECK_EQUAL(slice2.size( ),3);
+  BOOST_CHECK_EQUAL(slice2.bound(),(poutre::bd1d({3})));  
+  BOOST_CHECK_EQUAL(slice2.stride(),(poutre::idx1d({1})));  
+  
+  BOOST_CHECK_EQUAL(slice2[poutre::idx1d({0})], 12);
+  BOOST_CHECK_EQUAL(slice2[poutre::idx1d({1})], 13);
+  BOOST_CHECK_EQUAL(slice2[poutre::idx1d({2})], 14);
+  }
+  
+  
+  {
+  
+  BOOST_MESSAGE("get section of 2d view with explicit bound");
+  auto view2d = poutre::array_view<int, 2>(mif, { 5, 5 });
+  auto section2d = view2d.section((poutre::idx2d{1,2}),(poutre::bd2d{3,2}));
+  BOOST_CHECK_EQUAL(section2d.size( ),6);
+  BOOST_CHECK_EQUAL(section2d.bound(),(poutre::bd2d({3,2})));  
+  BOOST_CHECK_EQUAL(section2d.stride(),(poutre::idx2d({5,1}))); 
+  
+//  for(auto idx : section2d.bound())
+//  {
+//      std::cout<<"\nidx"<<idx;
+//      std::cout<<"\nvalue"<<section2d[idx];
+//  }
+  BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,0 })], 7);
+  BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,1 })], 8);
+  BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 1,0 })], 12);
+  BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 1,1 })], 13);
+  BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 2,0 })], 17);
+  BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 2,1 })], 18);
+  
+  
+  //  * 1  2  3 *   
+  //  * 6  7  8 *
+  //  * *  *  * *
+  //  * *  *  * *
+  //  * *  *  * *
+  BOOST_MESSAGE("get section of 2d view with explicit bound 2");
+  auto sec2d = view2d.section((poutre::idx2d{0,1}),(poutre::bd2d{2,3}));
+  BOOST_CHECK_EQUAL(sec2d.size( ),6);
+  BOOST_CHECK_EQUAL(sec2d.bound(),(poutre::bd2d({2,3})));  
+  BOOST_CHECK_EQUAL(sec2d.stride(),(poutre::idx2d({5,1}))); 
+  
+//  for(auto idx : sec2d.bound())
+//  {
+//      std::cout<<"\nidx"<<idx;
+//      std::cout<<"\nvalue"<<sec2d[idx];
+//  }
+  BOOST_CHECK_EQUAL(sec2d[poutre::idx2d({ 0,0 })], 1);
+  BOOST_CHECK_EQUAL(sec2d[poutre::idx2d({ 0,1 })], 2);
+  BOOST_CHECK_EQUAL(sec2d[poutre::idx2d({ 0,2 })], 3);
+  BOOST_CHECK_EQUAL(sec2d[poutre::idx2d({ 1,0 })], 6);
+  BOOST_CHECK_EQUAL(sec2d[poutre::idx2d({ 1,1 })], 7);
+  BOOST_CHECK_EQUAL(sec2d[poutre::idx2d({ 1,2 })], 8);
+  
+  //  1 2 3    
+  //  6 7 8
+  BOOST_MESSAGE("get section of 2d section with explicit bound");
+  auto subsec2d = sec2d.section((poutre::idx2d{1,1}));//,(poutre::bd2d{1,2}));
+  for(auto idx : subsec2d.bound())
+  {
+      std::cout<<"\nidx"<<idx;
+      std::cout<<"\nvalue"<<subsec2d[idx];
+  }
+  
+  BOOST_CHECK_EQUAL(subsec2d.size(),2);
+  BOOST_CHECK_EQUAL(subsec2d.bound(),(poutre::bd2d({1,2})));  
+  BOOST_CHECK_EQUAL(subsec2d.stride(),(poutre::idx2d({5,1}))); 
+  BOOST_CHECK_EQUAL(subsec2d[poutre::idx2d({ 0,0 })], 7);
+  BOOST_CHECK_EQUAL(subsec2d[poutre::idx2d({ 0,1 })], 8);
+  
+  }  
   }
 
-  //BOOST_AUTO_TEST_CASE(view_on_muti_dim_c_array)
-  //  {
-  //  char a[3][1][4] {{{'H', 'i'}}};
-  //  auto av = poutre::array_view<char, 3>{a};
-  //  BOOST_CHECK((av.bound( ) == poutre::bounds<3>{3, 1, 4}));
-  //  //assert((av[{0, 0, 0}] == 'H'));
-  //  }
-  //
-
-
+  BOOST_AUTO_TEST_CASE(view_on_c_array)
+    {
+    int a[10]={0,1,2,3,4,5,6,7,8,9};
+    auto av = poutre::array_view<int, 1>{a};
+    BOOST_CHECK_EQUAL(av.size( ), 10);
+    BOOST_CHECK(av.bound( ) == poutre::bd1d{ 10 });
+    //assignment through view
+    av[poutre::idx1d{ 0 }] = 42; //grmmlll poutre::idx1d{} to force resolution operator[index] and not slice ....
+    BOOST_CHECK_EQUAL(a[0], 42);  // v == 42
+    //copy view
+    auto viewcopy(av);
+    BOOST_CHECK_EQUAL(viewcopy[poutre::idx1d{ 0 }], 42);  // v == 42
+    auto viewcopy2=av;
+    BOOST_CHECK_EQUAL(viewcopy2[poutre::idx1d{ 0 }], 42);  // v == 42
+    }
   BOOST_AUTO_TEST_SUITE_END( )

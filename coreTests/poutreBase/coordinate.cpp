@@ -74,12 +74,13 @@ BOOST_AUTO_TEST_CASE(index)
   {
   //Scaling
   poutre::index<2> idx{ 2, 3 };
-  poutre::index<2> res = idx * 1.5f;  // res is {3, 4}
+  
   BOOST_CHECK_EQUAL(idx[0], 2);
   BOOST_CHECK_EQUAL(idx[1], 3);
 
-  BOOST_CHECK_EQUAL(res[0], 3);
-  BOOST_CHECK_EQUAL(res[1], 4);
+  idx*=1.5f;  // res is {3, 4}
+  BOOST_CHECK_EQUAL(idx[0], 3);
+  BOOST_CHECK_EQUAL(idx[1], 4);
   }
 
 BOOST_AUTO_TEST_CASE(index_ordering)
@@ -88,7 +89,7 @@ BOOST_AUTO_TEST_CASE(index_ordering)
   poutre::index<2> idx{ 2, 3 };
   poutre::index<2> idx2{ 1, 3 };
   poutre::index<2> idx3{ 3, 3 };
-
+  
   BOOST_CHECK(idx2<idx);
   BOOST_CHECK(idx2<=idx);
   BOOST_CHECK(idx3>idx);
@@ -175,6 +176,22 @@ BOOST_AUTO_TEST_CASE(bounds_iterator_2d)
   idx outofbound = { 15,15 };
   iterator itFromOut(bnd2D, outofbound);
   BOOST_CHECK(itFromOut == bnd2D.end( ));
+  
+  
+  auto b  =  bnd{3, 2};
+  auto it2d = iterator(b,idx{0,0});
+  //std::vector<idx> expected = {{0, 1}, {1, 0}, {1, 1}, {2, 0}, {2, 1}};
+  BOOST_CHECK_EQUAL(*it2d,(idx{0, 0}));
+  ++it2d;
+  BOOST_CHECK_EQUAL(*it2d,(idx{0, 1}));
+  ++it2d;
+  BOOST_CHECK_EQUAL(*it2d,(idx{1, 0}));
+  ++it2d;
+  BOOST_CHECK_EQUAL(*it2d,(idx{1, 1}));
+  ++it2d;
+  BOOST_CHECK_EQUAL(*it2d,(idx{2, 0}));
+  ++it2d;
+  BOOST_CHECK_EQUAL(*it2d,(idx{2, 1}));
   }
 
 BOOST_AUTO_TEST_CASE(bounds_iterator_3d)
