@@ -123,14 +123,14 @@ namespace poutre
   template <class storagetype>
   struct get_dim
     {
-    static const size_t dim= 1;
+    POUTRE_STATIC_CONSTEXPR ptrdiff_t dim= 1;
     };
 
   //!Helper to retrieve dim off compound_pixel 
-  template <class storagetype, std::size_t NumDims>
-  struct get_dim< compound_pixel<storagetype, NumDims> >
+  template <class storagetype, std::ptrdiff_t Rank>
+  struct get_dim< compound_pixel<storagetype, Rank> >
     {
-    static const size_t dim = NumDims;
+    POUTRE_STATIC_CONSTEXPR ptrdiff_t dim = Rank;
     };
 
   //! Define TypeTraits  
@@ -238,8 +238,8 @@ namespace poutre
     };
 
   //! TypeTraits compound_pixel
-  template <class valuetype, std::size_t NumDims>
-  struct TypeTraits < compound_pixel<valuetype, NumDims> >
+  template <class valuetype, std::ptrdiff_t Rank>
+  struct TypeTraits <compound_pixel<valuetype, Rank>>
     {
     };
 
