@@ -54,25 +54,26 @@ namespace poutre
       //! Provid deep copy
       virtual std::unique_ptr<IInterface> Clone() const = 0;
       //! Get @c PType belong to @c IInterface
-      virtual PType GetPType() const = 0;
+      virtual PType GetPType() const = 0 ;
       //! Get @c CompoundType belong to @c IInterface
-      virtual CompoundType GetCType( ) const = 0;
+      virtual CompoundType GetCType( ) const = 0 ;
       //! Get @c ImgType belong to @c IInterface
-      virtual ImgType GetImgType( ) const = 0;
+      virtual ImgType GetImgType( ) const = 0 ;
       //! Get size over dimensions 
-      virtual std::vector<std::size_t> GetCoords( ) const = 0; //@TODO
+      virtual std::vector<std::size_t> GetCoords( ) const = 0 ; //@TODO
                                                                //may
                                                                //change this
       //! Get size num of dimensions 
-      virtual std::size_t GetNumDims( ) const = 0;
+      virtual std::size_t GetNumDims( ) const = 0 ;
       //!Dtor
-      virtual ~IInterface(){}
+      virtual ~IInterface() = default;
       //!Stringification 
-      virtual std::string str( ) const = 0;
+      virtual std::string str( ) const = 0 ;
    };
 
 
    //! operator<< for IInterface
+   //@warning Serialize a description of image. Doesn't serialize data. Use @c poutreIO::ImageFromString,@c poutreIO::ImageToString 
    IMP_API std::ostream& operator<<(std::ostream&, const IInterface& img);
 
 /**

@@ -14,7 +14,7 @@
 
 namespace poutre
   {
-	  std::ostream& operator<<(std::ostream& stream, const IInterface& img)
+    std::ostream& operator<<(std::ostream& stream, const IInterface& img)
     {
     stream << img.str( );
     return stream;

@@ -47,11 +47,12 @@ namespace poutre
 
   template <
   class valuetype,
-  std::size_t NumDims = 2,
+  std::ptrdiff_t NumDims = 2,
   class allocator_type_t = boost::simd::allocator < typename TypeTraits<valuetype>::storage_type, TypeTraits<valuetype>::alignement >
   >
   class DenseImage : public IInterface
   {
+    static_assert(NumDims>0,"NumDims must be >0");
   public:
 
 
@@ -164,19 +165,19 @@ namespace poutre
     //Capacity
 
     const size_type
-    size () POUTRE_NOEXCEPT
+    size () const POUTRE_NOEXCEPT
     {
       return m_numelemwithpaddingifany; //FIXME COULD BE != if padding present
     }
 
     const size_type
-    max_size () POUTRE_NOEXCEPT
+    max_size () const  POUTRE_NOEXCEPT
     {
       return this->size ();
     }
 
     const bool
-    empty () POUTRE_NOEXCEPT
+    empty () const POUTRE_NOEXCEPT
     {
       return this->size () == 0;
     }
@@ -278,6 +279,12 @@ namespace poutre
     }
 
     const_iterator
+    begin () const POUTRE_NOEXCEPT
+    {
+      return const_iterator (m_data, m_data);
+    }
+    
+    const_iterator
     cbegin () const POUTRE_NOEXCEPT
     {
       return const_iterator (m_data, m_data);
@@ -289,6 +296,12 @@ namespace poutre
       return iterator (m_data + m_numelemwithpaddingifany, m_data);
     }
 
+    const_iterator
+    end () const POUTRE_NOEXCEPT
+    {
+      return const_iterator (m_data + m_numelemwithpaddingifany, m_data);
+    }
+    
     const_iterator
     cend () const POUTRE_NOEXCEPT
     {
@@ -431,7 +444,62 @@ namespace poutre
       return *this;
     }
   };
+  /*
+  template <
+  class valuetype,
+  std::ptrdiff_t NumDims = 2,
+  class allocator_type_t = boost::simd::allocator < typename TypeTraits<valuetype>::storage_type, TypeTraits<valuetype>::alignement >
+  >
+  class DenseImage 
+  iterator
+    begin () POUTRE_NOEXCEPT
+    {
+      return iterator (m_data, m_data);
+    }
 
+    const_iterator
+    cbegin () POUTRE_NOEXCEPT
+    {
+      return const_iterator (m_data, m_data);
+    }
+
+    iterator
+    end () POUTRE_NOEXCEPT
+    {
+      return iterator (m_data + m_numelemwithpaddingifany, m_data);
+    }
+
+    const_iterator
+    cend () POUTRE_NOEXCEPT
+    {
+      return const_iterator (m_data + m_numelemwithpaddingifany, m_data);
+    }
+
+    reverse_iterator
+    rbegin () POUTRE_NOEXCEPT
+    {
+      return (reverse_iterator (m_data + m_numelemwithpaddingifany - 1, m_data));
+    }
+
+    const_reverse_iterator
+    crbegin () POUTRE_NOEXCEPT
+    {
+      return (const_reverse_iterator (m_data + m_numelemwithpaddingifany - 1, m_data));
+    }
+
+    reverse_iterator
+    rend () POUTRE_NOEXCEPT
+    {
+      return (reverse_iterator (m_data - 1, m_data));
+    }
+
+    const_reverse_iterator
+    crend () POUTRE_NOEXCEPT
+    {
+      return (const_reverse_iterator (m_data - 1, m_data));
+    }
+  */
+  
   //todo define macros
   extern template class DenseImage <pUINT8, 1 >;
   extern template class DenseImage <pINT32, 1 >;
