@@ -42,7 +42,7 @@ namespace poutre
   class BASE_API InterfaceJsonSerializable
     {
     public:
-      virtual ~InterfaceJsonSerializable(void) {};
+      virtual ~InterfaceJsonSerializable(void) = default;
       virtual void Serialize(Json::Value& root) = 0;
       virtual void Deserialize(Json::Value& root) = 0;
     };
@@ -50,9 +50,13 @@ namespace poutre
   /**
    * @brief Default json serailizer object
    */
-  class BASE_API JsonSerializer : boost::noncopyable
+  class BASE_API JsonSerializer 
     {
     public:
+      JsonSerializer() = default;
+      JsonSerializer(const JsonSerializer&) = delete; // cannot be copy constructed
+      JsonSerializer& operator=(const JsonSerializer& orig) = delete;
+
       static bool Serialize(InterfaceJsonSerializable* iptrJSObj, std::string& ostr);
       static bool Deserialize(InterfaceJsonSerializable* iptrJSObj, const std::string& istr);
     };
