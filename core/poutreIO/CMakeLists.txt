@@ -5,10 +5,12 @@ set(PoutreIOSubdirectory ${POUTRE_CORE_DIR}/poutreIO)
 #generate_library_version(${PoutreIOSubdirectory}/src/current_configuration_generated.cpp)
 
 set(PoutreIOSRC_DETAILS
+  ${PoutreIOSubdirectory}/src/poutreIOString.cpp
   )
 
 set(PoutreIOSRC_PUBLICHEADERS  
   ${PoutreIOSubdirectory}/poutreIO.hpp
+  ${PoutreIOSubdirectory}/poutreIOString.hpp
 )
 
 set(PoutreIOSRC_CPP
@@ -37,6 +39,8 @@ target_link_libraries(PoutreIO
   INTERFACE Eigen
   INTERFACE BoostSimd
   PoutreBase 
+  PoutreImageProcessing
+  PoutreIO
   )
 set_target_properties(PoutreIO PROPERTIES FOLDER "CoreCPP/")
 
