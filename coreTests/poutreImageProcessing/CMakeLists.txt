@@ -4,25 +4,25 @@ set(poutreImageProcessingTestSubdirectory ${POUTRE_CORE_TEST_DIR}/poutreImagePro
 set(poutreImageProcessingTestSRC
     ${poutreImageProcessingTestSubdirectory}/main.hpp
     ${poutreImageProcessingTestSubdirectory}/main.cpp
-  ${poutreImageProcessingTestSubdirectory}/ImageProcessingType.cpp
-	${poutreImageProcessingTestSubdirectory}/ImageContainer.cpp
-	${poutreImageProcessingTestSubdirectory}/ImageCopieConvert.cpp
+    ${poutreImageProcessingTestSubdirectory}/ImageProcessingType.cpp
+    ${poutreImageProcessingTestSubdirectory}/ImageContainer.cpp
+    ${poutreImageProcessingTestSubdirectory}/ImageCopieConvert.cpp
 )
 
-add_executable(poutreImageProcessingTests ${poutreImageProcessingTestSRC})
-set_target_properties(poutreImageProcessingTests PROPERTIES 
+add_executable(PoutreImageProcessingTests ${poutreImageProcessingTestSRC})
+set_target_properties(PoutreImageProcessingTests PROPERTIES 
                       DEFINE_SYMBOL "JSON_DLL"
                       FOLDER "Core/")
 
-target_link_libraries(poutreImageProcessingTests
+target_link_libraries(PoutreImageProcessingTests
     PoutreBase 
     PoutreImageProcessing
     jsoncpp	
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 	
-add_test(NAME poutreImageProcessingTests-1 
-         COMMAND poutreImageProcessingTests)
-set_property(TARGET poutreImageProcessingTests PROPERTY FOLDER "UnitTests/")
-test_environment_setup(poutreImageProcessingTests-1)
+add_test(NAME PoutreImageProcessingTests-1 
+         COMMAND PoutreImageProcessingTests)
+set_property(TARGET PoutreImageProcessingTests PROPERTY FOLDER "UnitTests/")
+test_environment_setup(PoutreImageProcessingTests-1)
 

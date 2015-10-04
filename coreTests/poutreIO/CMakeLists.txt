@@ -4,6 +4,7 @@ set(PoutreIOTestSubdirectory ${POUTRE_CORE_TEST_DIR}/poutreIO)
 set(PoutreIOTestSRC
     ${PoutreIOTestSubdirectory}/main.hpp
     ${PoutreIOTestSubdirectory}/main.cpp
+    ${PoutreIOTestSubdirectory}/iostring.cpp
 )
 
 add_executable(PoutreIOTests ${PoutreIOTestSRC})

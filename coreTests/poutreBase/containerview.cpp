@@ -50,11 +50,13 @@ BOOST_AUTO_TEST_CASE(basic_usage_view_over_vector)
   using view1DINt = poutre::array_view < int,1 > ;
   using view2DINt = poutre::array_view < int, 2 > ;
   using view1DFLOAT = poutre::array_view < float,1 > ;
-
+  
+  
   BOOST_TEST_MESSAGE("1D view over std::vector");
   std::vector<int> mif = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
   BOOST_CHECK_EQUAL(mif.size( ), 10);
-  auto view = poutre::array_view < int,1 >(mif);
+  auto view = view1DINt(mif);  
+  
   BOOST_CHECK_EQUAL(view.size( ), 10);
   BOOST_CHECK(view.bound( ) == poutre::bd1d{ 10 });
   BOOST_TEST_MESSAGE("assignment through view");
