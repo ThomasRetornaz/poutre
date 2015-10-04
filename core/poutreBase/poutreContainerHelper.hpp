@@ -291,7 +291,7 @@ namespace poutre
          struct helper_arith_container_op
       {
          using value_type = typename container::value_type;
-         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR void op(container const & A0, container const & A1, container &res) POUTRE_NOEXCEPT
+         POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR void op(container const & A0, container const & A1, container &res) POUTRE_NOEXCEPT
          {
             for (size_t i = 0; i < Rank; i++) 
             { 
