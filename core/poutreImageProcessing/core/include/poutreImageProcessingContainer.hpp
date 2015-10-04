@@ -39,6 +39,10 @@
 #include <poutreBase/poutreCoordinate.hpp>
 #endif
 
+#ifndef POUTRE_CONTAINER_VIEW_HPP__
+#include <poutreBase/poutreContainerView.hpp>
+#endif
+
 namespace poutre
 {
   //Maybe inherit/compose with nt2::table or blaze::DenseMatrix or Eigen::DenseMatrix would be more effective depending on algorithms 
@@ -160,6 +164,13 @@ namespace poutre
       if (m_data) m_allocator.deallocate (m_data, m_numelemwithpaddingifany);
     }
 
+    
+    const coordinate_type
+    bound() const POUTRE_NOEXCEPT
+    {
+      return m_coordinnates;
+    }
+    
     //std::array like interface
 
     //Capacity
@@ -349,7 +360,7 @@ namespace poutre
     }
 
     size_t
-    GetNumDims () const POUTRE_NOEXCEPT
+    GetNumDims () const POUTRE_NOEXCEPT override
     {
       return m_numdims;
     }
@@ -380,8 +391,7 @@ namespace poutre
       return uni;
     }
 
-    std::string
-    str () const
+    std::string str() const POUTRE_NOEXCEPT override
     {
       std::ostringstream out;
       out << "Image" << std::endl;
@@ -444,6 +454,20 @@ namespace poutre
       return *this;
     }
   };
+  
+  
+  template <class valuetype,std::ptrdiff_t Rank>
+  poutre::array_view < valuetype,Rank> view(DenseImage<valuetype,Rank>& iImg)
+  {
+    return poutre::array_view < valuetype,Rank>(iImg.datas(),iImg.bound());
+  }
+  
+  template <class valuetype,std::ptrdiff_t Rank>
+  poutre::carray_view < valuetype,Rank> view(const DenseImage<valuetype,Rank>& iImg)
+  {
+    return poutre::carray_view < valuetype,Rank>(iImg.datas(),iImg.bound());
+  }
+  
   /*
   template <
   class valuetype,
