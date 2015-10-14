@@ -294,8 +294,8 @@ namespace poutre
          POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR void op(container const & A0, container const & A1, container &res) POUTRE_NOEXCEPT
          {
             for (size_t i = 0; i < Rank; i++) 
-            { 
-            helper_comp_op<value_type, arithop>::op(A0[i], A1[i], res[i]);
+            {
+                helper_arith_op<value_type, arithop>::op(A0[i], A1[i], res[i]);
             }
          }
       };
