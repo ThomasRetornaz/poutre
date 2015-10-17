@@ -1,6 +1,6 @@
 
 # Test project
-set(PoutreIOTestSubdirectory ${POUTRE_CORE_TEST_DIR}/poutreIO)
+set(PoutreIOTestSubdirectory ${POUTRE_NRT_DIR}/poutreIO)
 set(PoutreIOTestSRC
     ${PoutreIOTestSubdirectory}/main.hpp
     ${PoutreIOTestSubdirectory}/main.cpp

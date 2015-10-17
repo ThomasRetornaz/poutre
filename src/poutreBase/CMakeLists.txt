@@ -1,6 +1,6 @@
 
 
-set(PoutreBaseSubdirectory ${POUTRE_CORE_DIR}/poutreBase)
+set(PoutreBaseSubdirectory ${POUTRE_SRC_DIR}/poutreBase)
 
 #generate_library_version(${PoutreBaseSubdirectory}/src/current_configuration_generated.cpp)
 

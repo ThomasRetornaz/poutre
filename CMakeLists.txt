@@ -33,13 +33,13 @@ set(POUTRE_SOURCE_DIR         ${CMAKE_CURRENT_SOURCE_DIR}   CACHE PATH "Base of 
 set(POUTRE_ROOT_DIR         ${POUTRE_SOURCE_DIR}   CACHE PATH "Base of the input directory")
 
 # General library settings
-set(POUTRE_CORE_DIR
-    ${POUTRE_ROOT_DIR}/core
+set(POUTRE_SRC_DIR
+    ${POUTRE_ROOT_DIR}/src
     CACHE PATH
     "Root path of the Core of POUTRE")
 
-set(POUTRE_CORE_TEST_DIR
-    ${POUTRE_ROOT_DIR}/coreTests
+set(POUTRE_NRT_DIR
+    ${POUTRE_ROOT_DIR}/nrt
     CACHE PATH
     "Root path of the Core of POUTRE's tests")
 
@@ -117,8 +117,8 @@ Set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} ${NT
 set(CMAKE_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} ${NT2_LINK_FLAGS}")
 
 # warning the order is important
-include_directories(${POUTRE_CORE_DIR})
-include_directories(${POUTRE_CORE_TEST_DIR})
+include_directories(${POUTRE_SRC_DIR})
+include_directories(${POUTRE_NRT_DIR})
 include_directories(${POUTRE_PYTHONEXT_DIR})
 
 include_directories(${Boost_INCLUDE_DIRS})
@@ -126,8 +126,8 @@ include_directories(${NT2_INCLUDE_DIR})
 include_directories(${JSONCPP_INCLUDE_DIR})
 
 # the poutre core libraries
-add_subdirectory (${POUTRE_CORE_DIR})
-add_subdirectory (${POUTRE_CORE_TEST_DIR})
+add_subdirectory (${POUTRE_SRC_DIR})
+add_subdirectory (${POUTRE_NRT_DIR})
 
 # creates the python package
 #create_python_package()

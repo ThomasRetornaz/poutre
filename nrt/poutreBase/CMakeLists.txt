@@ -1,8 +1,8 @@
 
-include_directories(${POUTRE_CORE_DIR})
+include_directories(${POUTRE_SRC_DIR})
 
 # Test project
-set(PoutreBaseTestSubdirectory ${POUTRE_CORE_TEST_DIR}/poutreBase)
+set(PoutreBaseTestSubdirectory ${POUTRE_NRT_DIR}/poutreBase)
 set(PoutreBaseTestSRC
   ${PoutreBaseTestSubdirectory}/main.hpp
   ${PoutreBaseTestSubdirectory}/main.cpp

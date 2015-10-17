@@ -1,6 +1,6 @@
-include_directories(${POUTRE_CORE_DIR})
+include_directories(${POUTRE_SRC_DIR})
 
-set(PoutreIPSubdirectory ${POUTRE_CORE_DIR}/poutreImageProcessing)
+set(PoutreIPSubdirectory ${POUTRE_SRC_DIR}/poutreImageProcessing)
 
 #generate_library_version(${PoutreNNSubdirectory}/src/current_configuration_generated.cpp)
 

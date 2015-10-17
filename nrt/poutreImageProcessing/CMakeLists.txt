@@ -1,6 +1,6 @@
 
 # Test project
-set(poutreImageProcessingTestSubdirectory ${POUTRE_CORE_TEST_DIR}/poutreImageProcessing)
+set(poutreImageProcessingTestSubdirectory ${POUTRE_NRT_DIR}/poutreImageProcessing)
 set(poutreImageProcessingTestSRC
     ${poutreImageProcessingTestSubdirectory}/main.hpp
     ${poutreImageProcessingTestSubdirectory}/main.cpp

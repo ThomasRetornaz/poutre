@@ -1,6 +1,6 @@
 
 
-set(PoutreNNSubdirectory ${POUTRE_CORE_DIR}/poutreNeuralNets)
+set(PoutreNNSubdirectory ${POUTRE_SRC_DIR}/poutreNeuralNets)
 
 #generate_library_version(${PoutreNNSubdirectory}/src/current_configuration_generated.cpp)
 

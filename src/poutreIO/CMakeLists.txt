@@ -1,6 +1,6 @@
 
 
-set(PoutreIOSubdirectory ${POUTRE_CORE_DIR}/poutreIO)
+set(PoutreIOSubdirectory ${POUTRE_SRC_DIR}/poutreIO)
 
 #generate_library_version(${PoutreIOSubdirectory}/src/current_configuration_generated.cpp)
 

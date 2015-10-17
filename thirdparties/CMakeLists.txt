@@ -135,6 +135,10 @@ SET(NT2_INCLUDE_DIR ${NT2_INCLUDE_DIR} PARENT_SCOPE) #we can do better
 #add_subdirectory(boostsimd)
 SET(NT2_COMPILE_FLAGS ${NT2_COMPILE_FLAGS} PARENT_SCOPE) 
 
+
+# micro benchmark
+add_subdirectory(microbenchmark)
+
 # jsoncpp
 add_subdirectory(jsoncpp)
 #SET(JSONCPP_INCLUDE_DIR ${JSONCPP_INCLUDE_DIR} PARENT_SCOPE)
