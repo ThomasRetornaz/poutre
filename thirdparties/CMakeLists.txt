@@ -137,7 +137,7 @@ SET(NT2_COMPILE_FLAGS ${NT2_COMPILE_FLAGS} PARENT_SCOPE)
 
 
 # micro benchmark
-add_subdirectory(microbenchmark)
+#?add_subdirectory(microbenchmark)
 
 # jsoncpp
 add_subdirectory(jsoncpp)

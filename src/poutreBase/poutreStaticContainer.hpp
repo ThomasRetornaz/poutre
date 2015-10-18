@@ -505,8 +505,10 @@ namespace poutre
 
     using parent = static_array_base < value_type, Rank >;
     using self_type = static_array < value_type, Rank >;
-#ifdef _MSC_VER
+#if (defined _MSC_VER && _MSC_VER<=1800)
     using static_array_base<value_type, Rank>::static_array_base<value_type, Rank>;
+#elif (defined _MSC_VER && _MSC_VER>=1900)
+	poutre::static_array_base<valuetype, Rank>::static_array_base;
 #else
     using parent::parent;
 #endif

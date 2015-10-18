@@ -95,7 +95,7 @@ BOOST_AUTO_TEST_CASE(ioreadstring_3Planes_UNT8)
     std::vector<std::vector<poutre::pUINT8>> expectedvalues={{1,1,1},{2,2,2},{3,3,3},{4,4,4},{10,10,10},
     {12,12,12},{13,13,13},{14,14,14},{20,20,20},{22,22,22},{23,23,23},{24,24,24}};
     
-    using ImgType =  typename poutre::DenseImage<
+    using ImgType =  /*typename*/ poutre::DenseImage<
                 typename poutre::TypeTraits<poutre::compound_pixel<poutre::pUINT8,3>>::storage_type,
                 2>;
     ImgType* img_t=dynamic_cast<ImgType*>(&(*img));
@@ -139,7 +139,7 @@ BOOST_AUTO_TEST_CASE(ioreadstring_4Planes_double)
 {20,20,20,20},{22,22,22,22},{23,23,23,23},{24,24,24,24}
     };
     
-    using ImgType =  typename poutre::DenseImage<
+    using ImgType =  /*typename*/ poutre::DenseImage<
                 typename poutre::TypeTraits<poutre::compound_pixel<poutre::pDOUBLE,4>>::storage_type,
                 2>;
     ImgType* img_t=dynamic_cast<ImgType*>(&(*img));

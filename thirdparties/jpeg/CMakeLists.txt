@@ -26,5 +26,5 @@ else()
 	  CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
 	  ) #SET CONFIGURE_COMMAND, BUILD_COMMAND and INSTALL_COMMAND to "" compile nothing
 	  
-	
+	set_target_properties(jpeg PROPERTIES FOLDER "Dependencies/")
 endif()

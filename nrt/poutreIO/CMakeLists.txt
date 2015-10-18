@@ -13,10 +13,10 @@ set_target_properties(PoutreIOTests PROPERTIES
                       FOLDER "Core/")
 
 target_link_libraries(PoutreIOTests
-    PoutreBase 
-    PoutreImageProcessing 
-    PoutreIO
-    jsoncpp	
+    PUBLIC PoutreBase 
+    PUBLIC PoutreImageProcessing 
+    PUBLIC PoutreIO
+    PUBLIC jsoncpp	
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 	

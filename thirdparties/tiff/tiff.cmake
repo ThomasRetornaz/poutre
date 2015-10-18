@@ -14,7 +14,6 @@ set (CHECK_JPEG_YCBCR_SUBSAMPLING 1 )
 set (CXX_SUPPORT 1 )
 set (DEFAULT_EXTRASAMPLE_AS_ALPHA 1 )
 
-
 check_include_files ( assert.h HAVE_ASSERT_H )
 check_include_files ( dlfcn.h HAVE_DLFCN_H )
 check_include_files ( fcntl.h HAVE_FCNTL_H )
@@ -147,6 +146,14 @@ configure_file ( libtiff/tiffconf.h.in tiffconf.h )
 message ( "Configure: libtiff - done." )
 add_definitions ( -DHAVE_CONFIG_H )
 
+macro ( add_prefix prefix rootlist )
+set ( outlist )
+foreach ( root ${${rootlist}} )
+list ( APPEND outlist ${prefix}${root} )
+endforeach ( root )
+set ( ${rootlist} ${outlist} )
+endmacro ( )
+
 
 set ( LIBTIFF_SRC tif_aux.c tif_close.c tif_codec.c tif_color.c tif_compress.c tif_dir.c 
   tif_dirinfo.c tif_dirread.c tif_dirwrite.c tif_dumpmode.c tif_error.c tif_extension.c 
@@ -159,6 +166,8 @@ if ( UNIX )
 elseif ( WIN32 )
 list ( APPEND LIBTIFF_SRC tif_win32.c )
 endif ( )
+
+add_prefix ( libtiff/ TIFF_SRCS )
 
 set(LIBTIFF_PUBLIC_HEADERS
 tiff.h
@@ -189,15 +198,12 @@ target_include_directories(tiff
     PRIVATE zlib
     PRIVATE jpeg
 )
+
+
+set_target_properties(tiff PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 target_link_libraries(tiff LINK_PRIVATE zlib jpeg)
 set_property(TARGET tiff PROPERTY FOLDER "Dependencies/")
 
 set(tiff               tiff              PARENT_SCOPE)
 set(TIFF_LIB_SRC       ${LIBTIFF_SOURCE_DIR}   PARENT_SCOPE)
-
-
-
-
-
-
 

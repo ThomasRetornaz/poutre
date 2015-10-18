@@ -38,7 +38,7 @@ target_link_libraries(PoutreNeuralNets
   INTERFACE BoostSimd
   PoutreBase 
   )
-set_target_properties(PoutreNeuralNets PROPERTIES FOLDER "CoreCPP/")
+set_target_properties(PoutreNeuralNets PROPERTIES FOLDER "src/")
 
 IF(BUILD_SHARED_LIBS)
   SET_TARGET_PROPERTIES(PoutreNeuralNets PROPERTIES COMPILE_FLAGS -DJSON_DLL)

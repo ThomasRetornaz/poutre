@@ -38,11 +38,10 @@ target_link_libraries(PoutreIO
   PRIVATE jsoncpp
   INTERFACE Eigen
   INTERFACE BoostSimd
-  PoutreBase 
-  PoutreImageProcessing
-  PoutreIO
+  PUBLIC PoutreBase 
+  PUBLIC PoutreImageProcessing
   )
-set_target_properties(PoutreIO PROPERTIES FOLDER "CoreCPP/")
+set_target_properties(PoutreIO PROPERTIES FOLDER "src/")
 
 IF(BUILD_SHARED_LIBS)
   SET_TARGET_PROPERTIES(PoutreIO PROPERTIES COMPILE_FLAGS -DJSON_DLL)
