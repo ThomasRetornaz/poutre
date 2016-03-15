@@ -16,7 +16,7 @@ target_include_directories(jsoncpp
                            PUBLIC ${jsoncppSubdirectory}
                            PUBLIC ${jsoncppSubdirectory}/json
                            )
-set_target_properties(jsoncpp PROPERTIES FOLDER "Dependencies/")		
+set_target_properties(jsoncpp PROPERTIES FOLDER "3rdparty/")		
 IF(BUILD_SHARED_LIBS)
 	SET_TARGET_PROPERTIES(jsoncpp PROPERTIES COMPILE_FLAGS -DJSON_DLL_BUILD)
 ENDIF(BUILD_SHARED_LIBS)

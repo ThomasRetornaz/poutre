@@ -90,8 +90,6 @@ namespace poutre
     using iterator = bounds_iterator<Rank>;
 #if (defined _MSC_VER && _MSC_VER<=1800)
 	static_array_base<ptrdiff_t, Rank>::static_array_base < ptrdiff_t, Rank >;
-#elif (defined _MSC_VER && _MSC_VER>=1900)
-	poutre::static_array_base<ptrdiff_t, Rank>::static_array_base;
 #else
 	using parent::parent;
 #endif
@@ -310,8 +308,6 @@ namespace poutre
     using self_type = index < Rank >;
 #if (defined _MSC_VER && _MSC_VER<=1800)
 	using static_array_base<ptrdiff_t, Rank>::static_array_base<ptrdiff_t, Rank>;
-#elif (defined _MSC_VER && _MSC_VER>=1900)
-	poutre::static_array_base<ptrdiff_t, Rank>::static_array_base;
 #else
 	using parent::parent;
 #endif

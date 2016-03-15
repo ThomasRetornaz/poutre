@@ -34,8 +34,8 @@ add_library(Eigen INTERFACE)
 target_include_directories(Eigen INTERFACE
   $<BUILD_INTERFACE:${source_dir}> #we can do better
 )
-set_target_properties(Eigendep PROPERTIES FOLDER "Dependencies/")	
-#set_target_properties(Eigen PROPERTIES FOLDER "Dependencies/")	
+set_target_properties(Eigendep PROPERTIES FOLDER "3rdparty/")	
+#set_target_properties(Eigen PROPERTIES FOLDER "3rdparty/")	
 
 #think about this later
 # install(TARGETS Eigen EXPORT eigenExport)

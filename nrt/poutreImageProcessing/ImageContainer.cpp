@@ -12,125 +12,17 @@
 
 #include <iostream>
 #include <poutreImageProcessing/core/include/poutreImageProcessingContainer.hpp>
+#include <poutreImageProcessing/core/include/poutreImageProcessingUnaryOp.hpp>
 #include <boost/lexical_cast.hpp>
 
-namespace poutre
+
+class dummy
 {
+	void operator()() const 
+	{
 
-  enum class DispatchView
-  {
-    DispatchViewUndef = 0, //!< Undefined dispatch
-    DispatchViewCompatibleOffsetSamePtrType = 1 << 0, //!< Offset Compatible. Ptr arthimetic compatible
-    DispatchViewCompatibleOffset = 1 << 1, //!< Offset Compatible. Iterate with one offset
-    DispatchViewCompatibleArrayView = 1 << 2, //!< Ptr Compatible. Iterate with two ptr 
-    DispatchViewAtLeastOneIsAStridedView = 1 << 3, //!< One is trided fallback to index iteration
-  };
-
-  std::ostream& operator<<(std::ostream& os, DispatchView dispatchview)
-  {
-    switch (dispatchview)
-      {
-      case DispatchView::DispatchViewCompatibleOffsetSamePtrType:
-        os << "DispatchViewCompatibleOffsetSamePtrType";
-        break;
-      case DispatchView::DispatchViewCompatibleOffset:
-        os << "DispatchViewCompatibleOffset";
-        break;
-      case DispatchView::DispatchViewCompatibleArrayView:
-        os << "DispatchViewCompatibleArrayView";
-        break;
-      case DispatchView::DispatchViewAtLeastOneIsAStridedView:
-        os << "DispatchViewAtLeastOneIsAStridedView";
-        break;
-      default://  enumDispatchView::DispatchViewUndef; 
-        os << "Unknown dispatchView";
-        break;
-      }
-    return os;
-  }
-
-  std::istream& operator>>(std::istream& is, DispatchView& dispatchview)
-  {
-    dispatchview = DispatchView::DispatchViewUndef;
-
-    if (!is.good())
-      return is;
-
-    std::string strType;
-    is >> strType;
-    if (is.bad())
-      return is;
-    if (strType == "DispatchViewCompatibleOffsetSamePtrType")
-      dispatchview = DispatchView::DispatchViewCompatibleOffsetSamePtrType;
-    else if (strType == "DispatchViewCompatibleOffset")
-      dispatchview = DispatchView::DispatchViewCompatibleOffset;
-    else if (strType == "DispatchViewCompatibleArrayView")
-      dispatchview = DispatchView::DispatchViewCompatibleArrayView;
-    else if (strType == "DispatchViewAtLeastOneIsAStridedView")
-      dispatchview = DispatchView::DispatchViewAtLeastOneIsAStridedView;
-    else
-      {
-        POUTRE_RUNTIME_ERROR("Unable to read dispatchview from stream");
-      }
-    return is;
-  }
-
-  template <poutre::DispatchView dispatchview>
-  struct pApplyImageUnaryViewOp_dispatcher
-  {
-  };
-
-  template <>
-  struct pApplyImageUnaryViewOp_dispatcher<DispatchView::DispatchViewCompatibleOffsetSamePtrType>
-  {
-
-    template </*class UnOp,*/ class ViewIn, class ViewOut, class ImageIn, class ImageOut>
-    void operator()(/*UnOp& op,*/ const ViewIn vIn, ViewOut vOut, ImageIn&, ImageOut&) const
-    {
-      std::cout << "\n" << "call pApplyImageUnaryViewOp<DispatchView::DispatchViewCompatibleOffsetSamePtrType>";
-    }
-  };
-
-  struct pApplyImageUnaryViewOp
-  {
-
-    template </*class UnOp,*/ class ViewIn, class ViewOut, class ImageIn, class ImageOut>
-    void operator()(/*UnOp& op,*/ const ViewIn vIn, ViewOut vOut, ImageIn&, ImageOut&) const
-    {
-      //debug precondition
-      POUTRE_ASSERTCHECK(vIn.size() == vOut.size(), "pApplyImageUnaryIterOp size of view are not compatible");
-
-      //extract appropriate tag dispatch from view properties
-      auto dispatch = DispatchView::DispatchViewUndef;
-      auto vInbound = vIn.bound();
-      auto vOutbound = vOut.bound();
-      auto stridevIN = vIn.stride();
-      auto stridevOut = vOut.stride();
-
-      if ((vInbound == vOutbound) && (stridevIN == stridevOut))
-        {
-          if (std::is_same<ViewIn, ViewOut>::value)
-            {
-              //fallback ptr + simd 
-              dispatch = poutre::DispatchView::DispatchViewCompatibleOffsetSamePtrType;
-            }
-          else
-            {
-              //fallback ptr 
-              dispatch = poutre::DispatchView::DispatchViewCompatibleOffset;
-            }
-        }
-      else
-        {
-          dispatch = poutre::DispatchView::DispatchViewAtLeastOneIsAStridedView;
-        }
-      std::cout << "\n***********************";
-      std::cout << "\n" << dispatch;
-      std::cout << "\n***********************";
-    }
-  };
-
-}//namespace poutre
+	}
+};
 
 BOOST_AUTO_TEST_SUITE(poutreImageProcessingContainer)
 
@@ -141,13 +33,8 @@ BOOST_AUTO_TEST_CASE(unaryopviewcompatibleoffset)
   poutre::DenseImage<poutre::pUINT8> img2({3, 4});
   auto v_img1 = poutre::view(img1);
   auto v_img2 = poutre::view(img2);
-  poutre::pApplyImageUnaryViewOp op1;
-  op1(v_img1, v_img2, img1, img2);
-  //throw in debug
-  //#ifndef NDEBUG   
-  //    BOOST_CHECK_THROW(poutre::view(img3),std::runtime_error);
-  //#endif    
-
+  poutre::pApplyImageUnaryViewOp_dispatcher op1;
+  op1(dummy(),v_img1, v_img2);
 }
 
 BOOST_AUTO_TEST_CASE(unaryopviewcompatibleviewDifferenttype)
@@ -156,13 +43,8 @@ BOOST_AUTO_TEST_CASE(unaryopviewcompatibleviewDifferenttype)
   poutre::DenseImage<poutre::pINT32> img2({5, 6});
   auto v_img1 = poutre::view(img1);
   auto v_img2 = poutre::view(img2);
-  poutre::pApplyImageUnaryViewOp op1;
-  op1(v_img1, v_img2, img1, img2);
-  //throw in debug
-  //#ifndef NDEBUG   
-  //    BOOST_CHECK_THROW(poutre::view(img3),std::runtime_error);
-  //#endif    
-
+  poutre::pApplyImageUnaryViewOp_dispatcher op1;
+  op1(dummy(),v_img1, v_img2);
 }
 
 BOOST_AUTO_TEST_CASE(ctor)

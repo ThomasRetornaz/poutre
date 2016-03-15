@@ -30,9 +30,7 @@ if(UNIX AND NOT APPLE AND NOT POUTRE_BOOST_FROM_SYSTEM)
 endif()
 
 set(Boost_ADDITIONAL_VERSIONS   
-    "1.57" "1.57.0" 
-	"1.58" "1.58.0"
-	"1.59" "1.59.0")
+	"1.59" "1.59.0" "1.60" "1.60.0" "1.61" "1.61.0")
 
 # disable auto link
 add_definitions(-DBOOST_ALL_NO_LIB)
@@ -143,16 +141,18 @@ SET(NT2_COMPILE_FLAGS ${NT2_COMPILE_FLAGS} PARENT_SCOPE)
 add_subdirectory(jsoncpp)
 #SET(JSONCPP_INCLUDE_DIR ${JSONCPP_INCLUDE_DIR} PARENT_SCOPE)
 
-
 # png
-add_subdirectory(png)
+add_subdirectory(zlib)
+# png
+add_subdirectory(libpng)
 # jpeg
-add_subdirectory(jpeg)
+add_subdirectory(libjpeg)
 # tiff
-add_subdirectory(tiff)
+add_subdirectory(libtiff)
 # eigen
 add_subdirectory(eigen)
-
+# compute
+add_subdirectory(compute)
 #todo HDF5
 
 

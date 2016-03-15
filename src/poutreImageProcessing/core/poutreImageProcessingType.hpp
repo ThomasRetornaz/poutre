@@ -114,7 +114,7 @@ namespace poutre
   typedef compound_pixel < pDOUBLE, 3 > c3pDOUBLE;
 
   typedef compound_pixel < pUINT8, 4 > c4pUINT8;
-  typedef compound_pixel < pINT32, 3 > c4pINT32;
+  typedef compound_pixel < pINT32, 4 > c4pINT32;
   typedef compound_pixel < pFLOAT, 4 > c4pFLOAT;
   typedef compound_pixel < pINT64, 4 > c4pINT64;
   typedef compound_pixel < pDOUBLE, 4 > c4pDOUBLE;

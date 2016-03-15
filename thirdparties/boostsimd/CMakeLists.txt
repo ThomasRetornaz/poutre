@@ -36,7 +36,7 @@ target_include_directories(BoostSimd INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/src/BoostSimddep/include> #we can do better
 )
 include_directories(${NT2_INCLUDE_DIR})
-set_target_properties(BoostSimddep PROPERTIES FOLDER "Dependencies/")	
+set_target_properties(BoostSimddep PROPERTIES FOLDER "3rdparty/")	
 #workaround
 #MESSAGE(FATAL_ERROR "${NT2_COMPILE_FLAGS}")
 #add_compile_options(${NT2_COMPILE_FLAGS})

@@ -36,139 +36,216 @@
 #include <boost/config.hpp>
 
 
+
+
+//move this in a dedicated here in PoutreCore
 namespace poutre
-  {
-  namespace bs = boost::simd;
+{
 
-  //stolen from
-  //#include <boost/simd/sdk/simd/algorithm.hpp>
-  template<PType ptypeIn, class UnOp>
-  struct pImageUnaryIterOpInPlace
-    {
-    using value_type = TypeTraits<ptypeIn>::storage_type;
-    using pointer = value_type*;
-    using bsvalue_type = bs::pack < value_type > ;
+	namespace bs = boost::simd;
 
-    void operator()(pointer begin, pointer end, UnOp f) const
-      {
-      POUTRE_ASSERTCHECK(begin != nullptr, "pImageUnaryIterOp: begin null ptr");
-      POUTRE_ASSERTCHECK(end != nullptr, "pImageUnaryIterOp: end null ptr");
+	enum class DispatchView {
+		DispatchViewUndef = 0, //!< Undefined dispatch
+		DispatchViewCompatibleOffsetSamePtrType =	1 << 0, //!<Ptr arthimetic compatible
+		DispatchViewCompatibleOffset =		1 << 1, //!< Offset Compatible. Iterate with one iterator
+		// DispatchViewCompatibleArrayView =
+		// 1 << 2, //!< Ptr Compatible. Iterate with two ptr
+		DispatchViewAtLeastOneIsAStridedView =	1 << 3, //!< One is strided fallback to index iteration
+	};
 
+	std::ostream& operator<<(std::ostream& os, DispatchView dispatchview)
+	{
+		switch (dispatchview)
+		{
+		case DispatchView::DispatchViewCompatibleOffsetSamePtrType:
+			os << "DispatchViewCompatibleOffsetSamePtrType";
+			break;
+		case DispatchView::DispatchViewCompatibleOffset:
+			os << "DispatchViewCompatibleOffset";
+			break;
+			//case DispatchView::DispatchViewCompatibleArrayView:
+			//  os << "DispatchViewCompatibleArrayView";
+			//  break;
+		case DispatchView::DispatchViewAtLeastOneIsAStridedView:
+			os << "DispatchViewAtLeastOneIsAStridedView";
+			break;
+		default://  enumDispatchView::DispatchViewUndef; 
+			os << "Unknown dispatchView";
+			break;
+		}
+		return os;
+	}
 
-      static const std::size_t N = bsvalue_type::static_size;
-      const std::size_t shift = simd::align_on(begin, N * sizeof(value_type)) - begin;
-      pointer end2 = begin + std::min<size_t>(shift, end - begin);
-      pointer end3 = end2 + (end - end2) / N*N;
+	std::istream& operator>>(std::istream& is, DispatchView& dispatchview)
+	{
+		dispatchview = DispatchView::DispatchViewUndef;
 
-      // prologue
-      for (; begin != end2; ++begin)
-        *begin = f(*begin);
+		if (!is.good())
+			return is;
 
-      //main loop 
-      //TODO UNROLL ?
-      if (simd::is_aligned(begin, N * sizeof(value_type)))
-        {
-        for (; begin != end3; begin += N, out += N)
-          simd::aligned_store(f(simd::aligned_load<value_type>(begin)), begin);
-        }
-      else
-        {
-        for (; begin != end3; begin += N, out += N)
-          simd::aligned_store(f(simd::load<value_type>(begin)), begin);
-        }
+		std::string strType;
+		is >> strType;
+		if (is.bad())
+			return is;
+		if (strType == "DispatchViewCompatibleOffsetSamePtrType")
+			dispatchview = DispatchView::DispatchViewCompatibleOffsetSamePtrType;
+		else if (strType == "DispatchViewCompatibleOffset")
+			dispatchview = DispatchView::DispatchViewCompatibleOffset;
+		//else if (strType == "DispatchViewCompatibleArrayView")
+		//  dispatchview = DispatchView::DispatchViewCompatibleArrayView;
+		else if (strType == "DispatchViewAtLeastOneIsAStridedView")
+			dispatchview = DispatchView::DispatchViewAtLeastOneIsAStridedView;
+		else
+		{
+			POUTRE_RUNTIME_ERROR("Unable to read dispatchview from stream");
+		}
+		return is;
+	}
 
-      // epilogue
-      for (; begin != end; ++begin, ++out)
-        *begin = f(*begin);
+	template <poutre::DispatchView dispatchview>
+	struct pApplyImageUnaryViewOp_Specialize
+	{
+	};
 
-      }
-    };
+	template <>
+	struct pApplyImageUnaryViewOp_Specialize<DispatchView::DispatchViewCompatibleOffsetSamePtrType>
+	{
 
+		//template <class UnOp,class ViewInOut>
+		template <class UnOp, class ViewIn,class ViewOut>
+		void operator()(UnOp& op,const ViewIn& vIn, ViewOut& vOut) const
+		{
 
-  template<PType ptypeIn, PType ptypeOut, class UnOp>
-  struct pImageUnaryIterOp
-    {
-    using value_typeIn = TypeTraits<ptypeIn>::storage_type;
-    using value_typeOut = TypeTraits<ptypeOut>::storage_type;
-    using pointerin = value_typeIn *;
-    using pointerout = value_typeOut *;
-    using const_pointerin = const value_typeIn *;
-    //using const_pointerout = const value_typeOut *;
-    using bsvalue_typeIn = bs::pack < value_typeIn > ;
-    using bsvalue_typeOut = bs::pack < value_typeOut > ;
-
-    void operator()(const_pointerin beginin, const_pointerin endin, pointerout beginout, UnOp f) const
-      {
-      BOOST_MPL_ASSERT_MSG(bsvalue_typeIn::static_size == bsvalue_typeOut::static_size
-        , BOOST_SIMD_TRANSFORM_INPUT_OUTPUT_NOT_SAME_SIZE
-        , (value_typeIn, value_typeOut)
-        );
-      static const std::size_t N = bsvalue_typeIn::static_size;
-
-      const std::size_t shift = simd::align_on(beginout, N * sizeof(value_typeOut) - beginout;
-      const_pointerin end2 = beginin + std::min<size_t>(shift, endin - beginin);
-      const_pointerin end3 = end2 + (endin - end2) / N*N;
-
-      // prologue
-      for (; beginin != end2; ++beginin, ++beginout)
-        *beginout = f(*beginin);
-
-      //main loop
-      //TODO UNROLL ?
-      if (simd::is_aligned(beginin, N * sizeof(value_typeIn)) && simd::is_aligned(beginout, N * sizeof(value_typeOut)))
-        {
-        for (; beginin != end3; beginin += N, beginout += N)
-          simd::aligned_store(f(simd::aligned_load<value_typeIn>(begin1)), beginout);
-        }
-      else
-        {
-        for (; beginin != end3; beginin += N, beginout += N)
-          simd::store(f(simd::load<value_typeIn>(begin1)), beginout);
-        }
-
-      // epilogue
-      for (; beginin != end; ++beginin, ++beginout)
-        *beginout = f(*beginin);
-      }
-    };
+			std::cout << "\n" << "call pApplyImageUnaryViewOp<DispatchView::DispatchViewCompatibleOffsetSamePtrType>";
+		}
+	};
 
 
-  template<class ImageIn, class UnOp>
-  struct pApplyImageUnaryIterOpInPlace
-    {
-    void operator()(ImageIn& img, UnOp f) const
-      {
-      //TODO use multithread approch here dispatch on dims and so on 
-      //also dispatch on iterator categories
-      pImageUnaryIterOp<ImageIn::m_ptype, ImageIn::m_ptype, UnOp>( )(img.begin( ), img.end( ), img.begin( ),f);
-      }
-    };
+	template <>
+	struct pApplyImageUnaryViewOp_Specialize<DispatchView::DispatchViewCompatibleOffset>
+	{
 
-  //struct pApplyImageUnaryIterOp
-  //  {
-  //  template<class ImageIn, class ImageOut, class UnOp>
-  //  void operator()(const ImageIn& imgIn, ImageOut& imgOut, UnOp f) const
-  //    {
-  //    //TODO PRECONDITIONS
-  //    //TODO use multithread approch here dispatch on dims and so on 
-  //    //also dispatch on iterator categories and types
-  //    pImageUnaryIterOp<ImageIn::m_ptype, ImageOut::m_ptype, UnOp>( )(imgIn.begin( ), imgIn.end( ), imgOut.begin( ), f);
-  //    }
-  //  };
-  
-    
-  //more generic version
-  template <class tag>
-  struct pApplyImageUnaryIterOp
-    {
-    template <class UnOp, class IterIn, class IterOut, class ImageIn, class ImageOut>
-    void operator()(op_& op, IterIn it, const IterIn ite, IterOut itout, ImageIn&, ImageOut&) const
-      {
-      for ( ; it != ite; ++it, ++itout )
-        {
-        *itout=op(*it);
-        }
-      }
-    };
-  }
+		template <class UnOp,class ViewIn, class ViewOut>
+		void operator()(UnOp& op,const ViewIn vIn, ViewOut vOut) const
+		{
+			std::cout << "\n" << "call pApplyImageUnaryViewOp<DispatchView::DispatchViewCompatibleOffset>";
+		}
+	};
+
+	template <>
+	struct pApplyImageUnaryViewOp_Specialize<DispatchView::DispatchViewAtLeastOneIsAStridedView>
+	{
+
+		template <class UnOp, class ViewIn, class ViewOut>
+		void operator()(UnOp& op, const ViewIn vIn, ViewOut vOut) const
+		{
+			std::cout << "\n" << "call pApplyImageUnaryViewOp<DispatchView::DispatchViewAtLeastOneIsAStridedView>";
+		}
+	};
+
+
+	struct pApplyImageUnaryViewOp_dispatcher
+	{
+
+		template <class UnOp,class ViewIn, class ViewOut>
+		void operator()(UnOp& op, const ViewIn vIn, ViewOut vOut) const
+		{
+			//debug precondition
+			POUTRE_ASSERTCHECK(vIn.size() == vOut.size(), "pApplyImageUnaryIterOp size of view are not compatible");
+
+			auto vInbound = vIn.bound();
+			auto vOutbound = vOut.bound();
+			auto stridevIN = vIn.stride();
+			auto stridevOut = vOut.stride();
+
+			//FIXME A REPRENDRE
+			if ((vInbound == vOutbound) && (stridevIN == stridevOut))
+			{
+				if (std::is_same<ViewIn, ViewOut>::value)
+				{
+					//fallback ptr + simd 
+					pApplyImageUnaryViewOp_Specialize<poutre::DispatchView::DispatchViewCompatibleOffsetSamePtrType>()(op,vIn, vOut);
+				}
+				else
+				{
+					//fallback different ptr type
+					pApplyImageUnaryViewOp_Specialize<poutre::DispatchView::DispatchViewCompatibleOffset>()(op, vIn, vOut);
+				}
+			}
+			else
+			{
+				pApplyImageUnaryViewOp_Specialize<poutre::DispatchView::DispatchViewAtLeastOneIsAStridedView>()(op,vIn, vOut);
+			}
+		}
+
+	};
+
+	/*
+	//stolen from <boost/simd/sdk/simd/algorithm.hpp>
+	/*
+	template<PType ptypeIn, PType ptypeOut, class UnOp>
+	struct pImageUnaryIterOp
+	{
+		using value_typeIn = TypeTraits<ptypeIn>::storage_type;
+		using value_typeOut = TypeTraits<ptypeOut>::storage_type;
+		using pointerin = value_typeIn*;
+		using pointerout = value_typeOut*;
+		using const_pointerin = const value_typeIn *;
+		//using const_pointerout = const value_typeOut *;
+		using bsvalue_typeIn = bs::pack < value_typeIn >;
+		using bsvalue_typeOut = bs::pack < value_typeOut >;
+
+		void operator()(const_pointerin beginin, const_pointerin endin, pointerout beginout, UnOp f) const
+		{
+			BOOST_MPL_ASSERT_MSG(bsvalue_typeIn::static_size == bsvalue_typeOut::static_size
+				, BOOST_SIMD_TRANSFORM_INPUT_OUTPUT_NOT_SAME_SIZE
+				, (value_typeIn, value_typeOut)
+				);
+			static const std::size_t N = bsvalue_typeIn::static_size;
+
+			const std::size_t shift = simd::align_on(beginout, N * sizeof(value_typeOut)) - beginout;
+			const_pointerin end2 = beginin + std::min<size_t>(shift, endin - beginin);
+			const_pointerin end3 = end2 + (endin - end2) / N*N;
+
+			// prologue
+			for (; beginin != end2; ++beginin, ++beginout)
+				*beginout = f(*beginin);
+
+			//main loop
+			//TODO UNROLL ?
+			if (simd::is_aligned(beginin, N * sizeof(value_typeIn)) && simd::is_aligned(beginout, N * sizeof(value_typeOut)))
+			{
+				for (; beginin != end3; beginin += N, beginout += N)
+					simd::aligned_store(f(simd::aligned_load<value_typeIn>(begin1)), beginout);
+			}
+			else
+			{
+				for (; beginin != end3; beginin += N, beginout += N)
+					simd::store(f(simd::load<value_typeIn>(begin1)), beginout);
+			}
+
+			// epilogue
+			for (; beginin != end; ++beginin, ++beginout)
+				*beginout = f(*beginin);
+		}
+	};
+
+
+
+	//more generic version
+	template <class tag>
+	struct pApplyImageUnaryIterOp
+	{
+		template <class UnOp, class IterIn, class IterOut, class ImageIn, class ImageOut>
+		void operator()(op_& op, IterIn it, const IterIn ite, IterOut itout, ImageIn&, ImageOut&) const
+		{
+			for (; it != ite; ++it, ++itout)
+			{
+				*itout = op(*it);
+			}
+		}
+	};
+	*/
+}
+
 #endif//POUTRE_IMAGEPROCESSING_UNARYOP_HPP__

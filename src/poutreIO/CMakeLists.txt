@@ -4,17 +4,15 @@ set(PoutreIOSubdirectory ${POUTRE_SRC_DIR}/poutreIO)
 
 #generate_library_version(${PoutreIOSubdirectory}/src/current_configuration_generated.cpp)
 
-set(PoutreIOSRC_DETAILS
-  ${PoutreIOSubdirectory}/src/poutreIOString.cpp
-  )
-
 set(PoutreIOSRC_PUBLICHEADERS  
   ${PoutreIOSubdirectory}/poutreIO.hpp
   ${PoutreIOSubdirectory}/poutreIOString.hpp
+  ${PoutreIOSubdirectory}/poutreIOLoader.hpp
 )
 
 set(PoutreIOSRC_CPP
   ${PoutreIOSubdirectory}/src/dummy.cpp
+  ${PoutreIOSubdirectory}/src/poutreIOString.cpp
   # auto generated file
   #${PoutreBaseSubdirectory}/src/current_configuration_generated.cpp
   )
@@ -23,19 +21,17 @@ source_group(src FILES ${PoutreIOSRC_CPP})
 source_group(header FILES ${PoutreIOSRC_PUBLICHEADERS})
 
 set(PoutreIOSRC
-	${PoutreIOSRC_DETAILS}
 	${PoutreIOSRC_PUBLICHEADERS}
 	${PoutreIOSRC_CPP}
 	)
 
 add_library(PoutreIO ${PoutreIOSRC})
 target_link_libraries(PoutreIO 
-  # PRIVATE ${Boost_GRAPH_LIBRARY} 
-  # PRIVATE ${Boost_DATE_TIME_LIBRARY} 
-  # PRIVATE ${Boost_REGEX_LIBRARY} 
-  # PRIVATE ${Boost_THREAD_LIBRARY} 
-  # PRIVATE ${Boost_SYSTEM_LIBRARY}
   PRIVATE jsoncpp
+  PRIVATE ${JPEG_LIBRARY}
+  PRIVATE ${ZLIB_LIBRARY} 
+  PRIVATE ${PNG_LIBRARY} 
+  PRIVATE ${TIFF_LIBRARY} 
   INTERFACE Eigen
   INTERFACE BoostSimd
   PUBLIC PoutreBase 
