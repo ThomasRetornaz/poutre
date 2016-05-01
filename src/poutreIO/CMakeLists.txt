@@ -4,6 +4,23 @@ set(PoutreIOSubdirectory ${POUTRE_SRC_DIR}/poutreIO)
 
 #generate_library_version(${PoutreIOSubdirectory}/src/current_configuration_generated.cpp)
 
+ find_package(OpenCV QUIET)
+
+INCLUDE_DIRECTORIES(BEFORE SYSTEM 
+	${ZLIB_INCLUDE_DIR}
+	${PNG_INCLUDE_DIR}
+	${JPEG_INCLUDE_DIR}
+	${TIFF_INCLUDE_DIR}
+	${HDF5_INCLUDE_DIR}
+	)
+
+set(PoutreIOSRC_DETAILS
+	${PoutreIOSubdirectory}/include/poutreIOPNG.hpp
+  ${PoutreIOSubdirectory}/include/poutreIOJPG.hpp
+  ${PoutreIOSubdirectory}/include/poutreIOTIFF.hpp
+  ${PoutreIOSubdirectory}/include/poutreIOBuffer.hpp
+)  
+
 set(PoutreIOSRC_PUBLICHEADERS  
   ${PoutreIOSubdirectory}/poutreIO.hpp
   ${PoutreIOSubdirectory}/poutreIOString.hpp
@@ -11,8 +28,11 @@ set(PoutreIOSRC_PUBLICHEADERS
 )
 
 set(PoutreIOSRC_CPP
-  ${PoutreIOSubdirectory}/src/dummy.cpp
   ${PoutreIOSubdirectory}/src/poutreIOString.cpp
+  ${PoutreIOSubdirectory}/src/poutreIOLoader.cpp
+  ${PoutreIOSubdirectory}/src/poutreIOPNG.cpp
+  ${PoutreIOSubdirectory}/src/poutreIOJPG.cpp
+  ${PoutreIOSubdirectory}/src/poutreIOTIFF.cpp
   # auto generated file
   #${PoutreBaseSubdirectory}/src/current_configuration_generated.cpp
   )
@@ -22,6 +42,7 @@ source_group(header FILES ${PoutreIOSRC_PUBLICHEADERS})
 
 set(PoutreIOSRC
 	${PoutreIOSRC_PUBLICHEADERS}
+	${PoutreIOSRC_DETAILS}
 	${PoutreIOSRC_CPP}
 	)
 
