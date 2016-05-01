@@ -15,7 +15,7 @@
 
 BOOST_AUTO_TEST_SUITE(poutreImageProcessingCopyConvert)
 
-BOOST_AUTO_TEST_CASE(getsame)
+BOOST_AUTO_TEST_CASE(Clone)
 {
   using ImageType = poutre::DenseImage < poutre::pUINT8 >;
   using ImageTypeInterface = std::unique_ptr < poutre::IInterface >;
@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_CASE(getsame)
   BOOST_CHECK_EQUAL(img.GetPType(), poutre::PType::PType_GrayUINT8);
   img.assign(10);
 
-  ImageTypeInterface getSameii = poutre::GetSame(img);
+  ImageTypeInterface getSameii = poutre::Clone(img);
 
   ImageType* getSame = dynamic_cast<ImageType*> (getSameii.get());
   BOOST_CHECK(getSame);
@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE(getsamecoord)
 
 
   using ImageType = poutre::DenseImage < poutre::pFLOAT>;
-  ImageTypeInterface getSameii = poutre::GetSameCoord(img, poutre::PType::PType_F32);
+  ImageTypeInterface getSameii = poutre::CloneGeometry(img, poutre::PType::PType_F32);
 
   ImageType* getSame = dynamic_cast<ImageType*> (getSameii.get());
   BOOST_CHECK_EQUAL((*getSame).GetCType(), poutre::CompoundType::CompoundType_Scalar);

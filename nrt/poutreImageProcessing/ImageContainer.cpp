@@ -9,43 +9,133 @@
 
 #include "main.hpp"
 #include "poutreBase/poutreGeometry.hpp"
-
+#include <vector>
 #include <iostream>
 #include <poutreImageProcessing/core/include/poutreImageProcessingContainer.hpp>
 #include <poutreImageProcessing/core/include/poutreImageProcessingUnaryOp.hpp>
 #include <boost/lexical_cast.hpp>
 
 
-class dummy
+template <typename value_type1, typename value_type2>
+struct dummy
 {
-	void operator()() const 
-	{
+private:
+    size_t count;
+    std::vector<value_type1> m_vect;
 
-	}
+public:
+    dummy() :count(0), m_vect() {}
+
+    value_type2 operator()(const value_type1 &val) /*const*/
+    {
+        m_vect.pushback(val);
+        count++;
+        return static_cast<value_type2>(val);
+    }
+
+    //void operator()()
+    //{
+    //}
+
+    size_t GetCount() const
+    {
+        return count;
+    }
+
+    std::vector<value_type1> GetValues() const
+    {
+        return m_vect;
+    }
+
 };
 
 BOOST_AUTO_TEST_SUITE(poutreImageProcessingContainer)
 
 
-BOOST_AUTO_TEST_CASE(unaryopviewcompatibleoffset)
+BOOST_AUTO_TEST_CASE(unaryopviewInPlace)
 {
   poutre::DenseImage<poutre::pUINT8> img1({3, 4});
-  poutre::DenseImage<poutre::pUINT8> img2({3, 4});
   auto v_img1 = poutre::view(img1);
-  auto v_img2 = poutre::view(img2);
-  poutre::pApplyImageUnaryViewOp_dispatcher op1;
-  op1(dummy(),v_img1, v_img2);
+  poutre::UnaryInPlaceOp(v_img1,dummy<poutre::pUINT8, poutre::pUINT8>());
 }
 
-BOOST_AUTO_TEST_CASE(unaryopviewcompatibleviewDifferenttype)
+BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousDifferentPtrType)
 {
   poutre::DenseImage<poutre::pUINT8> img1({5, 6});
   poutre::DenseImage<poutre::pINT32> img2({5, 6});
   auto v_img1 = poutre::view(img1);
   auto v_img2 = poutre::view(img2);
-  poutre::pApplyImageUnaryViewOp_dispatcher op1;
-  op1(dummy(),v_img1, v_img2);
+  poutre::UnaryOp(v_img1, v_img2, dummy<poutre::pUINT8,poutre::pINT32>());
 }
+
+BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType)
+{
+    poutre::DenseImage<poutre::pUINT8> img1({ 5, 6 });
+    poutre::DenseImage<poutre::pUINT8> img2({ 5, 6 });
+    auto v_img1 = poutre::view(img1);
+    auto v_img2 = poutre::view(img2);
+    poutre::UnaryOp(v_img1, v_img2, dummy<poutre::pUINT8, poutre::pUINT8>());
+}
+
+
+
+BOOST_AUTO_TEST_CASE(unaryopviewDispatchOneIdxSamePtrType)
+{
+	poutre::DenseImage<poutre::pUINT8> img1({ 5, 6 });
+	poutre::DenseImage<poutre::pUINT8> img2({ 5, 6 });
+	auto v_img1 = poutre::view(img1);
+	auto v_img2 = poutre::view(img2);
+	//Extract section
+	auto s_img1 = v_img1.section({1,1});
+	auto s_img2 = v_img2.section({1,1});
+
+	poutre::UnaryOp(s_img1, s_img2, dummy<poutre::pUINT8, poutre::pUINT8>());
+}
+
+BOOST_AUTO_TEST_CASE(unaryopviewDispatchOneIdxDiferentPtrType)
+{
+    poutre::DenseImage<poutre::pUINT8> img1({ 5, 6 });
+    poutre::DenseImage<poutre::pINT32> img2({ 5, 6 });
+    auto v_img1 = poutre::view(img1);
+    auto v_img2 = poutre::view(img2);
+    //Extract section
+    auto s_img1 = v_img1.section({ 1,1 });
+    auto s_img2 = v_img2.section({ 1,1 });
+
+    poutre::UnaryOp(s_img1, s_img2, dummy<poutre::pUINT8, poutre::pINT32>());
+}
+
+/*
+BOOST_AUTO_TEST_CASE(unaryopviewDispatchViewCompatibleShiftedOffset)
+{
+	poutre::DenseImage<poutre::pUINT8> img1({ 5, 6 });
+	poutre::DenseImage<poutre::pUINT8> img2({ 5, 6 });
+	auto v_img1 = poutre::view(img1);
+	auto v_img2 = poutre::view(img2);
+	
+	//Extract section
+	
+	auto s_img1 = v_img1.section({ 1,1 }, { 2,2 });
+	auto s_img2 = v_img2.section({ 3,3 }, { 2,2 });
+
+	poutre::pApplyImageUnaryViewOp_dispatcher op1;
+    op1.dispatch(dummy(), s_img1, s_img2);
+}
+
+BOOST_AUTO_TEST_CASE(unaryopviewDispatchViewAllDiff)
+{
+	poutre::DenseImage<poutre::pUINT8> img1({ 5, 6 });
+	poutre::DenseImage<poutre::pINT32> img2({ 5, 6 });
+	auto v_img1 = poutre::view(img1);
+	auto v_img2 = poutre::view(img2);
+	//Extract section
+	auto s_img1 = v_img1.section({ 1,1 }, { 3,2 });
+	auto s_img2 = v_img2.section({ 1,1 }, { 2,3 });
+
+	poutre::pApplyImageUnaryViewOp_dispatcher op1;
+	op1.dispatch(dummy(), s_img1, s_img2);
+}
+*/
 
 BOOST_AUTO_TEST_CASE(ctor)
 {

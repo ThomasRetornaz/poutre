@@ -378,64 +378,6 @@ view(const DenseImage<valuetype, Rank> &iImg) {
   return poutre::carray_view<valuetype, Rank>(iImg.datas(), iImg.bound());
 }
 
-/*
-template <
-class valuetype,
-std::ptrdiff_t NumDims = 2,
-class allocator_type_t = boost::simd::allocator < typename
-TypeTraits<valuetype>::storage_type, TypeTraits<valuetype>::alignement >
->
-class DenseImage
-iterator
-  begin () POUTRE_NOEXCEPT
-  {
-    return iterator (m_data, m_data);
-  }
-
-  const_iterator
-  cbegin () POUTRE_NOEXCEPT
-  {
-    return const_iterator (m_data, m_data);
-  }
-
-  iterator
-  end () POUTRE_NOEXCEPT
-  {
-    return iterator (m_data + m_numelemwithpaddingifany, m_data);
-  }
-
-  const_iterator
-  cend () POUTRE_NOEXCEPT
-  {
-    return const_iterator (m_data + m_numelemwithpaddingifany, m_data);
-  }
-
-  reverse_iterator
-  rbegin () POUTRE_NOEXCEPT
-  {
-    return (reverse_iterator (m_data + m_numelemwithpaddingifany - 1, m_data));
-  }
-
-  const_reverse_iterator
-  crbegin () POUTRE_NOEXCEPT
-  {
-    return (const_reverse_iterator (m_data + m_numelemwithpaddingifany - 1,
-m_data));
-  }
-
-  reverse_iterator
-  rend () POUTRE_NOEXCEPT
-  {
-    return (reverse_iterator (m_data - 1, m_data));
-  }
-
-  const_reverse_iterator
-  crend () POUTRE_NOEXCEPT
-  {
-    return (const_reverse_iterator (m_data - 1, m_data));
-  }
-*/
-
 // todo define macros
 extern template class DenseImage<pUINT8, 1>;
 extern template class DenseImage<pINT32, 1>;

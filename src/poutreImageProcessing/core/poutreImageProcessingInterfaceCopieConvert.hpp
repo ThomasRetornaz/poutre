@@ -29,13 +29,13 @@ namespace poutre
  *@{
  */     
   //! Deep clone of provided image  
-  IMP_API std::unique_ptr<IInterface> GetSame(const IInterface& i_img1);
+  IMP_API std::unique_ptr<IInterface> Clone(const IInterface& i_img1);
 
   //! Create a clone of provided image: using same geometries  but with different @c  CompoundType and @c PType 
-  IMP_API std::unique_ptr<IInterface> GetSameCoord(const IInterface& i_img1, CompoundType ctype, PType ptype);
+  IMP_API std::unique_ptr<IInterface> CloneGeometry(const IInterface& i_img1, CompoundType ctype, PType ptype);
 
   //! Create a clone of provided image using same geometries but with different  @c PType      
-  IMP_API std::unique_ptr<IInterface> GetSameCoord(const IInterface& i_img1, PType ptype);
+  IMP_API std::unique_ptr<IInterface> CloneGeometry(const IInterface& i_img1, PType ptype);
      
 //! @} doxygroup: image_processing_group
   }

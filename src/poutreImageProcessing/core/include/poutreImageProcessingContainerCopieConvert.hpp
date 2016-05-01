@@ -17,29 +17,47 @@
 
 namespace poutre
   {
+	  
+	  //template< class ViewIn, class ViewOut>
+	  //struct CopyViewDispatcherHelper
+	  //{
+		 // void operator()(const ViewIn& i_viewin, ViewOut& i_viewout)
+		 // {
+			//  //todo
+		 // }
 
-  /*
-  template <PType ptypeOther, PType ptype, class allocator>
-  struct get_same_allocator_t
-    {
-    };
+	  //};
 
-  template <PType ptypeOther, PType ptype>
-  struct get_same_allocator_t<ptypeOther, typename boost::simd::allocator < TypeTraits<ptype>::storage_type, TypeTraits<ptype>::alignement >>
-    {
-    using type = boost::simd::allocator < typename  TypeTraits<ptypeOther>::storage_type, TypeTraits<ptypeOther>::alignement >;
-    };
+	  //template< class ViewInOut>
+	  //struct CopyViewDispatcherHelper
+	  //{
+		 // void operator()(const ViewInOut& i_viewin, ViewInOut& i_viewout)
+		 // {
+			//  POUTRE_ASSERTCHECK(i_viewin.size() == i_viewout.size(), "CopyViewDispatcherHelper size of view are not compatible");
+			//  auto vInbound = i_viewin.bound();
+			//  auto vOutbound = i_viewout.bound();
+			//  auto stridevIN = vIn.stride();
+			//  auto stridevOut = vOut.stride();
 
-  template <PType ptypeOther, class ImageIn>
-  struct get_same_t < ImgType::ImgType_Dense, ptypeOther, ImageIn >
-    {
-    using type = DenseImage <
-      ptypeOther,
-      ImageIn::m_numdims,
-      typename get_same_allocator_t<ptypeOther, ImageIn::m_ptype, typename ImageIn::allocator_type>::type>
-      >;
-    };
-  */
-
+			//  if (vInbound != vOutbound || stridevIN != stridevOut) //two index 
+			//  {
+			//	  auto idx1 = begin(vInbound);
+			//	  auto idx2 = begin(vOutbound);
+			//	  auto idx1end = end(vInbound);
+			//	  for (; idx1 != idx1end; ++idx1, ++idx2)
+			//	  {
+			//		  i_viewout[idx2] = i_viewin[idx1];
+			//	  }
+			//	  return;
+			//  }
+			//  auto idx1 = begin(vInbound);
+			//  auto idx1end = end(vInbound);
+			//  for (; idx1 != idx1end; ++idx1)
+			//  {
+			//	  i_viewout[idx1] = i_viewin[idx1];
+			//  }
+			//  return;
+		 // }
+	  //};
   }
 #endif //POUTRE_IMAGEPROCESSING_CONTAINER_COPIECONVERT_HPP__

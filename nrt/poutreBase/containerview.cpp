@@ -13,7 +13,7 @@
 
 BOOST_AUTO_TEST_SUITE(ContainerView)
 
-BOOST_AUTO_TEST_CASE(init)
+BOOST_AUTO_TEST_CASE(ctor)
   {
   BOOST_TEST_MESSAGE("view");
   using view1DINt = poutre::array_view < int,1 > ;
@@ -41,7 +41,7 @@ BOOST_AUTO_TEST_CASE(init)
   BOOST_CHECK(dummysview.stride( ) == poutre::idx1d{ 1 }); //stride is 1 for empty stridedview
   //BOOST_CHECK_THROW(dummysview[idxtype{ 0 }], std::runtime_error); //throw in debug
   //BOOST_CHECK_THROW(dummysview[5], std::runtime_error); //can't slice on 1D
-  BOOST_CHECK_THROW(dummysview.section(poutre::bd1d{ 3 }), std::runtime_error); //section
+  //BOOST_CHECK_THROW(dummysview.section(poutre::bd1d{ 3 }), std::runtime_error); //section
   }
 
 
@@ -93,6 +93,32 @@ BOOST_AUTO_TEST_CASE(basic_usage_view_over_vector)
    
   }
 
+
+BOOST_AUTO_TEST_CASE(basic_usage_strided_view_over_vector)
+{
+    using sview1DINt = poutre::strided_array_view < int, 1 >;
+    using sview2DINt = poutre::strided_array_view < int, 2 >;
+    using sview1DFLOAT = poutre::strided_array_view < float, 1 >;
+
+
+    BOOST_TEST_MESSAGE("1D view over std::vector");
+    std::vector<int> mif = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    BOOST_CHECK_EQUAL(mif.size(), 10);
+    auto view = sview1DINt(&mif[0], { 10 }, { 3 });
+
+    BOOST_CHECK_EQUAL(view.size(), 10);
+    BOOST_CHECK(view.bound() == poutre::bd1d{ 10 });
+    BOOST_TEST_MESSAGE("assignment through view");
+    view[poutre::idx1d{ 0 }] = 42; //grmmlll poutre::idx1d{} to force resolution operator[index] and not slice ....
+    BOOST_CHECK_EQUAL(mif[0], 42);  // v == 42
+    BOOST_TEST_MESSAGE("copy view");
+    auto viewcopy(view);
+    BOOST_CHECK_EQUAL(viewcopy[poutre::idx1d{ 0 }], 42);  // v == 42
+    auto viewcopy2 = view;
+    BOOST_CHECK_EQUAL(viewcopy2[poutre::idx1d{ 0 }], 42);  // v == 42
+
+
+}
 
 BOOST_AUTO_TEST_CASE(section_and_slice_1d)
   {

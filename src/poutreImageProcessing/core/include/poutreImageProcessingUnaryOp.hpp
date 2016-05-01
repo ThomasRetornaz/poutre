@@ -22,6 +22,9 @@
 #include <poutreBase/poutreTrace.hpp>
 #endif
 
+#ifndef POUTRE_CONTAINER_VIEW_HPP__
+#include <poutreBase/poutreContainerView.hpp>
+#endif
 
 #include <boost/simd/sdk/simd/native.hpp>
 #include <boost/simd/include/functions/aligned_load.hpp>
@@ -35,150 +38,115 @@
 #include <algorithm>
 #include <boost/config.hpp>
 
-
-
-
 //move this in a dedicated here in PoutreCore
 namespace poutre
 {
 
+
+
 	namespace bs = boost::simd;
 
-	enum class DispatchView {
-		DispatchViewUndef = 0, //!< Undefined dispatch
-		DispatchViewCompatibleOffsetSamePtrType =	1 << 0, //!<Ptr arthimetic compatible
-		DispatchViewCompatibleOffset =		1 << 1, //!< Offset Compatible. Iterate with one iterator
-		// DispatchViewCompatibleArrayView =
-		// 1 << 2, //!< Ptr Compatible. Iterate with two ptr
-		DispatchViewAtLeastOneIsAStridedView =	1 << 3, //!< One is strided fallback to index iteration
-	};
+    /****************************************************************************************/
+    /*                               UnaryInPlaceOp                                         */
+    /****************************************************************************************/
+    template<typename T, ptrdiff_t Rank, template <typename, ptrdiff_t> class View,class UnOp>
+    void UnaryInPlaceOp(View<T, Rank>& v,UnOp& op)
+    {
+        
+        UnaryOpInPlaceDispatcher<T,Rank,View,UnOp> dispatcher;
+        dispatcher(v,op);
+    }
 
-	std::ostream& operator<<(std::ostream& os, DispatchView dispatchview)
-	{
-		switch (dispatchview)
-		{
-		case DispatchView::DispatchViewCompatibleOffsetSamePtrType:
-			os << "DispatchViewCompatibleOffsetSamePtrType";
-			break;
-		case DispatchView::DispatchViewCompatibleOffset:
-			os << "DispatchViewCompatibleOffset";
-			break;
-			//case DispatchView::DispatchViewCompatibleArrayView:
-			//  os << "DispatchViewCompatibleArrayView";
-			//  break;
-		case DispatchView::DispatchViewAtLeastOneIsAStridedView:
-			os << "DispatchViewAtLeastOneIsAStridedView";
-			break;
-		default://  enumDispatchView::DispatchViewUndef; 
-			os << "Unknown dispatchView";
-			break;
-		}
-		return os;
-	}
+    // primary template dispatcher
+    template<typename T, ptrdiff_t Rank, template <typename, ptrdiff_t> class View, class UnOp>
+    struct UnaryOpInPlaceDispatcher
+    {
+        void operator()(View<T,Rank>& v, UnOp& op) const
+        {
+            std::cout << "\n" << "call UnaryOpInPlaceDispatcher primary template";
+        }
+    };
 
-	std::istream& operator>>(std::istream& is, DispatchView& dispatchview)
-	{
-		dispatchview = DispatchView::DispatchViewUndef;
+    
+    //template specialization array_view
+    template<typename T, ptrdiff_t Rank,class UnOp>
+    struct UnaryOpInPlaceDispatcher<T,Rank,array_view, UnOp>
+    {
 
-		if (!is.good())
-			return is;
+        void operator()(array_view<T, Rank>& v, UnOp& op) const
+        {
+            std::cout << "\n" << "call UnaryOpInPlaceDispatcher array view template specialization";
+        }
 
-		std::string strType;
-		is >> strType;
-		if (is.bad())
-			return is;
-		if (strType == "DispatchViewCompatibleOffsetSamePtrType")
-			dispatchview = DispatchView::DispatchViewCompatibleOffsetSamePtrType;
-		else if (strType == "DispatchViewCompatibleOffset")
-			dispatchview = DispatchView::DispatchViewCompatibleOffset;
-		//else if (strType == "DispatchViewCompatibleArrayView")
-		//  dispatchview = DispatchView::DispatchViewCompatibleArrayView;
-		else if (strType == "DispatchViewAtLeastOneIsAStridedView")
-			dispatchview = DispatchView::DispatchViewAtLeastOneIsAStridedView;
-		else
-		{
-			POUTRE_RUNTIME_ERROR("Unable to read dispatchview from stream");
-		}
-		return is;
-	}
-
-	template <poutre::DispatchView dispatchview>
-	struct pApplyImageUnaryViewOp_Specialize
-	{
-	};
-
-	template <>
-	struct pApplyImageUnaryViewOp_Specialize<DispatchView::DispatchViewCompatibleOffsetSamePtrType>
-	{
-
-		//template <class UnOp,class ViewInOut>
-		template <class UnOp, class ViewIn,class ViewOut>
-		void operator()(UnOp& op,const ViewIn& vIn, ViewOut& vOut) const
-		{
-
-			std::cout << "\n" << "call pApplyImageUnaryViewOp<DispatchView::DispatchViewCompatibleOffsetSamePtrType>";
-		}
-	};
+    };
 
 
-	template <>
-	struct pApplyImageUnaryViewOp_Specialize<DispatchView::DispatchViewCompatibleOffset>
-	{
+    /****************************************************************************************/
+    /*                               UnaryOp                                                */
+    /****************************************************************************************/
 
-		template <class UnOp,class ViewIn, class ViewOut>
-		void operator()(UnOp& op,const ViewIn vIn, ViewOut vOut) const
-		{
-			std::cout << "\n" << "call pApplyImageUnaryViewOp<DispatchView::DispatchViewCompatibleOffset>";
-		}
-	};
+    template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, class UnOp>
+    void UnaryOp(const View1<T1, Rank>& i_vin, View2<T2, Rank>& o_vout, UnOp& op)
+    {
+        POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
+        UnaryOpDispatcher<T1,T2, Rank, View1, View2, UnOp> dispatcher;
+        dispatcher(i_vin, o_vout, op);
+    }
 
-	template <>
-	struct pApplyImageUnaryViewOp_Specialize<DispatchView::DispatchViewAtLeastOneIsAStridedView>
-	{
+    // primary use strided view 
+    template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2,class UnOp>
+    struct UnaryOpDispatcher
+    {
+        void operator()(const View1<T1, Rank>& i_vin, View2<T2, Rank>& o_vout, UnOp& op) const
+        {
+            //More runtime dispatch
+            auto vInbound = i_vin.bound();
+            auto vOutbound = o_vout.bound();
+            auto stridevIN = i_vin.stride();
+            auto stridevOut = o_vout.stride();
 
-		template <class UnOp, class ViewIn, class ViewOut>
-		void operator()(UnOp& op, const ViewIn vIn, ViewOut vOut) const
-		{
-			std::cout << "\n" << "call pApplyImageUnaryViewOp<DispatchView::DispatchViewAtLeastOneIsAStridedView>";
-		}
-	};
+            if (vInbound == vOutbound && stridevIN == stridevOut) //same bound + same stride -> one idx 
+            {
+                if (stridevIN[Rank - 1] == 1)  //same bound + same stride + stride equal 1 in less significant 
+                {
+                    std::cout << "\n" << "call UnaryOpDispatcher one idx stride equal 1 in less significant dimention";
+                }
+                else
+                {
+                    std::cout << "\n" << "call UnaryOpDispatcher one idx";
+                }
+            }
+            else //default two idx
+            {
+                std::cout << "\n" << "call UnaryOpDispatcher primary template default two idx";
+            }
+        }
+    };
 
+    //template specialization both array_view but different type
+    template<typename T1, typename T2, ptrdiff_t Rank, class UnOp>
+    struct UnaryOpDispatcher<T1,T2, Rank, array_view, array_view, UnOp>
+    {
 
-	struct pApplyImageUnaryViewOp_dispatcher
-	{
+        void operator()(const array_view<T1, Rank>& i_vin, array_view<T2, Rank>& o_vout, UnOp& op) const
+        {
+            std::cout << "\n" << "call UnaryOpDispatcher array view template specialization";
+        }
 
-		template <class UnOp,class ViewIn, class ViewOut>
-		void operator()(UnOp& op, const ViewIn vIn, ViewOut vOut) const
-		{
-			//debug precondition
-			POUTRE_ASSERTCHECK(vIn.size() == vOut.size(), "pApplyImageUnaryIterOp size of view are not compatible");
+    };
 
-			auto vInbound = vIn.bound();
-			auto vOutbound = vOut.bound();
-			auto stridevIN = vIn.stride();
-			auto stridevOut = vOut.stride();
+    //template specialization both array_view and same type
+    template<typename T,ptrdiff_t Rank, class UnOp>
+    struct UnaryOpDispatcher<T,T, Rank, array_view,array_view, UnOp>
+    {
 
-			//FIXME A REPRENDRE
-			if ((vInbound == vOutbound) && (stridevIN == stridevOut))
-			{
-				if (std::is_same<ViewIn, ViewOut>::value)
-				{
-					//fallback ptr + simd 
-					pApplyImageUnaryViewOp_Specialize<poutre::DispatchView::DispatchViewCompatibleOffsetSamePtrType>()(op,vIn, vOut);
-				}
-				else
-				{
-					//fallback different ptr type
-					pApplyImageUnaryViewOp_Specialize<poutre::DispatchView::DispatchViewCompatibleOffset>()(op, vIn, vOut);
-				}
-			}
-			else
-			{
-				pApplyImageUnaryViewOp_Specialize<poutre::DispatchView::DispatchViewAtLeastOneIsAStridedView>()(op,vIn, vOut);
-			}
-		}
+        void operator()(const array_view<T, Rank>& i_vin, array_view<T, Rank>& o_vout, UnOp& op) const
+        {
+            std::cout << "\n" << "call UnaryOpDispatcher array view template specialization same type";
+        }
 
-	};
+    };
+
 
 	/*
 	//stolen from <boost/simd/sdk/simd/algorithm.hpp>
@@ -246,6 +214,6 @@ namespace poutre
 		}
 	};
 	*/
-}
+}//namespace poutre
 
 #endif//POUTRE_IMAGEPROCESSING_UNARYOP_HPP__

@@ -95,18 +95,6 @@ namespace poutre
 
   template<typename value_type, ptrdiff_t Rank> using compound_pixel = static_array<value_type, Rank>;
 
-  //extern template class compound_pixel < pUINT8, 3 > ;
-  //extern template class compound_pixel < pINT32, 3 >;
-  //extern template class compound_pixel < pFLOAT, 3 > ;
-  //extern template class compound_pixel < pINT64, 3 > ;
-  //extern template class compound_pixel < pDOUBLE, 3 >;
-
-  //extern template class compound_pixel < pUINT8, 4 > ;
-  //extern template class compound_pixel < pINT32, 4 >;
-  //extern template class compound_pixel < pFLOAT, 4 > ;
-  //extern template class compound_pixel < pINT64, 4 > ;
-  //extern template class compound_pixel < pDOUBLE, 4 >;
-
   typedef compound_pixel < pUINT8, 3 > c3pUINT8;
   typedef compound_pixel < pINT32, 3 > c3pINT32;
   typedef compound_pixel < pFLOAT, 3 > c3pFLOAT;
