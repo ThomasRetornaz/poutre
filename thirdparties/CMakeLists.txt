@@ -30,7 +30,7 @@ if(UNIX AND NOT APPLE AND NOT POUTRE_BOOST_FROM_SYSTEM)
 endif()
 
 set(Boost_ADDITIONAL_VERSIONS   
-	"1.59" "1.59.0" "1.60" "1.60.0" "1.61" "1.61.0")
+	"1.60" "1.60.0" "1.61" "1.61.0")
 
 # disable auto link
 add_definitions(-DBOOST_ALL_NO_LIB)
@@ -133,28 +133,32 @@ SET(NT2_INCLUDE_DIR ${NT2_INCLUDE_DIR} PARENT_SCOPE) #we can do better
 #add_subdirectory(boostsimd)
 SET(NT2_COMPILE_FLAGS ${NT2_COMPILE_FLAGS} PARENT_SCOPE) 
 
-
-# micro benchmark
-#?add_subdirectory(microbenchmark)
-
 # jsoncpp
 add_subdirectory(jsoncpp)
 #SET(JSONCPP_INCLUDE_DIR ${JSONCPP_INCLUDE_DIR} PARENT_SCOPE)
 
-# png
+# zlib
 add_subdirectory(zlib)
+set(ZLIB_INCLUDE_DIR       ${ZLIB_INCLUDE_DIR}    PARENT_SCOPE)
+set(ZLIB_LIBRARY         ${ZLIB_LIBRARY}      PARENT_SCOPE)
 # png
 add_subdirectory(libpng)
+set(PNG_INCLUDE_DIR       ${PNG_INCLUDE_DIR}    PARENT_SCOPE)
+set(PNG_LIBRARY         ${PNG_LIBRARY}      PARENT_SCOPE)
 # jpeg
 add_subdirectory(libjpeg)
+set(JPEG_INCLUDE_DIR       ${JPEG_INCLUDE_DIR}    PARENT_SCOPE)
+set(JPEG_LIBRARY         ${JPEG_LIBRARY}      PARENT_SCOPE)
 # tiff
 add_subdirectory(libtiff)
+set(TIFF_INCLUDE_DIR       ${TIFF_INCLUDE_DIR}    PARENT_SCOPE)
+set(TIFF_LIBRARY         ${TIFF_LIBRARY}      PARENT_SCOPE)
+# hdf5
+add_subdirectory(hdf5)
+set(HDF5_INCLUDE_DIR       ${HDF5_INCLUDE_DIR}    PARENT_SCOPE)
+set(HDF5_LIBRARY         ${HDF5_LIBRARY}      PARENT_SCOPE)
 # eigen
 add_subdirectory(eigen)
-# compute
-add_subdirectory(compute)
-#todo HDF5
-
 
 
 # Python libraries
@@ -192,69 +196,4 @@ if(ENABLE_NUMPY)
   
 endif()
 
-# HDF5 IO capabilities
-if(0)
-  if(WIN32)
-    #TODO use /install__Windows_x86 default path
-    set(HDF5 hdf5)
-    set(HDF5_SOURCE_DIR
-        hdf5
-        CACHE PATH
-        "hdf5 sources directory")
-    message("hdf5 directory is ${HDF5_SOURCE_DIR}")
 
-    # use http://www.hdfgroup.org/HDF5/release/obtain5.html
-    #put it in external_libraries\hdf5
-    set(HDF5_INSTALL_DIR ${HDF5_SOURCE_DIR} CACHE PATH "HDF5 installation root path")
-    set(HDF5_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/${HDF5_INSTALL_DIR}/include PARENT_SCOPE)
-  else(WIN32)
-    # to compile with ./configure --prefix=$HOME/usr/local/ --with-zlib=$HOME/usr/local/
-    set(HDF5_INSTALL_DIR  ${THIRD_PARTIES_PATH} CACHE PATH "HDF5 installation root path")
-    set(HDF5_INCLUDE_DIRS ${HDF5_INSTALL_DIR}/include PARENT_SCOPE)
-  endif(WIN32)
-
-  find_library(HDF5LIBB hdf5 PATHS ${HDF5_INSTALL_DIR}/lib/
-      DOC "HDF5 library found on the system"
-      NO_DEFAULT_PATH
-      NO_CMAKE_ENVIRONMENT_PATH
-      NO_CMAKE_PATH
-      NO_SYSTEM_ENVIRONMENT_PATH
-      NO_CMAKE_SYSTEM_PATH
-  )
-  find_library(HDF5LIBL hdf5_hl PATHS ${HDF5_INSTALL_DIR}/lib/
-      DOC "HDF5 Lite library found on the system"
-      NO_DEFAULT_PATH
-      NO_CMAKE_ENVIRONMENT_PATH
-      NO_CMAKE_PATH
-      NO_SYSTEM_ENVIRONMENT_PATH
-      NO_CMAKE_SYSTEM_PATH
-  )
-
-  if(NOT(HDF5LIBB) OR NOT(HDF5LIBL))
-    message("Not found HDF5 from the specified path")
-    unset(HDF5LIBB CACHE)
-    unset(HDF5LIBL CACHE)
-    find_package(HDF5)
-    message("HDF5 include :" ${HDF5_INCLUDE_DIRS})
-    set(HDF5LIBB ${HDF5_hdf5_LIBRARIES})
-    set(HDF5LIBL ${HDF5_hdf5_hl_LIBRARIES})
-    set(HDF5LIBB ${HDF5_hdf5_LIBRARIES} PARENT_SCOPE)
-    set(HDF5LIBL ${HDF5_hdf5_hl_LIBRARIES} PARENT_SCOPE)
-  else()
-    get_filename_component(HDF5LIBB2 ${HDF5LIBB} REALPATH)
-    get_filename_component(HDF5LIBL2 ${HDF5LIBL} REALPATH)
-    unset(HDF5LIBB CACHE)
-    unset(HDF5LIBL CACHE)
-    set(HDF5LIBB ${HDF5LIBB2} CACHE INTERNAL "HDF5 real path" FORCE)
-    set(HDF5LIBL ${HDF5LIBL2} CACHE INTERNAL "HDF5HL real path" FORCE)
-    set(HDF5LIBB ${HDF5LIBB2} PARENT_SCOPE)
-    set(HDF5LIBL ${HDF5LIBL2} PARENT_SCOPE)
-
-    set(HDF5FilesToInstall ${HDF5LIBB} ${HDF5LIBL})
-    if(WIN32)
-      install_lib_and_dll("${HDF5FilesToInstall}" lib libraries)
-    else()
-      install_realpath_with_rename("${HDF5FilesToInstall}" lib libraries Release)
-    endif()
-  endif()
-endif()

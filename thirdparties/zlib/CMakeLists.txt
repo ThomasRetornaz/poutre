@@ -10,7 +10,7 @@ if(ZLIB_FOUND)
     set(ZLIB_LIBRARY        ${ZLIB_LIBRARY}      PARENT_SCOPE)
 else()
 
-SET(ZLIB_LIBRARY zlib3rdparty)
+SET(ZLIB_LIBRARY zlib)
 project(${ZLIB_LIBRARY} C)
 
 include(CheckFunctionExists)

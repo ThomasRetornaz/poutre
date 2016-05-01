@@ -5,6 +5,8 @@ set(PoutreIOTestSRC
     ${PoutreIOTestSubdirectory}/main.hpp
     ${PoutreIOTestSubdirectory}/main.cpp
     ${PoutreIOTestSubdirectory}/iostring.cpp
+	${PoutreIOTestSubdirectory}/png.cpp
+	${PoutreIOTestSubdirectory}/buffer.cpp
 )
 
 add_executable(PoutreIOTests ${PoutreIOTestSRC})

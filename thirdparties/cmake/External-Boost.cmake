@@ -22,8 +22,8 @@ ExternalProject_Add(boost
   PATCH_COMMAND ""
   CONFIGURE_COMMAND ${Boost_Bootstrap_Command}
   BUILD_COMMAND  ${Boost_b2_Command} install
-    --without-python
-    --without-mpi
+    --with-python
+    --with-mpi
     --disable-icu
     --prefix=${CMAKE_BINARY_DIR}/INSTALL
     --threading=single,multi
