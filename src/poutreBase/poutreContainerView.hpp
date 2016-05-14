@@ -117,7 +117,22 @@ namespace poutre
        POUTRE_STATIC_CONSTEXPR bool value = true;
    };
 
-  } //namespace details
+   //stolen https://github.com/wardw/array_view/blob/master/array_view/array_view.h
+   template <typename Viewable, typename U, typename View = std::remove_reference_t<Viewable>>
+   using is_viewable_on_u = std::integral_constant<bool,
+       std::is_convertible<typename View::size_type, ptrdiff_t>::value &&
+       std::is_convertible<typename View::value_type*, std::add_pointer_t<U>>::value &&
+       std::is_same<std::remove_cv_t<typename View::value_type>, std::remove_cv_t<U>>::value
+
+   >;
+
+   //stolen https://github.com/wardw/array_view/blob/master/array_view/array_view.h
+   template <typename T, typename U>
+   using is_viewable_value = std::integral_constant<bool,
+       std::is_convertible<std::add_pointer_t<T>, std::add_pointer_t<U>>::value &&
+       std::is_same<std::remove_cv_t<T>, std::remove_cv_t<U>>::value
+   >;
+} //namespace details
 
 
 
@@ -177,50 +192,31 @@ namespace poutre
 
     }
 
-	  template <typename Viewable,
-		  typename U=T,
-		  ptrdiff_t rank=Rank,
-                  typename std::enable_if<
-                  details::IsRankEqual1<rank>::value
-    		  >::type* = nullptr>
-//		  typename std::enable_if<
-//			  std::is_same<
-//				  typename std::remove_cv<T>::type,
-//				  typename std::remove_cv<U>::type
-//				  >::value //&&
-//				  //std::is_convertible<U,T
-//				  //typename std::add_pointer<typename details::extract_value_type<Viewable>::value>::type,
-//				  //typename std::add_pointer<U>::type
-//				  //		>::value
-//				  >::type* = nullptr>
-          
-           //!ctor from viewable object, mainly contiguous container C providing C.data(),C.size() interface and using the same value_type
-		  //@warning only available for rank==1
+    //template <typename Viewable, size_t R = Rank,
+    //    typename = std::enable_if_t<R == 1 &&
+    //    is_viewable_on_u<Viewable, value_type>::value
+    //    >
+    //    >
+    template<typename Viewable, size_t R = Rank>
+        //!ctor from viewable object, mainly contiguous container C providing C.data(),C.size() interface and using the same value_type
+		// @warning only available for rank==1
 		  POUTRE_CXX14_CONSTEXPR
 		  array_view (Viewable&& vw) : m_bnd (vw.size()),m_data (vw.data())
 	  {
-		  //static_assert(Rank == 1, "array_view(Viewable&& vw) is only allowed for rank=1 view");
+		  static_assert(Rank == 1, "array_view(Viewable&& vw) is only allowed for rank=1 view");
 	  }
 
-    template <class U=T,
-            ptrdiff_t rank=Rank,
-            ptrdiff_t AnyRank,
-           class = typename std::enable_if<details::IsRankEqual1<rank>::value>::type>
-//
-//		    typename std::enable_if<
-//			  std::is_same<
-//				  typename std::remove_cv<T>::type,
-//				  typename std::remove_cv<U>::type
-//				  >::value &&
-//				  std::is_convertible<U,T
-//				  typename std::add_pointer<typename details::extract_value_type<Viewable>::value>::type,
-//				  typename std::add_pointer<U>::type
-//				  >::value &&
-//				typename std::enable_if<IsRankEqual1<rank>::value>::type>::type* = nullptr>
+    template <typename U, ptrdiff_t R = Rank,
+        typename = std::enable_if_t<R == 1 &&
+        std::is_convertible<std::add_pointer_t<U>, pointer>::value && 
+        std::is_same<std::remove_cv_t<U>, std::remove_cv_t<value_type>>::value
+        is_viewable_value<U, value_type>::value
+        >
+    >
     //!ctor from other array_view with AnyRank is only allowed for flattened view (ie Rank=1)
     //@warning only available for AnyRank==1
     POUTRE_CONSTEXPR
-    array_view (const array_view<U, AnyRank>& rhs) POUTRE_NOEXCEPT
+    array_view (const array_view<U, R>& rhs) POUTRE_NOEXCEPT
     : m_bnd (rhs.m_bnd.size ()),m_data (rhs.m_data) { }
 
     //!ctor from C_Array 
@@ -243,18 +239,11 @@ namespace poutre
     {
     }
 
-    template <class Viewable>
-    //TODO fix SFINAE behavior!!!!! 
-    /*  typename std::enable_if<
-      std::is_convertible<typename std::add_pointer<typename details::extract_value_type<Viewable>::value_type>::type, pointer>::value &&
-      std::is_same<typename std::remove_cv<typename details::extract_value_type<Viewable>::value_type>::type, typename std::remove_cv<value_type>::type>::value
-    >::type* = nullptr>*/
-
-//    template <class U=T,
-//    typename std::enable_if<
-//    std::is_convertible<typename std::add_pointer<U>::type, pointer>::value &&
-//    std::is_same<typename std::remove_cv<U>::type, typename std::remove_cv<value_type>::type>::value
-//    >::type* = nullptr>
+  
+    /*template <typename Viewable,
+        typename = std::enable_if_t<is_viewable_on_u<Viewable, value_type>::value>
+    >*/
+    template <typename Viewable>
     //!ctor from an other view
     //@note This constructor may be used to create an array_view with a different rank and/or bounds than the original array_view, i.e. reshape the view.
     POUTRE_CXX14_CONSTEXPR
@@ -455,7 +444,7 @@ namespace poutre
     std::is_convertible<typename std::add_pointer<U>::type, pointer>::value &&
     std::is_same<typename std::remove_cv<U>::type, typename std::remove_cv<value_type>::type>::value
     >::type* = nullptr>
-    //!Ctor from array_view
+    //!Ctor from strided_array_view
     POUTRE_CONSTEXPR strided_array_view (const array_view<U, Rank>& rhs)
     POUTRE_NOEXCEPT_IF (POUTRE_NOEXCEPT_EXPR (m_bnd (rhs.m_bnd)) && POUTRE_NOEXCEPT_EXPR (m_stride_idx ()))
             : m_bnd (rhs.m_bnd), m_stride_idx (rhs.stride()), m_data (rhs.m_data) { }
