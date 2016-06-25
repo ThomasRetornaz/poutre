@@ -684,9 +684,9 @@ namespace poutre
 
     bounds_iterator operator++ (int) POUTRE_NOEXCEPTONLYNDEBUG
     {
-      auto tmp (*this);
-      return ++tmp;
-
+      auto  tmp(*this);
+      ++(*this); // Call pre-increment on this.
+      return tmp;
     }
 
     bounds_iterator& operator-- () POUTRE_NOEXCEPTONLYNDEBUG
@@ -705,7 +705,9 @@ namespace poutre
 
     bounds_iterator operator-- (int) POUTRE_NOEXCEPTONLYNDEBUG
     {
-      return --tmp (*this);
+      bounds_iterator tmp(*this);
+      --(*this);
+      return tmp;
     }
 
 //    bounds_iterator operator+ (difference_type n) const POUTRE_NOEXCEPTONLYNDEBUG

@@ -24,6 +24,8 @@
 
 #include <type_traits>
 
+#include <boost/simd/sdk/simd/pack.hpp> //to be moved
+
 #ifdef _MSC_VER
 #pragma warning( push )
 #pragma warning( disable : 4425 )//4425 improper support constexpr
@@ -116,6 +118,8 @@ namespace poutre
    {
        POUTRE_STATIC_CONSTEXPR bool value = true;
    };
+
+ 
 
    //stolen https://github.com/wardw/array_view/blob/master/array_view/array_view.h
    template <typename Viewable, typename U, typename View = std::remove_reference_t<Viewable>>
@@ -599,6 +603,38 @@ namespace poutre
     /**@}*/
   };
   //! @} doxygroup: coordinate_group   
+
+
+  template<template<typename T,ptrdiff_t> class ViewType>
+  struct IsStrided
+  {
+  };
+
+  template<>
+  struct IsStrided<array_view>
+  {
+      POUTRE_STATIC_CONSTEXPR bool value = false;
+  };
+
+  template<>
+  struct IsStrided<strided_array_view>
+  {
+      POUTRE_STATIC_CONSTEXPR bool value = true;
+  };
+
+  template<>
+  struct IsStrided<carray_view>
+  {
+      POUTRE_STATIC_CONSTEXPR bool value = false;
+  };
+
+  template<>
+  struct IsStrided<cstrided_array_view>
+  {
+      POUTRE_STATIC_CONSTEXPR bool value = true;
+  };
+
+
 
 } //namespace poutre
 
