@@ -10,9 +10,11 @@ set(PoutreIPSRC_DETAILS
   ${PoutreIPSubdirectory}/core/include/poutreImageProcessingCompare.hpp
 
   ${PoutreIPSubdirectory}/core/include/poutreImageProcessingUnaryOp.hpp
+  ${PoutreIPSubdirectory}/core/include/poutreImageProcessingUnaryOp.hpp
   ${PoutreIPSubdirectory}/core/include/poutreImageProcessingBinaryOp.hpp
   ${PoutreIPSubdirectory}/core/include/poutreImageProcessingTernaryOp.hpp
   ${PoutreIPSubdirectory}/core/include/poutreImageProcessingQuaternaryOp.hpp
+  ${PoutreIPSubdirectory}/core/include/poutreImageProcessingArith.hpp
   )
 
 set(PoutreIPSRC_PUBLICHEADERS  
