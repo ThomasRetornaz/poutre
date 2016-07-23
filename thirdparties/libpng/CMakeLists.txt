@@ -3,9 +3,11 @@
 #
 # ----------------------------------------------------------------------------
 
+#set(POUTRE_png_version_minimal 1.6.19)
+#find_package(PNG ${POUTRE_png_version_minimal} QUIET)
 find_package(PNG QUIET)
 if(PNG_FOUND)
-	message("LibPNG found on the system at location is ${JPEG_INCLUDE_DIR} so use it")
+	message("LibPNG found on the system at location is ${PNG_INCLUDE_DIR} so use it")
   set(PNG_INCLUDE_DIR       ${PNG_INCLUDE_DIR}    PARENT_SCOPE)
   set(PNG_LIBRARY       ${PNG_LIBRARY}      PARENT_SCOPE)
 
@@ -33,7 +35,8 @@ else()
 endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${ZLIB_INCLUDE_DIR})
+                    ${ZLIB_INCLUDE_DIR}
+                    ${CMAKE_CURRENT_BINARY_DIR})
 
 file(GLOB lib_srcs *.c)
 file(GLOB lib_hdrs *.h)
@@ -71,10 +74,9 @@ endif()
   # ARCHIVE_OUTPUT_DIRECTORY ${3P_LIBRARY_OUTPUT_PATH}
   # )
 set_target_properties(${PNG_LIBRARY} PROPERTIES FOLDER "3rdparty")
-
+set(PNG_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(PNG_INCLUDE_DIR       ${PNG_INCLUDE_DIR}    PARENT_SCOPE)
 set(PNG_LIBRARY         ${PNG_LIBRARY}      PARENT_SCOPE)
- 
 
 if(NOT BUILD_SHARED_LIBS)
   #ocv_install_target(${PNG_LIBRARY} EXPORT OpenCVModules ARCHIVE DESTINATION ${OPENCV_3P_LIB_INSTALL_PATH} COMPONENT dev)

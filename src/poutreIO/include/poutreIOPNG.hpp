@@ -28,6 +28,7 @@
 #include <poutreImageProcessing/core/poutreImageProcessingInterface.hpp>
 #endif
 
+
 #include <boost/filesystem.hpp>
 
 namespace poutre
@@ -36,7 +37,7 @@ namespace poutre
 	{
 		namespace bf = boost::filesystem;
 		IO_API  std::unique_ptr<IInterface> IOLoadPng(const bf::path& i_path);
-		IO_API  void IOSavePng(const poutre::IInterface& i_image);
+		IO_API  void IOSavePng(const poutre::IInterface& i_img);
 
 	}
 }

@@ -38,13 +38,12 @@ namespace poutre
                 {
                     istrm>>tmp;
                     //todo check range validity
-                    
-                    it=tmp;
-                    if (istrm.fail()) 
+                    if (istrm.fail())
                     {
-                       std::string err="ImageFromStringDenseScalarDispatchPType: unable to read current pixel from " + istrm.str();
-                       POUTRE_RUNTIME_ERROR(err);
+                        std::string err = "ImageFromStringDenseScalarDispatchPType: unable to read current pixel from " + istrm.str();
+                        POUTRE_RUNTIME_ERROR(err);
                     }
+                    it=tmp;
                 }
     }
     
@@ -59,13 +58,16 @@ namespace poutre
                 {
                     istrm>>tmp;
                     //todo check range validity ?
-                    it[0]=static_cast<typename TypeTraits<ptype>::storage_type>(tmp);if (istrm.fail()) {std::string err="ImageFromStringDenseScalarDispatchPType: unable to read current pixel from " + istrm.str();POUTRE_RUNTIME_ERROR(err);}
+                    if (istrm.fail()) { std::string err = "ImageFromStringDenseScalarDispatchPType: unable to read current pixel from " + istrm.str(); POUTRE_RUNTIME_ERROR(err); }
+                    it[0]=static_cast<typename TypeTraits<ptype>::storage_type>(tmp);
                     istrm>>tmp;
                     //todo check range validity ?
-                    it[1]=static_cast<typename TypeTraits<ptype>::storage_type>(tmp);if (istrm.fail()) {std::string err="ImageFromStringDenseScalarDispatchPType: unable to read current pixel from " + istrm.str();POUTRE_RUNTIME_ERROR(err);}
+                    if (istrm.fail()) { std::string err = "ImageFromStringDenseScalarDispatchPType: unable to read current pixel from " + istrm.str(); POUTRE_RUNTIME_ERROR(err); }
+                    it[1]=static_cast<typename TypeTraits<ptype>::storage_type>(tmp);
                     //todo check range validity ?
                     istrm>>tmp;
-                    it[2]=static_cast<typename TypeTraits<ptype>::storage_type>(tmp);if (istrm.fail()) {std::string err="ImageFromStringDenseScalarDispatchPType: unable to read current pixel from " + istrm.str();POUTRE_RUNTIME_ERROR(err);}
+                    if (istrm.fail()) { std::string err = "ImageFromStringDenseScalarDispatchPType: unable to read current pixel from " + istrm.str(); POUTRE_RUNTIME_ERROR(err); }
+                    it[2]=static_cast<typename TypeTraits<ptype>::storage_type>(tmp);
                     }
     }
 
@@ -81,21 +83,24 @@ namespace poutre
                 {
                     istrm>>tmp;
                     //todo check range validity ?
-                    it[0]=static_cast<typename TypeTraits<ptype>::storage_type>(tmp);
                     if (istrm.fail()) 
                     {
                         std::string err="ImageFromStringDenseScalarDispatchPType: unable to read current pixel from " + istrm.str();
                         POUTRE_RUNTIME_ERROR(err);
                     }
+                    it[0] = static_cast<typename TypeTraits<ptype>::storage_type>(tmp);
                     istrm>>tmp;
                     //todo check range validity ?
-                    it[1]=static_cast<typename TypeTraits<ptype>::storage_type >(tmp);if (istrm.fail()) {std::string err="ImageFromStringDenseScalarDispatchPType: unable to read current pixel from " + istrm.str();POUTRE_RUNTIME_ERROR(err);}
+                    if (istrm.fail()) { std::string err = "ImageFromStringDenseScalarDispatchPType: unable to read current pixel from " + istrm.str(); POUTRE_RUNTIME_ERROR(err); }
+                    it[1]=static_cast<typename TypeTraits<ptype>::storage_type >(tmp);
                     //todo check range validity ?
                     istrm>>tmp;
-                    it[2]=static_cast<typename TypeTraits<ptype>::storage_type >(tmp);if (istrm.fail()) {std::string err="ImageFromStringDenseScalarDispatchPType: unable to read current pixel from " + istrm.str();POUTRE_RUNTIME_ERROR(err);}
+                    if (istrm.fail()) { std::string err = "ImageFromStringDenseScalarDispatchPType: unable to read current pixel from " + istrm.str(); POUTRE_RUNTIME_ERROR(err); }
+                    it[2]=static_cast<typename TypeTraits<ptype>::storage_type >(tmp);
                     //todo check range validity ?
                     istrm>>tmp;
-                    it[3]=static_cast<typename TypeTraits<ptype>::storage_type >(tmp);if (istrm.fail()) {std::string err="ImageFromStringDenseScalarDispatchPType: unable to read current pixel from " + istrm.str();POUTRE_RUNTIME_ERROR(err);}                    
+                    if (istrm.fail()) { std::string err = "ImageFromStringDenseScalarDispatchPType: unable to read current pixel from " + istrm.str(); POUTRE_RUNTIME_ERROR(err); }
+                    it[3]=static_cast<typename TypeTraits<ptype>::storage_type >(tmp);
                     }
     }
     

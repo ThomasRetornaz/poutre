@@ -3,7 +3,9 @@
 #
 # ----------------------------------------------------------------------------
 
-find_package(ZLIB QUIET)
+#set(POUTRE_zlib_version_minimal 1.2.8)
+#find_package(ZLIB ${POUTRE_zlib_version_minimal} QUIET)
+find_package(ZLIB  QUIET)
 if(ZLIB_FOUND)
 	message("LibJPEG found on the system at location is ${JPEG_INCLUDE_DIR} so use it")
     set(ZLIB_INCLUDE_DIR       ${ZLIB_INCLUDE_DIR}    PARENT_SCOPE)
@@ -47,7 +49,7 @@ endif()
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/zconf.h.cmakein"
                "${CMAKE_CURRENT_BINARY_DIR}/zconf.h" @ONLY)
                
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(ZLIB_PUBLIC_HDRS
     "${CMAKE_CURRENT_BINARY_DIR}/zconf.h"
@@ -82,6 +84,10 @@ set(ZLIB_SRCS
     zutil.c
 )
 
+source_group(details FILES ${ZLIB_PRIVATE_HDRS})
+source_group(src FILES ${ZLIB_SRCS})
+source_group(header FILES ${ZLIB_PUBLIC_HDRS})
+
 add_library(${ZLIB_LIBRARY} STATIC ${ZLIB_SRCS} ${ZLIB_PUBLIC_HDRS} ${ZLIB_PRIVATE_HDRS})
 set_target_properties(${ZLIB_LIBRARY} PROPERTIES DEFINE_SYMBOL ZLIB_DLL)
 
@@ -90,20 +96,10 @@ if(UNIX)
      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
   endif()
 endif()
-#ocv_warnings_disable(CMAKE_C_FLAGS -Wshorten-64-to-32 -Wattributes -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations)
-
-# set_target_properties(${ZLIB_LIBRARY} PROPERTIES
-        # OUTPUT_NAME ${ZLIB_LIBRARY}
-        # DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
-        # COMPILE_PDB_NAME ${ZLIB_LIBRARY}
-        # COMPILE_PDB_NAME_DEBUG "${ZLIB_LIBRARY}${OPENCV_DEBUG_POSTFIX}"
-        # ARCHIVE_OUTPUT_DIRECTORY ${3P_LIBRARY_OUTPUT_PATH}
-    # )
 
 set_target_properties(${ZLIB_LIBRARY} PROPERTIES FOLDER "3rdparty")
-
-set(ZLIB_INCLUDE_DIR       ${ZLIB_PUBLIC_HDRS}    PARENT_SCOPE)
+set(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}) #for zconf
+set(ZLIB_INCLUDE_DIR       ${ZLIB_INCLUDE_DIR}    PARENT_SCOPE)
 set(ZLIB_LIBRARY         ${ZLIB_LIBRARY}      PARENT_SCOPE)
 
-#ocv_install_target(${ZLIB_LIBRARY} EXPORT OpenCVModules ARCHIVE DESTINATION ${OPENCV_3P_LIB_INSTALL_PATH} COMPONENT dev)
 endif()

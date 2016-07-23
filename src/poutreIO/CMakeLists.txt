@@ -4,7 +4,7 @@ set(PoutreIOSubdirectory ${POUTRE_SRC_DIR}/poutreIO)
 
 #generate_library_version(${PoutreIOSubdirectory}/src/current_configuration_generated.cpp)
 
- find_package(OpenCV QUIET)
+ find_package(OpenCV QUIET) #todo add converter to/from opencv
 
 INCLUDE_DIRECTORIES(BEFORE SYSTEM 
 	${ZLIB_INCLUDE_DIR}
@@ -12,12 +12,13 @@ INCLUDE_DIRECTORIES(BEFORE SYSTEM
 	${JPEG_INCLUDE_DIR}
 	${TIFF_INCLUDE_DIR}
 	${HDF5_INCLUDE_DIR}
+  ${CMAKE_CURRENT_BINARY_DIR} #for module with ./configure
 	)
 
 set(PoutreIOSRC_DETAILS
-	${PoutreIOSubdirectory}/include/poutreIOPNG.hpp
-  ${PoutreIOSubdirectory}/include/poutreIOJPG.hpp
-  ${PoutreIOSubdirectory}/include/poutreIOTIFF.hpp
+  ${PoutreIOSubdirectory}/include/poutreIOPNG.hpp
+  #${PoutreIOSubdirectory}/include/poutreIOJPG.hpp
+  #${PoutreIOSubdirectory}/include/poutreIOTIFF.hpp
   ${PoutreIOSubdirectory}/include/poutreIOBuffer.hpp
 )  
 
@@ -31,10 +32,8 @@ set(PoutreIOSRC_CPP
   ${PoutreIOSubdirectory}/src/poutreIOString.cpp
   ${PoutreIOSubdirectory}/src/poutreIOLoader.cpp
   ${PoutreIOSubdirectory}/src/poutreIOPNG.cpp
-  ${PoutreIOSubdirectory}/src/poutreIOJPG.cpp
-  ${PoutreIOSubdirectory}/src/poutreIOTIFF.cpp
-  # auto generated file
-  #${PoutreBaseSubdirectory}/src/current_configuration_generated.cpp
+  #${PoutreIOSubdirectory}/src/poutreIOJPG.cpp
+  #${PoutreIOSubdirectory}/src/poutreIOTIFF.cpp
   )
 source_group(details FILES ${PoutreIOSRC_DETAILS})
 source_group(src FILES ${PoutreIOSRC_CPP})
@@ -49,10 +48,10 @@ set(PoutreIOSRC
 add_library(PoutreIO ${PoutreIOSRC})
 target_link_libraries(PoutreIO 
   PRIVATE jsoncpp
-  PRIVATE ${JPEG_LIBRARY}
+  #PRIVATE ${JPEG_LIBRARY}
   PRIVATE ${ZLIB_LIBRARY} 
   PRIVATE ${PNG_LIBRARY} 
-  PRIVATE ${TIFF_LIBRARY} 
+  #PRIVATE ${TIFF_LIBRARY} 
   INTERFACE Eigen
   INTERFACE BoostSimd
   PUBLIC PoutreBase 
