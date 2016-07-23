@@ -128,10 +128,10 @@ BOOST_AUTO_TEST_CASE(bounds_iterator_1d)
   BOOST_CHECK_EQUAL(it5 - bnd1D.begin( ), 4);
   
   idx res;
-  poutre::details::get_coord_from_offset<bnd,idx>::op(bnd1D,4,res);
+  poutre::details::get_coord_from_offset_nostride<bnd,idx>::op(bnd1D,4,res);
   BOOST_CHECK(res==idx{4});
     
-  auto off=poutre::details::get_offset_from_coord<bnd, idx>::op(bnd1D, res);
+  auto off=poutre::details::get_offset_from_coord_nostride<bnd, idx>::op(bnd1D, res);
   BOOST_CHECK_EQUAL(off, 4);
 
   idx outofbound = {15};
@@ -167,10 +167,10 @@ BOOST_AUTO_TEST_CASE(bounds_iterator_2d)
 
   idx res;
   idx expectedidx = {1,1};
-  poutre::details::get_coord_from_offset<bnd, idx>::op(bnd2D, 5, res);
+  poutre::details::get_coord_from_offset_nostride<bnd, idx>::op(bnd2D, 5, res);
   BOOST_CHECK_EQUAL(res, expectedidx);
 
-  auto off = poutre::details::get_offset_from_coord<bnd, idx>::op(bnd2D, res);
+  auto off = poutre::details::get_offset_from_coord_nostride<bnd, idx>::op(bnd2D, res);
   BOOST_CHECK_EQUAL(off, 5);
 
   idx outofbound = { 15,15 };
@@ -224,10 +224,10 @@ BOOST_AUTO_TEST_CASE(bounds_iterator_3d)
 
   idx res;
   idx expidx = idx{ 0, 1, 2 };
-  poutre::details::get_coord_from_offset<bound, idx>::op(bnd, 5, res);
+  poutre::details::get_coord_from_offset_nostride<bound, idx>::op(bnd, 5, res);
   BOOST_CHECK_EQUAL(res, expidx);
 
-  auto off = poutre::details::get_offset_from_coord<bound, idx>::op(bnd, res);
+  auto off = poutre::details::get_offset_from_coord_nostride<bound, idx>::op(bnd, res);
   BOOST_CHECK_EQUAL(off, 5);
 
   idx outofbound = { 15, 15,15 };

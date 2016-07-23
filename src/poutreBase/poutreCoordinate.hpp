@@ -756,7 +756,7 @@ namespace poutre
 
     difference_type operator- (const bounds_iterator & rhs) const POUTRE_NOEXCEPTONLYNDEBUG
     {
-      return details::get_offset_from_coord<bounds<Rank>, index < Rank>>::op (m_bnd, m_idx) - details::get_offset_from_coord<bounds<Rank>, index < Rank>>::op (rhs.m_bnd, rhs.m_idx);
+      return details::get_offset_from_coord_nostride<bounds<Rank>, index < Rank>>::op (m_bnd, m_idx) - details::get_offset_from_coord_nostride<bounds<Rank>, index < Rank>>::op (rhs.m_bnd, rhs.m_idx);
     }
 
     //   pointer   operator->() const;  //implement or throw ?

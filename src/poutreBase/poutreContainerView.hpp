@@ -24,8 +24,6 @@
 
 #include <type_traits>
 
-#include <boost/simd/sdk/simd/pack.hpp> //to be moved
-
 #ifdef _MSC_VER
 #pragma warning( push )
 #pragma warning( disable : 4425 )//4425 improper support constexpr
@@ -365,7 +363,7 @@ namespace poutre
       index_type idxslice;
       details::helper_assign_container_valueop<index_type, AssignOpType::AssignOp, Rank>::op (0, idxslice);
       idxslice[0] = slice;
-      pointer data_slice = m_data + details::get_offset_from_coord<bounds_type, index_type>::op (m_bnd, idxslice);
+      pointer data_slice = m_data + details::get_offset_from_coord_nostride<bounds_type, index_type>::op (m_bnd, idxslice);
 
       return array_view<T, Rank - 1 > (data_slice, bnd_slice);
     }
@@ -381,7 +379,7 @@ namespace poutre
       shifted -= 1;
       POUTRE_CHECK (m_bnd.contains (shifted), "section(origin,section_bnd) section_bnd shifted by origins is out of bound");
 
-      pointer data_section = m_data + details::get_offset_from_coord<bounds_type, index_type>::op (m_bnd, origin);
+      pointer data_section = m_data + details::get_offset_from_coord_nostride<bounds_type, index_type>::op (m_bnd, origin);
       return strided_array_view<T, Rank>(data_section, section_bnd, stride());
     }
 
@@ -394,9 +392,10 @@ namespace poutre
 
       bounds_type section_bnd = m_bnd - origin;
       //std::cout<<"\nstrided_array_view::section init "<<m_bnd<<" sub "<<section_bnd<<" stride"<<stride()<<"\n";
-      pointer data_section = m_data + details::get_offset_from_coord<bounds_type, index_type>::op (m_bnd, origin);
+      pointer data_section = m_data + details::get_offset_from_coord_nostride<bounds_type, index_type>::op (m_bnd, origin);
       return strided_array_view<T, Rank>(data_section, section_bnd, stride());
     }
+
     /**@}*/
   };
 
@@ -605,34 +604,18 @@ namespace poutre
   //! @} doxygroup: coordinate_group   
 
 
-  template<template<typename T,ptrdiff_t> class ViewType>
-  struct IsStrided
-  {
-  };
+  //Default to false 
+  template<class ViewType>
+  struct is_strided : std::false_type {};
 
-  template<>
-  struct IsStrided<array_view>
-  {
-      POUTRE_STATIC_CONSTEXPR bool value = false;
-  };
+  template<typename T, std::ptrdiff_t Rank >
+  struct is_strided<carray_view<T, Rank>> : std::true_type {};
 
-  template<>
-  struct IsStrided<strided_array_view>
-  {
-      POUTRE_STATIC_CONSTEXPR bool value = true;
-  };
+  template<class ViewType1,class ViewType2>
+  struct is_same_view_type : std::false_type {};
 
-  template<>
-  struct IsStrided<carray_view>
-  {
-      POUTRE_STATIC_CONSTEXPR bool value = false;
-  };
-
-  template<>
-  struct IsStrided<cstrided_array_view>
-  {
-      POUTRE_STATIC_CONSTEXPR bool value = true;
-  };
+  template<class ViewType>
+  struct is_same_view_type<ViewType, ViewType> : std::true_type {};
 
 
 

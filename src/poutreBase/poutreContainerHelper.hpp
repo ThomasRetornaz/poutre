@@ -522,8 +522,8 @@ namespace poutre
          }
       };
 
-   template <class bnds, class idx, ptrdiff_t Rank = bnds::rank>
-   struct get_offset_from_coord
+   template <class bnds,class idx, ptrdiff_t Rank = bnds::rank>
+   struct get_offset_from_coord_nostride
      {
      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR offset op(bnds const &i_bnd, idx const &i_idx) POUTRE_NOEXCEPT
        {
@@ -541,7 +541,7 @@ namespace poutre
 
     //specialize 1D
     template <class bnds, class idx>
-    struct get_offset_from_coord<bnds, idx, 1>
+    struct get_offset_from_coord_nostride<bnds, idx, 1>
       {
       POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR offset op(bnds const &i_bnd, idx const &i_idx) POUTRE_NOEXCEPT
         {
@@ -551,7 +551,7 @@ namespace poutre
 
     //specialize 2D
     template <class bnds, class idx>
-    struct get_offset_from_coord<bnds, idx, 2>
+    struct get_offset_from_coord_nostride<bnds, idx, 2>
       {
       POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR offset op(const bnds &i_bnd, const idx &i_idx) POUTRE_NOEXCEPT
         {
@@ -561,7 +561,7 @@ namespace poutre
 
 
     template <class bnds, class idx, ptrdiff_t Rank = bnds::rank>
-    struct get_coord_from_offset
+    struct get_coord_from_offset_nostride
       {
       POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(bnds const &i_bnd,offset off, idx &o_idx) POUTRE_NOEXCEPTONLYNDEBUG
         {
@@ -588,7 +588,7 @@ namespace poutre
       };
 
     template <class bnds, class idx>
-    struct get_coord_from_offset<bnds, idx, 1>
+    struct get_coord_from_offset_nostride<bnds, idx, 1>
       {
       POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(bnds const &i_bnd, offset off, idx &o_idx) POUTRE_NOEXCEPTONLYNDEBUG
         {
@@ -599,7 +599,7 @@ namespace poutre
       };
 
     template <class bnds, class idx>
-    struct get_coord_from_offset<bnds, idx, 2>
+    struct get_coord_from_offset_nostride<bnds, idx, 2>
       {
       POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(bnds const &i_bnd, offset off, idx &o_idx) POUTRE_NOEXCEPTONLYNDEBUG
         {
@@ -624,11 +624,11 @@ namespace poutre
 			 return;
          }
        //current offset belong to in
-       offset current_offset = get_offset_from_coord<bnds, idx>::op(i_bnd, i_idx);
+       offset current_offset = get_offset_from_coord_nostride<bnds, idx>::op(i_bnd, i_idx);
        //shift
        current_offset += shift;
        //recreate idx
-       get_coord_from_offset<bnds, idx>::op(i_bnd,current_offset,o_idx);
+       get_coord_from_offset_nostride<bnds, idx>::op(i_bnd,current_offset,o_idx);
        }
      };
 
