@@ -108,10 +108,10 @@ namespace poutre
     };
 
   //! operator<< for AssignOpType
-  BASE_API std::ostream& operator<<(std::ostream&, ArithOpType);
+  BASE_API std::ostream& operator<<(std::ostream&, AssignOpType);
 
   //! operator>> for AssignOpType
-  BASE_API std::istream& operator>>(std::istream&, ArithOpType&);
+  BASE_API std::istream& operator>>(std::istream&, AssignOpType&);
 
 
 }
