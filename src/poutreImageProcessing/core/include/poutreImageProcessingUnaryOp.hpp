@@ -36,12 +36,8 @@ namespace poutre
 {
     namespace bs = boost::simd;
 
-    //tag to help dispatch 
-    struct tag_SIMD_disabled{};
-    struct tag_SIMD_enabled{};
-
     /****************************************************************************************/
-   /*                               PixelWiseUnaryOp                                        */ 
+   /*                               PixelWiseUnaryOp                                        */
    /****************************************************************************************/
 
     template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, template <typename, typename, class TAG> class UnOp>
@@ -53,13 +49,13 @@ namespace poutre
     }
 
     // primary use strided view 
-    template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, template <typename , typename, class TAG> class UnOp>
+    template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, template <typename, typename, class TAG> class UnOp>
     struct PixelWiseUnaryOpDispatcher
     {
         void operator()(const View1<T1, Rank>& i_vin, View2<T2, Rank>& o_vout) const
         {
             //get the specialized operator
-            using real_op= typename UnOp<T1,T2,tag_SIMD_disabled>;
+            using real_op = typename UnOp<T1, T2, tag_SIMD_disabled>;
             real_op op;
 
             //More runtime dispatch
@@ -77,7 +73,6 @@ namespace poutre
                 {
                     o_vout[*beg1] = static_cast<T2>(op(i_vin[*beg1]));
                 }
-                //}
                 //TODO stride==1 in least significant dimension
             }
             else //default two idx
@@ -109,7 +104,7 @@ namespace poutre
             auto i_vinbeg = i_vin.data();
             auto i_vinend = i_vin.data() + i_vin.size();
             auto i_voutbeg = o_vout.data();
-           for (; i_vinbeg != i_vinend; i_vinbeg++, i_voutbeg++)
+            for (; i_vinbeg != i_vinend; i_vinbeg++, i_voutbeg++)
             {
                 *i_voutbeg = static_cast<T2>(op(*i_vinbeg));
             }
@@ -119,13 +114,13 @@ namespace poutre
 
     //template specialization both array_view and same type, use simd counterpart
     template<typename T, ptrdiff_t Rank, template <typename, typename, class TAG> class UnOp>
-    struct PixelWiseUnaryOpDispatcher<T, T, Rank, array_view, array_view,UnOp>
+    struct PixelWiseUnaryOpDispatcher<T, T, Rank, array_view, array_view, UnOp>
     {
 
         void operator()(const array_view<T, Rank>& i_vin, array_view<T, Rank>& o_vout) const
         {
             //get the specialized operator
-            using real_op = typename UnOp<T,T, tag_SIMD_enabled>;
+            using real_op = typename UnOp<T, T, tag_SIMD_enabled>;
             real_op op;
 
             //std::cout << "\n" << "call UnaryOpDispatcher array view template specialization same type,fall back ptr + SIMD";
@@ -146,22 +141,22 @@ namespace poutre
     /*                               PixelWiseUnaryOp with value                            */
     /****************************************************************************************/
 
-    template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, template <typename,typename, class TAG> class UnOp>
-    void PixelWiseUnaryOpWithValue(const View1<T1, Rank>& i_vin,T1 val, View2<T2, Rank>& o_vout)
+    template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, template <typename, typename, class TAG> class UnOp>
+    void PixelWiseUnaryOpWithValue(const View1<T1, Rank>& i_vin, T1 val, View2<T2, Rank>& o_vout)
     {
         POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
         PixelWiseUnaryOpWithValueDispatcher<T1, T2, Rank, View1, View2, UnOp> dispatcher;
-        dispatcher(i_vin,val,o_vout);
+        dispatcher(i_vin, val, o_vout);
     }
 
     // primary use strided view 
-    template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, template <typename,typename, class TAG> class UnOp>
+    template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, template <typename, typename, class TAG> class UnOp>
     struct PixelWiseUnaryOpWithValueDispatcher
     {
-        void operator()(const View1<T1, Rank>& i_vin,T1 val, View2<T2, Rank>& o_vout) const
+        void operator()(const View1<T1, Rank>& i_vin, T1 val, View2<T2, Rank>& o_vout) const
         {
             //get the specialized operator
-            using real_op = typename UnOp<T1,T2,tag_SIMD_disabled>;
+            using real_op = typename UnOp<T1, T2, tag_SIMD_disabled>;
             real_op op(val);
 
             //More runtime dispatch
@@ -179,7 +174,6 @@ namespace poutre
                 {
                     o_vout[*beg1] = static_cast<T2>(op(i_vin[*beg1]));
                 }
-                //}
                 //TODO stride==1 in least significant dimension
             }
             else //default two idx
@@ -197,14 +191,14 @@ namespace poutre
     };
 
     //template specialization both array_view but different type
-    template<typename T1, typename T2, ptrdiff_t Rank, template <typename,typename, class TAG> class UnOp>
+    template<typename T1, typename T2, ptrdiff_t Rank, template <typename, typename, class TAG> class UnOp>
     struct PixelWiseUnaryOpWithValueDispatcher<T1, T2, Rank, array_view, array_view, UnOp>
     {
 
-        void operator()(const array_view<T1, Rank>& i_vin,T1 val, array_view<T2, Rank>& o_vout) const
+        void operator()(const array_view<T1, Rank>& i_vin, T1 val, array_view<T2, Rank>& o_vout) const
         {
             //get the specialized operator
-            using real_op = typename UnOp<T1,T2,tag_SIMD_disabled>;
+            using real_op = typename UnOp<T1, T2, tag_SIMD_disabled>;
             real_op op(val);
 
             //std::cout << "\n" << "call UnaryOpDispatcher array view template specialization,fall back ptr";
@@ -224,10 +218,10 @@ namespace poutre
     struct PixelWiseUnaryOpWithValueDispatcher<T, T, Rank, array_view, array_view, UnOp>
     {
 
-        void operator()(const array_view<T, Rank>& i_vin,T val, array_view<T, Rank>& o_vout) const
+        void operator()(const array_view<T, Rank>& i_vin, T val, array_view<T, Rank>& o_vout) const
         {
             //get the specialized operator
-            using real_op = typename UnOp<T,T,tag_SIMD_enabled>;
+            using real_op = typename UnOp<T, T, tag_SIMD_enabled>;
             real_op op(val);
 
             //std::cout << "\n" << "call UnaryOpDispatcher array view template specialization same type,fall back ptr + SIMD";

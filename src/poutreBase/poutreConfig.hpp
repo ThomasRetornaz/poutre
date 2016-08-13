@@ -138,6 +138,10 @@ namespace poutre
 #define POUTRE_ASSERTCHECK( CONDITION, MSG )
 #endif
 
+//tag to help dispatch 
+struct tag_SIMD_disabled {};
+struct tag_SIMD_enabled {};
+
 } //namespace
 #endif //DOXYGEN_SHOULD_SKIP_THIS
 #endif
