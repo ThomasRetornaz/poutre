@@ -48,27 +48,22 @@ namespace poutre
 	public:
 		ImageLoader() :m_imgPath(),m_isready(false){}
 		
-		virtual ~ImageLoader() {}
+        //rule of 0
+		//virtual ~ImageLoader() {}
 
-		ImageLoader(self_type &&rhs) = default;
+		//ImageLoader(self_type &&rhs) = default;
 
-		self_type &operator=(self_type &&rhs) = default;
+		//self_type &operator=(self_type &&rhs) = default;
 
-		ImageLoader(const self_type& rhs) = delete;
+		//ImageLoader(const self_type& rhs) = default;
+		//
+		//self_type& operator=(const self_type& rhs) = default;
 		
-		self_type& operator=(const self_type& rhs) = delete;
-		
-		self_type& SetPath(bf::path&& i_imgpath)
-		{
-			m_imgPath=(std::forward<bf::path>(i_imgpath));
-			m_isready = true;
-			return *this;
-		}
+        self_type& SetPath(bf::path&& i_imgpath);
 
-		std::unique_ptr<IInterface> ImageLoader::Load() const
-		{
-			return std::unique_ptr<IInterface>();
-		}
+        self_type& SetPath(const bf::path& i_imgpath);
+
+        std::unique_ptr<IInterface> Load() const;
 	};
 }//poutre
 

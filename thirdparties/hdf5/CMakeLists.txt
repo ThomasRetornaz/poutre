@@ -13,9 +13,9 @@ set(HDF5_TEMP_DIR "${HDF5_PREFIX}/Tmp")
 set(HDF5_INSTALL_DIR "${DREAM3D_SDK_INSTALL}/hdf5-${HDF5_VERSION}")
 
 if(MSVC)
-	set(HDF5_URL "http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.16.zip")
+	set(HDF5_URL "https://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.16/src/hdf5-1.8.16.zip")
 else()
-	set(HDF5_URL "http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.16.tar.gz")
+	set(HDF5_URL "https://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.16/src/hdf5-1.8.16.tar.gz")
 endif()
 
 set_property(DIRECTORY PROPERTY EP_BASE ${HDF5_PREFIX})

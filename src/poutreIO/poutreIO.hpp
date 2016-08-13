@@ -28,7 +28,11 @@
 
 namespace poutre
   {
-  IO_API void dummy(void);
+    enum class ImageIOFormat : unsigned int
+    {
+        PNG = 0,
+        UNDEF = 1 << 0,
+    };
   }
 #endif	/* POUTRE_IO_HPP */
 

@@ -20,18 +20,23 @@ set(PoutreIOSRC_DETAILS
   #${PoutreIOSubdirectory}/include/poutreIOJPG.hpp
   #${PoutreIOSubdirectory}/include/poutreIOTIFF.hpp
   ${PoutreIOSubdirectory}/include/poutreIOBuffer.hpp
+
 )  
 
 set(PoutreIOSRC_PUBLICHEADERS  
   ${PoutreIOSubdirectory}/poutreIO.hpp
   ${PoutreIOSubdirectory}/poutreIOString.hpp
   ${PoutreIOSubdirectory}/poutreIOLoader.hpp
+  ${PoutreIOSubdirectory}/poutreIOWriter.hpp
+  ${PoutreIOSubdirectory}/poutreIOProvider.hpp
 )
 
 set(PoutreIOSRC_CPP
   ${PoutreIOSubdirectory}/src/poutreIOString.cpp
   ${PoutreIOSubdirectory}/src/poutreIOLoader.cpp
+  ${PoutreIOSubdirectory}/src/poutreIOWriter.cpp
   ${PoutreIOSubdirectory}/src/poutreIOPNG.cpp
+  ${PoutreIOSubdirectory}/src/poutreIOProvider.cpp
   #${PoutreIOSubdirectory}/src/poutreIOJPG.cpp
   #${PoutreIOSubdirectory}/src/poutreIOTIFF.cpp
   )

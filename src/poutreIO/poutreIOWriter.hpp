@@ -8,14 +8,14 @@
 //==============================================================================
 
 /*
-* File:   poutreIOPNG.hpp
-* Author: thomas retornaz
+* File:   poutreIOWritter.hpp
+* Author: thomas
 *
-* Created on 19 mars 2016
+* Created on 15 mars 2016
 */
 
-#ifndef POUTREIOPNG_HPP
-#define	POUTREIOPNG_HPP
+#ifndef POUTREIOWRITTER_HPP
+#define	POUTREIOWRITTER_HPP
 
 #include <string>
 #include <memory>
@@ -28,18 +28,40 @@
 #include <poutreImageProcessing/core/poutreImageProcessingInterface.hpp>
 #endif
 
-
 #include <boost/filesystem.hpp>
 
 namespace poutre
 {
-	namespace details
-	{
-		namespace bf = boost::filesystem;
-		IO_API  std::unique_ptr<IInterface> IOLoadPng(const bf::path& i_path);
-		IO_API  void IOSavePng(const bf::path& i_path,const poutre::IInterface& i_img);
+	namespace bf = boost::filesystem;
 
-	}
-}
-#endif	/* POUTREIOPNG_HPP */
+	class IO_API ImageWriter
+	{
+		using self_type = ImageWriter;
+		bf::path m_imgPath;
+        ImageIOFormat m_imgformat;
+
+	public:
+        ImageWriter() :m_imgPath(), m_imgformat(ImageIOFormat::PNG){}
+		
+		virtual ~ImageWriter() {}
+
+        ImageWriter(self_type &&rhs) = default;
+
+		self_type &operator=(self_type &&rhs) = default;
+
+        ImageWriter(const self_type& rhs) = delete;
+		
+		self_type& operator=(const self_type& rhs) = delete;
+		
+        self_type& SetPath(bf::path&& i_imgpath);
+
+        self_type& SetPath(const bf::path& i_imgpath);
+
+        //self_type& SetFormat(ImageIOFormat format);
+
+        void Write(IInterface&& i_img) const;
+	};
+}//poutre
+
+#endif	/* POUTREIOWRITTER_HPP */
 

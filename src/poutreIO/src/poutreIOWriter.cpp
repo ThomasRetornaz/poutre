@@ -18,7 +18,7 @@
 
 #include <poutreIO/poutreIO.hpp>
 #include <poutreIO/include/poutreIOPNG.hpp>
-#include <poutreIO/poutreIOLoader.hpp>
+#include <poutreIO/poutreIOWriter.hpp>
 #include <poutreImageProcessing/core/poutreImageProcessingInterface.hpp>
 
 #include <boost/filesystem.hpp>
@@ -28,41 +28,44 @@ namespace poutre
 {
     namespace bf = boost::filesystem;
 
-    ImageLoader& ImageLoader::SetPath(bf::path&& i_imgpath)
-    {
-        m_imgPath = std::move(i_imgpath); //will call string(string&&)
-        m_isready = true;
-        return *this;
-    }
-
-    ImageLoader& ImageLoader::SetPath(const bf::path& i_imgpath)
+    ImageWriter& ImageWriter::SetPath(const bf::path& i_imgpath)
     {
         m_imgPath = i_imgpath;
-        m_isready = true;
+        boost::filesystem::path dir = m_imgPath.parent_path();
+        if (!(bf::exists(dir)))
+        {
+            POUTRE_RUNTIME_ERROR(boost::format("ImageWriter: provided path %s doesn't exists") % dir);
+        }
         return *this;
     }
 
-    std::unique_ptr<IInterface> ImageLoader::Load() const
+    ImageWriter& ImageWriter::SetPath(bf::path&& i_imgpath)
     {
-        if (!m_isready) POUTRE_RUNTIME_ERROR("ImageLoader:  you must set path through SetPath");
-        
-        if (!bf::exists(m_imgPath)) {
-            POUTRE_RUNTIME_ERROR(
-                (boost::format("IOSavePng:: path don't exist %s") % m_imgPath).str());
+        m_imgPath = std::move(i_imgpath);//will call string(string&&)
+        boost::filesystem::path dir = m_imgPath.parent_path();
+        if (!(bf::exists(dir)))
+        {
+            POUTRE_RUNTIME_ERROR(boost::format("ImageWriter: provided path %s doesn't exists") % dir);
         }
+        return *this;
+    }
 
+    //void ImageWriter::Write(IInterface&& i_img) const
+    void ImageWriter::Write(IInterface&& i_img) const
+    {
+        //const IInterface& img = std::forward<IInterface>(i_img);
+        //switch on extension
         auto extension = bf::extension(m_imgPath);
         boost::algorithm::to_lower(extension);
-        if (extension=="png")
-        { 
-            return  details::IOLoadPng(m_imgPath);
+        if (extension == "png")
+        {
+            return  details::IOSavePng(m_imgPath, i_img);
         } //else if 
         else
         {
             POUTRE_RUNTIME_ERROR(
-                (boost::format("ImageLoader::Load unsupported extension %s") % extension).str());
+                (boost::format("ImageWriter::Write unsupported extension %s") % extension).str());
         }
-        return std::unique_ptr<IInterface>(); //shut up warning
     }
 
 }//namespace poutre
