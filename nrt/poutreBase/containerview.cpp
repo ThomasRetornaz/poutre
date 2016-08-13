@@ -461,7 +461,9 @@ BOOST_AUTO_TEST_CASE(static_dispatch)
 {
 
     static_assert(false == poutre::is_strided<poutre::array_view< int, 1 > >::value, "oups");
-    static_assert(true == poutre::is_strided<poutre::carray_view< int, 1 > >::value, "oups");
+    static_assert(true == poutre::is_strided<poutre::strided_array_view< int, 1 > >::value, "oups");
+    static_assert(false == poutre::is_strided<poutre::carray_view< int, 1 > >::value, "oups");
+    static_assert(true == poutre::is_strided<poutre::cstrided_array_view< int, 1 > >::value, "oups");
 
 }
 BOOST_AUTO_TEST_SUITE_END()

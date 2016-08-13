@@ -18,6 +18,10 @@
  *
  */
 
+#ifndef POUTRE_CONFIG__HPP__
+#include <poutreBase/poutreConfig.hpp>
+#endif
+
 #ifndef POUTRE_COORDINATE_HPP__
 #include <poutreBase/poutreCoordinate.hpp>
 #endif
@@ -609,7 +613,7 @@ namespace poutre
   struct is_strided : std::false_type {};
 
   template<typename T, std::ptrdiff_t Rank >
-  struct is_strided<carray_view<T, Rank>> : std::true_type {};
+  struct is_strided<strided_array_view<T, Rank>> : std::true_type {};
 
   template<class ViewType1,class ViewType2>
   struct is_same_view_type : std::false_type {};
