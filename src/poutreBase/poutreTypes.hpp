@@ -30,7 +30,7 @@ namespace poutre
   {
   using  pbool = bool; //!boolean type
   using  pUINT8 = unsigned char; //!UINT8 type
-  using  pINT8 = signed char; //!INT8 type
+  //using  pINT8 = signed char; //!INT8 type
   using  pUINT32 = std::uint32_t; //!UINT32 type
   using  pINT32 = std::int32_t; //!INT32 type
   using  pFLOAT = float;        //!Float/Real type (default real type)

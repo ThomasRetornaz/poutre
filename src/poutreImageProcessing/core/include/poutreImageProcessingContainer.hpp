@@ -177,9 +177,17 @@ public:
 
   // Element access
 
-  reference operator[](size_type n)POUTRE_NOEXCEPT { return m_data[n]; }
+  reference operator[](size_type n)POUTRE_NOEXCEPT 
+    {
+      POUTRE_ASSERTCHECK(n < m_numelemwithpaddingifany, "Access out of bound");
+      POUTRE_ASSERTCHECK(n >= 0, "Access out of bound");
+      return m_data[n]; 
+    }
 
-  const_reference operator[](size_type n) const POUTRE_NOEXCEPT {
+  const_reference operator[](size_type n) const POUTRE_NOEXCEPT 
+  {
+      POUTRE_ASSERTCHECK(n < m_numelemwithpaddingifany, "Access out of bound");
+      POUTRE_ASSERTCHECK(n >= 0, "Access out of bound");
     return m_data[n];
   }
 

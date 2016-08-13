@@ -214,6 +214,54 @@ BOOST_AUTO_TEST_CASE(section_and_slice_2d)
     }
 
     {
+        BOOST_TEST_MESSAGE("get section of 2d view no specific bound");
+        auto view2d = poutre::array_view<int, 2>(mif, { 5, 5 });
+        auto section2d = view2d.section(poutre::idx2d{ 1,1 });
+        BOOST_CHECK_EQUAL(section2d.size(), 16);
+        BOOST_CHECK_EQUAL(section2d.bound(), (poutre::bd2d({ 4,4 })));
+        BOOST_CHECK_EQUAL(section2d.stride(), (poutre::idx2d({ 5,1 })));
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,0 })], 6);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,1 })], 7);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,2 })], 8);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,3 })], 9);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 1,0 })], 11);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 1,1 })], 12);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 1,2 })], 13);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 1,3 })], 14);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 2,0 })], 16);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 2,1 })], 17);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 2,2 })], 18);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 2,3 })], 19);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 3,0 })], 21);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 3,1 })], 22);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 3,2 })], 23);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 3,3 })], 24);
+    }
+    {
+        BOOST_TEST_MESSAGE("get section of 2d view no specific bound");
+        std::vector<int> tmp(30);
+        for (auto i = 0; i < 30; ++i)
+        {
+            tmp[i] = i;
+        }
+        auto view2d = poutre::array_view<int, 2>(tmp, { 5, 6 });
+        auto section2d = view2d.section(poutre::idx2d{ 1,1 });
+        BOOST_CHECK_EQUAL(section2d.size(), 20);
+        BOOST_CHECK_EQUAL(section2d.bound(), (poutre::bd2d({ 4,5 })));
+        BOOST_CHECK_EQUAL(section2d.stride(), (poutre::idx2d({ 6,1 })));
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,0 })], 7);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,1 })], 8);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,2 })], 9);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,3 })], 10);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,4 })], 11);
+        
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 3,0 })], 25);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 3,1 })], 26);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 3,2 })], 27);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 3,3 })], 28);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 3,4 })], 29);
+    }
+    {
         BOOST_TEST_MESSAGE("get section of 2d view");
         auto view2d = poutre::array_view<int, 2>(mif, { 5, 5 });
         auto section2d = view2d.section(poutre::idx2d{ 1,2 });

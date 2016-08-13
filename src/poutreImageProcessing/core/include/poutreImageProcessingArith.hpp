@@ -26,6 +26,8 @@
 #include <poutreBase/poutreContainerView.hpp>
 #endif
 
+#include <poutreImageProcessing/core/include/poutreImageProcessingUnaryOp.hpp>
+
 #include <boost/simd/sdk/simd/native.hpp>
 #include <boost/simd/include/functions/aligned_load.hpp>
 #include <boost/simd/include/functions/aligned_store.hpp>
@@ -39,65 +41,108 @@
 #include <algorithm>
 #include <boost/config.hpp>
 
+#include <boost/simd/sdk/simd/pack.hpp>
 #include <boost/simd/include/functions/plus.hpp>
 #include <boost/simd/include/functions/adds.hpp> //saturated add
 #include <boost/simd/include/functions/subs.hpp> //saturated sub
+#include <boost/simd/include/functions/negs.hpp> //invert
 
 namespace poutre
 {
     namespace bs = boost::simd;
 
 
-    template<class ViewType>
-    using target_type = std::conditional<
-        is_strided<ViewType>::value,
-        typename ViewType::value_type,
-        typename boost::simd::pack<ViewType::value_type>
-    >;
+    /*  template<class ViewType>
+      using target_type = typename std::conditional<
+          is_strided<ViewType>::value,
+          typename ViewType::value_type,
+          typename boost::simd::pack<ViewType::value_type>
+      >;*/
+      /***********************************************************************************************************************************/
+      /*                                                          NEGATE/INVERT                                                         */
+      /**********************************************************************************************************************************/
+    template< typename T1, typename T2, class tag>
+    struct op_Invert;
 
-    //!saturated add constant
-    template <typename T>
-    class op_adds
+    template< typename T1, typename T2>
+    struct op_Invert<T1,T2, tag_SIMD_disabled>
     {
-    private
-        T m_val;
-        T m_maxval;
-        typedef typename TypeTraits<T>::accu_type accutype;
     public:
-        op_adds(T val):m_val(val),m_maxval(TypeTraits<T>::max())
-
-        T operator()(T const &a0)
+        op_Invert() {}
+        T2 operator()(T1 const &a0)
         {
-            accutype res = static_cast<accutype>(m_val) + static_cast<accutype>(a0);
-            if (res > m_max_val) return m_max_val;
-            return static_cast<T>(res);
+            return -a0;
         }
     };
 
-    //! simd saturated add constant
-    template <typename T>
-    class op_boost_adds
+    template< typename T>
+    struct op_Invert<T,T,tag_SIMD_enabled>
     {
-        using p_t=bs::pack<T>;
-        p_t m_val;
     public:
-        op_adds(T val) :m_val(bs::splat<p_t>(val))
+        op_Invert() {}
+        template< typename U>
+        U operator()(U const &a0)
+        {
+            return bs::negs(a0);
+        }
+    };
 
+    template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2>
+    void t_ArithNegate(const View1<T1, Rank>& i_vin, View2<T2, Rank>& o_vout)
+    {
+        PixelWiseUnaryOp<T1, T2, Rank, View1, View2, op_Invert>(i_vin, o_vout);
+    }
+
+    /***********************************************************************************************************************************/
+    /*                                                  SATURATED ADD CONSTANT                                                         */
+    /**********************************************************************************************************************************/
+
+    template< typename T1, typename T2, class tag>
+    struct op_Saturated_Add_Constant;
+
+    template< typename T1, typename T2>
+    struct op_Saturated_Add_Constant<T1,T2,tag_SIMD_disabled>
+    {
+    private:
+        T2 m_val, m_maxval;
+        using accutype = typename TypeTraits<T2>::accu_type;
     public:
-        p_t operator()(p_t const &a0)
+        //using real_op = op_Saturated_Add_Constant<T, tag_SIMD_disabled>;
+        op_Saturated_Add_Constant(T2 val) :m_val(val), m_maxval(TypeTraits<T>::max()) {}
+        T2 operator()(T1 const &a0)
+        {
+            accutype res = static_cast<accutype>(m_val) + static_cast<accutype>(a0);
+            if (res > m_maxval) return m_maxval;
+            return static_cast<T2>(res);
+        }
+    };
+
+    //todo benchmark, if slow specialize boost::simd::transform to load m_val as a pack
+    template< typename T>
+    struct op_Saturated_Add_Constant<T,T,tag_SIMD_enabled>
+    {
+    private:
+        /*using p_t = bs::pack<T>;
+        p_t m_val_pack;*/
+        T m_val;
+    public:
+        //using real_op = op_Saturated_Add_Constant<T, tag_SIMD_disabled>;       
+        //op_Saturated_Add_Constant(T val) :m_val(val) {}
+        op_Saturated_Add_Constant(T val) :m_val(val) {}
+        template< typename U>
+        U operator()(U const &a0)
         {
             return bs::adds(a0, m_val);
         }
     };
 
     template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2>
-    void t_ArithAddConstSaturated(const View1<T1, Rank>& i_vin,T1 val,View2<T2, Rank>& o_vout)
+    //@warning saturation is related to *View2 type*
+    void t_ArithSaturatedAddConstant(const View1<T1, Rank>& i_vin, T2 val, View2<T2, Rank>& o_vout)
     {
-        op_boost_adds op(val);
-        UnaryOp(i_vin, o_vout, op);
+        PixelWiseUnaryOpWithValue<T1, T2, Rank, View1, View2, op_Saturated_Add_Constant>(i_vin, val, o_vout);
     }
 
-    
 }//namespace poutre
 
 #endif//POUTRE_IMAGEPROCESSING_ARITH_HPP__
