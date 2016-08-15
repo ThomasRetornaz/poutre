@@ -3,9 +3,8 @@
 #
 # ----------------------------------------------------------------------------
 
-#set(POUTRE_png_version_minimal 1.6.19)
-#find_package(PNG ${POUTRE_png_version_minimal} QUIET)
-find_package(PNG QUIET)
+set(POUTRE_png_version_minimal 1.6.19)
+find_package(PNG ${POUTRE_png_version_minimal} QUIET)
 if(PNG_FOUND)
 	message("LibPNG found on the system at location is ${PNG_INCLUDE_DIR} so use it")
   set(PNG_INCLUDE_DIR       ${PNG_INCLUDE_DIR}    PARENT_SCOPE)

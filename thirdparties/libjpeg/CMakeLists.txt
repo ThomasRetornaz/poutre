@@ -3,7 +3,7 @@
 #
 # ----------------------------------------------------------------------------
 #find_package(JPEG 9 QUIET)
-find_package(JPEG  QUIET)
+find_package(JPEG  9 QUIET) #right way to grab version ?
 if(JPEG_FOUND)
   message("LibJPEG found on the system at location is ${JPEG_INCLUDE_DIR} so use it")
   

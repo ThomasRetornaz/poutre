@@ -43,7 +43,7 @@ if(NOT Boost_USE_STATIC_LIBS)
   add_definitions(-DBOOST_ALL_DYN_LINK)
 endif()
 
-# if we are using the system version, we do not want to have the exact version embedded in the rpath/ldd
+# if we are using the system version
 if(POUTRE_BOOST_FROM_SYSTEM)
   set(Boost_REALPATH OFF)
 else()
@@ -113,7 +113,7 @@ message(STATUS "Boost library found in " ${Boost_LIBRARY_DIRS})
 message(STATUS "Boost major.minor.subminor=${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_SUBMINOR_VERSION}")
 
 
-# emit the installation command
+#installation 
 if(NOT POUTRE_BOOST_FROM_SYSTEM)
   install(FILES
     ${BoostFilesToInstall}
@@ -150,16 +150,20 @@ add_subdirectory(libjpeg)
 set(JPEG_INCLUDE_DIR       ${JPEG_INCLUDE_DIR}    PARENT_SCOPE)
 set(JPEG_LIBRARY         ${JPEG_LIBRARY}      PARENT_SCOPE)
 # tiff
-add_subdirectory(libtiff)
-set(TIFF_INCLUDE_DIR       ${TIFF_INCLUDE_DIR}    PARENT_SCOPE)
-set(TIFF_LIBRARY         ${TIFF_LIBRARY}      PARENT_SCOPE)
+#add_subdirectory(libtiff)
+#set(TIFF_INCLUDE_DIR       ${TIFF_INCLUDE_DIR}    PARENT_SCOPE)
+#set(TIFF_LIBRARY         ${TIFF_LIBRARY}      PARENT_SCOPE)
 # hdf5
-add_subdirectory(hdf5)
-set(HDF5_INCLUDE_DIR       ${HDF5_INCLUDE_DIR}    PARENT_SCOPE)
-set(HDF5_LIBRARY         ${HDF5_LIBRARY}      PARENT_SCOPE)
+#SET(HDF5_EXTERNALLY_CONFIGURED ON)
+#add_subdirectory(hdf5)
+#set(HDF5_INCLUDE_DIR       ${HDF5_INCLUDE_DIR}    PARENT_SCOPE)
+#set(HDF5_LIBRARY         ${HDF5_LIBRARY}      PARENT_SCOPE)
 # eigen
 add_subdirectory(eigen)
-
+# bench
+add_subdirectory(bench)
+set(GOOGLE_BENCHMARK_INCLUDE_DIRS       ${GOOGLE_BENCHMARK_INCLUDE_DIRS}    PARENT_SCOPE)
+set(GOOGLE_BENCHMARK         ${GOOGLE_BENCHMARK}      PARENT_SCOPE)
 
 # Python libraries
 

@@ -140,9 +140,14 @@ namespace poutre
 
     POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
 
+    POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pUINT8) * 8;
+
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::lowest( ); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::min( ); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::max( ); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
+
     };
 
   //! TypeTraits pINT32
@@ -159,10 +164,14 @@ namespace poutre
 
     POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
     POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
+    POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pINT32) * 8;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT{ return std::numeric_limits<storage_type>::lowest( ); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min( ) POUTRE_NOEXCEPT{ return std::numeric_limits<storage_type>::min( ); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max( ) POUTRE_NOEXCEPT{ return std::numeric_limits<storage_type>::max( ); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
+
     };
 
   //! TypeTraits pFLOAT
@@ -179,10 +188,13 @@ namespace poutre
 
     POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
     POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
+    POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pFLOAT) * 8;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::lowest( ); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::min( ); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::max( ); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
     };
 
   //! TypeTraits pDOUBLE
@@ -199,10 +211,13 @@ namespace poutre
 
     POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
     POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
+    POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pDOUBLE) * 8;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::lowest( ); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::min( ); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::max( ); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
     };
 
   //! TypeTraits pINT64 
@@ -219,10 +234,13 @@ namespace poutre
 
     POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
     POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
+    POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pINT64) * 8;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::lowest( ); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::min( ); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::max( ); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
     };
 
   //! TypeTraits compound_pixel
@@ -234,36 +252,37 @@ namespace poutre
   //! TypeTraits compound_pixel 3 channel
   template <class valuetype>
   struct TypeTraits < compound_pixel<valuetype, 3> >
-    {
-    using storage_type = compound_pixel<valuetype, 3>;
-    using safe_signed_type = compound_pixel<typename TypeTraits<valuetype>::safe_signed_type, 3>;
-    using str_type = compound_pixel<typename TypeTraits<valuetype>::str_type, 3>;
-    using accu_type = compound_pixel < typename TypeTraits<valuetype>::accu_type, 3 >;
+  {
+      using storage_type = compound_pixel<valuetype, 3>;
+      using safe_signed_type = compound_pixel<typename TypeTraits<valuetype>::safe_signed_type, 3>;
+      using str_type = compound_pixel<typename TypeTraits<valuetype>::str_type, 3>;
+      using accu_type = compound_pixel < typename TypeTraits<valuetype>::accu_type, 3 >;
 
-    static const PType pixel_type = TypeTraits<valuetype>::pixel_type;
-    static const CompoundType compound_type = CompoundType::CompoundType_3Planes;
-    POUTRE_STATIC_CONSTEXPR size_t default_padding_size = 1;
-    POUTRE_STATIC_CONSTEXPR size_t alignement = 1;
+      static const PType pixel_type = TypeTraits<valuetype>::pixel_type;
+      static const CompoundType compound_type = CompoundType::CompoundType_3Planes;
+      POUTRE_STATIC_CONSTEXPR size_t default_padding_size = 1;
+      POUTRE_STATIC_CONSTEXPR size_t alignement = 1;
 
-   //todo decltype
-    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT
-      { 
-      return compound_pixel<valuetype, 3>(std::numeric_limits<valuetype>::lowest( ), std::numeric_limits<valuetype>::lowest( ), std::numeric_limits<valuetype>::lowest( ));
-      }
-   
-    //todo decltype
-    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR  storage_type min( ) POUTRE_NOEXCEPT
+      //todo decltype
+      POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
       {
-      return compound_pixel<valuetype, 3>(std::numeric_limits<valuetype>::min( ), std::numeric_limits<valuetype>::min( ), std::numeric_limits<valuetype>::min( ));
+          return compound_pixel<valuetype, 3>(std::numeric_limits<valuetype>::lowest(), std::numeric_limits<valuetype>::lowest(), std::numeric_limits<valuetype>::lowest());
       }
 
-    //todo decltype
-    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR  storage_type max( ) POUTRE_NOEXCEPT
+      //todo decltype
+      POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR  storage_type min() POUTRE_NOEXCEPT
       {
-      return compound_pixel<valuetype, 3>(std::numeric_limits<valuetype>::max( ), std::numeric_limits<valuetype>::max( ), std::numeric_limits<valuetype>::max( ));
+          return compound_pixel<valuetype, 3>(std::numeric_limits<valuetype>::min(), std::numeric_limits<valuetype>::min(), std::numeric_limits<valuetype>::min());
       }
-    };
 
+      //todo decltype
+      POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR  storage_type max() POUTRE_NOEXCEPT
+      {
+          return compound_pixel<valuetype, 3>(std::numeric_limits<valuetype>::max(), std::numeric_limits<valuetype>::max(), std::numeric_limits<valuetype>::max());
+      }
+      POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
+      POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
+  };
   //! TypeTraits compound_pixel 4 channel
   template <class valuetype>
   struct TypeTraits < compound_pixel<valuetype, 4> >
@@ -297,6 +316,8 @@ namespace poutre
       {
       return compound_pixel<valuetype, 4>(std::numeric_limits<valuetype>::max( ), std::numeric_limits<valuetype>::max( ), std::numeric_limits<valuetype>::max( ), std::numeric_limits<valuetype>::max( ));
       }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
+    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
     };
 //! @} doxygroup: 
   }

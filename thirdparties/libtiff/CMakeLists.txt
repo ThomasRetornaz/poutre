@@ -3,7 +3,7 @@
 #
 # ----------------------------------------------------------------------------
 
-find_package(TIFF QUIET)
+find_package(TIFF 20120615 QUIET) #right way to grab version ?
 if(TIFF_FOUND)
 	message("LibJPEG found on the system at location is ${JPEG_INCLUDE_DIR} so use it")
     set(TIFF_INCLUDE_DIR       ${TIFF_INCLUDE_DIR}    PARENT_SCOPE)
