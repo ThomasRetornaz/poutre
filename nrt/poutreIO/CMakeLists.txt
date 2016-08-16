@@ -16,9 +16,8 @@ set_target_properties(PoutreIOTests PROPERTIES
 
 target_link_libraries(PoutreIOTests
     PUBLIC PoutreBase 
-    PUBLIC PoutreImageProcessing 
+    PUBLIC PoutreIPCore 
     PUBLIC PoutreIO
-    PUBLIC jsoncpp	
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 	
