@@ -9,14 +9,25 @@ set(PoutreBaseBenchSubdirectory ${POUTRE_BENCH_DIR}/poutreBase)
 set(PoutreBaseBenchSRC
   ${PoutreBaseBenchSubdirectory}/main.hpp
   ${PoutreBaseBenchSubdirectory}/main.cpp
+  ${PoutreBaseBenchSubdirectory}/containerview.cpp
   )
+
+#UGLY fix this later
+LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/$(ConfigurationName))
 
 add_executable(PoutreBaseBenchs ${PoutreBaseBenchSRC})
 set_target_properties(PoutreBaseBenchs PROPERTIES  
   FOLDER "Bench/")
 
+IF(WIN32)
 target_link_libraries(PoutreBaseBenchs 
-  PRIVATE benchmark  
-  PUBLIC PoutreBase
+  PUBLIC benchmark  
+  PUBLIC shlwapi.lib
   )
+ELSE()
+target_link_libraries(PoutreBaseBenchs 
+  PUBLIC benchmark  
+  )
+ENDIF()
+
 add_dependencies(PoutreBaseBenchs ${GOOGLE_BENCHMARK})
