@@ -43,6 +43,11 @@ set(POUTRE_NRT_DIR
     CACHE PATH
     "Root path of the Core of POUTRE's tests")
 
+set(POUTRE_BENCH_DIR
+	${POUTRE_ROOT_DIR}/bench
+    CACHE PATH
+    "Root path of the Core of POUTRE's bench")
+
 # set(POUTRE_PYTHONEXT_DIR
     # ${POUTRE_root_dir}/python
     # CACHE PATH
@@ -66,22 +71,9 @@ set(POUTRE_HEADER_INSTALLATION_RELATIVE_PATH          "include" CACHE PATH "Wher
 set(POUTRE_LIBRARIES_INSTALLATION_RELATIVE_PATH       "lib" CACHE PATH "Where to install libraries")
 set(POUTRE_DOCUMENTATION_INSTALLATION_RELATIVE_PATH   "documentation" CACHE PATH "Where to install doc")
 
-# this is where the python package is located. The POUTRE binaries will be copied
-# into this place when creating the python package. This is also used for the Sphinx documentation.
-# if(NOT DEFINED POUTRE_PYTHON_PACKAGE_LOCATION)
-  # set(POUTRE_PYTHON_PACKAGE_LOCATION ${POUTRE_root_dir}/plugins/PythonPackage)
-# endif()
 
 # Compiler specific configurations
-# this also includes some boost configurations
 include(cmake/CMakeCompilerSpecific.cmake)
-
-
-
-#set(CMAKE_SKIP_RPATH                FALSE)
-#set(CMAKE_SKIP_BUILD_RPATH          FALSE)
-#set(CMAKE_BUILD_WITH_INSTALL_RPATH  TRUE)
-#set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 message(STATUS "CMake running on OS ${CMAKE_HOST_SYSTEM_NAME} version ${CMAKE_HOST_SYSTEM_VERSION} on processor ${CMAKE_HOST_SYSTEM_PROCESSOR}")
 message(STATUS "HDF5 support is ${ENABLE_HDF5}")
@@ -102,14 +94,12 @@ include(cmake/CMakeInstallUtils.cmake)
 include(cmake/CMakeTestUtils.cmake)
 
 # Python packaging
-message(STATUS "Configuring the python packaging")
+#message(STATUS "Configuring the python packaging")
 #include(cmake/CMakePythonPackage.cmake)
 
 # Third parties
-#add_subdirectory(${THIRD_PARTIES_PATH} ${TEMPORARY_DIRECTORY}/thirdParties)
 add_subdirectory(${THIRD_PARTIES_PATH})
 add_definitions(-DBOOST_TEST_DYN_LINK)
-#add_compile_options(${NT2_COMPILE_FLAGS}) #USE CACHE INSTEAD ? #USE dispatch to properly set ?
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${NT2_COMPILE_FLAGS}")
 set(CMAKE_C_FLAGS_RELEASE   "${CMAKE_C_FLAGS_RELEASE} ${NT2_COMPILE_FLAGS}")
 #todo filter duplicate and conflict
@@ -128,6 +118,7 @@ include_directories(${JSONCPP_INCLUDE_DIR})
 # the poutre core libraries
 add_subdirectory (${POUTRE_SRC_DIR})
 add_subdirectory (${POUTRE_NRT_DIR})
+add_subdirectory(${POUTRE_BENCH_DIR})
 
 # creates the python package
 #create_python_package()
@@ -135,18 +126,18 @@ add_subdirectory (${POUTRE_NRT_DIR})
 message(STATUS "Configuring the documentation")
 include(cmake/CMakeDoc.cmake)
 
-add_custom_target(
-  CMakeFiles
-  SOURCES
-  cmake/CMakeCompilerSpecific.cmake
-  # cmake/CMakeCPackConf.cmake
-  cmake/CMakeDoc.cmake
-  cmake/CMakeInstallUtils.cmake
-  # cmake/CMakePythonPackage.cmake
-  # cmake/CMakePythonUtils.cmake
-  cmake/CMakeTestUtils.cmake
-  cmake/CMakeVersion.cmake
-)
+#add_custom_target(
+#  CMakeFiles
+#  SOURCES
+#  cmake/CMakeCompilerSpecific.cmake
+#  # cmake/CMakeCPackConf.cmake
+#  cmake/CMakeDoc.cmake
+#  cmake/CMakeInstallUtils.cmake
+#  # cmake/CMakePythonPackage.cmake
+#  # cmake/CMakePythonUtils.cmake
+#  cmake/CMakeTestUtils.cmake
+#  cmake/CMakeVersion.cmake
+#)
 
 # Should be last
 #include(cmake/CMakeCPackConf.cmake)

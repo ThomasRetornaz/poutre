@@ -59,8 +59,8 @@ target_link_libraries(PoutreIO
   #PRIVATE ${TIFF_LIBRARY} 
   INTERFACE Eigen
   INTERFACE BoostSimd
-  PUBLIC PoutreBase 
-  PUBLIC PoutreImageProcessing
+  PUBLIC   PoutreBase 
+  PUBLIC   PoutreIPCore 
   )
 set_target_properties(PoutreIO PROPERTIES FOLDER "src/")
 

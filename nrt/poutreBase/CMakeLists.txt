@@ -19,6 +19,7 @@ set(PoutreBaseTestSRC
   ${PoutreBaseTestSubdirectory}/static_array.cpp
   ${PoutreBaseTestSubdirectory}/types.cpp
   ${PoutreBaseTestSubdirectory}/containerview.cpp
+  ${PoutreBaseTestSubdirectory}/tree.cpp
   )
 
 add_executable(PoutreBaseTests ${PoutreBaseTestSRC})

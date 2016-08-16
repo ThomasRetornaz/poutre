@@ -19,7 +19,7 @@
 #include <poutreIO/poutreIO.hpp>
 #include <poutreIO/include/poutreIOPNG.hpp>
 #include <poutreIO/poutreIOWriter.hpp>
-#include <poutreImageProcessing/core/poutreImageProcessingInterface.hpp>
+#include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
 
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>

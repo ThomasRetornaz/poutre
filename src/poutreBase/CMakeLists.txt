@@ -2,8 +2,6 @@
 
 set(PoutreBaseSubdirectory ${POUTRE_SRC_DIR}/poutreBase)
 
-#generate_library_version(${PoutreBaseSubdirectory}/src/current_configuration_generated.cpp)
-
 set(PoutreBaseSRCDETAILS
   )
 
@@ -29,8 +27,6 @@ set(PoutreBaseSRC_CPP
   ${PoutreBaseSubdirectory}/src/poutreGeometry.cpp
   ${PoutreBaseSubdirectory}/src/poutreCoordinate.cpp
   ${PoutreBaseSubdirectory}/src/poutreType.cpp
-  # auto generated file
-  #${PoutreBaseSubdirectory}/src/current_configuration_generated.cpp
   )
 source_group(details FILES ${PoutreBaseSRC_DETAILS})
 source_group(src FILES ${PoutreBaseSRC_CPP})
@@ -69,11 +65,3 @@ IF(BUILD_SHARED_LIBS)
   SET_TARGET_PROPERTIES(PoutreBase PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DLL) #FIXME not true should be linked with boost
   SET_TARGET_PROPERTIES(PoutreBase PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DYN_LINK) #FIXME not true should be linked with boost
 ENDIF(BUILD_SHARED_LIBS)
-
-
-install_POUTRE_targets(
-  TARGET PoutreBase
-  CONFIGURATION Release
-  HEADER_FILES ${PoutreBaseSRC}
-  )
-

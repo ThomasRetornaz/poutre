@@ -25,7 +25,7 @@
 #endif
 
 #ifndef POUTRE_IMAGEPROCESSING_INTERFACE_HPP__
-#include <poutreImageProcessing/core/poutreImageProcessingInterface.hpp>
+#include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
 #endif
 
 namespace poutre

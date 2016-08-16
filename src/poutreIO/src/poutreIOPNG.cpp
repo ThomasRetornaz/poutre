@@ -14,7 +14,7 @@
 
 #include <poutreBase/poutreTrace.hpp>
 #include <poutreIO/include/poutreIOPNG.hpp>
-#include <poutreImageProcessing/core/include/poutreImageProcessingContainer.hpp>
+#include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 
 #include <png.h> /* libpng header; includes zlib.h */
 

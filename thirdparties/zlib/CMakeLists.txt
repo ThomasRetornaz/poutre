@@ -3,9 +3,8 @@
 #
 # ----------------------------------------------------------------------------
 
-#set(POUTRE_zlib_version_minimal 1.2.8)
-#find_package(ZLIB ${POUTRE_zlib_version_minimal} QUIET)
-find_package(ZLIB  QUIET)
+set(POUTRE_zlib_version_minimal 1.2.8)
+find_package(ZLIB ${POUTRE_zlib_version_minimal} QUIET)
 if(ZLIB_FOUND)
 	message("LibJPEG found on the system at location is ${JPEG_INCLUDE_DIR} so use it")
     set(ZLIB_INCLUDE_DIR       ${ZLIB_INCLUDE_DIR}    PARENT_SCOPE)

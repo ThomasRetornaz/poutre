@@ -14,7 +14,7 @@
 
 #include "poutreIO/poutreIOString.hpp"
 #include <poutreBase/poutreTrace.hpp>
-#include <poutreImageProcessing/core/include/poutreImageProcessingContainer.hpp>
+#include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 
 
 

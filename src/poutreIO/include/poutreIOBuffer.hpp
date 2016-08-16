@@ -25,7 +25,7 @@
 #endif
 
 #ifndef POUTRE_IMAGEPROCESSING_INTERFACE_HPP__
-#include <poutreImageProcessing/core/include/poutreImageProcessingContainer.hpp>
+#include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 #endif
 
 #include <boost/filesystem.hpp>
