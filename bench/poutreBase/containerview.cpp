@@ -30,7 +30,7 @@ public:
     std::vector<unsigned int> m_vect;
 };
 
-//ten times slower than common iterator
+//15 times slower than common iterator
 BENCHMARK_DEFINE_F(ViewOnVect1DFixture, BoundIterator)(benchmark::State& state) {
     const int size = state.range(0);
     while (state.KeepRunning()) {
@@ -65,5 +65,8 @@ BENCHMARK_DEFINE_F(ViewOnVect1DFixture, Iterator)(benchmark::State& state) {
     }
     state.SetItemsProcessed(state.iterations() * size);
 }
-BENCHMARK_REGISTER_F(ViewOnVect1DFixture, Iterator)->Range(1 << 3, 1 << 12);
-BENCHMARK_REGISTER_F(ViewOnVect1DFixture, BoundIterator)->Range(1 << 3, 1 << 12);
+
+BENCHMARK_REGISTER_F(ViewOnVect1DFixture, Iterator)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Arg(256 * 256)->Arg(512 * 512)->Arg(1024 * 1024);//->Unit(benchmark::kMillisecond);
+//15 times slower ....
+BENCHMARK_REGISTER_F(ViewOnVect1DFixture, BoundIterator)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Arg(256 * 256)->Arg(512 * 512)->Arg(1024 * 1024);//->Unit(benchmark::kMillisecond);
+
