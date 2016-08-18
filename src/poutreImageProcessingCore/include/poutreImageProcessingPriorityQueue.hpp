@@ -18,17 +18,52 @@
  * 
  */
 
-#ifndef POUTRE_CONFIG__HPP__
-#include <poutreBase/poutreConfig.hpp>
-#endif
-
 #include <boost/heap/priority_queue.hpp>
 #include <queue>
 #include <vector>
 
+#ifndef POUTRE_CONFIG__HPP__
+#include <poutreBase/poutreConfig.hpp>
+#endif
+
+#ifndef POUTRE_IMAGEPROCESSING_TYPE_HPP__
+#include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
+#endif
+
 namespace poutre
   {
+    template<typename key, typename value>
+    struct lesserKey
+    {        
+        bool operator() (const std::pair<key,value> & lhs, const std::pair<key, value> rhs) const
+        {
+            return std::less<key>()(lhs.first,rhs.first);
+        }
+    };
 
+    template<typename key, typename value>
+    struct greaterKey
+    {
+        bool operator() (const std::pair<key, value> & lhs, const std::pair<key, value> rhs) const
+        {
+            return std::greater<key>()(lhs.first, rhs.first);
+        }
+    };
+
+    template <class key, class value, class order = lesserKey<key,value>,bool IsStable=false,typename EnableIf=void>
+    class PriorityQueue : public boost::heap::priority_queue<
+            std::pair<key, value>,
+            boost::heap::compare<order>,
+            boost::heap::stable<IsStable>>
+    {
+    public:
+        using base = boost::heap::priority_queue<
+            std::pair<key, value>,
+            boost::heap::compare<order>,
+            boost::heap::stable<IsStable>>;
+
+        PriorityQueue():base(){}
+    };
 
   }
 #endif //POUTRE_PRIORITYQUEUE_HPP__

@@ -5,6 +5,7 @@ set(PoutreIPCoreSubdirectory ${POUTRE_SRC_DIR}/poutreImageProcessingCore)
 set(PoutreIPCORESRC_DETAILS
   ${PoutreIPCoreSubdirectory}/include/poutreImageProcessingContainer.hpp
   ${PoutreIPCoreSubdirectory}/include/poutreImageProcessingContainerCopieConvert.hpp
+  ${PoutreIPCoreSubdirectory}/include/poutreImageProcessingPriorityQueue.hpp
   )
 
 set(PoutreIPCORESRC_PUBLICHEADERS  

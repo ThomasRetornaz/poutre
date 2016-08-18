@@ -7,6 +7,7 @@ set(poutreIPCoreTestSRC
     ${poutreIPCoreTestSubdirectory}/ImageProcessingType.cpp
     ${poutreIPCoreTestSubdirectory}/ImageContainer.cpp
     ${poutreIPCoreTestSubdirectory}/ImageCopieConvert.cpp
+	${poutreIPCoreTestSubdirectory}/PriorityQueue.cpp
 )
 
 add_executable(poutreIPCoreTests ${poutreIPCoreTestSRC})
