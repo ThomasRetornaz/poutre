@@ -65,17 +65,6 @@ namespace poutre
       typedef T value_type;
     };
 
-    template <typename T, ptrdiff_t Rank>
-    POUTRE_CXX14_CONSTEXPR T& view_access(T* data, const index<Rank>& idx, const index<Rank>& stride)
-    {
-        ptrdiff_t offset=0;
-        for (size_t i = 0; i<Rank; ++i)
-        {
-            offset += idx[i] * stride[i];
-        }
-        return data[offset];
-    }
-
     template <ptrdiff_t Rank>
     POUTRE_CXX14_CONSTEXPR ptrdiff_t view_offset(const index<Rank>& idx, const index<Rank>& stride)
     {
@@ -85,6 +74,12 @@ namespace poutre
             offset += idx[i] * stride[i];
         }
         return offset;
+    }
+
+    template <typename T, ptrdiff_t Rank>
+    POUTRE_CXX14_CONSTEXPR T& view_access(T* data, const index<Rank>& idx, const index<Rank>& stride)
+    {
+        return data[view_offset(idx,stride)];
     }
 
    template <ptrdiff_t Rank>

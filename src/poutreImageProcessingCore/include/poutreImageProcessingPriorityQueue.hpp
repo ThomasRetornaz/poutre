@@ -50,7 +50,7 @@ namespace poutre
         }
     };
 
-    template <class key, class value, class order = lesserKey<key,value>,bool IsStable=false,typename EnableIf=void>
+    template <class key, class value, class order = lesserKey<key,value>,bool IsStable=false,typename Enable=void>
     class PriorityQueue : public boost::heap::priority_queue<
             std::pair<key, value>,
             boost::heap::compare<order>,
@@ -64,6 +64,15 @@ namespace poutre
 
         PriorityQueue():base(){}
     };
+
+    //specialize for small integral types
+    //TODO
+    //template <class key, class value, class order = lesserKey<key, value>,bool IsStable = false, typename std::enable_if< (TypeTraits<key>::quant <= 16) >::type>  
+    //class PriorityQueue 
+    //{
+    //public:
+    //    PriorityQueue(){}
+    //};
 
   }
 #endif //POUTRE_PRIORITYQUEUE_HPP__

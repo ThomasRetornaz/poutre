@@ -15,12 +15,12 @@
 BOOST_AUTO_TEST_SUITE(poutreImageProcessingPriorityQueue)
 BOOST_AUTO_TEST_CASE(ctor)
 {
-    poutre::PriorityQueue<unsigned int, poutre::offset> pq;
+    poutre::PriorityQueue<unsigned char, poutre::offset> pq;
 }
 
 BOOST_AUTO_TEST_CASE(increase_nostable)
 {
-    poutre::PriorityQueue<poutre::offset, unsigned int> pq;
+    poutre::PriorityQueue<poutre::offset, unsigned char> pq;
     pq.emplace(0, 1);
     pq.emplace(50, 1);
     pq.emplace(0, 2);
@@ -30,8 +30,8 @@ BOOST_AUTO_TEST_CASE(increase_nostable)
     pq.emplace(80, 3);
     pq.emplace(0, 3);
 
-    std::vector < std::pair<poutre::offset, unsigned int>> expected = { {80,1},{80,2},{80,3},{50,1},{50,2},{0,2},{0,1},{0,3} };
-    std::vector < std::pair<poutre::offset, unsigned int>> results;
+    std::vector < std::pair<poutre::offset, unsigned char>> expected = { {80,1},{80,2},{80,3},{50,1},{50,2},{0,2},{0,1},{0,3} };
+    std::vector < std::pair<poutre::offset, unsigned char>> results;
     while (!pq.empty())
     {
         results.push_back(pq.top());
@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE(increase_nostable)
 
 BOOST_AUTO_TEST_CASE(increase_stable)
 {
-    poutre::PriorityQueue<poutre::offset, unsigned int, poutre::lesserKey<poutre::offset, unsigned int>, true> pq;
+    poutre::PriorityQueue<poutre::offset, unsigned char, poutre::lesserKey<poutre::offset, unsigned char>, true> pq;
     pq.emplace(0, 1);
     pq.emplace(50, 1);
     pq.emplace(0, 2);
@@ -59,8 +59,8 @@ BOOST_AUTO_TEST_CASE(increase_stable)
     pq.emplace(80, 3);
     pq.emplace(0, 3);
 
-    std::vector < std::pair<poutre::offset, unsigned int>> expected = { { 80,1 },{ 80,2 },{ 80,3 },{ 50,1 },{ 50,2 },{ 0,1 },{ 0,2 },{ 0,3 } };
-    std::vector < std::pair<poutre::offset, unsigned int>> results;
+    std::vector < std::pair<poutre::offset, unsigned char>> expected = { { 80,1 },{ 80,2 },{ 80,3 },{ 50,1 },{ 50,2 },{ 0,1 },{ 0,2 },{ 0,3 } };
+    std::vector < std::pair<poutre::offset, unsigned char>> results;
     while (!pq.empty())
     {
         results.push_back(pq.top());
@@ -78,7 +78,7 @@ BOOST_AUTO_TEST_CASE(increase_stable)
 
 BOOST_AUTO_TEST_CASE(decrease_nostable)
 {
-    poutre::PriorityQueue<poutre::offset, unsigned int, poutre::greaterKey<poutre::offset, unsigned int>> pq;
+    poutre::PriorityQueue<poutre::offset, unsigned char, poutre::greaterKey<poutre::offset, unsigned char>> pq;
     pq.emplace(0, 1);
     pq.emplace(50, 1);
     pq.emplace(0, 2);
@@ -87,8 +87,8 @@ BOOST_AUTO_TEST_CASE(decrease_nostable)
     pq.emplace(80, 2);
     pq.emplace(80, 3);
     pq.emplace(0, 3);
-    std::vector < std::pair<poutre::offset, unsigned int>> expected = { {0,1}, {0,2},{0,3}, {50,2},{50,1},{80,2},{80,3},{80,1} };
-    std::vector < std::pair<poutre::offset, unsigned int>> results;
+    std::vector < std::pair<poutre::offset, unsigned char>> expected = { {0,1}, {0,2},{0,3}, {50,2},{50,1},{80,2},{80,3},{80,1} };
+    std::vector < std::pair<poutre::offset, unsigned char>> results;
     while (!pq.empty())
     {
         results.push_back(pq.top());
@@ -106,7 +106,7 @@ BOOST_AUTO_TEST_CASE(decrease_nostable)
 
 BOOST_AUTO_TEST_CASE(decrease_stable)
 {
-    poutre::PriorityQueue<poutre::offset, unsigned int, poutre::greaterKey<poutre::offset, unsigned int>, true> pq;
+    poutre::PriorityQueue<poutre::offset, unsigned char, poutre::greaterKey<poutre::offset, unsigned char>, true> pq;
     pq.emplace(0, 1);
     pq.emplace(50, 1);
     pq.emplace(0, 2);
@@ -115,8 +115,8 @@ BOOST_AUTO_TEST_CASE(decrease_stable)
     pq.emplace(80, 2);
     pq.emplace(80, 3);
     pq.emplace(0, 3);
-    std::vector < std::pair<poutre::offset, unsigned int>> expected = { { 0,1 },{ 0,2 },{ 0,3 },{ 50,1 },{ 50,2 },{ 80,1 }, { 80,2 },{ 80,3 }};
-    std::vector < std::pair<poutre::offset, unsigned int>> results;
+    std::vector < std::pair<poutre::offset, unsigned char>> expected = { { 0,1 },{ 0,2 },{ 0,3 },{ 50,1 },{ 50,2 },{ 80,1 }, { 80,2 },{ 80,3 }};
+    std::vector < std::pair<poutre::offset, unsigned char>> results;
     while (!pq.empty())
     {
         results.push_back(pq.top());
