@@ -23,10 +23,12 @@ IF(WIN32)
 target_link_libraries(PoutreIPCoreBenchs 
   PUBLIC benchmark  
   PUBLIC shlwapi.lib
+  PUBLIC PoutreIPCore
   )
 ELSE()
 target_link_libraries(PoutreIPCoreBenchs 
   PUBLIC benchmark  
+  PUBLIC PoutreIPCore
   )
 ENDIF()
 

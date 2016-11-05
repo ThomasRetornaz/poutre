@@ -35,11 +35,17 @@ namespace poutre
      //! Deep clone of provided image  
     IMP_CORE_API std::unique_ptr<IInterface> Clone(const IInterface& i_img1);
 
-    //! Create a clone of provided image: using same geometries  but with different @c  CompoundType and @c PType 
-    IMP_CORE_API std::unique_ptr<IInterface> CloneGeometry(const IInterface& i_img1, CompoundType ctype, PType ptype);
+    //! Clone of provided image but no data copied 
+    IMP_CORE_API std::unique_ptr<IInterface> CloneGeometry(const IInterface& i_img1);
 
-    //! Create a clone of provided image using same geometries but with different  @c PType      
-    IMP_CORE_API std::unique_ptr<IInterface> CloneGeometry(const IInterface& i_img1, PType ptype);
+    //! Convert the provided image: using same geometries  but with different @c  CompoundType and @c PType, no data is copied 
+    IMP_CORE_API std::unique_ptr<IInterface> ConvertGeometry(const IInterface& i_img1, CompoundType ctype, PType ptype);
+
+    //! Create a clone of provided image using same geometries but with different  @c PType, no data is copied     
+    IMP_CORE_API std::unique_ptr<IInterface> ConvertGeometry(const IInterface& i_img1, PType ptype);
+
+    //! Copy i_img1 in i_img2
+    IMP_CORE_API void Copy(const IInterface& i_img1, IInterface& i_img2);
 
     //! @} doxygroup: image_processing_group
 }

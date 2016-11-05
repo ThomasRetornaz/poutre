@@ -1,5 +1,6 @@
 add_subdirectory(poutreBase  ${TEMPORARY_DIRECTORY}/poutreBaseTests)
 add_subdirectory(poutreImageProcessingCore ${TEMPORARY_DIRECTORY}/poutreImageProcessingCoreTests)
-add_subdirectory(poutreImageProcessingPixelOperation ${TEMPORARY_DIRECTORY}/poutreImageProcessingPixelOperationTests)
+add_subdirectory(poutreImageProcessingPixelProcessing ${TEMPORARY_DIRECTORY}/poutreImageProcessingPixelProcessingTests)
+add_subdirectory(poutreImageProcessingSE ${TEMPORARY_DIRECTORY}/poutreImageProcessingSETests)
 add_subdirectory(poutreNeuralNets  ${TEMPORARY_DIRECTORY}/poutreNeuralNetsTests)
 add_subdirectory(poutreIO ${TEMPORARY_DIRECTORY}/poutreIOTests)

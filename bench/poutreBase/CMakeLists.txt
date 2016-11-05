@@ -23,10 +23,12 @@ IF(WIN32)
 target_link_libraries(PoutreBaseBenchs 
   PUBLIC benchmark  
   PUBLIC shlwapi.lib
+  PUBLIC PoutreBase
   )
 ELSE()
 target_link_libraries(PoutreBaseBenchs 
   PUBLIC benchmark  
+  PUBLIC PoutreBase
   )
 ENDIF()
 

@@ -1,2 +1,4 @@
 add_subdirectory (poutreBase  ${TEMPORARY_DIRECTORY}/poutreBaseBenchs)
 add_subdirectory (poutreImageProcessingCore ${TEMPORARY_DIRECTORY}/poutreImageProcessingCoreBenchs)
+add_subdirectory (poutreImageProcessingPixelProcessing ${TEMPORARY_DIRECTORY}/poutreImageProcessingPixelProcessingBenchs)
+add_subdirectory (poutreImageProcessingSE ${TEMPORARY_DIRECTORY}/poutreImageProcessingSEBenchs)

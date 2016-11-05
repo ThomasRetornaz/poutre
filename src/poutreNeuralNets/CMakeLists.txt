@@ -1,8 +1,5 @@
 
-
 set(PoutreNNSubdirectory ${POUTRE_SRC_DIR}/poutreNeuralNets)
-
-#generate_library_version(${PoutreNNSubdirectory}/src/current_configuration_generated.cpp)
 
 set(PoutreNeuralNetsSRC_DETAILS
   )
@@ -13,8 +10,6 @@ set(PoutreNeuralNetsSRC_PUBLICHEADERS
 
 set(PoutreNeuralNetsSRC_CPP
   ${PoutreNNSubdirectory}/src/dummy.cpp
-  # auto generated file
-  #${PoutreBaseSubdirectory}/src/current_configuration_generated.cpp
   )
 source_group(details FILES ${PoutreNeuralNetsSRC_DETAILS})
 source_group(src FILES ${PoutreNeuralNetsSRC_CPP})

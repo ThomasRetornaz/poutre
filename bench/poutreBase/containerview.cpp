@@ -66,7 +66,7 @@ BENCHMARK_DEFINE_F(ViewOnVect1DFixture, Iterator)(benchmark::State& state) {
     state.SetItemsProcessed(state.iterations() * size);
 }
 
-BENCHMARK_REGISTER_F(ViewOnVect1DFixture, Iterator)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Arg(256 * 256)->Arg(512 * 512)->Arg(1024 * 1024);//->Unit(benchmark::kMillisecond);
+BENCHMARK_REGISTER_F(ViewOnVect1DFixture, Iterator)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Arg(256 * 256);//->Unit(benchmark::kMillisecond);
 //15 times slower ....
-BENCHMARK_REGISTER_F(ViewOnVect1DFixture, BoundIterator)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Arg(256 * 256)->Arg(512 * 512)->Arg(1024 * 1024);//->Unit(benchmark::kMillisecond);
+BENCHMARK_REGISTER_F(ViewOnVect1DFixture, BoundIterator)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Arg(256 * 256);//->Unit(benchmark::kMillisecond);
 

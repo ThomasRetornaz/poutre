@@ -441,21 +441,13 @@ namespace poutre
         details::init_default_stride(m_bnd, m_stride_idx);
     }
 
-    template <class U=T,
-    typename std::enable_if<
-    std::is_convertible<typename std::add_pointer<U>::type, pointer>::value &&
-    std::is_same<typename std::remove_cv<U>::type, typename std::remove_cv<value_type>::type>::value
-    >::type* = nullptr>
+    template <typename U=T, typename = std::enable_if_t<details::is_viewable_value<U, value_type>::value>>
     //!Ctor from strided_array_view
     POUTRE_CONSTEXPR strided_array_view (const array_view<U, Rank>& rhs)
     POUTRE_NOEXCEPT_IF (POUTRE_NOEXCEPT_EXPR (m_bnd (rhs.m_bnd)) && POUTRE_NOEXCEPT_EXPR (m_stride_idx ()))
             : m_bnd (rhs.m_bnd), m_stride_idx (rhs.stride()), m_data (rhs.m_data) { }
 
-    template <class U=T,
-    typename std::enable_if<
-    std::is_convertible<typename std::add_pointer<U>::type, pointer>::value &&
-    std::is_same<typename std::remove_cv<U>::type, typename std::remove_cv<value_type>::type>::value
-    >::type* = nullptr>
+    template <typename U = T, typename = std::enable_if_t<details::is_viewable_value<U, value_type>::value>>
     //!Copy ctor
     POUTRE_CONSTEXPR strided_array_view (const strided_array_view<U, Rank>& rhs)
     POUTRE_NOEXCEPT_IF (POUTRE_NOEXCEPT_EXPR (m_sview_bnd (rhs.m_bnd)) && POUTRE_NOEXCEPT_EXPR (m_stride_idx (rhs.m_stride_idx)))

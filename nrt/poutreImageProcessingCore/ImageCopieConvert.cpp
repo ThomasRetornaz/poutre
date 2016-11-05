@@ -12,6 +12,7 @@
 #include <iostream>
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterfaceCopieConvert.hpp>
+#include <poutreImageProcessingCore/include/poutreImageProcessingContainerCopieConvert.hpp>
 
 BOOST_AUTO_TEST_SUITE(poutreImageProcessingCopyConvert)
 
@@ -59,7 +60,7 @@ BOOST_AUTO_TEST_CASE(getsamecoord)
 
 
   using ImageType = poutre::DenseImage < poutre::pFLOAT>;
-  ImageTypeInterface getSameii = poutre::CloneGeometry(img, poutre::PType::PType_F32);
+  ImageTypeInterface getSameii = poutre::ConvertGeometry(img, poutre::PType::PType_F32);
 
   ImageType* getSame = dynamic_cast<ImageType*> (getSameii.get());
   BOOST_CHECK_EQUAL((*getSame).GetCType(), poutre::CompoundType::CompoundType_Scalar);
@@ -72,6 +73,31 @@ BOOST_AUTO_TEST_CASE(getsamecoord)
   auto getSameexpectedcoords = {3, 4};
   BOOST_CHECK_EQUAL_COLLECTIONS(getSamecoords.begin(), getSamecoords.end(), getSameexpectedcoords.begin(), getSameexpectedcoords.end());
 }
+
+
+BOOST_AUTO_TEST_CASE(copy_same_type)
+{
+    { //integral types
+        using ImageTypeBase = poutre::DenseImage < poutre::pUINT8 >;
+
+        ImageTypeBase img({ 3, 4 });
+        img.assign(10);
+        ImageTypeBase img2({ 3, 4 });
+        img2.assign(4);
+        poutre::CopyOp(img, img2);
+        BOOST_CHECK_EQUAL_COLLECTIONS(img.begin(), img.end(), img2.begin(), img2.end());
+    }
+    {//compound 
+        using ImageTypeBase = poutre::DenseImage <poutre::c3pUINT8>;
+        ImageTypeBase img({ 3, 4 });
+        img.assign({ 1,2,3 });
+        ImageTypeBase img2({ 3, 4 });
+        img2.assign({ 4,5,6});
+        poutre::CopyOp(img, img2);
+        BOOST_CHECK_EQUAL_COLLECTIONS(img.begin(), img.end(), img2.begin(), img2.end());
+    }
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 
 

@@ -174,16 +174,16 @@ BENCHMARK_DEFINE_F(PriorityQueueFixture, boostpriorityqueue_reserve_respectfifoo
 }
 
 /*STL priority queue*/
-BENCHMARK_REGISTER_F(PriorityQueueFixture, stlpriorityqueue)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond);
+BENCHMARK_REGISTER_F(PriorityQueueFixture, stlpriorityqueue)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Unit(benchmark::kMicrosecond);
 //5% gain with visual 2015 SP3
-BENCHMARK_REGISTER_F(PriorityQueueFixture, stlpriorityqueue_reserve)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond);
+BENCHMARK_REGISTER_F(PriorityQueueFixture, stlpriorityqueue_reserve)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Unit(benchmark::kMicrosecond);
 
 /*boost priority queue*/
-BENCHMARK_REGISTER_F(PriorityQueueFixture, boostpriorityqueue)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond);
+BENCHMARK_REGISTER_F(PriorityQueueFixture, boostpriorityqueue)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Unit(benchmark::kMicrosecond);
 //AT least 5% gain with visual 2015 SP3
-BENCHMARK_REGISTER_F(PriorityQueueFixture, boostpriorityqueue_reserve)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond);
+BENCHMARK_REGISTER_F(PriorityQueueFixture, boostpriorityqueue_reserve)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Unit(benchmark::kMicrosecond);
 //2.5 times slower
-BENCHMARK_REGISTER_F(PriorityQueueFixture, boostpriorityqueue_respectfifoorder)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond);
+BENCHMARK_REGISTER_F(PriorityQueueFixture, boostpriorityqueue_respectfifoorder)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Unit(benchmark::kMicrosecond);
 //AT least 5% gain with visual 2015 SP3
-BENCHMARK_REGISTER_F(PriorityQueueFixture, boostpriorityqueue_reserve_respectfifoorder)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond);
+BENCHMARK_REGISTER_F(PriorityQueueFixture, boostpriorityqueue_reserve_respectfifoorder)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Unit(benchmark::kMicrosecond);
 
