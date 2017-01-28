@@ -286,7 +286,8 @@ public:
 
   // TODO use extern class ?
 
-  std::vector<std::size_t> GetCoords() const override {
+  std::vector<std::size_t> GetCoords() const override 
+  {
     std::vector<std::size_t> out(m_numdims);
     // use normal traversal
     for (auto i = 0; i < m_numdims; ++i) {
@@ -303,7 +304,8 @@ public:
 
   ImgType GetImgType() const POUTRE_NOEXCEPT override { return m_imgtype; }
 
-  std::unique_ptr<IInterface> Clone() const override { // FIXME
+  std::unique_ptr<IInterface> Clone() const override 
+  { // FIXME
     // return std::make_unique<DenseImage>(*this);
     std::unique_ptr<IInterface> uni(new DenseImage(*this));
     return uni;
@@ -335,7 +337,8 @@ protected:
   DenseImage(const self_type &rhs)
       : m_data(nullptr),
         m_numelemwithpaddingifany(rhs.m_numelemwithpaddingifany),
-        m_coordinnates(rhs.m_coordinnates), m_allocator(rhs.m_allocator) {
+        m_coordinnates(rhs.m_coordinnates), m_allocator(rhs.m_allocator) 
+  {
     m_data = m_allocator.allocate(m_numelemwithpaddingifany);
     std::copy(rhs.m_data, rhs.m_data + m_numelemwithpaddingifany, m_data);
   }
@@ -346,15 +349,26 @@ public:
 
   // move constructor
 
-  DenseImage(self_type &&rhs)
+  DenseImage(self_type &&rhs) noexcept
       : m_data(nullptr), m_numelemwithpaddingifany(0), m_coordinnates(),
-        m_allocator() {
-    *this = std::move(rhs);
+        m_allocator() 
+  {
+      m_data = rhs.m_data;
+      m_numelemwithpaddingifany = rhs.m_numelemwithpaddingifany;
+      m_coordinnates = rhs.m_coordinnates;
+      m_allocator = rhs.m_allocator;
+
+      //relase
+      rhs.m_numelemwithpaddingifany = 0;
+      rhs.m_data = nullptr;
+      /*m_coordinnates = {};*/
+
   }
 
   // move assignment operator
 
-  self_type &operator=(self_type &&rhs) {
+  self_type &operator=(self_type &&rhs)  noexcept
+  {
     if (this !=
         &rhs) // ??
               // http://scottmeyers.blogspot.fr/2014/06/the-drawbacks-of-implementing-move.html
@@ -364,12 +378,13 @@ public:
       // Copy the data pointer and its length from the source object.
       m_data = rhs.m_data;
       m_numelemwithpaddingifany = rhs.m_numelemwithpaddingifany;
-      m_coordinnates = std::move(rhs.m_coordinnates);
-      m_allocator = std::move(rhs.m_allocator); //?
+      m_coordinnates = rhs.m_coordinnates;
+      m_allocator = rhs.m_allocator;
 
       // release
       rhs.m_numelemwithpaddingifany = 0;
       rhs.m_data = nullptr;
+     /* m_coordinnates = {};*/
     }
     return *this;
   }
@@ -405,12 +420,6 @@ extern template class DenseImage<compound_pixel<pFLOAT, 3>>;
 extern template class DenseImage<compound_pixel<pINT64, 3>>;
 extern template class DenseImage<compound_pixel<pDOUBLE, 3>>;
 
-extern template class DenseImage<compound_pixel<pUINT8, 4>>;
-extern template class DenseImage<compound_pixel<pINT32, 4>>;
-extern template class DenseImage<compound_pixel<pFLOAT, 4>>;
-extern template class DenseImage<compound_pixel<pINT64, 4>>;
-extern template class DenseImage<compound_pixel<pDOUBLE, 4>>;
-
 extern template class DenseImage<pUINT8, 3>;
 extern template class DenseImage<pINT32, 3>;
 extern template class DenseImage<pFLOAT, 3>;
@@ -422,5 +431,11 @@ extern template class DenseImage<pINT32, 4>;
 extern template class DenseImage<pFLOAT, 4>;
 extern template class DenseImage<pINT64, 4>;
 extern template class DenseImage<pDOUBLE, 4>;
+
+extern template class DenseImage<compound_pixel<pUINT8, 4>>;
+extern template class DenseImage<compound_pixel<pINT32, 4>>;
+extern template class DenseImage<compound_pixel<pFLOAT, 4>>;
+extern template class DenseImage<compound_pixel<pINT64, 4>>;
+extern template class DenseImage<compound_pixel<pDOUBLE, 4>>;
 }
 #endif // POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
