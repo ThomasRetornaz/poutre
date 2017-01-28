@@ -1,8 +1,5 @@
-if(WIN32)
-cmake_minimum_required (VERSION 3.2)
-else()
-cmake_minimum_required (VERSION 2.8)
-endif()
+cmake_minimum_required (VERSION 3.0)
+
 
 #project(Eigen)
 #http://eigen.tuxfamily.org/index.php?title=Main_Page
@@ -22,7 +19,7 @@ include(ExternalProject)
 
 # archive approach
 ExternalProject_Add(Eigendep #see http://www.cmake.org/cmake/help/v3.0/module/ExternalProject.html
-  URL http://bitbucket.org/eigen/eigen/get/3.2.4.zip
+  URL http://bitbucket.org/eigen/eigen/get/3.3.2.zip
   PREFIX ${CMAKE_CURRENT_BINARY_DIR}
   CONFIGURE_COMMAND ""
   BUILD_COMMAND ""
