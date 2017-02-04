@@ -119,6 +119,7 @@ namespace poutre
 
         void operator()(const array_view<T, Rank>& i_vin, array_view<T, Rank>& o_vout) const
         {
+            static_assert(std::is_arithmetic<T>::value, "Specialization for arithmetic type only");
             //get the specialized operator
             using real_op = typename UnOp<T, T, tag_SIMD_enabled>;
             real_op op;
@@ -216,6 +217,7 @@ namespace poutre
 
         void operator()(const array_view<T, Rank>& i_vin, T val, array_view<T, Rank>& o_vout) const
         {
+            static_assert(std::is_arithmetic<T>::value,"Specialization for arithmetic type only");
             //get the specialized operator
             using real_op = typename UnOp<T, T, tag_SIMD_enabled>;
             real_op op(val);
