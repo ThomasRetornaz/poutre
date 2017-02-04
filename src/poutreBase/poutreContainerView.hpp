@@ -133,6 +133,13 @@ namespace poutre
        std::is_convertible<std::add_pointer_t<T>, std::add_pointer_t<U>>::value &&
        std::is_same<std::remove_cv_t<T>, std::remove_cv_t<U>>::value
    >;
+
+   template<typename T>
+   using EnableIfArithmetic= typename std::enable_if<std::is_arithmetic<T>::value>::type;
+
+   template<typename T>
+   using EnableIfNotArithmetic = typename std::enable_if<!std::is_arithmetic<T>::value>::type;
+
 } //namespace details
 
 
