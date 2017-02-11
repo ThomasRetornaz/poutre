@@ -129,7 +129,7 @@ namespace poutre
 
     };
 
-
+    /*
     //template specialization both array_view and same type, use simd counterpart
     template<typename T, ptrdiff_t Rank, template <typename, typename, typename, typename, typename, class TAG> class QuaterOp>
     struct PixelWiseQuaternaryOpDispatcher<T, T, T, T, T, Rank, array_view, array_view, array_view, array_view, array_view, QuaterOp>
@@ -158,6 +158,7 @@ namespace poutre
         }
 
     };
+    */
 
 }
 #endif //POUTRE_IMAGEPROCESSING_QUATERNARYOP_HPP__

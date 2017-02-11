@@ -91,6 +91,12 @@ BOOST_AUTO_TEST_CASE(basic_usage_view_over_vector)
     BOOST_CHECK(av1DFrom2D.stride() == (poutre::idx1d{ 1 }));
     BOOST_CHECK_EQUAL(av1DFrom2D[poutre::idx1d{ 0 }], 42);
 
+    BOOST_TEST_MESSAGE("2D view over vec subview");
+    auto view2dsub = poutre::array_view<int, 2>(mif, { 2, 3});  // 2D view over vec
+    BOOST_CHECK_EQUAL(view2dsub.size(), 6);
+    BOOST_CHECK(view2dsub.bound() == (poutre::bd2d{ 2, 3 }));
+    BOOST_CHECK(view2dsub.stride() == (poutre::idx2d{3, 1 }));
+    BOOST_CHECK_EQUAL(view2dsub[(poutre::idx2d{ 0, 0 })], 42);
 }
 
 

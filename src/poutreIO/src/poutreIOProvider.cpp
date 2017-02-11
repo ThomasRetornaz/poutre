@@ -32,6 +32,6 @@ namespace poutre
         if (m_container_loader.empty()) POUTRE_RUNTIME_ERROR("ImageProvider::Fetch container empty");
         ImageLoader loader=m_container_loader.front();
         m_container_loader.pop_front();
-        return std::move(loader);
+        return loader;//RVO
     }
 }

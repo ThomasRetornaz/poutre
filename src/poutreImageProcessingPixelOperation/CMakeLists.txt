@@ -9,6 +9,7 @@ set(PoutreIPPPSRC_DETAILS
   ${PoutreIPPPSubdirectory}/include/poutreImageProcessingTernaryOp.hpp
   ${PoutreIPPPSubdirectory}/include/poutreImageProcessingQuaternaryOp.hpp
   ${PoutreIPPPSubdirectory}/include/poutreImageProcessingArith.hpp
+  ${PoutreIPPPSubdirectory}/include/poutreImageProcessingCompare.hpp
   )
 
 set(PoutreIPPPSRC_PUBLICHEADERS  

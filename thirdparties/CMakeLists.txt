@@ -2,8 +2,6 @@
 set(config_folder ${CMAKE_BINARY_DIR}/configs)
 file(MAKE_DIRECTORY ${config_folder})
 
-# Third parties builds
-#include(select_library_configurations)
 if(MSVC)
   # looking for appropriate paths
   if(CMAKE_CL_64)
@@ -30,7 +28,7 @@ if(UNIX AND NOT APPLE AND NOT POUTRE_BOOST_FROM_SYSTEM)
 endif()
 
 set(Boost_ADDITIONAL_VERSIONS   
-	"1.61" "1.61.0")
+	"1.61" "1.61.0" "1.62" "1.62.0" "1.63" "1.63.0")
 
 # disable auto link
 add_definitions(-DBOOST_ALL_NO_LIB)

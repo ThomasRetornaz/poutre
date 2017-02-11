@@ -121,7 +121,7 @@ namespace poutre
 
     };
 
-
+    /*
     //template specialization both array_view and same type, use simd counterpart
     template<typename T, ptrdiff_t Rank, template <typename, typename, typename, typename, class TAG> class TerOp>
     struct PixelWiseTernaryOpDispatcher<T, T, T, T, Rank, array_view, array_view, array_view, array_view, TerOp>
@@ -149,6 +149,7 @@ namespace poutre
         }
 
     };
+    */
 }//namespace
 
 #endif //POUTRE_IMAGEPROCESSING_TERNARYOP_HPP__

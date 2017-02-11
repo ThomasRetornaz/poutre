@@ -11,191 +11,191 @@
 #include <sstream>
 
 namespace poutre
-  {
-  //NOTE JUST FOR CONVENIENCE AT INTERFACE LAYER TO USE STRING INSTEAD OF VERBOSE ENUM
+{
+    //NOTE JUST FOR CONVENIENCE AT INTERFACE LAYER TO USE STRING INSTEAD OF VERBOSE ENUM
 
-  std::ostream& operator<<(std::ostream& os, CompOpType arithOpType)
+    std::ostream& operator<<(std::ostream& os, CompOpType compOpType)
     {
-    switch (arithOpType)
-      {
+        switch (compOpType)
+        {
         case CompOpType::CompOpDiff:
-          os << "!=";
-          break;
+            os << "!=";
+            break;
         case CompOpType::CompOpEqual:
-          os << "==";
-          break;
+            os << "==";
+            break;
         case CompOpType::CompOpInf:
-          os << "<";
-          break;
+            os << "<";
+            break;
         case CompOpType::CompOpInfEqual:
-          os << "<=";
-          break;
+            os << "<=";
+            break;
         case CompOpType::CompOpSup:
-          os << ">";
-          break;
+            os << ">";
+            break;
         case CompOpType::CompOpSupEqual:
-          os << ">=";
-          break;
+            os << ">=";
+            break;
         default://  CompOpType::CompOpUndef; 
-          os << "Unknown CompOpType";
-          break;
-      }
-    return os;
+            os << "Unknown CompOpType";
+            break;
+        }
+        return os;
     }
 
 
-  std::istream& operator>>(std::istream& is, CompOpType& arithOpType)
+    std::istream& operator >> (std::istream& is, CompOpType& compOpType)
     {
-    arithOpType = CompOpType::CompOpUndef;
+        compOpType = CompOpType::CompOpUndef;
 
-    if (!is.good( ))
-      return is;
+        if (!is.good())
+            return is;
 
-    std::string strType;
-    is >> strType;
-    if (is.bad( ))
-      return is;
+        std::string strType;
+        is >> strType;
+        if (is.bad())
+            return is;
 
-    if (strType == "!=")
-      arithOpType = CompOpType::CompOpDiff;
-    else if (strType == "==")
-      arithOpType = CompOpType::CompOpEqual;
-    else if (strType == "<")
-      arithOpType = CompOpType::CompOpInf;
-    else if (strType == ">")
-      arithOpType = CompOpType::CompOpSup;
-    else if (strType == "<=")
-      arithOpType = CompOpType::CompOpInfEqual;
-    else if (strType == ">=")
-      arithOpType = CompOpType::CompOpSupEqual;
-    else
-      {
-      POUTRE_RUNTIME_ERROR("Unable to read arithOpType from stream");
-      }
-    return is;
+        if (strType == "!=")
+            compOpType = CompOpType::CompOpDiff;
+        else if (strType == "==")
+            compOpType = CompOpType::CompOpEqual;
+        else if (strType == "<")
+            compOpType = CompOpType::CompOpInf;
+        else if (strType == ">")
+            compOpType = CompOpType::CompOpSup;
+        else if (strType == "<=")
+            compOpType = CompOpType::CompOpInfEqual;
+        else if (strType == ">=")
+            compOpType = CompOpType::CompOpSupEqual;
+        else
+        {
+            POUTRE_RUNTIME_ERROR("Unable to read arithOpType from stream");
+        }
+        return is;
     }
 
 
- std::ostream& operator<<(std::ostream& os, ArithOpType arithOpType)
+    std::ostream& operator<<(std::ostream& os, ArithOpType arithOpType)
     {
-    switch (arithOpType)
-      {
+        switch (arithOpType)
+        {
         case ArithOpType::ArithOpPlus:
-          os << "+";
-          break;
+            os << "+";
+            break;
         case ArithOpType::ArithOpMinus:
-          os << "-";
-          break;
+            os << "-";
+            break;
         case ArithOpType::ArithOpMul:
-          os << "*";
-          break;
+            os << "*";
+            break;
         case ArithOpType::ArithOpDiv:
-          os << "/";
-          break;
+            os << "/";
+            break;
         case ArithOpType::ArithOpMod:
-          os << "%";
-          break;
+            os << "%";
+            break;
         default://  ArithOpType::; 
-          os << "Unknown ArithOpType";
-          break;
-      }
-    return os;
+            os << "Unknown ArithOpType";
+            break;
+        }
+        return os;
     }
 
 
-  std::istream& operator>>(std::istream& is, ArithOpType& arithOpType)
+    std::istream& operator >> (std::istream& is, ArithOpType& arithOpType)
     {
-    arithOpType = ArithOpType::ArithOpUndef;
+        arithOpType = ArithOpType::ArithOpUndef;
 
-    if (!is.good( ))
-      return is;
+        if (!is.good())
+            return is;
 
-    std::string strType;
-    is >> strType;
-    if (is.bad( ))
-      return is;
+        std::string strType;
+        is >> strType;
+        if (is.bad())
+            return is;
 
-    if (strType == "+")
-      arithOpType = ArithOpType::ArithOpPlus;
-    else if (strType == "-")
-      arithOpType = ArithOpType::ArithOpMinus;
-    else if (strType == "/")
-      arithOpType = ArithOpType::ArithOpDiv;
-    else if (strType == "%")
-      arithOpType = ArithOpType::ArithOpMod;
-    else if (strType == "*")
-      arithOpType = ArithOpType::ArithOpMul;
-    else
-      {
-      POUTRE_RUNTIME_ERROR("Unable to read ArithOpType from stream");
-      }
-    return is;
+        if (strType == "+")
+            arithOpType = ArithOpType::ArithOpPlus;
+        else if (strType == "-")
+            arithOpType = ArithOpType::ArithOpMinus;
+        else if (strType == "/")
+            arithOpType = ArithOpType::ArithOpDiv;
+        else if (strType == "%")
+            arithOpType = ArithOpType::ArithOpMod;
+        else if (strType == "*")
+            arithOpType = ArithOpType::ArithOpMul;
+        else
+        {
+            POUTRE_RUNTIME_ERROR("Unable to read ArithOpType from stream");
+        }
+        return is;
     }
 
 
 
-  std::ostream& operator<<(std::ostream& os, AssignOpType assignOpType)
+    std::ostream& operator<<(std::ostream& os, AssignOpType assignOpType)
     {
-    switch (assignOpType)
-      {
+        switch (assignOpType)
+        {
         case AssignOpType::AssignOpAdd:
-          os << "+=";
-          break;
+            os << "+=";
+            break;
         case AssignOpType::AssignOpMinus:
-          os << "-=";
-          break;
+            os << "-=";
+            break;
         case AssignOpType::AssignOpMul:
-          os << "*=";
-          break;
+            os << "*=";
+            break;
         case AssignOpType::AssignOpDiv:
-          os << "/=";
-          break;
+            os << "/=";
+            break;
         case AssignOpType::AssignOpMod:
-          os << "%=";
-          break;
+            os << "%=";
+            break;
         case AssignOpType::AssignOp:
-          os << "=";
-          break;
+            os << "=";
+            break;
         default://  AssignOpType::; 
-          os << "Unknown AssignOpType";
-          break;
-      }
-    return os;
+            os << "Unknown AssignOpType";
+            break;
+        }
+        return os;
     }
 
 
-  std::istream& operator>>(std::istream& is, AssignOpType& assignOpType)
+    std::istream& operator >> (std::istream& is, AssignOpType& assignOpType)
     {
-    assignOpType = AssignOpType::AssignOpUndef;
+        assignOpType = AssignOpType::AssignOpUndef;
 
-    if (!is.good( ))
-      return is;
+        if (!is.good())
+            return is;
 
-    std::string strType;
-    is >> strType;
-    if (is.bad( ))
-      return is;
+        std::string strType;
+        is >> strType;
+        if (is.bad())
+            return is;
 
-    if (strType == "+=")
-      assignOpType = AssignOpType::AssignOpAdd;
-    else if (strType == "-=")
-      assignOpType = AssignOpType::AssignOpMinus;
-    else if (strType == "*=")
-      assignOpType = AssignOpType::AssignOpMul;
-    else if (strType == "/=")
-      assignOpType = AssignOpType::AssignOpDiv;
-    else if (strType == "%=")
-      assignOpType = AssignOpType::AssignOpMod;
-    else if (strType == "=")
-      assignOpType = AssignOpType::AssignOp;
-    else
-      {
-      POUTRE_RUNTIME_ERROR("Unable to read AssignOpType from stream");
-      }
-    return is;
+        if (strType == "+=")
+            assignOpType = AssignOpType::AssignOpAdd;
+        else if (strType == "-=")
+            assignOpType = AssignOpType::AssignOpMinus;
+        else if (strType == "*=")
+            assignOpType = AssignOpType::AssignOpMul;
+        else if (strType == "/=")
+            assignOpType = AssignOpType::AssignOpDiv;
+        else if (strType == "%=")
+            assignOpType = AssignOpType::AssignOpMod;
+        else if (strType == "=")
+            assignOpType = AssignOpType::AssignOp;
+        else
+        {
+            POUTRE_RUNTIME_ERROR("Unable to read AssignOpType from stream");
+        }
+        return is;
     }
 
-  
-  
 
-  }
+
+
+}

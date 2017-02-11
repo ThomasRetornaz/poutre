@@ -157,7 +157,7 @@ namespace poutre
     using storage_type = pINT32;
     using safe_signed_type = pINT64;
     using str_type = pINT32;
-    using accu_type = pUINT64;
+    using accu_type = pINT64;
 
     static const PType pixel_type = PType::PType_GrayINT32;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
