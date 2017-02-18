@@ -69,6 +69,8 @@ namespace poutre
       virtual ~IInterface() = default;
       //!Stringification 
       virtual std::string str( ) const = 0 ;
+
+      const IInterface& operator=(const IInterface&) = delete; //see this later
    };
 
 

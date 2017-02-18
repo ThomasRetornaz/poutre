@@ -34,15 +34,15 @@ namespace poutre
         template <typename, ptrdiff_t> class View3,
         template <typename, ptrdiff_t> class View4,
         template <typename, ptrdiff_t> class ViewOut,
-        template <typename, typename, typename, typename, typename, class TAG> class QuaterOp>
-    void PixelWiseQuaternaryOp(const View1<T1, Rank>& i_vin1, const View2<T2, Rank>& i_vin2, const View3<T3, Rank>& i_vin3, const View4<T4, Rank>& i_vin4, ViewOut<Tout, Rank>& o_vout)
+        class QuaterOp>
+    void PixelWiseQuaternaryOp(const View1<T1, Rank>& i_vin1,const QuaterOp&op, const View2<T2, Rank>& i_vin2, const View3<T3, Rank>& i_vin3, const View4<T4, Rank>& i_vin4, ViewOut<Tout, Rank>& o_vout)
     {
         POUTRE_CHECK(i_vin1.size() == i_vin2.size(), "Incompatible views size");
         POUTRE_CHECK(i_vin2.size() == i_vin3.size(), "Incompatible views size");
         POUTRE_CHECK(i_vin3.size() == i_vin4.size(), "Incompatible views size");
         POUTRE_CHECK(o_vout.size() == i_vin4.size(), "Incompatible views size");
         PixelWiseQuaternaryOpDispatcher<T1, T2, T3, T4, Tout, Rank, View1, View2, View3, View4, ViewOut, QuaterOp> dispatcher;
-        dispatcher(i_vin1, i_vin2, i_vin3, i_vin4, o_vout);
+        dispatcher(i_vin1,op,i_vin2, i_vin3, i_vin4, o_vout);
     }
 
     // primary use strided view 
@@ -52,15 +52,11 @@ namespace poutre
         template <typename, ptrdiff_t> class View3,
         template <typename, ptrdiff_t> class View4,
         template <typename, ptrdiff_t> class ViewOut,
-        template <typename, typename, typename, typename, typename, class TAG> class QuaterOp>
+        class QuaterOp>
     struct PixelWiseQuaternaryOpDispatcher
     {
-        void operator()(const View1<T1, Rank>& i_vin1, const View2<T2, Rank>& i_vin2, const View3<T3, Rank>& i_vin3, const View4<T4, Rank>& i_vin4, ViewOut<Tout, Rank>& o_vout) const
+        void operator()(const View1<T1, Rank>& i_vin1,const QuaterOp& op,const View2<T2, Rank>& i_vin2, const View3<T3, Rank>& i_vin3, const View4<T4, Rank>& i_vin4, ViewOut<Tout, Rank>& o_vout) const
         {
-            //get the specialized operator
-            using real_op = typename QuaterOp<T1, T2, T3, T4, Tout, tag_SIMD_disabled>;
-            real_op op;
-
             //More runtime dispatch
             auto vInbound1 = i_vin1.bound();
             auto vInbound2 = i_vin2.bound();
@@ -105,16 +101,12 @@ namespace poutre
 
     //template specialization both array_view but different type
     template<typename T1, typename T2, typename T3, typename T4, typename Tout, ptrdiff_t Rank,
-        template <typename, typename, typename, typename, typename, class TAG> class QuaterOp>
+        class QuaterOp>
     struct PixelWiseQuaternaryOpDispatcher<T1, T2, T3, T4, Tout, Rank, array_view, array_view, array_view, array_view, array_view, QuaterOp>
     {
 
-        void operator()(const array_view<T1, Rank>& i_vin1, const array_view<T2, Rank>& i_vin2, const array_view<T3, Rank>& i_vin3, const array_view<T4, Rank>& i_vin4, array_view<Tout, Rank>& o_vout) const
+        void operator()(const array_view<T1, Rank>& i_vin1,const QuaterOp& op,const array_view<T2, Rank>& i_vin2, const array_view<T3, Rank>& i_vin3, const array_view<T4, Rank>& i_vin4, array_view<Tout, Rank>& o_vout) const
         {
-            //get the specialized operator
-            using real_op = typename QuaterOp<T1, T2, T3, T4, Tout, tag_SIMD_disabled>;
-            real_op op;
-
             auto i_vinbeg1 = i_vin1.data();
             auto i_vinend1 = i_vin1.data() + i_vin1.size();
             auto i_vinbeg2 = i_vin2.data();
@@ -128,37 +120,5 @@ namespace poutre
         }
 
     };
-
-    /*
-    //template specialization both array_view and same type, use simd counterpart
-    template<typename T, ptrdiff_t Rank, template <typename, typename, typename, typename, typename, class TAG> class QuaterOp>
-    struct PixelWiseQuaternaryOpDispatcher<T, T, T, T, T, Rank, array_view, array_view, array_view, array_view, array_view, QuaterOp>
-    {
-
-        void operator()(const array_view<T, Rank>& i_vin1, const array_view<T, Rank>& i_vin2, const array_view<T, Rank>& i_vin3, const array_view<T, Rank>& i_vin4, array_view<T, Rank>& o_vout) const
-        {
-            //get the specialized operator
-            //using real_op = typename TerOp<T, T, T, T, tag_SIMD_enabled>; //may some could be vectorized, see this later
-            using real_op = typename QuaterOp<T, T, T, T, T, tag_SIMD_disabled>;
-            real_op op;
-
-            auto i_vinbeg1 = i_vin1.data();
-            auto i_vinend1 = i_vin1.data() + i_vin1.size();
-            auto i_vinbeg2 = i_vin2.data();
-            auto i_vinbeg3 = i_vin3.data();
-            auto i_vinbeg4 = i_vin4.data();
-            auto i_voutbeg = o_vout.data();
-            //bs::transform(i_vinbeg1, i_vinend1, i_vinbeg2, i_voutbeg, op);
-
-            //may some could be vectorized, see this later
-            for (; i_vinbeg1 != i_vinend1; ++i_vinbeg1, ++i_vinbeg2, ++i_vinbeg3, ++i_vinbeg4, ++i_voutbeg)
-            {
-                *i_voutbeg = op(*i_vinbeg1, *i_vinbeg2, *i_vinbeg3, *i_vinbeg4);
-            }
-        }
-
-    };
-    */
-
 }
 #endif //POUTRE_IMAGEPROCESSING_QUATERNARYOP_HPP__

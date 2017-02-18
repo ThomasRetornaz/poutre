@@ -85,7 +85,7 @@ namespace poutre
     };
 
 
-    //template specialization both array_view but different type
+    //template specialization both array_view
     template<typename T1, typename T2, ptrdiff_t Rank, class UnOp>
     struct PixelWiseUnaryOpDispatcher<T1, T2, Rank, array_view, array_view, UnOp>
     {
