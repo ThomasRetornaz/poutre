@@ -25,11 +25,12 @@ ExternalProject_Add(Eigendep #see http://www.cmake.org/cmake/help/v3.0/module/Ex
   BUILD_COMMAND ""
   INSTALL_COMMAND "" 
   ) #SET CONFIGURE_COMMAND, BUILD_COMMAND and INSTALL_COMMAND to "" compile nothing
-ExternalProject_Get_Property( Eigendep source_dir )  
+ExternalProject_Get_Property(Eigendep TMP_DIR STAMP_DIR DOWNLOAD_DIR SOURCE_DIR BINARY_DIR INSTALL_DIR)
+message("Build Eigendep src ${SOURCE_DIR} in ${BINARY_DIR}")
   
 add_library(Eigen INTERFACE)
 target_include_directories(Eigen INTERFACE
-  $<BUILD_INTERFACE:${source_dir}> #we can do better
+  $<BUILD_INTERFACE:${SOURCE_DIR}/Eigen> #we can do better
 )
 set_target_properties(Eigendep PROPERTIES FOLDER "3rdparty/")	
 #set_target_properties(Eigen PROPERTIES FOLDER "3rdparty/")	

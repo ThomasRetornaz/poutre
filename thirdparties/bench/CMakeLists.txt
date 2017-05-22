@@ -35,7 +35,6 @@ ExternalProject_Add(Benchmark
 
 ExternalProject_Get_Property(Benchmark TMP_DIR STAMP_DIR DOWNLOAD_DIR SOURCE_DIR BINARY_DIR INSTALL_DIR)
 message("Build Benchmark src ${SOURCE_DIR} in ${BINARY_DIR}")
-set_target_properties(Benchmark PROPERTIES FOLDER "3rdparty")
 
 ExternalProject_Add_Step(
   Benchmark CopyToBin
