@@ -11,7 +11,7 @@
 #define POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
 
 #include <boost/simd/memory/allocator.hpp>
-#include <boost/simd/memory/is_aligned.hpp>
+#include <boost/simd/detail/is_aligned.hpp>
 #include <array>
 #include <memory>
 #include <utility>
@@ -51,8 +51,7 @@ namespace poutre {
 
 template <class valuetype, std::ptrdiff_t NumDims = 2,
           class allocator_type_t = boost::simd::allocator<
-              typename TypeTraits<valuetype>::storage_type,
-              TypeTraits<valuetype>::alignement>>
+              typename TypeTraits<valuetype>::storage_type>>
 class DenseImage : public IInterface {
   static_assert(NumDims > 0, "NumDims must be >0");
 
@@ -82,7 +81,7 @@ public:
   static const CompoundType m_ctype = TypeTraits<value_type>::compound_type;
 
   static const std::size_t m_numdims = NumDims;
-  static const std::size_t alignement = TypeTraits<valuetype>::alignement;
+//  static const std::size_t alignement = TypeTraits<valuetype>::alignement;
   static const ImgType m_imgtype = ImgType::ImgType_Dense;
 
 private:
@@ -399,6 +398,11 @@ template <class valuetype, std::ptrdiff_t Rank>
 poutre::carray_view<valuetype, Rank>
 view(const DenseImage<valuetype, Rank> &iImg) {
   return poutre::carray_view<valuetype, Rank>(iImg.datas(), iImg.bound());
+
+//template <class valuetype, std::ptrdiff_t Rank>
+//const poutre::array_view<valuetype, Rank>
+//view(const DenseImage<valuetype, Rank> &iImg) {
+//  return poutre::array_view<valuetype, Rank>(iImg.datas(), iImg.bound());
 }
 
 // todo define macros

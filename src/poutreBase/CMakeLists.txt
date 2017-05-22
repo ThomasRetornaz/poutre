@@ -27,6 +27,7 @@ set(PoutreBaseSRC_CPP
   ${PoutreBaseSubdirectory}/src/poutreGeometry.cpp
   ${PoutreBaseSubdirectory}/src/poutreCoordinate.cpp
   ${PoutreBaseSubdirectory}/src/poutreType.cpp
+  ${PoutreBaseSubdirectory}/src/poutreChronos.cpp
   )
 source_group(details FILES ${PoutreBaseSRC_DETAILS})
 source_group(src FILES ${PoutreBaseSRC_CPP})
@@ -52,8 +53,8 @@ target_link_libraries(PoutreBase
   PUBLIC ${Boost_LOG_LIBRARY}
   PUBLIC ${Boost_LOG_SETUP_LIBRARY}
   PUBLIC jsoncpp 
-  INTERFACE Eigen  
-  INTERFACE BoostSimd 
+  PUBLIC Eigen  
+  PUBLIC BoostSimd 
   )
 set_target_properties(PoutreBase PROPERTIES FOLDER "src/")
 #force custom target before start
