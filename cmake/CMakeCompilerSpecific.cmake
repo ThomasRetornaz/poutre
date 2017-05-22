@@ -2,6 +2,8 @@ cmake_minimum_required (VERSION 3.0)
 include(CheckCXXCompilerFlag)
 message(STATUS "host processor " ${CMAKE_HOST_SYSTEM_PROCESSOR} " target processor " ${CMAKE_SYSTEM_PROCESSOR})
 
+
+
 ###### MSVC ######
 if(MSVC)
   if(MSVC_VERSION LESS 1800)
@@ -58,11 +60,14 @@ if(MSVC)
   #set(CMAKE_C_FLAGS_RELEASE CACHE STRING "Release flags (overwritten) for C files")
   #message("Flags for MSVC ${CMAKE_CXX_FLAGS_RELEASE}")
   
-   # Linker
-   
-   #https://msdn.microsoft.com/fr-fr/library/bxwfs976.aspx
-   set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG /OPT:REF")
-   set(CMAKE_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE}  /LTCG /OPT:REF")
+  # Linker
+  #https://msdn.microsoft.com/fr-fr/library/bxwfs976.aspx
+  # /OPT:REF enables also /OPT:ICF and disables INCREMENTAL
+  set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG /OPT:REF")
+  # /OPT:NOICF is recommended when /DEBUG is used (http://msdn.microsoft.com/en-us/library/xe4t6fc1.aspx)
+  set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DEBUG /OPT:NOICF")
+  set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /OPT:REF")
+  set(CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /DEBUG /OPT:NOICF")
    
   #unset(CMAKE_SHARED_LINKER_FLAGS_RELEASE CACHE)
   #set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${value_tmp}" CACHE STRING "Release flags (overwritten) for CPP files")
@@ -72,7 +77,7 @@ if(MSVC)
   #4250: 'class1' : inherits 'class2::member' via dominance  polymorphism generate 10^50 warning ....	
   #4702 unreachable code 
   #4715 not all control paths return a value
-  foreach(warning 4250 4702 4715) 
+  foreach(warning 4250 4702)  
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd${warning}")
   endforeach(warning)
  
