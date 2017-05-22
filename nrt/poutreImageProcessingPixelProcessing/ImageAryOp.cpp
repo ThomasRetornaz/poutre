@@ -14,7 +14,8 @@
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingArith.hpp>
 #include <boost/lexical_cast.hpp>
 #include <poutreIO/poutreIOString.hpp>
-
+#include <random>
+#include <poutreBase/poutreChronos.hpp>
 namespace bs = boost::simd;
 
 ////have a look https://searchcode.com/codesearch/view/15337430/
@@ -694,6 +695,77 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType_sub)
 ";
     auto imgstr = poutre::ImageToString(img3);
     BOOST_CHECK_EQUAL(imgstr, expected);
+}
+
+namespace
+{
+	decltype(auto) ConstructVector(size_t size)
+	{
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_int_distribution<> dis(0, 255);
+
+		std::vector<poutre::pUINT8, boost::simd::allocator<poutre::pUINT8>> m_vect;
+		m_vect.reserve(size);
+		for (auto i = 0; i < size; ++i) {
+			m_vect.push_back(dis(gen));
+		}
+		return m_vect;
+	}
+}
+BOOST_AUTO_TEST_CASE(benchmark)
+{
+	const auto size = 1024 * 1024;
+	const auto inputVect1 = ConstructVector(size);
+	const auto inputVect2 = ConstructVector(size);
+	std::vector<poutre::pUINT8> ouputVect(size);
+
+	auto v_img1 = poutre::carray_view< poutre::pUINT8, 2>(inputVect1, { int(1024),int(1024) });
+	auto v_img2 = poutre::carray_view< poutre::pUINT8, 2>(inputVect1, { int(1024),int(1024) });
+	auto v_imgout = poutre::array_view< poutre::pUINT8, 2>(ouputVect, { int(1024),int(1024) });
+
+	poutre::Timer timer;
+	timer.Start();
+	for (auto i = 0; i<1000; ++i)
+		poutre::t_ArithSaturatedSub(v_img1,v_img2,v_imgout);
+	timer.Stop();
+	std::cout << "Time t_ArithSaturatedSub " << timer << std::endl;
+	timer.Reset();
+
+	timer.Start();
+	for (auto i = 0; i<1000; ++i)
+		poutre::t_ArithSaturatedAdd(v_img1, v_img2, v_imgout);
+	timer.Stop();
+	std::cout << "Time t_ArithSaturatedAdd " << timer << std::endl;
+	timer.Reset();
+
+	timer.Start();
+	for (auto i = 0; i<1000; ++i)
+		poutre::t_ArithSaturatedAddConstant(v_img1,static_cast<poutre::pUINT8>(10),v_imgout);
+	timer.Stop();
+	std::cout << "Time t_ArithSaturatedAddConstant " << timer << std::endl;
+	timer.Reset();
+
+	timer.Start();
+	for (auto i = 0; i<1000; ++i)
+		poutre::t_ArithSaturatedSubConstant(v_img1, static_cast<poutre::pUINT8>(10), v_imgout);
+	timer.Stop();
+	std::cout << "Time t_ArithSaturatedSubConstant " << timer << std::endl;
+	timer.Reset();
+
+	timer.Start();
+	for (auto i = 0; i<1000; ++i)
+		poutre::t_ArithSup(v_img1,v_img2, v_imgout);
+	timer.Stop();
+	std::cout << "Time t_ArithSup " << timer << std::endl;
+	timer.Reset();
+
+	timer.Start();
+	for (auto i = 0; i<1000; ++i)
+		poutre::t_ArithInf(v_img1, v_img2, v_imgout);
+	timer.Stop();
+	std::cout << "Time t_ArithInf " << timer << std::endl;
+	timer.Reset();
 }
 BOOST_AUTO_TEST_SUITE_END()
 
