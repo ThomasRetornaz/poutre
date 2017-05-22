@@ -20,7 +20,6 @@
 
 #include <limits>
 #include <type_traits>
-#include <boost/simd/preprocessor/parameters.hpp> //default alignment
 #include <stdexcept>
 
 #ifndef POUTRE_IMAGEPROCESSINGCORE_HPP__
@@ -136,9 +135,9 @@ namespace poutre
     static const PType pixel_type = PType::PType_GrayUINT8;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
-    POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
+    //POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
 
-    POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
+    //POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
 
     POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pUINT8) * 8;
 
@@ -162,8 +161,8 @@ namespace poutre
     static const PType pixel_type = PType::PType_GrayINT32;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
-    POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
-    POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
+    //POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
+    //POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
     POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pINT32) * 8;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT{ return std::numeric_limits<storage_type>::lowest( ); }
@@ -186,8 +185,8 @@ namespace poutre
     static const PType pixel_type = PType::PType_F32;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
-    POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
-    POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
+    //POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
+    //POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
     POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pFLOAT) * 8;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::lowest( ); }
@@ -209,8 +208,8 @@ namespace poutre
     static const PType pixel_type = PType::PType_D64;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
-    POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
-    POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
+    //POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
+    //POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
     POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pDOUBLE) * 8;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::lowest( ); }
@@ -232,8 +231,8 @@ namespace poutre
     static const PType pixel_type = PType::PType_GrayINT64;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
-    POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
-    POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
+    //POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
+    //POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
     POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pINT64) * 8;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::lowest( ); }
@@ -260,8 +259,8 @@ namespace poutre
 
       static const PType pixel_type = TypeTraits<valuetype>::pixel_type;
       static const CompoundType compound_type = CompoundType::CompoundType_3Planes;
-      POUTRE_STATIC_CONSTEXPR size_t default_padding_size = 1;
-      POUTRE_STATIC_CONSTEXPR size_t alignement = 1;
+     /* POUTRE_STATIC_CONSTEXPR size_t default_padding_size = 1;
+      POUTRE_STATIC_CONSTEXPR size_t alignement = 1;*/
 
       //todo decltype
       POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
@@ -295,9 +294,9 @@ namespace poutre
     static const PType pixel_type = TypeTraits<valuetype>::pixel_type;
     static const CompoundType compound_type = CompoundType::CompoundType_4Planes;
 
-    POUTRE_STATIC_CONSTEXPR size_t default_padding_size = 1;
+   /* POUTRE_STATIC_CONSTEXPR size_t default_padding_size = 1;
     POUTRE_STATIC_CONSTEXPR size_t alignement = 1;
-
+*/
     
     //todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT
