@@ -18,6 +18,7 @@
 
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingCompare.hpp>
+#include <poutreBase/poutreChronos.hpp>
 
 namespace bs = boost::simd;
 
@@ -45,7 +46,7 @@ BOOST_AUTO_TEST_CASE(CompareOpssswholeimage_equal)
     imgout.fill(4);
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_sss_dispatch(v_img1,poutre::CompOpType::CompOpEqual,1,1,0,v_imgout);
+    poutre::ViewCompare_sss_func_helper(v_img1,poutre::CompOpType::CompOpEqual,1,1,0,v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 1 1 1 1 1 1 \
@@ -79,7 +80,7 @@ BOOST_AUTO_TEST_CASE(CompareOpssswholeimage_notequal)
     imgout.fill(4);
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_sss_dispatch(v_img1, poutre::CompOpType::CompOpDiff, 1, 1, 0, v_imgout);
+    poutre::ViewCompare_sss_func_helper(v_img1, poutre::CompOpType::CompOpDiff, 1, 1, 0, v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 0 0 0 0 0 0 \
@@ -113,7 +114,7 @@ BOOST_AUTO_TEST_CASE(CompareOpssswholeimage_sup)
     imgout.fill(4);
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_sss_dispatch(v_img1, poutre::CompOpType::CompOpSup, 1, 1, 0, v_imgout);
+    poutre::ViewCompare_sss_func_helper(v_img1, poutre::CompOpType::CompOpSup, 1, 1, 0, v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 0 0 0 0 0 0 \
@@ -147,7 +148,7 @@ BOOST_AUTO_TEST_CASE(CompareOpssswholeimage_supequal)
     imgout.fill(4);
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_sss_dispatch(v_img1, poutre::CompOpType::CompOpSupEqual, 1, 1, 0, v_imgout);
+    poutre::ViewCompare_sss_func_helper(v_img1, poutre::CompOpType::CompOpSupEqual, 1, 1, 0, v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 1 1 1 1 1 1 \
@@ -181,7 +182,7 @@ BOOST_AUTO_TEST_CASE(CompareOpssswholeimage_inf)
     imgout.fill(4);
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_sss_dispatch(v_img1, poutre::CompOpType::CompOpInf, 5, 1, 0, v_imgout);
+    poutre::ViewCompare_sss_func_helper(v_img1, poutre::CompOpType::CompOpInf, 5, 1, 0, v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 1 1 1 1 1 1 \
@@ -215,7 +216,7 @@ BOOST_AUTO_TEST_CASE(CompareOpssswholeimage_infequal)
     imgout.fill(4);
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_sss_dispatch(v_img1, poutre::CompOpType::CompOpInfEqual, 5, 1, 0, v_imgout);
+    poutre::ViewCompare_sss_func_helper(v_img1, poutre::CompOpType::CompOpInfEqual, 5, 1, 0, v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 1 1 1 1 1 1 \
@@ -251,7 +252,7 @@ BOOST_AUTO_TEST_CASE(CompareOpssssection)
     auto s_img = v_imgin.section({ 1,1 }, { 3,2 });
     auto s_imgout = v_imgout.section({ 1,1 }, { 3,2 });
 
-    poutre::ViewCompare_sss_dispatch(s_img, poutre::CompOpType::CompOpEqual, 1, 1, 0, s_imgout);
+    poutre::ViewCompare_sss_func_helper(s_img, poutre::CompOpType::CompOpEqual, 1, 1, 0, s_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 4 4 4 4 4 4 \
@@ -1172,10 +1173,223 @@ BOOST_AUTO_TEST_CASE(CompareOpsiiwholeimage_notequal)
 
 }
 
-//BOOST_AUTO_TEST_CASE(CompareOpsiiwholeimage_sup)
-//BOOST_AUTO_TEST_CASE(CompareOpsiiwholeimage_supequal)
-//BOOST_AUTO_TEST_CASE(CompareOpsiiwholeimage_inf)
-//BOOST_AUTO_TEST_CASE(CompareOpsiiwholeimage_infequal)
+BOOST_AUTO_TEST_CASE(CompareOpsiiwholeimage_sup)
+{
+	auto imgin = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 5 5 5\
+ 1 1 1 5 5 5\
+");
+	using ImageType = poutre::DenseImage < poutre::pINT32>;
+	ImageType* img = dynamic_cast<ImageType*> (imgin.get());
+	BOOST_REQUIRE(img);
+	auto v_img = poutre::view(*img);
+
+	auto imgtrue = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+");
+	ImageType* imgt = dynamic_cast<ImageType*> (imgtrue.get());
+	BOOST_REQUIRE(imgt);
+	auto v_imgtrue = poutre::view(*imgt);
+
+
+	auto imgfalse = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+");
+	ImageType* imgf = dynamic_cast<ImageType*> (imgfalse.get());
+	BOOST_REQUIRE(imgf);
+	auto v_imgfalse = poutre::view(*imgf);
+
+	poutre::DenseImage<poutre::pINT32> imgout({ 5, 6 });
+	imgout.fill(4);
+	auto v_imgout = poutre::view(imgout);
+
+	poutre::ViewCompare_sii_dispatch(v_img, poutre::CompOpType::CompOpSup, static_cast<poutre::pINT32>(5), v_imgtrue, v_imgfalse, v_imgout);
+
+	std::string expected = "Dense Scalar GINT32 2 5 6\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+";
+	auto imgstr = poutre::ImageToString(imgout);
+	BOOST_CHECK_EQUAL(imgstr, expected);
+
+
+}
+BOOST_AUTO_TEST_CASE(CompareOpsiiwholeimage_supequal)
+{
+	auto imgin = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 5 5 5\
+ 1 1 1 5 5 5\
+");
+	using ImageType = poutre::DenseImage < poutre::pINT32>;
+	ImageType* img = dynamic_cast<ImageType*> (imgin.get());
+	BOOST_REQUIRE(img);
+	auto v_img = poutre::view(*img);
+
+	auto imgtrue = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+");
+	ImageType* imgt = dynamic_cast<ImageType*> (imgtrue.get());
+	BOOST_REQUIRE(imgt);
+	auto v_imgtrue = poutre::view(*imgt);
+
+
+	auto imgfalse = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+");
+	ImageType* imgf = dynamic_cast<ImageType*> (imgfalse.get());
+	BOOST_REQUIRE(imgf);
+	auto v_imgfalse = poutre::view(*imgf);
+
+	poutre::DenseImage<poutre::pINT32> imgout({ 5, 6 });
+	imgout.fill(4);
+	auto v_imgout = poutre::view(imgout);
+
+	poutre::ViewCompare_sii_dispatch(v_img, poutre::CompOpType::CompOpSupEqual, static_cast<poutre::pINT32>(5), v_imgtrue, v_imgfalse, v_imgout);
+
+	std::string expected = "Dense Scalar GINT32 2 5 6\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 2 2 2\
+ 4 4 4 2 2 2\
+";
+	auto imgstr = poutre::ImageToString(imgout);
+	BOOST_CHECK_EQUAL(imgstr, expected);
+
+}
+BOOST_AUTO_TEST_CASE(CompareOpsiiwholeimage_inf)
+{
+	auto imgin = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 5 5 5\
+ 1 1 1 5 5 5\
+");
+	using ImageType = poutre::DenseImage < poutre::pINT32>;
+	ImageType* img = dynamic_cast<ImageType*> (imgin.get());
+	BOOST_REQUIRE(img);
+	auto v_img = poutre::view(*img);
+
+	auto imgtrue = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+");
+	ImageType* imgt = dynamic_cast<ImageType*> (imgtrue.get());
+	BOOST_REQUIRE(imgt);
+	auto v_imgtrue = poutre::view(*imgt);
+
+
+	auto imgfalse = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+");
+	ImageType* imgf = dynamic_cast<ImageType*> (imgfalse.get());
+	BOOST_REQUIRE(imgf);
+	auto v_imgfalse = poutre::view(*imgf);
+
+	poutre::DenseImage<poutre::pINT32> imgout({ 5, 6 });
+	imgout.fill(4);
+	auto v_imgout = poutre::view(imgout);
+
+	poutre::ViewCompare_sii_dispatch(v_img, poutre::CompOpType::CompOpInf, static_cast<poutre::pINT32>(5), v_imgtrue, v_imgfalse, v_imgout);
+
+	std::string expected = "Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 4 4 4\
+ 2 2 2 4 4 4\
+";
+	auto imgstr = poutre::ImageToString(imgout);
+	BOOST_CHECK_EQUAL(imgstr, expected);
+
+}
+BOOST_AUTO_TEST_CASE(CompareOpsiiwholeimage_infequal)
+{
+	auto imgin = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 5 5 5\
+ 1 1 1 5 5 5\
+");
+	using ImageType = poutre::DenseImage < poutre::pINT32>;
+	ImageType* img = dynamic_cast<ImageType*> (imgin.get());
+	BOOST_REQUIRE(img);
+	auto v_img = poutre::view(*img);
+
+	auto imgtrue = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+");
+	ImageType* imgt = dynamic_cast<ImageType*> (imgtrue.get());
+	BOOST_REQUIRE(imgt);
+	auto v_imgtrue = poutre::view(*imgt);
+
+
+	auto imgfalse = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+");
+	ImageType* imgf = dynamic_cast<ImageType*> (imgfalse.get());
+	BOOST_REQUIRE(imgf);
+	auto v_imgfalse = poutre::view(*imgf);
+
+	poutre::DenseImage<poutre::pINT32> imgout({ 5, 6 });
+	imgout.fill(4);
+	auto v_imgout = poutre::view(imgout);
+
+	poutre::ViewCompare_sii_dispatch(v_img, poutre::CompOpType::CompOpInfEqual, static_cast<poutre::pINT32>(5), v_imgtrue, v_imgfalse, v_imgout);
+
+	std::string expected = "Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+";
+	auto imgstr = poutre::ImageToString(imgout);
+	BOOST_CHECK_EQUAL(imgstr, expected);
+
+}
 
 BOOST_AUTO_TEST_CASE(CompareOpiiiwholeimage_equal)
 {
@@ -1243,11 +1457,333 @@ BOOST_AUTO_TEST_CASE(CompareOpiiiwholeimage_equal)
 
 }
 
-//BOOST_AUTO_TEST_CASE(CompareOpiiiwholeimage_notequal)
-//BOOST_AUTO_TEST_CASE(CompareOpiiiwholeimage_sup)
-//BOOST_AUTO_TEST_CASE(CompareOpiiiwholeimage_supequal)
-//BOOST_AUTO_TEST_CASE(CompareOpiiiwholeimage_inf)
-//BOOST_AUTO_TEST_CASE(CompareOpiiiwholeimage_infequal)
+BOOST_AUTO_TEST_CASE(CompareOpiiiwholeimage_notequal)
+{
+	auto imgin = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 5 5 5\
+ 1 1 1 5 5 5\
+");
+	using ImageType = poutre::DenseImage < poutre::pINT32>;
+	ImageType* img = dynamic_cast<ImageType*> (imgin.get());
+	BOOST_REQUIRE(img);
+	auto v_img = poutre::view(*img);
+
+	auto imgcomp = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 5 5 5\
+ 2 2 2 5 5 5\
+");
+	ImageType* imgc = dynamic_cast<ImageType*> (imgcomp.get());
+	BOOST_REQUIRE(imgc);
+	auto v_imgcomp = poutre::view(*imgc);
+
+	auto imgtrue = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+");
+	ImageType* imgt = dynamic_cast<ImageType*> (imgtrue.get());
+	BOOST_REQUIRE(imgt);
+	auto v_imgtrue = poutre::view(*imgt);
+
+
+	auto imgfalse = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+");
+	ImageType* imgf = dynamic_cast<ImageType*> (imgfalse.get());
+	BOOST_REQUIRE(imgf);
+	auto v_imgfalse = poutre::view(*imgf);
+
+	poutre::DenseImage<poutre::pINT32> imgout({ 5, 6 });
+	imgout.fill(4);
+	auto v_imgout = poutre::view(imgout);
+
+	poutre::ViewCompare_iii_dispatch(v_img, poutre::CompOpType::CompOpDiff, v_imgcomp, v_imgtrue, v_imgfalse, v_imgout);
+
+	std::string expected = "Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 4 4 4\
+ 2 2 2 4 4 4\
+";
+	auto imgstr = poutre::ImageToString(imgout);
+	BOOST_CHECK_EQUAL(imgstr, expected);
+
+}
+BOOST_AUTO_TEST_CASE(CompareOpiiiwholeimage_sup)
+{
+	auto imgin = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 5 5 5\
+ 1 1 1 5 5 5\
+");
+	using ImageType = poutre::DenseImage < poutre::pINT32>;
+	ImageType* img = dynamic_cast<ImageType*> (imgin.get());
+	BOOST_REQUIRE(img);
+	auto v_img = poutre::view(*img);
+
+	auto imgcomp = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 5 5 5\
+ 2 2 2 5 5 5\
+");
+	ImageType* imgc = dynamic_cast<ImageType*> (imgcomp.get());
+	BOOST_REQUIRE(imgc);
+	auto v_imgcomp = poutre::view(*imgc);
+
+	auto imgtrue = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+");
+	ImageType* imgt = dynamic_cast<ImageType*> (imgtrue.get());
+	BOOST_REQUIRE(imgt);
+	auto v_imgtrue = poutre::view(*imgt);
+
+
+	auto imgfalse = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+");
+	ImageType* imgf = dynamic_cast<ImageType*> (imgfalse.get());
+	BOOST_REQUIRE(imgf);
+	auto v_imgfalse = poutre::view(*imgf);
+
+	poutre::DenseImage<poutre::pINT32> imgout({ 5, 6 });
+	imgout.fill(4);
+	auto v_imgout = poutre::view(imgout);
+
+	poutre::ViewCompare_iii_dispatch(v_img, poutre::CompOpType::CompOpSup, v_imgcomp, v_imgtrue, v_imgfalse, v_imgout);
+
+	std::string expected = "Dense Scalar GINT32 2 5 6\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+";
+	auto imgstr = poutre::ImageToString(imgout);
+	BOOST_CHECK_EQUAL(imgstr, expected);
+
+}
+BOOST_AUTO_TEST_CASE(CompareOpiiiwholeimage_supequal)
+{
+	auto imgin = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 5 5 5\
+ 1 1 1 5 5 5\
+");
+	using ImageType = poutre::DenseImage < poutre::pINT32>;
+	ImageType* img = dynamic_cast<ImageType*> (imgin.get());
+	BOOST_REQUIRE(img);
+	auto v_img = poutre::view(*img);
+
+	auto imgcomp = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 5 5 5\
+ 2 2 2 5 5 5\
+");
+	ImageType* imgc = dynamic_cast<ImageType*> (imgcomp.get());
+	BOOST_REQUIRE(imgc);
+	auto v_imgcomp = poutre::view(*imgc);
+
+	auto imgtrue = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+");
+	ImageType* imgt = dynamic_cast<ImageType*> (imgtrue.get());
+	BOOST_REQUIRE(imgt);
+	auto v_imgtrue = poutre::view(*imgt);
+
+
+	auto imgfalse = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+");
+	ImageType* imgf = dynamic_cast<ImageType*> (imgfalse.get());
+	BOOST_REQUIRE(imgf);
+	auto v_imgfalse = poutre::view(*imgf);
+
+	poutre::DenseImage<poutre::pINT32> imgout({ 5, 6 });
+	imgout.fill(4);
+	auto v_imgout = poutre::view(imgout);
+
+	poutre::ViewCompare_iii_dispatch(v_img, poutre::CompOpType::CompOpSupEqual, v_imgcomp, v_imgtrue, v_imgfalse, v_imgout);
+
+	std::string expected = "Dense Scalar GINT32 2 5 6\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 2 2 2\
+ 4 4 4 2 2 2\
+";
+	auto imgstr = poutre::ImageToString(imgout);
+	BOOST_CHECK_EQUAL(imgstr, expected);
+
+}
+
+BOOST_AUTO_TEST_CASE(CompareOpiiiwholeimage_inf)
+{
+	auto imgin = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 5 5 5\
+ 1 1 1 5 5 5\
+");
+	using ImageType = poutre::DenseImage < poutre::pINT32>;
+	ImageType* img = dynamic_cast<ImageType*> (imgin.get());
+	BOOST_REQUIRE(img);
+	auto v_img = poutre::view(*img);
+
+	auto imgcomp = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 5 5 5\
+ 2 2 2 5 5 5\
+");
+	ImageType* imgc = dynamic_cast<ImageType*> (imgcomp.get());
+	BOOST_REQUIRE(imgc);
+	auto v_imgcomp = poutre::view(*imgc);
+
+	auto imgtrue = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+");
+	ImageType* imgt = dynamic_cast<ImageType*> (imgtrue.get());
+	BOOST_REQUIRE(imgt);
+	auto v_imgtrue = poutre::view(*imgt);
+
+
+	auto imgfalse = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+");
+	ImageType* imgf = dynamic_cast<ImageType*> (imgfalse.get());
+	BOOST_REQUIRE(imgf);
+	auto v_imgfalse = poutre::view(*imgf);
+
+	poutre::DenseImage<poutre::pINT32> imgout({ 5, 6 });
+	imgout.fill(4);
+	auto v_imgout = poutre::view(imgout);
+
+	poutre::ViewCompare_iii_dispatch(v_img, poutre::CompOpType::CompOpInf, v_imgcomp, v_imgtrue, v_imgfalse, v_imgout);
+
+	std::string expected = "Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 4 4 4\
+ 2 2 2 4 4 4\
+";
+	auto imgstr = poutre::ImageToString(imgout);
+	BOOST_CHECK_EQUAL(imgstr, expected);
+
+}
+
+BOOST_AUTO_TEST_CASE(CompareOpiiiwholeimage_infequal)
+{
+	auto imgin = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 5 5 5\
+ 1 1 1 5 5 5\
+");
+	using ImageType = poutre::DenseImage < poutre::pINT32>;
+	ImageType* img = dynamic_cast<ImageType*> (imgin.get());
+	BOOST_REQUIRE(img);
+	auto v_img = poutre::view(*img);
+
+	auto imgcomp = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 5 5 5\
+ 2 2 2 5 5 5\
+");
+	ImageType* imgc = dynamic_cast<ImageType*> (imgcomp.get());
+	BOOST_REQUIRE(imgc);
+	auto v_imgcomp = poutre::view(*imgc);
+
+	auto imgtrue = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+");
+	ImageType* imgt = dynamic_cast<ImageType*> (imgtrue.get());
+	BOOST_REQUIRE(imgt);
+	auto v_imgtrue = poutre::view(*imgt);
+
+
+	auto imgfalse = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+");
+	ImageType* imgf = dynamic_cast<ImageType*> (imgfalse.get());
+	BOOST_REQUIRE(imgf);
+	auto v_imgfalse = poutre::view(*imgf);
+
+	poutre::DenseImage<poutre::pINT32> imgout({ 5, 6 });
+	imgout.fill(4);
+	auto v_imgout = poutre::view(imgout);
+
+	poutre::ViewCompare_iii_dispatch(v_img, poutre::CompOpType::CompOpInfEqual, v_imgcomp, v_imgtrue, v_imgfalse, v_imgout);
+
+	std::string expected = "Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+";
+	auto imgstr = poutre::ImageToString(imgout);
+	BOOST_CHECK_EQUAL(imgstr, expected);
+
+}
 
 BOOST_AUTO_TEST_CASE(CompareOpiiswholeimage_equal)
 {
@@ -1302,11 +1838,270 @@ BOOST_AUTO_TEST_CASE(CompareOpiiswholeimage_equal)
     BOOST_CHECK_EQUAL(imgstr, expected);
 
 }
-//BOOST_AUTO_TEST_CASE(CompareOpiiswholeimage_notequal)
-//BOOST_AUTO_TEST_CASE(CompareOpiiswholeimage_sup)
-//BOOST_AUTO_TEST_CASE(CompareOpiiswholeimage_supequal)
-//BOOST_AUTO_TEST_CASE(CompareOpiiswholeimage_inf)
-//BOOST_AUTO_TEST_CASE(CompareOpiiswholeimage_infequal)
+BOOST_AUTO_TEST_CASE(CompareOpiiswholeimage_notequal)
+{
+	auto imgin = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 5 5 5\
+ 1 1 1 5 5 5\
+");
+	using ImageType = poutre::DenseImage < poutre::pINT32>;
+	ImageType* img = dynamic_cast<ImageType*> (imgin.get());
+	BOOST_REQUIRE(img);
+	auto v_img = poutre::view(*img);
+
+	auto imgcomp = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 5 5 5\
+ 2 2 2 5 5 5\
+");
+	ImageType* imgc = dynamic_cast<ImageType*> (imgcomp.get());
+	BOOST_REQUIRE(imgc);
+	auto v_imgcomp = poutre::view(*imgc);
+
+	auto imgtrue = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+");
+	ImageType* imgt = dynamic_cast<ImageType*> (imgtrue.get());
+	BOOST_REQUIRE(imgt);
+	auto v_imgtrue = poutre::view(*imgt);
+
+	poutre::DenseImage<poutre::pINT32> imgout({ 5, 6 });
+	imgout.fill(4);
+	auto v_imgout = poutre::view(imgout);
+
+	poutre::ViewCompare_iis_dispatch(v_img, poutre::CompOpType::CompOpDiff, v_imgcomp, v_imgtrue, 4, v_imgout);
+
+	std::string expected = "Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 4 4 4\
+ 2 2 2 4 4 4\
+";
+	auto imgstr = poutre::ImageToString(imgout);
+	BOOST_CHECK_EQUAL(imgstr, expected);
+
+}
+BOOST_AUTO_TEST_CASE(CompareOpiiswholeimage_sup)
+{
+	auto imgin = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 5 5 5\
+ 1 1 1 5 5 5\
+");
+	using ImageType = poutre::DenseImage < poutre::pINT32>;
+	ImageType* img = dynamic_cast<ImageType*> (imgin.get());
+	BOOST_REQUIRE(img);
+	auto v_img = poutre::view(*img);
+
+	auto imgcomp = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 5 5 5\
+ 2 2 2 5 5 5\
+");
+	ImageType* imgc = dynamic_cast<ImageType*> (imgcomp.get());
+	BOOST_REQUIRE(imgc);
+	auto v_imgcomp = poutre::view(*imgc);
+
+	auto imgtrue = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+");
+	ImageType* imgt = dynamic_cast<ImageType*> (imgtrue.get());
+	BOOST_REQUIRE(imgt);
+	auto v_imgtrue = poutre::view(*imgt);
+
+	poutre::DenseImage<poutre::pINT32> imgout({ 5, 6 });
+	imgout.fill(4);
+	auto v_imgout = poutre::view(imgout);
+
+	poutre::ViewCompare_iis_dispatch(v_img, poutre::CompOpType::CompOpSup, v_imgcomp, v_imgtrue, 4, v_imgout);
+
+	std::string expected = "Dense Scalar GINT32 2 5 6\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+";
+	auto imgstr = poutre::ImageToString(imgout);
+	BOOST_CHECK_EQUAL(imgstr, expected);
+
+}
+BOOST_AUTO_TEST_CASE(CompareOpiiswholeimage_supequal)
+{
+		auto imgin = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 5 5 5\
+ 1 1 1 5 5 5\
+");
+		using ImageType = poutre::DenseImage < poutre::pINT32>;
+		ImageType* img = dynamic_cast<ImageType*> (imgin.get());
+		BOOST_REQUIRE(img);
+		auto v_img = poutre::view(*img);
+
+		auto imgcomp = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 5 5 5\
+ 2 2 2 5 5 5\
+");
+		ImageType* imgc = dynamic_cast<ImageType*> (imgcomp.get());
+		BOOST_REQUIRE(imgc);
+		auto v_imgcomp = poutre::view(*imgc);
+
+		auto imgtrue = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+");
+		ImageType* imgt = dynamic_cast<ImageType*> (imgtrue.get());
+		BOOST_REQUIRE(imgt);
+		auto v_imgtrue = poutre::view(*imgt);
+
+		poutre::DenseImage<poutre::pINT32> imgout({ 5, 6 });
+		imgout.fill(4);
+		auto v_imgout = poutre::view(imgout);
+
+		poutre::ViewCompare_iis_dispatch(v_img, poutre::CompOpType::CompOpSupEqual, v_imgcomp, v_imgtrue, 4, v_imgout);
+
+		std::string expected = "Dense Scalar GINT32 2 5 6\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 4 4 4\
+ 4 4 4 2 2 2\
+ 4 4 4 2 2 2\
+";
+		auto imgstr = poutre::ImageToString(imgout);
+		BOOST_CHECK_EQUAL(imgstr, expected);
+
+
+}
+BOOST_AUTO_TEST_CASE(CompareOpiiswholeimage_inf)
+{
+	auto imgin = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 5 5 5\
+ 1 1 1 5 5 5\
+");
+	using ImageType = poutre::DenseImage < poutre::pINT32>;
+	ImageType* img = dynamic_cast<ImageType*> (imgin.get());
+	BOOST_REQUIRE(img);
+	auto v_img = poutre::view(*img);
+
+	auto imgcomp = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 5 5 5\
+ 2 2 2 5 5 5\
+");
+	ImageType* imgc = dynamic_cast<ImageType*> (imgcomp.get());
+	BOOST_REQUIRE(imgc);
+	auto v_imgcomp = poutre::view(*imgc);
+
+	auto imgtrue = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+");
+	ImageType* imgt = dynamic_cast<ImageType*> (imgtrue.get());
+	BOOST_REQUIRE(imgt);
+	auto v_imgtrue = poutre::view(*imgt);
+
+	poutre::DenseImage<poutre::pINT32> imgout({ 5, 6 });
+	imgout.fill(4);
+	auto v_imgout = poutre::view(imgout);
+
+	poutre::ViewCompare_iis_dispatch(v_img, poutre::CompOpType::CompOpInf, v_imgcomp, v_imgtrue, 4, v_imgout);
+
+	std::string expected = "Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 4 4 4\
+ 2 2 2 4 4 4\
+";
+	auto imgstr = poutre::ImageToString(imgout);
+	BOOST_CHECK_EQUAL(imgstr, expected);
+}
+BOOST_AUTO_TEST_CASE(CompareOpiiswholeimage_infequal)
+{
+		auto imgin = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 5 5 5\
+ 1 1 1 5 5 5\
+");
+		using ImageType = poutre::DenseImage < poutre::pINT32>;
+		ImageType* img = dynamic_cast<ImageType*> (imgin.get());
+		BOOST_REQUIRE(img);
+		auto v_img = poutre::view(*img);
+
+		auto imgcomp = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 5 5 5\
+ 2 2 2 5 5 5\
+");
+		ImageType* imgc = dynamic_cast<ImageType*> (imgcomp.get());
+		BOOST_REQUIRE(imgc);
+		auto v_imgcomp = poutre::view(*imgc);
+
+		auto imgtrue = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+");
+		ImageType* imgt = dynamic_cast<ImageType*> (imgtrue.get());
+		BOOST_REQUIRE(imgt);
+		auto v_imgtrue = poutre::view(*imgt);
+
+		poutre::DenseImage<poutre::pINT32> imgout({ 5, 6 });
+		imgout.fill(4);
+		auto v_imgout = poutre::view(imgout);
+
+		poutre::ViewCompare_iis_dispatch(v_img, poutre::CompOpType::CompOpInfEqual, v_imgcomp, v_imgtrue, 4, v_imgout);
+
+		std::string expected = "Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+";
+		auto imgstr = poutre::ImageToString(imgout);
+		BOOST_CHECK_EQUAL(imgstr, expected);
+}
 
 BOOST_AUTO_TEST_CASE(CompareOpisiwholeimage_equal)
 {
@@ -1361,12 +2156,335 @@ BOOST_AUTO_TEST_CASE(CompareOpisiwholeimage_equal)
     BOOST_CHECK_EQUAL(imgstr, expected);
 
 }
-//BOOST_AUTO_TEST_CASE(CompareOpisiwholeimage_notequal)
-//BOOST_AUTO_TEST_CASE(CompareOpisiwholeimage_sup)
-//BOOST_AUTO_TEST_CASE(CompareOpisiwholeimage_supequal)
-//BOOST_AUTO_TEST_CASE(CompareOpisiwholeimage_inf)
-//BOOST_AUTO_TEST_CASE(CompareOpisiwholeimage_infequal)
+BOOST_AUTO_TEST_CASE(CompareOpisiwholeimage_notequal)
+{
+	auto imgin = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 5 5 5\
+ 1 1 1 5 5 5\
+");
+	using ImageType = poutre::DenseImage < poutre::pINT32>;
+	ImageType* img = dynamic_cast<ImageType*> (imgin.get());
+	BOOST_REQUIRE(img);
+	auto v_img = poutre::view(*img);
 
+	auto imgcomp = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 5 5 5\
+ 2 2 2 5 5 5\
+");
+	ImageType* imgc = dynamic_cast<ImageType*> (imgcomp.get());
+	BOOST_REQUIRE(imgc);
+	auto v_imgcomp = poutre::view(*imgc);
+
+	auto imgfalse = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+");
+	ImageType* imgf = dynamic_cast<ImageType*> (imgfalse.get());
+	BOOST_REQUIRE(imgf);
+	auto v_imgfalse = poutre::view(*imgf);
+
+	poutre::DenseImage<poutre::pINT32> imgout({ 5, 6 });
+	imgout.fill(4);
+	auto v_imgout = poutre::view(imgout);
+
+	poutre::ViewCompare_isi_dispatch(v_img, poutre::CompOpType::CompOpDiff, v_imgcomp, 1, v_imgfalse, v_imgout);
+
+	std::string expected = "Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 2 2 2\
+ 1 1 1 2 2 2\
+";
+	auto imgstr = poutre::ImageToString(imgout);
+	BOOST_CHECK_EQUAL(imgstr, expected);
+
+}
+BOOST_AUTO_TEST_CASE(CompareOpisiwholeimage_sup)
+{
+	auto imgin = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 5 5 5\
+ 1 1 1 5 5 5\
+");
+	using ImageType = poutre::DenseImage < poutre::pINT32>;
+	ImageType* img = dynamic_cast<ImageType*> (imgin.get());
+	BOOST_REQUIRE(img);
+	auto v_img = poutre::view(*img);
+
+	auto imgcomp = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 5 5 5\
+ 2 2 2 5 5 5\
+");
+	ImageType* imgc = dynamic_cast<ImageType*> (imgcomp.get());
+	BOOST_REQUIRE(imgc);
+	auto v_imgcomp = poutre::view(*imgc);
+
+	auto imgfalse = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+");
+	ImageType* imgf = dynamic_cast<ImageType*> (imgfalse.get());
+	BOOST_REQUIRE(imgf);
+	auto v_imgfalse = poutre::view(*imgf);
+
+	poutre::DenseImage<poutre::pINT32> imgout({ 5, 6 });
+	imgout.fill(4);
+	auto v_imgout = poutre::view(imgout);
+
+	poutre::ViewCompare_isi_dispatch(v_img, poutre::CompOpType::CompOpSup, v_imgcomp, 1, v_imgfalse, v_imgout);
+
+	std::string expected = "Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+";
+	auto imgstr = poutre::ImageToString(imgout);
+	BOOST_CHECK_EQUAL(imgstr, expected);
+
+}
+BOOST_AUTO_TEST_CASE(CompareOpisiwholeimage_supequal)
+{
+	auto imgin = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 5 5 5\
+ 1 1 1 5 5 5\
+");
+	using ImageType = poutre::DenseImage < poutre::pINT32>;
+	ImageType* img = dynamic_cast<ImageType*> (imgin.get());
+	BOOST_REQUIRE(img);
+	auto v_img = poutre::view(*img);
+
+	auto imgcomp = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 5 5 5\
+ 2 2 2 5 5 5\
+");
+	ImageType* imgc = dynamic_cast<ImageType*> (imgcomp.get());
+	BOOST_REQUIRE(imgc);
+	auto v_imgcomp = poutre::view(*imgc);
+
+	auto imgfalse = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+");
+	ImageType* imgf = dynamic_cast<ImageType*> (imgfalse.get());
+	BOOST_REQUIRE(imgf);
+	auto v_imgfalse = poutre::view(*imgf);
+
+	poutre::DenseImage<poutre::pINT32> imgout({ 5, 6 });
+	imgout.fill(4);
+	auto v_imgout = poutre::view(imgout);
+
+	poutre::ViewCompare_isi_dispatch(v_img, poutre::CompOpType::CompOpSupEqual, v_imgcomp, 1, v_imgfalse, v_imgout);
+
+	std::string expected = "Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 1 1 1\
+ 2 2 2 1 1 1\
+";
+	auto imgstr = poutre::ImageToString(imgout);
+	BOOST_CHECK_EQUAL(imgstr, expected);
+}
+
+BOOST_AUTO_TEST_CASE(CompareOpisiwholeimage_inf)
+{
+	auto imgin = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 5 5 5\
+ 1 1 1 5 5 5\
+");
+	using ImageType = poutre::DenseImage < poutre::pINT32>;
+	ImageType* img = dynamic_cast<ImageType*> (imgin.get());
+	BOOST_REQUIRE(img);
+	auto v_img = poutre::view(*img);
+
+	auto imgcomp = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 5 5 5\
+ 2 2 2 5 5 5\
+");
+	ImageType* imgc = dynamic_cast<ImageType*> (imgcomp.get());
+	BOOST_REQUIRE(imgc);
+	auto v_imgcomp = poutre::view(*imgc);
+
+	auto imgfalse = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+");
+	ImageType* imgf = dynamic_cast<ImageType*> (imgfalse.get());
+	BOOST_REQUIRE(imgf);
+	auto v_imgfalse = poutre::view(*imgf);
+
+	poutre::DenseImage<poutre::pINT32> imgout({ 5, 6 });
+	imgout.fill(4);
+	auto v_imgout = poutre::view(imgout);
+
+	poutre::ViewCompare_isi_dispatch(v_img, poutre::CompOpType::CompOpInf, v_imgcomp, 1, v_imgfalse, v_imgout);
+
+	std::string expected = "Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 2 2 2\
+ 1 1 1 2 2 2\
+";
+	auto imgstr = poutre::ImageToString(imgout);
+	BOOST_CHECK_EQUAL(imgstr, expected);
+}
+
+BOOST_AUTO_TEST_CASE(CompareOpisiwholeimage_infequal)
+{
+	auto imgin = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 5 5 5\
+ 1 1 1 5 5 5\
+");
+	using ImageType = poutre::DenseImage < poutre::pINT32>;
+	ImageType* img = dynamic_cast<ImageType*> (imgin.get());
+	BOOST_REQUIRE(img);
+	auto v_img = poutre::view(*img);
+
+	auto imgcomp = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 5 5 5\
+ 2 2 2 5 5 5\
+");
+	ImageType* imgc = dynamic_cast<ImageType*> (imgcomp.get());
+	BOOST_REQUIRE(imgc);
+	auto v_imgcomp = poutre::view(*imgc);
+
+	auto imgfalse = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+ 2 2 2 2 2 2\
+");
+	ImageType* imgf = dynamic_cast<ImageType*> (imgfalse.get());
+	BOOST_REQUIRE(imgf);
+	auto v_imgfalse = poutre::view(*imgf);
+
+	poutre::DenseImage<poutre::pINT32> imgout({ 5, 6 });
+	imgout.fill(4);
+	auto v_imgout = poutre::view(imgout);
+
+	poutre::ViewCompare_isi_dispatch(v_img, poutre::CompOpType::CompOpInfEqual, v_imgcomp, 1, v_imgfalse, v_imgout);
+
+	std::string expected = "Dense Scalar GINT32 2 5 6\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+ 1 1 1 1 1 1\
+";
+	auto imgstr = poutre::ImageToString(imgout);
+	BOOST_CHECK_EQUAL(imgstr, expected);
+}
+
+BOOST_AUTO_TEST_CASE(benchmark)
+{
+	std::vector<poutre::pUINT8, boost::simd::allocator<poutre::pUINT8>> myvect(1024 * 1024);
+	std::vector<poutre::pUINT8, boost::simd::allocator<poutre::pUINT8>> myvectTrue(1024 * 1024);
+	std::vector<poutre::pUINT8, boost::simd::allocator<poutre::pUINT8>> myvectout(1024 * 1024);
+
+	auto v_img = poutre::array_view< poutre::pUINT8, 2>(myvect, { int(1024),int(1024) });
+	auto v_true = poutre::array_view< poutre::pUINT8, 2>(myvectTrue, { int(1024),int(1024) });
+	auto v_imgout = poutre::array_view< poutre::pUINT8, 2>(myvectout, { int(1024),int(1024) });
+
+	poutre::Timer timer;
+	timer.Start();
+	for(auto i=0;i<1000;++i)
+		poutre::ViewCompare_sss_func_helper(v_img, poutre::CompOpType::CompOpEqual, 1, 1, 0, v_imgout);
+	timer.Stop();
+	std::cout << "Time ViewCompare_sss_func_helper CompOpEqual " << timer << std::endl;
+	timer.Reset();
+
+	timer.Start();
+	for (auto i = 0; i<1000; ++i)
+		poutre::ViewCompare_iii_dispatch(v_img, poutre::CompOpType::CompOpEqual, v_true, v_true, v_true, v_imgout);
+	timer.Stop();
+	std::cout << "Time ViewCompare_iii_dispatch CompOpEqual " << timer << std::endl;
+	timer.Reset();
+}
+
+//namespace
+//{
+//	template<typename T>
+//	struct ArrayView
+//	{
+//
+//	};
+//
+//	template<typename T>
+//	struct StridedView
+//	{
+//
+//	};
+//
+//	template<typename T, template <typename> class ViewIn, typename = void>
+//	struct dispatch
+//	{
+//		void operator()(const ViewIn<T>& test)
+//		{
+//			std::cout << "Primary template";
+//		}
+//	};
+//
+//	template<typename T, template <typename> class ViewIn>
+//	struct dispatch<T,ViewIn,std::enable_if_t<std::is_same<ViewIn<T>,ArrayView<T>>::value>>
+//	{
+//		void operator()(const ViewIn<T>& test)
+//		{
+//			std::cout << "Sepecialize array view";
+//		}
+//	};
+//}
+//BOOST_AUTO_TEST_CASE(SNIFAE)
+//{
+//	ArrayView<int32_t> myview;
+//	dispatch<int32_t,ArrayView> op;
+//	op(myview);
+//}
 BOOST_AUTO_TEST_SUITE_END()
 
 
