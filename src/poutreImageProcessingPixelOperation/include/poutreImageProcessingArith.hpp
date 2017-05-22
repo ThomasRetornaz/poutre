@@ -26,31 +26,31 @@
 #include <poutreBase/poutreContainerView.hpp>
 #endif
 
+#ifndef POUTRE_IMAGEPROCESSING_UNARYOP_HPP__
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingUnaryOp.hpp>
+#endif
+#ifndef POUTRE_IMAGEPROCESSING_BINARYOP_HPP__
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingBinaryOp.hpp>
+#endif
 
-#include <boost/simd/sdk/simd/pack.hpp>
+#include <boost/simd/pack.hpp>
 //#include <boost/simd/include/functions/plus.hpp>
-#include <boost/simd/include/functions/adds.hpp> //saturated add
-#include <boost/simd/include/functions/subs.hpp> //saturated sub
-#include <boost/simd/include/functions/negs.hpp> //invert
-#include <boost/simd/include/functions/max.hpp> //sup
-#include <boost/simd/include/functions/min.hpp> //inf
+//https://developer.numscale.com/boost.simd/documentation/develop/group__group-arithmetic.html
+#include <boost/simd/function/saturated.hpp>
+#include <boost/simd/function/plus.hpp> //add
+#include <boost/simd/function/minus.hpp> //sub
+#include <boost/simd/function/negate.hpp> //invert
+#include <boost/simd/function/max.hpp> //sup
+#include <boost/simd/function/min.hpp> //inf
 
 namespace poutre
 {
     namespace bs = boost::simd;
 
 
-    /*  template<class ViewType>
-      using target_type = typename std::conditional<
-          is_strided<ViewType>::value,
-          typename ViewType::value_type,
-          typename boost::simd::pack<ViewType::value_type>
-      >;*/
-      /***********************************************************************************************************************************/
-      /*                                                          NEGATE/INVERT                                                         */
-      /**********************************************************************************************************************************/
+    /***********************************************************************************************************************************/
+    /*                                                          NEGATE/INVERT                                                         */
+    /**********************************************************************************************************************************/
     template< typename T1, typename T2, class tag>
     struct op_Invert;
 
@@ -73,7 +73,7 @@ namespace poutre
         template< typename U>
         POUTRE_ALWAYS_INLINE U operator()(U const &a0) POUTRE_NOEXCEPT
         {
-            return bs::negs(a0);
+            return -a0;
         }
     };
 
@@ -113,7 +113,7 @@ namespace poutre
         template< typename U>
         POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) POUTRE_NOEXCEPT
         {
-            return bs::subs(a0, a1);
+            return bs::saturated_(bs::minus)(a0, a1);
         }
     };
 
@@ -153,7 +153,7 @@ namespace poutre
         template< typename U>
         POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) POUTRE_NOEXCEPT
         {
-            return bs::adds(a0, a1);
+            return bs::saturated_(bs::plus)(a0, a1);
         }
     };
 
@@ -202,7 +202,7 @@ namespace poutre
         template< typename U>
         POUTRE_ALWAYS_INLINE U operator()(U const &a0) POUTRE_NOEXCEPT
         {
-            return bs::adds(a0, m_val);
+            return bs::saturated_(bs::plus)(a0, m_val);
         }
     };
 
@@ -252,7 +252,7 @@ namespace poutre
         template< typename U>
         U operator()(U const &a0) POUTRE_NOEXCEPT
         {
-            return bs::subs(a0, m_val);
+            return bs::saturated_(bs::minus)(a0, m_val);
         }
     };
 

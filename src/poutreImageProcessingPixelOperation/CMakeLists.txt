@@ -39,7 +39,7 @@ target_link_libraries(PoutreIPPixelProcessing
   PUBLIC ${Boost_LOG_SETUP_LIBRARY}
   PUBLIC jsoncpp 
   #INTERFACE Eigen  
-  INTERFACE BoostSimd 
+  PUBLIC BoostSimd 
   PUBLIC   PoutreBase 
   PUBLIC   PoutreIPCore 
   )

@@ -23,7 +23,7 @@
 #endif
 
 #include <algorithm>//transform
-#include <boost/simd/sdk/simd/algorithm.hpp>//"simd" transform
+#include <boost/simd/algorithm.hpp>//"simd" transform
 
 
 namespace poutre

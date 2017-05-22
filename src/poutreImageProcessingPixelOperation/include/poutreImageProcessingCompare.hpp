@@ -25,18 +25,38 @@
 #include <poutreBase/poutreContainerView.hpp>
 #endif
 
+#ifndef POUTRE_IMAGEPROCESSING_UNARYOP_HPP__
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingUnaryOp.hpp>
+#endif
+#ifndef POUTRE_IMAGEPROCESSING_BINARYOP_HPP__
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingBinaryOp.hpp>
+#endif
+#ifndef POUTRE_IMAGEPROCESSING_TERNARYOP_HPP__
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingTernaryOp.hpp>
+#endif
+
+#ifndef POUTRE_IMAGEPROCESSING_QUATERNARYOP_HPP__
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingQuaternaryOp.hpp>
+#endif
 
-
+//simd part
+//https://developer.numscale.com/boost.simd/documentation/develop/group__group-predicates.html
+#include <boost/simd/function/is_less.hpp>
+#include <boost/simd/function/is_less_equal.hpp>
+#include <boost/simd/function/is_greater.hpp>
+#include <boost/simd/function/is_greater_equal.hpp>
+#include <boost/simd/function/is_equal.hpp>
+#include <boost/simd/function/is_not_equal.hpp>
+#include <boost/simd/algorithm.hpp>//"simd" transform
+#include <boost/simd/logical.hpp>
 
 namespace poutre
 {
+    namespace bs = boost::simd;
+
     /******************************************Operator base ******************************************************/
     //!Operator equal
-    template< typename T1>
+    template< typename T1, class tag = tag_SIMD_disabled>
     struct OpCompEqualValue
     {
         T1 m_val;
@@ -47,8 +67,22 @@ namespace poutre
         }
     };
 
-    //!Operator diff
     template< typename T1>
+    struct OpCompEqualValue<T1, tag_SIMD_enabled>
+    {
+        using pack_t = bs::pack<T1>;
+        using logical_t = bs::pack<bs::logical<T1>>;
+        pack_t m_val_pack;
+        OpCompEqualValue(T1 ival) :m_val_pack(ival) {}
+        template< typename U>
+        POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR logical_t operator()(U lhs) const POUTRE_NOEXCEPT
+        {
+            return  bs::is_equal(lhs, m_val_pack);
+        }
+    };
+
+    //!Operator diff
+    template< typename T1, class tag = tag_SIMD_disabled>
     struct OpCompDiffValue
     {
         T1 m_val;
@@ -59,8 +93,22 @@ namespace poutre
         }
     };
 
-    //!Operator Sup
     template< typename T1>
+    struct OpCompDiffValue<T1, tag_SIMD_enabled>
+    {
+        using pack_t = bs::pack<T1>;
+        using logical_t = bs::pack<bs::logical<T1>>;
+        pack_t m_val_pack;
+        OpCompDiffValue(T1 ival) :m_val_pack(ival) {}
+        template< typename U>
+        POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR logical_t operator()(U lhs) const POUTRE_NOEXCEPT
+        {
+            return  bs::is_not_equal(lhs, m_val_pack);
+        }
+    };
+
+    //!Operator Sup
+    template< typename T1, class tag = tag_SIMD_disabled>
     struct OpCompSupValue
     {
         T1 m_val;
@@ -71,8 +119,22 @@ namespace poutre
         }
     };
 
-    //!Operator SupEqual
     template< typename T1>
+    struct OpCompSupValue<T1, tag_SIMD_enabled>
+    {
+        using pack_t = bs::pack<T1>;
+        using logical_t = bs::pack<bs::logical<T1>>;
+        pack_t m_val_pack;
+        OpCompSupValue(T1 ival) :m_val_pack(ival) {}
+        template< typename U>
+        POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR logical_t operator()(U lhs) const POUTRE_NOEXCEPT
+        {
+            return  bs::is_greater(lhs, m_val_pack);
+        }
+    };
+
+    //!Operator SupEqual
+    template< typename T1, class tag = tag_SIMD_disabled>
     struct OpCompSupEqualValue
     {
         T1 m_val;
@@ -83,8 +145,22 @@ namespace poutre
         }
     };
 
-    //!Operator Inf
     template< typename T1>
+    struct OpCompSupEqualValue<T1, tag_SIMD_enabled>
+    {
+        using pack_t = bs::pack<T1>;
+        using logical_t = bs::pack<bs::logical<T1>>;
+        pack_t m_val_pack;
+        OpCompSupEqualValue(T1 ival) :m_val_pack(ival) {}
+        template< typename U>
+        POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR logical_t operator()(U lhs) const POUTRE_NOEXCEPT
+        {
+            return  bs::is_greater_equal(lhs, m_val_pack);
+        }
+    };
+
+    //!Operator Inf
+    template< typename T1, class tag = tag_SIMD_disabled>
     struct OpCompInfValue
     {
         T1 m_val;
@@ -95,8 +171,22 @@ namespace poutre
         }
     };
 
+    template< typename T1>
+    struct OpCompInfValue<T1, tag_SIMD_enabled>
+    {
+        using pack_t = bs::pack<T1>;
+        using logical_t = bs::pack<bs::logical<T1>>;
+        pack_t m_val_pack;
+        OpCompInfValue(T1 ival) :m_val_pack(ival) {}
+        template< typename U>
+        POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR logical_t operator()(U lhs) const POUTRE_NOEXCEPT
+        {
+            return  bs::is_less(lhs, m_val_pack);
+        }
+    };
+
     //!Operator InfEqual
-    template<typename T1>
+    template< typename T1, class tag = tag_SIMD_disabled>
     struct OpCompInfEqualValue
     {
         T1 m_val;
@@ -107,6 +197,19 @@ namespace poutre
         }
     };
 
+    template< typename T1>
+    struct OpCompInfEqualValue<T1, tag_SIMD_enabled>
+    {
+        using pack_t = bs::pack<T1>;
+        using logical_t = bs::pack<bs::logical<T1>>;
+        pack_t m_val_pack;
+        OpCompInfEqualValue(T1 ival) :m_val_pack(ival) {}
+        template< typename U>
+        POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR logical_t operator()(U lhs) const POUTRE_NOEXCEPT
+        {
+            return  bs::is_less_equal(lhs, m_val_pack);
+        }
+    };
     /*************************************************************************************************************************************/
     /*                                                      SSS                                                                          */
     /*************************************************************************************************************************************/
@@ -125,59 +228,239 @@ namespace poutre
 
     };
 
-    template<typename Tin, typename Tout, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, class Op, template <typename, ptrdiff_t> class View2>
-    void t_ViewCompare_sss(
-        const View1<Tin, Rank>& i_vin,
-        Op i_op,
-        typename boost::call_traits<Tout>::param_type i_valtrue,
-        typename boost::call_traits<Tout>::param_type i_valfalse,
-        View2<Tout, Rank>& o_vout)
+    template <typename T, class CompareOpSimd, class CompareOp>
+    struct compare_sss_simd
     {
-        using myop = compare_sss<Tin, Tout, Op>;
-        myop op(i_valtrue, i_valfalse, i_op);
-        PixelWiseUnaryOp(i_vin, op, o_vout);
-    }
+		const CompareOpSimd copsimd;
+        const CompareOp  cop;
+        using pack_t = bs::pack<T>;
+        using logical_t = bs::pack<bs::logical<T>>;
+        pack_t m_valtrue_pack, m_valfalse_pack;
+		T m_valtrue, m_valfalse;
+        compare_sss_simd(const T& i_valtrue, const T& i_valfalse) : copsimd(),cop(), m_valtrue_pack(i_valtrue), m_valfalse_pack(i_valfalse),m_valtrue(i_valtrue),m_valfalse(i_valfalse) {}
+		compare_sss_simd(const T& i_valtrue, const T& i_valfalse, const CompareOpSimd& opsimd, const CompareOp& op) :copsimd(opsimd), cop(op), m_valtrue_pack(i_valtrue), m_valfalse_pack(i_valfalse), m_valtrue(i_valtrue), m_valfalse(i_valfalse) {}
 
-    template<typename Tin, typename Tout, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2>
-    void ViewCompare_sss_dispatch(
-        const View1<Tin, Rank>& i_vin,
+        T operator()(T i_val) const POUTRE_NOEXCEPT 
+        {
+            std::cout << "call unary" << std::endl;
+            return (cop(i_val) ? m_valtrue : m_valfalse);
+        }
+
+        template<typename U>
+        U operator()(U i_val) const POUTRE_NOEXCEPT //TODO inline ?        
+        {          
+            std::cout << "call unary simd" << std::endl;
+            logical_t v_res = copsimd(i_val);
+            return bs::if_else(v_res, m_valtrue_pack, m_valfalse_pack);
+        }
+
+    };
+
+    template<typename Tin, typename Tout, ptrdiff_t Rank, template <typename, ptrdiff_t> class ViewIn, class Op, template <typename, ptrdiff_t> class ViewOut>
+    struct viewCompare_sss
+    {
+        void operator()(const ViewIn<Tin, Rank>& i_vin,
+            Op i_op,
+            typename boost::call_traits<Tout>::param_type i_valtrue,
+            typename boost::call_traits<Tout>::param_type i_valfalse,
+            ViewOut<Tout, Rank>& o_vout)
+        {
+            using myop = compare_sss<Tin, Tout, Op>;
+            myop op(i_valtrue, i_valfalse, i_op);
+            PixelWiseUnaryOp(i_vin, op, o_vout);
+        }
+    };
+
+    template<typename T, ptrdiff_t Rank, class OpSimd,class Op>
+    struct viewCompare_sss_simd
+    {
+        void operator()(const array_view<T, Rank>& i_vin,
+			OpSimd i_opsimd,
+            Op i_op,
+            typename boost::call_traits<T>::param_type i_valtrue,
+            typename boost::call_traits<T>::param_type i_valfalse,
+            array_view<T, Rank>& o_vout)
+        {
+            using functor = compare_sss_simd<T, OpSimd, Op>;
+            functor f(i_valtrue, i_valfalse, i_opsimd, i_op);
+            auto begin = i_vin.data();
+            auto end = i_vin.data() + i_vin.size();
+            auto out = o_vout.data();
+            bs::transform(begin, end, out, f);
+        }
+
+    };
+
+    //primary template
+    template<typename Tin, typename Tout, ptrdiff_t Rank, template <typename, ptrdiff_t> class ViewIn, template <typename, ptrdiff_t> class ViewOut,typename=void>
+    struct ViewCompare_sss_dispatch
+    {
+        void operator()(
+            const ViewIn<Tin, Rank>& i_vin,
+            CompOpType compOpType,
+            typename boost::call_traits<Tin>::param_type i_compval,
+            typename boost::call_traits<Tout>::param_type i_valtrue,
+            typename boost::call_traits<Tout>::param_type i_valfalse,
+            ViewOut<Tout, Rank>& o_vout)
+        {
+            switch (compOpType)
+            {
+            case CompOpType::CompOpEqual:
+            {
+                OpCompEqualValue<Tin> myop(i_compval);
+                return viewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompEqualValue<Tin>, ViewOut>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+            }break;
+            case CompOpType::CompOpDiff:
+            {
+                OpCompDiffValue<Tin> myop(i_compval);
+                return viewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompDiffValue<Tin>, ViewOut>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+            }break;
+            case CompOpType::CompOpSup:
+            {
+                OpCompSupValue<Tin> myop(i_compval);
+                return viewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompSupValue<Tin>, ViewOut>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+            }break;
+            case CompOpType::CompOpSupEqual:
+            {
+                OpCompSupEqualValue<Tin> myop(i_compval);
+                return viewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompSupEqualValue<Tin>, ViewOut>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+            }break;
+            case CompOpType::CompOpInf:
+            {
+                OpCompInfValue<Tin> myop(i_compval);
+                return viewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompInfValue<Tin>, ViewOut>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+            }break;
+            case CompOpType::CompOpInfEqual:
+            {
+                OpCompInfEqualValue<Tin> myop(i_compval);
+                return viewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompInfEqualValue<Tin>, ViewOut>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+            }break;
+            default:
+            {
+                POUTRE_RUNTIME_ERROR("ViewCompare_sss_dispatch CompOpType not implemented");
+            }
+            }
+        }
+    };
+	
+    //SIMD Specialization arithmetic type,same type and both array_view
+	template<typename T, ptrdiff_t Rank, template <typename, ptrdiff_t> class ViewIn, template <typename, ptrdiff_t> class ViewOut>
+	struct ViewCompare_sss_dispatch<T, T, Rank, ViewIn, ViewOut,
+		std::enable_if_t<
+		std::is_arithmetic<T>::value &&
+		(std::is_same< ViewIn<T,Rank>, array_view<T, Rank> >::value || std::is_same< ViewIn<T,Rank>, carray_view<T, Rank> >::value) 
+		&& std::is_same< ViewOut<T, Rank>, array_view<T, Rank> >::value>
+	>
+    {
+        void operator()(
+            const ViewIn<T, Rank>& i_vin,
+            CompOpType compOpType,
+            typename boost::call_traits<T>::param_type i_compval,
+            typename boost::call_traits<T>::param_type i_valtrue,
+            typename boost::call_traits<T>::param_type i_valfalse,
+			ViewOut<T, Rank>& o_vout)
+        {
+            switch (compOpType)
+            {
+            case CompOpType::CompOpEqual:
+            {
+                OpCompEqualValue<T, tag_SIMD_enabled> myopsimd(i_compval);
+				OpCompEqualValue<T> myop(i_compval);
+                return viewCompare_sss_simd<T, Rank, OpCompEqualValue<T, tag_SIMD_enabled>,OpCompEqualValue<T>>()(i_vin, myopsimd, myop,i_valtrue, i_valfalse, o_vout);
+            }break;
+            case CompOpType::CompOpDiff:
+            {
+                OpCompDiffValue<T, tag_SIMD_enabled> myopsimd(i_compval);
+				OpCompDiffValue<T> myop(i_compval);
+                return viewCompare_sss_simd<T, Rank, OpCompDiffValue<T, tag_SIMD_enabled>, OpCompDiffValue<T>>()(i_vin, myopsimd, myop, i_valtrue, i_valfalse, o_vout);
+            }break;
+            case CompOpType::CompOpSup:
+            {
+                OpCompSupValue<T, tag_SIMD_enabled> myopsimd(i_compval);
+				OpCompSupValue<T> myop(i_compval);
+                return viewCompare_sss_simd<T, Rank, OpCompSupValue<T, tag_SIMD_enabled>, OpCompSupValue<T>>()(i_vin, myopsimd, myop, i_valtrue, i_valfalse, o_vout);
+            }break;
+            case CompOpType::CompOpSupEqual:
+            {
+                OpCompSupEqualValue<T, tag_SIMD_enabled> myopsimd(i_compval);
+				OpCompSupEqualValue<T> myop(i_compval);
+                return viewCompare_sss_simd<T, Rank, OpCompSupEqualValue<T, tag_SIMD_enabled>,OpCompSupEqualValue<T>>()(i_vin, myopsimd, myop, i_valtrue, i_valfalse, o_vout);
+            }break;
+            case CompOpType::CompOpInf:
+            {
+                OpCompInfValue<T, tag_SIMD_enabled> myopsimd(i_compval);
+				OpCompInfValue<T> myop(i_compval);
+                return viewCompare_sss_simd<T, Rank, OpCompInfValue<T, tag_SIMD_enabled>, OpCompInfValue<T>>()(i_vin, myopsimd, myop, i_valtrue, i_valfalse, o_vout);
+            }break;
+            case CompOpType::CompOpInfEqual:
+            {
+                OpCompInfEqualValue<T, tag_SIMD_enabled> myopsimd(i_compval);
+				OpCompInfEqualValue<T> myop(i_compval);
+                return viewCompare_sss_simd<T, Rank, OpCompInfEqualValue<T, tag_SIMD_enabled>,OpCompInfEqualValue<T>>()(i_vin, myopsimd, myop, i_valtrue, i_valfalse, o_vout);
+            }break;
+            default:
+            {
+                POUTRE_RUNTIME_ERROR("ViewCompare_sss_dispatch CompOpType not implemented");
+            }
+            }
+        }
+    };
+	
+    template<typename Tin, typename Tout, ptrdiff_t Rank, template <typename, ptrdiff_t> class ViewIn, template <typename, ptrdiff_t> class ViewOut>
+    void ViewCompare_sss_func_helper(
+        const ViewIn<Tin, Rank>& i_vin,
         CompOpType compOpType,
         typename boost::call_traits<Tin>::param_type i_compval,
         typename boost::call_traits<Tout>::param_type i_valtrue,
         typename boost::call_traits<Tout>::param_type i_valfalse,
-        View2<Tout, Rank>& o_vout)
+        ViewOut<Tout, Rank>& o_vout)
+    {
+		ViewCompare_sss_dispatch<Tin, Tout, Rank, ViewIn, ViewOut> op;
+        op(i_vin, compOpType, i_compval, i_valtrue, i_valfalse, o_vout);
+    }
+    /*
+    //default
+    template<typename Tin, typename Tout, ptrdiff_t Rank, template <typename, ptrdiff_t> class ViewIn, template <typename, ptrdiff_t> class ViewOut>
+    typename std::enable_if<!(std::is_arithmetic<Tin>::value && std::is_arithmetic<Tout>::value && std::is_same<Tin, Tout>::value),void>::type
+        ViewCompare_sss_dispatch(
+        const ViewIn<Tin, Rank>& i_vin,
+        CompOpType compOpType,
+        typename boost::call_traits<Tin>::param_type i_compval,
+        typename boost::call_traits<Tout>::param_type i_valtrue,
+        typename boost::call_traits<Tout>::param_type i_valfalse,
+        ViewOut<Tout, Rank>& o_vout)
     {
         switch (compOpType)
         {
         case CompOpType::CompOpEqual:
         {
             OpCompEqualValue<Tin> myop(i_compval);
-            return t_ViewCompare_sss(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+            return viewCompare_sss<Tin,Tout,Rank,ViewIn,OpCompEqualValue<Tin>,ViewOut>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
         }break;
         case CompOpType::CompOpDiff:
         {
             OpCompDiffValue<Tin> myop(i_compval);
-            return t_ViewCompare_sss(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+            return viewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompDiffValue<Tin>, ViewOut>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
         }break;
         case CompOpType::CompOpSup:
         {
             OpCompSupValue<Tin> myop(i_compval);
-            return t_ViewCompare_sss(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+            return viewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompSupValue<Tin>, ViewOut>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
         }break;
         case CompOpType::CompOpSupEqual:
         {
             OpCompSupEqualValue<Tin> myop(i_compval);
-            return t_ViewCompare_sss(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+            return viewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompSupEqualValue<Tin>, ViewOut>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
         }break;
         case CompOpType::CompOpInf:
         {
             OpCompInfValue<Tin> myop(i_compval);
-            return t_ViewCompare_sss(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+            return viewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompInfValue<Tin>, ViewOut>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
         }break;
         case CompOpType::CompOpInfEqual:
         {
             OpCompInfEqualValue<Tin> myop(i_compval);
-            return t_ViewCompare_sss(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+            return viewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompInfEqualValue<Tin>, ViewOut>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
         }break;
         default:
         {
@@ -185,6 +468,60 @@ namespace poutre
         }
         }
     }
+
+
+
+    //overload same type and arithmetic
+    template<typename Tin, typename Tout, ptrdiff_t Rank, template <typename, ptrdiff_t> class ViewIn, template <typename, ptrdiff_t> class ViewOut>
+    typename std::enable_if < (std::is_arithmetic<Tin>::value && std::is_arithmetic<Tout>::value && std::is_same<Tin, Tout>::value), void > ::type
+        ViewCompare_sss_dispatch(
+            const ViewIn<Tin, Rank>& i_vin,
+            CompOpType compOpType,
+            typename boost::call_traits<Tin>::param_type i_compval,
+            typename boost::call_traits<Tout>::param_type i_valtrue,
+            typename boost::call_traits<Tout>::param_type i_valfalse,
+            ViewOut<Tout, Rank>& o_vout)
+    {
+        switch (compOpType)
+        {
+        case CompOpType::CompOpEqual:
+        {
+            OpCompEqualValue<Tin,tag_SIMD_enabled> myop(i_compval);
+            return viewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompEqualValue<Tin>, ViewOut>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+        }break;
+        case CompOpType::CompOpDiff:
+        {
+            OpCompDiffValue<Tin, tag_SIMD_enabled> myop(i_compval);
+            return viewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompDiffValue<Tin>, ViewOut>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+        }break;
+        case CompOpType::CompOpSup:
+        {
+            OpCompSupValue<Tin, tag_SIMD_enabled> myop(i_compval);
+            return viewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompSupValue<Tin>, ViewOut>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+        }break;
+        case CompOpType::CompOpSupEqual:
+        {
+            OpCompSupEqualValue<Tin, tag_SIMD_enabled> myop(i_compval);
+            return viewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompSupEqualValue<Tin>, ViewOut>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+        }break;
+        case CompOpType::CompOpInf:
+        {
+            OpCompInfValue<Tin, tag_SIMD_enabled> myop(i_compval);
+            return viewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompInfValue<Tin>, ViewOut>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+        }break;
+        case CompOpType::CompOpInfEqual:
+        {
+            OpCompInfEqualValue<Tin, tag_SIMD_enabled> myop(i_compval);
+            return viewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompInfEqualValue<Tin>, ViewOut>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+        }break;
+        default:
+        {
+            POUTRE_RUNTIME_ERROR("ViewCompare_sss_dispatch CompOpType not implemented");
+        }
+        }
+    }*/
+
+
     /*************************************************************************************************************************************/
     /*                                                      III                                                                          */
     /*************************************************************************************************************************************/
