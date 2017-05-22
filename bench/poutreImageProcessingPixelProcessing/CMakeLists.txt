@@ -10,6 +10,7 @@ set(PoutreImageProcessingPixelProcessingBenchSRC
   ${PoutreImageProcessingPixelOperationBenchSubdirectory}/main.hpp
   ${PoutreImageProcessingPixelOperationBenchSubdirectory}/main.cpp
   ${PoutreImageProcessingPixelOperationBenchSubdirectory}/arithmetics.cpp
+  ${PoutreImageProcessingPixelOperationBenchSubdirectory}/compare.cpp
   )
 
 #UGLY fix this later
@@ -22,6 +23,7 @@ set_target_properties(PoutreIPPixelProcessingBenchs PROPERTIES
 IF(WIN32)
 target_link_libraries(PoutreIPPixelProcessingBenchs 
   PUBLIC benchmark  
+  PUBLIC BoostSimd
   PUBLIC shlwapi.lib
   #PUBLIC PoutreIPPixelProcessing
   PUBLIC ${Boost_SYSTEM_LIBRARY} 
@@ -29,6 +31,7 @@ target_link_libraries(PoutreIPPixelProcessingBenchs
 ELSE()
 target_link_libraries(PoutreIPPixelProcessingBenchs 
   PUBLIC benchmark  
+  PUBLIC BoostSimd
   #PUBLIC PoutreIPPixelProcessing 
   PUBLIC ${Boost_SYSTEM_LIBRARY}   
   )
