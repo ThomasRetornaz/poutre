@@ -49,7 +49,7 @@ namespace poutre
 			}
 
 			pUINT8* ptr_buffer = reinterpret_cast<pUINT8*>(buffer);
-			memcpy(ptr_buffer, im.datas(), size_buffer);
+			memcpy(ptr_buffer, im.data(), size_buffer);
 		}
 
 		//compound 3 Interleaved or planes by planes ?
@@ -172,7 +172,7 @@ namespace poutre
 			}
 			
 			const pUINT8* ptr_buffer = reinterpret_cast<const pUINT8*>(buffer);
-		    memcpy(im.datas(), ptr_buffer, size_buffer);
+		    memcpy(im.data(), ptr_buffer, size_buffer);
 		}
 
 		template <typename valuetype>

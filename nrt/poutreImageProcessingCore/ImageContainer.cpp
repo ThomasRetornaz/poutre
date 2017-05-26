@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(clone)
     //!= address
     BOOST_CHECK_NE(cloned, &(img));
     //!= data address
-    BOOST_CHECK_NE(&(*((*cloned).datas())), &(*(img.datas())));
+    BOOST_CHECK_NE(&(*((*cloned).data())), &(*(img.data())));
     BOOST_CHECK_EQUAL((*cloned).GetPType(), poutre::PType::PType_GrayUINT8);
     BOOST_CHECK_EQUAL((*cloned).GetCType(), poutre::CompoundType::CompoundType_Scalar);
     BOOST_CHECK_EQUAL((*cloned).GetImgType(), poutre::ImgType::ImgType_Dense);

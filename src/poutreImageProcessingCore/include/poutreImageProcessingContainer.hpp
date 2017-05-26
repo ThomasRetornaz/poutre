@@ -214,9 +214,9 @@ public:
     return m_data[m_numelemwithpaddingifany - 1];
   }
 
-  pointer datas() POUTRE_NOEXCEPT { return m_data; }
+  pointer data() POUTRE_NOEXCEPT { return m_data; }
 
-  const_pointer datas() const POUTRE_NOEXCEPT { return m_data; }
+  const_pointer data() const POUTRE_NOEXCEPT { return m_data; }
 
   // Modifiers
 
@@ -391,18 +391,14 @@ public:
 
 template <class valuetype, std::ptrdiff_t Rank>
 poutre::array_view<valuetype, Rank> view(DenseImage<valuetype, Rank> &iImg) {
-  return poutre::array_view<valuetype, Rank>(iImg.datas(), iImg.bound());
+  return poutre::array_view<valuetype, Rank>(iImg.data(), iImg.bound());
 }
 
 template <class valuetype, std::ptrdiff_t Rank>
-poutre::carray_view<valuetype, Rank>
+poutre::array_view<const valuetype, Rank>
 view(const DenseImage<valuetype, Rank> &iImg) {
-  return poutre::carray_view<valuetype, Rank>(iImg.datas(), iImg.bound());
+  return poutre::array_view<const valuetype, Rank>(iImg.data(), iImg.bound());
 
-//template <class valuetype, std::ptrdiff_t Rank>
-//const poutre::array_view<valuetype, Rank>
-//view(const DenseImage<valuetype, Rank> &iImg) {
-//  return poutre::array_view<valuetype, Rank>(iImg.datas(), iImg.bound());
 }
 
 // todo define macros
