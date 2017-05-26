@@ -2423,24 +2423,25 @@ BOOST_AUTO_TEST_CASE(CompareOpisiwholeimage_infequal)
 
 BOOST_AUTO_TEST_CASE(benchmark)
 {
-	std::vector<poutre::pUINT8, boost::simd::allocator<poutre::pUINT8>> myvect(1024 * 1024);
-	std::vector<poutre::pUINT8, boost::simd::allocator<poutre::pUINT8>> myvectTrue(1024 * 1024);
+	const std::vector<poutre::pUINT8, boost::simd::allocator<poutre::pUINT8>> myvect(1024 * 1024);
+	const std::vector<poutre::pUINT8, boost::simd::allocator<poutre::pUINT8>> myvectTrue(1024 * 1024);
 	std::vector<poutre::pUINT8, boost::simd::allocator<poutre::pUINT8>> myvectout(1024 * 1024);
 
-	auto v_img = poutre::array_view< poutre::pUINT8, 2>(myvect, { int(1024),int(1024) });
-	auto v_true = poutre::array_view< poutre::pUINT8, 2>(myvectTrue, { int(1024),int(1024) });
+	auto v_img = poutre::array_view< const poutre::pUINT8, 2>(myvect, { int(1024),int(1024) });
+	auto v_true = poutre::array_view< const poutre::pUINT8, 2>(myvectTrue, { int(1024),int(1024) });
 	auto v_imgout = poutre::array_view< poutre::pUINT8, 2>(myvectout, { int(1024),int(1024) });
 
+	auto iteration = 1;
 	poutre::Timer timer;
 	timer.Start();
-	for(auto i=0;i<1000;++i)
+	for(auto i=0;i<iteration;++i)
 		poutre::ViewCompare_sss_func_helper(v_img, poutre::CompOpType::CompOpEqual, 1, 1, 0, v_imgout);
 	timer.Stop();
 	std::cout << "Time ViewCompare_sss_func_helper CompOpEqual " << timer << std::endl;
 	timer.Reset();
 
 	timer.Start();
-	for (auto i = 0; i<1000; ++i)
+	for (auto i = 0; i<iteration; ++i)
 		poutre::ViewCompare_iii_dispatch(v_img, poutre::CompOpType::CompOpEqual, v_true, v_true, v_true, v_imgout);
 	timer.Stop();
 	std::cout << "Time ViewCompare_iii_dispatch CompOpEqual " << timer << std::endl;

@@ -64,7 +64,6 @@ namespace poutre
             return -a0;
         }
     };
-
     template< typename T>
     struct op_Invert<T, T, tag_SIMD_enabled>
     {

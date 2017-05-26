@@ -242,14 +242,13 @@ namespace poutre
 
         T operator()(T i_val) const POUTRE_NOEXCEPT 
         {
-            std::cout << "call unary" << std::endl;
+            //std::cout << "call unary" << std::endl;
             return (cop(i_val) ? m_valtrue : m_valfalse);
         }
 
         template<typename U>
         U operator()(U i_val) const POUTRE_NOEXCEPT //TODO inline ?        
         {          
-            std::cout << "call unary simd" << std::endl;
             logical_t v_res = copsimd(i_val);
             return bs::if_else(v_res, m_valtrue_pack, m_valfalse_pack);
         }
@@ -348,7 +347,7 @@ namespace poutre
 	struct ViewCompare_sss_dispatch<T, T, Rank, ViewIn, ViewOut,
 		std::enable_if_t<
 		std::is_arithmetic<T>::value &&
-		(std::is_same< ViewIn<T,Rank>, array_view<T, Rank> >::value || std::is_same< ViewIn<T,Rank>, carray_view<T, Rank> >::value) 
+		(std::is_same< ViewIn<T,Rank>, array_view<T, Rank>>::value || std::is_same< ViewIn<T,Rank>, array_view<const T, Rank> >::value)
 		&& std::is_same< ViewOut<T, Rank>, array_view<T, Rank> >::value>
 	>
     {

@@ -109,9 +109,18 @@ namespace poutre
     }
 
     // primary use strided view 
-    template<typename T1, typename T2, typename Tout, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, template <typename, ptrdiff_t> class ViewOut, template <typename, typename, typename, class TAG> class BinOp>
+    template<typename T1, typename T2, typename Tout, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, template <typename, ptrdiff_t> class ViewOut, template <typename, typename, typename, class TAG> class BinOp,typename=void>
     struct PixelWiseBinaryOpDispatcherWithTag
     {
+		static_assert((
+			std::is_same< View1<T1, Rank>, strided_array_view<T1, Rank> >::value
+			|| std::is_same< View1<T1, Rank>, strided_array_view<const T1, Rank> >::value
+			|| std::is_same< View2<T2, Rank>, strided_array_view<T2, Rank> >::value
+			|| std::is_same< View2<T2, Rank>, strided_array_view<const T2, Rank> >::value
+			|| std::is_same< ViewOut<Tout, Rank>, strided_array_view<Tout, Rank> >::value
+			), "strided view only specilization fail for arrayview");
+
+
         void operator()(const View1<T1, Rank>& i_vin1, const View2<T2, Rank>& i_vin2, ViewOut<Tout, Rank>& o_vout) const
         {
             //get the specialized operator
@@ -154,15 +163,18 @@ namespace poutre
 
     //template specialization both array_view but different type
     template<typename T1, typename T2, typename Tout, ptrdiff_t Rank, template <typename, typename, typename, class TAG> class BinOp>
-    struct PixelWiseBinaryOpDispatcherWithTag<T1, T2, Tout, Rank, array_view, array_view, array_view, BinOp>
+    struct PixelWiseBinaryOpDispatcherWithTag<T1, T2, Tout, Rank, array_view, array_view, array_view, BinOp,
+		std::enable_if_t< 
+		!std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T2>> || !std::is_same_v<std::remove_const_t<T2>, std::remove_const_t<Tout>>
+		>
+	>
     {
-
         void operator()(const array_view<T1, Rank>& i_vin1, const array_view<T2, Rank>& i_vin2, array_view<Tout, Rank>& o_vout) const
         {
             //get the specialized operator
             using real_op = typename BinOp<T1, T2, Tout, tag_SIMD_disabled>;
             real_op op;
-
+			//std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr";
             auto i_vinbeg1 = i_vin1.data();
             auto i_vinend1 = i_vin1.data() + i_vin1.size();
             auto i_vinbeg2 = i_vin2.data();
@@ -176,16 +188,19 @@ namespace poutre
     };
 
     //template specialization both array_view and same type, use simd counterpart
-    template<typename T, ptrdiff_t Rank, template <typename, typename, typename, class TAG> class BinOp>
-    struct PixelWiseBinaryOpDispatcherWithTag<T, T, T, Rank, array_view, array_view, array_view, BinOp>
+    template<typename T1, typename T2, typename Tout, ptrdiff_t Rank, template <typename, typename, typename, class TAG> class BinOp>
+    struct PixelWiseBinaryOpDispatcherWithTag<T1, T2, Tout, Rank, array_view, array_view, array_view, BinOp,std::enable_if_t<
+		std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T2>> && std::is_same_v<std::remove_const_t<T2>, std::remove_const_t<Tout>> && std::is_arithmetic_v<T1>
+	>
+	>
     {
 
-        void operator()(const array_view<T, Rank>& i_vin1, const array_view<T, Rank>& i_vin2, array_view<T, Rank>& o_vout) const
+        void operator()(const array_view<T1, Rank>& i_vin1, const array_view<T2, Rank>& i_vin2, array_view<Tout, Rank>& o_vout) const
         {
             //get the specialized operator
-            using real_op = typename BinOp<T, T, T, tag_SIMD_enabled>;
+            using real_op = typename BinOp<T1, T1, T1, tag_SIMD_enabled>;
             real_op op;
-
+			std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr + SIMD";
             auto i_vinbeg1 = i_vin1.data();
             auto i_vinend1 = i_vin1.data() + i_vin1.size();
             auto i_vinbeg2 = i_vin2.data();

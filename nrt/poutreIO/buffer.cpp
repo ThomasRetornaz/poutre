@@ -57,7 +57,7 @@ BOOST_AUTO_TEST_CASE(ioImageToBufferScalar)
 		using ImageType_t = poutre::DenseImage<float, 1>;
 		ImageType_t* img_t = dynamic_cast<ImageType_t*>(img.get());
 		if (!img_t) { POUTRE_RUNTIME_ERROR("Dynamic cast fail"); }
-		for (auto i = 0; i < 12; i++) (*img_t)[i] = i;
+		for (auto i = 0; i < 12; i++) (*img_t)[i] = static_cast<float>(i);
 		poutre::details::t_ImageToBufferForceType(*img, 12 * sizeof(float), &tab[0]);
 		BOOST_CHECK_EQUAL_COLLECTIONS((*img_t).begin(), (*img_t).end(), &tab[0], &tab[12]);
 	}
@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE(ioImageToBufferScalar)
 		using ImageType_t = poutre::DenseImage<float, 2>;
 		ImageType_t* img_t = dynamic_cast<ImageType_t*>(img.get());
 		if (!img_t) { POUTRE_RUNTIME_ERROR("Dynamic cast fail"); }
-		for (auto i = 0; i < 12; i++) (*img_t)[i] = i;
+		for (auto i = 0; i < 12; i++) (*img_t)[i] = static_cast<float>(i);
 		poutre::details::t_ImageToBufferForceType(*img, 12 * sizeof(float), &tab[0]);
 		BOOST_CHECK_EQUAL_COLLECTIONS((*img_t).begin(), (*img_t).end(), &tab[0], &tab[12]);
 	}
@@ -78,7 +78,7 @@ BOOST_AUTO_TEST_CASE(ioImageToBufferScalar)
 		using ImageType_t = poutre::DenseImage<float, 3>;
 		ImageType_t* img_t = dynamic_cast<ImageType_t*>(img.get());
 		if (!img_t) { POUTRE_RUNTIME_ERROR("Dynamic cast fail"); }
-		for (auto i = 0; i < 12; i++) (*img_t)[i] = i;
+		for (auto i = 0; i < 12; i++) (*img_t)[i] = static_cast<float>(i);
 		poutre::details::t_ImageToBufferForceType(*img, 12 * sizeof(float), &tab[0]);
 		BOOST_CHECK_EQUAL_COLLECTIONS((*img_t).begin(), (*img_t).end(), &tab[0], &tab[12]);
 	}

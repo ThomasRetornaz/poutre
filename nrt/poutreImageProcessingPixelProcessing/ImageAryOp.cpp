@@ -706,6 +706,7 @@ namespace
 		std::uniform_int_distribution<> dis(0, 255);
 
 		std::vector<poutre::pUINT8, boost::simd::allocator<poutre::pUINT8>> m_vect;
+		//std::vector<poutre::pUINT8> m_vect;
 		m_vect.reserve(size);
 		for (auto i = 0; i < size; ++i) {
 			m_vect.push_back(dis(gen));
@@ -713,6 +714,79 @@ namespace
 		return m_vect;
 	}
 }
+
+//namespace
+//{
+//	/*template <class T,ptrdiff_t Rank>
+//	class view
+//	{
+//	};
+//
+//	template <class T,ptrdiff_t Rank>
+//	class sview
+//	{
+//	};*/
+//
+//	template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2>
+//	void PixelWiseUnary(const View1<T1, Rank>& i_vin, View2<T2, Rank>& o_vout)
+//	{
+//		PixelWiseUnaryDispatch<T1, T2,Rank, View1, View2> dispatcher;
+//		dispatcher(i_vin, o_vout);
+//	}
+//
+//	// primary use strided view 
+//	template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, typename = void>
+//	struct PixelWiseUnaryDispatch
+//	{
+//		void operator()(const View1<T1, Rank>& i_vin, View2<T2, Rank>& o_vout) const
+//		{
+//			std::cout << "***************" << std::endl;
+//			std::cout << "primary template" << std::endl;
+//			std::cout << "***************" << std::endl;
+//
+//		}
+//	};
+//
+//	template <typename T1, typename T2, ptrdiff_t Rank>
+//	struct PixelWiseUnaryDispatch <T1, T2, Rank,poutre::array_view, poutre::array_view,
+//		std::enable_if_t<!std::is_same<std::remove_const_t<T1> , std::remove_const_t<T2>>::value>>
+//	{
+//		void operator()(poutre::array_view<T1,Rank> const & i_vin, poutre::array_view<T2, Rank> & o_vout) const
+//		{
+//			std::cout << "***************" << std::endl;
+//			std::cout << "both view != type" << std::endl;
+//			std::cout << "***************" << std::endl;
+//		}
+//	};
+//	template <typename T1, typename T2,ptrdiff_t Rank>
+//	struct PixelWiseUnaryDispatch<T1, T2,Rank, poutre::array_view, poutre::array_view,
+//		std::enable_if_t<
+//		std::is_same<std::remove_const_t<T1>, std::remove_const_t<T2>>::value
+//		&& std::is_arithmetic<T1>::value>>
+//	{
+//		void operator()(poutre::array_view<T1, Rank> const & i_vin, poutre::array_view<T2, Rank> & o_vout) const
+//		{
+//			std::cout << "***************" << std::endl;
+//			std::cout << "both view same type" << std::endl;
+//			std::cout << "***************" << std::endl;
+//
+//		}
+//	};
+//
+//}
+
+//BOOST_AUTO_TEST_CASE(teststemplate)
+//{
+//	poutre::array_view<const int,1> vin;
+//	poutre::array_view<const float,1> vinf;
+//	poutre::array_view<int,1> vout;
+//	poutre::strided_array_view<int,1> vsout;
+//	PixelWiseUnary(vin, vsout);
+//	PixelWiseUnary(vinf, vout);
+//	PixelWiseUnary(vin, vout);
+//
+//
+//}
 BOOST_AUTO_TEST_CASE(benchmark)
 {
 	const auto size = 1024 * 1024;
@@ -720,52 +794,81 @@ BOOST_AUTO_TEST_CASE(benchmark)
 	const auto inputVect2 = ConstructVector(size);
 	std::vector<poutre::pUINT8> ouputVect(size);
 
-	auto v_img1 = poutre::carray_view< poutre::pUINT8, 2>(inputVect1, { int(1024),int(1024) });
-	auto v_img2 = poutre::carray_view< poutre::pUINT8, 2>(inputVect1, { int(1024),int(1024) });
+	auto v_img1 = poutre::array_view< const poutre::pUINT8, 2>(inputVect1, { int(1024),int(1024) });
+	auto v_img2 = poutre::array_view< const poutre::pUINT8, 2>(inputVect2, { int(1024),int(1024) });
 	auto v_imgout = poutre::array_view< poutre::pUINT8, 2>(ouputVect, { int(1024),int(1024) });
 
+
+
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	auto iteration = 1;
+	std::cout << "********************************" << std::endl;
 	poutre::Timer timer;
 	timer.Start();
-	for (auto i = 0; i<1000; ++i)
+	for (auto i = 0; i<iteration; ++i)
+		poutre::t_ArithNegate(v_img1,v_imgout);
+	timer.Stop();
+	std::cout << "Time t_ArithNegate " << timer << std::endl;
+	timer.Reset();
+	std::cout << "********************************" << std::endl;
+
+	std::cout << "********************************"<<std::endl;
+	timer.Start();
+	for (auto i = 0; i<iteration; ++i)
 		poutre::t_ArithSaturatedSub(v_img1,v_img2,v_imgout);
 	timer.Stop();
 	std::cout << "Time t_ArithSaturatedSub " << timer << std::endl;
 	timer.Reset();
+	std::cout << "********************************" << std::endl;
 
+	std::cout << "********************************" << std::endl;
 	timer.Start();
-	for (auto i = 0; i<1000; ++i)
+	for (auto i = 0; i<iteration; ++i)
 		poutre::t_ArithSaturatedAdd(v_img1, v_img2, v_imgout);
 	timer.Stop();
 	std::cout << "Time t_ArithSaturatedAdd " << timer << std::endl;
 	timer.Reset();
+	std::cout << "********************************" << std::endl;
 
+	std::cout << "********************************" << std::endl;
 	timer.Start();
-	for (auto i = 0; i<1000; ++i)
+	for (auto i = 0; i<iteration; ++i)
 		poutre::t_ArithSaturatedAddConstant(v_img1,static_cast<poutre::pUINT8>(10),v_imgout);
 	timer.Stop();
 	std::cout << "Time t_ArithSaturatedAddConstant " << timer << std::endl;
 	timer.Reset();
+	std::cout << "********************************" << std::endl;
 
+	std::cout << "********************************" << std::endl;
 	timer.Start();
-	for (auto i = 0; i<1000; ++i)
+	for (auto i = 0; i<iteration; ++i)
 		poutre::t_ArithSaturatedSubConstant(v_img1, static_cast<poutre::pUINT8>(10), v_imgout);
 	timer.Stop();
 	std::cout << "Time t_ArithSaturatedSubConstant " << timer << std::endl;
 	timer.Reset();
+	std::cout << "********************************" << std::endl;
 
+	std::cout << "********************************" << std::endl;
 	timer.Start();
-	for (auto i = 0; i<1000; ++i)
+	for (auto i = 0; i<iteration; ++i)
 		poutre::t_ArithSup(v_img1,v_img2, v_imgout);
 	timer.Stop();
 	std::cout << "Time t_ArithSup " << timer << std::endl;
 	timer.Reset();
+	std::cout << "********************************" << std::endl;
 
+	std::cout << "********************************" << std::endl;
 	timer.Start();
-	for (auto i = 0; i<1000; ++i)
+	for (auto i = 0; i<iteration; ++i)
 		poutre::t_ArithInf(v_img1, v_img2, v_imgout);
 	timer.Stop();
 	std::cout << "Time t_ArithInf " << timer << std::endl;
 	timer.Reset();
+	std::cout << "********************************" << std::endl;
 }
 BOOST_AUTO_TEST_SUITE_END()
 

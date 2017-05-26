@@ -43,10 +43,10 @@ namespace poutre
   template <class T, ptrdiff_t Rank> class strided_array_view;
 
   // Views alias templates
-  template <class T, ptrdiff_t Rank>
+ /* template <class T, ptrdiff_t Rank>
   using carray_view = array_view<const T, Rank>;
   template <class T, ptrdiff_t Rank>
-  using cstrided_array_view = strided_array_view<const T, Rank>;
+  using cstrided_array_view = strided_array_view<const T, Rank>;*/
 #endif
 
   namespace details
