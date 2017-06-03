@@ -1,4 +1,4 @@
-#include <PoutreBase/poutreChronos.hpp>
+#include <poutreBase/poutreChronos.hpp>
 
 namespace poutre
 {
@@ -76,7 +76,8 @@ namespace poutre
 		m_nbiter = 0;
 	}
 
-	std::ostream & poutre::operator<<(std::ostream &os, Timer& timer)
+	// std::ostream & poutre::operator<<(std::ostream &os, Timer& timer)
+	std::ostream & operator<<(std::ostream &os, Timer& timer)
 	{
 		os << timer.to_str();
 		return os;
