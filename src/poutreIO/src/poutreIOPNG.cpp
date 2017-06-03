@@ -211,7 +211,7 @@ namespace {
                     png_line_pix = reinterpret_cast<pUINT8 *>(
                         row_pointers[linenb]);                   // current line png
                     line_pix = img_t->data() + width * linenb;  // current line image
-                    memcpy(line_pix, png_line_pix, width * sizeof pUINT8);
+                    memcpy(line_pix, png_line_pix, width * sizeof(pUINT8));
                 }
 
             } break;

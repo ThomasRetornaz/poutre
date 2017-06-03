@@ -87,8 +87,8 @@ namespace poutre
    {
     stride[Rank - 1] = 1;
     for ( ptrdiff_t i = Rank - 2; i >= 0; i-- )
-    {                                          
-    stride[i] = stride[i + 1] * bound[i + 1];  
+    {
+    stride[i] = stride[i + 1] * bound[i + 1];
     }
    }
 
@@ -116,7 +116,7 @@ namespace poutre
        POUTRE_STATIC_CONSTEXPR bool value = true;
    };
 
- 
+
 
    //stolen https://github.com/wardw/array_view/blob/master/array_view/array_view.h
    template <typename Viewable, typename U, typename View = std::remove_reference_t<Viewable>>
@@ -215,10 +215,11 @@ namespace poutre
 	  }
 
     template <typename U, ptrdiff_t R = Rank,
-        typename = std::enable_if_t<R == 1 &&
-        std::is_convertible<std::add_pointer_t<U>, pointer>::value && 
-        std::is_same<std::remove_cv_t<U>, std::remove_cv_t<value_type>>::value
-        is_viewable_value<U, value_type>::value
+        typename = std::enable_if_t<
+        R == 1 &&
+        //std::is_convertible<std::add_pointer_t<U>, pointer>::value &&
+        //std::is_same<std::remove_cv_t<U>, std::remove_cv_t<value_type>>::value
+        details::is_viewable_value<U, value_type>::value
         >
     >
     //!ctor from other array_view with AnyRank is only allowed for flattened view (ie Rank=1)
@@ -227,7 +228,7 @@ namespace poutre
     array_view (const array_view<U, R>& rhs) POUTRE_NOEXCEPT
     : m_bnd (rhs.m_bnd.size ()),m_data (rhs.m_data) { }
 
-    //!ctor from C_Array 
+    //!ctor from C_Array
     //@warning only available for rank==1
     template <size_t Extent,ptrdiff_t rank=Rank,
     class = typename std::enable_if<details::IsRankEqual1<rank>::value>::type>
@@ -240,14 +241,14 @@ namespace poutre
     }
 
     template <class U=T>
-    //!copy ctor      
+    //!copy ctor
     POUTRE_CONSTEXPR array_view (const array_view<U, Rank>& rhs)
     POUTRE_NOEXCEPT_IF (POUTRE_NOEXCEPT_EXPR ((m_bnd (rhs.m_bnd))) && POUTRE_NOEXCEPT_EXPR ((m_stride_idx (rhs.m_stride_idx))))
-            : m_bnd (rhs.m_bnd),m_data (rhs.m_data) 
+            : m_bnd (rhs.m_bnd),m_data (rhs.m_data)
     {
     }
 
-  
+
     /*template <typename Viewable,
         typename = std::enable_if_t<is_viewable_on_u<Viewable, value_type>::value>
     >*/
@@ -260,11 +261,11 @@ namespace poutre
       if (vw.size () < bound.size ())
         {
           POUTRE_RUNTIME_ERROR ("array_view(Viewable&& vw, bounds_type bound) can't create view, provided bounds overfit vw");
-        }      
+        }
     }
 
-    //!ctor from nude ptr 
-    //@warning Requires: [ptr, ptr + bounds.size()) is a valid range. 
+    //!ctor from nude ptr
+    //@warning Requires: [ptr, ptr + bounds.size()) is a valid range.
 
     POUTRE_CXX14_CONSTEXPR
     array_view (pointer ptr, bounds_type bound) : m_bnd (bound), m_data (ptr)
@@ -291,7 +292,7 @@ namespace poutre
       return *this;
     }
     */
-    
+
     /**@}*/
 
     /** @name Observers
@@ -323,7 +324,7 @@ namespace poutre
       return stride;
     }
 
-    //!Getter raw access to underlying data ptr to the contiguous sequence on which the view was created. 
+    //!Getter raw access to underlying data ptr to the contiguous sequence on which the view was created.
 
     POUTRE_CONSTEXPR pointer
     data () const POUTRE_NOEXCEPT
@@ -349,7 +350,7 @@ namespace poutre
     /** @name Slicing and sectioning
      */
     /**@{*/
-    //! Return a view such that the initial element is (*this)[{slice, 0, 0, �..., 0}], and the bounds are {bounds()[1], bounds()[2], �..., bounds()[Rank - 1]}. 
+    //! Return a view such that the initial element is (*this)[{slice, 0, 0, �..., 0}], and the bounds are {bounds()[1], bounds()[2], �..., bounds()[Rank - 1]}.
 
     POUTRE_CXX14_CONSTEXPR array_view<T, Rank - 1>
     operator[] (difference_type slice) const POUTRE_NOEXCEPTONLYNDEBUG
@@ -375,8 +376,8 @@ namespace poutre
     }
 
     POUTRE_CXX14_CONSTEXPR strided_array_view<T, Rank>
-    //!A strided view such that the initial element is (*this)[origin], the stride is stride(), and the bounds are section_bnd. 
-    //@warning Requires: bounds().contains(origin + idx) == true for any index_type idx such that (bounds() - origin).contains(idx) == true. 
+    //!A strided view such that the initial element is (*this)[origin], the stride is stride(), and the bounds are section_bnd.
+    //@warning Requires: bounds().contains(origin + idx) == true for any index_type idx such that (bounds() - origin).contains(idx) == true.
     section (const index_type& origin, const bounds_type& section_bnd) const
     {
       //precondition
@@ -390,8 +391,8 @@ namespace poutre
     }
 
     POUTRE_CXX14_CONSTEXPR strided_array_view<T, Rank>
-    //! A strided view such that the initial element is (*this)[origin], the stride is stride(), and the bounds are (bounds() - origin). 
-    //@warning Requires: bounds().contains(origin + idx) == true for any index_type idx such that (bounds() - origin).contains(idx) == true. 
+    //! A strided view such that the initial element is (*this)[origin], the stride is stride(), and the bounds are (bounds() - origin).
+    //@warning Requires: bounds().contains(origin + idx) == true for any index_type idx such that (bounds() - origin).contains(idx) == true.
     section (const index_type& origin) const
     {
       POUTRE_CHECK (m_bnd.contains (origin), "section(origin,section_bnd) origin is Out of bound");
@@ -460,8 +461,8 @@ namespace poutre
     POUTRE_NOEXCEPT_IF (POUTRE_NOEXCEPT_EXPR (m_sview_bnd (rhs.m_bnd)) && POUTRE_NOEXCEPT_EXPR (m_stride_idx (rhs.m_stride_idx)))
             : m_bnd (rhs.m_bnd), m_stride_idx (rhs.stride()), m_data (rhs.m_data) { }
 
-    //!ctor from nude ptr 
-    //@warning Requires: [ptr, ptr + bounds.size()) is a valid range. 
+    //!ctor from nude ptr
+    //@warning Requires: [ptr, ptr + bounds.size()) is a valid range.
     POUTRE_CXX14_CONSTEXPR
     strided_array_view (pointer ptr, bounds_type bounds, index_type stride)
             : m_bnd (bounds), m_stride_idx (stride), m_data (ptr)
@@ -558,37 +559,37 @@ namespace poutre
       index_type idxslice;
       details::helper_assign_container_valueop<index_type, AssignOpType::AssignOp, Rank>::op (0, idxslice);
       idxslice[0] = slice;
-      
+
       ptrdiff_t shift= details::view_offset(idxslice,m_stride_idx);
-      pointer data_slice = m_data +shift;      
-      
+      pointer data_slice = m_data +shift;
+
       return strided_array_view<T, Rank - 1 > (data_slice, bnd_slice, stride_slice);
     }
 
     POUTRE_CXX14_CONSTEXPR strided_array_view<T, Rank>
     //! A strided view such that the initial element is (*this)[origin], the stride is stride(), and the bounds are section_bnd.
-    //@warning Requires: bounds().contains(origin + idx) == true for any index_type idx such that (bounds() - origin).contains(idx) == true. 
+    //@warning Requires: bounds().contains(origin + idx) == true for any index_type idx such that (bounds() - origin).contains(idx) == true.
     section (const index_type& origin, const bounds_type& section_bnd) const
     {
       //TODO  A REPRENDRE
-      POUTRE_ASSERTCHECK (m_bnd.contains(origin), "section(origin,section_bnd) origin is Out of bound"); 
-      
+      POUTRE_ASSERTCHECK (m_bnd.contains(origin), "section(origin,section_bnd) origin is Out of bound");
+
       index_type shifted = section_bnd + origin;
       shifted -= 1;
       //std::cout<<"\n strided_array_view::section with bound shifted:"<<shifted<<" bnd:"<<m_bnd;
       //POUTRE_CHECK (m_bnd.contains (shifted), "section(origin,section_bnd) section_bnd shifted by origins is out of bound");
       ptrdiff_t shift = details::view_offset(origin, m_stride_idx);
-      pointer data_section = m_data +shift;      
-      
+      pointer data_section = m_data +shift;
+
       //std::cout<<"\n strided_array_view::section with bound data_section:"<<*data_section;
       return strided_array_view<T, Rank>(data_section, section_bnd, m_stride_idx);
     }
 
     POUTRE_CXX14_CONSTEXPR strided_array_view<T, Rank>
-    //! A strided view such that the initial element is (*this)[origin], the stride is stride(), and the bounds are (bounds() - origin). 
-    // @warning Requires: bounds().contains(origin + idx) == true for any index_type idx such that (bounds() - origin).contains(idx) == true. 
+    //! A strided view such that the initial element is (*this)[origin], the stride is stride(), and the bounds are (bounds() - origin).
+    // @warning Requires: bounds().contains(origin + idx) == true for any index_type idx such that (bounds() - origin).contains(idx) == true.
     section (const index_type& origin) const
-    {      
+    {
       POUTRE_ASSERTCHECK(m_bnd.contains (origin), "section(origin,section_bnd) origin is Out of bound");
       bounds_type section_bnd = m_bnd - origin;
       //TODO take into account stride ?
@@ -599,10 +600,10 @@ namespace poutre
     }
     /**@}*/
   };
-  //! @} doxygroup: coordinate_group   
+  //! @} doxygroup: coordinate_group
 
 
-  //Default to false 
+  //Default to false
   template<class ViewType>
   struct is_strided : std::false_type {};
 
@@ -620,7 +621,7 @@ namespace poutre
 } //namespace poutre
 
 #ifdef _MSC_VER
-#pragma warning( pop ) 
+#pragma warning( pop )
 #endif
 
 #endif //POUTRE_CONTAINER_VIEW_HPP__

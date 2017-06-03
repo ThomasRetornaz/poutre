@@ -98,7 +98,7 @@ public:
   /**@{*/
   //FIXME
   POUTRE_CONSTEXPR
-      static_array_base():m_array{{0}} /*POUTRE_NOEXCEPT*/ {}
+      static_array_base():m_array{0} /*POUTRE_NOEXCEPT*/ {}
   //POUTRE_CONSTEXPR
   //    static_array_base() POUTRE_NOEXCEPT {}
   // template <typename other=valuetype,

@@ -31,16 +31,7 @@ namespace poutre
     /****************************************************************************************/
     /*                               PixelWiseBinaryOp                                      */
     /****************************************************************************************/
-    template<typename T1, typename T2, typename Tout, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, template <typename, ptrdiff_t> class View3,class BinOp>
-    void PixelWiseBinaryOp(const View1<T1, Rank>& i_vin1,const BinOp& op,const View2<T2, Rank>& i_vin2, View3<Tout, Rank>& o_vout)
-    {
-        POUTRE_CHECK(i_vin1.size() == i_vin2.size(), "Incompatible views size");
-        POUTRE_CHECK(o_vout.size() == i_vin2.size(), "Incompatible views size");
-        PixelWiseBinaryOpDispatcher<T1, T2, Tout, Rank, View1, View2, View3, BinOp> dispatcher;
-        dispatcher(i_vin1,op,i_vin2, o_vout);
-    }
-
-    // primary use strided view 
+    // primary use strided view
     template<typename T1, typename T2, typename Tout, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, template <typename, ptrdiff_t> class ViewOut,class BinOp>
     struct PixelWiseBinaryOpDispatcher
     {
@@ -54,7 +45,7 @@ namespace poutre
             auto stridevIN2 = i_vin2.stride();
             auto stridevOut = o_vout.stride();
 
-            if (vInbound1 == vOutbound && vInbound2 == vOutbound && stridevIN1 == stridevOut && stridevIN2 == stridevOut) //same bound + same stride -> one idx 
+            if (vInbound1 == vOutbound && vInbound2 == vOutbound && stridevIN1 == stridevOut && stridevIN2 == stridevOut) //same bound + same stride -> one idx
             {
                 auto beg1 = begin(vInbound1);
                 auto end1 = end(vInbound1);
@@ -80,7 +71,7 @@ namespace poutre
         }
     };
 
-    //template specialization both array_view 
+    //template specialization both array_view
     template<typename T1, typename T2, typename Tout, ptrdiff_t Rank,class BinOp>
     struct PixelWiseBinaryOpDispatcher<T1, T2, Tout, Rank, array_view, array_view, array_view, BinOp>
     {
@@ -101,16 +92,20 @@ namespace poutre
 
     };
 
-    template<typename T1, typename T2, typename Tout, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, template <typename, ptrdiff_t> class View3, template <typename, typename, typename, class TAG> class BinOp>
-    void PixelWiseBinaryOp(const View1<T1, Rank>& i_vin1, const View2<T2, Rank>& i_vin2, View3<Tout, Rank>& o_vout)
+    template<typename T1, typename T2, typename Tout, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, template <typename, ptrdiff_t> class View3,class BinOp>
+    void PixelWiseBinaryOp(const View1<T1, Rank>& i_vin1,const BinOp& op,const View2<T2, Rank>& i_vin2, View3<Tout, Rank>& o_vout)
     {
         POUTRE_CHECK(i_vin1.size() == i_vin2.size(), "Incompatible views size");
         POUTRE_CHECK(o_vout.size() == i_vin2.size(), "Incompatible views size");
-        PixelWiseBinaryOpDispatcherWithTag<T1, T2, Tout, Rank, View1, View2, View3, BinOp> dispatcher;
-        dispatcher(i_vin1, i_vin2, o_vout);
+        PixelWiseBinaryOpDispatcher<T1, T2, Tout, Rank, View1, View2, View3, BinOp> dispatcher;
+        dispatcher(i_vin1,op,i_vin2, o_vout);
     }
 
-    // primary use strided view 
+    /****************************************************************************************/
+    /*                               PixelWiseBinaryOpWithTag                               */
+    /****************************************************************************************/
+
+    // primary use strided view
     template<typename T1, typename T2, typename Tout, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, template <typename, ptrdiff_t> class ViewOut, template <typename, typename, typename, class TAG> class BinOp,typename=void>
     struct PixelWiseBinaryOpDispatcherWithTag
     {
@@ -126,9 +121,9 @@ namespace poutre
         void operator()(const View1<T1, Rank>& i_vin1, const View2<T2, Rank>& i_vin2, ViewOut<Tout, Rank>& o_vout) const
         {
             //get the specialized operator
-            using real_op = typename BinOp<T1, T2, Tout, tag_SIMD_disabled>;
+            using real_op = /*typename*/ BinOp<T1, T2, Tout, tag_SIMD_disabled>;
             real_op op;
-			std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization strided view";
+
             //More runtime dispatch
             auto vInbound1 = i_vin1.bound();
             auto vInbound2 = i_vin2.bound();
@@ -137,7 +132,7 @@ namespace poutre
             auto stridevIN2 = i_vin2.stride();
             auto stridevOut = o_vout.stride();
 
-            if (vInbound1 == vOutbound && vInbound2 == vOutbound && stridevIN1 == stridevOut && stridevIN2 == stridevOut) //same bound + same stride -> one idx 
+            if (vInbound1 == vOutbound && vInbound2 == vOutbound && stridevIN1 == stridevOut && stridevIN2 == stridevOut) //same bound + same stride -> one idx
             {
                 auto beg1 = begin(vInbound1);
                 auto end1 = end(vInbound1);
@@ -166,17 +161,17 @@ namespace poutre
     //template specialization both array_view but different type
     template<typename T1, typename T2, typename Tout, ptrdiff_t Rank, template <typename, typename, typename, class TAG> class BinOp>
     struct PixelWiseBinaryOpDispatcherWithTag<T1, T2, Tout, Rank, array_view, array_view, array_view, BinOp,
-		std::enable_if_t< 
-		!std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T2>> || !std::is_same_v<std::remove_const_t<T2>, std::remove_const_t<Tout>>
+		std::enable_if_t<
+		!std::is_same<std::remove_const_t<T1>, std::remove_const_t<T2>>::value || !std::is_same<std::remove_const_t<T2>, std::remove_const_t<Tout>>::value
 		>
 	>
     {
         void operator()(const array_view<T1, Rank>& i_vin1, const array_view<T2, Rank>& i_vin2, array_view<Tout, Rank>& o_vout) const
         {
             //get the specialized operator
-            using real_op = typename BinOp<T1, T2, Tout, tag_SIMD_disabled>;
+            using real_op = /*typename*/ BinOp<T1, T2, Tout, tag_SIMD_disabled>;
             real_op op;
-			std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr";
+			//std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr";
             auto i_vinbeg1 = i_vin1.data();
             auto i_vinend1 = i_vin1.data() + i_vin1.size();
             auto i_vinbeg2 = i_vin2.data();
@@ -192,7 +187,7 @@ namespace poutre
     //template specialization both array_view and same type, use simd counterpart
     template<typename T1, typename T2, typename Tout, ptrdiff_t Rank, template <typename, typename, typename, class TAG> class BinOp>
     struct PixelWiseBinaryOpDispatcherWithTag<T1, T2, Tout, Rank, array_view, array_view, array_view, BinOp,std::enable_if_t<
-		std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T2>> && std::is_same_v<std::remove_const_t<T2>, std::remove_const_t<Tout>> && std::is_arithmetic_v<T1>
+		std::is_same<std::remove_const_t<T1>, std::remove_const_t<T2>>::value && std::is_same<std::remove_const_t<T2>, std::remove_const_t<Tout>>::value && std::is_arithmetic<T1>::value
 	>
 	>
     {
@@ -200,7 +195,7 @@ namespace poutre
         void operator()(const array_view<T1, Rank>& i_vin1, const array_view<T2, Rank>& i_vin2, array_view<Tout, Rank>& o_vout) const
         {
             //get the specialized operator
-            using real_op = typename BinOp<T1, T1, T1, tag_SIMD_enabled>;
+            using real_op = /*typename*/ BinOp<T1, T1, T1, tag_SIMD_enabled>;
             real_op op;
 			std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr + SIMD";
             auto i_vinbeg1 = i_vin1.data();
@@ -211,6 +206,17 @@ namespace poutre
         }
 
     };
+
+    template<typename T1, typename T2, typename Tout, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, template <typename, ptrdiff_t> class View3, template <typename, typename, typename, class TAG> class BinOp>
+    void PixelWiseBinaryOp(const View1<T1, Rank>& i_vin1, const View2<T2, Rank>& i_vin2, View3<Tout, Rank>& o_vout)
+    {
+        POUTRE_CHECK(i_vin1.size() == i_vin2.size(), "Incompatible views size");
+        POUTRE_CHECK(o_vout.size() == i_vin2.size(), "Incompatible views size");
+        PixelWiseBinaryOpDispatcherWithTag<T1, T2, Tout, Rank, View1, View2, View3, BinOp> dispatcher;
+        dispatcher(i_vin1, i_vin2, o_vout);
+    }
+
+
 
 } //namespace poutre
 #endif //POUTRE_IMAGEPROCESSING_BINARYOP_HPP__

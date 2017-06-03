@@ -245,10 +245,10 @@ namespace poutre
             //std::cout << "call unary" << std::endl;
             return (cop(i_val) ? m_valtrue : m_valfalse);
         }
-		
+
         template<typename U>
-        U operator()(U i_val) const POUTRE_NOEXCEPT //TODO inline ?        
-        {          
+        U operator()(U i_val) const POUTRE_NOEXCEPT //TODO inline ?
+        {
             logical_t v_res = copsimd(i_val);
             //return bs::if_else(v_res, m_valtrue_pack, m_valfalse_pack); //FIXME
 			return i_val;
@@ -286,8 +286,8 @@ namespace poutre
             typename boost::call_traits<Tout>::param_type i_valfalse,
             array_view<Tout, Rank>& o_vout)
         {
-			
-			static_assert(std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tout>>,"should be same type");
+
+			static_assert(std::is_same<std::remove_const_t<Tin>, std::remove_const_t<Tout>>::value,"should be same type");
 			/*std::cout << "***********************************************************************************" << std::endl;
 			std::cout << "call viewCompare_sss_simd array view template specialization, fall back ptrTime SIMD" << std::endl;
 			std::cout << "***********************************************************************************" << std::endl;*/
@@ -353,15 +353,15 @@ namespace poutre
             }
         }
     };
-	
+
 
 	//SIMD Specialization arithmetic type,same type and both array_view
 	template<typename Tin, typename Tout, ptrdiff_t Rank>
 	struct ViewCompare_sss_dispatch<Tin, Tout, Rank, array_view, array_view,
-		std::enable_if_t<std::is_same_v<std::remove_const_t<Tin>,std::remove_const_t<Tout>> && std::is_arithmetic_v<Tin>>
+		std::enable_if_t<std::is_same<std::remove_const_t<Tin>,std::remove_const_t<Tout>>::value && std::is_arithmetic<Tin>::value>
 	>
     {
-		
+
        void operator()(
             const array_view<Tin, Rank>& i_vin,
             CompOpType compOpType,
@@ -371,7 +371,7 @@ namespace poutre
 			array_view<Tout, Rank>& o_vout)
 
         {
-		   
+
             switch (compOpType)
             {
             case CompOpType::CompOpEqual:
@@ -419,7 +419,7 @@ namespace poutre
             }
         }
     };
-	
+
     template<typename Tin, typename Tout, ptrdiff_t Rank, template <typename, ptrdiff_t> class ViewIn, template <typename, ptrdiff_t> class ViewOut>
     void ViewCompare_sss_func_helper(
         const ViewIn<Tin, Rank>& i_vin,

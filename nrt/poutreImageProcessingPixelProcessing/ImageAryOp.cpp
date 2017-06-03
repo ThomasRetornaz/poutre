@@ -27,7 +27,7 @@ namespace bs = boost::simd;
 //using target_type = std::conditional< is_strided::value, view_type::value_type, bs::simd::pack<view_type::value_type>>;
 
 //template<class view_type1, class view_type2,class operator_default,class operator_simd>
-//using op = std::conditional< 
+//using op = std::conditional<
 //                            std::is_same<
 //                                typename poutre::details::extract_value_type<view_type1>::value_type,
 //                                typename poutre::details::extract_value_type<view_type2>::value_type
@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType_negate)
 {
     poutre::DenseImage<poutre::pINT32> img1({ 5, 6 });
     img1.fill(1);
-    poutre::DenseImage<poutre::pINT32> img2({ 5, 6 });    
+    poutre::DenseImage<poutre::pINT32> img2({ 5, 6 });
     auto v_img1 = poutre::view(img1);
     auto v_img2 = poutre::view(img2);
     poutre::t_ArithNegate(v_img1, v_img2);
@@ -364,7 +364,7 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousDifferentPtrType__subconstsatu
     auto v_img2 = poutre::view(img2);
     //call UnaryOpDispatcher array view template specialization,fall back ptr
     poutre::t_ArithSaturatedSubConstant(v_img1, static_cast<poutre::pUINT8>(10), v_img2);
-   
+
     std::string expected = "Dense Scalar GUINT8 2 5 6 \
 0 0 0 0 0 0 \
 0 0 0 0 0 0 \
@@ -731,105 +731,105 @@ namespace
 		return m_vect;
 	}*/
 
-	//struct tag_SIMD_disabled {};
-	//struct tag_SIMD_enabled {};
+	struct tag_SIMD_disabled {};
+	struct tag_SIMD_enabled {};
 
-	//template< typename T1, typename T2, typename T3, class tag>
-	//struct op_Inf;
+	template< typename T1, typename T2, typename T3, class tag>
+	struct op_Inf;
 
-	//template< typename T1, typename T2, typename T3>
-	//struct op_Inf<T1, T2, T3, tag_SIMD_disabled>
-	//{
-	//public:
-	//	op_Inf() {}
-	//	POUTRE_ALWAYS_INLINE T3 operator()(T1 const &a0, T2 const &a1) POUTRE_NOEXCEPT
-	//	{
-	//		//std::cout << "call min" << std::endl;
-	//		return static_cast<T3>(a0 < a1 ? a0 : a1);
-	//	}
-	//};
+	template< typename T1, typename T2, typename T3>
+	struct op_Inf<T1, T2, T3, tag_SIMD_disabled>
+	{
+	public:
+		op_Inf() {}
+		POUTRE_ALWAYS_INLINE T3 operator()(T1 const &a0, T2 const &a1) POUTRE_NOEXCEPT
+		{
+			//std::cout << "call min" << std::endl;
+			return static_cast<T3>(a0 < a1 ? a0 : a1);
+		}
+	};
 
-	//template< typename T>
-	//struct op_Inf<T, T, T, tag_SIMD_enabled>
-	//{
-	//public:
-	//	op_Inf() {}
-	//	template< typename U>
-	//	POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) POUTRE_NOEXCEPT
-	//	{
-	//		//std::cout << "call bs::min" << std::endl;
-	//		//std::cout << "U type" << typeid(U).name() <<std::endl;
-	//		return bs::min(a0, a1);
-	//	}
-	//};
+	template< typename T>
+	struct op_Inf<T, T, T, tag_SIMD_enabled>
+	{
+	public:
+		op_Inf() {}
+		template< typename U>
+		POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) POUTRE_NOEXCEPT
+		{
+			//std::cout << "call bs::min" << std::endl;
+			//std::cout << "U type" << typeid(U).name() <<std::endl;
+			return bs::min(a0, a1);
+		}
+	};
 
-	//void PerformInfScalar(const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin1, const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin2, std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectout)
-	//{
-	//	//get the specialized operator
-	//	using real_op = typename op_Inf<unsigned char, unsigned char, unsigned char, tag_SIMD_disabled>;
-	//	real_op op;
-	//	//std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr";
-	//	auto i_vinbeg1 = vectin1.data();
-	//	auto i_vinend1 = vectin1.data() + vectin1.size();
-	//	auto i_vinbeg2 = vectin2.data();
-	//	auto i_voutbeg = vectout.data();
-	//	for (; i_vinbeg1 != i_vinend1; ++i_vinbeg1, ++i_vinbeg2, ++i_voutbeg)
-	//	{
-	//		*i_voutbeg = op(*i_vinbeg1, *i_vinbeg2);
-	//	}
-	//}
+	void PerformInfScalar(const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin1, const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin2, std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectout)
+	{
+		//get the specialized operator
+		using real_op = op_Inf<unsigned char, unsigned char, unsigned char, tag_SIMD_disabled>;
+		real_op op;
+		//std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr";
+		auto i_vinbeg1 = vectin1.data();
+		auto i_vinend1 = vectin1.data() + vectin1.size();
+		auto i_vinbeg2 = vectin2.data();
+		auto i_voutbeg = vectout.data();
+		for (; i_vinbeg1 != i_vinend1; ++i_vinbeg1, ++i_vinbeg2, ++i_voutbeg)
+		{
+			*i_voutbeg = op(*i_vinbeg1, *i_vinbeg2);
+		}
+	}
 
-	//void PerformInfSIMD(const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin1, const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin2, std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectout)
-	//{
-	//	//get the specialized operator
-	//	using real_op = typename op_Inf<unsigned char, unsigned char, unsigned char, tag_SIMD_enabled>;
-	//	real_op op;
-	//	//std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr SIMD";
-	//	auto i_vinbeg1 = vectin1.data();
-	//	auto i_vinend1 = vectin1.data() + vectin1.size();
-	//	auto i_vinbeg2 = vectin2.data();
-	//	auto i_voutbeg = vectout.data();
-	//	bs::transform(i_vinbeg1, i_vinend1, i_vinbeg2, i_voutbeg, op);
-	//}
+	void PerformInfSIMD(const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin1, const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin2, std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectout)
+	{
+		//get the specialized operator
+		using real_op = op_Inf<unsigned char, unsigned char, unsigned char, tag_SIMD_enabled>;
+		real_op op;
+		//std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr SIMD";
+		auto i_vinbeg1 = vectin1.data();
+		auto i_vinend1 = vectin1.data() + vectin1.size();
+		auto i_vinbeg2 = vectin2.data();
+		auto i_voutbeg = vectout.data();
+		bs::transform(i_vinbeg1, i_vinend1, i_vinbeg2, i_voutbeg, op);
+	}
 
 }
 
-//BOOST_AUTO_TEST_CASE(operatorinfdispatch)
-//{
-//	const auto size = 1000*1000;
-//	//const auto size = 10 * 10;
-//	const auto inputVect1 = ConstructVector(size);
-//	const auto inputVect2 = ConstructVector(size);
-//	std::vector<unsigned char, boost::simd::allocator<unsigned char>> ouputVect(size);
-//
-//	auto iteration = 10000;
-//	//auto iteration = 1;
-//	
-//	{
-//		poutre::Timer timer;
-//		std::cout << "********************************" << std::endl;
-//		timer.Start();
-//		for (auto i = 0; i < iteration; ++i)
-//			PerformInfSIMD(inputVect1, inputVect2, ouputVect);
-//		timer.Stop();
-//		std::cout << "Time testInf simd" << timer << std::endl;
-//		timer.Reset();
-//		std::cout << "********************************" << std::endl;
-//	}
-//	{
-//		std::cout << "********************************" << std::endl;
-//		poutre::Timer timer;
-//		timer.Start();
-//		for (auto i = 0; i < iteration; ++i)
-//			PerformInfScalar(inputVect1, inputVect2, ouputVect);
-//		timer.Stop();
-//		std::cout << "Time testInf scalar " << timer << std::endl;
-//		timer.Reset();
-//		std::cout << "********************************" << std::endl;
-//	}
-//	
-//
-//}
+BOOST_AUTO_TEST_CASE(operatorinfdispatch)
+{
+	const auto size = 1000*1000;
+	//const auto size = 10 * 10;
+	const auto inputVect1 = ConstructVector(size);
+	const auto inputVect2 = ConstructVector(size);
+	std::vector<unsigned char, boost::simd::allocator<unsigned char>> ouputVect(size);
+
+	auto iteration = 10000;
+	//auto iteration = 1;
+
+	{
+		poutre::Timer timer;
+		std::cout << "********************************" << std::endl;
+		timer.Start();
+		for (auto i = 0; i < iteration; ++i)
+			PerformInfSIMD(inputVect1, inputVect2, ouputVect);
+		timer.Stop();
+		std::cout << "Time testInf simd" << timer << std::endl;
+		timer.Reset();
+		std::cout << "********************************" << std::endl;
+	}
+	{
+		std::cout << "********************************" << std::endl;
+		poutre::Timer timer;
+		timer.Start();
+		for (auto i = 0; i < iteration; ++i)
+			PerformInfScalar(inputVect1, inputVect2, ouputVect);
+		timer.Stop();
+		std::cout << "Time testInf scalar " << timer << std::endl;
+		timer.Reset();
+		std::cout << "********************************" << std::endl;
+	}
+
+
+}
 
 namespace
 {
@@ -843,14 +843,7 @@ namespace
 	{
 	};*/
 
-	template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2>
-	void PixelWiseUnary(const View1<T1, Rank>& i_vin, View2<T2, Rank>& o_vout)
-	{
-		PixelWiseUnaryDispatch<T1, T2,Rank, View1, View2> dispatcher;
-		dispatcher(i_vin, o_vout);
-	}
-
-	// primary use strided view 
+	// primary use strided view
 	template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, typename = void>
 	struct PixelWiseUnaryDispatch
 	{
@@ -888,6 +881,15 @@ namespace
 
 		}
 	};
+
+	template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2>
+	void PixelWiseUnary(const View1<T1, Rank>& i_vin, View2<T2, Rank>& o_vout)
+	{
+		PixelWiseUnaryDispatch<T1, T2,Rank, View1, View2> dispatcher;
+		dispatcher(i_vin, o_vout);
+	}
+
+
 
 }
 

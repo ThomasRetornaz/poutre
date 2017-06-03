@@ -17,16 +17,7 @@
 
 namespace poutre
   {
-    //Quiet stupid here we rewrite Processing unary op without simd specialization
-    template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2>
-    void CopyOp(const View1<T1, Rank>& i_vin, View2<T2, Rank>& o_vout)
-    {
-        POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
-        CopyOpDispatcher<T1, T2, Rank, View1, View2> dispatcher;
-        dispatcher(i_vin, o_vout);
-    }
-
-    // primary use strided view 
+       // primary use strided view
     template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2>
     struct CopyOpDispatcher
     {
@@ -38,7 +29,7 @@ namespace poutre
             auto stridevIN = i_vin.stride();
             auto stridevOut = o_vout.stride();
 
-            if (vInbound == vOutbound && stridevIN == stridevOut) //same bound + same stride -> one idx 
+            if (vInbound == vOutbound && stridevIN == stridevOut) //same bound + same stride -> one idx
             {
                 auto beg1 = begin(vInbound);
                 auto end1 = end(vInbound);
@@ -90,6 +81,17 @@ namespace poutre
             std::memcpy((void*)o_vout.data(), (void*)i_vin.data(), sizeof(T)*i_vin.size());
         }
     };
+
+
+    //Quiet stupid here we rewrite Processing unary op without simd specialization
+    template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2>
+    void CopyOp(const View1<T1, Rank>& i_vin, View2<T2, Rank>& o_vout)
+    {
+        POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
+        CopyOpDispatcher<T1, T2, Rank, View1, View2> dispatcher;
+        dispatcher(i_vin, o_vout);
+    }
+
 
     template <class ImageIn,class ImageOut>
     void CopyOp(const ImageIn& i_image,ImageOut& o_image)

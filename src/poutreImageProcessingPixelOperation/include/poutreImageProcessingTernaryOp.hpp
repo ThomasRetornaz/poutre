@@ -29,22 +29,7 @@ namespace poutre
     /*                               PixelWiseTernaryOp                                      */
     /****************************************************************************************/
 
-    template<typename T1, typename T2, typename T3, typename Tout, ptrdiff_t Rank,
-        template <typename, ptrdiff_t> class View1,
-        template <typename, ptrdiff_t> class View2,
-        template <typename, ptrdiff_t> class View3,
-        template <typename, ptrdiff_t> class ViewOut,
-        class TerOp>
-    void PixelWiseTernaryOp(const View1<T1, Rank>& i_vin1,const TerOp& op,const View2<T2, Rank>& i_vin2, const View3<T3, Rank>& i_vin3, ViewOut<Tout, Rank>& o_vout)
-    {
-        POUTRE_CHECK(i_vin1.size() == i_vin2.size(), "Incompatible views size");
-        POUTRE_CHECK(i_vin2.size() == i_vin3.size(), "Incompatible views size");
-        POUTRE_CHECK(o_vout.size() == i_vin3.size(), "Incompatible views size");
-        PixelWiseTernaryOpDispatcher<T1, T2, T3, Tout, Rank, View1, View2, View3, ViewOut, TerOp> dispatcher;
-        dispatcher(i_vin1,op,i_vin2, i_vin3, o_vout);
-    }
-
-    // primary use strided view 
+    // primary use strided view
     template<typename T1, typename T2, typename T3, typename Tout, ptrdiff_t Rank,
         template <typename, ptrdiff_t> class View1,
         template <typename, ptrdiff_t> class View2,
@@ -65,7 +50,7 @@ namespace poutre
             auto stridevIN3 = i_vin3.stride();
             auto stridevOut = o_vout.stride();
 
-            if (vInbound1 == vOutbound && vInbound2 == vOutbound && vInbound1 == vInbound3 && stridevIN1 == stridevOut && stridevIN2 == stridevOut && stridevIN1 == stridevIN3) //same bound + same stride -> one idx 
+            if (vInbound1 == vOutbound && vInbound2 == vOutbound && vInbound1 == vInbound3 && stridevIN1 == stridevOut && stridevIN2 == stridevOut && stridevIN1 == stridevIN3) //same bound + same stride -> one idx
             {
                 auto beg1 = begin(vInbound1);
                 auto end1 = end(vInbound1);
@@ -112,6 +97,21 @@ namespace poutre
         }
 
     };
+
+    template<typename T1, typename T2, typename T3, typename Tout, ptrdiff_t Rank,
+        template <typename, ptrdiff_t> class View1,
+        template <typename, ptrdiff_t> class View2,
+        template <typename, ptrdiff_t> class View3,
+        template <typename, ptrdiff_t> class ViewOut,
+        class TerOp>
+    void PixelWiseTernaryOp(const View1<T1, Rank>& i_vin1,const TerOp& op,const View2<T2, Rank>& i_vin2, const View3<T3, Rank>& i_vin3, ViewOut<Tout, Rank>& o_vout)
+    {
+        POUTRE_CHECK(i_vin1.size() == i_vin2.size(), "Incompatible views size");
+        POUTRE_CHECK(i_vin2.size() == i_vin3.size(), "Incompatible views size");
+        POUTRE_CHECK(o_vout.size() == i_vin3.size(), "Incompatible views size");
+        PixelWiseTernaryOpDispatcher<T1, T2, T3, Tout, Rank, View1, View2, View3, ViewOut, TerOp> dispatcher;
+        dispatcher(i_vin1,op,i_vin2, i_vin3, o_vout);
+    }
 
 }//namespace
 
