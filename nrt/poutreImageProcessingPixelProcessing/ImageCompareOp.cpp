@@ -2421,7 +2421,7 @@ BOOST_AUTO_TEST_CASE(CompareOpisiwholeimage_infequal)
 	BOOST_CHECK_EQUAL(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(benchmark)
+BOOST_AUTO_TEST_CASE(benchmarkViewCompare)
 {
 	const std::vector<poutre::pUINT8, boost::simd::allocator<poutre::pUINT8>> myvect(1024 * 1024);
 	const std::vector<poutre::pUINT8, boost::simd::allocator<poutre::pUINT8>> myvectTrue(1024 * 1024);
@@ -2431,7 +2431,7 @@ BOOST_AUTO_TEST_CASE(benchmark)
 	auto v_true = poutre::array_view< const poutre::pUINT8, 2>(myvectTrue, { int(1024),int(1024) });
 	auto v_imgout = poutre::array_view< poutre::pUINT8, 2>(myvectout, { int(1024),int(1024) });
 
-	auto iteration = 1;
+	auto iteration = 10000;
 	poutre::Timer timer;
 	timer.Start();
 	for(auto i=0;i<iteration;++i)

@@ -35,7 +35,7 @@
 namespace poutre
 {
     namespace bs = boost::simd;
-
+	
    /****************************************************************************************/
    /*                               PixelWiseUnaryOp                                        */
    /****************************************************************************************/
@@ -58,7 +58,7 @@ namespace poutre
             auto vOutbound = o_vout.bound();
             auto stridevIN = i_vin.stride();
             auto stridevOut = o_vout.stride();
-
+			std::cout << "\n" << "call UnaryOpDispatcher strided view";
             if (vInbound == vOutbound && stridevIN == stridevOut) //same bound + same stride -> one idx 
             {
                 //std::cout << "\n" << "call UnaryOpDispatcher one idx";
@@ -84,7 +84,7 @@ namespace poutre
         }
     };
 
-
+	
     //template specialization both array_view
     template<typename T1, typename T2, ptrdiff_t Rank, class UnOp>
     struct PixelWiseUnaryOpDispatcher<T1, T2, Rank, array_view, array_view, UnOp>
@@ -201,7 +201,7 @@ namespace poutre
             using real_op = typename UnOp<T1, T1, tag_SIMD_enabled>;
             real_op op;
 
-            //std::cout << "\n" << "call PixelWiseUnaryOpDispatcherWithTag array view template specialization same type,fall back ptr + SIMD";
+            std::cout << "\n" << "call PixelWiseUnaryOpDispatcherWithTag array view template specialization same type,fall back ptr + SIMD";
 
             auto i_vinbeg = i_vin.data();
             auto i_vinend = i_vin.data() + i_vin.size();
@@ -284,7 +284,7 @@ namespace poutre
             using real_op = typename UnOp<T1, T2, tag_SIMD_disabled>;
             real_op op(a0);
 
-            //std::cout << "\n" << "call UnaryOpDispatcher array view template specialization,fall back ptr";
+            std::cout << "\n" << "call UnaryOpDispatcher array view template specialization,fall back ptr";
             auto i_vinbeg = i_vin.data();
             auto i_vinend = i_vin.data() + i_vin.size();
             auto i_voutbeg = o_vout.data();
@@ -312,7 +312,7 @@ namespace poutre
             using real_op = typename UnOp<T1, T1, tag_SIMD_enabled>;
             real_op op(a0);
 
-            //std::cout << "\n" << "call UnaryOpDispatcher array view template specialization same type,fall back ptr + SIMD";
+            std::cout << "\n" << "call UnaryOpDispatcher array view template specialization same type,fall back ptr + SIMD";
 
             auto i_vinbeg = i_vin.data();
             auto i_vinend = i_vin.data() + i_vin.size();

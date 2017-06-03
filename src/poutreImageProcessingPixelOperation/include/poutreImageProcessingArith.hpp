@@ -324,6 +324,7 @@ namespace poutre
         template< typename U>
         POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) POUTRE_NOEXCEPT
         {
+			
             return bs::min(a0, a1);
         }
     };

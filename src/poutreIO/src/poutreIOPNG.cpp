@@ -210,7 +210,7 @@ namespace {
                 for (linenb = 0; linenb < (scoord)height; linenb++) {
                     png_line_pix = reinterpret_cast<pUINT8 *>(
                         row_pointers[linenb]);                   // current line png
-                    line_pix = img_t->datas() + width * linenb;  // current line image
+                    line_pix = img_t->data() + width * linenb;  // current line image
                     memcpy(line_pix, png_line_pix, width * sizeof pUINT8);
                 }
 
@@ -229,7 +229,7 @@ namespace {
                 for (linenb = 0; linenb < (scoord)height; linenb++) {
                     png_line_pix = reinterpret_cast<pUINT8 *>(
                         row_pointers[linenb]);                   // current line png
-                    line_pix = img_t->datas() + width * linenb;  // current line image
+                    line_pix = img_t->data() + width * linenb;  // current line image
                     for (column = 0; column < (scoord)width; ++column) {
                         line_pix[column][0] = png_line_pix[column * 3];
                         line_pix[column][1] = png_line_pix[column * 3 + 1];
@@ -252,7 +252,7 @@ namespace {
                 for (linenb = 0; linenb < (scoord)height; linenb++) {
                     png_line_pix = reinterpret_cast<pUINT8 *>(
                         row_pointers[linenb]);                   // current line png
-                    line_pix = img_t->datas() + width * linenb;  // current line image
+                    line_pix = img_t->data() + width * linenb;  // current line image
                     for (column = 0; column < (scoord)width; ++column) {
                         line_pix[column][0] = png_line_pix[column * 4];
                         line_pix[column][1] = png_line_pix[column * 4 + 1];
