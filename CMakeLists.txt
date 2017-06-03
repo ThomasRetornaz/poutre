@@ -1,4 +1,4 @@
-#Most of the initial cmake skeleton  was heavely inspired from yayi project see https://bitbucket.org/renficiaud/yayi.git. and rapidjosn 
+#Most of the initial cmake skeleton  was heavely inspired from yayi project see https://bitbucket.org/renficiaud/yayi.git. and rapidjosn
 cmake_minimum_required (VERSION 3.0)
 project(Poutre)
 
@@ -6,7 +6,7 @@ project(Poutre)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "CMakePredefined")
 
-# build type, by default to release (with optimisations) 
+# build type, by default to release (with optimisations)
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   message(STATUS "Setting build type to 'Release' as none was specified.")
   set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
@@ -17,7 +17,7 @@ endif()
 
 enable_testing()
 
-# current version 
+# current version
 set(POUTRE_MAJOR    0 )
 set(POUTRE_MINOR    1 )
 set(POUTRE_SUBMINOR 0 )
@@ -43,10 +43,10 @@ set(POUTRE_NRT_DIR
     CACHE PATH
     "Root path of the Core of POUTRE's tests")
 
-set(POUTRE_BENCH_DIR
-	${POUTRE_ROOT_DIR}/bench
-    CACHE PATH
-    "Root path of the Core of POUTRE's bench")
+#set(POUTRE_BENCH_DIR
+#	${POUTRE_ROOT_DIR}/bench
+#    CACHE PATH
+#    "Root path of the Core of POUTRE's bench")
 
 # set(POUTRE_PYTHONEXT_DIR
     # ${POUTRE_root_dir}/python
@@ -133,7 +133,7 @@ include_directories(${JSONCPP_INCLUDE_DIR})
 # the poutre core libraries
 add_subdirectory (${POUTRE_SRC_DIR})
 add_subdirectory (${POUTRE_NRT_DIR})
-add_subdirectory(${POUTRE_BENCH_DIR})
+#add_subdirectory(${POUTRE_BENCH_DIR})
 
 # creates the python package
 #create_python_package()
