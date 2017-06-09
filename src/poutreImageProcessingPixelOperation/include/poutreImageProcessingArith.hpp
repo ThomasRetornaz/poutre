@@ -59,7 +59,7 @@ namespace poutre
     {
     public:
         op_Invert() {}
-        POUTRE_ALWAYS_INLINE T2 operator()(T1 const &a0) POUTRE_NOEXCEPT
+        POUTRE_ALWAYS_INLINE T2 operator()(T1 const &a0) const POUTRE_NOEXCEPT
         {
             return -a0;
         }
@@ -70,7 +70,7 @@ namespace poutre
     public:
         op_Invert() {}
         template< typename U>
-        POUTRE_ALWAYS_INLINE U operator()(U const &a0) POUTRE_NOEXCEPT
+        POUTRE_ALWAYS_INLINE U operator()(U const &a0) const POUTRE_NOEXCEPT
         {
             return -a0;
         }
@@ -96,7 +96,7 @@ namespace poutre
         using accutype = typename TypeTraits<T3>::accu_type;
     public:
         op_Saturated_Sub() :m_minval(TypeTraits<T3>::min()) {}
-        POUTRE_ALWAYS_INLINE T3 operator()(T1 const &a0, T2 const &a1) POUTRE_NOEXCEPT
+        POUTRE_ALWAYS_INLINE T3 operator()(T1 const &a0, T2 const &a1) const POUTRE_NOEXCEPT
         {
             accutype res = static_cast<accutype>(a0) - static_cast<accutype>(a1);
             if (res < static_cast<accutype>(m_minval)) return m_minval;
@@ -110,7 +110,7 @@ namespace poutre
     public:
         op_Saturated_Sub() {}
         template< typename U>
-        POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) POUTRE_NOEXCEPT
+        POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) const POUTRE_NOEXCEPT
         {
             return bs::saturated_(bs::minus)(a0, a1);
         }
@@ -136,7 +136,7 @@ namespace poutre
         using accutype = typename TypeTraits<T3>::accu_type;
     public:
         op_Saturated_Add() :m_maxval(TypeTraits<T3>::max()) {}
-        POUTRE_ALWAYS_INLINE T3 operator()(T1 const &a0, T2 const &a1) POUTRE_NOEXCEPT
+        POUTRE_ALWAYS_INLINE T3 operator()(T1 const &a0, T2 const &a1) const POUTRE_NOEXCEPT
         {
             accutype res = static_cast<accutype>(a0) + static_cast<accutype>(a1);
             if (res > static_cast<accutype>(m_maxval)) return m_maxval;
@@ -150,7 +150,7 @@ namespace poutre
     public:
         op_Saturated_Add() {}
         template< typename U>
-        POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) POUTRE_NOEXCEPT
+        POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) const POUTRE_NOEXCEPT
         {
             return bs::saturated_(bs::plus)(a0, a1);
         }
@@ -177,7 +177,7 @@ namespace poutre
         using accutype = typename TypeTraits<T2>::accu_type;
     public:
         op_Saturated_Add_Constant(T2 val) :m_val(val), m_maxval(TypeTraits<T2>::max()) {}
-        POUTRE_ALWAYS_INLINE T2 operator()(T1 const &a0) POUTRE_NOEXCEPT
+        POUTRE_ALWAYS_INLINE T2 operator()(T1 const &a0) const  POUTRE_NOEXCEPT
         {
             accutype res = static_cast<accutype>(m_val) + static_cast<accutype>(a0);
             if (res > static_cast<accutype>(m_maxval)) return m_maxval;
@@ -199,7 +199,7 @@ namespace poutre
         //op_Saturated_Add_Constant(T val) :m_val(val) {}
         op_Saturated_Add_Constant(T val) :m_val(val) {}
         template< typename U>
-        POUTRE_ALWAYS_INLINE U operator()(U const &a0) POUTRE_NOEXCEPT
+        POUTRE_ALWAYS_INLINE U operator()(U const &a0) const POUTRE_NOEXCEPT
         {
             return bs::saturated_(bs::plus)(a0, m_val);
         }
@@ -227,7 +227,7 @@ namespace poutre
         using accutype = typename TypeTraits<T2>::accu_type;
     public:
         op_Saturated_Sub_Constant(T2 val) :m_val(val), m_minval(TypeTraits<T2>::min()) {}
-        POUTRE_ALWAYS_INLINE T2 operator()(T1 const &a0) POUTRE_NOEXCEPT
+        POUTRE_ALWAYS_INLINE T2 operator()(T1 const &a0) const POUTRE_NOEXCEPT
         {
             accutype res = static_cast<accutype>(a0) - static_cast<accutype>(m_val);
             if (res < static_cast<accutype>(m_minval)) return m_minval;
@@ -249,7 +249,7 @@ namespace poutre
         //op_Saturated_Sub_Constant(T val) :m_val(val) {}
         op_Saturated_Sub_Constant(T val) :m_val(val) {}
         template< typename U>
-        U operator()(U const &a0) POUTRE_NOEXCEPT
+        U operator()(U const &a0) const POUTRE_NOEXCEPT
         {
             return bs::saturated_(bs::minus)(a0, m_val);
         }
@@ -274,7 +274,7 @@ namespace poutre
     {
     public:
         op_Sup() {}
-        POUTRE_ALWAYS_INLINE T3 operator()(T1 const &a0, T2 const &a1) POUTRE_NOEXCEPT
+        POUTRE_ALWAYS_INLINE T3 operator()(T1 const &a0, T2 const &a1) const POUTRE_NOEXCEPT
         {
             return static_cast<T3>(a0 > a1 ? a0 : a1);
         }
@@ -286,7 +286,7 @@ namespace poutre
     public:
         op_Sup() {}
         template< typename U>
-        POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) POUTRE_NOEXCEPT
+        POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) const POUTRE_NOEXCEPT
         {
             return bs::max(a0, a1);
         }
@@ -310,7 +310,7 @@ namespace poutre
     {
     public:
         op_Inf() {}
-        POUTRE_ALWAYS_INLINE T3 operator()(T1 const &a0, T2 const &a1) POUTRE_NOEXCEPT
+        POUTRE_ALWAYS_INLINE T3 operator()(T1 const &a0, T2 const &a1) const POUTRE_NOEXCEPT
         {
             return static_cast<T3>(a0 < a1 ? a0 : a1);
         }
@@ -322,7 +322,7 @@ namespace poutre
     public:
         op_Inf() {}
         template< typename U>
-        POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) POUTRE_NOEXCEPT
+        POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) const POUTRE_NOEXCEPT
         {
 			
             return bs::min(a0, a1);
