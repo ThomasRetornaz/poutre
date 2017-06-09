@@ -715,121 +715,360 @@ namespace
 }
 
 
-namespace
-{
-	/*decltype(auto) ConstructVector(size_t size)
-	{
-		std::random_device rd;
-		std::mt19937 gen(rd());
-		std::uniform_int_distribution<> dis(0, 255);
-
-		std::vector<unsigned char, boost::simd::allocator<unsigned char>> m_vect;
-		m_vect.reserve(size);
-		for (auto i = 0; i < size; ++i) {
-			m_vect.push_back(dis(gen));
-		}
-		return m_vect;
-	}*/
-
-	struct tag_SIMD_disabled {};
-	struct tag_SIMD_enabled {};
-
-	template< typename T1, typename T2, typename T3, class tag>
-	struct op_Inf;
-
-	template< typename T1, typename T2, typename T3>
-	struct op_Inf<T1, T2, T3, tag_SIMD_disabled>
-	{
-	public:
-		op_Inf() {}
-		POUTRE_ALWAYS_INLINE T3 operator()(T1 const &a0, T2 const &a1) POUTRE_NOEXCEPT
-		{
-			//std::cout << "call min" << std::endl;
-			return static_cast<T3>(a0 < a1 ? a0 : a1);
-		}
-	};
-
-	template< typename T>
-	struct op_Inf<T, T, T, tag_SIMD_enabled>
-	{
-	public:
-		op_Inf() {}
-		template< typename U>
-		POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) POUTRE_NOEXCEPT
-		{
-			//std::cout << "call bs::min" << std::endl;
-			//std::cout << "U type" << typeid(U).name() <<std::endl;
-			return bs::min(a0, a1);
-		}
-	};
-
-	void PerformInfScalar(const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin1, const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin2, std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectout)
-	{
-		//get the specialized operator
-		using real_op = op_Inf<unsigned char, unsigned char, unsigned char, tag_SIMD_disabled>;
-		real_op op;
-		//std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr";
-		auto i_vinbeg1 = vectin1.data();
-		auto i_vinend1 = vectin1.data() + vectin1.size();
-		auto i_vinbeg2 = vectin2.data();
-		auto i_voutbeg = vectout.data();
-		for (; i_vinbeg1 != i_vinend1; ++i_vinbeg1, ++i_vinbeg2, ++i_voutbeg)
-		{
-			*i_voutbeg = op(*i_vinbeg1, *i_vinbeg2);
-		}
-	}
-
-	void PerformInfSIMD(const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin1, const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin2, std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectout)
-	{
-		//get the specialized operator
-		using real_op = op_Inf<unsigned char, unsigned char, unsigned char, tag_SIMD_enabled>;
-		real_op op;
-		//std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr SIMD";
-		auto i_vinbeg1 = vectin1.data();
-		auto i_vinend1 = vectin1.data() + vectin1.size();
-		auto i_vinbeg2 = vectin2.data();
-		auto i_voutbeg = vectout.data();
-		bs::transform(i_vinbeg1, i_vinend1, i_vinbeg2, i_voutbeg, op);
-	}
-
-}
-
-BOOST_AUTO_TEST_CASE(operatorinfdispatch)
-{
-	const auto size = 1000*1000;
-	//const auto size = 10 * 10;
-	const auto inputVect1 = ConstructVector(size);
-	const auto inputVect2 = ConstructVector(size);
-	std::vector<unsigned char, boost::simd::allocator<unsigned char>> ouputVect(size);
-
-	auto iteration = 10000;
-	//auto iteration = 1;
-
-	{
-		poutre::Timer timer;
-		std::cout << "********************************" << std::endl;
-		timer.Start();
-		for (auto i = 0; i < iteration; ++i)
-			PerformInfSIMD(inputVect1, inputVect2, ouputVect);
-		timer.Stop();
-		std::cout << "Time testInf simd" << timer << std::endl;
-		timer.Reset();
-		std::cout << "********************************" << std::endl;
-	}
-	{
-		std::cout << "********************************" << std::endl;
-		poutre::Timer timer;
-		timer.Start();
-		for (auto i = 0; i < iteration; ++i)
-			PerformInfScalar(inputVect1, inputVect2, ouputVect);
-		timer.Stop();
-		std::cout << "Time testInf scalar " << timer << std::endl;
-		timer.Reset();
-		std::cout << "********************************" << std::endl;
-	}
-
-
-}
+//namespace
+//{
+//	struct tag_SIMD_disabled {};
+//	struct tag_SIMD_enabled {};
+//
+//	template< typename T1, typename T2, typename T3, class tag>
+//	struct op_Inf;
+//
+//	template< typename T1, typename T2, typename T3>
+//	struct op_Inf<T1, T2, T3, tag_SIMD_disabled>
+//	{
+//	public:
+//		op_Inf() {}
+//		POUTRE_ALWAYS_INLINE T3 operator()(T1 const &a0, T2 const &a1) const POUTRE_NOEXCEPT
+//		{
+//			//std::cout << "call min" << std::endl;
+//			return static_cast<T3>(a0 < a1 ? a0 : a1);
+//		}
+//	};
+//
+//	template< typename T>
+//	struct op_Inf<T, T, T, tag_SIMD_enabled>
+//	{
+//	public:
+//		op_Inf() {}
+//		template< typename U>
+//		POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) const POUTRE_NOEXCEPT
+//		{
+//			//std::cout << "call bs::min" << std::endl;
+//			//std::cout << "U type" << typeid(U).name() <<std::endl;
+//			return bs::min(a0, a1);
+//		}
+//	};
+//
+//	void PerformInfScalar(const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin1, const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin2, std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectout)
+//	{
+//		//get the specialized operator
+//		using real_op = op_Inf<unsigned char, unsigned char, unsigned char, tag_SIMD_disabled>;
+//		real_op op;
+//		//std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr";
+//		auto i_vinbeg1 = vectin1.data();
+//		auto i_vinend1 = vectin1.data() + vectin1.size();
+//		auto i_vinbeg2 = vectin2.data();
+//		auto i_voutbeg = vectout.data();
+//		for (; i_vinbeg1 != i_vinend1; ++i_vinbeg1, ++i_vinbeg2, ++i_voutbeg)
+//		{
+//			*i_voutbeg = op(*i_vinbeg1, *i_vinbeg2);
+//		}
+//	}
+//
+//	void PerformInfSIMD(const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin1, const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin2, std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectout)
+//	{
+//		//get the specialized operator
+//		using real_op = op_Inf<unsigned char, unsigned char, unsigned char, tag_SIMD_enabled>;
+//		real_op op;
+//		//std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr SIMD";
+//		const auto i_vinbeg1 = vectin1.data();
+//		const auto i_vinend1 = vectin1.data() + vectin1.size();
+//		const auto i_vinbeg2 = vectin2.data();
+//		auto i_voutbeg = vectout.data();
+//		bs::transform(i_vinbeg1, i_vinend1, i_vinbeg2, i_voutbeg, op);
+//	}
+//
+//
+//	template< typename T1, typename T2, typename T3, class tag>
+//	struct op_Sup;
+//
+//	template< typename T1, typename T2, typename T3>
+//	struct op_Sup<T1, T2, T3, tag_SIMD_disabled>
+//	{
+//	public:
+//		op_Sup() {}
+//		POUTRE_ALWAYS_INLINE T3 operator()(T1 const &a0, T2 const &a1) const POUTRE_NOEXCEPT
+//		{
+//			return static_cast<T3>(a0 > a1 ? a0 : a1);
+//		}
+//	};
+//
+//	template< typename T>
+//	struct op_Sup<T, T, T, tag_SIMD_enabled>
+//	{
+//	public:
+//		op_Sup() {}
+//		template< typename U>
+//		POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) const POUTRE_NOEXCEPT
+//		{
+//			return bs::max(a0, a1);
+//		}
+//	};
+//
+//	void PerformSupScalar(const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin1, const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin2, std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectout)
+//	{
+//		//get the specialized operator
+//		using real_op = op_Sup<unsigned char, unsigned char, unsigned char, tag_SIMD_disabled>;
+//		real_op op;
+//		//std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr";
+//		auto i_vinbeg1 = vectin1.data();
+//		auto i_vinend1 = vectin1.data() + vectin1.size();
+//		auto i_vinbeg2 = vectin2.data();
+//		auto i_voutbeg = vectout.data();
+//		for (; i_vinbeg1 != i_vinend1; ++i_vinbeg1, ++i_vinbeg2, ++i_voutbeg)
+//		{
+//			*i_voutbeg = op(*i_vinbeg1, *i_vinbeg2);
+//		}
+//	}
+//
+//	void PerformSupSIMD(const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin1, const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin2, std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectout)
+//	{
+//		//get the specialized operator
+//		using real_op = op_Sup<unsigned char, unsigned char, unsigned char, tag_SIMD_enabled>;
+//		real_op op;
+//		//std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr SIMD";
+//		const auto i_vinbeg1 = vectin1.data();
+//		const auto i_vinend1 = vectin1.data() + vectin1.size();
+//		const auto i_vinbeg2 = vectin2.data();
+//		auto i_voutbeg = vectout.data();
+//		bs::transform(i_vinbeg1, i_vinend1, i_vinbeg2, i_voutbeg, op);
+//	}
+//
+//	/***********************************************************************************************************************************/
+//	/*                                                  SATURATED SUB                                                                  */
+//	/**********************************************************************************************************************************/
+//	template< typename T1, typename T2, typename T3, class tag>
+//	struct op_Saturated_Sub;
+//
+//	template< typename T1, typename T2, typename T3>
+//	struct op_Saturated_Sub<T1, T2, T3, tag_SIMD_disabled>
+//	{
+//	private:
+//		T3 m_minval;
+//		using accutype = typename poutre::TypeTraits<T3>::accu_type;
+//	public:
+//		op_Saturated_Sub() :m_minval(poutre::TypeTraits<T3>::min()) {}
+//		POUTRE_ALWAYS_INLINE T3 operator()(T1 const &a0, T2 const &a1) const POUTRE_NOEXCEPT
+//		{
+//			accutype res = static_cast<accutype>(a0) - static_cast<accutype>(a1);
+//			if (res < static_cast<accutype>(m_minval)) return m_minval;
+//			return static_cast<T3>(res);
+//		}
+//	};
+//
+//	template< typename T>
+//	struct op_Saturated_Sub<T, T, T, tag_SIMD_enabled>
+//	{
+//	public:
+//		op_Saturated_Sub() {}
+//		template< typename U>
+//		POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) const POUTRE_NOEXCEPT
+//		{
+//			return bs::saturated_(bs::minus)(a0, a1);
+//		}
+//	};
+//
+//	void PerformSubScalar(const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin1, const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin2, std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectout)
+//	{
+//		//get the specialized operator
+//		using real_op = op_Saturated_Sub<unsigned char, unsigned char, unsigned char, tag_SIMD_disabled>;
+//		real_op op;
+//		//std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr";
+//		auto i_vinbeg1 = vectin1.data();
+//		auto i_vinend1 = vectin1.data() + vectin1.size();
+//		auto i_vinbeg2 = vectin2.data();
+//		auto i_voutbeg = vectout.data();
+//		for (; i_vinbeg1 != i_vinend1; ++i_vinbeg1, ++i_vinbeg2, ++i_voutbeg)
+//		{
+//			*i_voutbeg = op(*i_vinbeg1, *i_vinbeg2);
+//		}
+//	}
+//
+//	void PerformSubSIMD(const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin1, const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin2, std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectout)
+//	{
+//		//get the specialized operator
+//		using real_op = op_Saturated_Sub<unsigned char, unsigned char, unsigned char, tag_SIMD_enabled>;
+//		real_op op;
+//		//std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr SIMD";
+//		const auto i_vinbeg1 = vectin1.data();
+//		const auto i_vinend1 = vectin1.data() + vectin1.size();
+//		const auto i_vinbeg2 = vectin2.data();
+//		auto i_voutbeg = vectout.data();
+//		bs::transform(i_vinbeg1, i_vinend1, i_vinbeg2, i_voutbeg, op);
+//	}
+//
+//
+//	/***********************************************************************************************************************************/
+//	/*                                                  SATURATED ADD                                                                  */
+//	/**********************************************************************************************************************************/
+//	template< typename T1, typename T2, typename T3, class tag>
+//	struct op_Saturated_Add;
+//
+//	template< typename T1, typename T2, typename T3>
+//	struct op_Saturated_Add<T1, T2, T3, tag_SIMD_disabled>
+//	{
+//	private:
+//		T3 m_maxval;
+//		using accutype = typename poutre::TypeTraits<T3>::accu_type;
+//	public:
+//		op_Saturated_Add() :m_maxval(poutre::TypeTraits<T3>::max()) {}
+//		POUTRE_ALWAYS_INLINE T3 operator()(T1 const &a0, T2 const &a1) const POUTRE_NOEXCEPT
+//		{
+//			accutype res = static_cast<accutype>(a0) + static_cast<accutype>(a1);
+//			if (res > static_cast<accutype>(m_maxval)) return m_maxval;
+//			return static_cast<T3>(res);
+//		}
+//	};
+//
+//	template< typename T>
+//	struct op_Saturated_Add<T, T, T, tag_SIMD_enabled>
+//	{
+//	public:
+//		op_Saturated_Add() {}
+//		template< typename U>
+//		POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) const POUTRE_NOEXCEPT
+//		{
+//			return bs::saturated_(bs::plus)(a0, a1);
+//		}
+//	};
+//
+//
+//	void PerformAddScalar(const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin1, const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin2, std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectout)
+//	{
+//		//get the specialized operator
+//		using real_op = op_Saturated_Add<unsigned char, unsigned char, unsigned char, tag_SIMD_disabled>;
+//		real_op op;
+//		//std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr";
+//		auto i_vinbeg1 = vectin1.data();
+//		auto i_vinend1 = vectin1.data() + vectin1.size();
+//		auto i_vinbeg2 = vectin2.data();
+//		auto i_voutbeg = vectout.data();
+//		for (; i_vinbeg1 != i_vinend1; ++i_vinbeg1, ++i_vinbeg2, ++i_voutbeg)
+//		{
+//			*i_voutbeg = op(*i_vinbeg1, *i_vinbeg2);
+//		}
+//	}
+//
+//	void PerformAddSIMD(const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin1, const std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectin2, std::vector<unsigned char, boost::simd::allocator<unsigned char>>& vectout)
+//	{
+//		//get the specialized operator
+//		using real_op = op_Saturated_Add<unsigned char, unsigned char, unsigned char, tag_SIMD_enabled>;
+//		real_op op;
+//		//std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr SIMD";
+//		const auto i_vinbeg1 = vectin1.data();
+//		const auto i_vinend1 = vectin1.data() + vectin1.size();
+//		const auto i_vinbeg2 = vectin2.data();
+//		auto i_voutbeg = vectout.data();
+//		bs::transform(i_vinbeg1, i_vinend1, i_vinbeg2, i_voutbeg, op);
+//	}
+//
+//
+//}
+//
+//BOOST_AUTO_TEST_CASE(operatorinfdispatch)
+//{
+//	const auto size = 1000*1000;
+//	//const auto size = 10 * 10;
+//	const auto inputVect1 = ConstructVector(size);
+//	const auto inputVect2 = ConstructVector(size);
+//	std::vector<unsigned char, boost::simd::allocator<unsigned char>> ouputVect(size);
+//
+//	auto iteration = 10000;
+//	//auto iteration = 1;
+//
+//	{
+//		poutre::Timer timer;
+//		std::cout << "********************************" << std::endl;
+//		timer.Start();
+//		for (auto i = 0; i < iteration; ++i)
+//			PerformInfSIMD(inputVect1, inputVect2, ouputVect);
+//		timer.Stop();
+//		std::cout << "Time testInf simd" << timer << std::endl;
+//		timer.Reset();
+//		std::cout << "********************************" << std::endl;
+//	}
+//	{
+//		std::cout << "********************************" << std::endl;
+//		poutre::Timer timer;
+//		timer.Start();
+//		for (auto i = 0; i < iteration; ++i)
+//			PerformInfScalar(inputVect1, inputVect2, ouputVect);
+//		timer.Stop();
+//		std::cout << "Time testInf scalar " << timer << std::endl;
+//		timer.Reset();
+//		std::cout << "********************************" << std::endl;
+//	}
+//
+//	{
+//		poutre::Timer timer;
+//		std::cout << "********************************" << std::endl;
+//		timer.Start();
+//		for (auto i = 0; i < iteration; ++i)
+//			PerformSupSIMD(inputVect1, inputVect2, ouputVect);
+//		timer.Stop();
+//		std::cout << "Time testsup simd" << timer << std::endl;
+//		timer.Reset();
+//		std::cout << "********************************" << std::endl;
+//	}
+//	{
+//		std::cout << "********************************" << std::endl;
+//		poutre::Timer timer;
+//		timer.Start();
+//		for (auto i = 0; i < iteration; ++i)
+//			PerformSupScalar(inputVect1, inputVect2, ouputVect);
+//		timer.Stop();
+//		std::cout << "Time testsup scalar " << timer << std::endl;
+//		timer.Reset();
+//		std::cout << "********************************" << std::endl;
+//	}
+//
+//	{
+//		poutre::Timer timer;
+//		std::cout << "********************************" << std::endl;
+//		timer.Start();
+//		for (auto i = 0; i < iteration; ++i)
+//			PerformAddSIMD(inputVect1, inputVect2, ouputVect);
+//		timer.Stop();
+//		std::cout << "Time testadd simd" << timer << std::endl;
+//		timer.Reset();
+//		std::cout << "********************************" << std::endl;
+//	}
+//	{
+//		std::cout << "********************************" << std::endl;
+//		poutre::Timer timer;
+//		timer.Start();
+//		for (auto i = 0; i < iteration; ++i)
+//			PerformAddScalar(inputVect1, inputVect2, ouputVect);
+//		timer.Stop();
+//		std::cout << "Time testadd scalar " << timer << std::endl;
+//		timer.Reset();
+//		std::cout << "********************************" << std::endl;
+//	}
+//
+//
+//	{
+//		poutre::Timer timer;
+//		std::cout << "********************************" << std::endl;
+//		timer.Start();
+//		for (auto i = 0; i < iteration; ++i)
+//			PerformSubSIMD(inputVect1, inputVect2, ouputVect);
+//		timer.Stop();
+//		std::cout << "Time testsub simd" << timer << std::endl;
+//		timer.Reset();
+//		std::cout << "********************************" << std::endl;
+//	}
+//	{
+//		std::cout << "********************************" << std::endl;
+//		poutre::Timer timer;
+//		timer.Start();
+//		for (auto i = 0; i < iteration; ++i)
+//			PerformSubScalar(inputVect1, inputVect2, ouputVect);
+//		timer.Stop();
+//		std::cout << "Time testsub scalar " << timer << std::endl;
+//		timer.Reset();
+//		std::cout << "********************************" << std::endl;
+//	}
+//}
 
 namespace
 {
