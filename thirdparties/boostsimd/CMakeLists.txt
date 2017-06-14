@@ -10,8 +10,8 @@ include(ExternalProject)
 find_package(git REQUIRED)
 ExternalProject_Add(BoostSimDdep
   GIT_REPOSITORY https://github.com/NumScale/boost.simd
-  #GIT_TAG develop
-  GIT_TAG 3695ff6babc63deab068ccc0776825478dac27cb
+  #GIT_TAG issue_519
+  GIT_TAG develop  
   PREFIX ${CMAKE_CURRENT_BINARY_DIR}
   CONFIGURE_COMMAND ""
   BUILD_COMMAND ""
