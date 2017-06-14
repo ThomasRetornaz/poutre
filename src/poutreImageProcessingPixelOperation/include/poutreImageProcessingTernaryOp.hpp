@@ -38,6 +38,16 @@ namespace poutre
         class TerOp>
     struct PixelWiseTernaryOpDispatcher
     {
+		static_assert((
+			std::is_same< View1<T1, Rank>, strided_array_view<T1, Rank> >::value
+			|| std::is_same< View1<T1, Rank>, strided_array_view<const T1, Rank> >::value
+			|| std::is_same< View2<T2, Rank>, strided_array_view<T2, Rank> >::value
+			|| std::is_same< View2<T2, Rank>, strided_array_view<const T2, Rank> >::value
+			|| std::is_same< View2<T3, Rank>, strided_array_view<T3, Rank> >::value
+			|| std::is_same< View2<T3, Rank>, strided_array_view<const T3, Rank> >::value
+			|| std::is_same< ViewOut<Tout, Rank>, strided_array_view<Tout, Rank> >::value
+			), "strided view only specilization fail for arrayview");
+
         void operator()(const View1<T1, Rank>& i_vin1, const TerOp& op, const View2<T2, Rank>& i_vin2, const View3<T3, Rank>& i_vin3, ViewOut<Tout, Rank>& o_vout) const
         {
             //More runtime dispatch

@@ -38,6 +38,19 @@ namespace poutre
         class QuaterOp>
     struct PixelWiseQuaternaryOpDispatcher
     {
+		static_assert((
+			std::is_same< View1<T1, Rank>, strided_array_view<T1, Rank> >::value
+			|| std::is_same< View1<T1, Rank>, strided_array_view<const T1, Rank> >::value
+			|| std::is_same< View2<T2, Rank>, strided_array_view<T2, Rank> >::value
+			|| std::is_same< View2<T2, Rank>, strided_array_view<const T2, Rank> >::value
+			|| std::is_same< View2<T3, Rank>, strided_array_view<T3, Rank> >::value
+			|| std::is_same< View2<T3, Rank>, strided_array_view<const T3, Rank> >::value
+			|| std::is_same< View2<T4, Rank>, strided_array_view<T4, Rank> >::value
+			|| std::is_same< View2<T4, Rank>, strided_array_view<const T4, Rank> >::value
+			|| std::is_same< ViewOut<Tout, Rank>, strided_array_view<Tout, Rank> >::value
+			), "strided view only specilization fail for arrayview");
+
+
         void operator()(const View1<T1, Rank>& i_vin1,const QuaterOp& op,const View2<T2, Rank>& i_vin2, const View3<T3, Rank>& i_vin3, const View4<T4, Rank>& i_vin4, ViewOut<Tout, Rank>& o_vout) const
         {
             //More runtime dispatch
