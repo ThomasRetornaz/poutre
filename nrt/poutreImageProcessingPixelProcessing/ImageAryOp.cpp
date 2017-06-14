@@ -714,6 +714,7 @@ namespace
 	}
 }
 
+/*
 BOOST_AUTO_TEST_CASE(benchmark)
 {
 	const auto size = 1000 * 1000;
@@ -721,9 +722,9 @@ BOOST_AUTO_TEST_CASE(benchmark)
 	const auto inputVect2 = ConstructVector(size);
 	std::vector<poutre::pUINT8, boost::simd::allocator<poutre::pUINT8>> ouputVect(size);
 
-	auto v_img1 = poutre::array_view< const poutre::pUINT8, 2>(inputVect1, { int(1024),int(1024) });
-	auto v_img2 = poutre::array_view< const poutre::pUINT8, 2>(inputVect2, { int(1024),int(1024) });
-	auto v_imgout = poutre::array_view< poutre::pUINT8, 2>(ouputVect, { int(1024),int(1024) });
+	auto v_img1 = poutre::array_view< const poutre::pUINT8, 2>(inputVect1, { int(1000),int(1000) });
+	auto v_img2 = poutre::array_view< const poutre::pUINT8, 2>(inputVect2, { int(1000),int(1000) });
+	auto v_imgout = poutre::array_view< poutre::pUINT8, 2>(ouputVect, { int(1000),int(1000) });
 
 
 
@@ -797,6 +798,7 @@ BOOST_AUTO_TEST_CASE(benchmark)
 	timer.Reset();
 	std::cout << "********************************" << std::endl;
 }
+*/
 BOOST_AUTO_TEST_SUITE_END()
 
 
