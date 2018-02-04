@@ -10,8 +10,7 @@
 #ifndef POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
 #define POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
 
-#include <boost/simd/memory/allocator.hpp>
-#include <boost/simd/detail/is_aligned.hpp>
+#include <simdpp/simd.h>
 #include <array>
 #include <memory>
 #include <utility>
@@ -47,11 +46,12 @@ namespace poutre {
 // Maybe inherit/compose with nt2::table or blaze::DenseMatrix or
 // Eigen::Tensor would be more effective depending on algorithms
 
-//! FIXME dispatch on coord and allow unset dims
+//! TODO dispatch on coord and allow unset dims
 
 template <class valuetype, std::ptrdiff_t NumDims = 2,
-          class allocator_type_t = boost::simd::allocator<
-              typename TypeTraits<valuetype>::storage_type>>
+          class allocator_type_t = simdpp::aligned_allocator<
+    typename TypeTraits<valuetype>::storage_type, 
+    simdpp::typetraits<typename TypeTraits<valuetype>::storage_type>::alignment>>
 class DenseImage : public IInterface {
   static_assert(NumDims > 0, "NumDims must be >0");
 
@@ -323,7 +323,7 @@ public:
     for (size_t i = 0; i < numDims - 1; i++) {
       out << coords[i] << ", ";
     }
-    if (numDims - 1 >= 0) {
+    if ((ptrdiff_t)numDims - 1 >= 0) {
       out << coords[numDims - 1];
     }
     out << ")" << std::endl;

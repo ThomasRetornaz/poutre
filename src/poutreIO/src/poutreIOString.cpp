@@ -1,3 +1,6 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 //==============================================================================
 //                  Copyright (c) 2015 - Thomas Retornaz                      //
@@ -332,7 +335,7 @@ namespace poutre
           }
       }
 
-      return std::move(img);
+      return img;
     }
 
     /***********************************************************************************************************************/
@@ -562,7 +565,7 @@ namespace poutre
           {
         case 0:
           {
-          POUTRE_RUNTIME_ERROR("Unsupported number of dims:0"); return std::move(ostrm.str());
+          POUTRE_RUNTIME_ERROR("Unsupported number of dims:0"); return ostrm.str();
           }break;
         case 1:
           {
@@ -585,7 +588,7 @@ namespace poutre
           POUTRE_RUNTIME_ERROR("Unsupported number of dims");
           }
         }  
-        return std::move(ostrm.str());
+        return ostrm.str();
     }
 
 } //namespace

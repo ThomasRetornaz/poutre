@@ -33,19 +33,14 @@
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingBinaryOp.hpp>
 #endif
 
-#include <boost/simd/pack.hpp>
-//#include <boost/simd/include/functions/plus.hpp>
-//https://developer.numscale.com/boost.simd/documentation/develop/group__group-arithmetic.html
-#include <boost/simd/function/saturated.hpp>
-#include <boost/simd/function/plus.hpp> //add
-#include <boost/simd/function/minus.hpp> //sub
-#include <boost/simd/function/negate.hpp> //invert
-#include <boost/simd/function/max.hpp> //sup
-#include <boost/simd/function/min.hpp> //inf
+////https://developer.numscale.com/boost.simd/documentation/develop/group__group-arithmetic.html
+//#include <boost/simd/function/negate.hpp> //invert
+
+#include <simdpp/simd.h>
 
 namespace poutre
 {
-    namespace bs = boost::simd;
+    namespace simd = simdpp::SIMDPP_ARCH_NAMESPACE;
 
 
     /***********************************************************************************************************************************/
@@ -69,10 +64,16 @@ namespace poutre
     {
     public:
         op_Invert() {}
+
+        POUTRE_ALWAYS_INLINE T operator()(T const &a0) const POUTRE_NOEXCEPT
+        {
+            return -a0;
+        }
+
         template< typename U>
         POUTRE_ALWAYS_INLINE U operator()(U const &a0) const POUTRE_NOEXCEPT
         {
-            return -a0;
+            return simd::neg(a0);
         }
     };
 
@@ -107,12 +108,23 @@ namespace poutre
     template< typename T>
     struct op_Saturated_Sub<T, T, T, tag_SIMD_enabled>
     {
+    private:
+        T m_minval;
+        using accutype = typename TypeTraits<T>::accu_type;
     public:
-        op_Saturated_Sub() {}
+        op_Saturated_Sub() :m_minval(TypeTraits<T>::min()) {}
+
+        POUTRE_ALWAYS_INLINE T operator()(T const &a0, T const &a1) const POUTRE_NOEXCEPT
+        {
+            accutype res = static_cast<accutype>(a0) - static_cast<accutype>(a1);
+            if (res < static_cast<accutype>(m_minval)) return m_minval;
+            return static_cast<T>(res);
+        }
+
         template< typename U>
         POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) const POUTRE_NOEXCEPT
         {
-            return bs::saturated_(bs::minus)(a0, a1);
+            return simd::sub_sat(a0, a1);
         }
     };
 
@@ -147,12 +159,21 @@ namespace poutre
     template< typename T>
     struct op_Saturated_Add<T, T, T, tag_SIMD_enabled>
     {
+    private:
+        T m_maxval;
+        using accutype = typename TypeTraits<T>::accu_type;
     public:
-        op_Saturated_Add() {}
+        op_Saturated_Add() :m_maxval(TypeTraits<T>::max()) {}
+        POUTRE_ALWAYS_INLINE T operator()(T const &a0, T const &a1) const POUTRE_NOEXCEPT
+        {
+            accutype res = static_cast<accutype>(a0) + static_cast<accutype>(a1);
+            if (res > static_cast<accutype>(m_maxval)) return m_maxval;
+            return static_cast<T>(res);
+        }
         template< typename U>
         POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) const POUTRE_NOEXCEPT
         {
-            return bs::saturated_(bs::plus)(a0, a1);
+            return simd::add_sat(a0, a1);
         }
     };
 
@@ -190,18 +211,21 @@ namespace poutre
     struct op_Saturated_Add_Constant<T, T, tag_SIMD_enabled>
     {
     private:
-        //FIXME    
-        /*using p_t = bs::pack<T>;
-        p_t m_val_pack;*/
-        T m_val;
+        const T m_val, m_maxval;
+        const typename TypeTraits<T>::simd_type m_simd_val;
+        using accutype = typename TypeTraits<T>::accu_type;
     public:
-        //using real_op = op_Saturated_Add_Constant<T, tag_SIMD_disabled>;       
-        //op_Saturated_Add_Constant(T val) :m_val(val) {}
-        op_Saturated_Add_Constant(T val) :m_val(val) {}
+        op_Saturated_Add_Constant(T val) :m_val(val), m_maxval(TypeTraits<T>::max()), m_simd_val(simd::splat(val)){}
+        POUTRE_ALWAYS_INLINE T operator()(T const &a0) const  POUTRE_NOEXCEPT
+        {
+            accutype res = static_cast<accutype>(m_val) + static_cast<accutype>(a0);
+            if (res > static_cast<accutype>(m_maxval)) return m_maxval;
+            return static_cast<T>(res);
+        }
         template< typename U>
         POUTRE_ALWAYS_INLINE U operator()(U const &a0) const POUTRE_NOEXCEPT
         {
-            return bs::saturated_(bs::plus)(a0, m_val);
+            return simd::add_sat(a0, m_simd_val);
         }
     };
 
@@ -240,18 +264,23 @@ namespace poutre
     struct op_Saturated_Sub_Constant<T, T, tag_SIMD_enabled>
     {
     private:
-        //FIXME    
-        /*using p_t = bs::pack<T>;
-        p_t m_val_pack;*/
-        T m_val;
+        const T m_val, m_minval;
+        const typename TypeTraits<T>::simd_type m_simd_val;
+        using accutype = typename TypeTraits<T>::accu_type;
     public:
-        //using real_op = op_Saturated_Sub_Constant<T, tag_SIMD_disabled>;       
-        //op_Saturated_Sub_Constant(T val) :m_val(val) {}
-        op_Saturated_Sub_Constant(T val) :m_val(val) {}
-        template< typename U>
-        U operator()(U const &a0) const POUTRE_NOEXCEPT
+        op_Saturated_Sub_Constant(T val) :m_val(val), m_minval(TypeTraits<T>::min()), m_simd_val(simd::splat(val)){}
+
+        POUTRE_ALWAYS_INLINE T operator()(T const &a0) const POUTRE_NOEXCEPT
         {
-            return bs::saturated_(bs::minus)(a0, m_val);
+            accutype res = static_cast<accutype>(a0) - static_cast<accutype>(m_val);
+            if (res < static_cast<accutype>(m_minval)) return m_minval;
+            return static_cast<T>(res);
+        }
+
+        template< typename U>
+        POUTRE_ALWAYS_INLINE U operator()(U const &a0) const POUTRE_NOEXCEPT
+        {
+            return simd::sub_sat(a0, m_simd_val);
         }
     };
 
@@ -285,10 +314,14 @@ namespace poutre
     {
     public:
         op_Sup() {}
+        POUTRE_ALWAYS_INLINE T operator()(T const &a0, T const &a1) const POUTRE_NOEXCEPT
+        {
+            return (a0 > a1 ? a0 : a1);
+        }
         template< typename U>
         POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) const POUTRE_NOEXCEPT
         {
-            return bs::max(a0, a1);
+            return simd::max(a0, a1);
         }
     };
 
@@ -321,11 +354,17 @@ namespace poutre
     {
     public:
         op_Inf() {}
+
+        POUTRE_ALWAYS_INLINE T operator()(T const &a0, T const &a1) const POUTRE_NOEXCEPT
+        {
+            return (a0 < a1 ? a0 : a1);
+        }
+
         template< typename U>
         POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) const POUTRE_NOEXCEPT
         {
 			
-            return bs::min(a0, a1);
+            return simd::min(a0, a1);
         }
     };
 

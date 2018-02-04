@@ -40,150 +40,123 @@
 #endif
 
 //simd part
-//https://developer.numscale.com/boost.simd/documentation/develop/group__group-predicates.html
-#include <boost/simd/function/is_less.hpp>
-#include <boost/simd/function/is_less_equal.hpp>
-#include <boost/simd/function/is_greater.hpp>
-#include <boost/simd/function/is_greater_equal.hpp>
-#include <boost/simd/function/is_equal.hpp>
-#include <boost/simd/function/is_not_equal.hpp>
-#include <boost/simd/algorithm.hpp>//"simd" transform
-#include <boost/simd/logical.hpp>
+////https://developer.numscale.com/boost.simd/documentation/develop/group__group-predicates.html
+//#include <boost/simd/function/is_less.hpp>
+//#include <boost/simd/function/is_less_equal.hpp>
+//#include <boost/simd/function/is_greater.hpp>
+//#include <boost/simd/function/is_greater_equal.hpp>
+//#include <boost/simd/function/is_equal.hpp>
+//#include <boost/simd/function/is_not_equal.hpp>
+//#include <boost/simd/algorithm.hpp>//"simd" transform
+//#include <boost/simd/logical.hpp>
+
+#include <simdpp/simd.h>
 
 namespace poutre
 {
-	namespace bs = boost::simd;
+    namespace simd = simdpp::SIMDPP_ARCH_NAMESPACE;
 
-	/******************************************Operator base ******************************************************/
-	//!Operator equal
-	template< typename T1, class tag = tag_SIMD_disabled>
+
+	template< typename T1>
 	struct OpCompEqualValue
 	{
 		T1 m_val;
-		OpCompEqualValue(T1 ival) :m_val(ival) {}
-		POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR bool operator()(T1 lhs) const POUTRE_NOEXCEPT
+        using simd_t = typename TypeTraits<T1>::simd_type;
+        using simd_mask_t = typename TypeTraits<T1>::simd_mask_type;
+        simd_t m_val_pack;
+		OpCompEqualValue(T1 ival) :m_val(ival), m_val_pack(simd::splat(ival)) {}
+		POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT
 		{
 			return  lhs == m_val;
 		}
-	};
 
-	template< typename T1>
-	struct OpCompEqualValue<T1, tag_SIMD_enabled>
-	{
-		using pack_t = bs::pack<std::remove_const_t<T1>>; //FIXME WHY I NEED TO REMOVE CONSTNESS
-		using logical_t = bs::pack<bs::logical<std::remove_const_t<T1>>>; //FIXME WHY I NEED TO REMOVE CONSTNESS
-		//using pack_t = bs::pack<T1>; //FIXME WHY I NEED TO REMOVE CONSTNESS
-		//using logical_t = bs::pack<bs::logical<T1>>; //FIXME WHY I NEED TO REMOVE CONSTNESS
-		pack_t m_val_pack;
-		OpCompEqualValue(T1 ival) :m_val_pack(ival) {}
 		template< typename U>
-		POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR logical_t operator()(U lhs) const POUTRE_NOEXCEPT
+		POUTRE_ALWAYS_INLINE simd_mask_t operator()(const U& lhs) const POUTRE_NOEXCEPT
 		{
-			return  bs::is_equal(lhs, m_val_pack);
+			return  simd::cmp_eq(lhs, m_val_pack);
 		}
 	};
 
 	//!Operator diff
-	template< typename T1, class tag = tag_SIMD_disabled>
+	template< typename T1>
 	struct OpCompDiffValue
 	{
-		T1 m_val;
-		OpCompDiffValue(T1 ival) :m_val(ival) {}
-		POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR bool operator()(T1 lhs) const POUTRE_NOEXCEPT
+        T1 m_val;
+        using simd_t = typename TypeTraits<T1>::simd_type;
+        using simd_mask_t = typename TypeTraits<T1>::simd_mask_type;
+        simd_t m_val_pack;
+        OpCompDiffValue(T1 ival) :m_val(ival), m_val_pack(simd::splat(ival)) {}
+		POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT
 		{
 			return  lhs != m_val;
 		}
-	};
 
-	template< typename T1>
-	struct OpCompDiffValue<T1, tag_SIMD_enabled>
-	{
-		using pack_t = bs::pack<std::remove_const_t<T1>>;
-		using logical_t = bs::pack<bs::logical<std::remove_const_t<T1>>>;
-		pack_t m_val_pack;
-		OpCompDiffValue(T1 ival) :m_val_pack(ival) {}
 		template< typename U>
-		POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR logical_t operator()(U lhs) const POUTRE_NOEXCEPT
+		POUTRE_ALWAYS_INLINE simd_mask_t operator()(const U& lhs) const POUTRE_NOEXCEPT
 		{
-			return  bs::is_not_equal(lhs, m_val_pack);
+			return  simd::cmp_neq(lhs, m_val_pack);
 		}
 	};
 
 	//!Operator Sup
-	template< typename T1, class tag = tag_SIMD_disabled>
+	template< typename T1>
 	struct OpCompSupValue
 	{
-		T1 m_val;
-		OpCompSupValue(T1 ival) :m_val(ival) {}
-		POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR bool operator()(T1 lhs) const POUTRE_NOEXCEPT
+        T1 m_val;
+        using simd_t = typename TypeTraits<T1>::simd_type;
+        using simd_mask_t = typename TypeTraits<T1>::simd_mask_type;
+        simd_t m_val_pack;
+        OpCompSupValue(T1 ival) :m_val(ival), m_val_pack(simd::splat(ival)) {}
+		POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT
 		{
 			return  lhs > m_val;
 		}
-	};
 
-	template< typename T1>
-	struct OpCompSupValue<T1, tag_SIMD_enabled>
-	{
-		using pack_t = bs::pack<std::remove_const_t<T1>>;
-		using logical_t = bs::pack<bs::logical<std::remove_const_t<T1>>>;
-		pack_t m_val_pack;
-		OpCompSupValue(T1 ival) :m_val_pack(ival) {}
 		template< typename U>
-		POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR logical_t operator()(U lhs) const POUTRE_NOEXCEPT
+		POUTRE_ALWAYS_INLINE simd_mask_t operator()(const U& lhs) const POUTRE_NOEXCEPT
 		{
-			return  bs::is_greater(lhs, m_val_pack);
+			return  simd::cmp_gt(lhs, m_val_pack);
 		}
 	};
 
 	//!Operator SupEqual
-	template< typename T1, class tag = tag_SIMD_disabled>
+	template< typename T1>
 	struct OpCompSupEqualValue
 	{
-		T1 m_val;
-		OpCompSupEqualValue(T1 ival) :m_val(ival) {}
-		POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR bool operator()(T1 lhs) const POUTRE_NOEXCEPT
+        T1 m_val;
+        using simd_t = typename TypeTraits<T1>::simd_type;
+        using simd_mask_t = typename TypeTraits<T1>::simd_mask_type;
+        simd_t m_val_pack;
+		OpCompSupEqualValue(T1 ival) :m_val(ival), m_val_pack(simd::splat(ival)) {}
+		POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT
 		{
 			return lhs >= m_val;
 		}
-	};
 
-	template< typename T1>
-	struct OpCompSupEqualValue<T1, tag_SIMD_enabled>
-	{
-		using pack_t = bs::pack<std::remove_const_t<T1>>;
-		using logical_t = bs::pack<bs::logical<std::remove_const_t<T1>>>;
-		pack_t m_val_pack;
-		OpCompSupEqualValue(T1 ival) :m_val_pack(ival) {}
 		template< typename U>
-		POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR logical_t operator()(U lhs) const POUTRE_NOEXCEPT
+		POUTRE_ALWAYS_INLINE simd_mask_t operator()(const U& lhs) const POUTRE_NOEXCEPT
 		{
-			return  bs::is_greater_equal(lhs, m_val_pack);
+			return  simd::cmp_ge(lhs, m_val_pack);
 		}
 	};
 
 	//!Operator Inf
-	template< typename T1, class tag = tag_SIMD_disabled>
+	template< typename T1>
 	struct OpCompInfValue
 	{
-		T1 m_val;
-		OpCompInfValue(T1 ival) :m_val(ival) {}
-		POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR bool operator()(T1 lhs) const POUTRE_NOEXCEPT
+        T1 m_val;
+        using simd_t = typename TypeTraits<T1>::simd_type;
+        using simd_mask_t = typename TypeTraits<T1>::simd_mask_type;
+        simd_t m_val_pack;
+		OpCompInfValue(T1 ival) :m_val(ival), m_val_pack(simd::splat(ival)) {}
+		POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT
 		{
 			return lhs < m_val;
 		}
-	};
-
-	template< typename T1>
-	struct OpCompInfValue<T1, tag_SIMD_enabled>
-	{
-		using pack_t = bs::pack<std::remove_const_t<T1>>;
-		using logical_t = bs::pack<bs::logical<std::remove_const_t<T1>>>;
-		pack_t m_val_pack;
-		OpCompInfValue(T1 ival) :m_val_pack(ival) {}
 		template< typename U>
-		POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR logical_t operator()(U lhs) const POUTRE_NOEXCEPT
+		POUTRE_ALWAYS_INLINE simd_mask_t operator()(const U& lhs) const POUTRE_NOEXCEPT
 		{
-			return  bs::is_less(lhs, m_val_pack);
+			return  simd::cmp_lt(lhs, m_val_pack);
 		}
 	};
 
@@ -191,25 +164,20 @@ namespace poutre
 	template< typename T1, class tag = tag_SIMD_disabled>
 	struct OpCompInfEqualValue
 	{
-		T1 m_val;
-		OpCompInfEqualValue(T1 ival) :m_val(ival) {}
-		POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR bool operator()(T1 lhs) const POUTRE_NOEXCEPT
+        T1 m_val;
+        using simd_t = typename TypeTraits<T1>::simd_type;
+        using simd_mask_t = typename TypeTraits<T1>::simd_mask_type;
+        simd_t m_val_pack;
+		OpCompInfEqualValue(T1 ival) :m_val(ival), m_val_pack(simd::splat(ival)) {}
+		POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT
 		{
 			return lhs <= m_val;
 		}
-	};
 
-	template< typename T1>
-	struct OpCompInfEqualValue<T1, tag_SIMD_enabled>
-	{
-		using pack_t = bs::pack<std::remove_const_t<T1>>;
-		using logical_t = bs::pack<bs::logical<std::remove_const_t<T1>>>;
-		pack_t m_val_pack;
-		OpCompInfEqualValue(T1 ival) :m_val_pack(ival) {}
 		template< typename U>
-		POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR logical_t operator()(U lhs) const POUTRE_NOEXCEPT
+		POUTRE_ALWAYS_INLINE simd_mask_t operator()(const U& lhs) const POUTRE_NOEXCEPT
 		{
-			return  bs::is_less_equal(lhs, m_val_pack);
+			return  simd::cmp_le(lhs, m_val_pack);
 		}
 	};
 	/*************************************************************************************************************************************/
@@ -223,37 +191,33 @@ namespace poutre
 		using param_type = typename boost::call_traits<Tin>::param_type;
 		compare_sss(const Tout& i_valtrue, const Tout& i_valfalse) : cop(), m_valtrue(i_valtrue), m_valfalse(i_valfalse) {}
 		compare_sss(const Tout& i_valtrue, const Tout& i_valfalse, const CompareOp& op) : cop(op), m_valtrue(i_valtrue), m_valfalse(i_valfalse) {}
-		const Tout& operator()(param_type i_val) const POUTRE_NOEXCEPT //TODO inline ?
+        POUTRE_ALWAYS_INLINE Tout operator()(param_type i_val) const POUTRE_NOEXCEPT 
 		{
 			return (cop(i_val) ? m_valtrue : m_valfalse);
 		}
 
 	};
 
-	template <typename Tin, typename Tout, class CompareOpSimd, class CompareOp>
+	template <typename Tin, typename Tout, class CompareOp>
 	struct compare_sss_simd
 	{
-		const CompareOpSimd copsimd;
 		const CompareOp  cop;
-		using pack_t = bs::pack<Tout>;
-		using logical_t = bs::pack<bs::logical<Tout>>;
-		pack_t m_valtrue_pack, m_valfalse_pack;
+        using simd_t = typename TypeTraits<Tin>::simd_type;
+        using simd_mask_t = typename TypeTraits<Tout>::simd_mask_type;
+        simd_t m_valtrue_pack, m_valfalse_pack;
 		Tout m_valtrue, m_valfalse;
-		compare_sss_simd(const Tout& i_valtrue, const Tout& i_valfalse) : copsimd(), cop(), m_valtrue_pack(i_valtrue), m_valfalse_pack(i_valfalse), m_valtrue(i_valtrue), m_valfalse(i_valfalse) {}
-		compare_sss_simd(const Tout& i_valtrue, const Tout& i_valfalse, const CompareOpSimd& opsimd, const CompareOp& op) :copsimd(opsimd), cop(op), m_valtrue_pack(i_valtrue), m_valfalse_pack(i_valfalse), m_valtrue(i_valtrue), m_valfalse(i_valfalse) {}
+		compare_sss_simd(const Tout& i_valtrue, const Tout& i_valfalse) : cop(), m_valtrue_pack(simd::splat(i_valtrue)), m_valfalse_pack(simd::splat(i_valfalse)), m_valtrue(i_valtrue), m_valfalse(i_valfalse) {}
+		compare_sss_simd(const Tout& i_valtrue, const Tout& i_valfalse, const CompareOp& op) :cop(op), m_valtrue_pack(simd::splat(i_valtrue)), m_valfalse_pack(simd::splat(i_valfalse)), m_valtrue(i_valtrue), m_valfalse(i_valfalse) {}
 
-		Tout operator()(Tin i_val) const POUTRE_NOEXCEPT  //TODO inline ?
+        POUTRE_ALWAYS_INLINE Tout operator()(Tin i_val) const POUTRE_NOEXCEPT 
 		{
-			//std::cout << "call unary" << std::endl;
 			return (cop(i_val) ? m_valtrue : m_valfalse);
 		}
 
 		template<typename U>
 		U operator()(U i_val) const POUTRE_NOEXCEPT //TODO inline ?
 		{
-			logical_t v_res = copsimd(i_val);
-			return bs::if_else(v_res, m_valtrue_pack, m_valfalse_pack); 
-			//return i_val;
+			return simd::blend(m_valtrue_pack, m_valfalse_pack, cop(i_val));
 		}
 
 	};
@@ -278,11 +242,10 @@ namespace poutre
 		}
 	};
 
-	template<typename Tin, typename Tout, ptrdiff_t Rank, class OpSimd, class Op>
+	template<typename Tin, typename Tout, ptrdiff_t Rank, class Op>
 	struct viewCompare_sss_simd
 	{
-		void operator()(const array_view<Tin, Rank>& i_vin,
-			OpSimd i_opsimd,
+		void operator()(const array_view<Tin, Rank>& i_vin,			
 			Op i_op,
 			typename boost::call_traits<Tout>::param_type i_valtrue,
 			typename boost::call_traits<Tout>::param_type i_valfalse,
@@ -294,12 +257,12 @@ namespace poutre
 			std::cout << "call viewCompare_sss_simd array view template specialization, fall back ptrTime SIMD" << std::endl;
 			std::cout << "***********************************************************************************" << std::endl;*/
 
-			using functor = compare_sss_simd<Tin, Tout, OpSimd, Op>;
-			functor f(i_valtrue, i_valfalse, i_opsimd, i_op);
+			using functor = compare_sss_simd<Tin, Tout, Op>;
+			functor f(i_valtrue, i_valfalse, i_op);
 			auto begin = i_vin.data();
 			auto end = i_vin.data() + i_vin.size();
 			auto out = o_vout.data();
-			bs::transform(begin, end, out, f);
+			simd::transform(begin, end, out, f);
 		}
 
 	};
@@ -377,42 +340,35 @@ namespace poutre
 			switch (compOpType)
 			{
 			case CompOpType::CompOpEqual:
-			{
-				OpCompEqualValue<Tin, tag_SIMD_enabled> myopsimd(i_compval);
+			{				
 				OpCompEqualValue<Tin> myop(i_compval);
-				return viewCompare_sss_simd<Tin, Tout, Rank, OpCompEqualValue<Tin, tag_SIMD_enabled>, OpCompEqualValue<Tin>>()(i_vin, myopsimd, myop, i_valtrue, i_valfalse, o_vout);
+				return viewCompare_sss_simd<Tin, Tout, Rank,OpCompEqualValue<Tin>>()(i_vin,myop, i_valtrue, i_valfalse, o_vout);
 			}break;
-			
 			case CompOpType::CompOpDiff:
 			{
-				OpCompDiffValue<Tin, tag_SIMD_enabled> myopsimd(i_compval);
 				OpCompDiffValue<Tin> myop(i_compval);
-				return viewCompare_sss_simd<Tin, Tout, Rank, OpCompDiffValue<Tin, tag_SIMD_enabled>, OpCompDiffValue<Tin>>()(i_vin, myopsimd, myop, i_valtrue, i_valfalse, o_vout);
+				return viewCompare_sss_simd<Tin, Tout, Rank, OpCompDiffValue<Tin>>()(i_vin,  myop, i_valtrue, i_valfalse, o_vout);
 			}break;
 			
 			case CompOpType::CompOpSup:
 			{
-				OpCompSupValue<Tin, tag_SIMD_enabled> myopsimd(i_compval);
 				OpCompSupValue<Tin> myop(i_compval);
-				return viewCompare_sss_simd<Tin,Tout, Rank, OpCompSupValue<Tin, tag_SIMD_enabled>, OpCompSupValue<Tin>>()(i_vin, myopsimd, myop, i_valtrue, i_valfalse, o_vout);
+				return viewCompare_sss_simd<Tin,Tout, Rank, OpCompSupValue<Tin>>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
 			}break;
 			case CompOpType::CompOpSupEqual:
 			{
-				OpCompSupEqualValue<Tin, tag_SIMD_enabled> myopsimd(i_compval);
 				OpCompSupEqualValue<Tin> myop(i_compval);
-				return viewCompare_sss_simd<Tin,Tout, Rank, OpCompSupEqualValue<Tin, tag_SIMD_enabled>,OpCompSupEqualValue<Tin>>()(i_vin, myopsimd, myop, i_valtrue, i_valfalse, o_vout);
+				return viewCompare_sss_simd<Tin,Tout, Rank, OpCompSupEqualValue<Tin>>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
 			}break;
 			case CompOpType::CompOpInf:
 			{
-				OpCompInfValue<Tin, tag_SIMD_enabled> myopsimd(i_compval);
 				OpCompInfValue<Tin> myop(i_compval);
-				return viewCompare_sss_simd < Tin, Tout,  Rank, OpCompInfValue<Tin, tag_SIMD_enabled>, OpCompInfValue<Tin >> ()(i_vin, myopsimd, myop, i_valtrue, i_valfalse, o_vout);
+				return viewCompare_sss_simd < Tin, Tout,  Rank, OpCompInfValue<Tin >> ()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
 			}break;
 			case CompOpType::CompOpInfEqual:
 			{
-				OpCompInfEqualValue<Tin, tag_SIMD_enabled> myopsimd(i_compval);
 				OpCompInfEqualValue<Tin> myop(i_compval);
-				return viewCompare_sss_simd<Tin,Tout,Rank, OpCompInfEqualValue<Tin, tag_SIMD_enabled>,OpCompInfEqualValue<Tin>>()(i_vin, myopsimd, myop, i_valtrue, i_valfalse, o_vout);
+				return viewCompare_sss_simd<Tin,Tout,Rank,OpCompInfEqualValue<Tin>>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
 			}break;
 			default:
 			{
@@ -448,7 +404,7 @@ namespace poutre
 		using param_typefalse = typename boost::call_traits<Tfalse>::param_type;
 		compare_iii() : cop() {}
 		compare_iii(const CompareOp& op) : cop(op) {}
-		Tout operator()(param_typein i_val, param_typecomp i_comp, param_typetrue i_true, param_typetrue i_false) const POUTRE_NOEXCEPT //TODO inline ?
+        POUTRE_ALWAYS_INLINE Tout operator()(param_typein i_val, param_typecomp i_comp, param_typetrue i_true, param_typetrue i_false) const POUTRE_NOEXCEPT //TODO inline ?
 		{
 			return (cop(i_val, i_comp) ? i_true : i_false);
 		}
@@ -544,7 +500,7 @@ namespace poutre
 		using param_typefalse = typename boost::call_traits<Tfalse>::param_type;
 		compare_sii(const Tin& i_compval) : cop(), m_compval(i_compval) {}
 		compare_sii(const Tin& i_compval, const CompareOp& op) : cop(op), m_compval(i_compval) {}
-		Tout operator()(param_typein i_val, param_typetrue i_true, param_typefalse i_false) const POUTRE_NOEXCEPT //TODO inline ?
+        POUTRE_ALWAYS_INLINE Tout operator()(param_typein i_val, param_typetrue i_true, param_typefalse i_false) const POUTRE_NOEXCEPT //TODO inline ?
 		{
 			return (cop(i_val, m_compval) ? i_true : i_false);
 		}
@@ -634,7 +590,7 @@ namespace poutre
 		using param_typetrue = typename boost::call_traits<Ttrue>::param_type;
 		compare_sis(const Tin& i_compval, const Tout& i_valfalse) : cop(), m_compval(i_compval), m_valfalse(i_valfalse) {}
 		compare_sis(const Tin& i_compval, const Tout& i_valfalse, const CompareOp& op) : cop(op), m_compval(i_compval), m_valfalse(i_valfalse) {}
-		Tout operator()(param_typein i_val, param_typetrue i_true) const POUTRE_NOEXCEPT //TODO inline ?
+        POUTRE_ALWAYS_INLINE Tout operator()(param_typein i_val, param_typetrue i_true) const POUTRE_NOEXCEPT //TODO inline ?
 		{
 			return (cop(i_val, m_compval) ? i_true : m_valfalse);
 		}
@@ -729,7 +685,7 @@ namespace poutre
 		using param_typefalse = typename boost::call_traits<Tfalse>::param_type;
 		compare_isi(const Tout& i_valtrue) : cop(), m_valtrue(i_valtrue) {}
 		compare_isi(const Tout& i_valtrue, const CompareOp& op) : cop(op), m_valtrue(i_valtrue) {}
-		Tout operator()(param_typein i_val, param_typecomp i_comp, param_typefalse i_false) const POUTRE_NOEXCEPT //TODO inline ?
+        POUTRE_ALWAYS_INLINE Tout operator()(param_typein i_val, param_typecomp i_comp, param_typefalse i_false) const POUTRE_NOEXCEPT //TODO inline ?
 		{
 			return (cop(i_val, i_comp) ? m_valtrue : i_false);
 		}
@@ -825,7 +781,7 @@ namespace poutre
 		using param_typetrue = typename boost::call_traits<Ttrue>::param_type;
 		compare_iis(const Tout& i_valfalse) : cop(), m_valfalse(i_valfalse) {}
 		compare_iis(const Tout& i_valfalse, const CompareOp& op) : cop(op), m_valfalse(i_valfalse) {}
-		Tout operator()(param_typein i_val, param_typecomp i_comp, param_typetrue i_true) const POUTRE_NOEXCEPT //TODO inline ?
+        POUTRE_ALWAYS_INLINE Tout operator()(param_typein i_val, param_typecomp i_comp, param_typetrue i_true) const POUTRE_NOEXCEPT //TODO inline ?
 		{
 			return (cop(i_val, i_comp) ? i_true : m_valfalse);
 		}
@@ -923,7 +879,7 @@ namespace poutre
 		using param_typetrue = typename boost::call_traits<Tfalse>::param_type;
 		compare_ssi(const Tin& i_compval, const Tout& i_valtrue) : cop(), m_compval(i_compval), m_valtrue(i_valtrue) {}
 		compare_ssi(const Tin& i_compval, const Tout& i_valtrue, const CompareOp& op) : cop(op), m_compval(i_compval), m_valtrue(i_valtrue) {}
-		Tout operator()(param_typein i_val, param_typetrue i_false) const POUTRE_NOEXCEPT //TODO inline ?
+        POUTRE_ALWAYS_INLINE Tout operator()(param_typein i_val, param_typetrue i_false) const POUTRE_NOEXCEPT //TODO inline ?
 		{
 			return (cop(i_val, m_compval) ? m_valtrue : i_false);
 		}
@@ -1016,7 +972,7 @@ namespace poutre
 		using param_type2 = typename boost::call_traits<Tin2>::param_type;
 		compare_iss(const Tout& i_valtrue, const Tout& i_valfalse) : cop(), m_valtrue(i_valtrue), m_valfalse(i_valfalse) {}
 		compare_iss(const Tout& i_valtrue, const Tout& i_valfalse, const CompareOp& op) : cop(op), m_valtrue(i_valtrue), m_valfalse(i_valfalse) {}
-		const Tout& operator()(param_type1 i_val1, param_type2 i_val2) const POUTRE_NOEXCEPT //TODO inline ?
+        POUTRE_ALWAYS_INLINE Tout operator()(param_type1 i_val1, param_type2 i_val2) const POUTRE_NOEXCEPT 
 		{
 			return (cop(i_val1, i_val2) ? m_valtrue : m_valfalse);
 		}

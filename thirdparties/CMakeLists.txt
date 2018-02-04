@@ -28,7 +28,7 @@ if(UNIX AND NOT APPLE AND NOT POUTRE_BOOST_FROM_SYSTEM)
 endif()
 
 set(Boost_ADDITIONAL_VERSIONS   
-	"1.61" "1.61.0" "1.62" "1.62.0" "1.63" "1.63.0"  "1.64" "1.64.0")
+	"1.65.1" "1.66.0")
 
 # disable auto link
 add_definitions(-DBOOST_ALL_NO_LIB)
@@ -58,11 +58,11 @@ else()
 endif()
 set(Boost_NO_BOOST_CMAKE ON)
 
-set(POUTRE_boost_version_minimal 1.61)
+set(POUTRE_boost_version_minimal 1.64)
 
 find_package(Boost ${POUTRE_boost_version_minimal}
              REQUIRED 
-             COMPONENTS 
+            COMPONENTS 
 						date_time 
 						filesystem 
 						system 
@@ -122,14 +122,8 @@ if(NOT POUTRE_BOOST_FROM_SYSTEM)
   #add_files_to_python_packaging(FILES ${BoostFilesToInstall})
 endif()
 
-# nt2 unusable for the moment wait new release 
-# add_subdirectory(nt2)
-# SET(NT2_COMPILE_FLAGS ${NT2_COMPILE_FLAGS} PARENT_SCOPE) #we can do better
-# SET(NT2_LINK_FLAGS ${NT2_LINK_FLAGS} PARENT_SCOPE) #we can do better
-# SET(NT2_INCLUDE_DIR ${NT2_INCLUDE_DIR} PARENT_SCOPE) #we can do better
-# boostsimd
-add_subdirectory(boostsimd)
-# SET(NT2_COMPILE_FLAGS ${NT2_COMPILE_FLAGS} PARENT_SCOPE) 
+# libsimdpp
+add_subdirectory(libsimdpp)
 
 # jsoncpp
 add_subdirectory(jsoncpp)

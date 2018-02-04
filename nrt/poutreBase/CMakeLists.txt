@@ -9,7 +9,6 @@ set(PoutreBaseTestSRC
   #dummy tests to validate proper import of third parties dependencies
   #${PoutreBaseTestSubdirectory}/nt2TablePlayground.cpp
   #${PoutreBaseTestSubdirectory}/eigenCleanImport.cpp
-  ${PoutreBaseTestSubdirectory}/boostSimdCleanImport.cpp
   ${PoutreBaseTestSubdirectory}/chronos.cpp
   ${PoutreBaseTestSubdirectory}/jsonSerialize.cpp
   ${PoutreBaseTestSubdirectory}/registrar.cpp
@@ -29,7 +28,7 @@ set_target_properties(PoutreBaseTests PROPERTIES
 
 target_link_libraries(PoutreBaseTests 
   INTERFACE Eigen  
-  INTERFACE BoostSimd 
+  NTERFACE libsimdpp 
   PRIVATE ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}  
   # ${Boost_THREAD_LIBRARY} 
   # ${Boost_SYSTEM_LIBRARY} 
@@ -37,7 +36,7 @@ target_link_libraries(PoutreBaseTests
   # ${Boost_LOG_SETUP_LIBRARY}
   PUBLIC PoutreBase
   )
-add_dependencies(PoutreBaseTests BoostSimd)
+add_dependencies(PoutreBaseTests libsimdppdep)
 add_dependencies(PoutreBaseTests Eigendep)
 
 IF(BUILD_SHARED_LIBS)

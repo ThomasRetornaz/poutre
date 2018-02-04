@@ -1,3 +1,6 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 //==============================================================================
 //                  Copyright (c) 2015 - Thomas Retornaz                      //
@@ -20,11 +23,11 @@
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingCompare.hpp>
 #include <poutreBase/poutreChronos.hpp>
 
-namespace bs = boost::simd;
+#include <simdpp/simd.h>
+
+namespace simd = simdpp::SIMDPP_ARCH_NAMESPACE;
 
 BOOST_AUTO_TEST_SUITE(poutreImageProcessingCompareOp)
-
-
 
 BOOST_AUTO_TEST_CASE(CompareOpssswholeimage_equal)
 {
@@ -2419,14 +2422,14 @@ BOOST_AUTO_TEST_CASE(CompareOpisiwholeimage_infequal)
 	BOOST_CHECK_EQUAL(imgstr, expected);
 }
 
-/*
+
 BOOST_AUTO_TEST_CASE(benchmarkViewCompare)
 {
-	const std::vector<poutre::pUINT8, boost::simd::allocator<poutre::pUINT8>> myvect(1000 * 1000);
-	const std::vector<poutre::pUINT8, boost::simd::allocator<poutre::pUINT8>> myvectTrue(1000 * 1000);
-	const std::vector<poutre::pUINT8, boost::simd::allocator<poutre::pUINT8>> myvectFalse(1000 * 1000);
-	std::vector<poutre::pUINT8, boost::simd::allocator<poutre::pUINT8>> myvectout(1000 * 1000);
-	std::vector<poutre::pFLOAT, boost::simd::allocator<poutre::pFLOAT>> myvectoutfloat(1000 * 1000);
+	const std::vector<poutre::pUINT8, simd::aligned_allocator<poutre::pUINT8, simd::typetraits<poutre::pUINT8>::alignment>> myvect(1000 * 1000);
+	const std::vector<poutre::pUINT8, simd::aligned_allocator<poutre::pUINT8, simd::typetraits<poutre::pUINT8>::alignment>> myvectTrue(1000 * 1000);
+	const std::vector<poutre::pUINT8, simd::aligned_allocator<poutre::pUINT8, simd::typetraits<poutre::pUINT8>::alignment>> myvectFalse(1000 * 1000);
+	std::vector<poutre::pUINT8, simd::aligned_allocator<poutre::pUINT8, simd::typetraits<poutre::pUINT8>::alignment>> myvectout(1000 * 1000);
+	std::vector<poutre::pFLOAT, simd::aligned_allocator<poutre::pFLOAT, simd::typetraits<poutre::pFLOAT>::alignment>> myvectoutfloat(1000 * 1000);
 
 	auto v_img = poutre::array_view< const poutre::pUINT8, 2>(myvect, { int(1000),int(1000) });
 	auto v_true = poutre::array_view< const poutre::pUINT8, 2>(myvectTrue, { int(1000),int(1000) });
@@ -2522,7 +2525,6 @@ BOOST_AUTO_TEST_CASE(benchmarkViewCompare)
 	}
 	
 }
-*/
 
 BOOST_AUTO_TEST_SUITE_END()
 

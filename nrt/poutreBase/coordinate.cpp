@@ -1,3 +1,6 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 //==============================================================================
 //                  Copyright (c) 2015 - Thomas Retornaz                      //
@@ -95,9 +98,6 @@ BOOST_AUTO_TEST_CASE(index_ordering)
   BOOST_CHECK(idx3>idx);
   BOOST_CHECK(idx3>=idx);
 
-  BOOST_CHECK(idx<=idx);
-  BOOST_CHECK(idx>=idx);
-  BOOST_CHECK(idx == idx);
   BOOST_CHECK(idx != idx2);
   BOOST_CHECK(idx2 != idx3);
   }

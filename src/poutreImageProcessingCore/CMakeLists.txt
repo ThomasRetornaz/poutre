@@ -39,8 +39,9 @@ target_link_libraries(PoutreIPCore
   PUBLIC ${Boost_LOG_LIBRARY}
   PUBLIC ${Boost_LOG_SETUP_LIBRARY}
   PUBLIC jsoncpp 
-  #INTERFACE Eigen  
-  INTERFACE BoostSimd 
+  INTERFACE Eigen  
+
+  INTERFACE libsimdpp 
   PUBLIC   PoutreBase 
 
   )

@@ -34,7 +34,7 @@ namespace poutre
   using  pUINT32 = std::uint32_t; //!UINT32 type
   using  pINT32 = std::int32_t; //!INT32 type
   using  pFLOAT = float;        //!Float/Real type (default real type)
-  using  pDOUBLE = long double; //!Float/Real type
+  using  pDOUBLE = double; //!Float/Real type
   using  pINT64 = std::int64_t; //!INT64 type
   using  pUINT64 = std::uint64_t; //!UINT64 type
 

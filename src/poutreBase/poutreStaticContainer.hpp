@@ -306,7 +306,7 @@ public:
   template <typename ArithmeticType,
             typename std::enable_if<
                 std::is_arithmetic<ArithmeticType>::value>::type * = nullptr>
-  POUTRE_CXX14_CONSTEXPR static_array_base &
+  POUTRE_CXX14_CONSTEXPR static_array_base 
   operator%(ArithmeticType v) POUTRE_NOEXCEPT
   {
     self_type tmp(*this); // return a fresh new object

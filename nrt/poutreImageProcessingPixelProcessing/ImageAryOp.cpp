@@ -1,3 +1,6 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 //==============================================================================
 //                  Copyright (c) 2015 - Thomas Retornaz                      //
@@ -16,26 +19,11 @@
 #include <poutreIO/poutreIOString.hpp>
 #include <random>
 #include <poutreBase/poutreChronos.hpp>
-namespace bs = boost::simd;
 
-////have a look https://searchcode.com/codesearch/view/15337430/
-//nt2\modules\boost\simd\sdk\unit\simd\algorithm\transform.cpp
+#include <simdpp/simd.h>
 
 
-
-//template<class view_type>
-//using target_type = std::conditional< is_strided::value, view_type::value_type, bs::simd::pack<view_type::value_type>>;
-
-//template<class view_type1, class view_type2,class operator_default,class operator_simd>
-//using op = std::conditional<
-//                            std::is_same<
-//                                typename poutre::details::extract_value_type<view_type1>::value_type,
-//                                typename poutre::details::extract_value_type<view_type2>::value_type
-//                                        >::value,
-//                            operator_simd,
-//                            operator_default >
-//                            >;
-
+namespace simd = simdpp::SIMDPP_ARCH_NAMESPACE;
 
 BOOST_AUTO_TEST_SUITE(poutreImageProcessingArithOp)
 
@@ -705,7 +693,7 @@ namespace
 		std::mt19937 gen(rd());
 		std::uniform_int_distribution<> dis(0, 255);
 
-		std::vector<unsigned char, boost::simd::allocator<unsigned char>> m_vect;
+		std::vector<unsigned char, simd::aligned_allocator<unsigned char, simd::typetraits<unsigned char>::alignment>> m_vect;
 		m_vect.reserve(size);
 		for (auto i = 0; i < size; ++i) {
 			m_vect.push_back(dis(gen));
@@ -714,13 +702,13 @@ namespace
 	}
 }
 
-/*
+
 BOOST_AUTO_TEST_CASE(benchmark)
 {
 	const auto size = 1000 * 1000;
 	const auto inputVect1 = ConstructVector(size);
 	const auto inputVect2 = ConstructVector(size);
-	std::vector<poutre::pUINT8, boost::simd::allocator<poutre::pUINT8>> ouputVect(size);
+	std::vector<poutre::pUINT8,simd::aligned_allocator<poutre::pUINT8, simd::typetraits<poutre::pUINT8>::alignment>> ouputVect(size);
 
 	auto v_img1 = poutre::array_view< const poutre::pUINT8, 2>(inputVect1, { int(1000),int(1000) });
 	auto v_img2 = poutre::array_view< const poutre::pUINT8, 2>(inputVect2, { int(1000),int(1000) });
@@ -736,13 +724,14 @@ BOOST_AUTO_TEST_CASE(benchmark)
 	auto iteration = 10000;
 	std::cout << "********************************" << std::endl;
 	poutre::Timer timer;
-	timer.Start();
+	
+    /*timer.Start();
 	for (auto i = 0; i<iteration; ++i)
 		poutre::t_ArithNegate(v_img1,v_imgout);
 	timer.Stop();
 	std::cout << "Time t_ArithNegate " << timer << std::endl;
 	timer.Reset();
-	std::cout << "********************************" << std::endl;
+	std::cout << "********************************" << std::endl;*/
 
 	std::cout << "********************************"<<std::endl;
 	timer.Start();
@@ -798,7 +787,7 @@ BOOST_AUTO_TEST_CASE(benchmark)
 	timer.Reset();
 	std::cout << "********************************" << std::endl;
 }
-*/
+
 BOOST_AUTO_TEST_SUITE_END()
 
 

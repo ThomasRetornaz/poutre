@@ -23,11 +23,12 @@
 #endif
 
 #include <algorithm>//transform
-#include <boost/simd/algorithm.hpp>//"simd" transform
+#include <simdpp/algorithm/transform.h>
 
 
 namespace poutre
 {
+    namespace simd= simdpp::SIMDPP_ARCH_NAMESPACE;
     /****************************************************************************************/
     /*                               PixelWiseBinaryOp                                      */
     /****************************************************************************************/
@@ -212,7 +213,7 @@ namespace poutre
             auto i_vinend1 = i_vin1.data() + i_vin1.size();
             auto i_vinbeg2 = i_vin2.data();
             auto i_voutbeg = o_vout.data();
-            bs::transform(i_vinbeg1, i_vinend1, i_vinbeg2, i_voutbeg, op);
+            simd::transform(i_vinbeg1, i_vinend1, i_vinbeg2, i_voutbeg, op);
         }
 
     };

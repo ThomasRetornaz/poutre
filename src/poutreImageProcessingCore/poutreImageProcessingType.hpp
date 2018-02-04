@@ -38,8 +38,13 @@
 #include <poutreBase/poutreStaticContainer.hpp>
 #endif
 
+
+#include <simdpp/simd.h>
+
 namespace poutre
-  {
+{
+    namespace simd = simdpp::SIMDPP_ARCH_NAMESPACE;
+
 /**
  * @addtogroup image_processing_type_group Image Processing Types
  * @ingroup image_processing_group 
@@ -137,7 +142,9 @@ namespace poutre
 
     //POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
 
-    //POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
+    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::typetraits<pUINT8>::alignment;
+    using simd_type= typename simd::typetraits<pUINT8>::simd_type;
+    using simd_mask_type = typename  simd::typetraits<pUINT8>::simd_mask_type;
 
     POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pUINT8) * 8;
 
@@ -148,6 +155,9 @@ namespace poutre
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
 
     };
+
+  template<>
+  struct TypeTraits <const pUINT8>:public TypeTraits<pUINT8>{};
 
   //! TypeTraits pINT32
   template<>
@@ -162,7 +172,10 @@ namespace poutre
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
     //POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
-    //POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
+    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::typetraits<pINT32>::alignment;
+    using simd_type = typename simd::typetraits<pINT32>::simd_type;
+    using simd_mask_type = typename simd::typetraits<pINT32>::simd_mask_type;
+
     POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pINT32) * 8;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT{ return std::numeric_limits<storage_type>::lowest( ); }
@@ -172,6 +185,9 @@ namespace poutre
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
 
     };
+  
+  template<>
+  struct TypeTraits <const pINT32> :public TypeTraits<pINT32> {};
 
   //! TypeTraits pFLOAT
   template<>
@@ -186,7 +202,10 @@ namespace poutre
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
     //POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
-    //POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
+    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::typetraits<pFLOAT>::alignment;
+    using simd_type = typename simd::typetraits<pFLOAT>::simd_type;
+    using simd_mask_type = typename simd::typetraits<pFLOAT>::simd_mask_type;
+
     POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pFLOAT) * 8;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::lowest( ); }
@@ -195,6 +214,10 @@ namespace poutre
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
     };
+
+  template<>
+  struct TypeTraits <const pFLOAT> :public TypeTraits<pFLOAT> {};
+
 
   //! TypeTraits pDOUBLE
   template<>
@@ -209,7 +232,11 @@ namespace poutre
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
     //POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
-    //POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
+    
+    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::typetraits<pDOUBLE>::alignment;
+    using simd_type = typename simd::typetraits<pDOUBLE>::simd_type;
+    using simd_mask_type = typename simd::typetraits<pDOUBLE>::simd_mask_type;
+
     POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pDOUBLE) * 8;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::lowest( ); }
@@ -218,6 +245,9 @@ namespace poutre
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
     };
+  
+  template<>
+  struct TypeTraits <const pDOUBLE> :public TypeTraits<pDOUBLE> {};
 
   //! TypeTraits pINT64 
   template<>
@@ -232,7 +262,10 @@ namespace poutre
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
     //POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
-    //POUTRE_STATIC_CONSTEXPR size_t alignement = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT;
+    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::typetraits<pINT64>::alignment;
+    using simd_type = typename simd::typetraits<pINT64>::simd_type;
+    using simd_mask_type = typename simd::typetraits<pINT64>::simd_mask_type;
+
     POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pINT64) * 8;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::lowest( ); }
@@ -241,6 +274,10 @@ namespace poutre
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
     };
+
+  template<>
+  struct TypeTraits <const pINT64> :public TypeTraits<pINT64> {};
+
 
   //! TypeTraits compound_pixel
   template <class valuetype, std::ptrdiff_t Rank>

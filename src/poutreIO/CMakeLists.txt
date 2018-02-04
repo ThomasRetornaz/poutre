@@ -2,7 +2,6 @@
 
 set(PoutreIOSubdirectory ${POUTRE_SRC_DIR}/poutreIO)
 
-#generate_library_version(${PoutreIOSubdirectory}/src/current_configuration_generated.cpp)
 
  find_package(OpenCV QUIET) #todo add converter to/from opencv
 
@@ -57,8 +56,8 @@ target_link_libraries(PoutreIO
   PRIVATE ${ZLIB_LIBRARY} 
   PRIVATE ${PNG_LIBRARY} 
   #PRIVATE ${TIFF_LIBRARY} 
-  INTERFACE Eigen
-  INTERFACE BoostSimd
+  INTERFACE Eigen  
+  INTERFACE libsimdpp 
   PUBLIC   PoutreBase 
   PUBLIC   PoutreIPCore 
   )

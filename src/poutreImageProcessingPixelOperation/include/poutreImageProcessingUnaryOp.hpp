@@ -27,15 +27,15 @@
 #endif
 
 #include <algorithm>//transform
-#include <boost/simd/algorithm.hpp>//"simd" transform
+
+#include <simdpp/simd.h>
 
 
 
 //move this in a dedicated here in PoutreCore
 namespace poutre
 {
-    namespace bs = boost::simd;
-
+   namespace simd = simdpp::SIMDPP_ARCH_NAMESPACE;
    /****************************************************************************************/
    /*                               PixelWiseUnaryOp                                        */
    /****************************************************************************************/
@@ -210,7 +210,7 @@ namespace poutre
             auto i_vinbeg = i_vin.data();
             auto i_vinend = i_vin.data() + i_vin.size();
             auto i_voutbeg = o_vout.data();
-            bs::transform(i_vinbeg, i_vinend, i_voutbeg, op);
+            simdpp::transform(i_vinbeg, i_vinend, i_voutbeg, op);
         }
 
     };
@@ -327,7 +327,7 @@ namespace poutre
             auto i_vinbeg = i_vin.data();
             auto i_vinend = i_vin.data() + i_vin.size();
             auto i_voutbeg = o_vout.data();
-            bs::transform(i_vinbeg, i_vinend, i_voutbeg, op);
+            simd::transform(i_vinbeg, i_vinend, i_voutbeg, op);
         }
 
     };

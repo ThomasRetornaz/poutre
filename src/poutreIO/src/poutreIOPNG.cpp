@@ -1,3 +1,6 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 //==============================================================================
 //                  Copyright (c) 2015 - Thomas Retornaz                      //
@@ -299,9 +302,9 @@ namespace {
                 boost::lexical_cast<std::string>(i_img.GetPType())));
 
         // prepare future
-        if (i_img.GetCType() != CompoundType::CompoundType_Scalar ||
-            i_img.GetCType() != CompoundType::CompoundType_3Planes ||
-            i_img.GetCType() != CompoundType::CompoundType_4Planes)
+        if ((i_img.GetCType() != CompoundType::CompoundType_Scalar) &&
+            (i_img.GetCType() != CompoundType::CompoundType_3Planes) &&
+            (i_img.GetCType() != CompoundType::CompoundType_4Planes))
             POUTRE_RUNTIME_ERROR(
             (boost::format(
                 "writepnghelper: only scalar/c3/c4 are supported not %s ") %
