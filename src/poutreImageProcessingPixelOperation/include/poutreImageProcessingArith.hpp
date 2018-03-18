@@ -33,16 +33,11 @@
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingBinaryOp.hpp>
 #endif
 
-////https://developer.numscale.com/boost.simd/documentation/develop/group__group-arithmetic.html
-//#include <boost/simd/function/negate.hpp> //invert
-
 #include <simdpp/simd.h>
 
 namespace poutre
 {
-    namespace simd = simdpp::SIMDPP_ARCH_NAMESPACE;
-
-
+ 
     /***********************************************************************************************************************************/
     /*                                                          NEGATE/INVERT                                                         */
     /**********************************************************************************************************************************/
@@ -154,7 +149,7 @@ namespace poutre
             if (res > static_cast<accutype>(m_maxval)) return m_maxval;
             return static_cast<T3>(res);
         }
-    };
+    };      
 
     template< typename T>
     struct op_Saturated_Add<T, T, T, tag_SIMD_enabled>

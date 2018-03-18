@@ -25,20 +25,20 @@ BOOST_AUTO_TEST_CASE(bounds)
   BOOST_CHECK_EQUAL(bnd0.at(0), 5);
   BOOST_CHECK_EQUAL(bnd0.size( ), 5);
 
-  auto bnd1 = poutre::bounds < 3 > { 3, 1, 4 };
+  auto bnd1 = poutre::bounds < 3 > { 3, 1, 4 }; //-V112
   auto idx = poutre::index < 3 > { 2, -1, 0 };
 
   //operate with index
   poutre::bounds<3> bnd2 = bnd1 + idx;  // bnd2 is { 5, 0, 4 } and bnd1 unchanged
   BOOST_CHECK_EQUAL(bnd2[0], 5);
   BOOST_CHECK_EQUAL(bnd2[1], 0);
-  BOOST_CHECK_EQUAL(bnd2[2], 4);
+  BOOST_CHECK_EQUAL(bnd2[2], 4); //-V112
   BOOST_CHECK_EQUAL(bnd2.size(),0);
 
   bnd1 -= idx;  // bnd1 is { 1, 2, 4 } 
   BOOST_CHECK_EQUAL(bnd1[0], 1);
   BOOST_CHECK_EQUAL(bnd1[1], 2);
-  BOOST_CHECK_EQUAL(bnd1[2], 4);
+  BOOST_CHECK_EQUAL(bnd1[2], 4); //-V112
   BOOST_CHECK_EQUAL(bnd1.size( ), 8);
 
   //Arith
@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE(bounds)
   auto bnd = poutre::bounds < 2 > { 3, 3 };
   auto index = poutre::index < 2 > { 2, 2 };
   BOOST_CHECK(bnd.contains(index));
-  auto index2 = poutre::index < 2 > { 2, 4 };
+  auto index2 = poutre::index < 2 > { 2, 4 }; //-V112
   BOOST_CHECK(!bnd.contains(index2));
 
   }
@@ -83,7 +83,7 @@ BOOST_AUTO_TEST_CASE(index)
 
   idx*=1.5f;  // res is {3, 4}
   BOOST_CHECK_EQUAL(idx[0], 3);
-  BOOST_CHECK_EQUAL(idx[1], 4);
+  BOOST_CHECK_EQUAL(idx[1], 4); //-V112
   }
 
 BOOST_AUTO_TEST_CASE(index_ordering)
@@ -125,14 +125,14 @@ BOOST_AUTO_TEST_CASE(bounds_iterator_1d)
   iterator it5(bnd1D, poutre::index< 1 >(5));
   BOOST_CHECK_EQUAL(it5 - bnd1D.begin( ), 5);
   --it5;
-  BOOST_CHECK_EQUAL(it5 - bnd1D.begin( ), 4);
+  BOOST_CHECK_EQUAL(it5 - bnd1D.begin( ), 4); //-V112
   
   idx res;
-  poutre::details::get_coord_from_offset_nostride<bnd,idx>::op(bnd1D,4,res);
-  BOOST_CHECK(res==idx{4});
+  poutre::details::get_coord_from_offset_nostride<bnd,idx>::op(bnd1D,4,res); //-V112
+  BOOST_CHECK(res==idx{4}); //-V112
     
   auto off=poutre::details::get_offset_from_coord_nostride<bnd, idx>::op(bnd1D, res);
-  BOOST_CHECK_EQUAL(off, 4);
+  BOOST_CHECK_EQUAL(off, 4); //-V112
 
   idx outofbound = {15};
   iterator itFromOut(bnd1D, outofbound);
@@ -158,7 +158,7 @@ BOOST_AUTO_TEST_CASE(bounds_iterator_2d)
   test = idx{ 1, 0 };
   iterator it5(bnd2D, test);
   BOOST_CHECK_EQUAL(*it5, test);
-  BOOST_CHECK_EQUAL(it5 - bnd2D.begin( ), 4);
+  BOOST_CHECK_EQUAL(it5 - bnd2D.begin( ), 4); //-V112
   --it5;
   test = idx{ 0, 3 };
   BOOST_CHECK_EQUAL(*it5, test);
@@ -215,7 +215,7 @@ BOOST_AUTO_TEST_CASE(bounds_iterator_3d)
   idx start{ 0, 1, 1 };
   iterator it2(bnd, start);
   BOOST_CHECK_EQUAL(*it2, start);
-  BOOST_CHECK_EQUAL(it2 - bnd.begin( ), 4);
+  BOOST_CHECK_EQUAL(it2 - bnd.begin( ), 4); //-V112
   --it2;
   expectedidx = idx{ 0, 1, 0 };
   BOOST_CHECK_EQUAL(*it2, expectedidx);

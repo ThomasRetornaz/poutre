@@ -79,7 +79,7 @@ namespace poutre
           os << "Sparse";
           break;
         default://  ImgType::ImgType_Undef; 
-          os << "Unknown PType";
+          os << "Unknown ImgType";
           break;
       }
     return os;

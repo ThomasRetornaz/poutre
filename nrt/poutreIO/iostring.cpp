@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE(ioreadstring_scalar_GUINT8)
 //        {
 //        std::cout<<"\nval\t"<<(poutre::TypeTraits<poutre::pUINT8>::str_type)(val);
 //        }
-    BOOST_CHECK_EQUAL_COLLECTIONS((*img_t).begin(),(*img_t).end(), expectedvalues.begin(), expectedvalues.end());
+    BOOST_CHECK_EQUAL_COLLECTIONS((*img_t).begin(),(*img_t).end(), expectedvalues.begin(), expectedvalues.end()); //-V522
 
 
 }
@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE(ioreadstring_scalar_INT32)
 //        {
 //        std::cout<<"\nval\t"<<(poutre::TypeTraits<poutre::pUINT8>::str_type)(val);
 //        }
-    BOOST_CHECK_EQUAL_COLLECTIONS((*img_t).begin(),(*img_t).end(), expectedvalues.begin(), expectedvalues.end());
+    BOOST_CHECK_EQUAL_COLLECTIONS((*img_t).begin(),(*img_t).end(), expectedvalues.begin(), expectedvalues.end()); //-V522
 
 
 }
@@ -112,7 +112,7 @@ BOOST_AUTO_TEST_CASE(ioreadstring_3Planes_UNT8)
 //          }
 //        }
     
-    for (auto i=0;i<img_t->size();++i)
+    for (auto i=0;i<img_t->size();++i) //-V522
     {
         BOOST_CHECK_EQUAL_COLLECTIONS((*img_t)[i].begin(),(*img_t)[i].end(), expectedvalues[i].begin(), expectedvalues[i].end());
     }
@@ -147,7 +147,7 @@ BOOST_AUTO_TEST_CASE(ioreadstring_4Planes_double)
                 2>;
     ImgType* img_t=dynamic_cast<ImgType*>(&(*img));
     BOOST_REQUIRE(img_t);
-    for(auto i=0;i<img_t->size();++i)
+    for(auto i=0;i<img_t->size();++i) //-V522
     {
         BOOST_CHECK_EQUAL_COLLECTIONS((*img_t)[i].begin(),(*img_t)[i].end(), expectedvalues[i].begin(), expectedvalues[i].end());
     }
@@ -157,7 +157,7 @@ BOOST_AUTO_TEST_CASE(ioreadstring_4Planes_double)
     
 
 BOOST_AUTO_TEST_CASE(iowritestring_scalaruint8) {
-    poutre::DenseImage<poutre::pUINT8> img({ 3, 4 });
+    poutre::DenseImage<poutre::pUINT8> img({ 3, 4 }); //-V112
     img.fill(10);
     BOOST_CHECK_EQUAL(img.GetImgType(), poutre::ImgType::ImgType_Dense);
     BOOST_CHECK_EQUAL(img.GetPType(), poutre::PType::PType_GrayUINT8);
@@ -177,7 +177,7 @@ BOOST_AUTO_TEST_CASE(iowritestring_scalaruint8) {
 }
 
 BOOST_AUTO_TEST_CASE(iowritestring_scalarfloat) {
-    poutre::DenseImage<poutre::pFLOAT> img({ 3, 4 });
+    poutre::DenseImage<poutre::pFLOAT> img({ 3, 4 }); //-V112
     img.fill(-5.);
     BOOST_CHECK_EQUAL(img.GetImgType(), poutre::ImgType::ImgType_Dense);
     BOOST_CHECK_EQUAL(img.GetPType(), poutre::PType::PType_F32);
@@ -197,7 +197,7 @@ BOOST_AUTO_TEST_CASE(iowritestring_scalarfloat) {
 }
 
 BOOST_AUTO_TEST_CASE(iowritestring_compound3uint8) {
-    poutre::DenseImage<poutre::compound_pixel<poutre::pUINT8,3>> img({ 3, 4 });
+    poutre::DenseImage<poutre::compound_pixel<poutre::pUINT8,3>> img({ 3, 4 }); //-V112
     img.fill({10,11,12});
     BOOST_CHECK_EQUAL(img.GetImgType(), poutre::ImgType::ImgType_Dense);
     BOOST_CHECK_EQUAL(img.GetPType(), poutre::PType::PType_GrayUINT8);
@@ -218,7 +218,7 @@ BOOST_AUTO_TEST_CASE(iowritestring_compound3uint8) {
 
 
 BOOST_AUTO_TEST_CASE(iowritestring_compound3double) {
-    poutre::DenseImage<poutre::compound_pixel<poutre::pDOUBLE,3>> img({ 3, 4 });
+    poutre::DenseImage<poutre::compound_pixel<poutre::pDOUBLE,3>> img({ 3, 4 }); //-V112
     img.fill({10.,-11.,1.2});
     BOOST_CHECK_EQUAL(img.GetImgType(), poutre::ImgType::ImgType_Dense);
     BOOST_CHECK_EQUAL(img.GetPType(), poutre::PType::PType_D64);

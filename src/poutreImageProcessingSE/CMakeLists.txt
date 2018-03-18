@@ -1,15 +1,19 @@
 
 set(poutreImageProcessingSE ${POUTRE_SRC_DIR}/poutreImageProcessingSE)
 
-set(poutreImageProcessingSE_SRC_DETAILS
+set(poutreImageProcessingSE_SRC_DETAILS  
   )
 
 set(poutreImageProcessingSE_PUBLICHEADERS  
-  ${poutreImageProcessingSE}/poutreImageProcessingSE.hpp
+  ${poutreImageProcessingSE}/poutreImageProcessingSECore.hpp
+  ${poutreImageProcessingSE}/poutreImageProcessingSEInterface.hpp
+  ${poutreImageProcessingSE}/poutreImageProcessingSENeighborList.hpp
+  
 )
 
 set(poutreImageProcessingSE_CPP
-  ${poutreImageProcessingSE}/src/dummy.cpp
+  ${poutreImageProcessingSE}/src/poutreImageProcessingSEInterface.cpp
+  ${poutreImageProcessingSE}/src/poutreImageProcessingSENeighborList.cpp
   )
   
 source_group(details FILES ${poutreImageProcessingSE_SRC_DETAILS})
@@ -28,7 +32,7 @@ target_link_libraries(PoutreIPSE
   # PRIVATE ${Boost_DATE_TIME_LIBRARY} 
   # PRIVATE ${Boost_REGEX_LIBRARY} 
   # PRIVATE ${Boost_THREAD_LIBRARY} 
-  # PRIVATE ${Boost_SYSTEM_LIBRARY}
+  PUBLIC ${Boost_SYSTEM_LIBRARY}
   PRIVATE jsoncpp
   INTERFACE Eigen
   #INTERFACE libsimdpp 

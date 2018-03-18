@@ -117,8 +117,8 @@ namespace {
         ImgType imgtype = ImgType::ImgType_Dense;
         std::ptrdiff_t NumDims = 2;
         std::vector<std::size_t> dims(NumDims);
-        dims[0] = width;
-        dims[1] = height;
+        dims[0] = static_cast<size_t>(width);
+        dims[1] = static_cast<size_t>(height);
 
         CompoundType cptype = CompoundType::CompoundType_Undef;
         PType ptype = PType::PType_Undef;
@@ -156,7 +156,7 @@ namespace {
             ptype = PType::PType_GrayUINT8;
             png_set_palette_to_rgb(png_ptr);
         }
-        else if (channels == 4)  // RGBA
+        else if (channels == 4)  // RGBA //-V112
         {
             if (bit_depth == 16) {
                 // cppcheck-suppress doubleFree
@@ -257,10 +257,10 @@ namespace {
                         row_pointers[linenb]);                   // current line png
                     line_pix = img_t->data() + width * linenb;  // current line image
                     for (column = 0; column < (scoord)width; ++column) {
-                        line_pix[column][0] = png_line_pix[column * 4];
-                        line_pix[column][1] = png_line_pix[column * 4 + 1];
-                        line_pix[column][2] = png_line_pix[column * 4 + 2];
-                        line_pix[column][3] = png_line_pix[column * 4 + 3];
+                        line_pix[column][0] = png_line_pix[column * 4]; //-V112
+                        line_pix[column][1] = png_line_pix[column * 4 + 1]; //-V112
+                        line_pix[column][2] = png_line_pix[column * 4 + 2]; //-V112
+                        line_pix[column][3] = png_line_pix[column * 4 + 3]; //-V112
                     }
                 }
 

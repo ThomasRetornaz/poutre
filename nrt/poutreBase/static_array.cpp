@@ -23,13 +23,13 @@ BOOST_AUTO_TEST_CASE(static_array_init)
       //ctor specialization
       poutre::static_array<int, 1> array1(1);
       poutre::static_array<int, 2> array2(1, 2);
-      poutre::static_array<int, 3> array3(1, 2, 4);
+      poutre::static_array<int, 3> array3(1, 2, 4); //-V112
       }
 
     {
     //initializer list
     auto array1 = { 1 };
-    auto array2 = { 1, 2, 3, 4, 5, 6 };
+    auto array2 = { 1, 2, 3, 4, 5, 6 }; //-V112
     }
 
     {
@@ -41,7 +41,7 @@ BOOST_AUTO_TEST_CASE(static_array_init)
 
 BOOST_AUTO_TEST_CASE(static_array_iteration_acces_capacity)
   {
-  auto starray = poutre::static_array < ptrdiff_t, 6 > {1, 2, 3, 4, 5, 6};
+  auto starray = poutre::static_array < ptrdiff_t, 6 > {1, 2, 3, 4, 5, 6}; //-V112
   //stream through base
   std::cout << starray;
   BOOST_CHECK_EQUAL(starray.size( ), 6);
@@ -59,15 +59,15 @@ BOOST_AUTO_TEST_CASE(static_array_iteration_acces_capacity)
   poutre::static_array < ptrdiff_t, 6 > starray2;
   starray2.assign(5);
   BOOST_CHECK_EQUAL(starray2.at(1), 5);
-  starray2.fill(4);
-  BOOST_CHECK_EQUAL(starray2.at(1), 4);
+  starray2.fill(4); //-V112
+  BOOST_CHECK_EQUAL(starray2.at(1), 4); //-V112
 
   poutre::swap(starray,starray2);
-  BOOST_CHECK_EQUAL(starray.at(1), 4);
+  BOOST_CHECK_EQUAL(starray.at(1), 4); //-V112
   poutre::swap(starray, starray2);
 
-  auto expected = {1, 2, 3, 4, 5, 6};
-  auto rexpected = { 6,5,4,3,2,1};
+  auto expected = {1, 2, 3, 4, 5, 6}; //-V112
+  auto rexpected = { 6,5,4,3,2,1}; //-V112
   BOOST_CHECK_EQUAL_COLLECTIONS(starray.begin( ), starray.end( ),expected.begin(),expected.end());
   BOOST_CHECK_EQUAL_COLLECTIONS(starray.rbegin( ), starray.rend( ), rexpected.begin( ), rexpected.end( ));
 
@@ -87,7 +87,7 @@ BOOST_AUTO_TEST_CASE(static_array_iteration_acces_capacity)
 BOOST_AUTO_TEST_CASE(static_array_operator)
   {
 
-  auto array_int_3 = poutre::static_array < ptrdiff_t, 3 > { 1, 2, 4 };
+  auto array_int_3 = poutre::static_array < ptrdiff_t, 3 > { 1, 2, 4 }; //-V112
 
   //Arith
   auto array_cp = array_int_3;

@@ -43,13 +43,17 @@
 
 namespace poutre
 {
-    namespace simd = simdpp::SIMDPP_ARCH_NAMESPACE;
+    namespace simd = simdpp;
 
 /**
  * @addtogroup image_processing_type_group Image Processing Types
  * @ingroup image_processing_group 
  *@{
- */     
+ */   
+ 
+  /*! Type of Image
+   * 
+   */ 
   enum class ImgType
     {
     ImgType_Undef = 0,          //!< Undefined type 

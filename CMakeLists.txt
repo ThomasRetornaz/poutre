@@ -43,10 +43,10 @@ set(POUTRE_NRT_DIR
     CACHE PATH
     "Root path of the Core of POUTRE's tests")
 
-#set(POUTRE_BENCH_DIR
-#	${POUTRE_ROOT_DIR}/bench
-#    CACHE PATH
-#    "Root path of the Core of POUTRE's bench")
+set(POUTRE_BENCH_DIR
+	${POUTRE_ROOT_DIR}/bench
+    CACHE PATH
+    "Root path of the Core of POUTRE's bench")
 
 # set(POUTRE_PYTHONEXT_DIR
     # ${POUTRE_root_dir}/python
@@ -127,13 +127,12 @@ include_directories(${POUTRE_NRT_DIR})
 include_directories(${POUTRE_PYTHONEXT_DIR})
 
 include_directories(${Boost_INCLUDE_DIRS})
-include_directories(${NT2_INCLUDE_DIR})
 include_directories(${JSONCPP_INCLUDE_DIR})
 
 # the poutre core libraries
 add_subdirectory (${POUTRE_SRC_DIR})
 add_subdirectory (${POUTRE_NRT_DIR})
-#add_subdirectory(${POUTRE_BENCH_DIR})
+add_subdirectory (${POUTRE_BENCH_DIR})
 
 # creates the python package
 #create_python_package()

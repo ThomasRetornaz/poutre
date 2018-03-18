@@ -39,24 +39,10 @@
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingQuaternaryOp.hpp>
 #endif
 
-//simd part
-////https://developer.numscale.com/boost.simd/documentation/develop/group__group-predicates.html
-//#include <boost/simd/function/is_less.hpp>
-//#include <boost/simd/function/is_less_equal.hpp>
-//#include <boost/simd/function/is_greater.hpp>
-//#include <boost/simd/function/is_greater_equal.hpp>
-//#include <boost/simd/function/is_equal.hpp>
-//#include <boost/simd/function/is_not_equal.hpp>
-//#include <boost/simd/algorithm.hpp>//"simd" transform
-//#include <boost/simd/logical.hpp>
-
 #include <simdpp/simd.h>
 
 namespace poutre
 {
-    namespace simd = simdpp::SIMDPP_ARCH_NAMESPACE;
-
-
 	template< typename T1>
 	struct OpCompEqualValue
 	{

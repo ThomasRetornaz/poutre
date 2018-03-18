@@ -29,14 +29,14 @@ BOOST_AUTO_TEST_CASE(init)
 BOOST_AUTO_TEST_CASE(scoped)
   {
   poutre::Timer timer;
-  std::chrono::milliseconds dura(1);
+  std::chrono::milliseconds dura(100);
   for (size_t i=0; i < 10;i++)
     {
     poutre::ScopedTimer stimer(timer);
     std::this_thread::sleep_for(dura);
     }
-  BOOST_CHECK(timer.GetMeanTime() >= 1.f);
-  BOOST_CHECK(timer.GetCumulativeTime() >= 10.f);
+  BOOST_CHECK_CLOSE(timer.GetMeanTime(),100.f,2);
+  BOOST_CHECK_CLOSE(timer.GetCumulativeTime(),1000.f,2);
   BOOST_CHECK_EQUAL(timer.NbIter(), 10);
   //std::cout << "\n" << timer << "\n";
   }

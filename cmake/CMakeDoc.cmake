@@ -1,6 +1,7 @@
 
 # Doxygen
-set(POUTRE_DOCUMENTATION_ROOT ${POUTRE_ROOT_DIR}/doc)
+get_filename_component(POUTRE_root_dir_abs ${POUTRE_ROOT_DIR} ABSOLUTE)
+set(POUTRE_DOCUMENTATION_ROOT ${POUTRE_root_dir_abs}/doc)
 set(POUTRE_DOXYGEN_PATH ${POUTRE_DOCUMENTATION_ROOT}/Doxygen)
 find_file(DOXYGEN_CONFIG_FILE Doxyfile.in ${POUTRE_DOXYGEN_PATH})
 
@@ -9,7 +10,7 @@ if(NOT DOXYGEN_FOUND)
   message("Doxygen not found")
 elseif(DOXYGEN_CONFIG_FILE)
   message(STATUS "[POUTREDoc] Doxygen: use ${DOXYGEN_CONFIG_FILE}")
-  set(POUTRE_HTML_FILES_DIR "${POUTRE_root_dir}/doc/Doxygen/misc" CACHE FILEPATH "POUTRE_HTML_FILES_DIR")
+  set(POUTRE_HTML_FILES_DIR "${POUTRE_ROOT_DIR}/doc/Doxygen/misc" CACHE FILEPATH "POUTRE_HTML_FILES_DIR")
   
   if(DOXYGEN_DOT_FOUND)
     message("[POUTREDoc] DoxyDot found at ${DOXYGEN_DOT_PATH}")
@@ -20,8 +21,8 @@ elseif(DOXYGEN_CONFIG_FILE)
   set(DOXY_OUTPUT_DIR           ${CMAKE_BINARY_DIR}/documentation/doxygen)
   set(DOXY_CONFIG_FILE          ${DOXY_OUTPUT_DIR}/Doxyfile.generated)
 
-  set(DOXY_STRIP_FROM_PATH      ${POUTRE_root_dir_absolute})
-  set(DOXY_STRIP_FROM_INC_PATH  ${POUTRE_root_dir_absolute})
+  set(DOXY_STRIP_FROM_PATH      ${POUTRE_root_dir_abs})
+  set(DOXY_STRIP_FROM_INC_PATH  ${POUTRE_root_dir_abs})
     
   option(DOXYGEN_GENERATE_XML   "Generates xml documentation"   OFF)
   option(DOXYGEN_GENERATE_LATEX "Generates LateX documentation" OFF)
@@ -41,9 +42,9 @@ elseif(DOXYGEN_CONFIG_FILE)
 
   set(DOXY_FILES_PATTERN *.h *.hpp *.dox) 
   set(DOXY_IMAGE_PATH   \"${POUTRE_HTML_FILES_DIR}\" CACHE FILEPATH  "Doxygen image path")
-  set(DOXY_UNIT_TEST_PATH \"${POUTRE_HTML_FILES_DIR}\" \"${POUTRE_root_dir}/coreTests\" CACHE FILEPATH  "Doxygen unit tests path")
-  set(DOXY_LOGO_PATH    "${POUTRE_root_dir}/doc/Doxygen/misc/yun_5048_small.jpg" CACHE FILEPATH  "Doxygen logo")
-  #set(DOXY_INCLUDE_PATH \"${JPEG_LIB_SRC}\" \"${PNG_LIB_SRC}\" \"${ZLIB_SRC_DIR}\" \"${Boost_INCLUDE_DIRS}\" CACHE FILEPATH "Doxygen preprocessor paths")
+  set(DOXY_UNIT_TEST_PATH \"${POUTRE_HTML_FILES_DIR}\" \"${POUTRE_ROOT_DIR}/coreTests\" CACHE FILEPATH  "Doxygen unit tests path")
+  set(DOXY_LOGO_PATH    "${POUTRE_ROOT_DIR}/doc/Doxygen/misc/yun_5048_small.jpg" CACHE FILEPATH  "Doxygen logo")
+  set(DOXY_INCLUDE_PATH \"${JPEG_LIB_SRC}\" \"${PNG_LIB_SRC}\" \"${ZLIB_SRC_DIR}\" \"${Boost_INCLUDE_DIRS}\" CACHE FILEPATH "Doxygen preprocessor paths")
   set(DOXY_BIB_FILE "${POUTRE_DOCUMENTATION_ROOT}/Bib/bib_full.bib")
 
   string(REGEX REPLACE ";" " \\\\ \n" DOXY_FILES_PATTERN    "${DOXY_FILES_PATTERN}")

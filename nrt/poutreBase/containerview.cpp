@@ -197,7 +197,7 @@ BOOST_AUTO_TEST_CASE(section_and_slice_2d)
         BOOST_CHECK_EQUAL(slicesefirstline[poutre::idx1d{ 1 }], 1);
         BOOST_CHECK_EQUAL(slicesefirstline[poutre::idx1d{ 2 }], 2);
         BOOST_CHECK_EQUAL(slicesefirstline[poutre::idx1d{ 3 }], 3);
-        BOOST_CHECK_EQUAL(slicesefirstline[poutre::idx1d{ 4 }], 4);
+        BOOST_CHECK_EQUAL(slicesefirstline[poutre::idx1d{ 4 }], 4); //-V112
 
         auto slicesecondline = view2d[1];
         BOOST_CHECK_EQUAL(slicesecondline.size(), 5);
@@ -207,7 +207,7 @@ BOOST_AUTO_TEST_CASE(section_and_slice_2d)
         BOOST_CHECK_EQUAL(slicesecondline[poutre::idx1d{ 1 }], 6);
         BOOST_CHECK_EQUAL(slicesecondline[poutre::idx1d{ 2 }], 7);
         BOOST_CHECK_EQUAL(slicesecondline[poutre::idx1d{ 3 }], 8);
-        BOOST_CHECK_EQUAL(slicesecondline[poutre::idx1d{ 4 }], 9);
+        BOOST_CHECK_EQUAL(slicesecondline[poutre::idx1d{ 4 }], 9); //-V112
 
         auto slicethrirdline = view2d[2];
         BOOST_CHECK_EQUAL(slicethrirdline.size(), 5);
@@ -217,7 +217,7 @@ BOOST_AUTO_TEST_CASE(section_and_slice_2d)
         BOOST_CHECK_EQUAL(slicethrirdline[poutre::idx1d{ 1 }], 11);
         BOOST_CHECK_EQUAL(slicethrirdline[poutre::idx1d{ 2 }], 12);
         BOOST_CHECK_EQUAL(slicethrirdline[poutre::idx1d{ 3 }], 13);
-        BOOST_CHECK_EQUAL(slicethrirdline[poutre::idx1d{ 4 }], 14);
+        BOOST_CHECK_EQUAL(slicethrirdline[poutre::idx1d{ 4 }], 14); //-V112
 
 
     }
@@ -227,7 +227,7 @@ BOOST_AUTO_TEST_CASE(section_and_slice_2d)
         auto view2d = poutre::array_view<int, 2>(mif, { 5, 5 });
         auto section2d = view2d.section(poutre::idx2d{ 1,1 });
         BOOST_CHECK_EQUAL(section2d.size(), 16);
-        BOOST_CHECK_EQUAL(section2d.bound(), (poutre::bd2d({ 4,4 })));
+        BOOST_CHECK_EQUAL(section2d.bound(), (poutre::bd2d({ 4,4 }))); //-V112
         BOOST_CHECK_EQUAL(section2d.stride(), (poutre::idx2d({ 5,1 })));
         BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,0 })], 6);
         BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,1 })], 7);
@@ -256,26 +256,26 @@ BOOST_AUTO_TEST_CASE(section_and_slice_2d)
         auto view2d = poutre::array_view<int, 2>(tmp, { 5, 6 });
         auto section2d = view2d.section(poutre::idx2d{ 1,1 });
         BOOST_CHECK_EQUAL(section2d.size(), 20);
-        BOOST_CHECK_EQUAL(section2d.bound(), (poutre::bd2d({ 4,5 })));
+        BOOST_CHECK_EQUAL(section2d.bound(), (poutre::bd2d({ 4,5 }))); //-V112
         BOOST_CHECK_EQUAL(section2d.stride(), (poutre::idx2d({ 6,1 })));
         BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,0 })], 7);
         BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,1 })], 8);
         BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,2 })], 9);
         BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,3 })], 10);
-        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,4 })], 11);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 0,4 })], 11); //-V112
         
         BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 3,0 })], 25);
         BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 3,1 })], 26);
         BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 3,2 })], 27);
         BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 3,3 })], 28);
-        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 3,4 })], 29);
+        BOOST_CHECK_EQUAL(section2d[poutre::idx2d({ 3,4 })], 29); //-V112
     }
     {
         BOOST_TEST_MESSAGE("get section of 2d view");
         auto view2d = poutre::array_view<int, 2>(mif, { 5, 5 });
         auto section2d = view2d.section(poutre::idx2d{ 1,2 });
         BOOST_CHECK_EQUAL(section2d.size(), 12);
-        BOOST_CHECK_EQUAL(section2d.bound(), (poutre::bd2d({ 4,3 })));
+        BOOST_CHECK_EQUAL(section2d.bound(), (poutre::bd2d({ 4,3 }))); //-V112
         BOOST_CHECK_EQUAL(section2d.stride(), (poutre::idx2d({ 5,1 })));
         //auto bnd = section2d.bound();
         //std::cout << std::endl;
@@ -428,8 +428,8 @@ BOOST_AUTO_TEST_CASE(strided_view)
         BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 2,1 })], 13);
         BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 3,0 })], 15);
         BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 3,1 })], 18);
-        BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 4,0 })], 20);
-        BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 4,1 })], 23);
+        BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 4,0 })], 20); //-V112
+        BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 4,1 })], 23); //-V112
     }
     {
         auto sview2d = poutre::strided_array_view<int, 2>(&mif[0], poutre::bd2d{ 3, 5 }, poutre::idx2d{ 10,1 });
@@ -437,19 +437,19 @@ BOOST_AUTO_TEST_CASE(strided_view)
         BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 0,1 })], 1);
         BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 0,2 })], 2);
         BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 0,3 })], 3);
-        BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 0,4 })], 4);
+        BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 0,4 })], 4); //-V112
 
         BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 1,0 })], 10);
         BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 1,1 })], 11);
         BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 1,2 })], 12);
         BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 1,3 })], 13);
-        BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 1,4 })], 14);
+        BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 1,4 })], 14); //-V112
 
         BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 2,0 })], 20);
         BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 2,1 })], 21);
         BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 2,2 })], 22);
         BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 2,3 })], 23);
-        BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 2,4 })], 24);
+        BOOST_CHECK_EQUAL(sview2d[poutre::idx2d({ 2,4 })], 24); //-V112
 
     }
 

@@ -289,7 +289,7 @@ public:
   {
     std::vector<std::size_t> out(m_numdims);
     // use normal traversal
-    for (auto i = 0; i < m_numdims; ++i) {
+    for (size_t i = 0; i < m_numdims; ++i) {
       out[i] = m_coordinnates[i];
     }
     return out;

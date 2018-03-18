@@ -361,7 +361,7 @@ namespace poutre
 
       //Slice bound
       poutre::bounds < Rank - 1 > bnd_slice;
-      for (auto i = 0; i < Rank - 1; i++)
+      for (ptrdiff_t i = 0; i < Rank - 1; i++)
         {
           bnd_slice[i] = m_bnd[i + 1];
         }
@@ -549,7 +549,7 @@ namespace poutre
       //slice bound and stride
       bounds < Rank - 1 > bnd_slice;
       index < Rank - 1 > stride_slice;
-      for (auto i = 0; i < Rank - 1; i++)
+      for (ptrdiff_t i = 0; i < Rank - 1; i++)
         {
           bnd_slice[i] = m_bnd[i + 1];
           stride_slice[i] = m_stride_idx[i + 1];

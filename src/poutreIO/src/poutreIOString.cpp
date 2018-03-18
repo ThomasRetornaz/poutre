@@ -286,7 +286,7 @@ namespace poutre
         //from NumDims we know howto fill Dims
         dims.reserve(NumDims);
         ptrdiff_t current_dim=0;
-        for (auto i=0; i < NumDims; i++) {
+        for (ptrdiff_t i=0; i < NumDims; i++) {
             istrm>>current_dim;
             if (istrm.fail()) {
                 std::string err="ImageFromString: unable to read dim from " + i_str;

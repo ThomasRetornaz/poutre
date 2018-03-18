@@ -23,15 +23,15 @@ set_target_properties(PoutreIPPixelProcessingBenchs PROPERTIES
 IF(WIN32)
 target_link_libraries(PoutreIPPixelProcessingBenchs 
   PUBLIC benchmark  
-  INTERFACE libsimdpp
+  PUBLIC libsimdpp
   PUBLIC shlwapi.lib
   #PUBLIC PoutreIPPixelProcessing
-  PUBLIC ${Boost_SYSTEM_LIBRARY} 
+  PUBLIC ${Boost_SYSTEM_LIBRARY}
   )
 ELSE()
 target_link_libraries(PoutreIPPixelProcessingBenchs 
   PUBLIC benchmark  
-  INTERFACE libsimdpp
+  PUBLIC libsimdpp
   #PUBLIC PoutreIPPixelProcessing 
   PUBLIC ${Boost_SYSTEM_LIBRARY}   
   )

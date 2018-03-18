@@ -1,21 +1,29 @@
 
 //==============================================================================
-//                  Copyright (c) 2015 - Thomas Retornaz                      //
+//                  Copyright (c) 2018 - Thomas Retornaz                      //
 //                     thomas.retornaz@mines-paris.org                        //
 //          Distributed under the Boost Software License, Version 1.0.        //
 //                 See accompanying file LICENSE.txt or copy at               //
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IPSE_HPP__
-#define POUTRE_IPSE_HPP__
+#ifndef POUTRE_IPSECORE_HPP__
+#define POUTRE_IPSECORE_HPP__
 
 #ifndef POUTRE_CONFIG__HPP__
 #include <poutreBase/poutreConfig.hpp>
 #endif
 
+/**
+ * @file   poutreImageProcessingSECore.hpp
+ * @author Thomas Retornaz
+ * @brief  Structuring ELement Import/Export
+ * 
+ * 
+ */
+
 #ifdef POUTRE_DYNAMIC// defined if POUTRE is compiled as a DLL
-#ifdef poutreImageProcessingSE_EXPORTS // defined if we are building the POUTRE DLL (instead of using it)
+#ifdef PoutreIPSE_EXPORTS // defined if we are building the POUTRE DLL (instead of using it)
 #define IPPSE_API MODULE_EXPORT
 #else
 #define IPPSE_API MODULE_IMPORT
@@ -28,6 +36,6 @@
 
 namespace poutre
   {
-    IPPSE_API void dummy(void);
+    //TODO Doxydoc group
   }
-#endif //POUTRE_IPSE_HPP__
+#endif //POUTRE_IPSECORE_HPP__

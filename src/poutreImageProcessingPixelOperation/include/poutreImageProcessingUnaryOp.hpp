@@ -35,7 +35,6 @@
 //move this in a dedicated here in PoutreCore
 namespace poutre
 {
-   namespace simd = simdpp::SIMDPP_ARCH_NAMESPACE;
    /****************************************************************************************/
    /*                               PixelWiseUnaryOp                                        */
    /****************************************************************************************/

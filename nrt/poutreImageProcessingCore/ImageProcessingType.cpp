@@ -239,10 +239,10 @@ BOOST_AUTO_TEST_CASE(compound_pixel_3)
   BOOST_CHECK(pc[1] == 2);
   BOOST_CHECK(pc[2] == 3);
   pc[0] = 3;
-  pc[1] = 4;
+  pc[1] = 4; //-V112
   pc[2] = 5;
   BOOST_CHECK(pc[0] == 3);
-  BOOST_CHECK(pc[1] == 4);
+  BOOST_CHECK(pc[1] == 4); //-V112
   BOOST_CHECK(pc[2] == 5);
 
   //p0 = std::move(pc);
@@ -254,7 +254,7 @@ BOOST_AUTO_TEST_CASE(compound_pixel_3)
 BOOST_AUTO_TEST_CASE(compound_pixel_4)
 {
   using c4G8 = poutre::compound_pixel<poutre::pUINT8, 4>;
-  BOOST_CHECK(poutre::get_dim<c4G8>::dim == 4);
+  BOOST_CHECK(poutre::get_dim<c4G8>::dim == 4); //-V112
   c4G8 p00(0, 1, 2, 3);
   BOOST_CHECK(p00[0] == 0);
   BOOST_CHECK(p00[1] == 1);
@@ -269,12 +269,12 @@ BOOST_AUTO_TEST_CASE(compound_pixel_4)
   BOOST_CHECK(p0[2] == 12);
   BOOST_CHECK(p0[3] == 12);
 
-  c4G8 p = {1, 2, 3, 4};
+  c4G8 p = {1, 2, 3, 4}; //-V112
   BOOST_CHECK(p0 != p);
   BOOST_CHECK(p[0] == 1);
   BOOST_CHECK(p[1] == 2);
   BOOST_CHECK(p[2] == 3);
-  BOOST_CHECK(p[3] == 4);
+  BOOST_CHECK(p[3] == 4); //-V112
 
   c4G8 pc = p;
   BOOST_CHECK(pc == p);
@@ -282,13 +282,13 @@ BOOST_AUTO_TEST_CASE(compound_pixel_4)
   BOOST_CHECK(pc[0] == 1);
   BOOST_CHECK(pc[1] == 2);
   BOOST_CHECK(pc[2] == 3);
-  BOOST_CHECK(pc[3] == 4);
+  BOOST_CHECK(pc[3] == 4); //-V112
   pc[0] = 3;
-  pc[1] = 4;
+  pc[1] = 4; //-V112
   pc[2] = 5;
   pc[3] = 6;
   BOOST_CHECK(pc[0] == 3);
-  BOOST_CHECK(pc[1] == 4);
+  BOOST_CHECK(pc[1] == 4); //-V112
   BOOST_CHECK(pc[2] == 5);
   BOOST_CHECK(pc[3] == 6);
 
