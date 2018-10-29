@@ -32,6 +32,7 @@ set(PoutreIPCORESRC
 	)
 
 add_library(PoutreIPCore ${PoutreIPCORESRC})
+
 target_link_libraries(PoutreIPCore 
   PUBLIC ${Boost_THREAD_LIBRARY}  
   PUBLIC ${Boost_SYSTEM_LIBRARY} 
@@ -40,10 +41,8 @@ target_link_libraries(PoutreIPCore
   PUBLIC ${Boost_LOG_SETUP_LIBRARY}
   PUBLIC jsoncpp 
   INTERFACE Eigen  
-
-  INTERFACE libsimdpp 
+  #INTERFACE ${SIMD_LIB} 
   PUBLIC   PoutreBase 
-
   )
 set_target_properties(PoutreIPCore PROPERTIES FOLDER "src/")
 

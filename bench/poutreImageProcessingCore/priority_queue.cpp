@@ -1,3 +1,14 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+
+//==============================================================================
+//                  Copyright (c) 2015 - Thomas Retornaz                      //
+//                     thomas.retornaz@mines-paris.org                        //
+//          Distributed under the Boost Software License, Version 1.0.        //
+//                 See accompanying file LICENSE.txt or copy at               //
+//                     http://www.boost.org/LICENSE_1_0.txt                   //
+//==============================================================================
 
 #include "benchmark/benchmark.h"
 #include <poutreBase/poutreContainerView.hpp>
@@ -55,7 +66,7 @@ public:
 };
 
 BENCHMARK_DEFINE_F(PriorityQueueFixture, stlpriorityqueue)(benchmark::State& state) {
-    const int size = state.range(0);
+    const auto size = state.range(0);
     while (state.KeepRunning()) {
         for (int i = 0; i < size; ++i) {
             std::priority_queue<unsigned int> pqueue;
@@ -75,7 +86,7 @@ BENCHMARK_DEFINE_F(PriorityQueueFixture, stlpriorityqueue)(benchmark::State& sta
 }
 
 BENCHMARK_DEFINE_F(PriorityQueueFixture, stlpriorityqueue_reserve)(benchmark::State& state) {
-    const int size = state.range(0);
+    const auto size = state.range(0);
     while (state.KeepRunning()) {
         for (int i = 0; i < size; ++i) {
             PriorityQueueReserve<unsigned int> pqueue(m_vect.size());
@@ -94,7 +105,7 @@ BENCHMARK_DEFINE_F(PriorityQueueFixture, stlpriorityqueue_reserve)(benchmark::St
 }
 
 BENCHMARK_DEFINE_F(PriorityQueueFixture, boostpriorityqueue)(benchmark::State& state) {
-    const int size = state.range(0);
+    const auto size = state.range(0);
     while (state.KeepRunning()) {
         for (int i = 0; i < size; ++i) {
             boost::heap::priority_queue<unsigned int> pqueue;
@@ -114,7 +125,7 @@ BENCHMARK_DEFINE_F(PriorityQueueFixture, boostpriorityqueue)(benchmark::State& s
 }
 
 BENCHMARK_DEFINE_F(PriorityQueueFixture, boostpriorityqueue_reserve)(benchmark::State& state) {
-    const int size = state.range(0);
+    const auto size = state.range(0);
     while (state.KeepRunning()) {
         for (int i = 0; i < size; ++i) {
             BoostPriorityQueueReserve<unsigned int> pqueue(m_vect.size());
@@ -134,7 +145,7 @@ BENCHMARK_DEFINE_F(PriorityQueueFixture, boostpriorityqueue_reserve)(benchmark::
 }
 
 BENCHMARK_DEFINE_F(PriorityQueueFixture, boostpriorityqueue_respectfifoorder)(benchmark::State& state) {
-    const int size = state.range(0);
+    const auto size = state.range(0);
     while (state.KeepRunning()) {
         for (int i = 0; i < size; ++i) {
             boost::heap::priority_queue<unsigned int, boost::heap::stable<true>> pqueue;
@@ -154,7 +165,7 @@ BENCHMARK_DEFINE_F(PriorityQueueFixture, boostpriorityqueue_respectfifoorder)(be
 }
 
 BENCHMARK_DEFINE_F(PriorityQueueFixture, boostpriorityqueue_reserve_respectfifoorder)(benchmark::State& state) {
-    const int size = state.range(0);
+    const auto size = state.range(0);
     while (state.KeepRunning()) {
         for (int i = 0; i < size; ++i) {
             BoostPriorityQueueReserve<unsigned int,true> pqueue(m_vect.size());

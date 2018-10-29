@@ -30,7 +30,7 @@ target_link_libraries(PoutreNeuralNets
   # PRIVATE ${Boost_SYSTEM_LIBRARY}
   PRIVATE jsoncpp
   INTERFACE Eigen
-  INTERFACE libsimdpp
+  INTERFACE ${SIMD_LIB} 
   PoutreBase 
   )
 set_target_properties(PoutreNeuralNets PROPERTIES FOLDER "src/")

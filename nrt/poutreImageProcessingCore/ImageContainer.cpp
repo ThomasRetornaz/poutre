@@ -50,11 +50,11 @@ BOOST_AUTO_TEST_CASE(clone)
     ImageTypeInterface clonedinterface = img.Clone();
 
     ImageType* cloned = dynamic_cast<ImageType*> (clonedinterface.get());
-    BOOST_CHECK(cloned);
+    BOOST_REQUIRE(cloned);
     //!= address
     BOOST_CHECK_NE(cloned, &(img));
     //!= data address
-    BOOST_CHECK_NE(&(*((*cloned).data())), &(*(img.data())));
+    BOOST_CHECK_NE(&(*((*cloned).data())), &(*(img.data()))); //-V522
     BOOST_CHECK_EQUAL((*cloned).GetPType(), poutre::PType::PType_GrayUINT8);
     BOOST_CHECK_EQUAL((*cloned).GetCType(), poutre::CompoundType::CompoundType_Scalar);
     BOOST_CHECK_EQUAL((*cloned).GetImgType(), poutre::ImgType::ImgType_Dense);

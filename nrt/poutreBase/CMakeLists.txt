@@ -28,7 +28,7 @@ set_target_properties(PoutreBaseTests PROPERTIES
 
 target_link_libraries(PoutreBaseTests 
   INTERFACE Eigen  
-  NTERFACE libsimdpp 
+  INTERFACE ${SIMD_LIB} 
   PRIVATE ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}  
   # ${Boost_THREAD_LIBRARY} 
   # ${Boost_SYSTEM_LIBRARY} 
@@ -36,7 +36,7 @@ target_link_libraries(PoutreBaseTests
   # ${Boost_LOG_SETUP_LIBRARY}
   PUBLIC PoutreBase
   )
-add_dependencies(PoutreBaseTests libsimdppdep)
+add_dependencies(PoutreBaseTests ${SIMD_LIB_DEP})
 add_dependencies(PoutreBaseTests Eigendep)
 
 IF(BUILD_SHARED_LIBS)

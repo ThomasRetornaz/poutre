@@ -20,10 +20,7 @@
 #include <random>
 #include <poutreBase/poutreChronos.hpp>
 
-#include <simdpp/simd.h>
 
-
-namespace simd = simdpp::SIMDPP_ARCH_NAMESPACE;
 
 BOOST_AUTO_TEST_SUITE(poutreImageProcessingArithOp)
 
@@ -693,7 +690,7 @@ namespace
 		std::mt19937 gen(rd());
 		std::uniform_int_distribution<> dis(0, 255);
 
-		std::vector<unsigned char, simd::aligned_allocator<unsigned char, simd::typetraits<unsigned char>::alignment>> m_vect;
+		std::vector<poutre::pUINT8, poutre::aligned_allocator<poutre::pUINT8>> m_vect;
 		m_vect.reserve(size);
 		for (auto i = 0; i < size; ++i) {
 			m_vect.push_back(dis(gen));
@@ -708,7 +705,7 @@ BOOST_AUTO_TEST_CASE(benchmark)
 	const auto size = 1000 * 1000;
 	const auto inputVect1 = ConstructVector(size);
 	const auto inputVect2 = ConstructVector(size);
-	std::vector<poutre::pUINT8,simd::aligned_allocator<poutre::pUINT8, simd::typetraits<poutre::pUINT8>::alignment>> ouputVect(size);
+	std::vector<poutre::pUINT8,poutre::aligned_allocator<poutre::pUINT8>> ouputVect(size);
 
 	auto v_img1 = poutre::array_view< const poutre::pUINT8, 2>(inputVect1, { int(1000),int(1000) });
 	auto v_img2 = poutre::array_view< const poutre::pUINT8, 2>(inputVect2, { int(1000),int(1000) });

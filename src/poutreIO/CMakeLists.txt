@@ -57,7 +57,7 @@ target_link_libraries(PoutreIO
   PRIVATE ${PNG_LIBRARY} 
   #PRIVATE ${TIFF_LIBRARY} 
   INTERFACE Eigen  
-  INTERFACE libsimdpp 
+  # INTERFACE ${SIMD_LIB} 
   PUBLIC   PoutreBase 
   PUBLIC   PoutreIPCore 
   )

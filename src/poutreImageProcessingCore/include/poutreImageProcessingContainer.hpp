@@ -10,7 +10,13 @@
 #ifndef POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
 #define POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
 
+#ifdef USE_BOOSTSIMD
+#include <boost/simd/memory/allocator.hpp>
+#include <boost/simd/detail/is_aligned.hpp>
+#else
 #include <simdpp/simd.h>
+#endif
+
 #include <array>
 #include <memory>
 #include <utility>
@@ -47,11 +53,14 @@ namespace poutre {
 // Eigen::Tensor would be more effective depending on algorithms
 
 //! TODO dispatch on coord and allow unset dims
+#ifdef USE_BOOSTSIMD
+   template<typename valuetype> using aligned_allocator = boost::simd::allocator<typename TypeTraits<valuetype>::storage_type>;
+#else
+   template<typename valuetype> using aligned_allocator = simdpp::aligned_allocator<typename TypeTraits<valuetype>::storage_type,simdpp::simd_traits<typename TypeTraits<valuetype>::storage_type>::alignment>;
+#endif
 
-template <class valuetype, std::ptrdiff_t NumDims = 2,
-          class allocator_type_t = simdpp::aligned_allocator<
-    typename TypeTraits<valuetype>::storage_type, 
-    simdpp::typetraits<typename TypeTraits<valuetype>::storage_type>::alignment>>
+   template <class valuetype, std::ptrdiff_t NumDims = 2,
+   class allocator_type_t = aligned_allocator<valuetype>>
 class DenseImage : public IInterface {
   static_assert(NumDims > 0, "NumDims must be >0");
 

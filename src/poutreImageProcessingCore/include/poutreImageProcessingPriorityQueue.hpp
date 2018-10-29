@@ -35,7 +35,7 @@ namespace poutre
     template<typename key, typename value>
     struct lesserKey
     {        
-        bool operator() (const std::pair<key,value> & lhs, const std::pair<key, value> rhs) const
+        bool operator() (const std::pair<key,value> & lhs, const std::pair<key, value>& rhs) const
         {
             return std::less<key>()(lhs.first,rhs.first);
         }
@@ -44,7 +44,7 @@ namespace poutre
     template<typename key, typename value>
     struct greaterKey
     {
-        bool operator() (const std::pair<key, value> & lhs, const std::pair<key, value> rhs) const
+        bool operator() (const std::pair<key, value> & lhs, const std::pair<key, value>& rhs) const
         {
             return std::greater<key>()(lhs.first, rhs.first);
         }

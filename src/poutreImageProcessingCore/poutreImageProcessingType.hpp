@@ -38,12 +38,19 @@
 #include <poutreBase/poutreStaticContainer.hpp>
 #endif
 
-
+#ifdef USE_BOOSTSIMD
+#include <boost/simd.hpp>
+#else
 #include <simdpp/simd.h>
+#endif
 
 namespace poutre
 {
-    namespace simd = simdpp;
+#ifdef USE_BOOSTSIMD
+   namespace simd = boost::simd;
+#else
+   namespace simd = simdpp;
+#endif
 
 /**
  * @addtogroup image_processing_type_group Image Processing Types
@@ -145,11 +152,15 @@ namespace poutre
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
     //POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
-
-    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::typetraits<pUINT8>::alignment;
-    using simd_type= typename simd::typetraits<pUINT8>::simd_type;
-    using simd_mask_type = typename  simd::typetraits<pUINT8>::simd_mask_type;
-
+#ifdef USE_BOOSTSIMD
+    POUTRE_STATIC_CONSTEXPR size_t alignment = simd::pack<pUINT8>::alignment;
+    using simd_type = typename simd::pack<pUINT8>;
+    using simd_mask_type = typename  simd::pack<simd::logical<pUINT8>>;
+#else
+    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::simd_traits<pUINT8>::alignment;
+    using simd_type= typename simd::simd_traits<pUINT8>::simd_type;
+    using simd_mask_type = typename  simd::simd_traits<pUINT8>::simd_mask_type;
+#endif
     POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pUINT8) * 8;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::lowest( ); }
@@ -175,11 +186,16 @@ namespace poutre
     static const PType pixel_type = PType::PType_GrayINT32;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
+#ifdef USE_BOOSTSIMD
+    POUTRE_STATIC_CONSTEXPR size_t alignment = simd::pack<pINT32>::alignment;
+    using simd_type = typename simd::pack<pINT32>;
+    using simd_mask_type = typename  simd::pack<simd::logical<pINT32>>;
+#else
     //POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
-    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::typetraits<pINT32>::alignment;
-    using simd_type = typename simd::typetraits<pINT32>::simd_type;
-    using simd_mask_type = typename simd::typetraits<pINT32>::simd_mask_type;
-
+    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::simd_traits<pINT32>::alignment;
+    using simd_type = typename simd::simd_traits<pINT32>::simd_type;
+    using simd_mask_type = typename simd::simd_traits<pINT32>::simd_mask_type;
+#endif
     POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pINT32) * 8;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT{ return std::numeric_limits<storage_type>::lowest( ); }
@@ -204,12 +220,16 @@ namespace poutre
 
     static const PType pixel_type = PType::PType_F32;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
-
+#ifdef USE_BOOSTSIMD
+    POUTRE_STATIC_CONSTEXPR size_t alignment = simd::pack<pFLOAT>::alignment;
+    using simd_type = typename simd::pack<pFLOAT>;
+    using simd_mask_type = typename  simd::pack<simd::logical<pFLOAT>>;
+#else
     //POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
-    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::typetraits<pFLOAT>::alignment;
-    using simd_type = typename simd::typetraits<pFLOAT>::simd_type;
-    using simd_mask_type = typename simd::typetraits<pFLOAT>::simd_mask_type;
-
+    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::simd_traits<pFLOAT>::alignment;
+    using simd_type = typename simd::simd_traits<pFLOAT>::simd_type;
+    using simd_mask_type = typename simd::simd_traits<pFLOAT>::simd_mask_type;
+#endif
     POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pFLOAT) * 8;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::lowest( ); }
@@ -236,11 +256,15 @@ namespace poutre
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
     //POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
-    
-    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::typetraits<pDOUBLE>::alignment;
-    using simd_type = typename simd::typetraits<pDOUBLE>::simd_type;
-    using simd_mask_type = typename simd::typetraits<pDOUBLE>::simd_mask_type;
-
+#ifdef USE_BOOSTSIMD
+    POUTRE_STATIC_CONSTEXPR size_t alignment = simd::pack<pDOUBLE>::alignment;
+    using simd_type = typename simd::pack<pDOUBLE>;
+    using simd_mask_type = typename  simd::pack<simd::logical<pDOUBLE>>;
+#else    
+    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::simd_traits<pDOUBLE>::alignment;
+    using simd_type = typename simd::simd_traits<pDOUBLE>::simd_type;
+    using simd_mask_type = typename simd::simd_traits<pDOUBLE>::simd_mask_type;
+#endif
     POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pDOUBLE) * 8;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::lowest( ); }
@@ -265,11 +289,16 @@ namespace poutre
     static const PType pixel_type = PType::PType_GrayINT64;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
+#ifdef USE_BOOSTSIMD
+    POUTRE_STATIC_CONSTEXPR size_t alignment = simd::pack<pINT64>::alignment;
+    using simd_type = typename simd::pack<pINT64>;
+    using simd_mask_type = typename  simd::pack<simd::logical<pINT64>>;
+#else  
     //POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
-    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::typetraits<pINT64>::alignment;
-    using simd_type = typename simd::typetraits<pINT64>::simd_type;
-    using simd_mask_type = typename simd::typetraits<pINT64>::simd_mask_type;
-
+    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::simd_traits<pINT64>::alignment;
+    using simd_type = typename simd::simd_traits<pINT64>::simd_type;
+    using simd_mask_type = typename simd::simd_traits<pINT64>::simd_mask_type;
+#endif
     POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pINT64) * 8;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest( ) POUTRE_NOEXCEPT { return std::numeric_limits<storage_type>::lowest( ); }

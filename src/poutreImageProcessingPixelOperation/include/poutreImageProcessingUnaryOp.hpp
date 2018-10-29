@@ -28,7 +28,12 @@
 
 #include <algorithm>//transform
 
+#ifdef USE_BOOSTSIMD
+#include <boost/simd/algorithm.hpp>//"simd" transform
+#else
 #include <simdpp/simd.h>
+#endif
+
 
 
 
@@ -209,7 +214,11 @@ namespace poutre
             auto i_vinbeg = i_vin.data();
             auto i_vinend = i_vin.data() + i_vin.size();
             auto i_voutbeg = o_vout.data();
+#ifdef  USE_BOOSTSIMD
+            boost::simd::transform(i_vinbeg, i_vinend, i_voutbeg, op);
+#else
             simdpp::transform(i_vinbeg, i_vinend, i_voutbeg, op);
+#endif
         }
 
     };
@@ -326,7 +335,11 @@ namespace poutre
             auto i_vinbeg = i_vin.data();
             auto i_vinend = i_vin.data() + i_vin.size();
             auto i_voutbeg = o_vout.data();
+#ifdef  USE_BOOSTSIMD
+            boost::simd::transform(i_vinbeg, i_vinend, i_voutbeg, op);
+#else
             simd::transform(i_vinbeg, i_vinend, i_voutbeg, op);
+#endif
         }
 
     };

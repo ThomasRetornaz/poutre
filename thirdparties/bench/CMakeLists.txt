@@ -15,23 +15,27 @@ ExternalProject_Add(googlebenchmark
 		 -DBUILD_TESTING:BOOL=OFF
 		 -DBENCHMARK_ENABLE_TESTING:BOOL=OFF
 		 -DBENCHMARK_ENABLE_LTO:BOOL=OFF
-		 -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+		 -DCMAKE_BUILD_TYPE=Release
 	#--Build step-----------------
+  UPDATE_COMMAND "" # Skip annoying updates for every build
 	#--Install step-----------------
+  UPDATE_COMMAND "" # Skip annoying updates for every build
 	INSTALL_COMMAND ""
   ) 
 
 ExternalProject_Get_Property(googlebenchmark TMP_DIR STAMP_DIR DOWNLOAD_DIR SOURCE_DIR BINARY_DIR INSTALL_DIR)
 message("Build googlebenchmark src ${SOURCE_DIR} in ${BINARY_DIR}")
 
-ExternalProject_Add_Step(
-  googlebenchmark CopyToBin
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${BINARY_DIR}/src/${ConfigurationName} ${CMAKE_BINARY_DIR}
-  DEPENDEES install
-)
-
 set(GOOGLE_BENCHMARK_INCLUDE_DIRS "${SOURCE_DIR}/include")
 set(GOOGLE_BENCHMARK_INCLUDE_DIRS ${GOOGLE_BENCHMARK_INCLUDE_DIRS}    PARENT_SCOPE)
-set(GOOGLE_BENCHMARK         googlebenchmark      PARENT_SCOPE) #?
+set(GOOGLE_BENCHMARK googlebenchmark PARENT_SCOPE)
+
+add_library(benchmark STATIC IMPORTED GLOBAL) #MARK AS IMPORTED AND GLOBAL SCOPE
+
+if(WIN32)
+set_target_properties(benchmark PROPERTIES IMPORTED_LOCATION ${BINARY_DIR}/src/Release/benchmark.lib)
+else()
+set_target_properties(benchmark PROPERTIES IMPORTED_LOCATION ${BINARY_DIR}/src/Release/libbenchmark.a)
+endif()
 
 set_target_properties(googlebenchmark PROPERTIES FOLDER "3rdparty")	
