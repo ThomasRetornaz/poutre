@@ -13,8 +13,6 @@ set_target_properties(PoutreIPSETests PROPERTIES
 
 target_link_libraries(PoutreIPSETests
     PoutreBase 
-    PoutreIPSE
-    jsoncpp	
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 	

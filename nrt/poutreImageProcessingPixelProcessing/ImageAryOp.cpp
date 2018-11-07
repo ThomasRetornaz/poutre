@@ -77,9 +77,9 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchOneIdxSamePtrType_negate)
     auto s_img1 = v_img1.section(/*poutre::idx2d*/{ 1,1 });
     auto s_img2 = v_img2.section(/*poutre::idx2d*/{ 1,1 });
     BOOST_CHECK_EQUAL(s_img1.size(), 20);
-    BOOST_CHECK_EQUAL(s_img1.bound(), (poutre::bd2d({ 4,5 })));
+    BOOST_CHECK_EQUAL(s_img1.bound(), (poutre::bd2d({ 4,5 }))); //-V112
     BOOST_CHECK_EQUAL(s_img2.size(), 20);
-    BOOST_CHECK_EQUAL(s_img2.bound(), (poutre::bd2d({ 4,5 })));
+    BOOST_CHECK_EQUAL(s_img2.bound(), (poutre::bd2d({ 4,5 }))); //-V112
     //call UnaryOpDispatcher one idx
     poutre::t_ArithNegate(s_img1, s_img2);
 
@@ -106,9 +106,9 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchOneIdxDiferentPtrType_negate)
     auto s_img1 = v_img1.section({ 1,1 });
     auto s_img2 = v_img2.section({ 1,1 });
     BOOST_CHECK_EQUAL(s_img1.size(), 20);
-    BOOST_CHECK_EQUAL(s_img1.bound(), (poutre::bd2d({ 4,5 })));
+    BOOST_CHECK_EQUAL(s_img1.bound(), (poutre::bd2d({ 4,5 }))); //-V112
     BOOST_CHECK_EQUAL(s_img2.size(), 20);
-    BOOST_CHECK_EQUAL(s_img2.bound(), (poutre::bd2d({ 4,5 })));
+    BOOST_CHECK_EQUAL(s_img2.bound(), (poutre::bd2d({ 4,5 }))); //-V112
 
     poutre::t_ArithNegate(s_img1, s_img2);
     std::string expected = "Dense Scalar GINT64 2 5 6 \
@@ -692,14 +692,14 @@ namespace
 
 		std::vector<poutre::pUINT8, poutre::aligned_allocator<poutre::pUINT8>> m_vect;
 		m_vect.reserve(size);
-		for (auto i = 0; i < size; ++i) {
+		for (size_t i = 0u; i < size; ++i) {
 			m_vect.push_back(dis(gen));
 		}
 		return m_vect;
 	}
 }
 
-
+#if 0
 BOOST_AUTO_TEST_CASE(benchmark)
 {
 	const auto size = 1000 * 1000;
@@ -784,6 +784,7 @@ BOOST_AUTO_TEST_CASE(benchmark)
 	timer.Reset();
 	std::cout << "********************************" << std::endl;
 }
+#endif
 
 BOOST_AUTO_TEST_SUITE_END()
 

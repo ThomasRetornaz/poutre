@@ -82,15 +82,17 @@ namespace poutre
         return data[view_offset(idx,stride)];
     }
 
-   template <ptrdiff_t Rank>
-   POUTRE_CXX14_CONSTEXPR void init_default_stride(const bounds<Rank>& bound, index<Rank>& stride)
-   {
-    stride[Rank - 1] = 1;
-    for ( ptrdiff_t i = Rank - 2; i >= 0; i-- )
-    {
-    stride[i] = stride[i + 1] * bound[i + 1];
-    }
-   }
+   //template <ptrdiff_t Rank>
+   //POUTRE_CXX14_CONSTEXPR index<Rank> init_default_stride(const bounds<Rank>& bound)
+   //{
+   // index<Rank> stride = {};
+   // stride[Rank - 1] = 1;
+   // for ( ptrdiff_t dim = Rank - 2; dim >= 0; dim-- )
+   // {
+   // stride[dim] = stride[dim + 1] * bound[dim + 1]; //FIXME
+   // }
+   // return stride;
+   //}
 
    template <ptrdiff_t rank>
    struct IsRankEqual1
@@ -319,9 +321,13 @@ namespace poutre
     POUTRE_CXX14_CONSTEXPR index_type
     stride () const POUTRE_NOEXCEPT
     {
-      index_type stride;
-      details::init_default_stride(m_bnd,stride);
-      return stride;
+       index<Rank> stride{};
+       stride[rank - 1] = 1;
+       for (ptrdiff_t dim = rank - 2; dim >= 0; --dim)
+       {
+          stride[dim] = stride[dim + 1] * bound()[dim + 1];
+       }
+       return stride;
     }
 
     //!Getter raw access to underlying data ptr to the contiguous sequence on which the view was created.
@@ -445,8 +451,7 @@ namespace poutre
     POUTRE_CXX14_CONSTEXPR strided_array_view ()
     POUTRE_NOEXCEPT_IF (POUTRE_NOEXCEPT_EXPR (bounds_type ()) && POUTRE_NOEXCEPT_EXPR (index_type ()))
             : m_bnd (), m_stride_idx (), m_data (nullptr)
-    {
-        details::init_default_stride(m_bnd, m_stride_idx);
+    {        
     }
 
     template <typename U=T, typename = std::enable_if_t<details::is_viewable_value<U, value_type>::value>>

@@ -112,7 +112,7 @@ BOOST_AUTO_TEST_CASE(ioreadstring_3Planes_UNT8)
 //          }
 //        }
     
-    for (auto i=0;i<img_t->size();++i) //-V522
+    for (size_t i=0u;i<img_t->size();++i) //-V522
     {
         BOOST_CHECK_EQUAL_COLLECTIONS((*img_t)[i].begin(),(*img_t)[i].end(), expectedvalues[i].begin(), expectedvalues[i].end());
     }
@@ -147,7 +147,7 @@ BOOST_AUTO_TEST_CASE(ioreadstring_4Planes_double)
                 2>;
     ImgType* img_t=dynamic_cast<ImgType*>(&(*img));
     BOOST_REQUIRE(img_t);
-    for(auto i=0;i<img_t->size();++i) //-V522
+    for(size_t i=0u;i<img_t->size();++i) //-V522
     {
         BOOST_CHECK_EQUAL_COLLECTIONS((*img_t)[i].begin(),(*img_t)[i].end(), expectedvalues[i].begin(), expectedvalues[i].end());
     }

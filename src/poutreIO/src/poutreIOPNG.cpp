@@ -54,7 +54,7 @@ namespace {
 
         /* first do a quick check that the file really is a PNG image; could have used
          * slightly more general png_sig_cmp() function instead */
-        fread(sig, 1, 8, infile);
+        fread(sig, 1, 8, infile); //-V124
         if (!png_sig_cmp(sig, 0,8)) {
             // cppcheck-suppress doubleFree
             fclose(infile);
@@ -214,7 +214,7 @@ namespace {
                     png_line_pix = reinterpret_cast<pUINT8 *>(
                         row_pointers[linenb]);                   // current line png
                     line_pix = img_t->data() + width * linenb;  // current line image
-                    memcpy(line_pix, png_line_pix, width * sizeof(pUINT8));
+                    memcpy(line_pix, png_line_pix, (size_t)width * sizeof(pUINT8));
                 }
 
             } break;

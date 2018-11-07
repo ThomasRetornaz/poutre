@@ -153,7 +153,7 @@ namespace poutre
 
     //POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
 #ifdef USE_BOOSTSIMD
-    POUTRE_STATIC_CONSTEXPR size_t alignment = simd::pack<pUINT8>::alignment;
+    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::pack<pUINT8>::alignment;
     using simd_type = typename simd::pack<pUINT8>;
     using simd_mask_type = typename  simd::pack<simd::logical<pUINT8>>;
 #else
@@ -187,7 +187,7 @@ namespace poutre
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
 #ifdef USE_BOOSTSIMD
-    POUTRE_STATIC_CONSTEXPR size_t alignment = simd::pack<pINT32>::alignment;
+    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::pack<pINT32>::alignment;
     using simd_type = typename simd::pack<pINT32>;
     using simd_mask_type = typename  simd::pack<simd::logical<pINT32>>;
 #else
@@ -221,7 +221,7 @@ namespace poutre
     static const PType pixel_type = PType::PType_F32;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 #ifdef USE_BOOSTSIMD
-    POUTRE_STATIC_CONSTEXPR size_t alignment = simd::pack<pFLOAT>::alignment;
+    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::pack<pFLOAT>::alignment;
     using simd_type = typename simd::pack<pFLOAT>;
     using simd_mask_type = typename  simd::pack<simd::logical<pFLOAT>>;
 #else
@@ -257,7 +257,7 @@ namespace poutre
 
     //POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
 #ifdef USE_BOOSTSIMD
-    POUTRE_STATIC_CONSTEXPR size_t alignment = simd::pack<pDOUBLE>::alignment;
+    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::pack<pDOUBLE>::alignment;
     using simd_type = typename simd::pack<pDOUBLE>;
     using simd_mask_type = typename  simd::pack<simd::logical<pDOUBLE>>;
 #else    
@@ -290,7 +290,7 @@ namespace poutre
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
 #ifdef USE_BOOSTSIMD
-    POUTRE_STATIC_CONSTEXPR size_t alignment = simd::pack<pINT64>::alignment;
+    POUTRE_STATIC_CONSTEXPR size_t alignment = (size_t)simd::pack<pINT64>::alignment;
     using simd_type = typename simd::pack<pINT64>;
     using simd_mask_type = typename  simd::pack<simd::logical<pINT64>>;
 #else  

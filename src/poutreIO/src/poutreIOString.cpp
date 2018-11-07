@@ -296,7 +296,7 @@ namespace poutre
         }
 
         //TODO dispatch sparse type ?
-        if (imgtype != ImgType::ImgType_Dense) {
+        if (imgtype != ImgType::ImgType_Dense) { //-V547
             std::string err="ImageFromString: ImgType unknown or not supported yet from " + i_str;
             POUTRE_RUNTIME_ERROR(err);
 

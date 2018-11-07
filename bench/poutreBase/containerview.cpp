@@ -43,7 +43,7 @@ public:
 
 //15 times slower than common iterator
 BENCHMARK_DEFINE_F(ViewOnVect1DFixture, BoundIterator)(benchmark::State& state) {
-    const int size = state.range(0);
+    const auto size = state.range(0);
     while (state.KeepRunning()) {
         for (int i = 0; i < size; ++i) {            
             //benchmark::DoNotOptimize(m_vect[i]);
@@ -62,7 +62,7 @@ BENCHMARK_DEFINE_F(ViewOnVect1DFixture, BoundIterator)(benchmark::State& state) 
 }
 
 BENCHMARK_DEFINE_F(ViewOnVect1DFixture, Iterator)(benchmark::State& state) {
-    const int size = state.range(0);
+    const auto size = state.range(0);
     while (state.KeepRunning()) {
         for (int i = 0; i < size; ++i) {           
             auto it = m_vect.begin();
@@ -77,7 +77,7 @@ BENCHMARK_DEFINE_F(ViewOnVect1DFixture, Iterator)(benchmark::State& state) {
     state.SetItemsProcessed(state.iterations() * size);
 }
 
-BENCHMARK_REGISTER_F(ViewOnVect1DFixture, Iterator)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Arg(256 * 256);//->Unit(benchmark::kMillisecond);
+BENCHMARK_REGISTER_F(ViewOnVect1DFixture, Iterator)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Arg(256 * 256);//->Unit(benchmark::kMillisecond); //-V112
 //15 times slower ....
-BENCHMARK_REGISTER_F(ViewOnVect1DFixture, BoundIterator)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Arg(256 * 256);//->Unit(benchmark::kMillisecond);
+BENCHMARK_REGISTER_F(ViewOnVect1DFixture, BoundIterator)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Arg(256 * 256);//->Unit(benchmark::kMillisecond); //-V112
 

@@ -51,7 +51,7 @@ void TestClassA::Deserialize(Json::Value& root)
     m_bTestBool = root.get("m_bTestBool", false).asBool();
     const Json::Value& jsonarray = root.get("m_array",Json::Value(Json::arrayValue));
     m_array.clear();
-    m_array.reserve(jsonarray.size());
+    m_array.reserve((size_t)jsonarray.size());
     for (const auto& val: jsonarray)
       {
       m_array.push_back(val.asFloat());

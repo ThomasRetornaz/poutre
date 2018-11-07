@@ -14,7 +14,6 @@ set_target_properties(PoutreNeuralNetsTests PROPERTIES
 target_link_libraries(PoutreNeuralNetsTests
     PoutreBase 
     PoutreNeuralNets
-    jsoncpp	
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 	

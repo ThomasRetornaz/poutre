@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE(increase_nostable)
     }
     //BOOST_CHECK_EQUAL_COLLECTIONS(results.begin(), results.end(), expected.begin(), expected.end());
     BOOST_REQUIRE(expected.size() == results.size());
-    for (auto i = 0; i < expected.size(); i++)
+    for (size_t i = 0u; i < expected.size(); i++)
     {
         BOOST_CHECK_EQUAL(expected[i].first, results[i].first);
         BOOST_CHECK_EQUAL(expected[i].second, results[i].second);
@@ -71,7 +71,7 @@ BOOST_AUTO_TEST_CASE(increase_stable)
     }
     //BOOST_CHECK_EQUAL_COLLECTIONS(results.begin(), results.end(), expected.begin(), expected.end());
     BOOST_REQUIRE(expected.size() == results.size());
-    for (auto i = 0; i < expected.size(); i++)
+    for (size_t i = 0u; i < expected.size(); i++)
     {
         BOOST_CHECK_EQUAL(expected[i].first, results[i].first);
         BOOST_CHECK_EQUAL(expected[i].second, results[i].second);
@@ -99,7 +99,7 @@ BOOST_AUTO_TEST_CASE(decrease_nostable)
     }
     //BOOST_CHECK_EQUAL_COLLECTIONS(results.begin(), results.end(), expected.begin(), expected.end());
     BOOST_REQUIRE(expected.size() == results.size());
-    for (auto i = 0; i < expected.size(); i++)
+    for (size_t i = 0; i < expected.size(); i++)
     {
         BOOST_CHECK_EQUAL(expected[i].first, results[i].first);
         BOOST_CHECK_EQUAL(expected[i].second, results[i].second);
@@ -127,7 +127,7 @@ BOOST_AUTO_TEST_CASE(decrease_stable)
     }
     //BOOST_CHECK_EQUAL_COLLECTIONS(results.begin(), results.end(), expected.begin(), expected.end());
     BOOST_REQUIRE(expected.size() == results.size());
-    for (auto i = 0; i < expected.size(); i++)
+    for (size_t i = 0; i < expected.size(); i++)
     {
         BOOST_CHECK_EQUAL(expected[i].first, results[i].first);
         BOOST_CHECK_EQUAL(expected[i].second, results[i].second);

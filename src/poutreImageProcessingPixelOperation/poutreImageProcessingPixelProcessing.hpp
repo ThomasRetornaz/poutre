@@ -38,6 +38,7 @@ namespace poutre
   {
 
    //TODO Doxydoc module
+   void dummy(void);
 
   }
 #endif //POUTRE_IMAGEPROCESSINGPP_HPP__

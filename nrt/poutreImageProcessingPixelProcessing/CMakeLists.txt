@@ -6,16 +6,17 @@ set(poutreIPPixelOperationTestSRC
     ${poutreIPPixelOperationTestSubdirectory}/main.cpp
 	${poutreIPPixelOperationTestSubdirectory}/ImageAryOp.cpp
 	${poutreIPPixelOperationTestSubdirectory}/ImageCompareOp.cpp
+	${poutreIPPixelOperationTestSubdirectory}/ImageTransposeOp.cpp
 )
 
 add_executable(PoutreIPPixelProcessingTests ${poutreIPPixelOperationTestSRC})
 
 target_link_libraries(PoutreIPPixelProcessingTests
-    PoutreBase 
-    PoutreIPCore
-	  #PoutreIPPixelProcessing
-    PoutreIO
-    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    PUBLIC PoutreBase 
+    PUBLIC PoutreIPCore
+	PUBLIC PoutreIO
+    PUBLIC PoutreIPPixelProcessing
+    PUBLIC ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 	
 add_test(NAME PoutreIPPixelProcessingTests-1 

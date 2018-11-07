@@ -22,7 +22,7 @@
 BOOST_AUTO_TEST_SUITE(poutreImageProcessingContainer)
 BOOST_AUTO_TEST_CASE(ctor)
 {
-    poutre::DenseImage<poutre::pUINT8> img({ 3, 4 });
+    poutre::DenseImage<poutre::pUINT8> img({ 3, 4 }); //-V112
     BOOST_CHECK_EQUAL(img.GetImgType(), poutre::ImgType::ImgType_Dense);
     BOOST_CHECK_EQUAL(img.GetPType(), poutre::PType::PType_GrayUINT8);
     BOOST_CHECK_EQUAL(img.GetCType(), poutre::CompoundType::CompoundType_Scalar);
@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_CASE(ctor)
     BOOST_CHECK_EQUAL(img.GetNumDims(), 2);
     BOOST_CHECK(!img.empty());
     auto coords = img.GetCoords();
-    auto expectedcoords = { 3, 4 };
+    auto expectedcoords = { 3, 4 }; //-V112
     BOOST_CHECK_EQUAL_COLLECTIONS(coords.begin(), coords.end(), expectedcoords.begin(), expectedcoords.end());
 
     /*std::cout << "**************************************************" << std::endl;
@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE(clone)
 {
     using ImageType = poutre::DenseImage < poutre::pUINT8 >;
     using ImageTypeInterface = std::unique_ptr < poutre::IInterface >;
-    ImageType img({ 3, 4 });
+    ImageType img({ 3, 4 }); //-V112
     BOOST_CHECK_EQUAL(img.GetPType(), poutre::PType::PType_GrayUINT8);
     img.assign(10);
 
@@ -63,7 +63,7 @@ BOOST_AUTO_TEST_CASE(clone)
     BOOST_CHECK_EQUAL((*cloned).GetNumDims(), 2);
     BOOST_CHECK(!(*cloned).empty());
     auto coords = (*cloned).GetCoords();
-    auto expectedcoords = { 3, 4 };
+    auto expectedcoords = { 3, 4 }; //-V112
     BOOST_CHECK_EQUAL_COLLECTIONS(coords.begin(), coords.end(), expectedcoords.begin(), expectedcoords.end());
 
     for (const auto& var : (*cloned))
@@ -79,60 +79,60 @@ BOOST_AUTO_TEST_CASE(clone)
 BOOST_AUTO_TEST_CASE(Factory)
 {
     {
-        auto img = poutre::CreateDense({ 3, 4 }, poutre::CompoundType::CompoundType_Scalar, poutre::PType::PType_GrayUINT8);
+        auto img = poutre::CreateDense({ 3, 4 }, poutre::CompoundType::CompoundType_Scalar, poutre::PType::PType_GrayUINT8); //-V112
         BOOST_REQUIRE(img);
         BOOST_CHECK_EQUAL((*img).GetImgType(), poutre::ImgType::ImgType_Dense);
         BOOST_CHECK_EQUAL((*img).GetCType(), poutre::CompoundType::CompoundType_Scalar);
         BOOST_CHECK_EQUAL((*img).GetPType(), poutre::PType::PType_GrayUINT8);
         auto coords = (*img).GetCoords();
-        auto expectedcoords = { 3, 4 };
+        auto expectedcoords = { 3, 4 }; //-V112
         BOOST_CHECK_EQUAL_COLLECTIONS(coords.begin(), coords.end(), expectedcoords.begin(), expectedcoords.end());
         BOOST_CHECK(dynamic_cast<poutre::DenseImage < poutre::pUINT8 >*> (img.get()));
     }
 
     {
-        auto img = poutre::CreateDense({ 3, 4 }, poutre::CompoundType::CompoundType_Scalar, poutre::PType::PType_GrayINT32);
+        auto img = poutre::CreateDense({ 3, 4 }, poutre::CompoundType::CompoundType_Scalar, poutre::PType::PType_GrayINT32); //-V112
         BOOST_REQUIRE(img);
         BOOST_CHECK_EQUAL((*img).GetImgType(), poutre::ImgType::ImgType_Dense);
         BOOST_CHECK_EQUAL((*img).GetCType(), poutre::CompoundType::CompoundType_Scalar);
         BOOST_CHECK_EQUAL((*img).GetPType(), poutre::PType::PType_GrayINT32);
         auto coords = (*img).GetCoords();
-        auto expectedcoords = { 3, 4 };
+        auto expectedcoords = { 3, 4 }; //-V112
         BOOST_CHECK_EQUAL_COLLECTIONS(coords.begin(), coords.end(), expectedcoords.begin(), expectedcoords.end());
         BOOST_CHECK(dynamic_cast<poutre::DenseImage < poutre::pINT32>*> (img.get()));
     }
     {
-        auto img = poutre::CreateDense({ 3, 4 }, poutre::CompoundType::CompoundType_Scalar, poutre::PType::PType_F32);
+        auto img = poutre::CreateDense({ 3, 4 }, poutre::CompoundType::CompoundType_Scalar, poutre::PType::PType_F32); //-V112
         BOOST_REQUIRE(img);
         BOOST_CHECK_EQUAL((*img).GetImgType(), poutre::ImgType::ImgType_Dense);
         BOOST_CHECK_EQUAL((*img).GetCType(), poutre::CompoundType::CompoundType_Scalar);
         BOOST_CHECK_EQUAL((*img).GetPType(), poutre::PType::PType_F32);
         auto coords = (*img).GetCoords();
-        auto expectedcoords = { 3, 4 };
+        auto expectedcoords = { 3, 4 }; //-V112
         BOOST_CHECK_EQUAL_COLLECTIONS(coords.begin(), coords.end(), expectedcoords.begin(), expectedcoords.end());
         BOOST_CHECK(dynamic_cast<poutre::DenseImage < poutre::pFLOAT>*> (img.get()));
     }
     {
-        auto img = poutre::CreateDense({ 3, 4 }, poutre::CompoundType::CompoundType_Scalar, poutre::PType::PType_GrayINT64);
+        auto img = poutre::CreateDense({ 3, 4 }, poutre::CompoundType::CompoundType_Scalar, poutre::PType::PType_GrayINT64); //-V112
         BOOST_REQUIRE(img);
         BOOST_CHECK_EQUAL((*img).GetImgType(), poutre::ImgType::ImgType_Dense);
         BOOST_CHECK_EQUAL((*img).GetPType(), poutre::PType::PType_GrayINT64);
         BOOST_CHECK_EQUAL((*img).GetCType(), poutre::CompoundType::CompoundType_Scalar);
         auto coords = (*img).GetCoords();
-        auto expectedcoords = { 3, 4 };
+        auto expectedcoords = { 3, 4 }; //-V112
         BOOST_CHECK_EQUAL_COLLECTIONS(coords.begin(), coords.end(), expectedcoords.begin(), expectedcoords.end());
         BOOST_CHECK(dynamic_cast<poutre::DenseImage < poutre::pINT64>*> (img.get()));
     }
     {
-        BOOST_CHECK_THROW(poutre::CreateDense({ 3, 4 }, poutre::CompoundType::CompoundType_Scalar, poutre::PType::PType_Undef), std::runtime_error);
-        BOOST_CHECK_THROW(poutre::CreateDense({ 3, 4 }, poutre::CompoundType::CompoundType_Undef, poutre::PType::PType_GrayINT64), std::runtime_error);
+        BOOST_CHECK_THROW(poutre::CreateDense({ 3, 4 }, poutre::CompoundType::CompoundType_Scalar, poutre::PType::PType_Undef), std::runtime_error); //-V112
+        BOOST_CHECK_THROW(poutre::CreateDense({ 3, 4 }, poutre::CompoundType::CompoundType_Undef, poutre::PType::PType_GrayINT64), std::runtime_error); //-V112
     }
 
 }
 
 BOOST_AUTO_TEST_CASE(BasicIteration)
 {
-    poutre::DenseImage<poutre::pUINT8> img({ 3, 4 });
+    poutre::DenseImage<poutre::pUINT8> img({ 3, 4 }); //-V112
     BOOST_CHECK_EQUAL(img.GetPType(), poutre::PType::PType_GrayUINT8);
     BOOST_CHECK_EQUAL(img.GetCType(), poutre::CompoundType::CompoundType_Scalar);
     img.assign(10);
@@ -172,7 +172,7 @@ BOOST_AUTO_TEST_CASE(BasicIteration)
     }
     BOOST_CHECK_EQUAL(count, 12);
 
-    for (auto i = 0; i < img.size(); i++)
+    for (size_t i = 0u; i < img.size(); i++)
     {
         BOOST_CHECK_EQUAL(img[i], 10);
         BOOST_CHECK_EQUAL(img.at(i), 10);
@@ -184,13 +184,13 @@ BOOST_AUTO_TEST_CASE(BasicIteration)
 BOOST_AUTO_TEST_CASE(move)
 {
     //todo check assembly
-    auto img(poutre::DenseImage<poutre::pUINT8>{3, 4});
+    auto img(poutre::DenseImage<poutre::pUINT8>{3, 4}); //-V112
     BOOST_CHECK_EQUAL(img.GetImgType(), poutre::ImgType::ImgType_Dense);
     BOOST_CHECK_EQUAL(img.GetPType(), poutre::PType::PType_GrayUINT8);
     BOOST_CHECK_EQUAL(img.GetCType(), poutre::CompoundType::CompoundType_Scalar);
 
     auto coords = img.GetCoords();
-    auto expectedcoords = { 3, 4 };
+    auto expectedcoords = { 3, 4 }; //-V112
     BOOST_CHECK_EQUAL_COLLECTIONS(coords.begin(), coords.end(), expectedcoords.begin(), expectedcoords.end());
 
     poutre::DenseImage<poutre::pUINT8> img2({ 2, 3 });
@@ -207,19 +207,19 @@ BOOST_AUTO_TEST_CASE(move)
     BOOST_CHECK_EQUAL(img2.GetPType(), poutre::PType::PType_GrayUINT8);
     BOOST_CHECK_EQUAL(img2.GetCType(), poutre::CompoundType::CompoundType_Scalar);
     auto coordsmove = img2.GetCoords();
-    auto expectedcoordsmove = { 3, 4 };
+    auto expectedcoordsmove = { 3, 4 }; //-V112
     BOOST_CHECK_EQUAL_COLLECTIONS(coordsmove.begin(), coordsmove.end(), expectedcoordsmove.begin(), expectedcoordsmove.end());
 
 }
 
 BOOST_AUTO_TEST_CASE(viewoverimage)
 {
-    poutre::DenseImage<poutre::pUINT8> img1({ 3, 4 });
+    poutre::DenseImage<poutre::pUINT8> img1({ 3, 4 }); //-V112
     //start view
     auto vimg1 = poutre::view(img1);
     BOOST_CHECK_EQUAL(vimg1.size(), 12);
-    BOOST_CHECK_EQUAL(vimg1.bound(), (poutre::bd2d{ 3, 4 }));
-    BOOST_CHECK_EQUAL(vimg1.stride(), (poutre::idx2d{ 4, 1 }));
+    BOOST_CHECK_EQUAL(vimg1.bound(), (poutre::bd2d{ 3, 4 })); //-V112
+    BOOST_CHECK_EQUAL(vimg1.stride(), (poutre::idx2d{ 4, 1 })); //-V112
 
 
 }

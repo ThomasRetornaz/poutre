@@ -38,7 +38,7 @@ namespace poutre
   using  pINT64 = std::int64_t; //!INT64 type
   using  pUINT64 = std::uint64_t; //!UINT64 type
 
-  using  scoord = pINT32; //!scalar coordinate
+  using  scoord = pINT64; //!scalar coordinate
   using  rcoord = pFLOAT; //!real coordinate
 
   using  offset = std::ptrdiff_t; //!offset

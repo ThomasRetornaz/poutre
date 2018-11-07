@@ -28,7 +28,7 @@ namespace {
 
         std::vector<poutre::pUINT8> m_vect;
         m_vect.reserve(size);
-        for (auto i = 0; i < size; ++i) {
+        for (size_t i = 0u; i < size; ++i) {
             m_vect.push_back(dis(gen));
         }
         return m_vect;
@@ -47,9 +47,9 @@ public:
 };
 
 BENCHMARK_DEFINE_F(CompareFixture, comparesss_view)(benchmark::State& state) {
-    const int size = state.range(0);
+    const auto size = state.range(0);
     while (state.KeepRunning()) {
-        for (int i = 0; i < size; ++i) {
+        for (auto i = 0u; i < size; ++i) {
           std::vector<poutre::pUINT8> res(m_vect.size());
           auto sizeextent=sqrt(size);
           auto view2din=poutre::array_view<poutre::pUINT8,2>(m_vect,{int(sizeextent),int(sizeextent)});
@@ -62,9 +62,9 @@ BENCHMARK_DEFINE_F(CompareFixture, comparesss_view)(benchmark::State& state) {
 }
 
 BENCHMARK_DEFINE_F(CompareFixture, comparesss_strided_view)(benchmark::State& state) {
-    const int size = state.range(0);
+    const auto size = state.range(0);
     while (state.KeepRunning()) {
-        for (int i = 0; i < size; ++i) {
+        for (auto i = 0u; i < size; ++i) {
             std::vector< poutre::pUINT8> res(m_vect.size());
             auto sizeextent = sqrt(size);
             auto view2din = poutre::array_view< poutre::pUINT8, 2>(m_vect, { int(sizeextent),int(sizeextent) });
@@ -77,5 +77,5 @@ BENCHMARK_DEFINE_F(CompareFixture, comparesss_strided_view)(benchmark::State& st
     state.SetItemsProcessed(state.iterations() * size);
 }
 
-BENCHMARK_REGISTER_F(CompareFixture, comparesss_view)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Unit(benchmark::kMicrosecond);
-BENCHMARK_REGISTER_F(CompareFixture, comparesss_strided_view)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Unit(benchmark::kMicrosecond);
+BENCHMARK_REGISTER_F(CompareFixture, comparesss_view)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMicrosecond); //-V112
+BENCHMARK_REGISTER_F(CompareFixture, comparesss_strided_view)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Unit(benchmark::kMicrosecond); //-V112

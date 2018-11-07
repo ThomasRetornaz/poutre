@@ -10,6 +10,7 @@ set(PoutreIPPPSRC_DETAILS
   ${PoutreIPPPSubdirectory}/include/poutreImageProcessingQuaternaryOp.hpp
   ${PoutreIPPPSubdirectory}/include/poutreImageProcessingArith.hpp
   ${PoutreIPPPSubdirectory}/include/poutreImageProcessingCompare.hpp
+  ${PoutreIPPPSubdirectory}/include/poutreImageProcessingTranspose.hpp
   )
 
 set(PoutreIPPPSRC_PUBLICHEADERS  
@@ -39,17 +40,17 @@ target_link_libraries(PoutreIPPixelProcessing
   PUBLIC ${Boost_LOG_SETUP_LIBRARY}
   PUBLIC jsoncpp 
   INTERFACE Eigen  
-  # INTERFACE ${SIMD_LIB} 
+  #INTERFACE ${SIMD_LIB} 
   PUBLIC   PoutreBase 
   PUBLIC   PoutreIPCore 
   )
 set_target_properties(PoutreIPPixelProcessing PROPERTIES FOLDER "src/")
 
-#IF(BUILD_SHARED_LIBS)
-#  SET_TARGET_PROPERTIES(PoutreIPPixelProcessing PROPERTIES COMPILE_FLAGS -DJSON_DLL)
-#  SET_TARGET_PROPERTIES(PoutreIPPixelProcessing PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DLL) #FIXME not true should be linked with boost
-#  SET_TARGET_PROPERTIES(PoutreIPPixelProcessing PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DYN_LINK) #FIXME not true should be linked with boost
-#ENDIF(BUILD_SHARED_LIBS)
+IF(BUILD_SHARED_LIBS)
+  SET_TARGET_PROPERTIES(PoutreIPPixelProcessing PROPERTIES COMPILE_FLAGS -DJSON_DLL)
+  SET_TARGET_PROPERTIES(PoutreIPPixelProcessing PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DLL) #FIXME not true should be linked with boost
+  SET_TARGET_PROPERTIES(PoutreIPPixelProcessing PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DYN_LINK) #FIXME not true should be linked with boost
+ENDIF(BUILD_SHARED_LIBS)
 
 
 install_POUTRE_targets(

@@ -164,7 +164,7 @@ public:
       value_type a0, value_type a1, value_type a2,
       value_type a3) POUTRE_NOEXCEPT
   {
-    static_assert(Rank == 4, "static_array_base(value_type,value_type,value_"
+    static_assert(Rank == 4, "static_array_base(value_type,value_type,value_" //-V112
                              "type,value_type) is only supported on "
                              "static_array_base<T, 4>");
     m_array[0] = a0;

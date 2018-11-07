@@ -28,7 +28,7 @@ set_target_properties(PoutreBaseTests PROPERTIES
 
 target_link_libraries(PoutreBaseTests 
   INTERFACE Eigen  
-  INTERFACE ${SIMD_LIB} 
+  #INTERFACE ${SIMD_LIB} 
   PRIVATE ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}  
   # ${Boost_THREAD_LIBRARY} 
   # ${Boost_SYSTEM_LIBRARY} 
