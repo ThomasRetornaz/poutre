@@ -73,7 +73,7 @@ namespace poutre
             compOpType = CompOpType::CompOpSupEqual;
         else
         {
-            POUTRE_RUNTIME_ERROR("Unable to read arithOpType from stream");
+            POUTRE_RUNTIME_ERROR("Unable to read CompOpType from stream");
         }
         return is;
     }

@@ -30,7 +30,7 @@
 
 namespace poutre
 {   
-    IO_API std::string ImageToString(const poutre::IInterface& i_image);    
+    IO_API std::string ImageToString(const IInterface& i_image);    
     IO_API std::unique_ptr<IInterface> ImageFromString(const std::string& i_str); 
     
 }

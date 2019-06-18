@@ -89,7 +89,7 @@ public:
   static const PType m_ptype = TypeTraits<value_type>::pixel_type;
   static const CompoundType m_ctype = TypeTraits<value_type>::compound_type;
 
-  static const std::size_t m_numdims = NumDims;
+  /*constexpr*/ static const std::ptrdiff_t m_numdims = NumDims;
 //  static const std::size_t alignement = TypeTraits<valuetype>::alignement;
   static const ImgType m_imgtype = ImgType::ImgType_Dense;
 
@@ -195,18 +195,18 @@ public:
   const_reference operator[](size_type n) const POUTRE_NOEXCEPT 
   {
       POUTRE_ASSERTCHECK(n < m_numelemwithpaddingifany, "Access out of bound");
-      POUTRE_ASSERTCHECK(n >= 0, "Access out of bound");
+      //POUTRE_ASSERTCHECK(n >= 0, "Access out of bound");
     return m_data[n];
   }
 
   reference at(size_type n) {
-    if (n >= m_numelemwithpaddingifany || n < 0)
+    if (n >= m_numelemwithpaddingifany)
       POUTRE_RUNTIME_ERROR("Access out of bound");
     return m_data[n];
   }
 
   const_reference at(size_type n) const {
-    if (n >= m_numelemwithpaddingifany || n < 0)
+    if (n >= m_numelemwithpaddingifany)
       POUTRE_RUNTIME_ERROR("Access out of bound");
     return m_data[n];
   }

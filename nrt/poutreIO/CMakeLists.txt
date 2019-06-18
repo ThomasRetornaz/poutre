@@ -11,8 +11,7 @@ set(PoutreIOTestSRC
 
 add_executable(PoutreIOTests ${PoutreIOTestSRC})
 set_target_properties(PoutreIOTests PROPERTIES 
-                      DEFINE_SYMBOL "JSON_DLL"
-                      FOLDER "Core/")
+                      DEFINE_SYMBOL "JSON_DLL")
 
 target_link_libraries(PoutreIOTests
     PUBLIC PoutreBase 

@@ -1,7 +1,8 @@
 
 set(poutreImageProcessingSE ${POUTRE_SRC_DIR}/poutreImageProcessingSE)
 
-set(poutreImageProcessingSE_SRC_DETAILS  
+set(poutreImageProcessingSE_SRC_DETAILS 
+  ${poutreImageProcessingSE}/include/poutreImageProcessingSENeighborhood.hpp
   )
 
 set(poutreImageProcessingSE_PUBLICHEADERS  

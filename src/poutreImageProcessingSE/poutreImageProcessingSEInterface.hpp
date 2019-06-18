@@ -10,6 +10,10 @@
 #ifndef POUTRE_IPSEINTERFACE_HPP__
 #define POUTRE_IPSEINTERFACE_HPP__
 
+#ifndef POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
+#include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
+#endif
+
 #ifndef POUTRE_IPSECORE_HPP__
 #include <poutreImageProcessingSE/poutreImageProcessingSECore.hpp>
 #endif
@@ -64,6 +68,9 @@ namespace poutre
             //! Returns a new structuring element that is a transposed copy 
             virtual std::unique_ptr<IStructuringElement> Transpose() const = 0;
 
+            //! Returns the size of the structuring element in number of neighbors (the center, if defined, is included)
+            virtual size_t GetSize() const = 0;
+
             //!Dtor
             virtual ~IStructuringElement() = default;
 
@@ -73,6 +80,8 @@ namespace poutre
         //! operator<< for IStructuringElement
         //@warning Serialize a description of StructuringElement. Doesn't serialize data. Use @c TODO,@c TODO
         IPPSE_API std::ostream& operator<<(std::ostream&, const IStructuringElement& img);
+
+
 
     }
     //! @} // se_grp 

@@ -7,8 +7,8 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef _PNNTESTS_MAIN_HPP__
-#define _PNNTESTS_MAIN_HPP__
+#ifndef _PIPPSETESTS_MAIN_HPP__
+#define _PIPPSETESTS_MAIN_HPP__
 
 #include <boost/test/unit_test_suite.hpp>
 #include <boost/test/unit_test_log.hpp>
@@ -20,5 +20,5 @@ using boost::unit_test::test_suite;
 #include <iostream>
 
 
-#endif
+#endif //_PIPPSETESTS_MAIN_HPP__
 

@@ -24,7 +24,7 @@ set(PoutreBaseTestSRC
 add_executable(PoutreBaseTests ${PoutreBaseTestSRC})
 set_target_properties(PoutreBaseTests PROPERTIES 
   DEFINE_SYMBOL "JSON_DLL"
-  FOLDER "Core/")
+)
 
 target_link_libraries(PoutreBaseTests 
   INTERFACE Eigen  

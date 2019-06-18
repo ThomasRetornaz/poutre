@@ -10,18 +10,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IPSENL_HPP__
-#define POUTRE_IPSENL_HPP__
+#include "main.hpp"
+#include "benchmark/benchmark.h"
 
-#ifndef POUTRE_IPSECORE_HPP__
-#include <poutreImageProcessingSE/poutreImageProcessingSECore.hpp>
-#endif
-
-namespace poutre
-{
-    namespace se
-    {
-    }
-    
-}
-#endif //POUTRE_IPSENL_HPP__
+BENCHMARK_MAIN();

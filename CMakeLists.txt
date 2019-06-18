@@ -78,18 +78,6 @@ OptimizeForArchitecture()
 # Compiler specific configurations
 include(cmake/CMakeCompilerSpecific.cmake)
 
-# if (USE_AVX)
-    # message(STATUS "Compiling with AVX support")
-# elseif (USE_SSE4_2)
-    # message(STATUS "Compiling with SSE4.2 support")
-# elseif (USE_SSSE3)
-    # message(STATUS "Compiling with SSE3 support")
-# else()
-    # message(FATAL_ERROR "The target machine does not support SSE3. At least SSE3 is required")
-# endif()
-
-
-
 message(STATUS "CMake running on OS ${CMAKE_HOST_SYSTEM_NAME} version ${CMAKE_HOST_SYSTEM_VERSION} on processor ${CMAKE_HOST_SYSTEM_PROCESSOR}")
 message(STATUS "HDF5 support is ${ENABLE_HDF5}")
 message(STATUS "NumPy support is ${ENABLE_NUMPY}")

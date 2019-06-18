@@ -1,6 +1,3 @@
-// This is an open source non-commercial project. Dear PVS-Studio, please check it.
-
-// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 //==============================================================================
 //                  Copyright (c) 2015 - Thomas Retornaz                      //
@@ -10,8 +7,10 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
+#ifndef _LOWLEVELM_BENCHS_MAIN_HPP__
+#define _LOWLEVELM_BENCHS_MAIN_HPP__
 
-//#define BOOST_TEST_NO_MAIN
-#define BOOST_TEST_MAIN
-#define BOOST_TEST_MODULE poutre nn
-#include "main.hpp"
+#include <iostream>
+
+#endif //_LOWLEVELM_BENCHS_MAIN_HPP__
+

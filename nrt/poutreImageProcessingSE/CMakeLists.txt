@@ -9,7 +9,7 @@ set(PoutreImageProcessingSETestSRC
 add_executable(PoutreIPSETests ${PoutreImageProcessingSETestSRC})
 set_target_properties(PoutreIPSETests PROPERTIES 
                       DEFINE_SYMBOL "JSON_DLL"
-                      FOLDER "Core/")
+					 )
 
 target_link_libraries(PoutreIPSETests
     PoutreBase 

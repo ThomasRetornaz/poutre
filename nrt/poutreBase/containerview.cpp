@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE(ctor)
     sview1DINt dummysview;
     BOOST_CHECK_EQUAL(dummysview.size(), 0);
     std::cout << "dummysview.stride()" << dummysview.stride() << std::endl;
-    BOOST_CHECK(dummysview.stride() == poutre::idx1d{ 1 }); //stride is 1 for empty stridedview
+    BOOST_CHECK(dummysview.stride() == poutre::idx1d{ 0 }); //stride is 0 for empty stridedview
     //BOOST_CHECK_THROW(dummysview[idxtype{ 0 }], std::runtime_error); //throw in debug
     //BOOST_CHECK_THROW(dummysview[5], std::runtime_error); //can't slice on 1D
     //BOOST_CHECK_THROW(dummysview.section(poutre::bd1d{ 3 }), std::runtime_error); //section

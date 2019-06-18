@@ -109,6 +109,8 @@ namespace poutre
 
    //! Factory to build contiguous dense image
    IMP_CORE_API std::unique_ptr<IInterface> CreateDense(const std::vector<std::size_t>& dims, CompoundType ctype, PType ptype);
+
+   //! @} doxygroup: image_processing_interface_group 
 //! @} doxygroup: image_processing_group
      
 }

@@ -10,18 +10,12 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IPSENL_HPP__
-#define POUTRE_IPSENL_HPP__
-
-#ifndef POUTRE_IPSECORE_HPP__
-#include <poutreImageProcessingSE/poutreImageProcessingSECore.hpp>
-#endif
+#include <poutreImageProcessingLowLevelMorphology/poutreImageProcessingLowLevelMorphology.hpp>
 
 namespace poutre
 {
-    namespace se
-    {
-    }
-    
+   void dummy(void)
+   {
+      size_t a = 0;
+   }
 }
-#endif //POUTRE_IPSENL_HPP__

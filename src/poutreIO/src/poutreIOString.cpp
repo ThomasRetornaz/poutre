@@ -521,7 +521,7 @@ namespace poutre
             
             case CompoundType::CompoundType_4Planes:
             {
-                ImageToStringDenseCompoundType_3PlanesDispatchPType<dims>(img,ptype,ostrm);
+                ImageToStringDenseCompoundType_4PlanesDispatchPType<dims>(img,ptype,ostrm);
             }
             break;            
             
