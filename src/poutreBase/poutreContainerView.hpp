@@ -387,10 +387,10 @@ namespace poutre
     section (const index_type& origin, const bounds_type& section_bnd) const
     {
       //precondition
-      POUTRE_CHECK (m_bnd.contains (origin), "section(origin,section_bnd) origin is Out of bound");
+      POUTRE_ASSERTCHECK(m_bnd.contains (origin), "section(origin,section_bnd) origin is Out of bound");
       index_type shifted = section_bnd + origin;
       shifted -= 1;
-      POUTRE_CHECK (m_bnd.contains (shifted), "section(origin,section_bnd) section_bnd shifted by origins is out of bound");
+      POUTRE_ASSERTCHECK(m_bnd.contains (shifted), "section(origin,section_bnd) section_bnd shifted by origins is out of bound");
 
       pointer data_section = m_data + details::get_offset_from_coord_nostride<bounds_type, index_type>::op (m_bnd, origin);
       return strided_array_view<T, Rank>(data_section, section_bnd, stride());
@@ -401,7 +401,7 @@ namespace poutre
     //@warning Requires: bounds().contains(origin + idx) == true for any index_type idx such that (bounds() - origin).contains(idx) == true.
     section (const index_type& origin) const
     {
-      POUTRE_CHECK (m_bnd.contains (origin), "section(origin,section_bnd) origin is Out of bound");
+      POUTRE_ASSERTCHECK(m_bnd.contains (origin), "section(origin,section_bnd) origin is Out of bound");
 
       bounds_type section_bnd = m_bnd - origin;
       //std::cout<<"\nstrided_array_view::section init "<<m_bnd<<" sub "<<section_bnd<<" stride"<<stride()<<"\n";
@@ -411,7 +411,18 @@ namespace poutre
 
     /**@}*/
   };
-
+    
+  template <class T>
+  class array_view2D:public array_view<T, 2>
+  {
+    public:
+      POUTRE_CXX14_CONSTEXPR T& operator[] (const idx2d& idx) const POUTRE_NOEXCEPTONLYNDEBUG
+      {
+          POUTRE_ASSERTCHECK(m_bnd.contains(idx) == true, "Out of bound");
+          auto SizeX = m_bnd[0];
+          return m_data[idx[1] * SizeX + idx[0]];
+      }
+  };
   /**
    * @brief An strided_array_view is a potentially multidimensional view on a sequence of  strided objects of a uniform type
    */

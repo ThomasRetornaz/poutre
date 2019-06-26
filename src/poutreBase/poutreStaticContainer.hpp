@@ -426,8 +426,8 @@ public:
   POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR const_reference
   at(difference_type n) const
   {
-    POUTRE_CHECK(n < rank, "static_array_base.at(n) n must be in [0,rank)");
-    POUTRE_CHECK(n >= 0, "static_array_base.at(n) n must be in [0,rank)");
+    POUTRE_ASSERTCHECK(n < rank, "static_array_base.at(n) n must be in [0,rank)");
+    POUTRE_ASSERTCHECK(n >= 0, "static_array_base.at(n) n must be in [0,rank)");
     return m_array[n];
   }
 
