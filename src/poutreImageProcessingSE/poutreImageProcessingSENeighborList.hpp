@@ -48,12 +48,13 @@ namespace poutre
        struct NeighborListStaticSETraits< NeighborListStaticSE::NeighborListStaticSE2DCT8>
        {
           POUTRE_STATIC_CONSTEXPR ptrdiff_t Rank = 2;
-          const static ptrdiff_t HalfSize; //FXIME should be constexpr
+          POUTRE_STATIC_CONSTEXPR ptrdiff_t NbNeighbor = 9;
+          const static idx2d surroundingSquareHalfSize; //FXIME should be constexpr
 		  const static std::array<idx2d, 9> NlList;
 		  const static std::array<idx2d, 9> NlListTransposed;
        };
        
-       const ptrdiff_t NeighborListStaticSETraits< NeighborListStaticSE::NeighborListStaticSE2DCT8>::HalfSize = 1;
+       const idx2d NeighborListStaticSETraits< NeighborListStaticSE::NeighborListStaticSE2DCT8>::surroundingSquareHalfSize = idx2d{1,1};
 	   const std::array<idx2d, 9> NeighborListStaticSETraits< NeighborListStaticSE::NeighborListStaticSE2DCT8>::NlList = {
 	   idx2d{ 0,0 },
 	   //
@@ -86,12 +87,13 @@ namespace poutre
 	   struct NeighborListStaticSETraits< NeighborListStaticSE::NeighborListStaticSE2DCT4>
 	   {
 		   POUTRE_STATIC_CONSTEXPR ptrdiff_t Rank = 2;
-		   const static ptrdiff_t HalfSize; //FXIME should be constexpr
+           POUTRE_STATIC_CONSTEXPR ptrdiff_t NbNeighbor = 5;
+		   const static idx2d surroundingSquareHalfSize; //FXIME should be constexpr
 		   const static std::array<idx2d, 5> NlList;
 		   const static std::array<idx2d, 5> NlListTransposed;
 	   };
 
-	   const ptrdiff_t NeighborListStaticSETraits< NeighborListStaticSE::NeighborListStaticSE2DCT4>::HalfSize = 1;
+	   const idx2d NeighborListStaticSETraits< NeighborListStaticSE::NeighborListStaticSE2DCT4>::surroundingSquareHalfSize = idx2d{1,1};
 	   const std::array<idx2d, 5> NeighborListStaticSETraits< NeighborListStaticSE::NeighborListStaticSE2DCT4>::NlList = {
 	   idx2d{ 0,0 },
 	   //
