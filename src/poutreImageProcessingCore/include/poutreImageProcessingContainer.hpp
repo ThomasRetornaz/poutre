@@ -126,7 +126,7 @@ public:
       //  {
       m_numelemwithpaddingifany = m_coordinnates[0];
       //  }
-      for (size_t i = 1; i < m_numdims; i++) {
+      for (size_t i = 1; i < (size_t)m_numdims; i++) {
         m_numelemwithpaddingifany *= m_coordinnates[i];
       }
       m_data = m_allocator.allocate(m_numelemwithpaddingifany);
@@ -157,7 +157,7 @@ public:
       //  {
       m_numelemwithpaddingifany = m_coordinnates[0];
       //  }
-      for (size_t i = 1; i < m_numdims; i++) {
+      for (size_t i = 1; i < (size_t)m_numdims; i++) {
         m_numelemwithpaddingifany *= m_coordinnates[i];
       }
       m_data = m_allocator.allocate(m_numelemwithpaddingifany);

@@ -74,8 +74,9 @@ namespace poutre
          auto xsize = ibd[1];
          auto oxsize = obd[1];
 
-         POUTRE_CHECK(ibd[0] = obd[1], "ibd[0]!=obd[1] bound not compatible");
-         POUTRE_CHECK(ibd[1] = obd[0], "ibd[1]!=obd[0] bound not compatible");
+         POUTRE_CHECK(ibd[0] == obd[1], "ibd[0]!=obd[1] bound not compatible");
+         POUTRE_CHECK(ibd[1] == obd[0], "ibd[1]!=obd[0] bound not compatible");
+
          auto i_vinbeg1 = i_vin1.data();
          auto i_voutbeg = o_vout.data();
          for (size_t y = 0u; y < ysize; ++y)

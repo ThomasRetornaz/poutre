@@ -49,7 +49,8 @@ namespace poutre
         void operator()(const View1<T1, Rank>& i_vin1,const BinOp& op,const View2<T2, Rank>& i_vin2, ViewOut<Tout, Rank>& o_vout) const
         {
 			//std::cout << "\n" << "call PixelWiseBinaryOpDispatcher strided view";
-
+            POUTRE_CHECK(i_vin1.size() == i_vin2.size(), "Incompatible views size");
+            POUTRE_CHECK(o_vout.size() == i_vin2.size(), "Incompatible views size");
             //More runtime dispatch
             auto vInbound1 = i_vin1.bound();
             auto vInbound2 = i_vin2.bound();
@@ -92,7 +93,8 @@ namespace poutre
         void operator()(const array_view<T1, Rank>& i_vin1,const BinOp& op,const array_view<T2, Rank>& i_vin2, array_view<Tout, Rank>& o_vout) const
         {
 			//std::cout << "\n" << "call PixelWiseBinaryOpDispatcher array view template specialization array view ptr";
-
+            POUTRE_CHECK(i_vin1.size() == i_vin2.size(), "Incompatible views size");
+            POUTRE_CHECK(o_vout.size() == i_vin2.size(), "Incompatible views size");
             auto i_vinbeg1 = i_vin1.data();
             auto i_vinend1 = i_vin1.data() + i_vin1.size();
             auto i_vinbeg2 = i_vin2.data();
@@ -181,7 +183,9 @@ namespace poutre
     {
         void operator()(const array_view<T1, Rank>& i_vin1, const array_view<T2, Rank>& i_vin2, array_view<Tout, Rank>& o_vout) const
         {
-            //get the specialized operator
+            POUTRE_CHECK(i_vin1.size() == i_vin2.size(), "Incompatible views size");
+            POUTRE_CHECK(o_vout.size() == i_vin2.size(), "Incompatible views size");
+            //get the specialized operator       
             using real_op = /*typename*/ BinOp<T1, T2, Tout, tag_SIMD_disabled>;
             real_op op;
 			//std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr";
@@ -211,6 +215,8 @@ namespace poutre
             using real_op = /*typename*/ BinOp<T1, T1, T1, tag_SIMD_enabled>;
             real_op op;
 			//std::cout << "\n" << "call PixelWiseBinaryOpDispatcherWithTag array view template specialization same type,fall back ptr + SIMD";
+            POUTRE_CHECK(i_vin1.size() == i_vin2.size(), "Incompatible views size");
+            POUTRE_CHECK(o_vout.size() == i_vin2.size(), "Incompatible views size");
             auto i_vinbeg1 = i_vin1.data();
             auto i_vinend1 = i_vin1.data() + i_vin1.size();
             auto i_vinbeg2 = i_vin2.data();
