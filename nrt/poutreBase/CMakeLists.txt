@@ -27,7 +27,7 @@ set_target_properties(PoutreBaseTests PROPERTIES
 )
 
 target_link_libraries(PoutreBaseTests 
-  INTERFACE Eigen  
+  #INTERFACE Eigen  
   #INTERFACE ${SIMD_LIB} 
   PRIVATE ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}  
   # ${Boost_THREAD_LIBRARY} 
@@ -37,7 +37,7 @@ target_link_libraries(PoutreBaseTests
   PUBLIC PoutreBase
   )
 add_dependencies(PoutreBaseTests ${SIMD_LIB_DEP})
-add_dependencies(PoutreBaseTests Eigendep)
+#add_dependencies(PoutreBaseTests Eigendep)
 
 IF(BUILD_SHARED_LIBS)
   SET_TARGET_PROPERTIES(PoutreBaseTests PROPERTIES COMPILE_FLAGS -DJSON_DLL)

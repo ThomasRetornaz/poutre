@@ -60,7 +60,7 @@ target_link_libraries(PoutreIO
   PRIVATE ${ZLIB_LIBRARY} 
   PRIVATE ${PNG_LIBRARY} 
   #PRIVATE ${TIFF_LIBRARY} 
-  INTERFACE Eigen  
+  #INTERFACE Eigen  
   
   PUBLIC   PoutreBase 
   PUBLIC   PoutreIPCore 

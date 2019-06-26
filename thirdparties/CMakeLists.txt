@@ -176,7 +176,7 @@ set(JPEG_LIBRARY         ${JPEG_LIBRARY}      PARENT_SCOPE)
 #set(HDF5_INCLUDE_DIR       ${HDF5_INCLUDE_DIR}    PARENT_SCOPE)
 #set(HDF5_LIBRARY         ${HDF5_LIBRARY}      PARENT_SCOPE)
 # eigen
-add_subdirectory(eigen)
+#add_subdirectory(eigen)
 # bench
 add_subdirectory(bench)
 set(GOOGLE_BENCHMARK_INCLUDE_DIRS       ${GOOGLE_BENCHMARK_INCLUDE_DIRS}    PARENT_SCOPE)

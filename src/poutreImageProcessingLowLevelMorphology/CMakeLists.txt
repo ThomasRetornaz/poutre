@@ -32,7 +32,7 @@ target_link_libraries(PoutreIPLowLevelMorphology
   PUBLIC ${Boost_LOG_LIBRARY}
   PUBLIC ${Boost_LOG_SETUP_LIBRARY}
   PUBLIC jsoncpp 
-  INTERFACE Eigen  
+  # INTERFACE Eigen  
   #INTERFACE ${SIMD_LIB} 
   PUBLIC   PoutreIPCore
   PUBLIC   PoutreIPPixelProcessing
