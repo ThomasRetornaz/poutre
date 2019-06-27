@@ -53,18 +53,18 @@ namespace poutre
       *@{
       */
 
-    template<typename T1,typename T2>
+    template<typename T1, typename T2>
     struct BinOpInf
     {
-        public:
-            static constexpr T1 neutral=std::numeric_limits<T1>::max();
-            static T2 process(const T1& A0, const T1& A1)
-            {
-                return (T2)std::min<T1>(A0,A1);
-            }
+    public:
+        static constexpr T1 neutral = std::numeric_limits<T1>::max();
+        static T2 process(const T1& A0, const T1& A1)
+        {
+            return (T2)std::min<T1>(A0, A1);
+        }
     };
-    
-    template<typename T1,typename T2>
+
+    template<typename T1, typename T2>
     struct BinOpSup
     {
     public:
@@ -75,7 +75,7 @@ namespace poutre
         }
     };
 
-    template<se::NeighborListStaticSE nl, typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2,class BinOp>
+    template<se::NeighborListStaticSE nl, typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, class BinOp>
     struct t_ErodeDilateOpispatcher
     {
         static_assert(Rank == se::NeighborListStaticSETraits<nl>::Rank, "SE and view have not the same Rank");
@@ -95,7 +95,7 @@ namespace poutre
                 auto end1 = end(vInbound);
                 for (; beg1 != end1; ++beg1)
                 {
-                    auto val= BinOp::neutral;
+                    auto val = BinOp::neutral;
                     for (const auto& idxnl : NlList)
                     {
                         auto currentidx = *beg1 + idxnl;
@@ -126,7 +126,7 @@ namespace poutre
         }
     };
 
-    template<se::NeighborListStaticSE nl, typename T1, typename T2,class BinOp>
+    template<se::NeighborListStaticSE nl, typename T1, typename T2, class BinOp>
     void t_ErodeDilateIterateArrayView2DHelper(const array_view<T1, 2> & i_vin, const array_view<T2, 2> & o_vout, ptrdiff_t i_XCenter, ptrdiff_t i_YCenter)
     {
         static_assert(2 == se::NeighborListStaticSETraits<nl>::Rank, "SE and view have not the same Rank");
@@ -159,8 +159,8 @@ namespace poutre
         }
         o_voutbeg[xsize * i_YCenter + i_XCenter] = static_cast<T2>(val);
     }
-    template<se::NeighborListStaticSE nl, typename T1, typename T2,class BinOp>
-    struct t_ErodeDilateOpispatcher<nl, T1, T2, 2, array_view, array_view,BinOp>
+    template<se::NeighborListStaticSE nl, typename T1, typename T2, class BinOp>
+    struct t_ErodeDilateOpispatcher<nl, T1, T2, 2, array_view, array_view, BinOp>
     {
         static_assert(2 == se::NeighborListStaticSETraits<nl>::Rank, "SE and view have not the same Rank");
         void operator()(const array_view<T1, 2> & i_vin, array_view<T2, 2> & o_vout)
@@ -184,28 +184,28 @@ namespace poutre
             //handling the upper lines
             for (ptrdiff_t y = 0; y < suroundingHalfSizeY; ++y)
             {
-                for (ptrdiff_t  x = 0; x < xsize; ++x)
+                for (ptrdiff_t x = 0; x < xsize; ++x)
                 {
                     t_ErodeDilateIterateArrayView2DHelper<nl, T1, T2, BinOp>(i_vin, o_vout, x, y);
                 }
             }
             //handling the lower lines
-            for (ptrdiff_t  y = ysize - suroundingHalfSizeY; y < ysize; ++y)
+            for (ptrdiff_t y = ysize - suroundingHalfSizeY; y < ysize; ++y)
             {
-                for (ptrdiff_t  x = 0; x < xsize; ++x)
+                for (ptrdiff_t x = 0; x < xsize; ++x)
                 {
                     t_ErodeDilateIterateArrayView2DHelper<nl, T1, T2, BinOp>(i_vin, o_vout, x, y);
                 }
             }
             //Main lines area
-            for (ptrdiff_t  y = suroundingHalfSizeY; y < ysize - suroundingHalfSizeY; ++y)
+            for (ptrdiff_t y = suroundingHalfSizeY; y < ysize - suroundingHalfSizeY; ++y)
             {
                 //handling the first columns
-                for (ptrdiff_t  x = 0; x < suroundingHalfSizeX; ++x)
+                for (ptrdiff_t x = 0; x < suroundingHalfSizeX; ++x)
                 {
                     t_ErodeDilateIterateArrayView2DHelper<nl, T1, T2, BinOp>(i_vin, o_vout, x, y);
                 }
-                for (ptrdiff_t  x = suroundingHalfSizeX; x < xsize - suroundingHalfSizeX; ++x)
+                for (ptrdiff_t x = suroundingHalfSizeX; x < xsize - suroundingHalfSizeX; ++x)
                 {
                     auto val = BinOp::neutral;
                     idx2d center(y, x);
@@ -225,13 +225,84 @@ namespace poutre
                     o_voutbeg[xsize * y + x] = static_cast<T2>(val);
                 }
                 //handling the last columns
-                for (ptrdiff_t  x = xsize - suroundingHalfSizeX; x < xsize; ++x)
+                for (ptrdiff_t x = xsize - suroundingHalfSizeX; x < xsize; ++x)
                 {
                     t_ErodeDilateIterateArrayView2DHelper<nl, T1, T2, BinOp>(i_vin, o_vout, x, y);
                 }
             }
         }
     };
+    
+    template<typename T>
+    void t_LineBufferShiftRight(
+        const array_view<T, 1> & i_viewlinein,
+        scoord  nbshift,
+        T paddValue,
+        array_view<T, 1> & o_viewlineout
+    )
+    {
+        POUTRE_ASSERTCHECK(i_viewlinein.size() == o_viewlineout.size(), "Inconsistent array views sizes");
+        scoord lenghtline = i_viewlinein.size();
+        scoord i;
+        const T* linein = i_viewlinein.data();
+        T* lineout = o_viewlineout.data();
+
+        //Case handling error 
+        if (nbshift >= lenghtline)
+        {
+            //then padd right border
+            for (i = 0; i < lenghtline; i++)
+            {
+                lineout[i] = paddValue;
+            }
+            return;
+        }
+
+
+        //padd left border before shift
+        for (i = 0; i < nbshift; i++)
+        {
+            lineout[i] = paddValue;
+        }
+        //shift to right
+        memcpy(lineout + nbshift, linein, (lenghtline - nbshift) * sizeof(T));//<---faster
+        //boost::simd::copy_n(linein, (lenghtline - nbshift), lineout + nbshift);
+    }
+
+
+    template<typename T>
+    void t_LineBufferShiftLeft(
+        const array_view<T, 1> & i_viewlinein,
+        scoord  nbshift,
+        T paddValue,
+        array_view<T, 1> & o_viewlineout
+    )
+    {
+        POUTRE_ASSERTCHECK(i_viewlinein.size() == o_viewlineout.size(), "Inconsistent array views sizes");
+        scoord lenghtline = i_viewlinein.size();
+        scoord i;
+        const T* linein = i_viewlinein.data();
+        T* lineout = o_viewlineout.data();
+        //Case handling error 
+        if (nbshift >= lenghtline)
+        {
+            //then padd right border
+            for (i = 0; i < lenghtline; i++)
+            {
+                lineout[i] = paddValue;
+            }
+            return;
+        }
+
+        //shift to left
+        memcpy(lineout, linein + nbshift, (lenghtline - nbshift) * sizeof(T));
+
+        //then padd right border
+        for (i = lenghtline - nbshift; i < lenghtline; i++)
+        {
+            lineout[i] = paddValue;
+        }
+    }
 
     template<typename TIn, typename TOut, ptrdiff_t Rank, template <typename, ptrdiff_t> class ViewIn, template <typename, ptrdiff_t> class ViewOut>
     void t_Dilate(const ViewIn<TIn, Rank>& i_vin, se::NeighborListStaticSE nl, ViewOut<TOut, Rank>& o_vout)
@@ -241,7 +312,7 @@ namespace poutre
         {
         case se::NeighborListStaticSE::NeighborListStaticSE2DCT8:
         {
-            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DCT8, TIn, TOut, Rank, ViewIn, ViewOut, BinOpSup<TIn,TOut>> dispatcher;
+            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DCT8, TIn, TOut, Rank, ViewIn, ViewOut, BinOpSup<TIn, TOut>> dispatcher;
             dispatcher(i_vin, o_vout);
         }break;
         case se::NeighborListStaticSE::NeighborListStaticSE2DCT4:
@@ -281,6 +352,8 @@ namespace poutre
         }
         }
     }
+
+
     //! @} doxygroup: image_processing_erodil_group
     //! @} doxygroup: image_processing_group
 }//poutre

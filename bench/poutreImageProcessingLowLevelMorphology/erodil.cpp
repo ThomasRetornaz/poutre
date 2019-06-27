@@ -76,3 +76,43 @@ BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_UINT32, poutre::pUINT32
    state.SetItemsProcessed(state.iterations() * size);
 }
 BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_UINT32)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+
+template<typename T>
+class ShiftOpFixture : public ::benchmark::Fixture {
+public:
+    void SetUp(const ::benchmark::State& st) {
+        m_vect = ConstructVector<T>(st.range(0));
+    }
+    void TearDown(const ::benchmark::State&) {
+        m_vect.clear();
+    }
+    std::vector<T> m_vect;
+};
+BENCHMARK_TEMPLATE_DEFINE_F(ShiftOpFixture, ShiftOpFixture_UINT8, poutre::pUINT8)(benchmark::State& state) {
+    const auto size = state.range(0);
+    while (state.KeepRunning()) {
+        for (auto i = 0u; i < size; ++i) {
+            std::vector<poutre::pUINT8> res(m_vect.size());
+            auto view1din = poutre::array_view<poutre::pUINT8, 1>(m_vect, { size });
+            auto view1dout = poutre::array_view<poutre::pUINT8, 1>(res, { size });
+            poutre::t_LineBufferShiftRight(view1din,3,std::numeric_limits<poutre::pUINT8>::min(),view1dout);
+        }
+    }
+    state.SetItemsProcessed(state.iterations() * size);
+}
+BENCHMARK_REGISTER_F(ShiftOpFixture, ShiftOpFixture_UINT8)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+
+BENCHMARK_TEMPLATE_DEFINE_F(ShiftOpFixture, ShiftOpFixture_UINT32, poutre::pUINT32)(benchmark::State& state) {
+    const auto size = state.range(0);
+    while (state.KeepRunning()) {
+        for (auto i = 0u; i < size; ++i) {
+            std::vector<poutre::pUINT32> res(m_vect.size());
+            auto view1din = poutre::array_view<poutre::pUINT32, 1>(m_vect, { size });
+            auto view1dout = poutre::array_view<poutre::pUINT32, 1>(res, { size });
+            poutre::t_LineBufferShiftRight(view1din, 3, std::numeric_limits<poutre::pUINT32>::min(), view1dout);
+
+        }
+    }
+    state.SetItemsProcessed(state.iterations() * size);
+}
+BENCHMARK_REGISTER_F(ShiftOpFixture, ShiftOpFixture_UINT32)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
