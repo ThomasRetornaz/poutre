@@ -32,11 +32,11 @@ namespace poutre
         return m_container_loader[index];
     }
 
-    void ImageProvider::AddImage(const bf::path& i_imgpath)
+    void ImageProvider::AddImage(const std::string& i_imgpath)
     {
         ImageLoader loader;
         loader.SetPath(i_imgpath);
-        m_container_loader.emplace_back(std::move(loader));
+        m_container_loader.push_back(loader);
     }
 
     ImageLoader ImageProvider::Fetch()

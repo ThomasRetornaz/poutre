@@ -30,14 +30,6 @@ namespace bf = boost::filesystem;
 namespace {
     using namespace poutre;
 
-    // template<class image_type>
-    // void helper_fill_image(IInterface& img,const png_structp& png_ptr)
-    //{
-    //    image_type* img_t = dynamic_cast<image_type*>(&img);
-    //    if (!img_t) { POUTRE_RUNTIME_ERROR("helper_fill_image: downcast fail"); }
-
-    //}
-
     std::unique_ptr<IInterface> loappngHelper(const bf::path &i_path) {
         png_structp png_ptr = nullptr;
         png_infop info_ptr = nullptr;

@@ -31,34 +31,25 @@ namespace poutre
 {
     namespace bf = boost::filesystem;
 
-    ImageWriter& ImageWriter::SetPath(const bf::path& i_imgpath)
+    ImageWriter& ImageWriter::SetPath(const std::string& i_imgpath)
     {
         m_imgPath = i_imgpath;
-        boost::filesystem::path dir = m_imgPath.parent_path();
+        bf::path localPath(m_imgPath);
+        boost::filesystem::path dir = localPath.parent_path();
         if (!(bf::exists(dir)))
         {
             POUTRE_RUNTIME_ERROR(boost::format("ImageWriter: provided path %s doesn't exists") % dir);
         }
+        m_isready=true;
         return *this;
     }
 
-    ImageWriter& ImageWriter::SetPath(bf::path&& i_imgpath)
-    {
-        m_imgPath = std::move(i_imgpath);//will call string(string&&)
-        boost::filesystem::path dir = m_imgPath.parent_path();
-        if (!(bf::exists(dir)))
-        {
-            POUTRE_RUNTIME_ERROR(boost::format("ImageWriter: provided path %s doesn't exists") % dir);
-        }
-        return *this;
-    }
-
-    //void ImageWriter::Write(IInterface&& i_img) const
-    void ImageWriter::Write(IInterface&& i_img) const
-    {
-        //const IInterface& img = std::forward<IInterface>(i_img);
+    void ImageWriter::Write(const IInterface& i_img) const
+    {   
+        if (!m_isready) POUTRE_RUNTIME_ERROR("ImageWritter:  you must set path through SetPath");
+        bf::path localPath(m_imgPath);
         //switch on extension
-        auto extension = bf::extension(m_imgPath);
+        auto extension = bf::extension(localPath);
         boost::algorithm::to_lower(extension);
         if (extension == "png")
         {

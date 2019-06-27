@@ -43,7 +43,8 @@ namespace poutre
 	{
 		using self_type = ImageLoader;
 		friend class ImageProvider;
-		bf::path m_imgPath;
+		//bf::path m_imgPath;
+        std::string m_imgPath;
 		bool m_isready;
 	public:
 		ImageLoader() :m_imgPath(),m_isready(false){}
@@ -59,9 +60,9 @@ namespace poutre
 		//
 		//self_type& operator=(const self_type& rhs) = default;
 		
-        self_type& SetPath(bf::path&& i_imgpath);
+        self_type& SetPath(std::string&& i_imgpath);
 
-        self_type& SetPath(const bf::path& i_imgpath);
+        self_type& SetPath(const std::string& i_imgpath);
 
         std::unique_ptr<IInterface> Load() const;
 	};

@@ -32,35 +32,32 @@
 
 namespace poutre
 {
-	namespace bf = boost::filesystem;
-
-	class IO_API ImageWriter
-	{
-		using self_type = ImageWriter;
-		bf::path m_imgPath;
+    class IO_API ImageWriter
+    {
+        using self_type = ImageWriter;
+        std::string m_imgPath;
         ImageIOFormat m_imgformat;
+        bool m_isready;
 
-	public:
-        ImageWriter() :m_imgPath(), m_imgformat(ImageIOFormat::PNG){}
-		
-		virtual ~ImageWriter() {}
+    public:
+        ImageWriter() :m_imgPath(), m_imgformat(ImageIOFormat::PNG), m_isready(false){}
 
-        ImageWriter(self_type &&rhs) = default;
+        virtual ~ImageWriter() {}
 
-		self_type &operator=(self_type &&rhs) = default;
+        //rule of 0
+        //virtual ~ImageLoader() {}
 
-        ImageWriter(const self_type& rhs) = delete;
-		
-		self_type& operator=(const self_type& rhs) = delete;
-		
-        self_type& SetPath(bf::path&& i_imgpath);
+        //ImageLoader(self_type &&rhs) = default;
 
-        self_type& SetPath(const bf::path& i_imgpath);
+        //self_type &operator=(self_type &&rhs) = default;
 
-        //self_type& SetFormat(ImageIOFormat format);
+        //ImageLoader(const self_type& rhs) = default;
+        //
+        //self_type& operator=(const self_type& rhs) = default;
 
-        void Write(IInterface&& i_img) const;
-	};
+        self_type& SetPath(const std::string& i_imgpath);
+        void Write(const IInterface& i_img) const;
+    };
 }//poutre
 
 #endif	/* POUTREIOWRITTER_HPP */

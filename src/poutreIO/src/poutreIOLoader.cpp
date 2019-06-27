@@ -31,14 +31,14 @@ namespace poutre
 {
     namespace bf = boost::filesystem;
 
-    ImageLoader& ImageLoader::SetPath(bf::path&& i_imgpath)
+    ImageLoader& ImageLoader::SetPath(std::string&& i_imgpath)
     {
         m_imgPath = std::move(i_imgpath); //will call string(string&&)
         m_isready = true;
         return *this;
     }
 
-    ImageLoader& ImageLoader::SetPath(const bf::path& i_imgpath)
+    ImageLoader& ImageLoader::SetPath(const std::string& i_imgpath)
     {
         m_imgPath = i_imgpath;
         m_isready = true;
@@ -48,13 +48,13 @@ namespace poutre
     std::unique_ptr<IInterface> ImageLoader::Load() const
     {
         if (!m_isready) POUTRE_RUNTIME_ERROR("ImageLoader:  you must set path through SetPath");
-        
-        if (!bf::exists(m_imgPath)) {
+        bf::path localPath(m_imgPath);
+        if (!bf::exists(localPath)) {
             POUTRE_RUNTIME_ERROR(
                 (boost::format("IOSavePng:: path don't exist %s") % m_imgPath).str());
         }
 
-        auto extension = bf::extension(m_imgPath);
+        auto extension = bf::extension(localPath);
         boost::algorithm::to_lower(extension);
         if (extension=="png")
         { 

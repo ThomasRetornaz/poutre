@@ -31,8 +31,6 @@
 
 namespace poutre
 {
-	namespace bf = boost::filesystem;
-
 	class IO_API ImageProvider
 	{
     private:
@@ -58,10 +56,10 @@ namespace poutre
 
         ImageLoader Fetch();
 
-        void AddImage(const bf::path& i_imgpath);
+        void AddImage(const std::string& i_imgpath);
 
         //TODO
-        //void AddImages(const bf::path& path);
+        //void AddImages(const std::string& path);
 
         //rule of 0
 		//virtual ~ImageProvider() {}
