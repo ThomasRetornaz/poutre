@@ -174,7 +174,7 @@ public:
   }
 
   POUTRE_CXX14_CONSTEXPR
-  static_array_base(const std::initializer_list<value_type> &rhs)
+  static_array_base(const std::initializer_list<value_type> &rhs) :m_array()
   {
     POUTRE_CHECK(rhs.size() == rank,
                  "Ill formed initializer list: rhs.size() must equal Rank")
@@ -187,14 +187,14 @@ public:
   }
 
   POUTRE_CXX14_CONSTEXPR explicit static_array_base(
-      const value_type (&rhs)[Rank]) POUTRE_NOEXCEPT
+      const value_type (&rhs)[Rank]) :m_array() POUTRE_NOEXCEPT
   {
     details::helper_assign_container_op<self_type, AssignOpType::AssignOp,
                                         Rank>::op(rhs, *this);
   }
 
   POUTRE_CXX14_CONSTEXPR
-  static_array_base(const self_type &rhs) POUTRE_NOEXCEPT
+  static_array_base(const self_type &rhs)/*:m_array()*/ POUTRE_NOEXCEPT
   {
     details::helper_assign_container_op<self_type, AssignOpType::AssignOp,
                                         Rank>::op(rhs, *this);
