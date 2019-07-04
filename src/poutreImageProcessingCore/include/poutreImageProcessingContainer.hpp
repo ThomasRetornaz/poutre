@@ -403,11 +403,13 @@ poutre::array_view<valuetype, Rank> view(DenseImage<valuetype, Rank> &iImg) {
   return poutre::array_view<valuetype, Rank>(iImg.data(), iImg.bound());
 }
 
+//FIXME convertion loose qualifiers
 template <class valuetype, std::ptrdiff_t Rank>
-poutre::array_view<const valuetype, Rank>
-view(const DenseImage<valuetype, Rank> &iImg) {
-  return poutre::array_view<const valuetype, Rank>(iImg.data(), iImg.bound());
-
+/*const */poutre::array_view<valuetype, Rank> view(const DenseImage<valuetype, Rank>& iImg) {
+    /*DenseImage<valuetype, Rank>& castImage=const_cast<DenseImage<valuetype, Rank>&>(iImg);
+    poutre::array_view<valuetype, Rank> view(poutre::array_view<valuetype, Rank>(castImage));
+    return view;*/
+    return view(const_cast<DenseImage<valuetype, Rank>&>(iImg));
 }
 
 // todo define macros
