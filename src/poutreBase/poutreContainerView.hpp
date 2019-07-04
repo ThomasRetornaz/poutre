@@ -278,22 +278,20 @@ namespace poutre
         }
       //details::helper_assign_container_valueop<index_type, AssignOpType::AssignOp, Rank>::op (1, m_stride_idx);
     }
-
-    /*
-    template <class U,
-    typename std::enable_if<
-    std::is_convertible<typename std::add_pointer<U>::type, pointer>::value &&
-    std::is_same<typename std::remove_cv<U>::type, typename std::remove_cv<value_type>::type>::value
+    
+    template <class U = T,
+        typename std::enable_if<
+        std::is_convertible<typename std::add_pointer<U>::type, pointer>::value&&
+        std::is_same<typename std::remove_cv<U>::type, typename std::remove_cv<value_type>::type>::value
     >::type* = nullptr>
-    //!assignment operator
-    POUTRE_CXX14_CONSTEXPR self_type& operator= (const array_view<U, Rank>& rhs) POUTRE_NOEXCEPT
+        //!Assignement operator
+        POUTRE_CXX14_CONSTEXPR self_type & operator= (const array_view<U, Rank> & rhs) POUTRE_NOEXCEPT
     {
-      m_bnd = rhs.m_bnd;
-      m_stride_idx = rhs.m_stride_idx;
-      m_data = rhs.m_data;
-      return *this;
+        m_bnd = rhs.m_bnd;
+        m_stride_idx = rhs.m_stride_idx;
+        m_data = rhs.m_data;
+        return *this;
     }
-    */
 
     /**@}*/
 
