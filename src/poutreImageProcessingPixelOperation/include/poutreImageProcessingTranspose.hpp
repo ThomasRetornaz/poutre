@@ -70,18 +70,18 @@ namespace poutre
          //chack bound compatibility
          auto ibd = i_vin1.bound();
          auto obd = o_vout.bound();
-         auto ysize = ibd[0];
-         auto xsize = ibd[1];
-         auto oxsize = obd[1];
+         scoord  ysize = ibd[0];
+         scoord  xsize = ibd[1];
+         scoord  oxsize = obd[1];
 
          POUTRE_CHECK(ibd[0] == obd[1], "ibd[0]!=obd[1] bound not compatible");
          POUTRE_CHECK(ibd[1] == obd[0], "ibd[1]!=obd[0] bound not compatible");
 
          auto i_vinbeg1 = i_vin1.data();
          auto i_voutbeg = o_vout.data();
-         for (size_t y = 0u; y < ysize; ++y)
+         for (scoord y = 0u; y < ysize; ++y)
          {
-            for (size_t x = 0u; x < xsize; ++x)
+            for (scoord  x = 0u; x < xsize; ++x)
             {
                i_voutbeg[x*oxsize + y] = i_vinbeg1[x + y * xsize];
             }
@@ -98,19 +98,19 @@ namespace poutre
 
       void operator()(const array_view<pUINT8, 2>& i_vin1, array_view<pUINT8, 2>& o_vout) const
       {
-         constexpr size_t loopStep = 16;
+         constexpr scoord loopStep = 16;
          auto ibd = i_vin1.bound();
          auto obd = o_vout.bound();
          POUTRE_CHECK(ibd[0] = obd[1], "ibd[0]!=obd[1] bound not compatible");
          POUTRE_CHECK(ibd[1] = obd[0], "ibd[1]!=obd[0] bound not compatible");
          auto i_vinbeg1 = i_vin1.data();
          auto o_voutbeg = o_vout.data();
-         auto ysize = ibd[0];
-         auto xsize = ibd[1];
-         auto oxsize = obd[1];
-         auto ySizeSimdLoop = ysize - (ysize%loopStep);
-         auto xSizeSimdLoop = xsize - (xsize%loopStep);
-         size_t x, y;
+         scoord ysize = ibd[0];
+         scoord xsize = ibd[1];
+         scoord oxsize = obd[1];
+         scoord ySizeSimdLoop = ysize - (ysize%loopStep);
+         scoord xSizeSimdLoop = xsize - (xsize%loopStep);
+         scoord x, y;
          //enforce no loop in case one of the two coordinate have size below loopStep
          if (ySizeSimdLoop == 0 || xSizeSimdLoop == 0)
          {
@@ -322,19 +322,19 @@ namespace poutre
 
       void operator()(const array_view<pFLOAT, 2>& i_vin1, array_view<pFLOAT, 2>& o_vout) const
       {
-         constexpr size_t loopStep = 8;
+         constexpr scoord loopStep = 8;
          auto ibd = i_vin1.bound();
          auto obd = o_vout.bound();
          POUTRE_CHECK(ibd[0] = obd[1], "ibd[0]!=obd[1] bound not compatible");
          POUTRE_CHECK(ibd[1] = obd[0], "ibd[1]!=obd[0] bound not compatible");
          auto i_vinbeg1 = i_vin1.data();
          auto o_voutbeg = o_vout.data();
-         auto ysize = ibd[0];
-         auto xsize = ibd[1];
-         auto oxsize = obd[1];
-         auto ySizeSimdLoop = ysize - (ysize%loopStep);
-         auto xSizeSimdLoop = xsize - (xsize%loopStep);
-         size_t x, y;
+         scoord ysize = ibd[0];
+         scoord xsize = ibd[1];
+         scoord oxsize = obd[1];
+         scoord ySizeSimdLoop = ysize - (ysize%loopStep);
+         scoord xSizeSimdLoop = xsize - (xsize%loopStep);
+         scoord x, y;
          //enforce no loop in case one of the two coordinate have size below loopStep
          if (ySizeSimdLoop == 0 || xSizeSimdLoop == 0)
          {

@@ -93,8 +93,8 @@ namespace poutre
     }
 
 
-    template <class ImageIn,class ImageOut>
-    void CopyOp(const ImageIn& i_image,ImageOut& o_image)
+    template <typename T1, typename T2, ptrdiff_t Rank>
+    void CopyOp(const DenseImage<T1,Rank>& i_image,DenseImage<T2,Rank>& o_image)
     {
         auto viewIn = view(i_image);
         auto viewOut = view(o_image);
