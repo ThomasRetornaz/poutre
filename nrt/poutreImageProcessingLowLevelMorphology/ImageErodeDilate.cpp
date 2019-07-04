@@ -26,7 +26,6 @@ BOOST_AUTO_TEST_SUITE(poutreImageProcessingErodeDilate)
 
 BOOST_AUTO_TEST_CASE(static_se_dilate_SE2DCT8)
 {
-	using ImageType = const poutre::DenseImage < poutre::pINT32>;
 	const auto imgIn = poutre::ImageFromString("Dense Scalar GINT32 2 5 5\
  8 0 0 0 0\
  0 5 5 5 0\
@@ -34,14 +33,16 @@ BOOST_AUTO_TEST_CASE(static_se_dilate_SE2DCT8)
  0 5 5 5 0\
  0 0 0 0 0\
 ");
-	ImageType* img = dynamic_cast<ImageType*> (imgIn.get());
-	BOOST_REQUIRE(img);
+    using ImageType = const poutre::DenseImage < poutre::pINT32>;
+    ImageType* img = dynamic_cast<ImageType*> (imgIn.get());
+    BOOST_REQUIRE(img);
+    auto v_img1 = poutre::view(*img); //-V522
 
-	poutre::DenseImage<poutre::pINT32> imgOut({ 5, 5 });
-	imgOut.fill(-1);
-	auto v_img1 = poutre::view(*img); //-V522
-	auto v_img2 = poutre::view(imgOut);
-	poutre::t_Dilate(v_img1, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DCT8, v_img2);
+    poutre::DenseImage<poutre::pINT32> imgOut({ 5, 5 });
+    imgOut.fill(4); //-V112
+    auto v_imgOut = poutre::view(imgOut);
+
+	poutre::t_Dilate(v_img1, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DCT8, v_imgOut);
 
 	std::string expected = "Dense Scalar GINT32 2 5 5\
  8 8 5 5 5\

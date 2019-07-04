@@ -47,7 +47,7 @@ public:
     std::vector<T> m_vect;
 };
 
-BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_UINT8,poutre::pUINT8)(benchmark::State& state) {
+BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_CT8_UINT8,poutre::pUINT8)(benchmark::State& state) {
     const auto size = state.range(0);
     while (state.KeepRunning()) {
         for (auto i = 0u; i < size; ++i) {
@@ -60,59 +60,88 @@ BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_UINT8,poutre::pUINT8)(b
     }
     state.SetItemsProcessed(state.iterations() * size);
 }
-BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_UINT8)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_CT8_UINT8)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
 
-BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_UINT32, poutre::pUINT32)(benchmark::State& state) {
+BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_CT8_INT32, poutre::pINT32)(benchmark::State& state) {
    const auto size = state.range(0);
    while (state.KeepRunning()) {
       for (auto i = 0u; i < size; ++i) {
-         std::vector<poutre::pUINT32> res(m_vect.size());
+         std::vector<poutre::pINT32> res(m_vect.size());
          auto sizeextent = sqrt(size);
-         auto view2din = poutre::array_view<poutre::pUINT32, 2>(m_vect, { int(sizeextent),int(sizeextent) });
-         auto view2dout = poutre::array_view<poutre::pUINT32, 2>(res, { int(sizeextent),int(sizeextent) });
+         auto view2din = poutre::array_view<poutre::pINT32, 2>(m_vect, { int(sizeextent),int(sizeextent) });
+         auto view2dout = poutre::array_view<poutre::pINT32, 2>(res, { int(sizeextent),int(sizeextent) });
          poutre::t_Dilate(view2din, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DCT8, view2dout);
       }
    }
    state.SetItemsProcessed(state.iterations() * size);
 }
-BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_UINT32)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_CT8_INT32)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
 
-template<typename T>
-class ShiftOpFixture : public ::benchmark::Fixture {
-public:
-    void SetUp(const ::benchmark::State& st) {
-        m_vect = ConstructVector<T>(st.range(0));
-    }
-    void TearDown(const ::benchmark::State&) {
-        m_vect.clear();
-    }
-    std::vector<T> m_vect;
-};
-BENCHMARK_TEMPLATE_DEFINE_F(ShiftOpFixture, ShiftOpFixture_UINT8, poutre::pUINT8)(benchmark::State& state) {
+BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_CT4_UINT8, poutre::pUINT8)(benchmark::State& state) {
     const auto size = state.range(0);
     while (state.KeepRunning()) {
         for (auto i = 0u; i < size; ++i) {
             std::vector<poutre::pUINT8> res(m_vect.size());
-            auto view1din = poutre::array_view<poutre::pUINT8, 1>(m_vect, { size });
-            auto view1dout = poutre::array_view<poutre::pUINT8, 1>(res, { size });
-            poutre::t_LineBufferShiftRight(view1din,3,std::numeric_limits<poutre::pUINT8>::min(),view1dout);
+            auto sizeextent = sqrt(size);
+            auto view2din = poutre::array_view<poutre::pUINT8, 2>(m_vect, { int(sizeextent),int(sizeextent) });
+            auto view2dout = poutre::array_view<poutre::pUINT8, 2>(res, { int(sizeextent),int(sizeextent) });
+            poutre::t_Dilate(view2din, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DCT4, view2dout);
         }
     }
     state.SetItemsProcessed(state.iterations() * size);
 }
-BENCHMARK_REGISTER_F(ShiftOpFixture, ShiftOpFixture_UINT8)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_CT4_UINT8)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
 
-BENCHMARK_TEMPLATE_DEFINE_F(ShiftOpFixture, ShiftOpFixture_UINT32, poutre::pUINT32)(benchmark::State& state) {
+BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_CT4_INT32, poutre::pINT32)(benchmark::State& state) {
     const auto size = state.range(0);
     while (state.KeepRunning()) {
         for (auto i = 0u; i < size; ++i) {
-            std::vector<poutre::pUINT32> res(m_vect.size());
-            auto view1din = poutre::array_view<poutre::pUINT32, 1>(m_vect, { size });
-            auto view1dout = poutre::array_view<poutre::pUINT32, 1>(res, { size });
-            poutre::t_LineBufferShiftRight(view1din, 3, std::numeric_limits<poutre::pUINT32>::min(), view1dout);
-
+            std::vector<poutre::pINT32> res(m_vect.size());
+            auto sizeextent = sqrt(size);
+            auto view2din = poutre::array_view<poutre::pINT32, 2>(m_vect, { int(sizeextent),int(sizeextent) });
+            auto view2dout = poutre::array_view<poutre::pINT32, 2>(res, { int(sizeextent),int(sizeextent) });
+            poutre::t_Dilate(view2din, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DCT4, view2dout);
         }
     }
     state.SetItemsProcessed(state.iterations() * size);
 }
-BENCHMARK_REGISTER_F(ShiftOpFixture, ShiftOpFixture_UINT32)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_CT4_INT32)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+//template<typename T>
+//class ShiftOpFixture : public ::benchmark::Fixture {
+//public:
+//    void SetUp(const ::benchmark::State& st) {
+//        m_vect = ConstructVector<T>(st.range(0));
+//    }
+//    void TearDown(const ::benchmark::State&) {
+//        m_vect.clear();
+//    }
+//    std::vector<T> m_vect;
+//};
+//BENCHMARK_TEMPLATE_DEFINE_F(ShiftOpFixture, ShiftOpFixture_UINT8, poutre::pUINT8)(benchmark::State& state) {
+//    const auto size = state.range(0);
+//    while (state.KeepRunning()) {
+//        for (auto i = 0u; i < size; ++i) {
+//            std::vector<poutre::pUINT8> res(m_vect.size());
+//            auto view1din = poutre::array_view<poutre::pUINT8, 1>(m_vect, { size });
+//            auto view1dout = poutre::array_view<poutre::pUINT8, 1>(res, { size });
+//            poutre::t_LineBufferShiftRight(view1din,3,std::numeric_limits<poutre::pUINT8>::min(),view1dout);
+//        }
+//    }
+//    state.SetItemsProcessed(state.iterations() * size);
+//}
+//BENCHMARK_REGISTER_F(ShiftOpFixture, ShiftOpFixture_UINT8)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+//
+//BENCHMARK_TEMPLATE_DEFINE_F(ShiftOpFixture, ShiftOpFixture_INT32, poutre::pINT32)(benchmark::State& state) {
+//    const auto size = state.range(0);
+//    while (state.KeepRunning()) {
+//        for (auto i = 0u; i < size; ++i) {
+//            std::vector<poutre::pINT32> res(m_vect.size());
+//            auto view1din = poutre::array_view<poutre::pINT32, 1>(m_vect, { size });
+//            auto view1dout = poutre::array_view<poutre::pINT32, 1>(res, { size });
+//            poutre::t_LineBufferShiftRight(view1din, 3, std::numeric_limits<poutre::pINT32>::min(), view1dout);
+//
+//        }
+//    }
+//    state.SetItemsProcessed(state.iterations() * size);
+//}
+//BENCHMARK_REGISTER_F(ShiftOpFixture, ShiftOpFixture_INT32)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
