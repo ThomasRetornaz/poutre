@@ -319,7 +319,7 @@ namespace poutre
             scoord lengthline,
             lineView& lineout)
         {
-            PixelWiseBinaryOp<T, T, T, 1, array_view, array_view, array_view, op_Sup>(lineIn1, lineIn2, lineout);
+            t_ArithSup(lineIn1, lineIn2, lineout);
         }
         static void ShiftRightLeftAndArith(
             const_lineView& linein,
@@ -354,7 +354,7 @@ namespace poutre
             scoord lengthline,
             lineView& lineout)
         {
-            PixelWiseBinaryOp<T, T, T, 1, array_view, array_view, array_view, op_Inf>(lineIn1, lineIn2, lineout);
+            t_ArithInf(lineIn1, lineIn2, lineout);
         }
         static void ShiftRightLeftAndArith(
             const_lineView& linein,
