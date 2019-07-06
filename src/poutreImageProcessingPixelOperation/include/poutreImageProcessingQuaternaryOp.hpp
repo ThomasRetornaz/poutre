@@ -124,12 +124,12 @@ namespace poutre
         template <typename, ptrdiff_t> class View4,
         template <typename, ptrdiff_t> class ViewOut,
         class QuaterOp>
-    void PixelWiseQuaternaryOp(const View1<T1, Rank>& i_vin1,const QuaterOp&op, const View2<T2, Rank>& i_vin2, const View3<T3, Rank>& i_vin3, const View4<T4, Rank>& i_vin4, ViewOut<Tout, Rank>& o_vout)
+    void PixelWiseQuaternaryOp(const View1<T1, Rank>& i_vin1,const QuaterOp&op, const View2<T2, Rank>& i_vin2, const View3<T3, Rank>& i_vin3, const View4<T4, Rank>& i_vin4, ViewOut<Tout, Rank>& o_vout) POUTRE_NOEXCEPTONLYNDEBUG
     {
-        POUTRE_CHECK(i_vin1.size() == i_vin2.size(), "Incompatible views size");
-        POUTRE_CHECK(i_vin2.size() == i_vin3.size(), "Incompatible views size");
-        POUTRE_CHECK(i_vin3.size() == i_vin4.size(), "Incompatible views size");
-        POUTRE_CHECK(o_vout.size() == i_vin4.size(), "Incompatible views size");
+        POUTRE_ASSERTCHECK(i_vin1.size() == i_vin2.size(), "Incompatible views size");
+        POUTRE_ASSERTCHECK(i_vin2.size() == i_vin3.size(), "Incompatible views size");
+        POUTRE_ASSERTCHECK(i_vin3.size() == i_vin4.size(), "Incompatible views size");
+        POUTRE_ASSERTCHECK(o_vout.size() == i_vin4.size(), "Incompatible views size");
         PixelWiseQuaternaryOpDispatcher<T1, T2, T3, T4, Tout, Rank, View1, View2, View3, View4, ViewOut, QuaterOp> dispatcher;
         dispatcher(i_vin1,op,i_vin2, i_vin3, i_vin4, o_vout);
     }

@@ -114,11 +114,11 @@ namespace poutre
         template <typename, ptrdiff_t> class View3,
         template <typename, ptrdiff_t> class ViewOut,
         class TerOp>
-    void PixelWiseTernaryOp(const View1<T1, Rank>& i_vin1,const TerOp& op,const View2<T2, Rank>& i_vin2, const View3<T3, Rank>& i_vin3, ViewOut<Tout, Rank>& o_vout)
+    void PixelWiseTernaryOp(const View1<T1, Rank>& i_vin1,const TerOp& op,const View2<T2, Rank>& i_vin2, const View3<T3, Rank>& i_vin3, ViewOut<Tout, Rank>& o_vout) POUTRE_NOEXCEPTONLYNDEBUG
     {
-        POUTRE_CHECK(i_vin1.size() == i_vin2.size(), "Incompatible views size");
-        POUTRE_CHECK(i_vin2.size() == i_vin3.size(), "Incompatible views size");
-        POUTRE_CHECK(o_vout.size() == i_vin3.size(), "Incompatible views size");
+        POUTRE_ASSERTCHECK(i_vin1.size() == i_vin2.size(), "Incompatible views size");
+        POUTRE_ASSERTCHECK(i_vin2.size() == i_vin3.size(), "Incompatible views size");
+        POUTRE_ASSERTCHECK(o_vout.size() == i_vin3.size(), "Incompatible views size");
         PixelWiseTernaryOpDispatcher<T1, T2, T3, Tout, Rank, View1, View2, View3, ViewOut, TerOp> dispatcher;
         dispatcher(i_vin1,op,i_vin2, i_vin3, o_vout);
     }

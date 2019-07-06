@@ -160,10 +160,10 @@ namespace poutre
         }
     };
 
-    template<typename TIn, typename TOut, ptrdiff_t Rank, template <typename, ptrdiff_t> class ViewIn, template <typename, ptrdiff_t> class ViewOut,  class UnOp>
-    void PixelWiseUnaryOp(const ViewIn<TIn, Rank>& i_vin,UnOp op,ViewOut<TOut, Rank>& o_vout)
+    template<typename TIn, typename TOut, ptrdiff_t Rank, template <typename, ptrdiff_t> class ViewIn, template <typename, ptrdiff_t> class ViewOut, class UnOp>
+    void PixelWiseUnaryOp(const ViewIn<TIn, Rank>& i_vin,UnOp op,ViewOut<TOut, Rank>& o_vout) POUTRE_NOEXCEPTONLYNDEBUG
     {
-        POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
+        POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
         PixelWiseUnaryOpDispatcher<TIn, TOut, Rank, ViewIn, ViewOut, UnOp> dispatcher;
         dispatcher(i_vin,op,o_vout);
     }
@@ -228,9 +228,9 @@ namespace poutre
     /****************************************************************************************/
 
     template<typename TIn, typename TOut, ptrdiff_t Rank, template <typename, ptrdiff_t> class ViewIn, template <typename, ptrdiff_t> class ViewOut, template <typename, typename, class TAG> class UnOp>
-    void PixelWiseUnaryOp(const ViewIn<TIn, Rank>& i_vin, ViewOut<TOut, Rank>& o_vout)
+    void PixelWiseUnaryOp(const ViewIn<TIn, Rank>& i_vin, ViewOut<TOut, Rank>& o_vout) POUTRE_NOEXCEPTONLYNDEBUG
     {
-        POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
+        POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
         PixelWiseUnaryOpDispatcherWithTag<TIn, TOut, Rank, ViewIn, ViewOut, UnOp> dispatcher;
         dispatcher(i_vin, o_vout);
     }
@@ -323,7 +323,7 @@ namespace poutre
 	>
     {
 
-        void operator()(array_view<TIn, Rank> const & i_vin, TIn a0, array_view<TOut, Rank>& o_vout) const
+        /*POUTRE_ALWAYS_INLINE*/ void operator()(array_view<TIn, Rank> const & i_vin, TIn a0, array_view<TOut, Rank>& o_vout) const
         {
             
             //get the specialized operator
@@ -346,9 +346,9 @@ namespace poutre
 
 
     template<typename TIn, typename TOut, ptrdiff_t Rank, template <typename, ptrdiff_t> class ViewIn, template <typename, ptrdiff_t> class ViewOut, template <typename, typename, class TAG> class UnOp>
-    void PixelWiseUnaryOpWithValue(const ViewIn<TIn, Rank>& i_vin, TOut a0, ViewOut<TOut, Rank>& o_vout)
+    void PixelWiseUnaryOpWithValue(const ViewIn<TIn, Rank>& i_vin, TOut a0, ViewOut<TOut, Rank>& o_vout) POUTRE_NOEXCEPTONLYNDEBUG
     {
-        POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
+        POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
         PixelWiseUnaryOpWithValueDispatcherWithTag<TIn, TOut, Rank, ViewIn, ViewOut, UnOp> dispatcher;
         dispatcher(i_vin, a0, o_vout);
     }
