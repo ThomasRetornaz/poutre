@@ -39,6 +39,11 @@
 #ifndef POUTRE_IMAGEPROCESSING_ARITH_HPP__ 
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingArith.hpp>
 #endif
+
+#ifndef POUTRE_IMAGEPROCESSING_CONTAINER_COPIECONVERT_HPP__
+#include <poutreImageProcessingCore/include/poutreImageProcessingContainerCopieConvert.hpp>
+#endif
+
 namespace poutre
 {
     /**
@@ -127,7 +132,7 @@ namespace poutre
     };
 
     template<se::NeighborListStaticSE nl, typename T1, typename T2, class BinOp>
-    void t_ErodeDilateIterateArrayView2DHelper(const array_view<T1, 2> & i_vin, const array_view<T2, 2> & o_vout, ptrdiff_t i_XCenter, ptrdiff_t i_YCenter)
+    void t_ErodeDilateIterateBorderArrayView2DHelper(const array_view<T1, 2> & i_vin, const array_view<T2, 2> & o_vout, ptrdiff_t i_XCenter, ptrdiff_t i_YCenter)
     {
         static_assert(2 == se::NeighborListStaticSETraits<nl>::Rank, "SE and view have not the same Rank");
         POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
@@ -186,7 +191,7 @@ namespace poutre
             {
                 for (ptrdiff_t x = 0; x < xsize; ++x)
                 {
-                    t_ErodeDilateIterateArrayView2DHelper<nl, T1, T2, BinOp>(i_vin, o_vout, x, y);
+                    t_ErodeDilateIterateBorderArrayView2DHelper<nl, T1, T2, BinOp>(i_vin, o_vout, x, y);
                 }
             }
             //handling the lower lines
@@ -194,7 +199,7 @@ namespace poutre
             {
                 for (ptrdiff_t x = 0; x < xsize; ++x)
                 {
-                    t_ErodeDilateIterateArrayView2DHelper<nl, T1, T2, BinOp>(i_vin, o_vout, x, y);
+                    t_ErodeDilateIterateBorderArrayView2DHelper<nl, T1, T2, BinOp>(i_vin, o_vout, x, y);
                 }
             }
             //Main lines area
@@ -203,7 +208,7 @@ namespace poutre
                 //handling the first columns
                 for (ptrdiff_t x = 0; x < suroundingHalfSizeX; ++x)
                 {
-                    t_ErodeDilateIterateArrayView2DHelper<nl, T1, T2, BinOp>(i_vin, o_vout, x, y);
+                    t_ErodeDilateIterateBorderArrayView2DHelper<nl, T1, T2, BinOp>(i_vin, o_vout, x, y);
                 }
                 for (ptrdiff_t x = suroundingHalfSizeX; x < xsize - suroundingHalfSizeX; ++x)
                 {
@@ -227,7 +232,7 @@ namespace poutre
                 //handling the last columns
                 for (ptrdiff_t x = xsize - suroundingHalfSizeX; x < xsize; ++x)
                 {
-                    t_ErodeDilateIterateArrayView2DHelper<nl, T1, T2, BinOp>(i_vin, o_vout, x, y);
+                    t_ErodeDilateIterateBorderArrayView2DHelper<nl, T1, T2, BinOp>(i_vin, o_vout, x, y);
                 }
             }
         }
@@ -316,26 +321,29 @@ namespace poutre
         static void ApplyArith(
             const_lineView& lineIn1,
             const_lineView& lineIn2,
-            scoord lengthline,
             lineView& lineout)
         {
+            POUTRE_ASSERTCHECK(lineIn1.size() == lineIn2.size(), "Incompatible views size");
+            POUTRE_ASSERTCHECK(lineout.size() == lineIn2.size(), "Incompatible views size");
             t_ArithSup(lineIn1, lineIn2, lineout);
         }
         static void ShiftRightLeftAndArith(
             const_lineView& linein,
-            scoord lengthline,
             scoord nbStepShiftLeft,
             scoord nbStepShiftRight,
             lineView& linetmp,//to reuse external allocation
             lineView& lineout)
         {
+            POUTRE_ASSERTCHECK(lineIn.size() == linetmp.size(), "Incompatible views size");
+            POUTRE_ASSERTCHECK(linetmp.size() == lineout.size(), "Incompatible views size");
+
             //shift to left and arith
             t_LineBufferShiftLeft<T>(linein, nbStepShiftLeft, m_paddingValue, linetmp);
-            self::ApplyArith(linein, linetmp, lengthline, lineout);
+            self::ApplyArith(linein, linetmp, lineout);
 
             //shift to right and arith with previous computed arith
             t_LineBufferShiftRight<T>(linein, nbStepShiftRight, m_paddingValue, linetmp);
-            self::ApplyArith(lineout, linetmp, lengthline, lineout);
+            self::ApplyArith(lineout, linetmp, lineout);
         }
     };
 
@@ -351,44 +359,48 @@ namespace poutre
         static void ApplyArith(
             const_lineView& lineIn1,
             const_lineView& lineIn2,
-            scoord lengthline,
             lineView& lineout)
         {
+            POUTRE_ASSERTCHECK(lineIn1.size() == lineIn2.size(), "Incompatible views size");
+            POUTRE_ASSERTCHECK(lineout.size() == lineIn2.size(), "Incompatible views size");
             t_ArithInf(lineIn1, lineIn2, lineout);
         }
         static void ShiftRightLeftAndArith(
             const_lineView& linein,
-            scoord lengthline,
             scoord nbStepShiftLeft,
             scoord nbStepShiftRight,
             lineView& linetmp,//to reuse external allocation
             lineView& lineout)
         {
+            POUTRE_ASSERTCHECK(lineIn.size() == linetmp.size(), "Incompatible views size");
+            POUTRE_ASSERTCHECK(linetmp.size() == lineout.size(), "Incompatible views size");
             //shift to left and arith
             t_LineBufferShiftLeft<T>(linein, nbStepShiftLeft, m_paddingValue, linetmp);
-            self::ApplyArith(linein, linetmp, lengthline, lineout);
+            self::ApplyArith(linein, linetmp, lineout);
 
             //shift to right and arith with previous computed arith
             t_LineBufferShiftRight<T>(linein, nbStepShiftRight, m_paddingValue, linetmp);
-            self::ApplyArith(lineout, linetmp, lengthline, lineout);
+            self::ApplyArith(lineout, linetmp, lineout);
         }
     };
     
+    /////Square
+
     //FIXME check TIn, Tout equals cv
     template<typename TIn, typename TOut, class HelperOp>
-    struct t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DCT8, TIn, TOut, 2, array_view, array_view, HelperOp>
+    struct t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSquare, TIn, TOut, 2, array_view, array_view, HelperOp>
     {
         void operator()(const array_view<TIn, 2> & i_vin, array_view<TOut, 2> & o_vout)
         {
-            POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
+            POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
             auto ibd = i_vin.bound();
             auto obd = o_vout.bound();
             auto istride = i_vin.stride();
             auto ostride = o_vout.stride();
             scoord ysize = ibd[0];
             scoord xsize = ibd[1];
-            POUTRE_CHECK(ibd == obd, "bound not compatible");
-            POUTRE_CHECK(istride == ostride, "stride not compatible");
+            POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
+            POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
             using tmpBuffer=std::vector<TIn, boost::simd::allocator<TIn>>;
             using lineView =array_view<TIn, 1>;
 
@@ -398,6 +410,17 @@ namespace poutre
             lineView bufInputCurrentLine;
             lineView bufInputNextLine;
             lineView bufOuputCurrentLine;
+            
+            //quick run one line
+            if (ysize == 1)
+            {
+                bufInputPreviousLine = array_view<TIn, 1>(i_vin.data(), bd1d{ xsize });
+                bufOuputCurrentLine = array_view<TIn, 1>(o_vout.data(), bd1d{ xsize });
+                //dilate/erode line 0
+                HelperOp::ShiftRightLeftAndArith(bufInputPreviousLine, 1, 1, bufTempLine, bufOuputCurrentLine);
+                return;
+            }
+
 
             //compute first line
             //translate to clipped connection
@@ -405,15 +428,15 @@ namespace poutre
             //x x x
             bufInputPreviousLine = array_view<TIn, 1>(i_vin.data(), bd1d{ xsize });
             //dilate/erode line 0
-            HelperOp::ShiftRightLeftAndArith(bufInputPreviousLine, xsize, 1, 1, bufTempLine, bufTempLine1);
+            HelperOp::ShiftRightLeftAndArith(bufInputPreviousLine, 1, 1, bufTempLine, bufTempLine1);
 
             bufInputNextLine = array_view<TIn, 1>(i_vin.data() + xsize, bd1d{ xsize });
             bufOuputCurrentLine = array_view<TIn, 1>(o_vout.data(), bd1d{ xsize });
             //dilate/erode line 1
-            HelperOp::ShiftRightLeftAndArith(bufInputNextLine, xsize, 1, 1, bufTempLine, bufTempLine2);
+            HelperOp::ShiftRightLeftAndArith(bufInputNextLine, 1, 1, bufTempLine, bufTempLine2);
 
             //sup(dilate line 1,dilate line 0) or inf(erode line 1,erode line 0)
-            HelperOp::ApplyArith(bufTempLine1, bufTempLine2, xsize, bufOuputCurrentLine);
+            HelperOp::ApplyArith(bufTempLine1, bufTempLine2, bufOuputCurrentLine);
 
             bufInputCurrentLine = bufInputNextLine;
             //then loop
@@ -432,12 +455,12 @@ namespace poutre
                 bufOuputCurrentLine = array_view<TIn, 1>(o_vout.data() + (y - 1) * xsize, bd1d{ xsize });
                 bufInputNextLine = array_view<TIn, 1>(i_vin.data() + (y)* xsize, bd1d{ xsize });
                 //dilate/erode(y)
-                HelperOp::ShiftRightLeftAndArith(bufInputNextLine, xsize, 1, 1, bufTempLine, bufTempLine3);
+                HelperOp::ShiftRightLeftAndArith(bufInputNextLine, 1, 1, bufTempLine, bufTempLine3);
 
                 //sup(dilate(y-2),dilate(y-1)) or inf(erode(y-2),erode(y-1))
-                HelperOp::ApplyArith(bufTempLine1, bufTempLine2, xsize, bufTempLine);
+                HelperOp::ApplyArith(bufTempLine1, bufTempLine2, bufTempLine);
                 //sup(dilate(y-2),dilate(y-1),dilate(y)) or inf(erode(y-2),erode(y-1),erode(y))
-                HelperOp::ApplyArith(bufTempLine, bufTempLine3, xsize, bufOuputCurrentLine);
+                HelperOp::ApplyArith(bufTempLine, bufTempLine3, bufOuputCurrentLine);
 
                 //so use swap to don't loose ref on bufTempLine3
                 std::swap(bufTempLine3, bufTempLine2);
@@ -448,29 +471,414 @@ namespace poutre
             //x x x
             //x . x
             bufOuputCurrentLine = array_view<TIn, 1>(o_vout.data() + xsize * (ysize - 1), bd1d{ xsize });
-            HelperOp::ApplyArith(bufTempLine1, bufTempLine2, xsize, bufOuputCurrentLine);
+            HelperOp::ApplyArith(bufTempLine1, bufTempLine2, bufOuputCurrentLine);
         }
     };
     
+    /////Cross
+
+    //FIXME check TIn, Tout equals cv
+    template<typename TIn, typename TOut, class HelperOp>
+    struct t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DCross, TIn, TOut, 2, array_view, array_view, HelperOp>
+    {
+        void operator()(const array_view<TIn, 2> & i_vin, array_view<TOut, 2> & o_vout)
+        {
+            POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
+            auto ibd = i_vin.bound();
+            auto obd = o_vout.bound();
+            auto istride = i_vin.stride();
+            auto ostride = o_vout.stride();
+            scoord ysize = ibd[0];
+            scoord xsize = ibd[1];
+            POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
+            POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
+            using tmpBuffer=std::vector<TIn, boost::simd::allocator<TIn>>;
+            using lineView =array_view<TIn, 1>;
+
+            tmpBuffer tempLine(xsize), tempLine1(xsize), tempLine2(xsize), tempLine3(xsize);
+            lineView bufTempLine(tempLine), bufTempLine1(tempLine1), bufTempLine2(tempLine2), bufTempLine3(tempLine3);
+            lineView bufInputPreviousLine;
+            lineView bufInputCurrentLine;
+            lineView bufInputNextLine;
+            lineView bufOuputCurrentLine;
+            
+            //quick run one line
+            if (ysize == 1)
+            {
+                bufInputPreviousLine = array_view<TIn, 1>(i_vin.data(), bd1d{ xsize });
+                bufOuputCurrentLine = array_view<TIn, 1>(o_vout.data(), bd1d{ xsize });
+                //dilate/erode line 0
+                HelperOp::ShiftRightLeftAndArith(bufInputPreviousLine, 1, 1, bufTempLine, bufOuputCurrentLine);
+                return;
+            }
+
+            //compute first line
+            //translate to clipped connection
+            // x . x       
+            // ? x ?       
+            bufInputPreviousLine = array_view<TIn, 1>(i_vin.data(), bd1d{ xsize });
+            //dilate/erode line 0
+            HelperOp::ShiftRightLeftAndArith(bufInputPreviousLine, 1, 1, bufTempLine, bufTempLine2);
+            
+            bufInputNextLine = array_view<TIn, 1>(i_vin.data() + xsize, bd1d{ xsize });
+            bufOuputCurrentLine = array_view<TIn, 1>(o_vout.data(), bd1d{ xsize });
+
+            //inf/sup between dilate line 0 and line 1
+            HelperOp::ApplyArith(bufTempLine2, bufInputNextLine, bufOuputCurrentLine);
+
+            //then loop
+            bufInputCurrentLine = bufInputNextLine;
+            for (scoord y = 2; y < ysize; y++)
+            {
+                //actual computation
+                //1 2 3   <--- bufInputPreviousLine y-2
+                //4 5 6   <--- bufInputCurrentLine  y-1
+                //7 8 9   <--- bufInputNextLine     y
+                bufOuputCurrentLine = array_view<TIn, 1>(o_vout.data() + (y - 1) * xsize, bd1d{ xsize });
+                bufInputNextLine = array_view<TIn, 1>(i_vin.data() + (y)* xsize, bd1d{ xsize });
+                //dilate(y-1)/erode(y-1)
+                HelperOp::ShiftRightLeftAndArith(bufInputCurrentLine, 1, 1, bufTempLine, bufTempLine2);
+
+                //sup(y-2,dilate(y-1)),inf(y-2,erode(y-1))
+                HelperOp::ApplyArith(bufInputPreviousLine, bufTempLine2, bufTempLine);
+                //sup(sup(y-2,dilate(y-1),y) || inf(inf(y-2,erode(y-1),y)
+                HelperOp::ApplyArith(bufTempLine, bufInputNextLine, bufOuputCurrentLine);
+                //swap
+                bufInputPreviousLine = bufInputCurrentLine; //previous <--current
+                bufInputCurrentLine = bufInputNextLine;     //current <-- next
+            }
+            //end last line
+            //translate to clipped connection
+            //. x .
+            //x x x
+            //note that bufInputCurrentLine already point on ySize-1 (see above)
+            bufOuputCurrentLine = array_view<TIn, 1>(o_vout.data() + xsize * (ysize - 1), bd1d{ xsize });
+            //dilate/erode line y-1
+            HelperOp::ShiftRightLeftAndArith(bufInputCurrentLine, 1, 1, bufTempLine, bufTempLine2);
+            HelperOp::ApplyArith(bufInputPreviousLine, bufTempLine2, bufOuputCurrentLine);
+        }
+    };
+
+    /////Seg0
+
+        //FIXME check TIn, Tout equals cv
+    template<typename TIn, typename TOut, class HelperOp>
+    struct t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg0, TIn, TOut, 2, array_view, array_view, HelperOp>
+    {
+        void operator()(const array_view<TIn, 2> & i_vin, array_view<TOut, 2> & o_vout)
+        {
+            POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
+            auto ibd = i_vin.bound();
+            auto obd = o_vout.bound();
+            auto istride = i_vin.stride();
+            auto ostride = o_vout.stride();
+            scoord ysize = ibd[0];
+            scoord xsize = ibd[1];
+            POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
+            POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
+            using tmpBuffer=std::vector<TIn, boost::simd::allocator<TIn>>;
+            using lineView =array_view<TIn, 1>;
+
+            tmpBuffer tempLine(xsize);
+            lineView bufTempLine(tempLine);            
+            lineView bufInputCurrentLine;
+            lineView bufOuputCurrentLine;
+            
+            //quick exit one column
+            if (xsize == 1)
+            {
+                CopyOp(i_vin, o_vout);
+                return;
+            }
+
+            for (scoord y = 0; y < ysize; y++)
+            {
+                bufInputCurrentLine = array_view<TIn, 1>(i_vin.data() + y*xsize, bd1d{ xsize });
+                bufOuputCurrentLine = array_view<TIn, 1>(o_vout.data() + y*xsize, bd1d{ xsize });
+                HelperOp::ShiftRightLeftAndArith(bufInputCurrentLine, 1, 1, bufTempLine, bufOuputCurrentLine);
+            }
+        }
+    };
+
+    /////Seg90
+
+    //FIXME check TIn, Tout equals cv
+    template<typename TIn, typename TOut, class HelperOp>
+    struct t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg90, TIn, TOut, 2, array_view, array_view, HelperOp>
+    {
+        void operator()(const array_view<TIn, 2> & i_vin, array_view<TOut, 2> & o_vout)
+        {
+            POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
+            auto ibd = i_vin.bound();
+            auto obd = o_vout.bound();
+            auto istride = i_vin.stride();
+            auto ostride = o_vout.stride();
+            scoord ysize = ibd[0];
+            scoord xsize = ibd[1];
+            POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
+            POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
+            using tmpBuffer=std::vector<TIn, boost::simd::allocator<TIn>>;
+            using lineView =array_view<TIn, 1>;
+
+            tmpBuffer tempLine(xsize);
+            lineView bufTempLine(tempLine);
+            lineView bufInputPreviousLine;
+            lineView bufInputCurrentLine;
+            lineView bufInputNextLine;
+            lineView bufOuputCurrentLine;
+
+            //quick run one line
+            if (ysize == 1)
+            {
+                CopyOp(i_vin, o_vout);
+                return;
+            }
+
+            //compute first line
+            //translate to clipped connection
+            // ? . ?       
+            // ? x ?       
+            bufInputPreviousLine = array_view<TIn, 1>(i_vin.data(), bd1d{ xsize });
+            bufInputNextLine = array_view<TIn, 1>(i_vin.data() + xsize, bd1d{ xsize });
+            bufOuputCurrentLine = array_view<TIn, 1>(o_vout.data(), bd1d{ xsize });
+            //inf/sup between dilate line 0 and line 1
+            HelperOp::ApplyArith(bufInputPreviousLine , bufInputNextLine, bufOuputCurrentLine);
+
+            //then loop
+            bufInputCurrentLine = bufInputNextLine;
+            for (scoord y = 2; y < ysize; y++)
+            {
+                //actual computation
+                //1   <--- bufInputPreviousLine y-2
+                //4   <--- bufInputCurrentLine  y-1
+                //7   <--- bufInputNextLine     y
+                bufOuputCurrentLine = array_view<TIn, 1>(o_vout.data() + xsize * (y - 1), bd1d{ xsize });
+
+                bufInputNextLine = array_view<TIn, 1>(i_vin.data() + xsize * (y), bd1d{ xsize });
+                bufInputPreviousLine = array_view<TIn, 1>(i_vin.data() + xsize * (y-2), bd1d{ xsize });
+                bufInputCurrentLine = array_view<TIn, 1>(i_vin.data() + xsize * (y - 1), bd1d{ xsize });
+
+                HelperOp::ApplyArith(bufInputPreviousLine, bufInputCurrentLine, bufTempLine);
+                HelperOp::ApplyArith(bufTempLine, bufInputNextLine, bufOuputCurrentLine);
+            }
+            //end last line
+            //translate to clipped connection
+            //? x ?
+            //? x ?
+            bufInputPreviousLine = array_view<TIn, 1>(i_vin.data() + xsize * (ysize - 2), bd1d{ xsize });
+            bufInputCurrentLine = array_view<TIn, 1>(i_vin.data() + xsize * (ysize - 1), bd1d{ xsize });
+            bufOuputCurrentLine = array_view<TIn, 1>(o_vout.data() + xsize * (ysize - 1), bd1d{ xsize });
+            HelperOp::ApplyArith(bufInputPreviousLine, bufInputCurrentLine, bufOuputCurrentLine);
+        }
+    };
+
+    /////Seg45
+    //FIXME check TIn, Tout equals cv
+    template<typename TIn, typename TOut, class HelperOp>
+    struct t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg45, TIn, TOut, 2, array_view, array_view, HelperOp>
+    {
+        void operator()(const array_view<TIn, 2> & i_vin, array_view<TOut, 2> & o_vout)
+        {
+            POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
+            auto ibd = i_vin.bound();
+            auto obd = o_vout.bound();
+            auto istride = i_vin.stride();
+            auto ostride = o_vout.stride();
+            scoord ysize = ibd[0];
+            scoord xsize = ibd[1];
+            POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
+            POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
+            using tmpBuffer=std::vector<TIn, boost::simd::allocator<TIn>>;
+            using lineView =array_view<TIn, 1>;
+
+            tmpBuffer tempLine(xsize), tempLine2(xsize), tempLine3(xsize);
+            lineView bufTempLine(tempLine), bufTempLine2(tempLine2), bufTempLine3(tempLine3);
+            lineView bufInputPreviousLine;
+            lineView bufInputCurrentLine;
+            lineView bufInputNextLine;
+            lineView bufOuputCurrentLine;
+
+            //quick run one line/one column
+            if (ysize == 1 || xsize == 1)
+            {
+                CopyOp(i_vin, o_vout);
+                return;
+            }
+
+            //compute first line
+            //translate to clipped connection
+            // ? . ?       
+            // ? ? x       
+            bufInputPreviousLine = array_view<TIn, 1>(i_vin.data(), bd1d{ xsize });
+            bufInputNextLine = array_view<TIn, 1>(i_vin.data() + xsize, bd1d{ xsize });
+            bufOuputCurrentLine = array_view<TIn, 1>(o_vout.data(), bd1d{ xsize });
+            //shift to left
+            t_LineBufferShiftLeft<TIn>(bufInputNextLine, 1, HelperOp::m_paddingValue, bufTempLine);
+            //Take min(Erode), max(dilate)
+            HelperOp::ApplyArith(bufInputPreviousLine, bufTempLine, bufOuputCurrentLine);
+
+            //then loop
+            bufInputCurrentLine = bufInputNextLine;
+            for (scoord y = 1; y < ysize; y++)
+            {
+                //actual computation
+                //1 2 3   <--- bufInputPreviousLine y-1
+                //4 5 6   <--- bufInputCurrentLine  y
+                //7 8 9   <--- bufInputNextLine     y+1
+                bufInputPreviousLine = array_view<TIn, 1>(i_vin.data()+ xsize*(y-1), bd1d{ xsize }); 
+                bufInputCurrentLine = array_view<TIn, 1>(i_vin.data() + xsize*(y), bd1d{ xsize });
+                bufInputNextLine = array_view<TIn, 1>(i_vin.data() + xsize*(y + 1), bd1d{ xsize });
+                bufOuputCurrentLine = array_view<TIn, 1>(o_vout.data() + xsize * (y), bd1d{ xsize });
+                //shift to right previous line
+                t_LineBufferShiftRight<TIn>(bufInputPreviousLine, 1, HelperOp::m_paddingValue, bufTempLine);
+                //shift to left next line
+                t_LineBufferShiftLeft<TIn>(bufInputNextLine, 1, HelperOp::m_paddingValue, bufTempLine2);
+                //Take min(Erode), max(dilate)
+                HelperOp::ApplyArith(bufInputCurrentLine, bufTempLine, bufTempLine3);
+                HelperOp::ApplyArith(bufTempLine3, bufTempLine2, bufOuputCurrentLine);
+            }
+            //end last line
+            //translate to clipped connection
+            //x ? ?
+            //? . ?
+            bufInputPreviousLine = array_view<TIn, 1>(i_vin.data() + xsize * (ysize - 2), bd1d{ xsize });
+            bufInputCurrentLine = array_view<TIn, 1>(i_vin.data() + xsize * (ysize - 1), bd1d{ xsize });
+            bufOuputCurrentLine = array_view<TIn, 1>(o_vout.data() + xsize * (ysize - 1), bd1d{ xsize });
+
+            //shift to right
+            t_LineBufferShiftRight<TIn>(bufInputPreviousLine, 1, HelperOp::m_paddingValue, bufTempLine);
+            //Take min(Erode), max(dilate)
+            HelperOp::ApplyArith(bufInputCurrentLine, bufTempLine, bufOuputCurrentLine);
+
+        }
+    };
     
+
+    /////Seg135
+    //FIXME check TIn, Tout equals cv
+    template<typename TIn, typename TOut, class HelperOp>
+    struct t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg135, TIn, TOut, 2, array_view, array_view, HelperOp>
+    {
+        void operator()(const array_view<TIn, 2> & i_vin, array_view<TOut, 2> & o_vout)
+        {
+            POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
+            auto ibd = i_vin.bound();
+            auto obd = o_vout.bound();
+            auto istride = i_vin.stride();
+            auto ostride = o_vout.stride();
+            scoord ysize = ibd[0];
+            scoord xsize = ibd[1];
+            POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
+            POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
+            using tmpBuffer=std::vector<TIn, boost::simd::allocator<TIn>>;
+            using lineView =array_view<TIn, 1>;
+
+            tmpBuffer tempLine(xsize), tempLine2(xsize), tempLine3(xsize);
+            lineView bufTempLine(tempLine), bufTempLine2(tempLine2), bufTempLine3(tempLine3);
+            lineView bufInputPreviousLine;
+            lineView bufInputCurrentLine;
+            lineView bufInputNextLine;
+            lineView bufOuputCurrentLine;
+
+            //quick run one line
+            if (ysize == 1 || xsize == 1)
+            {
+                CopyOp(i_vin, o_vout);
+                return;
+            }
+
+            //compute first line
+            //translate to clipped connection
+            // 0 0 X     0 . 0 
+            // 0 . 0   ->x 0 0
+            // X 0 0  
+            bufInputPreviousLine = array_view<TIn, 1>(i_vin.data(), bd1d{ xsize });
+            bufInputNextLine = array_view<TIn, 1>(i_vin.data()+xsize, bd1d{ xsize });
+            bufOuputCurrentLine = array_view<TIn, 1>(o_vout.data(), bd1d{ xsize });
+
+            //shift to rigt
+            t_LineBufferShiftRight<TIn>(bufInputNextLine, 1, HelperOp::m_paddingValue, bufTempLine);
+            //Take min(Erode), max(dilate)
+            HelperOp::ApplyArith(bufInputPreviousLine, bufTempLine, bufOuputCurrentLine);
+            
+            for (scoord y = 1; y < ysize; y++)
+            {
+                //actual computation
+                //1 2 3   <--- bufInputPreviousLine y-2
+                //4 5 6   <--- bufInputCurrentLine  y-1
+                //7 8 9   <--- bufInputNextLine     y
+                bufInputPreviousLine = array_view<TIn, 1>(i_vin.data() + xsize * (y - 1), bd1d{ xsize });
+                bufInputCurrentLine = array_view<TIn, 1>(i_vin.data() + xsize * (y), bd1d{ xsize });
+                bufInputNextLine = array_view<TIn, 1>(i_vin.data() + xsize * (y + 1), bd1d{ xsize });
+                bufOuputCurrentLine = array_view<TIn, 1>(o_vout.data() + xsize * (y), bd1d{ xsize });
+                //shift to left previous line
+                t_LineBufferShiftLeft<TIn>(bufInputPreviousLine, 1, HelperOp::m_paddingValue, bufTempLine);
+                //shift to right next line
+                t_LineBufferShiftRight<TIn>(bufInputNextLine, 1, HelperOp::m_paddingValue, bufTempLine2);
+                //Take min(Erode), max(dilate)
+                HelperOp::ApplyArith(bufInputCurrentLine, bufTempLine, bufTempLine3);
+                HelperOp::ApplyArith(bufTempLine3, bufTempLine2, bufOuputCurrentLine);
+            }
+            //end last line
+            //translate to clipped connection
+            // 0 0 X     0 0 x
+            // 0 . 0   ->0 . 0
+            // X 0 0 
+            bufInputPreviousLine = array_view<TIn, 1>(i_vin.data() + xsize * (ysize - 2), bd1d{ xsize });
+            bufInputNextLine = array_view<TIn, 1>(i_vin.data() + xsize * (ysize - 1), bd1d{ xsize });
+            bufOuputCurrentLine = array_view<TIn, 1>(o_vout.data() + xsize * (ysize - 1), bd1d{ xsize });
+
+            //shift to left
+            t_LineBufferShiftLeft<TIn>(bufInputPreviousLine, 1, HelperOp::m_paddingValue, bufTempLine);
+            //Take min(Erode), max(dilate)
+            HelperOp::ApplyArith(bufInputNextLine, bufTempLine, bufOuputCurrentLine);
+        }
+    };
+
     template<typename TIn,typename TOut, ptrdiff_t Rank, template <typename, ptrdiff_t> class ViewIn, template <typename, ptrdiff_t> class ViewOut>
     void t_Dilate(const ViewIn<TIn, Rank>& i_vin, se::NeighborListStaticSE nl, ViewOut<TOut, Rank>& o_vout)
     {
         POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
         switch (nl)
         {
-        case se::NeighborListStaticSE::NeighborListStaticSE2DCT8:
+        case se::NeighborListStaticSE::NeighborListStaticSE2DSquare:
         {
             using LineOp=LineBufferShiftAndArithDilateHelperOp<TIn>;
-            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DCT8, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
+            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSquare, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
             dispatcher(i_vin, o_vout);
         }break;
-        case se::NeighborListStaticSE::NeighborListStaticSE2DCT4:
+        case se::NeighborListStaticSE::NeighborListStaticSE2DCross:
         {
-            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DCT4, TIn, TOut, Rank, ViewIn, ViewOut, BinOpSup<TIn, TOut>> dispatcher;
+            using LineOp=LineBufferShiftAndArithDilateHelperOp<TIn>;
+            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DCross, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
             dispatcher(i_vin, o_vout);
         }break;
-
+        case se::NeighborListStaticSE::NeighborListStaticSE2DSeg0:
+        {
+            using LineOp=LineBufferShiftAndArithDilateHelperOp<TIn>;            
+            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg0, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
+            dispatcher(i_vin, o_vout);
+        }break;
+        case se::NeighborListStaticSE::NeighborListStaticSE2DSeg90:
+        {
+            using LineOp=LineBufferShiftAndArithDilateHelperOp<TIn>;            
+            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg90, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
+            dispatcher(i_vin, o_vout);
+        }break;
+        case se::NeighborListStaticSE::NeighborListStaticSE2DSeg45:
+        {
+            using LineOp=LineBufferShiftAndArithDilateHelperOp<TIn>;
+            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg45, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
+            //t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg45, TIn, TOut, Rank, ViewIn, ViewOut, BinOpSup<TIn,TOut>> dispatcher;
+            dispatcher(i_vin, o_vout);
+        }break;
+        case se::NeighborListStaticSE::NeighborListStaticSE2DSeg135:
+        {
+            using LineOp=LineBufferShiftAndArithDilateHelperOp<TIn>;
+            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg135, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
+            //t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg135, TIn, TOut, Rank, ViewIn, ViewOut, BinOpSup<TIn, TOut>> dispatcher;
+            dispatcher(i_vin, o_vout);
+        }break;
         default:
         {
             POUTRE_RUNTIME_ERROR("t_Dilate se::NeighborListStaticSE not implemented");
@@ -485,18 +893,44 @@ namespace poutre
         POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
         switch (nl)
         {
-        case se::NeighborListStaticSE::NeighborListStaticSE2DCT8:
+        case se::NeighborListStaticSE::NeighborListStaticSE2DSquare:
         {
             using LineOp=LineBufferShiftAndArithErodeHelperOp<TIn>;
-            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DCT8, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
+            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSquare, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
             dispatcher(i_vin, o_vout);
         }break;
-        case se::NeighborListStaticSE::NeighborListStaticSE2DCT4:
+        case se::NeighborListStaticSE::NeighborListStaticSE2DCross:
         {
-            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DCT4, TIn, TOut, Rank, ViewIn, ViewOut, BinOpInf<TIn, TOut>> dispatcher;
+            using LineOp=LineBufferShiftAndArithErodeHelperOp<TIn>;
+            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DCross, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
             dispatcher(i_vin, o_vout);
         }break;
-
+        case se::NeighborListStaticSE::NeighborListStaticSE2DSeg0:
+        {
+            using LineOp=LineBufferShiftAndArithErodeHelperOp<TIn>;
+            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg0, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
+            dispatcher(i_vin, o_vout);
+        }break;
+        case se::NeighborListStaticSE::NeighborListStaticSE2DSeg90:
+        {
+            using LineOp=LineBufferShiftAndArithErodeHelperOp<TIn>;
+            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg90, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
+            dispatcher(i_vin, o_vout);
+        }break;
+        case se::NeighborListStaticSE::NeighborListStaticSE2DSeg45:
+        {
+            using LineOp=LineBufferShiftAndArithErodeHelperOp<TIn>;
+            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg45, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
+            //t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg45, TIn, TOut, Rank, ViewIn, ViewOut, BinOpInf<TIn,TOut>> dispatcher;
+            dispatcher(i_vin, o_vout);
+        }break;
+        case se::NeighborListStaticSE::NeighborListStaticSE2DSeg135:
+        {
+            using LineOp=LineBufferShiftAndArithErodeHelperOp<TIn>;
+            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg135, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
+            //t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg135, TIn, TOut, Rank, ViewIn, ViewOut, BinOpInf<TIn, TOut>> dispatcher;
+            dispatcher(i_vin, o_vout);
+        }break;
         default:
         {
             POUTRE_RUNTIME_ERROR("t_Erode se::NeighborListStaticSE not implemented");

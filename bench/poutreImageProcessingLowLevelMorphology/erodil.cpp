@@ -47,7 +47,8 @@ public:
     std::vector<T> m_vect;
 };
 
-BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_CT8_UINT8,poutre::pUINT8)(benchmark::State& state) {
+
+BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_Square_UINT8,poutre::pUINT8)(benchmark::State& state) {
     const auto size = state.range(0);
     while (state.KeepRunning()) {
         for (auto i = 0u; i < size; ++i) {
@@ -55,15 +56,15 @@ BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_CT8_UINT8,poutre::pUINT
           auto sizeextent=sqrt(size);
           auto view2din=poutre::array_view<poutre::pUINT8,2>(m_vect,{int(sizeextent),int(sizeextent)});
           auto view2dout=poutre::array_view<poutre::pUINT8,2>(res,{int(sizeextent),int(sizeextent)});          
-          poutre::t_Dilate(view2din, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DCT8,view2dout);
+          poutre::t_Dilate(view2din, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSquare,view2dout);
         }
     }
     state.SetItemsProcessed(state.iterations() * size);
 }
-BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_CT8_UINT8)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_Square_UINT8)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
 
 
-BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_CT8_INT32, poutre::pINT32)(benchmark::State& state) {
+BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_Square_INT32, poutre::pINT32)(benchmark::State& state) {
    const auto size = state.range(0);
    while (state.KeepRunning()) {
       for (auto i = 0u; i < size; ++i) {
@@ -71,14 +72,14 @@ BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_CT8_INT32, poutre::pINT
          auto sizeextent = sqrt(size);
          auto view2din = poutre::array_view<poutre::pINT32, 2>(m_vect, { int(sizeextent),int(sizeextent) });
          auto view2dout = poutre::array_view<poutre::pINT32, 2>(res, { int(sizeextent),int(sizeextent) });
-         poutre::t_Dilate(view2din, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DCT8, view2dout);
+         poutre::t_Dilate(view2din, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSquare, view2dout);
       }
    }
    state.SetItemsProcessed(state.iterations() * size);
 }
-BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_CT8_INT32)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_Square_INT32)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
 
-BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_CT4_UINT8, poutre::pUINT8)(benchmark::State& state) {
+BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_Cross_UINT8, poutre::pUINT8)(benchmark::State& state) {
     const auto size = state.range(0);
     while (state.KeepRunning()) {
         for (auto i = 0u; i < size; ++i) {
@@ -86,14 +87,14 @@ BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_CT4_UINT8, poutre::pUIN
             auto sizeextent = sqrt(size);
             auto view2din = poutre::array_view<poutre::pUINT8, 2>(m_vect, { int(sizeextent),int(sizeextent) });
             auto view2dout = poutre::array_view<poutre::pUINT8, 2>(res, { int(sizeextent),int(sizeextent) });
-            poutre::t_Dilate(view2din, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DCT4, view2dout);
+            poutre::t_Dilate(view2din, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DCross, view2dout);
         }
     }
     state.SetItemsProcessed(state.iterations() * size);
 }
-BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_CT4_UINT8)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_Cross_UINT8)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
 
-BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_CT4_INT32, poutre::pINT32)(benchmark::State& state) {
+BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_Cross_INT32, poutre::pINT32)(benchmark::State& state) {
     const auto size = state.range(0);
     while (state.KeepRunning()) {
         for (auto i = 0u; i < size; ++i) {
@@ -101,12 +102,132 @@ BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_CT4_INT32, poutre::pINT
             auto sizeextent = sqrt(size);
             auto view2din = poutre::array_view<poutre::pINT32, 2>(m_vect, { int(sizeextent),int(sizeextent) });
             auto view2dout = poutre::array_view<poutre::pINT32, 2>(res, { int(sizeextent),int(sizeextent) });
-            poutre::t_Dilate(view2din, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DCT4, view2dout);
+            poutre::t_Dilate(view2din, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DCross, view2dout);
         }
     }
     state.SetItemsProcessed(state.iterations() * size);
 }
-BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_CT4_INT32)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_Cross_INT32)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+
+BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_Seg0_UINT8, poutre::pUINT8)(benchmark::State& state) {
+    const auto size = state.range(0);
+    while (state.KeepRunning()) {
+        for (auto i = 0u; i < size; ++i) {
+            std::vector<poutre::pUINT8> res(m_vect.size());
+            auto sizeextent = sqrt(size);
+            auto view2din = poutre::array_view<poutre::pUINT8, 2>(m_vect, { int(sizeextent),int(sizeextent) });
+            auto view2dout = poutre::array_view<poutre::pUINT8, 2>(res, { int(sizeextent),int(sizeextent) });
+            poutre::t_Dilate(view2din, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg0, view2dout);
+        }
+    }
+    state.SetItemsProcessed(state.iterations() * size);
+}
+BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_Seg0_UINT8)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+
+BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_Seg0_INT32, poutre::pINT32)(benchmark::State& state) {
+    const auto size = state.range(0);
+    while (state.KeepRunning()) {
+        for (auto i = 0u; i < size; ++i) {
+            std::vector<poutre::pINT32> res(m_vect.size());
+            auto sizeextent = sqrt(size);
+            auto view2din = poutre::array_view<poutre::pINT32, 2>(m_vect, { int(sizeextent),int(sizeextent) });
+            auto view2dout = poutre::array_view<poutre::pINT32, 2>(res, { int(sizeextent),int(sizeextent) });
+            poutre::t_Dilate(view2din, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg0, view2dout);
+        }
+    }
+    state.SetItemsProcessed(state.iterations() * size);
+}
+BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_Seg0_INT32)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+
+BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_Seg90_UINT8, poutre::pUINT8)(benchmark::State& state) {
+    const auto size = state.range(0);
+    while (state.KeepRunning()) {
+        for (auto i = 0u; i < size; ++i) {
+            std::vector<poutre::pUINT8> res(m_vect.size());
+            auto sizeextent = sqrt(size);
+            auto view2din = poutre::array_view<poutre::pUINT8, 2>(m_vect, { int(sizeextent),int(sizeextent) });
+            auto view2dout = poutre::array_view<poutre::pUINT8, 2>(res, { int(sizeextent),int(sizeextent) });
+            poutre::t_Dilate(view2din, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg90, view2dout);
+        }
+    }
+    state.SetItemsProcessed(state.iterations() * size);
+}
+BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_Seg90_UINT8)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+
+BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_Seg90_INT32, poutre::pINT32)(benchmark::State& state) {
+    const auto size = state.range(0);
+    while (state.KeepRunning()) {
+        for (auto i = 0u; i < size; ++i) {
+            std::vector<poutre::pINT32> res(m_vect.size());
+            auto sizeextent = sqrt(size);
+            auto view2din = poutre::array_view<poutre::pINT32, 2>(m_vect, { int(sizeextent),int(sizeextent) });
+            auto view2dout = poutre::array_view<poutre::pINT32, 2>(res, { int(sizeextent),int(sizeextent) });
+            poutre::t_Dilate(view2din, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg90, view2dout);
+        }
+    }
+    state.SetItemsProcessed(state.iterations() * size);
+}
+BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_Seg90_INT32)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+
+BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_Seg45_UINT8, poutre::pUINT8)(benchmark::State& state) {
+    const auto size = state.range(0);
+    while (state.KeepRunning()) {
+        for (auto i = 0u; i < size; ++i) {
+            std::vector<poutre::pUINT8> res(m_vect.size());
+            auto sizeextent = sqrt(size);
+            auto view2din = poutre::array_view<poutre::pUINT8, 2>(m_vect, { int(sizeextent),int(sizeextent) });
+            auto view2dout = poutre::array_view<poutre::pUINT8, 2>(res, { int(sizeextent),int(sizeextent) });
+            poutre::t_Dilate(view2din, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg45, view2dout);
+        }
+    }
+    state.SetItemsProcessed(state.iterations() * size);
+}
+BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_Seg45_UINT8)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+
+BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_Seg45_INT32, poutre::pINT32)(benchmark::State& state) {
+    const auto size = state.range(0);
+    while (state.KeepRunning()) {
+        for (auto i = 0u; i < size; ++i) {
+            std::vector<poutre::pINT32> res(m_vect.size());
+            auto sizeextent = sqrt(size);
+            auto view2din = poutre::array_view<poutre::pINT32, 2>(m_vect, { int(sizeextent),int(sizeextent) });
+            auto view2dout = poutre::array_view<poutre::pINT32, 2>(res, { int(sizeextent),int(sizeextent) });
+            poutre::t_Dilate(view2din, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg45, view2dout);
+        }
+    }
+    state.SetItemsProcessed(state.iterations() * size);
+}
+BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_Seg45_INT32)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+
+BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_Seg135_UINT8, poutre::pUINT8)(benchmark::State& state) {
+    const auto size = state.range(0);
+    while (state.KeepRunning()) {
+        for (auto i = 0u; i < size; ++i) {
+            std::vector<poutre::pUINT8> res(m_vect.size());
+            auto sizeextent = sqrt(size);
+            auto view2din = poutre::array_view<poutre::pUINT8, 2>(m_vect, { int(sizeextent),int(sizeextent) });
+            auto view2dout = poutre::array_view<poutre::pUINT8, 2>(res, { int(sizeextent),int(sizeextent) });
+            poutre::t_Dilate(view2din, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg135, view2dout);
+        }
+    }
+    state.SetItemsProcessed(state.iterations() * size);
+}
+BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_Seg135_UINT8)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
+
+BENCHMARK_TEMPLATE_DEFINE_F(DilateFixture, DilateFixture_Seg135_INT32, poutre::pINT32)(benchmark::State& state) {
+    const auto size = state.range(0);
+    while (state.KeepRunning()) {
+        for (auto i = 0u; i < size; ++i) {
+            std::vector<poutre::pINT32> res(m_vect.size());
+            auto sizeextent = sqrt(size);
+            auto view2din = poutre::array_view<poutre::pINT32, 2>(m_vect, { int(sizeextent),int(sizeextent) });
+            auto view2dout = poutre::array_view<poutre::pINT32, 2>(res, { int(sizeextent),int(sizeextent) });
+            poutre::t_Dilate(view2din, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg135, view2dout);
+        }
+    }
+    state.SetItemsProcessed(state.iterations() * size);
+}
+BENCHMARK_REGISTER_F(DilateFixture, DilateFixture_Seg135_INT32)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMillisecond); //-V112
 
 template<typename T>
 class ShiftOpFixture : public ::benchmark::Fixture {
