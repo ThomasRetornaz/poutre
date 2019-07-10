@@ -33,7 +33,23 @@ namespace {
         }
         return m_vect;
     }
+
+
+    decltype(auto) ConstructVectorFloat(size_t size)
+    {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<> dis(std::numeric_limits<float>::min(), std::numeric_limits<float>::max());
+
+        std::vector<float> m_vect;
+        m_vect.reserve(size);
+        for (size_t i = 0; i < size; ++i) {
+            m_vect.push_back((float)dis(gen));
+        }
+        return m_vect;
+    }
 }
+
 
 template<typename T>
 class TransposeFixture : public ::benchmark::Fixture {
@@ -45,6 +61,18 @@ public:
         m_vect.clear();
     }
     std::vector<T> m_vect;
+};
+
+
+class TransposeFixtureFloat : public ::benchmark::Fixture {
+public:
+    void SetUp(const ::benchmark::State& st) {
+        m_vect = ConstructVectorFloat(st.range(0));
+    }
+    void TearDown(const ::benchmark::State&) {
+        m_vect.clear();
+    }
+    std::vector<float> m_vect;
 };
 
 BENCHMARK_TEMPLATE_DEFINE_F(TransposeFixture, TransposeFixture_UINT8,poutre::pUINT8)(benchmark::State& state) {
@@ -62,7 +90,7 @@ BENCHMARK_TEMPLATE_DEFINE_F(TransposeFixture, TransposeFixture_UINT8,poutre::pUI
 }
 BENCHMARK_REGISTER_F(TransposeFixture, TransposeFixture_UINT8)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMicrosecond); //-V112
 
-BENCHMARK_TEMPLATE_DEFINE_F(TransposeFixture, TransposeFixture_FLOAT, poutre::pFLOAT)(benchmark::State& state) {
+BENCHMARK_DEFINE_F(TransposeFixtureFloat, TransposeFixture_FLOAT)(benchmark::State& state) {
    const auto size = state.range(0);
    while (state.KeepRunning()) {
       for (auto i = 0u; i < size; ++i) {
@@ -75,4 +103,4 @@ BENCHMARK_TEMPLATE_DEFINE_F(TransposeFixture, TransposeFixture_FLOAT, poutre::pF
    }
    state.SetItemsProcessed(state.iterations() * size);
 }
-BENCHMARK_REGISTER_F(TransposeFixture, TransposeFixture_FLOAT)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMicrosecond); //-V112
+BENCHMARK_REGISTER_F(TransposeFixtureFloat, TransposeFixture_FLOAT)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMicrosecond); //-V112
