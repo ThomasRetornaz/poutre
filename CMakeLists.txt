@@ -73,14 +73,25 @@ set(POUTRE_DOCUMENTATION_INSTALLATION_RELATIVE_PATH   "documentation" CACHE PATH
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
-include(OptimizeForArchitecture)
-OptimizeForArchitecture()
+
 # Compiler specific configurations
 include(cmake/CMakeCompilerSpecific.cmake)
+include(OptimizeForArchitecture)
+OptimizeForArchitecture()
+foreach(flag ${Vc_ARCHITECTURE_FLAGS})
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flag}")
+endforeach()
 
 message(STATUS "CMake running on OS ${CMAKE_HOST_SYSTEM_NAME} version ${CMAKE_HOST_SYSTEM_VERSION} on processor ${CMAKE_HOST_SYSTEM_PROCESSOR}")
 message(STATUS "HDF5 support is ${ENABLE_HDF5}")
 message(STATUS "NumPy support is ${ENABLE_NUMPY}")
+MESSAGE(STATUS "Build type: " ${CMAKE_BUILD_TYPE})
+MESSAGE(STATUS "Library Type: " ${LIB_TYPE})
+MESSAGE(STATUS "Compiler flags:" ${CMAKE_CXX_COMPILE_FLAGS})
+MESSAGE(STATUS "Compiler cxx debug flags:" ${CMAKE_CXX_FLAGS_DEBUG})
+MESSAGE(STATUS "Compiler cxx release flags:" ${CMAKE_CXX_FLAGS_RELEASE})
+MESSAGE(STATUS "Compiler cxx min size flags:" ${CMAKE_CXX_FLAGS_MINSIZEREL})
+MESSAGE(STATUS "Compiler cxx flags:" ${CMAKE_CXX_FLAGS})
 
 if(BUILD_SHARED_LIBS)
   message(STATUS "Building shared libraries")
@@ -103,11 +114,6 @@ include(cmake/CMakeTestUtils.cmake)
 # Third parties
 add_subdirectory(${THIRD_PARTIES_PATH})
 add_definitions(-DBOOST_TEST_DYN_LINK)
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${NT2_COMPILE_FLAGS}")
-set(CMAKE_C_FLAGS_RELEASE   "${CMAKE_C_FLAGS_RELEASE} ${NT2_COMPILE_FLAGS}")
-#todo filter duplicate and conflict
-Set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} ${NT2_LINK_FLAGS}")
-set(CMAKE_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} ${NT2_LINK_FLAGS}")
 
 #FIXME
 include_directories(BEFORE "${SIMD_INLCUDE_DIRECTORY}")

@@ -104,7 +104,7 @@ namespace poutre
         //!ctor
 		ScopedTimer(Timer& itimer);
         //!dtor
-		~ScopedTimer(void) POUTRE_NOEXCEPT;
+		~ScopedTimer(void);
     };
 }
 

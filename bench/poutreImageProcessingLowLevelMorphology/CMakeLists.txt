@@ -20,21 +20,15 @@ set_target_properties(PoutreIPLowLevelMorphologyBenchs PROPERTIES
   FOLDER "Bench/")
 
 IF(WIN32)
-target_link_libraries(PoutreIPLowLevelMorphologyBenchs  
-  PUBLIC PoutreBase
+target_link_libraries(PoutreIPLowLevelMorphologyBenchs 
   PUBLIC benchmark  
-  #INTERFACE ${SIMD_LIB}
   PUBLIC shlwapi.lib
-  #PUBLIC PoutreIPPixelProcessing
-  PUBLIC ${Boost_SYSTEM_LIBRARY}
+  PUBLIC PoutreIPCore
   )
 ELSE()
-target_link_libraries(PoutreIPPixelProcessingBenchs 
-  PUBLIC PoutreBase
+target_link_libraries(PoutreIPLowLevelMorphologyBenchs 
   PUBLIC benchmark  
-  #INTERFACE ${SIMD_LIB}
-  #PUBLIC PoutreIPPixelProcessing 
-  PUBLIC ${Boost_SYSTEM_LIBRARY}   
+  PUBLIC PoutreIPCore
   )
 ENDIF()
 

@@ -287,9 +287,9 @@ namespace poutre
         //!Assignement operator
         POUTRE_CXX14_CONSTEXPR self_type & operator= (const array_view<U, Rank> & rhs) POUTRE_NOEXCEPT
     {
-        m_bnd = rhs.m_bnd;
-        m_stride_idx = rhs.m_stride_idx;
-        m_data = rhs.m_data;
+        this->m_bnd = rhs.m_bnd;
+        this->m_stride_idx = rhs.m_stride_idx;
+        this->m_data = rhs.m_data;
         return *this;
     }
 
@@ -417,8 +417,8 @@ namespace poutre
       POUTRE_CXX14_CONSTEXPR T& operator[] (const idx2d& idx) const POUTRE_NOEXCEPTONLYNDEBUG
       {
           POUTRE_ASSERTCHECK(m_bnd.contains(idx) == true, "Out of bound");
-          auto SizeX = m_bnd[0];
-          return m_data[idx[1] * SizeX + idx[0]];
+          auto SizeX = this->m_bnd[0];
+          return this->m_data[idx[1] * SizeX + idx[0]];
       }
   };
   /**

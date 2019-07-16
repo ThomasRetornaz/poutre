@@ -48,16 +48,16 @@ namespace poutre
    template<typename T1, typename Tout, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class ViewOut, typename = void>
    struct transpose2DAlongXOp
    {
-      static_assert((
-         std::is_same< View1<T1, 2>, strided_array_view<T1, 2> >::value
-         || std::is_same< View1<T1, 2>, strided_array_view<const T1, 2> >::value
-         || std::is_same< ViewOut<Tout, 2>, strided_array_view<Tout, 2> >::value
-         ), "strided view only specilization fail for arrayview");
+      // static_assert((
+      //    std::is_same< View1<T1, 2>, strided_array_view<T1, 2> >::value
+      //    || std::is_same< View1<T1, 2>, strided_array_view<const T1, 2> >::value
+      //    || std::is_same< ViewOut<Tout, 2>, strided_array_view<Tout, 2> >::value
+      //    ), "strided view only specialization fail for arrayview");
 
-      void operator()(const View1<T1, 2>& i_vin, ViewOut<Tout, 2>& o_vout) const
-      {
-         static_assert(false, "Not implemented for strided view");
-      }
+      // void operator()(const View1<T1, 2>& i_vin, ViewOut<Tout, 2>& o_vout) const
+      // {
+      //    static_assert(false, "Not implemented for strided view");
+      // }
    };
 
    //template specialization both array_view
@@ -92,6 +92,7 @@ namespace poutre
    //TODO arm64 
 #ifdef __AVX__
     //https ://software.intel.com/sites/landingpage/IntrinsicsGuide/
+   #include <immintrin.h>
    template<>
    struct transpose2DAlongXOp<pUINT8, pUINT8, array_view, array_view>
    {

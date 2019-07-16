@@ -187,7 +187,7 @@ public:
   }
 
   POUTRE_CXX14_CONSTEXPR explicit static_array_base(
-      const value_type (&rhs)[Rank]) :m_array() POUTRE_NOEXCEPT
+      const value_type (&rhs)[Rank]) POUTRE_NOEXCEPT 
   {
     details::helper_assign_container_op<self_type, AssignOpType::AssignOp,
                                         Rank>::op(rhs, *this);

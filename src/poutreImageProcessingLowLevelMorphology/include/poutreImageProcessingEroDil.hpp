@@ -118,14 +118,14 @@ namespace poutre
                 auto beg2 = begin(vOutbound);
                 for (; beg1 != end1; ++beg1, ++beg2)
                 {
-                    auto val = op::neutral;
+                    auto val = BinOp::neutral;
                     for (const auto& idxnl : NlList)
                     {
                         auto currentidx = *beg1 + idxnl;
                         if (!vInbound.contains(currentidx)) continue;
-                        val = op::process(val, i_vin[currentidx]);
+                        val = BinOp::process(val, i_vin[currentidx]);
                     }
-                    o_vout[*beg2] = static_cast<T2>(max);
+                    o_vout[*beg2] = static_cast<T2>(val);
                 }
             }
         }
@@ -753,7 +753,6 @@ namespace poutre
         }
     };
     
-
     /////Seg135
     //FIXME check TIn, Tout equals cv
     template<typename TIn, typename TOut, class HelperOp>
@@ -834,7 +833,6 @@ namespace poutre
             HelperOp::ApplyArith(bufInputNextLine, bufTempLine, bufOuputCurrentLine);
         }
     };
-
     template<typename TIn,typename TOut, ptrdiff_t Rank, template <typename, ptrdiff_t> class ViewIn, template <typename, ptrdiff_t> class ViewOut>
     void t_Dilate(const ViewIn<TIn, Rank>& i_vin, se::NeighborListStaticSE nl, ViewOut<TOut, Rank>& o_vout)
     {
@@ -942,4 +940,4 @@ namespace poutre
     //! @} doxygroup: image_processing_erodil_group
     //! @} doxygroup: image_processing_group
 }//poutre
-#endif POUTRE_IMAGEPROCESSING_ERO_DIL_HPP__
+#endif //POUTRE_IMAGEPROCESSING_ERO_DIL_HPP__
