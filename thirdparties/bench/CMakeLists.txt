@@ -15,7 +15,7 @@ ExternalProject_Add(googlebenchmark
 		 -DBUILD_TESTING:BOOL=OFF
 		 -DBENCHMARK_ENABLE_TESTING:BOOL=OFF
 		 -DBENCHMARK_ENABLE_LTO:BOOL=OFF
-		 -DCMAKE_BUILD_TYPE=Release
+		 #-DCMAKE_BUILD_TYPE=Release
 	#--Build step-----------------
   UPDATE_COMMAND "" # Skip annoying updates for every build
 	#--Install step-----------------
