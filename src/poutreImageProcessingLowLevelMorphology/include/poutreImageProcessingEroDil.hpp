@@ -24,10 +24,6 @@
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
 #endif
 
-#ifndef POUTRE_TRACE__HPP__
-#include <poutreBase/poutreTrace.hpp>
-#endif
-
 #ifndef POUTRE_CONTAINER_VIEW_HPP__
 #include <poutreBase/poutreContainerView.hpp>
 #endif
@@ -270,7 +266,7 @@ namespace poutre
             lineout[i] = paddValue;
         }
         //shift to right
-        memcpy(lineout + nbshift, linein, (lenghtline - nbshift) * sizeof(T));//<---faster
+        std::memcpy(lineout + nbshift, linein, (lenghtline - nbshift) * sizeof(T));//<---faster
         //boost::simd::copy_n(linein, (lenghtline - nbshift), lineout + nbshift);
     }
 
@@ -300,7 +296,7 @@ namespace poutre
         }
 
         //shift to left
-        memcpy(lineout, linein + nbshift, (lenghtline - nbshift) * sizeof(T));
+        std::memcpy(lineout, linein + nbshift, (lenghtline - nbshift) * sizeof(T));
 
         //then padd right border
         for (i = lenghtline - nbshift; i < lenghtline; i++)
@@ -401,7 +397,7 @@ namespace poutre
             scoord xsize = ibd[1];
             POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
             POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
-            using tmpBuffer=std::vector<TIn, boost::simd::allocator<TIn>>;
+            using tmpBuffer=std::vector<TIn, nsimd::allocator<TIn>>;
             using lineView =array_view<TIn, 1>;
 
             tmpBuffer tempLine(xsize), tempLine1(xsize), tempLine2(xsize), tempLine3(xsize);
@@ -492,7 +488,7 @@ namespace poutre
             scoord xsize = ibd[1];
             POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
             POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
-            using tmpBuffer=std::vector<TIn, boost::simd::allocator<TIn>>;
+            using tmpBuffer=std::vector<TIn, nsimd::allocator<TIn>>;
             using lineView =array_view<TIn, 1>;
 
             tmpBuffer tempLine(xsize), tempLine1(xsize), tempLine2(xsize), tempLine3(xsize);
@@ -576,7 +572,7 @@ namespace poutre
             scoord xsize = ibd[1];
             POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
             POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
-            using tmpBuffer=std::vector<TIn, boost::simd::allocator<TIn>>;
+            using tmpBuffer=std::vector<TIn, nsimd::allocator<TIn>>;
             using lineView =array_view<TIn, 1>;
 
             tmpBuffer tempLine(xsize);
@@ -617,7 +613,7 @@ namespace poutre
             scoord xsize = ibd[1];
             POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
             POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
-            using tmpBuffer=std::vector<TIn, boost::simd::allocator<TIn>>;
+            using tmpBuffer=std::vector<TIn, nsimd::allocator<TIn>>;
             using lineView =array_view<TIn, 1>;
 
             tmpBuffer tempLine(xsize);
@@ -688,7 +684,7 @@ namespace poutre
             scoord xsize = ibd[1];
             POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
             POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
-            using tmpBuffer=std::vector<TIn, boost::simd::allocator<TIn>>;
+            using tmpBuffer=std::vector<TIn, nsimd::allocator<TIn>>;
             using lineView =array_view<TIn, 1>;
 
             tmpBuffer tempLine(xsize), tempLine2(xsize), tempLine3(xsize);
@@ -756,7 +752,7 @@ namespace poutre
     /////Seg135
     //FIXME check TIn, Tout equals cv
     template<typename TIn, typename TOut, class HelperOp>
-    struct t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg135, TIn, TOut, 2, array_view, array_view, HelperOp>
+        struct t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg135, TIn, TOut, 2, array_view, array_view, HelperOp>
     {
         void operator()(const array_view<TIn, 2> & i_vin, array_view<TOut, 2> & o_vout)
         {
@@ -769,7 +765,7 @@ namespace poutre
             scoord xsize = ibd[1];
             POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
             POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
-            using tmpBuffer=std::vector<TIn, boost::simd::allocator<TIn>>;
+            using tmpBuffer=std::vector<TIn, nsimd::allocator<TIn>>;
             using lineView =array_view<TIn, 1>;
 
             tmpBuffer tempLine(xsize), tempLine2(xsize), tempLine3(xsize);
@@ -833,6 +829,7 @@ namespace poutre
             HelperOp::ApplyArith(bufInputNextLine, bufTempLine, bufOuputCurrentLine);
         }
     };
+ 
     template<typename TIn,typename TOut, ptrdiff_t Rank, template <typename, ptrdiff_t> class ViewIn, template <typename, ptrdiff_t> class ViewOut>
     void t_Dilate(const ViewIn<TIn, Rank>& i_vin, se::NeighborListStaticSE nl, ViewOut<TOut, Rank>& o_vout)
     {

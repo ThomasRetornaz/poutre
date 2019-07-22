@@ -18,22 +18,15 @@
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
 #endif
 
-#ifndef POUTRE_TRACE__HPP__
-#include <poutreBase/poutreTrace.hpp>
-#endif
-
 #ifndef POUTRE_CONTAINER_VIEW_HPP__
 #include <poutreBase/poutreContainerView.hpp>
 #endif
 
 #include <algorithm>//transform
 
-#ifdef USE_BOOSTSIMD
-#include <boost/simd/algorithm.hpp>//"simd" transform
-#else
-#include <simdpp/simd.h>
+#ifndef POUTRE_SIMD_ALGORITHM_HPP__
+#include <poutreBase/include/poutreSimdAlgorithm.hpp> //simd transform
 #endif
-
 
 
 
@@ -214,11 +207,9 @@ namespace poutre
             auto i_vinbeg = i_vin.data();
             auto i_vinend = i_vin.data() + i_vin.size();
             auto i_voutbeg = o_vout.data();
-#ifdef  USE_BOOSTSIMD
-            boost::simd::transform(i_vinbeg, i_vinend, i_voutbeg, op);
-#else
-            simdpp::transform(i_vinbeg, i_vinend, i_voutbeg, op);
-#endif
+
+            simd::transform(i_vinbeg, i_vinend, i_voutbeg, op);
+
         }
 
     };
@@ -335,11 +326,7 @@ namespace poutre
             auto i_vinbeg = i_vin.data();
             auto i_vinend = i_vin.data() + i_vin.size();
             auto i_voutbeg = o_vout.data();
-#ifdef  USE_BOOSTSIMD
-            boost::simd::transform(i_vinbeg, i_vinend, i_voutbeg, op);
-#else
             simd::transform(i_vinbeg, i_vinend, i_voutbeg, op);
-#endif
         }
 
     };

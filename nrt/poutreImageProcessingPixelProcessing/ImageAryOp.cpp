@@ -689,8 +689,7 @@ namespace
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		std::uniform_int_distribution<> dis(0, 255);
-
-		std::vector<poutre::pUINT8, poutre::aligned_allocator<poutre::pUINT8>> m_vect;
+		std::vector<poutre::pUINT8, nsimd::allocator<typename poutre::pUINT8>> m_vect;
 		m_vect.reserve(size);
 		for (size_t i = 0u; i < size; ++i) {
 			m_vect.push_back(dis(gen));

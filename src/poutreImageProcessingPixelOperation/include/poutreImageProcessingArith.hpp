@@ -18,10 +18,6 @@
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
 #endif
 
-#ifndef POUTRE_TRACE__HPP__
-#include <poutreBase/poutreTrace.hpp>
-#endif
-
 #ifndef POUTRE_CONTAINER_VIEW_HPP__
 #include <poutreBase/poutreContainerView.hpp>
 #endif
@@ -33,17 +29,8 @@
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingBinaryOp.hpp>
 #endif
 
-#ifdef USE_BOOSTSIMD
- //https://developer.numscale.com/boost.simd/documentation/develop/group__group-arithmetic.html
- #include <boost/simd/function/saturated.hpp>
- #include <boost/simd/function/plus.hpp> //add
- #include <boost/simd/function/minus.hpp> //sub
- #include <boost/simd/function/negate.hpp> //invert
- #include <boost/simd/function/max.hpp> //sup
- #include <boost/simd/function/min.hpp> //inf
-#else
-#include <simdpp/simd.h>
-#endif
+
+
 
 namespace poutre
 {
@@ -78,11 +65,8 @@ namespace poutre
         template< typename U>
         POUTRE_ALWAYS_INLINE U operator()(U const &a0) const POUTRE_NOEXCEPT
         {
-#ifdef USE_BOOSTSIMD
-           return -a0;
-#else
-           return simd::neg(a0);
-#endif
+
+           return nsimd::neg(a0);
         }
     };
 
@@ -133,11 +117,7 @@ namespace poutre
         template< typename U>
         POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) const POUTRE_NOEXCEPT
         {
-#ifdef USE_BOOSTSIMD
-            return boost::simd::saturated_(boost::simd::minus)(a0, a1);
-#else
-            return simd::sub_sat(a0, a1);
-#endif
+            return nsimd::sub(a0, a1); //FIXME//boost::simd::saturated_(boost::simd::minus)(a0, a1);
         }
     };
 
@@ -186,11 +166,7 @@ namespace poutre
         template< typename U>
         POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) const POUTRE_NOEXCEPT
         {
-#ifdef USE_BOOSTSIMD
-           return boost::simd::saturated_(boost::simd::plus)(a0, a1);
-#else
-            return simd::add_sat(a0, a1);
-#endif
+           return nsimd::add(a0, a1); //FIXME//boost::simd::saturated_(boost::simd::plus)(a0, a1);
         }
     };
 
@@ -232,11 +208,7 @@ namespace poutre
         const typename TypeTraits<T>::simd_type m_simd_val;
         using accutype = typename TypeTraits<T>::accu_type;
     public:
-#ifdef USE_BOOSTSIMD
         op_Saturated_Add_Constant(T val) :m_val(val), m_maxval(TypeTraits<T>::max()), m_simd_val(val){}
-#else
-       op_Saturated_Add_Constant(T val) : m_val(val), m_maxval(TypeTraits<T>::max()), m_simd_val(simd::splat(val)) {}
-#endif
         POUTRE_ALWAYS_INLINE T operator()(T const &a0) const  POUTRE_NOEXCEPT
         {
             accutype res = static_cast<accutype>(m_val) + static_cast<accutype>(a0);
@@ -246,11 +218,7 @@ namespace poutre
         template< typename U>
         POUTRE_ALWAYS_INLINE U operator()(U const &a0) const POUTRE_NOEXCEPT
         {
-#ifdef USE_BOOSTSIMD
-           return boost::simd::saturated_(boost::simd::plus)(a0, m_val);
-#else
-            return simd::add_sat(a0, m_simd_val);
-#endif
+           return nsimd::add(a0, m_simd_val);//FIXME boost::simd::saturated_(boost::simd::plus)(a0, m_val);
         }
     };
 
@@ -293,11 +261,8 @@ namespace poutre
         const typename TypeTraits<T>::simd_type m_simd_val;
         using accutype = typename TypeTraits<T>::accu_type;
     public:
-#ifdef USE_BOOSTSIMD
-       op_Saturated_Sub_Constant(T val) :m_val(val), m_minval(TypeTraits<T>::min()), m_simd_val(val) {}
-#else
-        op_Saturated_Sub_Constant(T val) :m_val(val), m_minval(TypeTraits<T>::min()), m_simd_val(simd::splat(val)){}
-#endif
+        op_Saturated_Sub_Constant(T val) :m_val(val), m_minval(TypeTraits<T>::min()), m_simd_val(val) {}
+
         POUTRE_ALWAYS_INLINE T operator()(T const &a0) const POUTRE_NOEXCEPT
         {
             accutype res = static_cast<accutype>(a0) - static_cast<accutype>(m_val);
@@ -308,12 +273,7 @@ namespace poutre
         template< typename U>
         POUTRE_ALWAYS_INLINE U operator()(U const &a0) const POUTRE_NOEXCEPT
         {
-#ifdef USE_BOOSTSIMD
-           return boost::simd::saturated_(boost::simd::minus)(a0, m_val);
-#else
-           return simd::sub_sat(a0, m_simd_val);
-#endif
-      
+           return nsimd::sub(a0, m_simd_val);// FIXMEboost::simd::saturated_(boost::simd::minus)(a0, m_val);
         }
     };
 
@@ -354,12 +314,7 @@ namespace poutre
         template< typename U>
         POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) const POUTRE_NOEXCEPT
         {
-#ifdef USE_BOOSTSIMD
-           return boost::simd::max(a0, a1);
-#else
-           return simd::max(a0, a1);
-#endif
-      
+           return nsimd::max(a0, a1);
         }
     };
 
@@ -401,11 +356,7 @@ namespace poutre
         template< typename U>
         POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) const POUTRE_NOEXCEPT
         {
-#ifdef USE_BOOSTSIMD
-           return boost::simd::min(a0, a1);
-#else
-           return simd::min(a0, a1);
-#endif			
+            return nsimd::min(a0, a1);
       
         }
     };

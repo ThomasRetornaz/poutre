@@ -76,7 +76,7 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 # Compiler specific configurations
 include(cmake/CMakeCompilerSpecific.cmake)
-include(OptimizeForArchitecture)
+include(cmake/OptimizeForArchitecture.cmake)
 OptimizeForArchitecture()
 foreach(flag ${Vc_ARCHITECTURE_FLAGS})
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flag}")

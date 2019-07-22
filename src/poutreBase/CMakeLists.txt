@@ -2,7 +2,9 @@
 
 set(PoutreBaseSubdirectory ${POUTRE_SRC_DIR}/poutreBase)
 
-set(PoutreBaseSRCDETAILS
+set(PoutreBaseSRC_DETAILS
+  ${PoutreBaseSubdirectory}/include/poutreSimd.hpp	
+  ${PoutreBaseSubdirectory}/include/poutreSimdAlgorithm.hpp
   )
 
 set(PoutreBaseSRC_PUBLICHEADERS  
@@ -53,6 +55,7 @@ target_link_libraries(PoutreBase
   PUBLIC ${Boost_LOG_LIBRARY}
   PUBLIC ${Boost_LOG_SETUP_LIBRARY}
   PUBLIC jsoncpp 
+  PUBLIC nsimd
   # INTERFACE Eigen  
   # INTERFACE ${SIMD_LIB} 
   )

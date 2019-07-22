@@ -10,12 +10,6 @@
 #ifndef POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
 #define POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
 
-#ifdef USE_BOOSTSIMD
-#include <boost/simd/memory/allocator.hpp>
-#include <boost/simd/detail/is_aligned.hpp>
-#else
-#include <simdpp/simd.h>
-#endif
 
 #include <array>
 #include <memory>
@@ -23,6 +17,7 @@
 #include <vector>
 #include <sstream>
 #include <iostream>
+#include <cstring>
 
 #ifndef POUTRE_CONFIG__HPP__
 #include <poutreBase/poutreConfig.hpp>
@@ -48,17 +43,12 @@
 #include <poutreBase/poutreContainerView.hpp>
 #endif
 
+template<typename valuetype> using aligned_allocator = nsimd::allocator<typename poutre::TypeTraits<valuetype>::storage_type>;
+
 namespace poutre {
 // Maybe inherit/compose with nt2::table or blaze::DenseMatrix or
 // Eigen::Tensor would be more effective depending on algorithms
-
 //! TODO dispatch on coord and allow unset dims
-#ifdef USE_BOOSTSIMD
-   template<typename valuetype> using aligned_allocator = boost::simd::allocator<typename TypeTraits<valuetype>::storage_type>;
-#else
-   template<typename valuetype> using aligned_allocator = simdpp::aligned_allocator<typename TypeTraits<valuetype>::storage_type,simdpp::simd_traits<typename TypeTraits<valuetype>::storage_type>::alignment>;
-#endif
-
    template <class valuetype, std::ptrdiff_t NumDims = 2,
    class allocator_type_t = aligned_allocator<valuetype>>
 class DenseImage : public IInterface {
