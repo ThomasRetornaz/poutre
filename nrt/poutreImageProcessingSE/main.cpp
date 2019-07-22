@@ -14,3 +14,11 @@
 #define BOOST_TEST_MAIN
 #define BOOST_TEST_MODULE poutre se
 #include "main.hpp"
+
+BOOST_AUTO_TEST_SUITE(ras)
+
+//http://nt2.metascale.fr/doc/html/tutorials/simd_hello_world.html
+BOOST_AUTO_TEST_CASE(ras)
+  {
+  }
+BOOST_AUTO_TEST_SUITE_END()

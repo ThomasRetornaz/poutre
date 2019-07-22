@@ -13,7 +13,6 @@
 #include "main.hpp"
 
 #include <poutreIO/poutreIOString.hpp>
-#include <poutreBase/poutreTrace.hpp>
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 
 BOOST_AUTO_TEST_SUITE(iostring)

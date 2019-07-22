@@ -11,7 +11,6 @@
 //==============================================================================
 
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
-#include <poutreBase/poutreTrace.hpp>
 #include <boost/lexical_cast.hpp>
 #include <string>
 

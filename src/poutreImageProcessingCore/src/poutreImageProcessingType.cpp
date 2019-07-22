@@ -11,7 +11,6 @@
 //==============================================================================
 
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
-#include <poutreBase/poutreTrace.hpp>
 
 namespace poutre
   {

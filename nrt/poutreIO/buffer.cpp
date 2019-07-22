@@ -13,7 +13,6 @@
 #include "main.hpp"
 
 #include <poutreIO/include/poutreIOBuffer.hpp>
-#include <poutreBase/poutreTrace.hpp>
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
 
