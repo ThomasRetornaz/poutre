@@ -90,6 +90,21 @@ BENCHMARK_TEMPLATE_DEFINE_F(TransposeFixture, TransposeFixture_UINT8,poutre::pUI
 }
 BENCHMARK_REGISTER_F(TransposeFixture, TransposeFixture_UINT8)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMicrosecond); //-V112
 
+BENCHMARK_TEMPLATE_DEFINE_F(TransposeFixture, TransposeFixture_INT32,poutre::pINT32)(benchmark::State& state) {
+    const auto size = state.range(0);
+    while (state.KeepRunning()) {
+        for (auto i = 0u; i < size; ++i) {
+          std::vector<poutre::pINT32> res(m_vect.size());
+          auto sizeextent=sqrt(size);
+          auto view2din=poutre::array_view<poutre::pINT32,2>(m_vect,{int(sizeextent),int(sizeextent)});
+          auto view2dout=poutre::array_view<poutre::pINT32,2>(res,{int(sizeextent),int(sizeextent)});          
+          poutre::t_transpose2DAlongX(view2din,view2dout);
+        }
+    }
+    state.SetItemsProcessed(state.iterations() * size);
+}
+BENCHMARK_REGISTER_F(TransposeFixture, TransposeFixture_INT32)->Arg(16 * 16)->Arg(32 * 32)->Arg(64 * 64)->Arg(128 * 128)->Unit(benchmark::kMicrosecond); //-V112
+
 BENCHMARK_DEFINE_F(TransposeFixtureFloat, TransposeFixture_FLOAT)(benchmark::State& state) {
    const auto size = state.range(0);
    while (state.KeepRunning()) {
