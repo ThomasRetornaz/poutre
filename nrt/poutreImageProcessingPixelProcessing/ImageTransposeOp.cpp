@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_SUITE(poutreImageProcessingTransposeOp)
 
 BOOST_AUTO_TEST_CASE(arrayview)
 {
-   using ImageType = const poutre::DenseImage < poutre::pINT32>;
+   using ImageType = const poutre::Image2D < poutre::pINT32>;
    const auto imgIn = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
  1 2 3 4 5 6\
  7 8 9 10 11 12\
@@ -37,10 +37,10 @@ BOOST_AUTO_TEST_CASE(arrayview)
    ImageType* img = dynamic_cast<ImageType*> (imgIn.get());
    BOOST_REQUIRE(img);
 
-    poutre::DenseImage<poutre::pINT32> imgOut({ 6, 5 });
-    auto v_img1 = poutre::view(*img); //-V522
-    auto v_img2 = poutre::view(imgOut);
-    poutre::t_transpose2DAlongX(v_img1, v_img2);
+    poutre::Image2D<poutre::pINT32> imgOut({ 6, 5 });
+   //  auto v_img1 = poutre::view(*img); //-V522
+   //  auto v_img2 = poutre::view(imgOut);
+    poutre::t_transpose2DAlongX(*img,imgOut);
 
     std::string expected = "Dense Scalar GINT32 2 6 5 \
 1 7 13 19 25 \
@@ -97,7 +97,7 @@ BOOST_AUTO_TEST_CASE(stridedview)
 
 BOOST_AUTO_TEST_CASE(arrayviewfloat)
 {
-   using ImageType = const poutre::DenseImage < poutre::pFLOAT>;
+   using ImageType = const poutre::Image2D < poutre::pFLOAT>;
    const auto imgIn = poutre::ImageFromString("Dense Scalar F32 2 9 9 \
 1 2 3 4 5 6 7 8 9 \
 1 2 3 4 5 6 7 8 9 \
@@ -111,10 +111,11 @@ BOOST_AUTO_TEST_CASE(arrayviewfloat)
    ImageType* img = dynamic_cast<ImageType*> (imgIn.get());
    BOOST_REQUIRE(img);
 
-   poutre::DenseImage<poutre::pFLOAT> imgOut({ 9, 9 });
-   auto v_img1 = poutre::view(*img); //-V522
-   auto v_img2 = poutre::view(imgOut);
-   poutre::t_transpose2DAlongX(v_img1, v_img2);
+   poutre::Image2D<poutre::pFLOAT> imgOut({ 9, 9 });
+   // auto v_img1 = poutre::view(*img); //-V522
+   // auto v_img2 = poutre::view(imgOut);
+   // poutre::t_transpose2DAlongX(v_img1, v_img2);
+   poutre::t_transpose2DAlongX(*img,imgOut);
 
    std::string expected = "Dense Scalar F32 2 9 9 \
 1 1 1 1 1 1 1 1 1 \
@@ -132,7 +133,7 @@ BOOST_AUTO_TEST_CASE(arrayviewfloat)
 
 BOOST_AUTO_TEST_CASE(arrayviewunint8)
 {
-   using ImageType = const poutre::DenseImage < poutre::pUINT8>;
+   using ImageType = const poutre::Image2D < poutre::pUINT8>;
    const auto imgIn = poutre::ImageFromString("Dense Scalar GUINT8 2 17 17 \
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 \
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 \
@@ -154,10 +155,11 @@ BOOST_AUTO_TEST_CASE(arrayviewunint8)
    ImageType* img = dynamic_cast<ImageType*> (imgIn.get());
    BOOST_REQUIRE(img);
 
-   poutre::DenseImage<poutre::pUINT8> imgOut({ 17, 17 });
-   auto v_img1 = poutre::view(*img); //-V522
-   auto v_img2 = poutre::view(imgOut);
-   poutre::t_transpose2DAlongX(v_img1, v_img2);
+   poutre::Image2D<poutre::pUINT8> imgOut({ 17, 17 });
+   // auto v_img1 = poutre::view(*img); //-V522
+   // auto v_img2 = poutre::view(imgOut);
+   // poutre::t_transpose2DAlongX(v_img1, v_img2);
+   poutre::t_transpose2DAlongX(*img,imgOut);
 
    std::string expected = "Dense Scalar GUINT8 2 17 17 \
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 \

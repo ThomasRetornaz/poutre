@@ -32,7 +32,7 @@ namespace poutre
     template<size_t dims,typename ptype> 
         void ImageFromStringDenseScalarDispatchPTypeHelper(poutre::IInterface& img,std::istringstream& istrm) 
     {
-        using ImgType =  DenseImage<typename TypeTraits<ptype>::storage_type,dims>;
+        using ImgType =  DenseTensor<typename TypeTraits<ptype>::storage_type,dims>;
         ImgType* img_t = dynamic_cast<ImgType*>(&img);
         typename TypeTraits<ptype>::str_type tmp;
         if(!img_t) POUTRE_RUNTIME_ERROR("ImageFromStringDenseScalarDispatchPType:Dynamic cast failure");
@@ -52,7 +52,7 @@ namespace poutre
     template<size_t dims,typename ptype> 
         void ImageFromStringDense3PlanesDispatchPTypeHelper(poutre::IInterface& img,std::istringstream& istrm) 
     {
-        using ImgType =  DenseImage<typename TypeTraits<compound_pixel<ptype,3>>::storage_type,dims>;
+        using ImgType =  DenseTensor<typename TypeTraits<compound_pixel<ptype,3>>::storage_type,dims>;
         ImgType* img_t = dynamic_cast<ImgType*>(&img);
         typename TypeTraits<ptype>::str_type tmp;
         if(!img_t) POUTRE_RUNTIME_ERROR("ImageFromStringDenseScalarDispatchPType:Dynamic cast failure");
@@ -77,7 +77,7 @@ namespace poutre
     template<size_t dims,typename ptype> 
         void ImageFromStringDense4PlanesDispatchPTypeHelper(poutre::IInterface& img,std::istringstream& istrm) 
     {
-        using ImgType =  DenseImage<typename TypeTraits<compound_pixel<ptype,4>>::storage_type,dims>;
+        using ImgType =  DenseTensor<typename TypeTraits<compound_pixel<ptype,4>>::storage_type,dims>;
         ImgType* img_t = dynamic_cast<ImgType*>(&img);
         typename TypeTraits<ptype>::str_type tmp;
         if(!img_t) POUTRE_RUNTIME_ERROR("ImageFromStringDenseScalarDispatchPType:Dynamic cast failure");
@@ -345,7 +345,7 @@ namespace poutre
     template<size_t dims,typename ptype> 
     void ImageToStringDenseCompoundType_4PlanesDispatchPTypeHelper(const poutre::IInterface& img,std::ostringstream& ostrm) 
     {
-        using ImgType =  DenseImage<typename TypeTraits<compound_pixel<ptype,4>>::storage_type,dims>;
+        using ImgType =  DenseTensor<typename TypeTraits<compound_pixel<ptype,4>>::storage_type,dims>;
         const ImgType* img_t = dynamic_cast<const ImgType*>(&img);
         if(!img_t) POUTRE_RUNTIME_ERROR("ImageFromStringDenseCompoundType_4PlanesDispatchPType:Dynamic cast failure");
         const ptrdiff_t len=img_t->size();
@@ -368,7 +368,7 @@ namespace poutre
     template<size_t dims,typename ptype> 
     void ImageToStringDenseCompoundType_3PlanesDispatchPTypeHelper(const poutre::IInterface& img,std::ostringstream& ostrm) 
     {
-        using ImgType =  DenseImage<typename TypeTraits<compound_pixel<ptype,3>>::storage_type,dims>;
+        using ImgType =  DenseTensor<typename TypeTraits<compound_pixel<ptype,3>>::storage_type,dims>;
         const ImgType* img_t = dynamic_cast<const ImgType*>(&img);
         if(!img_t) POUTRE_RUNTIME_ERROR("ImageFromStringDenseCompoundType_3PlanesDispatchPType:Dynamic cast failure");
         const ptrdiff_t len=img_t->size();
@@ -390,7 +390,7 @@ namespace poutre
     template<size_t dims,typename ptype> 
         void ImageToStringDenseScalarDispatchPTypeHelper(const poutre::IInterface& img,std::ostringstream& ostrm) 
     {
-        using ImgType =  DenseImage<typename TypeTraits<ptype>::storage_type,dims>;
+        using ImgType =  DenseTensor<typename TypeTraits<ptype>::storage_type,dims>;
         const ImgType* img_t = dynamic_cast<const ImgType*>(&img);
         if(!img_t) POUTRE_RUNTIME_ERROR("ImageToStringDenseScalarDispatchPTypeHelper:Dynamic cast failure");
         const ptrdiff_t len=img_t->size();

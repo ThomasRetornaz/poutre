@@ -36,7 +36,7 @@ namespace poutre
 	{
 		//Scalar
 		template<typename valuetype, std::ptrdiff_t NumDims = 2> //default dim == 2
-		void t_ImageToTypedBufferScalar(const DenseImage<valuetype, NumDims>& im, 
+		void t_ImageToTypedBufferScalar(const DenseTensor<valuetype, NumDims>& im, 
 			const size_t size_buffer, //Size in bytes!!!
 			valuetype* buffer)
 		{
@@ -54,7 +54,7 @@ namespace poutre
 
 		//compound 3 Interleaved or planes by planes ?
 		template<typename valuetype, std::ptrdiff_t NumDims = 2> //default dim == 2
-		void t_ImageToBufferCompound3(const DenseImage<compound_pixel<valuetype,3>, NumDims>& im,
+		void t_ImageToBufferCompound3(const DenseTensor<compound_pixel<valuetype,3>, NumDims>& im,
 			const size_t size_buffer, //Size in bytes!!!
 			valuetype* buffer)
 		{
@@ -69,7 +69,7 @@ namespace poutre
 
 		//compound 4
 		template<typename valuetype, std::ptrdiff_t NumDims = 2> //default dim == 2
-		void t_ImageToBufferCompound4(const DenseImage<compound_pixel<valuetype, 4>, NumDims>& im,
+		void t_ImageToBufferCompound4(const DenseTensor<compound_pixel<valuetype, 4>, NumDims>& im,
 			const size_t size_buffer, //Size in bytes!!!
 			valuetype* buffer)
 		{
@@ -112,7 +112,7 @@ namespace poutre
 				}break;
 				case 1:
 				{
-					using ImageType = poutre::DenseImage < valuetype,1>;
+					using ImageType = poutre::Signal< valuetype>;
 					const ImageType* tmp = dynamic_cast<const ImageType*>(&i_im);
 					if (!tmp)
 					{
@@ -122,7 +122,7 @@ namespace poutre
 				}break;
 				case 2:
 				{
-					using ImageType = poutre::DenseImage < valuetype, 2>;
+					using ImageType = poutre::Image2D<valuetype>;
 					const ImageType* tmp = dynamic_cast<const ImageType*>(&i_im);
 					if (!tmp)
 					{
@@ -132,7 +132,7 @@ namespace poutre
 				}break;
 				case 3:
 				{
-					using ImageType = poutre::DenseImage < valuetype, 3>;
+					using ImageType = poutre::Image3D<valuetype>;
 					const ImageType* tmp = dynamic_cast<const ImageType*>(&i_im);
 					if (!tmp)
 					{
@@ -143,7 +143,7 @@ namespace poutre
 				}break;
 				case 4:
 				{
-					using ImageType = poutre::DenseImage < valuetype, 4>;
+					using ImageType = poutre::DenseImage< valuetype, 4>;
 					const ImageType* tmp = dynamic_cast<const ImageType*>(&i_im);
 					if (!tmp)
 					{
@@ -159,7 +159,7 @@ namespace poutre
 		}
 
 		template<typename valuetype, std::ptrdiff_t NumDims = 2> //default dim == 2
-		void t_ImageFromBufferWithType(DenseImage<valuetype, NumDims>& im,
+		void t_ImageFromBufferWithType(DenseTensor<valuetype, NumDims>& im,
 			const size_t size_buffer,
 			const valuetype* buffer)
 		{
@@ -201,7 +201,7 @@ namespace poutre
 			{
 			case 1:
 			{
-				using ImageType = poutre::DenseImage < valuetype, 1>;
+				using ImageType = poutre::Signal<valuetype>;
 				ImageType* tmp = dynamic_cast<ImageType*>(&o_im);
 				if (!tmp)
 				{
@@ -211,7 +211,7 @@ namespace poutre
 			}break;
 			case 2:
 			{
-				using ImageType = poutre::DenseImage < valuetype, 2>;
+				using ImageType = poutre::Image2D< valuetype>;
 				ImageType* tmp = dynamic_cast<ImageType*>(&o_im);
 				if (!tmp)
 				{
@@ -221,7 +221,7 @@ namespace poutre
 			}break;
 			case 3:
 			{
-				using ImageType = poutre::DenseImage < valuetype, 3>;
+				using ImageType = poutre::Image3D< valuetype>;
 				ImageType* tmp = dynamic_cast<ImageType*>(&o_im);
 				if (!tmp)
 				{
@@ -231,7 +231,7 @@ namespace poutre
 			}break;
 			case 4:
 			{
-				using ImageType = poutre::DenseImage < valuetype, 4>;
+				using ImageType = poutre::DenseImage< valuetype, 4>;
 				ImageType* tmp = dynamic_cast<ImageType*>(&o_im);
 				if (!tmp)
 				{

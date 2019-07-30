@@ -30,15 +30,42 @@
 #if defined(NSIMD_CUDA)
     // GPU code is always vectorized and requires memory alignment for
     // statically allocated buffers.
-    #define SIMD_IDEAL_MAX_ALIGN_BYTES 16
+    #error "Unknow ideal alignment for gpu architecture"
 #elif (defined(NSIMD_AVX512_SKYLAKE) || defined(NSIMD_AVX512_KNL))
   // 64 bytes 
   #define SIMD_IDEAL_MAX_ALIGN_BYTES 64
+  #define SIMD_BATCH_INT8_SIZE 64
+  #define SIMD_BATCH_INT16_SIZE 32
+  #define SIMD_BATCH_INT32_SIZE 16
+  #define SIMD_BATCH_INT64_SIZE 8
+  #define SIMD_BATCH_FLOAT_SIZE 16
+  #define SIMD_BATCH_DOUBLE_SIZE 8
 #elif (defined(NSIMD_AVX) || defined(NSIMD_AVX2)) 
   // 32 bytes 
   #define SIMD_IDEAL_MAX_ALIGN_BYTES 32
+  #define SIMD_BATCH_INT8_SIZE 32
+  #define SIMD_BATCH_INT16_SIZE 16
+  #define SIMD_BATCH_INT32_SIZE 8
+  #define SIMD_BATCH_INT64_SIZE 4
+  #define SIMD_BATCH_FLOAT_SIZE 8
+  #define SIMD_BATCH_DOUBLE_SIZE 4  
 #elif (defined(NSIMD_SSE2) || defined(NSIMD_SSE42))
+  // 16 bytes
   #define SIMD_IDEAL_MAX_ALIGN_BYTES 16
+  #define SIMD_BATCH_INT8_SIZE 16
+  #define SIMD_BATCH_INT16_SIZE 8
+  #define SIMD_BATCH_INT32_SIZE 4
+  #define SIMD_BATCH_INT64_SIZE 2
+  #define SIMD_BATCH_FLOAT_SIZE 4
+  #define SIMD_BATCH_DOUBLE_SIZE 2
+#elif (defined(NSIMD_NEON128))  
+#define SIMD_IDEAL_MAX_ALIGN_BYTES 16
+  #define SIMD_BATCH_INT8_SIZE 16
+  #define SIMD_BATCH_INT16_SIZE 8
+  #define SIMD_BATCH_INT32_SIZE 4
+  #define SIMD_BATCH_INT64_SIZE 2
+  #define SIMD_BATCH_FLOAT_SIZE 4
+  #define SIMD_BATCH_DOUBLE_SIZE 2
 #else
   #error "Unknow ideal alignment for current architecture"  
 #endif

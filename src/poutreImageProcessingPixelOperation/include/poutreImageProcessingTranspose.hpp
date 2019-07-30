@@ -18,10 +18,9 @@
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
 #endif
 
-#ifndef POUTRE_CONTAINER_VIEW_HPP__
-#include <poutreBase/poutreContainerView.hpp>
+#ifndef POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
+#include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 #endif
-
 
 namespace poutre
 {
@@ -29,9 +28,10 @@ namespace poutre
    /*                                                  2D transpose along x                                                           */
    /************************************************************ **********************************************************************/
    // primary use strided view
-   template<typename T1, typename Tout, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class ViewOut, typename = void>
+   template<typename T1, typename Tout, template <typename> class Image2DIn, template <typename> class Image2DOut, typename = void>
    struct transpose2DAlongXOp
    {
+       static_assert(false, "Not implemented for strided view");
       // static_assert((
       //    std::is_same< View1<T1, 2>, strided_array_view<T1, 2> >::value
       //    || std::is_same< View1<T1, 2>, strided_array_view<const T1, 2> >::value
@@ -46,10 +46,10 @@ namespace poutre
 
    //template specialization both array_view
    template<typename T1, typename Tout>
-   struct transpose2DAlongXOp<T1, Tout, array_view, array_view>
+   struct transpose2DAlongXOp<T1, Tout, Image2D, Image2D>
    {
 
-      void operator()(const array_view<T1, 2>& i_vin1, array_view<Tout, 2>& o_vout) const
+      void operator()(const Image2D<T1>& i_vin1, Image2D<Tout>& o_vout) const
       {
          //check bound compatibility
          auto ibd = i_vin1.bound();
@@ -228,10 +228,10 @@ and do transposition
     //https ://software.intel.com/sites/landingpage/IntrinsicsGuide/
    #include <emmintrin.h>
    template<>
-   struct transpose2DAlongXOp<pUINT8, pUINT8, array_view, array_view>
+   struct transpose2DAlongXOp<pUINT8, pUINT8, Image2D, Image2D>
    {
 
-      void operator()(const array_view<pUINT8, 2>& i_vin1, array_view<pUINT8, 2>& o_vout) const
+      void operator()(const Image2D<pUINT8>& i_vin1, Image2D<pUINT8>& o_vout) const
       {
          constexpr scoord loopStep = 16;
          auto ibd = i_vin1.bound();
@@ -333,9 +333,9 @@ and do transposition
    
 //    //see https://stackoverflow.com/questions/25622745/transpose-an-8x8-float-using-avx-avx2
 //    template<>
-//    struct transpose2DAlongXOp<pFLOAT, pFLOAT, array_view, array_view>
+//    struct transpose2DAlongXOp<pFLOAT, pFLOAT, Image2D, Image2D>
 //    {
-//       void operator()(const array_view<pFLOAT, 2>& i_vin1, array_view<pFLOAT, 2>& o_vout) const
+//       void operator()(const Image2D<pFLOAT>& i_vin1, Image2D<pFLOAT>& o_vout) const
 //       {
 //          constexpr scoord loopStep = 8;
 //          auto ibd = i_vin1.bound();
@@ -443,12 +443,14 @@ and do transposition
 //       }
 //    };
 // #endif //__AVX__   
-   template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2 >
-   void t_transpose2DAlongX(const View1<T1, Rank>& i_vin1, View2<T2, Rank>& o_vout)
+   template<typename T1, typename T2>//, template <typename> class ImageIn, template <typename> class ImageOut >
+   void t_transpose2DAlongX(const Image2D<T1>& i_vin1,Image2D<T2>& o_vout)
    {
-      auto op = transpose2DAlongXOp<T1, T2, View1, View2>();
+      auto op = transpose2DAlongXOp<T1, T2, Image2D, Image2D>();
       op(i_vin1, o_vout);
    }
+
+   
 }//namespace poutre  
 
 #endif//POUTRE_IMAGEPROCESSING_TRANSPOSE_HPP__  

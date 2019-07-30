@@ -25,6 +25,12 @@
 #ifndef POUTRE_SIMD_HPP__
 #include <poutreBase/include/poutreSimd.hpp>
 #endif
+
+#include <stdio.h>
+#include <stddef.h>
+#include <stdalign.h>
+ 
+
 namespace poutre
   {
 	namespace simd
@@ -43,7 +49,15 @@ namespace poutre
                 , "mismatch length between T and U"
                 );
 
-            const auto alignment = SIMD_IDEAL_MAX_ALIGN_BYTES;//NSIMD_MAX_ALIGNMENT;
+            static_assert (sizeof(T) >= alignof(T)  
+                , "can't generate simd code for this kind of type"
+                );
+
+            static_assert (sizeof(U) >= alignof(U)  
+                , "can't generate simd code for this kind of type"
+                );
+
+            const auto alignment = SIMD_IDEAL_MAX_ALIGN_BYTES;
 
             //Define loop counter
             const auto simd_size = nsimd::len(simd_type_T());
@@ -112,8 +126,16 @@ namespace poutre
             static_assert (nsimd::max_len_t<T2>::value == nsimd::max_len_t<U>::value
                 , "mismatch length between T2 and U"
                 );
-
-            auto alignment = SIMD_IDEAL_MAX_ALIGN_BYTES;////NSIMD_MAX_ALIGNMENT; 
+            static_assert (sizeof(T1) >= alignof(T1)  
+                , "can't generate simd code for this kind of type"
+                );
+            static_assert (sizeof(T2) >= alignof(T2)  
+                , "can't generate simd code for this kind of type"
+                );
+            static_assert (sizeof(U) >= alignof(U)  
+                , "can't generate simd code for this kind of type"
+                );
+            auto alignment = SIMD_IDEAL_MAX_ALIGN_BYTES;
 
             //Define loop counter
             const auto simd_size = nsimd::len(simd_type_T1());

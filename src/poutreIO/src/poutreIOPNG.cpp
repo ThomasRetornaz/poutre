@@ -193,7 +193,7 @@ namespace {
             // dispatch
             switch (cptype) {
             case CompoundType::CompoundType_Scalar: {
-                auto img_t = dynamic_cast<DenseImage<pUINT8> *>(&(*imgout));
+                auto img_t = dynamic_cast<DenseTensor<pUINT8> *>(&(*imgout));
                 if (!img_t) {
                     POUTRE_RUNTIME_ERROR("helper_fill_image: downcast fail");
                 }
@@ -212,7 +212,7 @@ namespace {
             } break;
             case CompoundType::CompoundType_3Planes: {
                 auto img_t =
-                    dynamic_cast<DenseImage<compound_pixel<pUINT8, 3>> *>(&(*imgout));
+                    dynamic_cast<DenseTensor<compound_pixel<pUINT8, 3>> *>(&(*imgout));
                 if (!img_t) {
                     POUTRE_RUNTIME_ERROR("helper_fill_image: downcast fail");
                 }
@@ -235,7 +235,7 @@ namespace {
             } break;
             case CompoundType::CompoundType_4Planes: {
                 auto img_t =
-                    dynamic_cast<DenseImage<compound_pixel<pUINT8, 4>> *>(&(*imgout));
+                    dynamic_cast<DenseTensor<compound_pixel<pUINT8, 4>> *>(&(*imgout));
                 if (!img_t) {
                     POUTRE_RUNTIME_ERROR("helper_fill_image: downcast fail");
                 }
@@ -397,21 +397,21 @@ namespace {
         // dispatch
         switch (i_img.GetCType()) {
         case CompoundType::CompoundType_Scalar: {
-            auto img_t = dynamic_cast<const DenseImage<pUINT8> *>(&(i_img));
+            auto img_t = dynamic_cast<const DenseTensor<pUINT8> *>(&(i_img));
             if (!img_t) {
                 POUTRE_RUNTIME_ERROR("helper_fill_image: downcast fail");
             }
         } break;
         case CompoundType::CompoundType_3Planes: {
             auto img_t =
-                dynamic_cast<const DenseImage<compound_pixel<pUINT8, 3>> *>(&(i_img));
+                dynamic_cast<const DenseTensor<compound_pixel<pUINT8, 3>> *>(&(i_img));
             if (!img_t) {
                 POUTRE_RUNTIME_ERROR("helper_fill_image: downcast fail");
             }
         } break;
         case CompoundType::CompoundType_4Planes: {
             auto img_t =
-                dynamic_cast<const DenseImage<compound_pixel<pUINT8, 4>> *>(&(i_img));
+                dynamic_cast<const DenseTensor<compound_pixel<pUINT8, 4>> *>(&(i_img));
             if (!img_t) {
                 POUTRE_RUNTIME_ERROR("helper_fill_image: downcast fail");
             }

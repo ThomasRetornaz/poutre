@@ -147,7 +147,8 @@ namespace poutre
         //POUTRE_STATIC_CONSTEXPR size_t default_padding_size = (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
 
         typedef typename nsimd::simd_traits<storage_type, nsimd::NSIMD_SIMD>::simd_vector simd_vector;
-        POUTRE_STATIC_CONSTEXPR size_t alignment = NSIMD_MAX_ALIGNMENT;
+        POUTRE_STATIC_CONSTEXPR size_t alignment = SIMD_IDEAL_MAX_ALIGN_BYTES;
+        POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = SIMD_BATCH_INT8_SIZE;
         using simd_type = typename nsimd::pack<storage_type>;
         using simd_mask_type = typename  nsimd::packl<storage_type>;
         POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(storage_type) * 8;
@@ -176,7 +177,8 @@ namespace poutre
         static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
         typedef typename nsimd::simd_traits<storage_type, nsimd::NSIMD_SIMD>::simd_vector simd_vector;
-        POUTRE_STATIC_CONSTEXPR size_t alignment = NSIMD_MAX_ALIGNMENT;
+        POUTRE_STATIC_CONSTEXPR size_t alignment = SIMD_IDEAL_MAX_ALIGN_BYTES;
+        POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = SIMD_BATCH_INT32_SIZE;
         using simd_type = typename nsimd::pack<storage_type>;
         using simd_mask_type = typename  nsimd::packl<storage_type>;
         POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(storage_type) * 8;
@@ -205,7 +207,8 @@ namespace poutre
         static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
         typedef typename nsimd::simd_traits<storage_type, nsimd::NSIMD_SIMD>::simd_vector simd_vector;
-        POUTRE_STATIC_CONSTEXPR size_t alignment = NSIMD_MAX_ALIGNMENT;
+        POUTRE_STATIC_CONSTEXPR size_t alignment = SIMD_IDEAL_MAX_ALIGN_BYTES;
+        POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = SIMD_BATCH_FLOAT_SIZE;
         using simd_type = typename nsimd::pack<storage_type>;
         using simd_mask_type = typename  nsimd::packl<storage_type>;
 
@@ -235,7 +238,8 @@ namespace poutre
         static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
         typedef typename nsimd::simd_traits<storage_type, nsimd::NSIMD_SIMD>::simd_vector simd_vector;
-        POUTRE_STATIC_CONSTEXPR size_t alignment = NSIMD_MAX_ALIGNMENT;
+        POUTRE_STATIC_CONSTEXPR size_t alignment = SIMD_IDEAL_MAX_ALIGN_BYTES;
+        POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = SIMD_BATCH_DOUBLE_SIZE;
         using simd_type = typename nsimd::pack<storage_type>;
         using simd_mask_type = typename  nsimd::packl<storage_type>;
 
@@ -264,7 +268,8 @@ namespace poutre
         static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
         typedef typename nsimd::simd_traits<storage_type, nsimd::NSIMD_SIMD>::simd_vector simd_vector;
-        POUTRE_STATIC_CONSTEXPR size_t alignment = NSIMD_MAX_ALIGNMENT;
+        POUTRE_STATIC_CONSTEXPR size_t alignment = SIMD_IDEAL_MAX_ALIGN_BYTES;
+        POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = SIMD_BATCH_INT64_SIZE;
         using simd_type = typename nsimd::pack<storage_type>;
         using simd_mask_type = typename  nsimd::packl<storage_type>;
 
@@ -298,8 +303,9 @@ namespace poutre
 
         static const PType pixel_type = TypeTraits<valuetype>::pixel_type;
         static const CompoundType compound_type = CompoundType::CompoundType_3Planes;
-        /* POUTRE_STATIC_CONSTEXPR size_t default_padding_size = 1;
-         POUTRE_STATIC_CONSTEXPR size_t alignement = 1;*/
+
+        POUTRE_STATIC_CONSTEXPR size_t alignment = 1;
+        POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = 1;
 
          //todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
@@ -333,10 +339,8 @@ namespace poutre
         static const PType pixel_type = TypeTraits<valuetype>::pixel_type;
         static const CompoundType compound_type = CompoundType::CompoundType_4Planes;
 
-        /* POUTRE_STATIC_CONSTEXPR size_t default_padding_size = 1;
-         POUTRE_STATIC_CONSTEXPR size_t alignement = 1;
-     */
-
+        POUTRE_STATIC_CONSTEXPR size_t alignment = 1;
+        POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = 1;
      //todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
         {
