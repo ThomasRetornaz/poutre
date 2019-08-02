@@ -28,10 +28,10 @@ namespace poutre
    /*                                                  2D transpose along x                                                           */
    /************************************************************ **********************************************************************/
    // primary use strided view
-   template<typename T1, typename Tout, template <typename> class Image2DIn, template <typename> class Image2DOut, typename = void>
-   struct transpose2DAlongXOp
+   template<typename T1, typename Tout, typename = void>
+   struct t_transposeOp
    {
-       static_assert(false, "Not implemented for strided view");
+      // static_assert(false, "Not implemented for strided view");
       // static_assert((
       //    std::is_same< View1<T1, 2>, strided_array_view<T1, 2> >::value
       //    || std::is_same< View1<T1, 2>, strided_array_view<const T1, 2> >::value
@@ -46,7 +46,7 @@ namespace poutre
 
    //template specialization both array_view
    template<typename T1, typename Tout>
-   struct transpose2DAlongXOp<T1, Tout, Image2D, Image2D>
+   struct t_transposeOp<T1, Tout>
    {
 
       void operator()(const Image2D<T1>& i_vin1, Image2D<Tout>& o_vout) const
@@ -228,7 +228,7 @@ and do transposition
     //https ://software.intel.com/sites/landingpage/IntrinsicsGuide/
    #include <emmintrin.h>
    template<>
-   struct transpose2DAlongXOp<pUINT8, pUINT8, Image2D, Image2D>
+   struct t_transposeOp<pUINT8, pUINT8>
    {
 
       void operator()(const Image2D<pUINT8>& i_vin1, Image2D<pUINT8>& o_vout) const
@@ -333,7 +333,7 @@ and do transposition
    
 //    //see https://stackoverflow.com/questions/25622745/transpose-an-8x8-float-using-avx-avx2
 //    template<>
-//    struct transpose2DAlongXOp<pFLOAT, pFLOAT, Image2D, Image2D>
+//    struct t_transposeOp<pFLOAT, pFLOAT>
 //    {
 //       void operator()(const Image2D<pFLOAT>& i_vin1, Image2D<pFLOAT>& o_vout) const
 //       {
@@ -444,9 +444,9 @@ and do transposition
 //    };
 // #endif //__AVX__   
    template<typename T1, typename T2>//, template <typename> class ImageIn, template <typename> class ImageOut >
-   void t_transpose2DAlongX(const Image2D<T1>& i_vin1,Image2D<T2>& o_vout)
+   void t_transpose(const Image2D<T1>& i_vin1,Image2D<T2>& o_vout)
    {
-      auto op = transpose2DAlongXOp<T1, T2, Image2D, Image2D>();
+      auto op = t_transposeOp<T1, T2>();
       op(i_vin1, o_vout);
    }
 

@@ -25,12 +25,14 @@
 #ifndef POUTRE_IMAGEPROCESSING_UNARYOP_HPP__
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingUnaryOp.hpp>
 #endif
+
 #ifndef POUTRE_IMAGEPROCESSING_BINARYOP_HPP__
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingBinaryOp.hpp>
 #endif
 
-
-
+#ifndef POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
+#include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
+#endif
 
 namespace poutre
 {
@@ -74,6 +76,38 @@ namespace poutre
     void t_ArithNegate(const View1<T1, Rank>& i_vin, View2<T2, Rank>& o_vout)
     {
         PixelWiseUnaryOp<T1, T2, Rank, View1, View2, op_Invert>(i_vin, o_vout);
+    }
+
+    template<typename T1, typename T2>
+    void t_ArithNegate(const Image2D<T1>& i_vin, Image2D<T2>& o_vout)
+    {
+        auto viewIn=lview(const_cast<Image2D<T1>&>(i_vin));
+        auto viewOut=lview(o_vout);
+        return t_ArithNegate(viewIn,viewOut);
+    }
+
+    template<typename T1, typename T2>
+    void t_ArithNegate(const Signal<T1>& i_vin, Signal<T2>& o_vout)
+    {
+        auto viewIn=lview(const_cast<Signal<T1>&>(i_vin));
+        auto viewOut=lview(o_vout);
+        return t_ArithNegate(viewIn,viewOut);
+    }
+
+    template<typename T1, typename T2>
+    void t_ArithNegate(const Image3D<T1>& i_vin, Image3D<T2>& o_vout)
+    {
+        auto viewIn=lview(const_cast<Image3D<T1>&>(i_vin));
+        auto viewOut=lview(o_vout);
+        return t_ArithNegate(viewIn,viewOut);
+    }
+
+    template<typename T1, typename T2, ptrdiff_t Rank>
+    void t_ArithNegate(const DenseImage<T1,Rank>& i_vin, DenseImage<T2,Rank>& o_vout)
+    {
+        auto viewIn=lview(const_cast<DenseImage<T1,Rank>&>(i_vin));
+        auto viewOut=lview(o_vout);
+        return t_ArithNegate(viewIn,viewOut);
     }
 
     /***********************************************************************************************************************************/
@@ -127,6 +161,40 @@ namespace poutre
         PixelWiseBinaryOp<T1, T2, T3, Rank, View1, View2, View3, op_Saturated_Sub>(i_vin1, i_vin2, o_vout);
     }
 
+    template<typename T1, typename T2, typename T3>
+    void t_ArithSaturatedSub(const Signal<T1>& i_vin1, const Signal<T2>& i_vin2, Signal<T3>& o_vout)
+    {
+        auto viewIn1=lview(const_cast<Signal<T1>&>(i_vin1));
+        auto viewIn2=lview(const_cast<Signal<T1>&>(i_vin2));
+        auto viewOut=lview(o_vout);
+        return t_ArithSaturatedSub(viewIn1,viewIn2,viewOut);
+    }
+
+    template<typename T1, typename T2, typename T3>
+    void t_ArithSaturatedSub(const Image2D<T1>& i_vin1, const Image2D<T2>& i_vin2, Image2D<T3>& o_vout)
+    {
+        auto viewIn1=lview(const_cast<Image2D<T1>&>(i_vin1));
+        auto viewIn2=lview(const_cast<Image2D<T1>&>(i_vin2));
+        auto viewOut=lview(o_vout);
+        return t_ArithSaturatedSub(viewIn1,viewIn2,viewOut);
+    }
+
+    template<typename T1, typename T2, typename T3>
+    void t_ArithSaturatedSub(const Image3D<T1>& i_vin1, const Image3D<T2>& i_vin2, Image3D<T3>& o_vout)
+    {
+        auto viewIn1=lview(const_cast<Image3D<T1>&>(i_vin1));
+        auto viewIn2=lview(const_cast<Image3D<T1>&>(i_vin2));
+        auto viewOut=lview(o_vout);
+        return t_ArithSaturatedSub(viewIn1,viewIn2,viewOut);
+    }
+    template<typename T1, typename T2,typename T3,ptrdiff_t Rank>
+    void t_ArithSaturatedSub(const DenseImage<T1,Rank>& i_vin1,const DenseImage<T2,Rank>& i_vin2, DenseImage<T3,Rank>& o_vout)
+    {
+        auto viewIn1=lview(const_cast<DenseImage<T1,Rank>&>(i_vin1));
+        auto viewIn2=lview(const_cast<DenseImage<T1,Rank>&>(i_vin2));
+        auto viewOut=lview(o_vout);
+        return t_ArithSaturatedSub(viewIn1,viewIn2,viewOut);
+    }
     /***********************************************************************************************************************************/
     /*                                                  SATURATED ADD                                                                  */
     /**********************************************************************************************************************************/
@@ -174,6 +242,41 @@ namespace poutre
     void t_ArithSaturatedAdd(const View1<T1, Rank>& i_vin1, const View2<T2, Rank>& i_vin2, View3<T3, Rank>& o_vout)
     {
         PixelWiseBinaryOp<T1, T2, T3, Rank, View1, View2, View3, op_Saturated_Add>(i_vin1, i_vin2, o_vout);
+    }
+
+    template<typename T1, typename T2, typename T3>
+    void t_ArithSaturatedAdd(const Signal<T1>& i_vin1, const Signal<T2>& i_vin2, Signal<T3>& o_vout)
+    {
+        auto viewIn1=lview(const_cast<Signal<T1>&>(i_vin1));
+        auto viewIn2=lview(const_cast<Signal<T1>&>(i_vin2));
+        auto viewOut=lview(o_vout);
+        return t_ArithSaturatedAdd(viewIn1,viewIn2,viewOut);
+    }
+
+    template<typename T1, typename T2, typename T3>
+    void t_ArithSaturatedAdd(const Image2D<T1>& i_vin1, const Image2D<T2>& i_vin2, Image2D<T3>& o_vout)
+    {
+        auto viewIn1=lview(const_cast<Image2D<T1>&>(i_vin1));
+        auto viewIn2=lview(const_cast<Image2D<T1>&>(i_vin2));
+        auto viewOut=lview(o_vout);
+        return t_ArithSaturatedAdd(viewIn1,viewIn2,viewOut);
+    }
+
+    template<typename T1, typename T2, typename T3>
+    void t_ArithSaturatedAdd(const Image3D<T1>& i_vin1, const Image3D<T2>& i_vin2, Image3D<T3>& o_vout)
+    {
+        auto viewIn1=lview(const_cast<Image3D<T1>&>(i_vin1));
+        auto viewIn2=lview(const_cast<Image3D<T1>&>(i_vin2));
+        auto viewOut=lview(o_vout);
+        return t_ArithSaturatedAdd(viewIn1,viewIn2,viewOut);
+    }
+    template<typename T1, typename T2,typename T3,ptrdiff_t Rank>
+    void t_ArithSaturatedAdd(const DenseImage<T1,Rank>& i_vin1,const DenseImage<T2,Rank>& i_vin2, DenseImage<T3,Rank>& o_vout)
+    {
+        auto viewIn1=lview(const_cast<DenseImage<T1,Rank>&>(i_vin1));
+        auto viewIn2=lview(const_cast<DenseImage<T1,Rank>&>(i_vin2));
+        auto viewOut=lview(o_vout);
+        return t_ArithSaturatedAdd(viewIn1,viewIn2,viewOut);
     }
 
     /***********************************************************************************************************************************/
@@ -227,6 +330,37 @@ namespace poutre
     void t_ArithSaturatedAddConstant(const View1<T1, Rank>& i_vin, T2 val, View2<T2, Rank>& o_vout)
     {
         PixelWiseUnaryOpWithValue<T1, T2, Rank, View1, View2, op_Saturated_Add_Constant>(i_vin, val, o_vout);
+    }
+
+    template<typename T1, typename T2>
+    void t_ArithSaturatedAddConstant(const Signal<T1>& i_vin,T2 val, Signal<T2>& o_vout)
+    {
+        auto viewIn=lview(const_cast<Signal<T1>&>(i_vin));
+        auto viewOut=lview(o_vout);
+        return t_ArithSaturatedAddConstant(viewIn,val,viewOut);
+    }
+
+    template<typename T1, typename T2>
+    void t_ArithSaturatedAddConstant(const Image2D<T1>& i_vin, T2 val, Image2D<T2>& o_vout)
+    {
+        auto viewIn=lview(const_cast<Image2D<T1>&>(i_vin));
+        auto viewOut=lview(o_vout);
+        return t_ArithSaturatedAddConstant(viewIn,val,viewOut);
+    }
+
+    template<typename T1, typename T2>
+    void t_ArithSaturatedAddConstant(const Image3D<T1>& i_vin, T2 val, Image3D<T2>& o_vout)
+    {
+        auto viewIn=lview(const_cast<Image3D<T1>&>(i_vin));
+        auto viewOut=lview(o_vout);
+        return t_ArithSaturatedAddConstant(viewIn,val,viewOut);
+    }
+    template<typename T1, typename T2,ptrdiff_t Rank>
+    void t_ArithSaturatedAddConstant(const DenseImage<T1,Rank>& i_vin,T2 val, DenseImage<T2,Rank>& o_vout)
+    {
+        auto viewIn=lview(const_cast<DenseImage<T1,Rank>&>(i_vin));
+        auto viewOut=lview(o_vout);
+        return t_ArithSaturatedAddConstant(viewIn,val,viewOut);
     }
 
     /***********************************************************************************************************************************/
@@ -284,6 +418,37 @@ namespace poutre
         PixelWiseUnaryOpWithValue<T1, T2, Rank, View1, View2, op_Saturated_Sub_Constant>(i_vin, val, o_vout);
     }
 
+    template<typename T1, typename T2>
+    void t_ArithSaturatedSubConstant(const Signal<T1>& i_vin,T2 val, Signal<T2>& o_vout)
+    {
+        auto viewIn=lview(const_cast<Signal<T1>&>(i_vin));
+        auto viewOut=lview(o_vout);
+        return t_ArithSaturatedSubConstant(viewIn,val,viewOut);
+    }
+
+    template<typename T1, typename T2>
+    void t_ArithSaturatedSubConstant(const Image2D<T1>& i_vin, T2 val, Image2D<T2>& o_vout)
+    {
+        auto viewIn=lview(const_cast<Image2D<T1>&>(i_vin));
+        auto viewOut=lview(o_vout);
+        return t_ArithSaturatedSubConstant(viewIn,val,viewOut);
+    }
+
+    template<typename T1, typename T2>
+    void t_ArithSaturatedSubConstant(const Image3D<T1>& i_vin, T2 val, Image3D<T2>& o_vout)
+    {
+        auto viewIn=lview(const_cast<Image3D<T1>&>(i_vin));
+        auto viewOut=lview(o_vout);
+        return t_ArithSaturatedSubConstant(viewIn,val,viewOut);
+    }
+    template<typename T1, typename T2,ptrdiff_t Rank>
+    void t_ArithSaturatedSubConstant(const DenseImage<T1,Rank>& i_vin,T2 val, DenseImage<T2,Rank>& o_vout)
+    {
+        auto viewIn=lview(const_cast<DenseImage<T1,Rank>&>(i_vin));
+        auto viewOut=lview(o_vout);
+        return t_ArithSaturatedSubConstant(viewIn,val,viewOut);
+    }
+
     /***********************************************************************************************************************************/
     /*                                                  SUPREMUM                                                                       */
     /**********************************************************************************************************************************/
@@ -322,6 +487,41 @@ namespace poutre
     void t_ArithSup(const View1<T1, Rank>& i_vin1, const View2<T2, Rank>& i_vin2, View3<T3, Rank>& o_vout)
     {
         PixelWiseBinaryOp<T1, T2, T3, Rank, View1, View2, View3, op_Sup>(i_vin1, i_vin2, o_vout);
+    }
+
+    template<typename T1, typename T2, typename T3>
+    void t_ArithSup(const Signal<T1>& i_vin1, const Signal<T2>& i_vin2, Signal<T3>& o_vout)
+    {
+        auto viewIn1=lview(const_cast<Signal<T1>&>(i_vin1));
+        auto viewIn2=lview(const_cast<Signal<T2>&>(i_vin2));
+        auto viewOut=lview(o_vout);
+        return t_ArithSup(viewIn1,viewIn2,viewOut);
+    }
+
+    template<typename T1, typename T2, typename T3> 
+    void t_ArithSup(const Image2D<T1>& i_vin1, const Image2D<T2>& i_vin2, Image2D<T3>& o_vout)
+    {
+        auto viewIn1=lview(const_cast<Image2D<T1>&>(i_vin1));
+        auto viewIn2=lview(const_cast<Image2D<T2>&>(i_vin2));
+        auto viewOut=lview(o_vout);
+        return t_ArithSup(viewIn1,viewIn2,viewOut);
+    }
+
+    template<typename T1, typename T2, typename T3>
+    void t_ArithSup(const Image3D<T1>& i_vin1, const Image3D<T2>& i_vin2, Image3D<T3>& o_vout)
+    {
+        auto viewIn1=lview(const_cast<Image3D<T1>&>(i_vin1));
+        auto viewIn2=lview(const_cast<Image3D<T2>&>(i_vin2));
+        auto viewOut=lview(o_vout);
+        return t_ArithSup(viewIn1,viewIn2,viewOut);
+    }
+    template<typename T1, typename T2,typename T3,ptrdiff_t Rank>
+    void t_ArithSup(const DenseImage<T1,Rank>& i_vin1,const DenseImage<T2,Rank>& i_vin2, DenseImage<T3,Rank>& o_vout)
+    {
+        auto viewIn1=lview(const_cast<DenseImage<T1,Rank>&>(i_vin1));
+        auto viewIn2=lview(const_cast<DenseImage<T2,Rank>&>(i_vin2));
+        auto viewOut=lview(o_vout);
+        return t_ArithSup(viewIn1,viewIn2,viewOut);
     }
 
     /***********************************************************************************************************************************/
@@ -365,6 +565,41 @@ namespace poutre
     void t_ArithInf(const View1<T1, Rank>& i_vin1, const View2<T2, Rank>& i_vin2, View3<T3, Rank>& o_vout)
     {
         PixelWiseBinaryOp<T1, T2, T3, Rank, View1, View2, View3, op_Inf>(i_vin1, i_vin2, o_vout);
+    }
+
+    template<typename T1, typename T2, typename T3>
+    void t_ArithInf(const Signal<T1>& i_vin1, const Signal<T2>& i_vin2, Signal<T3>& o_vout)
+    {
+        auto viewIn1=lview(const_cast<Signal<T1>&>(i_vin1));
+        auto viewIn2=lview(const_cast<Signal<T2>&>(i_vin2));
+        auto viewOut=lview(o_vout);
+        return t_ArithInf(viewIn1,viewIn2,viewOut);
+    }
+
+    template<typename T1, typename T2, typename T3> 
+    void t_ArithInf(const Image2D<T1>& i_vin1, const Image2D<T2>& i_vin2, Image2D<T3>& o_vout)
+    {
+        auto viewIn1=lview(const_cast<Image2D<T1>&>(i_vin1));
+        auto viewIn2=lview(const_cast<Image2D<T2>&>(i_vin2));
+        auto viewOut=lview(o_vout);
+        return t_ArithInf(viewIn1,viewIn2,viewOut);
+    }
+
+    template<typename T1, typename T2, typename T3>
+    void t_ArithInf(const Image3D<T1>& i_vin1, const Image3D<T2>& i_vin2, Image3D<T3>& o_vout)
+    {
+        auto viewIn1=lview(const_cast<Image3D<T1>&>(i_vin1));
+        auto viewIn2=lview(const_cast<Image3D<T2>&>(i_vin2));
+        auto viewOut=lview(o_vout);
+        return t_ArithInf(viewIn1,viewIn2,viewOut);
+    }
+    template<typename T1, typename T2,typename T3,ptrdiff_t Rank>
+    void t_ArithInf(const DenseImage<T1,Rank>& i_vin1,const DenseImage<T2,Rank>& i_vin2, DenseImage<T3,Rank>& o_vout)
+    {
+        auto viewIn1=lview(const_cast<DenseImage<T1,Rank>&>(i_vin1));
+        auto viewIn2=lview(const_cast<DenseImage<T2,Rank>&>(i_vin2));
+        auto viewOut=lview(o_vout);
+        return t_ArithInf(viewIn1,viewIn2,viewOut);
     }
 }//namespace poutre
 

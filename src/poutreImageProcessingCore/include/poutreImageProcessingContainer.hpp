@@ -105,16 +105,17 @@ public:
         m_numelemwithpaddingifany *= m_coordinnates[i];
       }
       m_data = m_allocator.allocate(m_numelemwithpaddingifany);
-    }
-    // fill stride
-    m_strides[m_numdims - 1] = 1;
-    for (ptrdiff_t dim = m_numdims - 2; dim >= 0; --dim) {
-      m_strides[dim] = m_strides[dim + 1] * bound()[dim + 1];
+
+      // fill stride
+      m_strides[m_numdims - 1] = 1;
+      for (ptrdiff_t dim = m_numdims - 2; dim >= 0; --dim) {
+        m_strides[dim] = m_strides[dim + 1] * bound()[dim + 1];
+      }
     }
   }
 
   DenseTensor(const std::initializer_list<size_t> &dims)
-      : m_data(nullptr), m_coordinnates(), m_allocator(),
+      : m_data(nullptr), m_coordinnates(),m_strides(), m_allocator(),
         m_numelemwithpaddingifany(0) {
     if (dims.size() != m_numdims)
       POUTRE_RUNTIME_ERROR("Invalid input initializer regarding NumDims of "
@@ -141,6 +142,12 @@ public:
         m_numelemwithpaddingifany *= m_coordinnates[i];
       }
       m_data = m_allocator.allocate(m_numelemwithpaddingifany);
+
+      // fill stride
+      m_strides[m_numdims - 1] = 1;
+      for (ptrdiff_t dim = m_numdims - 2; dim >= 0; --dim) {
+        m_strides[dim] = m_strides[dim + 1] * bound()[dim + 1];
+      }
     }
   }
 
@@ -510,10 +517,10 @@ public:
   Image2D(const std::vector<size_t> &dims) : parent_type(dims) {}
   Image2D(const std::initializer_list<size_t> &dims) : parent_type(dims) {}
 
-  using parent_type::stride;
   using parent_type::bound;
   using parent_type::GetNumDims;
   using parent_type::shape;
+  using parent_type::stride;
   // std::array like interface
 
   // Capacity
@@ -615,10 +622,10 @@ public:
   // std::array like interface
 
   // Capacity
-  using parent_type::stride;
   using parent_type::empty;
   using parent_type::max_size;
   using parent_type::size;
+  using parent_type::stride;
 
   // Element access
   using parent_type::operator[];
@@ -709,10 +716,10 @@ public:
   Signal(const std::vector<size_t> &dims) : parent_type(dims) {}
   Signal(const std::initializer_list<size_t> &dims) : parent_type(dims) {}
 
-  using parent_type::stride;
   using parent_type::bound;
   using parent_type::GetNumDims;
   using parent_type::shape;
+  using parent_type::stride;
   // std::array like interface
 
   // Capacity
@@ -793,8 +800,9 @@ public:
 
 // Linear view, linearize container padding included
 template <class valuetype, std::ptrdiff_t Rank>
-poutre::array_view<valuetype,1> lview(DenseImage<valuetype, Rank> &iImg) {
-  return poutre::array_view<valuetype, 1>(iImg.data(),bd1d{(ptrdiff_t)iImg.size()});
+poutre::array_view<valuetype, 1> lview(DenseImage<valuetype, Rank> &iImg) {
+  return poutre::array_view<valuetype, 1>(iImg.data(),
+                                          bd1d{(ptrdiff_t)iImg.size()});
 }
 
 // FIXME convertion loose qualifiers
@@ -806,9 +814,10 @@ lview(const DenseImage<valuetype, Rank> &iImg) {
 
 // Default view is stridded due to padding
 template <class valuetype, std::ptrdiff_t Rank>
-poutre::strided_array_view<valuetype, Rank> view(DenseImage<valuetype, Rank> &iImg) {
-  return poutre::strided_array_view<valuetype, Rank>(iImg.data(),
-                                                     iImg.shape(), iImg.stride());
+poutre::strided_array_view<valuetype, Rank>
+view(DenseImage<valuetype, Rank> &iImg) {
+  return poutre::strided_array_view<valuetype, Rank>(iImg.data(), iImg.shape(),
+                                                     iImg.stride());
 }
 
 // FIXME convertion loose qualifiers

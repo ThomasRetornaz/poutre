@@ -247,7 +247,7 @@ BENCHMARK_TEMPLATE_DEFINE_F(ShiftOpFixture, ShiftOpFixture_UINT8, poutre::pUINT8
             std::vector<poutre::pUINT8> res(m_vect.size());
             auto view1din = poutre::array_view<poutre::pUINT8, 1>(m_vect, { size });
             auto view1dout = poutre::array_view<poutre::pUINT8, 1>(res, { size });
-            poutre::t_LineBufferShiftRight(view1din,3,std::numeric_limits<poutre::pUINT8>::min(),view1dout);
+            poutre::t_LineBufferShiftRight(view1din.data(),size,3,std::numeric_limits<poutre::pUINT8>::min(),view1dout.data());
         }
     }
     state.SetItemsProcessed(state.iterations() * size);
@@ -261,7 +261,7 @@ BENCHMARK_TEMPLATE_DEFINE_F(ShiftOpFixture, ShiftOpFixture_INT32, poutre::pINT32
             std::vector<poutre::pINT32> res(m_vect.size());
             auto view1din = poutre::array_view<poutre::pINT32, 1>(m_vect, { size });
             auto view1dout = poutre::array_view<poutre::pINT32, 1>(res, { size });
-            poutre::t_LineBufferShiftRight(view1din, 3, std::numeric_limits<poutre::pINT32>::min(), view1dout);
+            poutre::t_LineBufferShiftRight(view1din.data(),size,3, std::numeric_limits<poutre::pINT32>::min(), view1dout.data());
 
         }
     }

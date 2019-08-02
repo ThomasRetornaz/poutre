@@ -106,7 +106,7 @@ namespace poutre
     };
 
     template<typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2 >
-    void t_transpose2DAlongX(const View1<T1, Rank>& i_vin1, View2<T2, Rank>& o_vout)
+    void t_transpose(const View1<T1, Rank>& i_vin1, View2<T2, Rank>& o_vout)
     {
        auto op = transpose2DAlongXOp<T1, T2, View1, View2>();
        op(i_vin1, o_vout);

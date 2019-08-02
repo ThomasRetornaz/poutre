@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE(arrayview)
     poutre::Image2D<poutre::pINT32> imgOut({ 6, 5 });
    //  auto v_img1 = poutre::view(*img); //-V522
    //  auto v_img2 = poutre::view(imgOut);
-    poutre::t_transpose2DAlongX(*img,imgOut);
+    poutre::t_transpose(*img,imgOut);
 
     std::string expected = "Dense Scalar GINT32 2 6 5 \
 1 7 13 19 25 \
@@ -83,7 +83,7 @@ BOOST_AUTO_TEST_CASE(stridedview)
 //   BOOST_CHECK_EQUAL(section2dout.bound(), (poutre::bd2d({ 2,3 })));
 //   BOOST_CHECK_EQUAL(section2dout.stride(), (poutre::idx2d({ 6,1 })));
 //
-//   poutre::t_transpose2DAlongX(section2din, section2dout);
+//   poutre::t_transpose(section2din, section2dout);
 //
 //   std::string expected = "Dense Scalar GINT32 2 5 6 \
 //1 1 1 1 1 1 \
@@ -114,8 +114,8 @@ BOOST_AUTO_TEST_CASE(arrayviewfloat)
    poutre::Image2D<poutre::pFLOAT> imgOut({ 9, 9 });
    // auto v_img1 = poutre::view(*img); //-V522
    // auto v_img2 = poutre::view(imgOut);
-   // poutre::t_transpose2DAlongX(v_img1, v_img2);
-   poutre::t_transpose2DAlongX(*img,imgOut);
+   // poutre::t_transpose(v_img1, v_img2);
+   poutre::t_transpose(*img,imgOut);
 
    std::string expected = "Dense Scalar F32 2 9 9 \
 1 1 1 1 1 1 1 1 1 \
@@ -158,8 +158,8 @@ BOOST_AUTO_TEST_CASE(arrayviewunint8)
    poutre::Image2D<poutre::pUINT8> imgOut({ 17, 17 });
    // auto v_img1 = poutre::view(*img); //-V522
    // auto v_img2 = poutre::view(imgOut);
-   // poutre::t_transpose2DAlongX(v_img1, v_img2);
-   poutre::t_transpose2DAlongX(*img,imgOut);
+   // poutre::t_transpose(v_img1, v_img2);
+   poutre::t_transpose(*img,imgOut);
 
    std::string expected = "Dense Scalar GUINT8 2 17 17 \
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 \

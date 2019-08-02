@@ -15,7 +15,6 @@
 
 #include <cmath>
 #include <cstdlib>
-#include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingTranspose.hpp>
 #include <random>
 #include <vector>
@@ -27,7 +26,7 @@ template <typename T> void TransposeBenchmark(benchmark::State &state) {
     for (auto i = 0u; i < size; ++i) {
       auto ImageIn = poutre::Image2D<T>({(std::size_t)sqrt(size), (std::size_t)sqrt(size)});
       auto ImageOut = poutre::Image2D<T>({(std::size_t)sqrt(size), (std::size_t)sqrt(size)});
-      poutre::t_transpose2DAlongX(ImageIn, ImageOut);
+      poutre::t_transpose(ImageIn, ImageOut);
     }
   }
   state.SetItemsProcessed(state.iterations() * size);

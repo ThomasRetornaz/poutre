@@ -26,12 +26,10 @@ BOOST_AUTO_TEST_SUITE(poutreImageProcessingArithOp)
 
 BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType_negate)
 {
-    poutre::DenseImage<poutre::pINT32> img1({ 5, 6 });
+    poutre::Image2D<poutre::pINT32> img1({ 5, 6 });
     img1.fill(1);
-    poutre::DenseImage<poutre::pINT32> img2({ 5, 6 });
-    auto v_img1 = poutre::view(img1);
-    auto v_img2 = poutre::view(img2);
-    poutre::t_ArithNegate(v_img1, v_img2);
+    poutre::Image2D<poutre::pINT32> img2({ 5, 6 });
+    poutre::t_ArithNegate(img1, img2);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 -1 -1 -1 -1 -1 -1 \
@@ -49,11 +47,9 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousDifferentPtrType_negate)
     poutre::DenseImage<poutre::pINT32> img1({ 5, 6 });
     img1.fill(1);
     poutre::DenseImage<poutre::pINT64> img2({ 5, 6 });
-    img2.fill(3);
-    auto v_img1 = poutre::view(img1);
-    auto v_img2 = poutre::view(img2);
+    img2.fill(3);    
     //call UnaryOpDispatcher array view template specialization,fall back ptr
-    poutre::t_ArithNegate(v_img1, v_img2);
+    poutre::t_ArithNegate(img1, img2);
     std::string expected = "Dense Scalar GINT64 2 5 6 \
 -1 -1 -1 -1 -1 -1 \
 -1 -1 -1 -1 -1 -1 \
@@ -181,9 +177,7 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType_addconstsaturated)
     poutre::DenseImage<poutre::pUINT8> img1({ 5, 6 });
     img1.fill(250);
     poutre::DenseImage<poutre::pUINT8> img2({ 5, 6 });
-    auto v_img1 = poutre::view(img1);
-    auto v_img2 = poutre::view(img2);
-    poutre::t_ArithSaturatedAddConstant(v_img1, static_cast<poutre::pUINT8>(10), v_img2);
+    poutre::t_ArithSaturatedAddConstant(img1, static_cast<poutre::pUINT8>(10),img2);
 
     std::string expected = "Dense Scalar GUINT8 2 5 6 \
 255 255 255 255 255 255 \
@@ -201,10 +195,8 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousDifferentPtrType__addconstsatu
     poutre::DenseImage<poutre::pINT32> img1({ 5, 6 });
     img1.fill(250);
     poutre::DenseImage<poutre::pUINT8> img2({ 5, 6 });
-    auto v_img1 = poutre::view(img1);
-    auto v_img2 = poutre::view(img2);
     //call UnaryOpDispatcher array view template specialization,fall back ptr
-    poutre::t_ArithSaturatedAddConstant(v_img1, static_cast<poutre::pUINT8>(10), v_img2);
+    poutre::t_ArithSaturatedAddConstant(img1, static_cast<poutre::pUINT8>(10),img2);
     std::string expected = "Dense Scalar GUINT8 2 5 6 \
 255 255 255 255 255 255 \
 255 255 255 255 255 255 \
@@ -325,9 +317,7 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType_Subconstsaturated)
     poutre::DenseImage<poutre::pUINT8> img1({ 5, 6 });
     img1.fill(5);
     poutre::DenseImage<poutre::pUINT8> img2({ 5, 6 });
-    auto v_img1 = poutre::view(img1);
-    auto v_img2 = poutre::view(img2);
-    poutre::t_ArithSaturatedSubConstant(v_img1, static_cast<poutre::pUINT8>(10), v_img2);
+    poutre::t_ArithSaturatedSubConstant(img1, static_cast<poutre::pUINT8>(10), img2);
 
     std::string expected = "Dense Scalar GUINT8 2 5 6 \
 0 0 0 0 0 0 \
@@ -345,10 +335,8 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousDifferentPtrType__subconstsatu
     poutre::DenseImage<poutre::pINT32> img1({ 5, 6 });
     img1.fill(5);
     poutre::DenseImage<poutre::pUINT8> img2({ 5, 6 });
-    auto v_img1 = poutre::view(img1);
-    auto v_img2 = poutre::view(img2);
     //call UnaryOpDispatcher array view template specialization,fall back ptr
-    poutre::t_ArithSaturatedSubConstant(v_img1, static_cast<poutre::pUINT8>(10), v_img2);
+    poutre::t_ArithSaturatedSubConstant(img1, static_cast<poutre::pUINT8>(10), img2);
 
     std::string expected = "Dense Scalar GUINT8 2 5 6 \
 0 0 0 0 0 0 \
@@ -501,10 +489,7 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType_sup)
     poutre::DenseImage<poutre::pUINT8> img2({ 5, 6 });
     img2.fill(150);
     poutre::DenseImage<poutre::pUINT8> img3({ 5, 6 });
-    auto v_img1 = poutre::view(img1);
-    auto v_img2 = poutre::view(img2);
-    auto v_img3 = poutre::view(img3);
-    poutre::t_ArithSup(v_img1, v_img2, v_img3);
+    poutre::t_ArithSup(img1, img2, img3);
 
     std::string expected = "Dense Scalar GUINT8 2 5 6 \
 255 255 255 255 255 255 \
@@ -610,10 +595,7 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType_add)
     poutre::DenseImage<poutre::pUINT8> img2({ 5, 6 });
     img2.fill(150);
     poutre::DenseImage<poutre::pUINT8> img3({ 5, 6 });
-    auto v_img1 = poutre::view(img1);
-    auto v_img2 = poutre::view(img2);
-    auto v_img3 = poutre::view(img3);
-    poutre::t_ArithSaturatedAdd(v_img1, v_img2, v_img3);
+    poutre::t_ArithSaturatedAdd(img1, img2, img3);
 
     std::string expected = "Dense Scalar GUINT8 2 5 6 \
 255 255 255 255 255 255 \
@@ -666,10 +648,7 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType_sub)
     poutre::DenseImage<poutre::pUINT8> img2({ 5, 6 });
     img2.fill(250);
     poutre::DenseImage<poutre::pUINT8> img3({ 5, 6 });
-    auto v_img1 = poutre::view(img1);
-    auto v_img2 = poutre::view(img2);
-    auto v_img3 = poutre::view(img3);
-    poutre::t_ArithSaturatedSub(v_img1, v_img2, v_img3);
+    poutre::t_ArithSaturatedSub(img1, img2, img3);
 
     std::string expected = "Dense Scalar GUINT8 2 5 6 \
 0 0 0 0 0 0 \
