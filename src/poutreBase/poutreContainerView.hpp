@@ -106,6 +106,19 @@ namespace poutre
        POUTRE_STATIC_CONSTEXPR bool value = true;
    };
 
+   template <ptrdiff_t rank>
+   struct IsRankEqual2
+   {
+       POUTRE_STATIC_CONSTEXPR bool value = false;
+   };
+
+   template<>
+   struct IsRankEqual2<2>
+   {
+       POUTRE_STATIC_CONSTEXPR bool value = true;
+   };
+
+
    template <ptrdiff_t rank1, ptrdiff_t rank2>
    struct UseSameRank
    {

@@ -26,9 +26,9 @@ BOOST_AUTO_TEST_SUITE(poutreImageProcessingArithOp)
 
 BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType_negate)
 {
-    poutre::Image2D<poutre::pINT32> img1({ 5, 6 });
+    poutre::DenseImage<poutre::pINT32> img1({ 5, 6 });
     img1.fill(1);
-    poutre::Image2D<poutre::pINT32> img2({ 5, 6 });
+    poutre::DenseImage<poutre::pINT32> img2({ 5, 6 });
     poutre::t_ArithNegate(img1, img2);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \

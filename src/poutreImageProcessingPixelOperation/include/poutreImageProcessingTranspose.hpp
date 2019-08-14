@@ -49,7 +49,7 @@ namespace poutre
    struct t_transposeOp<T1, Tout>
    {
 
-      void operator()(const Image2D<T1>& i_vin1, Image2D<Tout>& o_vout) const
+      void operator()(const DenseImage<T1,2>& i_vin1, DenseImage<Tout,2>& o_vout) const
       {
          //check bound compatibility
          auto ibd = i_vin1.bound();
@@ -231,7 +231,7 @@ and do transposition
    struct t_transposeOp<pUINT8, pUINT8>
    {
 
-      void operator()(const Image2D<pUINT8>& i_vin1, Image2D<pUINT8>& o_vout) const
+      void operator()(const DenseImage<pUINT8,2>& i_vin1, DenseImage<pUINT8,2>& o_vout) const
       {
          constexpr scoord loopStep = 16;
          auto ibd = i_vin1.bound();
@@ -335,7 +335,7 @@ and do transposition
 //    template<>
 //    struct t_transposeOp<pFLOAT, pFLOAT>
 //    {
-//       void operator()(const Image2D<pFLOAT>& i_vin1, Image2D<pFLOAT>& o_vout) const
+//       void operator()(const DenseImage<pFLOAT,2>& i_vin1,DenseImage<pFLOAT,2>& o_vout) const
 //       {
 //          constexpr scoord loopStep = 8;
 //          auto ibd = i_vin1.bound();
@@ -444,7 +444,7 @@ and do transposition
 //    };
 // #endif //__AVX__   
    template<typename T1, typename T2>//, template <typename> class ImageIn, template <typename> class ImageOut >
-   void t_transpose(const Image2D<T1>& i_vin1,Image2D<T2>& o_vout)
+   void t_transpose(const DenseImage<T1,2>& i_vin1,DenseImage<T2,2>& o_vout)
    {
       auto op = t_transposeOp<T1, T2>();
       op(i_vin1, o_vout);

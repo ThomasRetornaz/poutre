@@ -42,6 +42,10 @@
 #include <poutreBase/poutreContainerView.hpp>
 #endif
 
+#ifndef POUTRE_GEOMETRY_HPP__
+#include <poutreBase/poutreGeometry.hpp>
+#endif
+
 template <typename valuetype>
 using aligned_allocator =
     nsimd::allocator<typename poutre::TypeTraits<valuetype>::storage_type>;
@@ -80,6 +84,7 @@ protected:
   pointer m_data;
   coordinate_type m_coordinnates;
   coordinate_type m_strides;
+  coordinate_type m_padding;
   allocator_type m_allocator;
   size_type m_numelemwithpaddingifany;
 
@@ -88,7 +93,7 @@ public:
 
 public:
   DenseTensor(const std::vector<size_t> &dims)
-      : m_data(nullptr), m_coordinnates(), m_strides(), m_allocator(),
+      : m_data(nullptr), m_coordinnates(), m_strides(),m_padding(),m_allocator(),
         m_numelemwithpaddingifany(0) {
     if (dims.size() != m_numdims)
       POUTRE_RUNTIME_ERROR("Invalid input initializer regarding NumDims of "
@@ -96,26 +101,28 @@ public:
     for (size_t i = 0; i < m_numdims; ++i) {
       m_coordinnates[i] = dims[i];
     }
-
+    for (size_t i = 0; i < m_numdims; ++i) {
+      m_padding[i] = 0;
+    }
     // compute full array size with include possible padding for each first
     // stride
     if (!m_coordinnates.empty()) {
-      m_numelemwithpaddingifany = m_coordinnates[0];
+      m_numelemwithpaddingifany = m_coordinnates[0]+m_padding[0];
       for (size_t i = 1; i < (size_t)m_numdims; i++) {
-        m_numelemwithpaddingifany *= m_coordinnates[i];
+        m_numelemwithpaddingifany *= (m_coordinnates[i]+m_padding[i]);
       }
       m_data = m_allocator.allocate(m_numelemwithpaddingifany);
 
       // fill stride
       m_strides[m_numdims - 1] = 1;
       for (ptrdiff_t dim = m_numdims - 2; dim >= 0; --dim) {
-        m_strides[dim] = m_strides[dim + 1] * bound()[dim + 1];
+        m_strides[dim] = m_strides[dim + 1] * (bound()[dim + 1]+m_padding[dim+1]);
       }
     }
   }
 
   DenseTensor(const std::initializer_list<size_t> &dims)
-      : m_data(nullptr), m_coordinnates(),m_strides(), m_allocator(),
+      : m_data(nullptr), m_coordinnates(),m_strides(),m_padding(), m_allocator(),
         m_numelemwithpaddingifany(0) {
     if (dims.size() != m_numdims)
       POUTRE_RUNTIME_ERROR("Invalid input initializer regarding NumDims of "
@@ -125,7 +132,9 @@ public:
     for (size_t i = 0; i < m_numdims; ++i, ++it) {
       m_coordinnates[i] = *it;
     }
-
+    for (size_t i = 0; i < m_numdims; ++i) {
+      m_padding[i] = 0;
+    }
     // compute full array size with include possible padding for each first
     // stride
     if (!m_coordinnates.empty()) {
@@ -135,18 +144,18 @@ public:
       //  ~(default_padding_size - 1));
       //  }
       // else
-      //  {
-      m_numelemwithpaddingifany = m_coordinnates[0];
+      //  {      
       //  }
+      m_numelemwithpaddingifany = m_coordinnates[0]+m_padding[0];
       for (size_t i = 1; i < (size_t)m_numdims; i++) {
-        m_numelemwithpaddingifany *= m_coordinnates[i];
+        m_numelemwithpaddingifany *= (m_coordinnates[i]+m_padding[i]);
       }
       m_data = m_allocator.allocate(m_numelemwithpaddingifany);
 
       // fill stride
       m_strides[m_numdims - 1] = 1;
       for (ptrdiff_t dim = m_numdims - 2; dim >= 0; --dim) {
-        m_strides[dim] = m_strides[dim + 1] * bound()[dim + 1];
+        m_strides[dim] = m_strides[dim + 1] * (bound()[dim + 1]+m_padding[dim+1]);
       }
     }
   }
@@ -159,6 +168,7 @@ public:
   const coordinate_type bound() const POUTRE_NOEXCEPT { return m_coordinnates; }
   const coordinate_type shape() const POUTRE_NOEXCEPT { return m_coordinnates; }
   const coordinate_type stride() const POUTRE_NOEXCEPT { return m_strides; }
+  const coordinate_type padding() const POUTRE_NOEXCEPT { return m_padding; }
 
   std::size_t GetNumDims() const POUTRE_NOEXCEPT { return m_numdims; }
   // std::array like interface
@@ -235,6 +245,8 @@ public:
       swap(this->m_numelemwithpaddingifany,
            rhs.m_numelemwithpaddingifany);            // notthrow
       swap(this->m_coordinnates, rhs.m_coordinnates); //?throw
+      swap(this->m_strides, rhs.m_strides); //?throw
+      swap(this->m_padding, rhs.m_padding); //?throw
       swap(this->m_allocator, rhs.m_allocator);       //?throw
     }
   }
@@ -285,7 +297,7 @@ protected:
   DenseTensor(const self_type &rhs)
       : m_data(nullptr),
         m_numelemwithpaddingifany(rhs.m_numelemwithpaddingifany),
-        m_coordinnates(rhs.m_coordinnates), m_allocator(rhs.m_allocator) {
+        m_coordinnates(rhs.m_coordinnates),m_strides(rhs.m_strides),m_padding(rhs.m_padding),m_allocator(rhs.m_allocator) {
     m_data = m_allocator.allocate(m_numelemwithpaddingifany);
     std::copy(rhs.m_data, rhs.m_data + m_numelemwithpaddingifany, m_data);
   }
@@ -302,6 +314,8 @@ public:
     m_data = rhs.m_data;
     m_numelemwithpaddingifany = rhs.m_numelemwithpaddingifany;
     m_coordinnates = rhs.m_coordinnates;
+    m_strides= rhs.m_strides;
+    m_padding= rhs.m_m_padding;
     m_allocator = rhs.m_allocator;
 
     // relase
@@ -323,6 +337,8 @@ public:
       m_data = rhs.m_data;
       m_numelemwithpaddingifany = rhs.m_numelemwithpaddingifany;
       m_coordinnates = rhs.m_coordinnates;
+      m_strides= rhs.m_strides;
+      m_padding= rhs.m_m_padding;
       m_allocator = rhs.m_allocator;
 
       // release
@@ -421,6 +437,7 @@ public:
   using parent_template::GetNumDims;
   using parent_template::shape;
   using parent_template::stride;
+  using parent_template::padding;
   // std::array like interface
 
   // Capacity
@@ -434,6 +451,25 @@ public:
   using parent_template::back;
   using parent_template::data;
   using parent_template::front;
+
+  template <ptrdiff_t Rank=NumDims,class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
+  POUTRE_CXX14_CONSTEXPR
+    void SetPixel(scoord x,scoord y,value_type value) POUTRE_NOEXCEPTONLYNDEBUG
+    {
+
+    }
+  template <ptrdiff_t Rank=NumDims,class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
+  POUTRE_CXX14_CONSTEXPR
+    void SetPixel(idx2d index,value_type value) POUTRE_NOEXCEPTONLYNDEBUG
+    {
+
+    }
+  template <ptrdiff_t Rank=NumDims,class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
+  POUTRE_CXX14_CONSTEXPR
+    void SetPixel(pt2D_scoord pt2D,value_type value) POUTRE_NOEXCEPTONLYNDEBUG
+    {
+
+    }
   // Modifiers
   using parent_template::assign;
   using parent_template::fill;
@@ -459,7 +495,7 @@ public:
   using parent_template::rend;
   // end std::array like interface
 public:
-  // public copyctor used through clone (make_unique ask this constructor to be
+  // public copyctor used through clone (for make_unique ask this constructor has to be
   // public)
 
   DenseImage(const self_type &rhs) : parent_template(rhs) {}
@@ -485,6 +521,8 @@ public:
       this->m_data = rhs.m_data;
       this->m_numelemwithpaddingifany = rhs.m_numelemwithpaddingifany;
       this->m_coordinnates = rhs.m_coordinnates;
+      this->m_strides = rhs.m_strides;
+      this->m_padding = rhs.m_padding;
       this->m_allocator = rhs.m_allocator;
 
       // release
@@ -496,304 +534,313 @@ public:
   }
 };
 
-template <typename valuetype>
-class Image2D : public DenseImage<valuetype, 2,
-                                  nsimd::allocator<typename poutre::TypeTraits<
-                                      valuetype>::storage_type>> {
-public:
-  using parent_type = DenseImage<
-      valuetype, 2,
-      nsimd::allocator<typename poutre::TypeTraits<valuetype>::storage_type>>;
-  using self_type = Image2D<valuetype>;
-  using contigous_iterator = typename parent_type::contigous_iterator;
-  using const_contigous_iterator =
-      typename parent_type::const_contigous_iterator;
+// template <typename valuetype>
+// class Image2D : public DenseImage<valuetype, 2,
+//                                   nsimd::allocator<typename poutre::TypeTraits<
+//                                       valuetype>::storage_type>> {
+// public:
+//   using parent_type = DenseImage<
+//       valuetype, 2,
+//       nsimd::allocator<typename poutre::TypeTraits<valuetype>::storage_type>>;
+//   using self_type = Image2D<valuetype>;
+//   using contigous_iterator = typename parent_type::contigous_iterator;
+//   using const_contigous_iterator =
+//       typename parent_type::const_contigous_iterator;
 
-  using reverse_contigous_iterator =
-      typename parent_type::reverse_contigous_iterator;
-  using const_reverse_contigous_iterator =
-      typename parent_type::const_reverse_contigous_iterator;
+//   using reverse_contigous_iterator =
+//       typename parent_type::reverse_contigous_iterator;
+//   using const_reverse_contigous_iterator =
+//       typename parent_type::const_reverse_contigous_iterator;
 
-  Image2D(const std::vector<size_t> &dims) : parent_type(dims) {}
-  Image2D(const std::initializer_list<size_t> &dims) : parent_type(dims) {}
+//   Image2D(const std::vector<size_t> &dims) : parent_type(dims) {}
+//   Image2D(const std::initializer_list<size_t> &dims) : parent_type(dims) {}
 
-  using parent_type::bound;
-  using parent_type::GetNumDims;
-  using parent_type::shape;
-  using parent_type::stride;
-  // std::array like interface
+//   using parent_type::bound;
+//   using parent_type::GetNumDims;
+//   using parent_type::shape;
+//   using parent_type::stride;
+//   using parent_type::padding;
+//   // std::array like interface
 
-  // Capacity
-  using parent_type::empty;
-  using parent_type::max_size;
-  using parent_type::size;
+//   // Capacity
+//   using parent_type::empty;
+//   using parent_type::max_size;
+//   using parent_type::size;
 
-  // Element access
-  using parent_type::operator[];
-  using parent_type::at;
-  using parent_type::back;
-  using parent_type::data;
-  using parent_type::front;
-  // Modifiers
-  using parent_type::assign;
-  using parent_type::fill;
+//   // Element access
+//   using parent_type::operator[];
+//   using parent_type::at;
+//   using parent_type::back;
+//   using parent_type::data;
+//   using parent_type::front;
+//   // Modifiers
+//   using parent_type::assign;
+//   using parent_type::fill;
 
-  void swap(self_type &rhs) // POUTRE_NOEXCEPT(POUTRE_NOEXCEPT
-                            // (swap(declval<value_type&>( ),
-                            // declval<value_type&>( )))) //wait MSVC2013
-                            // noexcept impl ...
-  {
-    if (this != &rhs) {
-      using std::swap;
-      parent_type::swap(*this);
-    }
-  }
-  using parent_type::begin;
-  using parent_type::cbegin;
-  using parent_type::cend;
-  using parent_type::crbegin;
-  using parent_type::end;
-  using parent_type::rbegin;
+//   void swap(self_type &rhs) // POUTRE_NOEXCEPT(POUTRE_NOEXCEPT
+//                             // (swap(declval<value_type&>( ),
+//                             // declval<value_type&>( )))) //wait MSVC2013
+//                             // noexcept impl ...
+//   {
+//     if (this != &rhs) {
+//       using std::swap;
+//       parent_type::swap(*this);
+//     }
+//   }
+//   using parent_type::begin;
+//   using parent_type::cbegin;
+//   using parent_type::cend;
+//   using parent_type::crbegin;
+//   using parent_type::end;
+//   using parent_type::rbegin;
 
-  using parent_type::crend;
-  using parent_type::rend;
-  // end std::array like interface
-public:
-  // public copyctor used through clone (make_unique ask this constructor to be
-  // public)
+//   using parent_type::crend;
+//   using parent_type::rend;
+//   // end std::array like interface
+// public:
+//   // public copyctor used through clone (make_unique ask this constructor to be
+//   // public)
 
-  Image2D(const self_type &rhs) : parent_type(rhs) {}
+//   Image2D(const self_type &rhs) : parent_type(rhs) {}
 
-public:
-  // disable copyassignement
-  self_type &operator=(const self_type &other) = delete;
+// public:
+//   // disable copyassignement
+//   self_type &operator=(const self_type &other) = delete;
 
-  // move constructor
+//   // move constructor
 
-  Image2D(self_type &&rhs) noexcept : parent_type(rhs) {}
+//   Image2D(self_type &&rhs) noexcept : parent_type(rhs) {}
 
-  // move assignment operator
+//   // move assignment operator
 
-  self_type &operator=(self_type &&rhs) noexcept {
-    if (this !=
-        &rhs) // http://scottmeyers.blogspot.fr/2014/06/the-drawbacks-of-implementing-move.html
-    {
-      // release resource
-      this->m_allocator.deallocate(this->m_data,
-                                   this->m_numelemwithpaddingifany);
-      // Copy the data pointer and its length from the source object.
-      this->m_data = rhs.m_data;
-      this->m_numelemwithpaddingifany = rhs.m_numelemwithpaddingifany;
-      this->m_coordinnates = rhs.m_coordinnates;
-      this->m_allocator = rhs.m_allocator;
+//   self_type &operator=(self_type &&rhs) noexcept {
+//     if (this !=
+//         &rhs) // http://scottmeyers.blogspot.fr/2014/06/the-drawbacks-of-implementing-move.html
+//     {
+//       // release resource
+//       this->m_allocator.deallocate(this->m_data,
+//                                    this->m_numelemwithpaddingifany);
+//       // Copy the data pointer and its length from the source object.
+//       this->m_data = rhs.m_data;
+//       this->m_numelemwithpaddingifany = rhs.m_numelemwithpaddingifany;
+//       this->m_coordinnates = rhs.m_coordinnates;
+//       this->m_strides=rhs.m_strides;
+//       this->m_padding=rhs.m_padding;
+//       this->m_allocator = rhs.m_allocator;
 
-      // release
-      rhs.m_numelemwithpaddingifany = 0;
-      rhs.m_data = nullptr;
-      /* m_coordinnates = {};*/
-    }
-    return *this;
-  }
-};
+//       // release
+//       rhs.m_numelemwithpaddingifany = 0;
+//       rhs.m_data = nullptr;
+//       /* m_coordinnates = {};*/
+//     }
+//     return *this;
+//   }
+// };
 
-template <typename valuetype>
-class Image3D : public DenseImage<valuetype, 3,
-                                  nsimd::allocator<typename poutre::TypeTraits<
-                                      valuetype>::storage_type>> {
-public:
-  using parent_type = DenseImage<
-      valuetype, 3,
-      nsimd::allocator<typename poutre::TypeTraits<valuetype>::storage_type>>;
-  using self_type = Image3D<valuetype>;
-  using contigous_iterator = typename parent_type::contigous_iterator;
-  using const_contigous_iterator =
-      typename parent_type::const_contigous_iterator;
+// template <typename valuetype>
+// class Image3D : public DenseImage<valuetype, 3,
+//                                   nsimd::allocator<typename poutre::TypeTraits<
+//                                       valuetype>::storage_type>> {
+// public:
+//   using parent_type = DenseImage<
+//       valuetype, 3,
+//       nsimd::allocator<typename poutre::TypeTraits<valuetype>::storage_type>>;
+//   using self_type = Image3D<valuetype>;
+//   using contigous_iterator = typename parent_type::contigous_iterator;
+//   using const_contigous_iterator =
+//       typename parent_type::const_contigous_iterator;
 
-  using reverse_contigous_iterator =
-      typename parent_type::reverse_contigous_iterator;
-  using const_reverse_contigous_iterator =
-      typename parent_type::const_reverse_contigous_iterator;
+//   using reverse_contigous_iterator =
+//       typename parent_type::reverse_contigous_iterator;
+//   using const_reverse_contigous_iterator =
+//       typename parent_type::const_reverse_contigous_iterator;
 
-  Image3D(const std::vector<size_t> &dims) : parent_type(dims) {}
-  Image3D(const std::initializer_list<size_t> &dims) : parent_type(dims) {}
-  using parent_type::bound;
-  using parent_type::GetNumDims;
-  using parent_type::shape;
-  // std::array like interface
+//   Image3D(const std::vector<size_t> &dims) : parent_type(dims) {}
+//   Image3D(const std::initializer_list<size_t> &dims) : parent_type(dims) {}
+//   using parent_type::bound;
+//   using parent_type::GetNumDims;
+//   using parent_type::shape;
+//   // std::array like interface
 
-  // Capacity
-  using parent_type::empty;
-  using parent_type::max_size;
-  using parent_type::size;
-  using parent_type::stride;
+//   // Capacity
+//   using parent_type::empty;
+//   using parent_type::max_size;
+//   using parent_type::size;
+//   using parent_type::stride;
+//   using parent_type::padding;
 
-  // Element access
-  using parent_type::operator[];
-  using parent_type::at;
-  using parent_type::back;
-  using parent_type::data;
-  using parent_type::front;
-  // Modifiers
-  using parent_type::assign;
-  using parent_type::fill;
+//   // Element access
+//   using parent_type::operator[];
+//   using parent_type::at;
+//   using parent_type::back;
+//   using parent_type::data;
+//   using parent_type::front;
+//   // Modifiers
+//   using parent_type::assign;
+//   using parent_type::fill;
 
-  void swap(self_type &rhs) // POUTRE_NOEXCEPT(POUTRE_NOEXCEPT
-                            // (swap(declval<value_type&>( ),
-                            // declval<value_type&>( )))) //wait MSVC2013
-                            // noexcept impl ...
-  {
-    if (this != &rhs) {
-      using std::swap;
-      parent_type::swap(*this);
-    }
-  }
-  using parent_type::begin;
-  using parent_type::cbegin;
-  using parent_type::cend;
-  using parent_type::crbegin;
-  using parent_type::end;
-  using parent_type::rbegin;
+//   void swap(self_type &rhs) // POUTRE_NOEXCEPT(POUTRE_NOEXCEPT
+//                             // (swap(declval<value_type&>( ),
+//                             // declval<value_type&>( )))) //wait MSVC2013
+//                             // noexcept impl ...
+//   {
+//     if (this != &rhs) {
+//       using std::swap;
+//       parent_type::swap(*this);
+//     }
+//   }
+//   using parent_type::begin;
+//   using parent_type::cbegin;
+//   using parent_type::cend;
+//   using parent_type::crbegin;
+//   using parent_type::end;
+//   using parent_type::rbegin;
 
-  using parent_type::crend;
-  using parent_type::rend;
-  // end std::array like interface
-public:
-  // public copyctor used through clone (make_unique ask this constructor to be
-  // public)
+//   using parent_type::crend;
+//   using parent_type::rend;
+//   // end std::array like interface
+// public:
+//   // public copyctor used through clone (make_unique ask this constructor to be
+//   // public)
 
-  Image3D(const self_type &rhs) : parent_type(rhs) {}
+//   Image3D(const self_type &rhs) : parent_type(rhs) {}
 
-public:
-  // disable copyassignement
-  self_type &operator=(const self_type &other) = delete;
+// public:
+//   // disable copyassignement
+//   self_type &operator=(const self_type &other) = delete;
 
-  // move constructor
+//   // move constructor
 
-  Image3D(self_type &&rhs) noexcept : parent_type(rhs) {}
+//   Image3D(self_type &&rhs) noexcept : parent_type(rhs) {}
 
-  // move assignment operator
+//   // move assignment operator
 
-  self_type &operator=(self_type &&rhs) noexcept {
-    if (this !=
-        &rhs) // http://scottmeyers.blogspot.fr/2014/06/the-drawbacks-of-implementing-move.html
-    {
-      // release resource
-      this->m_allocator.deallocate(this->m_data,
-                                   this->m_numelemwithpaddingifany);
-      // Copy the data pointer and its length from the source object.
-      this->m_data = rhs.m_data;
-      this->m_numelemwithpaddingifany = rhs.m_numelemwithpaddingifany;
-      this->m_coordinnates = rhs.m_coordinnates;
-      this->m_allocator = rhs.m_allocator;
+//   self_type &operator=(self_type &&rhs) noexcept {
+//     if (this !=
+//         &rhs) // http://scottmeyers.blogspot.fr/2014/06/the-drawbacks-of-implementing-move.html
+//     {
+//       // release resource
+//       this->m_allocator.deallocate(this->m_data,
+//                                    this->m_numelemwithpaddingifany);
+//       // Copy the data pointer and its length from the source object.
+//       this->m_data = rhs.m_data;
+//       this->m_numelemwithpaddingifany = rhs.m_numelemwithpaddingifany;
+//       this->m_coordinnates = rhs.m_coordinnates;
+//       this->m_strides=rhs.m_strides;
+//       this->m_padding=rhs.m_padding;
+//       this->m_allocator = rhs.m_allocator;
 
-      // release
-      rhs.m_numelemwithpaddingifany = 0;
-      rhs.m_data = nullptr;
-      /* m_coordinnates = {};*/
-    }
-    return *this;
-  }
-};
+//       // release
+//       rhs.m_numelemwithpaddingifany = 0;
+//       rhs.m_data = nullptr;
+//       /* m_coordinnates = {};*/
+//     }
+//     return *this;
+//   }
+// };
 
-template <typename valuetype>
-class Signal : public DenseImage<valuetype, 1,
-                                 nsimd::allocator<typename poutre::TypeTraits<
-                                     valuetype>::storage_type>> {
-public:
-  using parent_type = DenseImage<
-      valuetype, 1,
-      nsimd::allocator<typename poutre::TypeTraits<valuetype>::storage_type>>;
-  using self_type = Signal<valuetype>;
-  using contigous_iterator = typename parent_type::contigous_iterator;
-  using const_contigous_iterator =
-      typename parent_type::const_contigous_iterator;
+// template <typename valuetype>
+// class Signal : public DenseImage<valuetype, 1,
+//                                  nsimd::allocator<typename poutre::TypeTraits<
+//                                      valuetype>::storage_type>> {
+// public:
+//   using parent_type = DenseImage<
+//       valuetype, 1,
+//       nsimd::allocator<typename poutre::TypeTraits<valuetype>::storage_type>>;
+//   using self_type = Signal<valuetype>;
+//   using contigous_iterator = typename parent_type::contigous_iterator;
+//   using const_contigous_iterator =
+//       typename parent_type::const_contigous_iterator;
 
-  using reverse_contigous_iterator =
-      typename parent_type::reverse_contigous_iterator;
-  using const_reverse_contigous_iterator =
-      typename parent_type::const_reverse_contigous_iterator;
+//   using reverse_contigous_iterator =
+//       typename parent_type::reverse_contigous_iterator;
+//   using const_reverse_contigous_iterator =
+//       typename parent_type::const_reverse_contigous_iterator;
 
-  Signal(const std::vector<size_t> &dims) : parent_type(dims) {}
-  Signal(const std::initializer_list<size_t> &dims) : parent_type(dims) {}
+//   Signal(const std::vector<size_t> &dims) : parent_type(dims) {}
+//   Signal(const std::initializer_list<size_t> &dims) : parent_type(dims) {}
 
-  using parent_type::bound;
-  using parent_type::GetNumDims;
-  using parent_type::shape;
-  using parent_type::stride;
-  // std::array like interface
+//   using parent_type::bound;
+//   using parent_type::GetNumDims;
+//   using parent_type::shape;
+//   using parent_type::stride;
+//   using parent_type::padding;
+//   // std::array like interface
 
-  // Capacity
-  using parent_type::empty;
-  using parent_type::max_size;
-  using parent_type::size;
+//   // Capacity
+//   using parent_type::empty;
+//   using parent_type::max_size;
+//   using parent_type::size;
 
-  // Element access
-  using parent_type::operator[];
-  using parent_type::at;
-  using parent_type::back;
-  using parent_type::data;
-  using parent_type::front;
-  // Modifiers
-  using parent_type::assign;
-  using parent_type::fill;
+//   // Element access
+//   using parent_type::operator[];
+//   using parent_type::at;
+//   using parent_type::back;
+//   using parent_type::data;
+//   using parent_type::front;
+//   // Modifiers
+//   using parent_type::assign;
+//   using parent_type::fill;
 
-  void swap(self_type &rhs) // POUTRE_NOEXCEPT(POUTRE_NOEXCEPT
-                            // (swap(declval<value_type&>( ),
-                            // declval<value_type&>( )))) //wait MSVC2013
-                            // noexcept impl ...
-  {
-    if (this != &rhs) {
-      using std::swap;
-      parent_type::swap(*this);
-    }
-  }
-  using parent_type::begin;
-  using parent_type::cbegin;
-  using parent_type::cend;
-  using parent_type::crbegin;
-  using parent_type::end;
-  using parent_type::rbegin;
+//   void swap(self_type &rhs) // POUTRE_NOEXCEPT(POUTRE_NOEXCEPT
+//                             // (swap(declval<value_type&>( ),
+//                             // declval<value_type&>( )))) //wait MSVC2013
+//                             // noexcept impl ...
+//   {
+//     if (this != &rhs) {
+//       using std::swap;
+//       parent_type::swap(*this);
+//     }
+//   }
+//   using parent_type::begin;
+//   using parent_type::cbegin;
+//   using parent_type::cend;
+//   using parent_type::crbegin;
+//   using parent_type::end;
+//   using parent_type::rbegin;
 
-  using parent_type::crend;
-  using parent_type::rend;
-  // end std::array like interface
-public:
-  // public copyctor used through clone (make_unique ask this constructor to be
-  // public)
+//   using parent_type::crend;
+//   using parent_type::rend;
+//   // end std::array like interface
+// public:
+//   // public copyctor used through clone (make_unique ask this constructor to be
+//   // public)
 
-  Signal(const self_type &rhs) : parent_type(rhs) {}
+//   Signal(const self_type &rhs) : parent_type(rhs) {}
 
-public:
-  // disable copyassignement
-  self_type &operator=(const self_type &other) = delete;
+// public:
+//   // disable copyassignement
+//   self_type &operator=(const self_type &other) = delete;
 
-  // move constructor
+//   // move constructor
 
-  Signal(self_type &&rhs) noexcept : parent_type(rhs) {}
+//   Signal(self_type &&rhs) noexcept : parent_type(rhs) {}
 
-  // move assignment operator
+//   // move assignment operator
 
-  self_type &operator=(self_type &&rhs) noexcept {
-    if (this !=
-        &rhs) // http://scottmeyers.blogspot.fr/2014/06/the-drawbacks-of-implementing-move.html
-    {
-      // release resource
-      this->m_allocator.deallocate(this->m_data,
-                                   this->m_numelemwithpaddingifany);
-      // Copy the data pointer and its length from the source object.
-      this->m_data = rhs.m_data;
-      this->m_numelemwithpaddingifany = rhs.m_numelemwithpaddingifany;
-      this->m_coordinnates = rhs.m_coordinnates;
-      this->m_allocator = rhs.m_allocator;
+//   self_type &operator=(self_type &&rhs) noexcept {
+//     if (this !=
+//         &rhs) // http://scottmeyers.blogspot.fr/2014/06/the-drawbacks-of-implementing-move.html
+//     {
+//       // release resource
+//       this->m_allocator.deallocate(this->m_data,
+//                                    this->m_numelemwithpaddingifany);
+//       // Copy the data pointer and its length from the source object.
+//       this->m_data = rhs.m_data;
+//       this->m_numelemwithpaddingifany = rhs.m_numelemwithpaddingifany;
+//       this->m_coordinnates = rhs.m_coordinnates;
+//       this->m_strides=rhs.m_strides;
+//       this->m_padding=rhs.m_padding;
+//       this->m_allocator = rhs.m_allocator;
 
-      // release
-      rhs.m_numelemwithpaddingifany = 0;
-      rhs.m_data = nullptr;
-      /* m_coordinnates = {};*/
-    }
-    return *this;
-  }
-};
+//       // release
+//       rhs.m_numelemwithpaddingifany = 0;
+//       rhs.m_data = nullptr;
+//       /* m_coordinnates = {};*/
+//     }
+//     return *this;
+//   }
+// };
 
 ///////////////////////////////////////////////////////////////////////////////////
 /* Translate to view*/
@@ -812,7 +859,7 @@ lview(const DenseImage<valuetype, Rank> &iImg) {
   return lview(const_cast<DenseImage<valuetype, Rank> &>(iImg));
 }
 
-// Default view is stridded due to padding
+// Default view is strided due to padding
 template <class valuetype, std::ptrdiff_t Rank>
 poutre::strided_array_view<valuetype, Rank>
 view(DenseImage<valuetype, Rank> &iImg) {
@@ -829,35 +876,35 @@ view(const DenseImage<valuetype, Rank> &iImg) {
 ///////////////////////////////////////////////////////////////////////////////////
 
 // todo define macros
-extern template class Signal<pUINT8>;
-extern template class Signal<pINT32>;
-extern template class Signal<pFLOAT>;
-extern template class Signal<pINT64>;
-extern template class Signal<pDOUBLE>;
+extern template class DenseImage<pUINT8,1>;
+extern template class DenseImage<pINT32,1>;
+extern template class DenseImage<pFLOAT,1>;
+extern template class DenseImage<pINT64,1>;
+extern template class DenseImage<pDOUBLE,1>;
 
-extern template class Image2D<pUINT8>;
-extern template class Image2D<pINT32>;
-extern template class Image2D<pFLOAT>;
-extern template class Image2D<pINT64>;
-extern template class Image2D<pDOUBLE>;
+extern template class DenseImage<pUINT8,2>;
+extern template class DenseImage<pINT32,2>;
+extern template class DenseImage<pFLOAT,2>;
+extern template class DenseImage<pINT64,2>;
+extern template class DenseImage<pDOUBLE,2>;
 
-extern template class Image2D<compound_pixel<pUINT8, 3>>;
-extern template class Image2D<compound_pixel<pINT32, 3>>;
-extern template class Image2D<compound_pixel<pFLOAT, 3>>;
-extern template class Image2D<compound_pixel<pINT64, 3>>;
-extern template class Image2D<compound_pixel<pDOUBLE, 3>>;
+extern template class DenseImage<compound_pixel<pUINT8, 3>,2>;
+extern template class DenseImage<compound_pixel<pINT32, 3>,2>;
+extern template class DenseImage<compound_pixel<pFLOAT, 3>,2>;
+extern template class DenseImage<compound_pixel<pINT64, 3>,2>;
+extern template class DenseImage<compound_pixel<pDOUBLE, 3>,2>;
 
-extern template class Image2D<compound_pixel<pUINT8, 4>>;
-extern template class Image2D<compound_pixel<pINT32, 4>>;
-extern template class Image2D<compound_pixel<pFLOAT, 4>>;
-extern template class Image2D<compound_pixel<pINT64, 4>>;
-extern template class Image2D<compound_pixel<pDOUBLE, 4>>;
+extern template class DenseImage<compound_pixel<pUINT8, 4>,2>;
+extern template class DenseImage<compound_pixel<pINT32, 4>,2>;
+extern template class DenseImage<compound_pixel<pFLOAT, 4>,2>;
+extern template class DenseImage<compound_pixel<pINT64, 4>,2>;
+extern template class DenseImage<compound_pixel<pDOUBLE, 4>,2>;
 
-extern template class Image3D<pUINT8>;
-extern template class Image3D<pINT32>;
-extern template class Image3D<pFLOAT>;
-extern template class Image3D<pINT64>;
-extern template class Image3D<pDOUBLE>;
+extern template class DenseImage<pUINT8,3>;
+extern template class DenseImage<pINT32,3>;
+extern template class DenseImage<pFLOAT,3>;
+extern template class DenseImage<pINT64,3>;
+extern template class DenseImage<pDOUBLE,3>;
 
 extern template class DenseImage<pUINT8, 4>;
 extern template class DenseImage<pINT32, 4>;

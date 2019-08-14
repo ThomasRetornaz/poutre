@@ -112,7 +112,7 @@ namespace poutre
 				}break;
 				case 1:
 				{
-					using ImageType = poutre::Signal< valuetype>;
+					using ImageType = poutre::DenseImage< valuetype,1>;
 					const ImageType* tmp = dynamic_cast<const ImageType*>(&i_im);
 					if (!tmp)
 					{
@@ -122,7 +122,7 @@ namespace poutre
 				}break;
 				case 2:
 				{
-					using ImageType = poutre::Image2D<valuetype>;
+					using ImageType = poutre::DenseImage<valuetype,2>;
 					const ImageType* tmp = dynamic_cast<const ImageType*>(&i_im);
 					if (!tmp)
 					{
@@ -132,7 +132,7 @@ namespace poutre
 				}break;
 				case 3:
 				{
-					using ImageType = poutre::Image3D<valuetype>;
+					using ImageType = poutre::DenseImage<valuetype,3>;
 					const ImageType* tmp = dynamic_cast<const ImageType*>(&i_im);
 					if (!tmp)
 					{
@@ -201,7 +201,7 @@ namespace poutre
 			{
 			case 1:
 			{
-				using ImageType = poutre::Signal<valuetype>;
+				using ImageType = poutre::DenseImage<valuetype,1>;
 				ImageType* tmp = dynamic_cast<ImageType*>(&o_im);
 				if (!tmp)
 				{
@@ -211,7 +211,7 @@ namespace poutre
 			}break;
 			case 2:
 			{
-				using ImageType = poutre::Image2D< valuetype>;
+				using ImageType = poutre::DenseImage<valuetype,2>;
 				ImageType* tmp = dynamic_cast<ImageType*>(&o_im);
 				if (!tmp)
 				{
@@ -221,7 +221,7 @@ namespace poutre
 			}break;
 			case 3:
 			{
-				using ImageType = poutre::Image3D< valuetype>;
+				using ImageType = poutre::DenseImage<valuetype,3>;
 				ImageType* tmp = dynamic_cast<ImageType*>(&o_im);
 				if (!tmp)
 				{

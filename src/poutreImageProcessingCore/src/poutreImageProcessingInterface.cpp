@@ -170,15 +170,15 @@ CreateImage1DDispatchPTypeScalar(const std::vector<std::size_t> &dims,
   switch (ptype) {
   // todo think about bool/binary here
   case PType::PType_GrayUINT8:
-    return std::make_unique<Signal<pUINT8>>(dims);
+    return std::make_unique<DenseImage<pUINT8,1>>(dims);
   case PType::PType_GrayINT32:
-    return std::make_unique<Signal<pINT32>>(dims);
+    return std::make_unique<DenseImage<pINT32,1>>(dims);
   case PType::PType_F32:
-    return std::make_unique<Signal<pFLOAT>>(dims);
+    return std::make_unique<DenseImage<pFLOAT,1>>(dims);
   case PType::PType_GrayINT64:
-    return std::make_unique<Signal<pINT64>>(dims);
+    return std::make_unique<DenseImage<pINT64,1>>(dims);
   case PType::PType_D64:
-    return std::make_unique<Signal<pDOUBLE>>(dims);
+    return std::make_unique<DenseImage<pDOUBLE,1>>(dims);
   default: {
     POUTRE_RUNTIME_ERROR(
         ("CreateImage1DDispatchPTypeScalar:: Unsupported scalar type:" +
@@ -221,15 +221,15 @@ CreateImage2DDispatchPTypeScalar(const std::vector<std::size_t> &dims,
   switch (ptype) {
   // todo think about bool/binary here
   case PType::PType_GrayUINT8:
-    return std::make_unique<Image2D<pUINT8>>(dims);
+    return std::make_unique<DenseImage<pUINT8,2>>(dims);
   case PType::PType_GrayINT32:
-    return std::make_unique<Image2D<pINT32>>(dims);
+    return std::make_unique<DenseImage<pINT32,2>>(dims);
   case PType::PType_F32:
-    return std::make_unique<Image2D<pFLOAT>>(dims);
+    return std::make_unique<DenseImage<pFLOAT,2>>(dims);
   case PType::PType_GrayINT64:
-    return std::make_unique<Image2D<pINT64>>(dims);
+    return std::make_unique<DenseImage<pINT64,2>>(dims);
   case PType::PType_D64:
-    return std::make_unique<Image2D<pDOUBLE>>(dims);
+    return std::make_unique<DenseImage<pDOUBLE,2>>(dims);
   default: {
     POUTRE_RUNTIME_ERROR(
         ("CreateImage2DDispatchPTypeScalar:: Unsupported scalar type:" +
@@ -246,15 +246,15 @@ CreateImage2DDispatchPType3PLanes(const std::vector<std::size_t> &dims,
   switch (ptype) {
   // todo think about bool/binary here
   case PType::PType_GrayUINT8:
-    return std::make_unique<Image2D<compound_pixel<pUINT8, 3>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pUINT8, 3>,2>>(dims);
   case PType::PType_GrayINT32:
-    return std::make_unique<Image2D<compound_pixel<pINT32,3>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pINT32,3>,2>>(dims);
   case PType::PType_F32:
-    return std::make_unique<Image2D<compound_pixel<pFLOAT,3>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pFLOAT,3>,2>>(dims);
   case PType::PType_GrayINT64:
-    return std::make_unique<Image2D<compound_pixel<pINT64,3>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pINT64,3>,2>>(dims);
   case PType::PType_D64:
-    return std::make_unique<Image2D<compound_pixel<pDOUBLE,3>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pDOUBLE,3>,2>>(dims);
   default: {
     POUTRE_RUNTIME_ERROR(
         ("CreateImage2DDispatchPType3PLanes:: Unsupported scalar type:" +
@@ -271,15 +271,15 @@ CreateImage2DDispatchPType4PLanes(const std::vector<std::size_t> &dims,
   switch (ptype) {
   // todo think about bool/binary here
   case PType::PType_GrayUINT8:
-    return std::make_unique<Image2D<compound_pixel<pUINT8, 4>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pUINT8, 4>,2>>(dims);
   case PType::PType_GrayINT32:
-    return std::make_unique<Image2D<compound_pixel<pINT32,4>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pINT32,4>,2>>(dims);
   case PType::PType_F32:
-    return std::make_unique<Image2D<compound_pixel<pFLOAT,4>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pFLOAT,4>,2>>(dims);
   case PType::PType_GrayINT64:
-    return std::make_unique<Image2D<compound_pixel<pINT64,4>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pINT64,4>,2>>(dims);
   case PType::PType_D64:
-    return std::make_unique<Image2D<compound_pixel<pDOUBLE,4>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pDOUBLE,4>,2>>(dims);
   default: {
     POUTRE_RUNTIME_ERROR(
         ("CreateImage2DDispatchPType4PLanes:: Unsupported scalar type:" +
@@ -322,15 +322,15 @@ CreateImage3DDispatchPTypeScalar(const std::vector<std::size_t> &dims,
   switch (ptype) {
   // todo think about bool/binary here
   case PType::PType_GrayUINT8:
-    return std::make_unique<Image3D<pUINT8>>(dims);
+    return std::make_unique<DenseImage<pUINT8,3>>(dims);
   case PType::PType_GrayINT32:
-    return std::make_unique<Image3D<pINT32>>(dims);
+    return std::make_unique<DenseImage<pINT32,3>>(dims);
   case PType::PType_F32:
-    return std::make_unique<Image3D<pFLOAT>>(dims);
+    return std::make_unique<DenseImage<pFLOAT,3>>(dims);
   case PType::PType_GrayINT64:
-    return std::make_unique<Image3D<pINT64>>(dims);
+    return std::make_unique<DenseImage<pINT64,3>>(dims);
   case PType::PType_D64:
-    return std::make_unique<Image3D<pDOUBLE>>(dims);
+    return std::make_unique<DenseImage<pDOUBLE,3>>(dims);
   default: {
     POUTRE_RUNTIME_ERROR(
         ("CreateImage3DDispatchPTypeScalar:: Unsupported scalar type:" +
@@ -347,15 +347,15 @@ CreateImage3DDispatchPType3PLanes(const std::vector<std::size_t> &dims,
   switch (ptype) {
   // todo think about bool/binary here
   case PType::PType_GrayUINT8:
-    return std::make_unique<Image3D<compound_pixel<pUINT8, 3>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pUINT8, 3>>>(dims);
   case PType::PType_GrayINT32:
-    return std::make_unique<Image3D<compound_pixel<pINT32,3>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pINT32,3>>>(dims);
   case PType::PType_F32:
-    return std::make_unique<Image3D<compound_pixel<pFLOAT,3>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pFLOAT,3>>>(dims);
   case PType::PType_GrayINT64:
-    return std::make_unique<Image3D<compound_pixel<pINT64,3>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pINT64,3>>>(dims);
   case PType::PType_D64:
-    return std::make_unique<Image3D<compound_pixel<pDOUBLE,3>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pDOUBLE,3>>>(dims);
   default: {
     POUTRE_RUNTIME_ERROR(
         ("CreateImage3DDispatchPType3PLanes:: Unsupported scalar type:" +
@@ -372,15 +372,15 @@ CreateImage3DDispatchPType4PLanes(const std::vector<std::size_t> &dims,
   switch (ptype) {
   // todo think about bool/binary here
   case PType::PType_GrayUINT8:
-    return std::make_unique<Image3D<compound_pixel<pUINT8, 4>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pUINT8, 4>>>(dims);
   case PType::PType_GrayINT32:
-    return std::make_unique<Image3D<compound_pixel<pINT32,4>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pINT32,4>>>(dims);
   case PType::PType_F32:
-    return std::make_unique<Image3D<compound_pixel<pFLOAT,4>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pFLOAT,4>>>(dims);
   case PType::PType_GrayINT64:
-    return std::make_unique<Image3D<compound_pixel<pINT64,4>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pINT64,4>>>(dims);
   case PType::PType_D64:
-    return std::make_unique<Image3D<compound_pixel<pDOUBLE,4>>>(dims);
+    return std::make_unique<DenseImage<compound_pixel<pDOUBLE,4>>>(dims);
   default: {
     POUTRE_RUNTIME_ERROR(
         ("CreateImage3DDispatchPType4PLanes:: Unsupported scalar type:" +
