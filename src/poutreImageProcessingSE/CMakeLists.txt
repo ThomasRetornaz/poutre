@@ -36,7 +36,7 @@ target_link_libraries(PoutreIPSE
   PUBLIC ${Boost_SYSTEM_LIBRARY}
   PRIVATE jsoncpp
   INTERFACE Eigen
-  #INTERFACE ${SIMD_LIB}  
+  INTERFACE xsimd  
   PoutreBase
   PoutreIPCore  
   )

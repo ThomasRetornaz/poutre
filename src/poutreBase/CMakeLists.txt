@@ -55,13 +55,14 @@ target_link_libraries(PoutreBase
   PUBLIC ${Boost_LOG_LIBRARY}
   PUBLIC ${Boost_LOG_SETUP_LIBRARY}
   PUBLIC jsoncpp 
-  PUBLIC nsimd
+  INTERFACE xsimd 
   # INTERFACE Eigen  
-  # INTERFACE ${SIMD_LIB} 
+  # INTERFACE ${SIMD_LIB}
+  INTERFACE xsimd 
   )
 set_target_properties(PoutreBase PROPERTIES FOLDER "src/")
 #force custom target before start
-add_dependencies(PoutreBase ${SIMD_LIB_DEP})
+add_dependencies(PoutreBase XsimdDep)
 #add_dependencies(PoutreBase Eigendep)
 
 IF(BUILD_SHARED_LIBS)
