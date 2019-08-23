@@ -123,10 +123,15 @@ if(NOT POUTRE_BOOST_FROM_SYSTEM)
 endif()
 
 #SIMD library
-add_subdirectory(nsimd)
+add_subdirectory(xsimd)
 SET(SIMD_INLCUDE_DIRECTORY "${SIMD_INLCUDE_DIRECTORY}" PARENT_SCOPE)
-SET(SIMD_LIB nsimd PARENT_SCOPE)
-SET(SIMD_LIB_DEP NSimdDep PARENT_SCOPE)
+SET(SIMD_LIB xsimd PARENT_SCOPE)
+SET(SIMD_LIB_DEP XsimdDep PARENT_SCOPE)
+
+#add_subdirectory(nsimd)
+#SET(SIMD_INLCUDE_DIRECTORY "${SIMD_INLCUDE_DIRECTORY}" PARENT_SCOPE)
+#SET(SIMD_LIB nsimd PARENT_SCOPE)
+#SET(SIMD_LIB_DEP NSimdDep PARENT_SCOPE) {% endcomment %}
 
 # jsoncpp
 add_subdirectory(jsoncpp)
