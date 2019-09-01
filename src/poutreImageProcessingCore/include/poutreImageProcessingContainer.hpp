@@ -26,6 +26,10 @@
 #include <poutreBase/poutreDenseIterator.hpp>
 #endif
 
+#ifndef POUTRE_DOMAIN_ITERATOR_HPP__
+#include <poutreBase/poutreDomainIterator.hpp>
+#endif
+
 #ifndef POUTRE_IMAGEPROCESSING_INTERFACE_HPP__
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
 #endif
@@ -44,6 +48,10 @@
 
 #ifndef POUTRE_GEOMETRY_HPP__
 #include <poutreBase/poutreGeometry.hpp>
+#endif
+
+#ifndef POUTRE_SIMD_HPP__
+#include <poutreBase/include/poutreSimd.hpp>
 #endif
 
 template <typename valuetype>
@@ -94,7 +102,10 @@ protected:
 public:
   using self_type = DenseTensor<valuetype, NumDims, allocator_type_t>;
 
-public:
+protected:
+  DenseTensor()
+      : m_data(nullptr), m_coordinnates(), m_strides(), m_padding(),
+        m_allocator(), m_numelemwithpaddingifany(0) {}
   DenseTensor(const std::vector<size_t> &dims)
       : m_data(nullptr), m_coordinnates(), m_strides(), m_padding(),
         m_allocator(), m_numelemwithpaddingifany(0) {
@@ -165,6 +176,7 @@ public:
     }
   }
 
+public:
   ~DenseTensor() POUTRE_NOEXCEPT {
     if (m_data)
       m_allocator.deallocate(m_data, m_numelemwithpaddingifany);
@@ -258,20 +270,12 @@ public:
 
   iterator begin() POUTRE_NOEXCEPT { return iterator(m_data, m_data); }
 
-  const_iterator begin() const POUTRE_NOEXCEPT {
-    return const_iterator(m_data, m_data);
-  }
-
   const_iterator cbegin() const POUTRE_NOEXCEPT {
     return const_iterator(m_data, m_data);
   }
 
   iterator end() POUTRE_NOEXCEPT {
     return iterator(m_data + m_numelemwithpaddingifany, m_data);
-  }
-
-  const_iterator end() const POUTRE_NOEXCEPT {
-    return const_iterator(m_data + m_numelemwithpaddingifany, m_data);
   }
 
   const_iterator cend() const POUTRE_NOEXCEPT {
@@ -377,26 +381,105 @@ public:
   using const_reference = value_type const &;
   using difference_type = std::ptrdiff_t;
 
-  using contigous_iterator = pdense_iterator<value_type>;
-  using const_contigous_iterator = pdense_iterator<const value_type>;
+  using iterator = pdomain_iterator<value_type, NumDims>;
+  using const_iterator = pdomain_iterator<const value_type, NumDims>;
 
-  using reverse_contigous_iterator = pdense_reverse_iterator<value_type>;
-  using const_reverse_contigous_iterator =
-      pdense_reverse_iterator<const value_type>;
+  // using reverse_contiguous_iterator = pdense_reverse_iterator<value_type>;
+  // using const_reverse_contiguous_iterator =
+  //     pdense_reverse_iterator<const value_type>;
 
   using index = offset;
   using size_type = std::size_t;
 
   using coordinate_type = typename parent_template::coordinate_type;
   using index_type = typename parent_template::index_type;
-
+  // static const std::ptrdiff_t m_numdims = NumDims;
   static const ImgType m_imgtype = ImgType::ImgType_Dense;
   static const PType m_ptype = TypeTraits<value_type>::pixel_type;
   static const CompoundType m_ctype = TypeTraits<value_type>::compound_type;
 
-  DenseImage(const std::vector<size_t> &dims) : parent_template(dims) {}
-  DenseImage(const std::initializer_list<size_t> &dims)
-      : parent_template(dims) {}
+  DenseImage(const std::vector<size_t> &dims) : parent_template() {
+    if (dims.size() != parent_template::m_numdims)
+      POUTRE_RUNTIME_ERROR("Invalid input initializer regarding NumDims of "
+                           "DenseImage container");
+    for (size_t i = 0; i < parent_template::m_numdims; ++i) {
+      parent_template::m_coordinnates[i] = dims[i];
+    }
+    for (size_t i = 0; i < parent_template::m_numdims; ++i) {
+      parent_template::m_padding[i] = 0;
+    }
+
+    // ADD PADDING LEAST SIGNIFICANT DIM FOR ARITHMETIC TYPES
+    if (TypeTraits<valuetype>::alignment != 1) {
+      parent_template::m_padding[parent_template::m_numdims - 1] =
+          simd::t_ReachNextAlignedSize<valuetype>(
+              parent_template::m_coordinnates[parent_template::m_numdims - 1]);
+    }
+    // compute full array size with include possible padding for each first
+    // stride
+    if (!parent_template::m_coordinnates.empty()) {
+      parent_template::m_numelemwithpaddingifany =
+          parent_template::m_coordinnates[0] + parent_template::m_padding[0];
+      for (size_t i = 1; i < (size_t)parent_template::m_numdims; i++) {
+        parent_template::m_numelemwithpaddingifany *=
+            (parent_template::m_coordinnates[i] +
+             parent_template::m_padding[i]);
+      }
+      parent_template::m_data = parent_template::m_allocator.allocate(
+          parent_template::m_numelemwithpaddingifany);
+
+      // fill stride
+      parent_template::m_strides[parent_template::m_numdims - 1] = 1;
+      for (ptrdiff_t dim = parent_template::m_numdims - 2; dim >= 0; --dim) {
+        parent_template::m_strides[dim] =
+            parent_template::m_strides[dim + 1] *
+            (bound()[dim + 1] + parent_template::m_padding[dim + 1]);
+      }
+    }
+  }
+
+  DenseImage(const std::initializer_list<size_t> &dims) : parent_template() {
+    if (dims.size() != parent_template::m_numdims)
+      POUTRE_RUNTIME_ERROR("Invalid input initializer regarding NumDims of "
+                           "DenseImage container");
+    // std::copy(dims.begin( ), dims.end( ), m_coordinnates.begin( ));
+    auto it = dims.begin();
+    for (size_t i = 0; i < parent_template::m_numdims; ++i, ++it) {
+      parent_template::m_coordinnates[i] = *it;
+    }
+    for (size_t i = 0; i < parent_template::m_numdims; ++i) {
+      parent_template::m_padding[i] = 0;
+    }
+
+    // ADD PADDING LEAST SIGNIFICANT DIM FOR ARITHMETIC TYPES
+    if (TypeTraits<valuetype>::alignment != 1) {
+      parent_template::m_padding[parent_template::m_numdims - 1] =
+          simd::t_ReachNextAlignedSize<valuetype>(
+              parent_template::m_coordinnates[parent_template::m_numdims - 1]);
+    }
+
+    // compute full array size with include possible padding for each first
+    // stride
+    if (!parent_template::m_coordinnates.empty()) {
+      parent_template::m_numelemwithpaddingifany =
+          parent_template::m_coordinnates[0] + parent_template::m_padding[0];
+      for (size_t i = 1; i < (size_t)parent_template::m_numdims; i++) {
+        parent_template::m_numelemwithpaddingifany *=
+            (parent_template::m_coordinnates[i] +
+             parent_template::m_padding[i]);
+      }
+      parent_template::m_data = parent_template::m_allocator.allocate(
+          parent_template::m_numelemwithpaddingifany);
+
+      // fill stride
+      parent_template::m_strides[parent_template::m_numdims - 1] = 1;
+      for (ptrdiff_t dim = parent_template::m_numdims - 2; dim >= 0; --dim) {
+        parent_template::m_strides[dim] =
+            parent_template::m_strides[dim + 1] *
+            (bound()[dim + 1] + parent_template::m_padding[dim + 1]);
+      }
+    }
+  }
 
   std::vector<std::size_t> GetCoords() const override {
     std::vector<std::size_t> out(this->m_numdims);
@@ -560,15 +643,29 @@ public:
       parent_template::swap(*this);
     }
   }
-  using parent_template::begin;
-  using parent_template::cbegin;
-  using parent_template::cend;
-  using parent_template::crbegin;
-  using parent_template::end;
-  using parent_template::rbegin;
 
-  using parent_template::crend;
-  using parent_template::rend;
+  iterator begin() POUTRE_NOEXCEPT {
+    return iterator(data(), bound(), stride(), 0);
+  }
+
+  const_iterator begin() const POUTRE_NOEXCEPT {
+    return const_iterator(data(), bound(), stride(), 0);
+  }
+
+  const_iterator cbegin() const POUTRE_NOEXCEPT {
+    return const_iterator(data(), bound(), stride(), 0);
+  }
+
+  iterator end() POUTRE_NOEXCEPT {
+    return iterator(data(), bound(), stride(), bound().size() /*+ 1*/);
+  }
+  const_iterator end() const POUTRE_NOEXCEPT {
+    return const_iterator(data(), bound(), stride(), bound().size() /*+ 1*/);
+  }
+
+  const_iterator cend() const POUTRE_NOEXCEPT {
+    return const_iterator(data(), bound(), stride(), bound().size() /*+ 1*/);
+  }
   // end std::array like interface
 public:
   // public copyctor used through clone (for make_unique ask this constructor

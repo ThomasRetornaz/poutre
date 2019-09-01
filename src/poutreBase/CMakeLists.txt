@@ -19,6 +19,7 @@ set(PoutreBaseSRC_PUBLICHEADERS
   ${PoutreBaseSubdirectory}/poutreCoordinate.hpp
   ${PoutreBaseSubdirectory}/poutreContainerHelper.hpp
   ${PoutreBaseSubdirectory}/poutreDenseIterator.hpp  
+  ${PoutreBaseSubdirectory}/poutreDomainIterator.hpp
   ${PoutreBaseSubdirectory}/poutreStaticContainer.hpp
   ${PoutreBaseSubdirectory}/poutreContainerView.hpp
 )

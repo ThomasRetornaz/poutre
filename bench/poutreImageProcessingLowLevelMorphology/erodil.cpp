@@ -64,12 +64,13 @@ BENCHMARK_TEMPLATE_DEFINE_F(DilateFixtureView, DilateFixtureView_Square_UINT8,
   }
   state.SetItemsProcessed(state.iterations() * size);
 }
-BENCHMARK_REGISTER_F(DilateFixtureView, DilateFixtureView_Square_UINT8)
-    ->Arg(16 * 16)
-    ->Arg(32 * 32)
-    ->Arg(64 * 64)
-    ->Arg(128 * 128)
-    ->Unit(benchmark::kMillisecond); //-V112
+
+// BENCHMARK_REGISTER_F(DilateFixtureView, DilateFixtureView_Square_UINT8)
+//     ->Arg(16 * 16)
+//     ->Arg(32 * 32)
+//     ->Arg(64 * 64)
+//     ->Arg(128 * 128)
+//     ->Unit(benchmark::kMillisecond); //-V112
 
 BENCHMARK_TEMPLATE_DEFINE_F(DilateFixtureView, DilateFixtureView_Square_INT32,
                             poutre::pINT32)
@@ -442,6 +443,23 @@ template <typename T> void DilateDenseImageSquare(benchmark::State &state) {
   }
   state.SetItemsProcessed(state.iterations() * size);
 }
+
+template <typename T> void DilateDenseImageCross(benchmark::State &state) {
+  const auto size = state.range(0);
+  while (state.KeepRunning()) {
+    for (auto i = 0u; i < size; ++i) {
+      auto ImageIn = poutre::DenseImage<T, 2>(
+          {(std::size_t)sqrt(size), (std::size_t)sqrt(size)});
+      auto ImageOut = poutre::DenseImage<T, 2>(
+          {(std::size_t)sqrt(size), (std::size_t)sqrt(size)});
+      poutre::t_Dilate(
+          ImageIn,
+          poutre::se::NeighborListStaticSE::NeighborListStaticSE2DCross,
+          ImageOut);
+    }
+  }
+  state.SetItemsProcessed(state.iterations() * size);
+}
 } // namespace
 BENCHMARK_TEMPLATE(DilateDenseImageSquare, poutre::pUINT8)
     ->Arg(16 * 16)
@@ -451,6 +469,20 @@ BENCHMARK_TEMPLATE(DilateDenseImageSquare, poutre::pUINT8)
     ->Unit(benchmark::kMillisecond);
 
 BENCHMARK_TEMPLATE(DilateDenseImageSquare, poutre::pINT32)
+    ->Arg(16 * 16)
+    ->Arg(32 * 32)
+    ->Arg(64 * 64)
+    ->Arg(128 * 128)
+    ->Unit(benchmark::kMillisecond);
+
+BENCHMARK_TEMPLATE(DilateDenseImageCross, poutre::pUINT8)
+    ->Arg(16 * 16)
+    ->Arg(32 * 32)
+    ->Arg(64 * 64)
+    ->Arg(128 * 128)
+    ->Unit(benchmark::kMillisecond);
+
+BENCHMARK_TEMPLATE(DilateDenseImageCross, poutre::pINT32)
     ->Arg(16 * 16)
     ->Arg(32 * 32)
     ->Arg(64 * 64)
