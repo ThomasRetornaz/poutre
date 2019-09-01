@@ -793,6 +793,100 @@ struct t_ErodeDilateOpispatcher<
   }
 };
 
+template <typename TIn, typename TOut, class HelperOp>
+struct t_ErodeDilateOpispatcherDenseImage<
+    se::NeighborListStaticSE::NeighborListStaticSE2DCross, TIn, TOut, 2,
+    HelperOp> {
+  void operator()(const DenseImage<TIn, 2> &i_vin,
+                  DenseImage<TOut, 2> &o_vout) {
+    POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(),
+                       "Incompatible views size");
+    auto ibd = i_vin.bound();
+    auto obd = o_vout.bound();
+    auto istride = i_vin.stride();
+    auto ostride = o_vout.stride();
+    scoord ysize = i_vin.GetYSize();
+    scoord xsize = i_vin.GetXSize();
+    scoord xsizepadded = istride[0];
+    POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
+    POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
+    using tmpBuffer =
+        std::vector<TIn,
+                    xs::aligned_allocator<TIn, SIMD_IDEAL_MAX_ALIGN_BYTES>>;
+    // using lineView = array_view<TIn, 1>;
+    using lineView = TIn *; // array_view<TIn, 1>;
+
+    tmpBuffer tempLine(xsize), tempLine1(xsize), tempLine2(xsize),
+        tempLine3(xsize);
+    lineView bufTempLine(tempLine.data()), bufTempLine1(tempLine1.data()),
+        bufTempLine2(tempLine2.data()), bufTempLine3(tempLine3.data());
+    lineView bufInputPreviousLine;
+    lineView bufInputCurrentLine;
+    lineView bufInputNextLine;
+    lineView bufOuputCurrentLine;
+
+    // quick run one line
+    if (ysize == 1) {
+      bufInputPreviousLine = (lineView)i_vin.data();
+      bufOuputCurrentLine = o_vout.data();
+      // dilate/erode line 0
+      HelperOp::ShiftRightLeftAndArith(bufInputPreviousLine, xsize, 1, 1,
+                                       bufTempLine, bufOuputCurrentLine);
+      return;
+    }
+
+    // compute first line
+    // translate to clipped connection
+    // x . x
+    // ? x ?
+    bufInputPreviousLine = (lineView)i_vin.data();
+    // dilate/erode line 0
+    HelperOp::ShiftRightLeftAndArith(bufInputPreviousLine, xsize, 1, 1,
+                                     bufTempLine, bufTempLine2);
+
+    bufInputNextLine = (lineView)i_vin.data() + xsizepadded;
+    bufOuputCurrentLine = o_vout.data();
+
+    // inf/sup between dilate line 0 and line 1
+    HelperOp::ApplyArith(bufTempLine2, bufInputNextLine, xsize,
+                         bufOuputCurrentLine);
+
+    // then loop
+    bufInputCurrentLine = bufInputNextLine;
+    for (scoord y = 2; y < ysize; y++) {
+      // actual computation
+      // 1 2 3   <--- bufInputPreviousLine y-2
+      // 4 5 6   <--- bufInputCurrentLine  y-1
+      // 7 8 9   <--- bufInputNextLine     y
+      bufOuputCurrentLine = o_vout.data() + (y - 1) * xsizepadded;
+      bufInputNextLine = (lineView)i_vin.data() + (y)*xsizepadded;
+      // dilate(y-1)/erode(y-1)
+      HelperOp::ShiftRightLeftAndArith(bufInputCurrentLine, xsize, 1, 1,
+                                       bufTempLine, bufTempLine2);
+
+      // sup(y-2,dilate(y-1)),inf(y-2,erode(y-1))
+      HelperOp::ApplyArith(bufInputPreviousLine, bufTempLine2, xsize,
+                           bufTempLine);
+      // sup(sup(y-2,dilate(y-1),y) || inf(inf(y-2,erode(y-1),y)
+      HelperOp::ApplyArith(bufTempLine, bufInputNextLine, xsize,
+                           bufOuputCurrentLine);
+      // swap
+      bufInputPreviousLine = bufInputCurrentLine; // previous <--current
+      bufInputCurrentLine = bufInputNextLine;     // current <-- next
+    }
+    // end last line
+    // translate to clipped connection
+    //. x .
+    // x x x
+    // note that bufInputCurrentLine already point on ySize-1 (see above)
+    bufOuputCurrentLine = o_vout.data() + xsizepadded * (ysize - 1);
+    // dilate/erode line y-1
+    HelperOp::ShiftRightLeftAndArith(bufInputCurrentLine, xsize, 1, 1,
+                                     bufTempLine, bufTempLine2);
+    HelperOp::ApplyArith(bufInputPreviousLine, bufTempLine2, xsize,
+                         bufOuputCurrentLine);
+  }
+};
 /////Seg0
 
 // FIXME check TIn, Tout equals cv
@@ -831,6 +925,48 @@ struct t_ErodeDilateOpispatcher<
     for (scoord y = 0; y < ysize; y++) {
       bufInputCurrentLine = i_vin.data() + y * xsize;
       bufOuputCurrentLine = o_vout.data() + y * xsize;
+      HelperOp::ShiftRightLeftAndArith(bufInputCurrentLine, xsize, 1, 1,
+                                       bufTempLine, bufOuputCurrentLine);
+    }
+  }
+};
+
+template <typename TIn, typename TOut, class HelperOp>
+struct t_ErodeDilateOpispatcherDenseImage<
+    se::NeighborListStaticSE::NeighborListStaticSE2DSeg0, TIn, TOut, 2,
+    HelperOp> {
+  void operator()(const DenseImage<TIn, 2> &i_vin,
+                  DenseImage<TOut, 2> &o_vout) {
+    POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(),
+                       "Incompatible views size");
+    auto ibd = i_vin.bound();
+    auto obd = o_vout.bound();
+    auto istride = i_vin.stride();
+    auto ostride = o_vout.stride();
+    scoord ysize = i_vin.GetYSize();
+    scoord xsize = i_vin.GetXSize();
+    scoord xsizepadded = istride[0];
+    POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
+    POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
+    using tmpBuffer =
+        std::vector<TIn,
+                    xs::aligned_allocator<TIn, SIMD_IDEAL_MAX_ALIGN_BYTES>>;
+    using lineView = TIn *; // array_view<TIn, 1>;
+
+    tmpBuffer tempLine(xsize);
+    lineView bufTempLine(tempLine.data());
+    lineView bufInputCurrentLine;
+    lineView bufOuputCurrentLine;
+
+    // quick exit one column
+    if (xsize == 1) {
+      CopyOp(i_vin, o_vout);
+      return;
+    }
+
+    for (scoord y = 0; y < ysize; y++) {
+      bufInputCurrentLine = (lineView)i_vin.data() + y * xsizepadded;
+      bufOuputCurrentLine = o_vout.data() + y * xsizepadded;
       HelperOp::ShiftRightLeftAndArith(bufInputCurrentLine, xsize, 1, 1,
                                        bufTempLine, bufOuputCurrentLine);
     }
@@ -911,6 +1047,84 @@ struct t_ErodeDilateOpispatcher<
     bufInputPreviousLine = i_vin.data() + xsize * (ysize - 2);
     bufInputCurrentLine = i_vin.data() + xsize * (ysize - 1);
     bufOuputCurrentLine = o_vout.data() + xsize * (ysize - 1);
+    HelperOp::ApplyArith(bufInputPreviousLine, bufInputCurrentLine, xsize,
+                         bufOuputCurrentLine);
+  }
+};
+
+// FIXME check TIn, Tout equals cv
+template <typename TIn, typename TOut, class HelperOp>
+struct t_ErodeDilateOpispatcherDenseImage<
+    se::NeighborListStaticSE::NeighborListStaticSE2DSeg90, TIn, TOut, 2,
+    HelperOp> {
+  void operator()(const DenseImage<TIn, 2> &i_vin,
+                  DenseImage<TOut, 2> &o_vout) {
+    POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(),
+                       "Incompatible views size");
+    auto ibd = i_vin.bound();
+    auto obd = o_vout.bound();
+    auto istride = i_vin.stride();
+    auto ostride = o_vout.stride();
+    scoord ysize = i_vin.GetYSize();
+    scoord xsize = i_vin.GetXSize();
+    scoord xsizepadded = istride[0];
+    POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
+    POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
+    using tmpBuffer =
+        std::vector<TIn,
+                    xs::aligned_allocator<TIn, SIMD_IDEAL_MAX_ALIGN_BYTES>>;
+    // using lineView = array_view<TIn, 1>;
+    using lineView = TIn *;
+    tmpBuffer tempLine(xsize);
+    lineView bufTempLine(tempLine.data());
+    lineView bufInputPreviousLine;
+    lineView bufInputCurrentLine;
+    lineView bufInputNextLine;
+    lineView bufOuputCurrentLine;
+
+    // quick run one line
+    if (ysize == 1) {
+      CopyOp(i_vin, o_vout);
+      return;
+    }
+
+    // compute first line
+    // translate to clipped connection
+    // ? . ?
+    // ? x ?
+    bufInputPreviousLine = (lineView)i_vin.data();
+    bufInputNextLine = (lineView)i_vin.data() + xsizepadded;
+    ;
+    bufOuputCurrentLine = o_vout.data();
+    // inf/sup between dilate line 0 and line 1
+    HelperOp::ApplyArith(bufInputPreviousLine, bufInputNextLine, xsize,
+                         bufOuputCurrentLine);
+
+    // then loop
+    bufInputCurrentLine = bufInputNextLine;
+    for (scoord y = 2; y < ysize; y++) {
+      // actual computation
+      // 1   <--- bufInputPreviousLine y-2
+      // 4   <--- bufInputCurrentLine  y-1
+      // 7   <--- bufInputNextLine     y
+      bufOuputCurrentLine = o_vout.data() + xsizepadded * (y - 1);
+
+      bufInputNextLine = (lineView)i_vin.data() + xsizepadded * (y);
+      bufInputPreviousLine = (lineView)i_vin.data() + xsizepadded * (y - 2);
+      bufInputCurrentLine = (lineView)i_vin.data() + xsizepadded * (y - 1);
+
+      HelperOp::ApplyArith(bufInputPreviousLine, bufInputCurrentLine, xsize,
+                           bufTempLine);
+      HelperOp::ApplyArith(bufTempLine, bufInputNextLine, xsize,
+                           bufOuputCurrentLine);
+    }
+    // end last line
+    // translate to clipped connection
+    //? x ?
+    //? x ?
+    bufInputPreviousLine = (lineView)i_vin.data() + xsizepadded * (ysize - 2);
+    bufInputCurrentLine = (lineView)i_vin.data() + xsizepadded * (ysize - 1);
+    bufOuputCurrentLine = o_vout.data() + xsizepadded * (ysize - 1);
     HelperOp::ApplyArith(bufInputPreviousLine, bufInputCurrentLine, xsize,
                          bufOuputCurrentLine);
   }
@@ -997,6 +1211,97 @@ struct t_ErodeDilateOpispatcher<
     bufInputPreviousLine = i_vin.data() + xsize * (ysize - 2);
     bufInputCurrentLine = i_vin.data() + xsize * (ysize - 1);
     bufOuputCurrentLine = o_vout.data() + xsize * (ysize - 1);
+
+    // shift to right
+    t_LineBufferShiftRight<TIn>(bufInputPreviousLine, xsize, 1,
+                                HelperOp::m_paddingValue, bufTempLine);
+    // Take min(Erode), max(dilate)
+    HelperOp::ApplyArith(bufInputCurrentLine, bufTempLine, xsize,
+                         bufOuputCurrentLine);
+  }
+};
+
+// FIXME check TIn, Tout equals cv
+template <typename TIn, typename TOut, class HelperOp>
+struct t_ErodeDilateOpispatcherDenseImage<
+    se::NeighborListStaticSE::NeighborListStaticSE2DSeg45, TIn, TOut, 2,
+    HelperOp> {
+  void operator()(const DenseImage<TIn, 2> &i_vin,
+                  DenseImage<TOut, 2> &o_vout) {
+    POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(),
+                       "Incompatible views size");
+    auto ibd = i_vin.bound();
+    auto obd = o_vout.bound();
+    auto istride = i_vin.stride();
+    auto ostride = o_vout.stride();
+    scoord ysize = i_vin.GetYSize();
+    scoord xsize = i_vin.GetXSize();
+    scoord xsizepadded = istride[0];
+    POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
+    POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
+    using tmpBuffer =
+        std::vector<TIn,
+                    xs::aligned_allocator<TIn, SIMD_IDEAL_MAX_ALIGN_BYTES>>;
+    // using lineView = array_view<TIn, 1>;
+    using lineView = TIn *;
+    tmpBuffer tempLine(xsize), tempLine2(xsize), tempLine3(xsize);
+    lineView bufTempLine(tempLine.data()), bufTempLine2(tempLine2.data()),
+        bufTempLine3(tempLine3.data());
+    lineView bufInputPreviousLine;
+    lineView bufInputCurrentLine;
+    lineView bufInputNextLine;
+    lineView bufOuputCurrentLine;
+
+    // quick run one line/one column
+    if (ysize == 1 || xsize == 1) {
+      CopyOp(i_vin, o_vout);
+      return;
+    }
+
+    // compute first line
+    // translate to clipped connection
+    // ? . ?
+    // ? ? x
+    bufInputPreviousLine = (lineView)i_vin.data();
+    bufInputNextLine = (lineView)i_vin.data() + xsizepadded;
+    bufOuputCurrentLine = o_vout.data();
+    // shift to left
+    t_LineBufferShiftLeft<TIn>(bufInputNextLine, xsize, 1,
+                               HelperOp::m_paddingValue, bufTempLine);
+    // Take min(Erode), max(dilate)
+    HelperOp::ApplyArith(bufInputPreviousLine, bufTempLine, xsize,
+                         bufOuputCurrentLine);
+
+    // then loop
+    bufInputCurrentLine = bufInputNextLine;
+    for (scoord y = 1; y < ysize; y++) {
+      // actual computation
+      // 1 2 3   <--- bufInputPreviousLine y-1
+      // 4 5 6   <--- bufInputCurrentLine  y
+      // 7 8 9   <--- bufInputNextLine     y+1
+      bufInputPreviousLine = (lineView)i_vin.data() + xsizepadded * (y - 1);
+      bufInputCurrentLine = (lineView)i_vin.data() + xsizepadded * (y);
+      bufInputNextLine = (lineView)i_vin.data() + xsizepadded * (y + 1);
+      bufOuputCurrentLine = o_vout.data() + xsizepadded * (y);
+      // shift to right previous line
+      t_LineBufferShiftRight<TIn>(bufInputPreviousLine, xsize, 1,
+                                  HelperOp::m_paddingValue, bufTempLine);
+      // shift to left next line
+      t_LineBufferShiftLeft<TIn>(bufInputNextLine, xsize, 1,
+                                 HelperOp::m_paddingValue, bufTempLine2);
+      // Take min(Erode), max(dilate)
+      HelperOp::ApplyArith(bufInputCurrentLine, bufTempLine, xsize,
+                           bufTempLine3);
+      HelperOp::ApplyArith(bufTempLine3, bufTempLine2, xsize,
+                           bufOuputCurrentLine);
+    }
+    // end last line
+    // translate to clipped connection
+    // x ? ?
+    //? . ?
+    bufInputPreviousLine = (lineView)i_vin.data() + xsizepadded * (ysize - 2);
+    bufInputCurrentLine = (lineView)i_vin.data() + xsizepadded * (ysize - 1);
+    bufOuputCurrentLine = o_vout.data() + xsizepadded * (ysize - 1);
 
     // shift to right
     t_LineBufferShiftRight<TIn>(bufInputPreviousLine, xsize, 1,
@@ -1098,6 +1403,100 @@ struct t_ErodeDilateOpispatcher<
                          bufOuputCurrentLine);
   }
 };
+
+// FIXME check TIn, Tout equals cv
+template <typename TIn, typename TOut, class HelperOp>
+struct t_ErodeDilateOpispatcherDenseImage<
+    se::NeighborListStaticSE::NeighborListStaticSE2DSeg135, TIn, TOut, 2,
+    HelperOp> {
+  void operator()(const DenseImage<TIn, 2> &i_vin,
+                  DenseImage<TOut, 2> &o_vout) {
+    POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(),
+                       "Incompatible views size");
+    auto ibd = i_vin.bound();
+    auto obd = o_vout.bound();
+    auto istride = i_vin.stride();
+    auto ostride = o_vout.stride();
+    scoord ysize = i_vin.GetYSize();
+    scoord xsize = i_vin.GetXSize();
+    scoord xsizepadded = istride[0];
+    POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
+    POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
+    using tmpBuffer =
+        std::vector<TIn,
+                    xs::aligned_allocator<TIn, SIMD_IDEAL_MAX_ALIGN_BYTES>>;
+    // using lineView = array_view<TIn, 1>;
+    using lineView = TIn *;
+    tmpBuffer tempLine(xsize), tempLine2(xsize), tempLine3(xsize);
+    lineView bufTempLine(tempLine.data()), bufTempLine2(tempLine2.data()),
+        bufTempLine3(tempLine3.data());
+    lineView bufInputPreviousLine;
+    lineView bufInputCurrentLine;
+    lineView bufInputNextLine;
+    lineView bufOuputCurrentLine;
+
+    // quick run one line
+    if (ysize == 1 || xsize == 1) {
+      CopyOp(i_vin, o_vout);
+      return;
+    }
+
+    // compute first line
+    // translate to clipped connection
+    // 0 0 X     0 . 0
+    // 0 . 0   ->x 0 0
+    // X 0 0
+    bufInputPreviousLine = (lineView)i_vin.data();
+    bufInputNextLine = (lineView)i_vin.data() + xsizepadded;
+    bufOuputCurrentLine = o_vout.data();
+
+    // shift to rigt
+    t_LineBufferShiftRight<TIn>(bufInputNextLine, xsize, 1,
+                                HelperOp::m_paddingValue, bufTempLine);
+    // Take min(Erode), max(dilate)
+    HelperOp::ApplyArith(bufInputPreviousLine, bufTempLine, xsize,
+                         bufOuputCurrentLine);
+
+    for (scoord y = 1; y < ysize; y++) {
+      // actual computation
+      // 1 2 3   <--- bufInputPreviousLine y-2
+      // 4 5 6   <--- bufInputCurrentLine  y-1
+      // 7 8 9   <--- bufInputNextLine     y
+      bufInputPreviousLine = (lineView)i_vin.data() + xsizepadded * (y - 1);
+      bufInputCurrentLine = (lineView)i_vin.data() + xsizepadded * (y);
+      bufInputNextLine = (lineView)i_vin.data() + xsizepadded * (y + 1);
+      bufOuputCurrentLine = o_vout.data() + xsizepadded * (y);
+      // shift to left previous line
+      t_LineBufferShiftLeft<TIn>(bufInputPreviousLine, xsize, 1,
+                                 HelperOp::m_paddingValue, bufTempLine);
+      // shift to right next line
+      t_LineBufferShiftRight<TIn>(bufInputNextLine, xsize, 1,
+                                  HelperOp::m_paddingValue, bufTempLine2);
+      // Take min(Erode), max(dilate)
+      HelperOp::ApplyArith(bufInputCurrentLine, bufTempLine, xsize,
+                           bufTempLine3);
+      HelperOp::ApplyArith(bufTempLine3, bufTempLine2, xsize,
+                           bufOuputCurrentLine);
+    }
+    // end last line
+    // translate to clipped connection
+    // 0 0 X     0 0 x
+    // 0 . 0   ->0 . 0
+    // X 0 0
+    bufInputPreviousLine = (lineView)i_vin.data() + xsizepadded * (ysize - 2);
+    bufInputNextLine = (lineView)i_vin.data() + xsizepadded * (ysize - 1);
+    bufOuputCurrentLine = o_vout.data() + xsizepadded * (ysize - 1);
+
+    // shift to left
+    t_LineBufferShiftLeft<TIn>(bufInputPreviousLine, xsize, 1,
+                               HelperOp::m_paddingValue, bufTempLine);
+    // Take min(Erode), max(dilate)
+    HelperOp::ApplyArith(bufInputNextLine, bufTempLine, xsize,
+                         bufOuputCurrentLine);
+  }
+};
+
+//**********************************************************/
 
 template <typename TIn, typename TOut, ptrdiff_t Rank,
           template <typename, ptrdiff_t> class ViewIn,
