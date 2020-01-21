@@ -1,6 +1,8 @@
 Poutre
 =======
 
+[![Travis]](https://travis-ci.com/ThomasRetornaz/poutre)
+
 ## Rationale ##
 
 __Poutre__ is a open-source image processing framework, with a focus on Mathematical Morphology.  
