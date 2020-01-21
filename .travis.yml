@@ -21,7 +21,7 @@ matrix:
       env: COMPILER=clang CLANG=6.0
 env:
   global:
-        - POUTRE_CMAKE_EXTRA_ARGS="-DBUILD_PYTHON=ON -DCMAKE_BUILD_TYPE=Release 
+        - POUTRE_CMAKE_EXTRA_ARGS="-DBUILD_PYTHON=ON -DCMAKE_BUILD_TYPE=Release" 
         - POUTRE_CMAKE_GENERATOR="Ninja"
 before_install:
     - sudo apt-get update
@@ -42,14 +42,13 @@ before_install:
         fi
       fi
 script:
-  # cppcheck
-  - cppcheck --quiet --error-exitcode=1 . 
   - mkdir -p build
   - cd build
   - cmake -GNinja "$POUTRE_CMAKE_EXTRA_ARGS" -DBUILD_SHARED_LIBS=ON -DBUILD_TEST=ON $POUTRE_CMAKE_EXTRA_ARGS ..
   - cmake --build . --config Release
   - ctest . -C Release --output-on-failure
-
+  # cppcheck
+  - cppcheck --quiet --error-exitcode=1 . 
 # see https://github.com/richelbilderbeek/travis_cpp_tutorial/blob/master/travis_cpp_tutorial.pdf
 #after_success:
 #  - bash <(curl -s https://codecov.io/bash)
