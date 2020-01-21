@@ -13,7 +13,9 @@ set(PoutreImageProcessingLLMBenchSRC
   )
 
 #UGLY fix this later
-LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/$(ConfigurationName))
+if(WIN32)
+  LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/$(ConfigurationName))
+endif()  
 
 add_executable(PoutreIPLowLevelMorphologyBenchs ${PoutreImageProcessingLLMBenchSRC})
 set_target_properties(PoutreIPLowLevelMorphologyBenchs PROPERTIES  
@@ -21,14 +23,14 @@ set_target_properties(PoutreIPLowLevelMorphologyBenchs PROPERTIES
 
 IF(WIN32)
 target_link_libraries(PoutreIPLowLevelMorphologyBenchs 
-  PUBLIC benchmark  
-  PUBLIC shlwapi.lib
-  PUBLIC PoutreIPCore
+  ${GOOGLE_BENCHMARK} 
+  shlwapi.lib
+  PoutreIPCore
   )
 ELSE()
 target_link_libraries(PoutreIPLowLevelMorphologyBenchs 
-  PUBLIC benchmark  
-  PUBLIC PoutreIPCore
+  ${GOOGLE_BENCHMARK} 
+  PoutreIPCore
   )
 ENDIF()
 

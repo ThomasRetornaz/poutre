@@ -85,7 +85,7 @@ public:
   using coordinate_type = bounds<NumDims>;
   using index_type = index<NumDims>;
 
-  using index = offset;
+  //using index = offset;
   using size_type = std::size_t;
 
   using allocator_type = allocator_type_t;

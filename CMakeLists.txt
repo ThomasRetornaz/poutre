@@ -1,6 +1,7 @@
 #Most of the initial cmake skeleton  was heavely inspired from yayi project see https://bitbucket.org/renficiaud/yayi.git. and rapidjosn
 cmake_minimum_required (VERSION 3.0)
 project(Poutre)
+set(CMAKE_CXX_STANDARD 14)
 
 # some global properties
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -14,8 +15,14 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
+OPTION(BUILD_TEST "Build Tests Suites" ON)
+OPTION(BUILD_BENCH "Build Benchmark Suites" ON)
+OPTION(BUILD_PY "Build python exports" ON)
 
-enable_testing()
+if(BUILD_TEST)
+    enable_testing()
+endif()
+
 
 # current version
 set(POUTRE_MAJOR    0 )
@@ -120,6 +127,7 @@ include_directories(BEFORE "${SIMD_INLCUDE_DIRECTORY}")
 
 # warning the order is important
 include_directories(${POUTRE_SRC_DIR})
+
 include_directories(${POUTRE_NRT_DIR})
 include_directories(${POUTRE_PYTHONEXT_DIR})
 
@@ -128,11 +136,16 @@ include_directories(${JSONCPP_INCLUDE_DIR})
 
 # the poutre core libraries
 add_subdirectory (${POUTRE_SRC_DIR})
-add_subdirectory (${POUTRE_NRT_DIR})
-add_subdirectory (${POUTRE_BENCH_DIR})
-
-# creates the python package
-#create_python_package()
+if(BUILD_TEST)
+    add_subdirectory (${POUTRE_NRT_DIR})
+endif()
+if(BUILD_BENCH)
+    add_subdirectory (${POUTRE_BENCH_DIR})
+endif()    
+if(BUILD_PY)
+    # creates the python package
+    #create_python_package()
+endif()    
 
 message(STATUS "Configuring the documentation")
 include(cmake/CMakeDoc.cmake)

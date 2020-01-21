@@ -13,7 +13,9 @@ set(PoutreBaseBenchSRC
   )
 
 #UGLY fix this later
-LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/$(ConfigurationName))
+if(WIN32)
+  LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/$(ConfigurationName))
+endif()  
 
 add_executable(PoutreBaseBenchs ${PoutreBaseBenchSRC})
 set_target_properties(PoutreBaseBenchs PROPERTIES  
@@ -21,14 +23,14 @@ set_target_properties(PoutreBaseBenchs PROPERTIES
 
 IF(WIN32)
 target_link_libraries(PoutreBaseBenchs 
-  PUBLIC benchmark  
-  PUBLIC shlwapi.lib
-  PUBLIC PoutreBase
+  ${GOOGLE_BENCHMARK}
+  shlwapi.lib
+  PoutreBase
   )
 ELSE()
 target_link_libraries(PoutreBaseBenchs 
-  PUBLIC benchmark  
-  PUBLIC PoutreBase
+  ${GOOGLE_BENCHMARK}
+  PoutreBase
   )
 ENDIF()
 

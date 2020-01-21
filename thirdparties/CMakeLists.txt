@@ -27,9 +27,6 @@ if(UNIX AND NOT APPLE AND NOT POUTRE_BOOST_FROM_SYSTEM)
   message(WARNING "[POUTRE Boost] you are setting a different boost than the one provided by the system. This option should be taken with care.")
 endif()
 
-set(Boost_ADDITIONAL_VERSIONS   
-	"1.65.1" "1.66.0" "1.67.0" "1.68.0" "1.69.0" "1.70.0")
-
 # disable auto link
 add_definitions(-DBOOST_ALL_NO_LIB)
 # linking with shared library version
@@ -58,8 +55,9 @@ else()
 endif()
 set(Boost_NO_BOOST_CMAKE ON)
 
-set(POUTRE_boost_version_minimal 1.64)
-set(Boost_ADDITIONAL_VERSIONS "1.65" "1.65.1" "1.66" "1.67")
+set(POUTRE_boost_version_minimal 1.62)
+set(Boost_ADDITIONAL_VERSIONS   
+	"1.62" "1.63" "1.64" "1.65.1" "1.66.0" "1.67.0" "1.68.0" "1.69.0" "1.70.0")
 find_package(Boost ${POUTRE_boost_version_minimal}
              REQUIRED 
             COMPONENTS 

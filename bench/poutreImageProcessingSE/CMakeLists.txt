@@ -12,7 +12,9 @@ set(PoutreImageProcessingSEBenchSRC
   )
 
 #UGLY fix this later
-LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/$(ConfigurationName))
+if(WIN32)
+  LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/$(ConfigurationName))
+endif()  
 
 add_executable(PoutreIPSEBenchs ${PoutreImageProcessingSEBenchSRC})
 set_target_properties(PoutreIPSEBenchs PROPERTIES  
@@ -20,16 +22,16 @@ set_target_properties(PoutreIPSEBenchs PROPERTIES
 
 IF(WIN32)
 target_link_libraries(PoutreIPSEBenchs 
-  PUBLIC benchmark  
-  PUBLIC shlwapi.lib
+  ${GOOGLE_BENCHMARK}
+  shlwapi.lib
   #PUBLIC PoutreIPSE
-  PUBLIC ${Boost_SYSTEM_LIBRARY} 
+  ${Boost_SYSTEM_LIBRARY} 
   )
 ELSE()
 target_link_libraries(PoutreIPSEBenchs 
-  PUBLIC benchmark  
+  ${GOOGLE_BENCHMARK}
   #PUBLIC PoutreIPSE 
-  PUBLIC ${Boost_SYSTEM_LIBRARY}   
+  ${Boost_SYSTEM_LIBRARY}   
   )
 ENDIF()
 
