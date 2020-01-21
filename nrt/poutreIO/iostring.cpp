@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE(ioreadstring_scalar_GUINT8) {
   //   std::cout << "\n**************************************************\n";
   //   abort();
   BOOST_CHECK_EQUAL_COLLECTIONS((*img_t).begin(), (*img_t).end(),
-                                expectedvalues.begin(),
+                                expectedvalues.begin(), //-V522
                                 expectedvalues.end()); //-V522
 }
 
@@ -81,7 +81,7 @@ BOOST_AUTO_TEST_CASE(ioreadstring_scalar_INT32) {
   //        std::cout<<"\nval\t"<<(poutre::TypeTraits<poutre::pUINT8>::str_type)(val);
   //        }
   BOOST_CHECK_EQUAL_COLLECTIONS((*img_t).begin(), (*img_t).end(),
-                                expectedvalues.begin(),
+                                expectedvalues.begin(), //-V522
                                 expectedvalues.end()); //-V522
 }
 
@@ -124,7 +124,7 @@ BOOST_AUTO_TEST_CASE(ioreadstring_3Planes_UNT8) {
   //        }
 
   for (size_t i = 0u; i < img_t->size(); ++i) //-V522
-  {
+  { //-V522
     BOOST_CHECK_EQUAL_COLLECTIONS((*img_t)[i].begin(), (*img_t)[i].end(),
                                   expectedvalues[i].begin(),
                                   expectedvalues[i].end());
@@ -160,7 +160,7 @@ BOOST_AUTO_TEST_CASE(ioreadstring_4Planes_double) {
   ImgType *img_t = dynamic_cast<ImgType *>(&(*img));
   BOOST_REQUIRE(img_t);
   for (size_t i = 0u; i < img_t->size(); ++i) //-V522
-  {
+  { //-V522
     BOOST_CHECK_EQUAL_COLLECTIONS((*img_t)[i].begin(), (*img_t)[i].end(),
                                   expectedvalues[i].begin(),
                                   expectedvalues[i].end());

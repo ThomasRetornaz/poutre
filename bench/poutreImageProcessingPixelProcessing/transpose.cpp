@@ -34,19 +34,19 @@ template <typename T> void TransposeBenchmark(benchmark::State &state) {
 } // namespace
 BENCHMARK_TEMPLATE(TransposeBenchmark, poutre::pUINT8)
     ->Arg(16 * 16)
-    ->Arg(32 * 32)
+    ->Arg(32 * 32) //-V112
     ->Arg(64 * 64)
     ->Arg(128 * 128)
     ->Unit(benchmark::kMicrosecond); //-V112
 BENCHMARK_TEMPLATE(TransposeBenchmark, poutre::pINT32)
     ->Arg(16 * 16)
-    ->Arg(32 * 32)
+    ->Arg(32 * 32) //-V112
     ->Arg(64 * 64)
     ->Arg(128 * 128)
     ->Unit(benchmark::kMicrosecond); //-V112
 BENCHMARK_TEMPLATE(TransposeBenchmark, poutre::pFLOAT)
     ->Arg(16 * 16)
-    ->Arg(32 * 32)
+    ->Arg(32 * 32) //-V112
     ->Arg(64 * 64)
     ->Arg(128 * 128)
     ->Unit(benchmark::kMicrosecond); //-V112

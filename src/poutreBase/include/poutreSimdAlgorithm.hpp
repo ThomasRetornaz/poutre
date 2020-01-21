@@ -26,7 +26,7 @@
 #include <poutreBase/include/poutreSimd.hpp>
 #endif
 
-#include <stdalign.h>
+#include <memory>
 #include <stddef.h>
 #include <stdio.h>
 

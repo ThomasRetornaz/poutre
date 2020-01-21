@@ -265,7 +265,7 @@ template <> struct t_transposeOp<pUINT8, pUINT8> {
         r3 =
             _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 3) * xstep + x));
         r4 =
-            _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 4) * xstep + x));
+            _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 4) * xstep + x)); //-V112
         r5 =
             _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 5) * xstep + x));
         r6 =

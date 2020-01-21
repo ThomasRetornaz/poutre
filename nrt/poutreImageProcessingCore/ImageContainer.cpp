@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_CASE(ctor) {
   BOOST_CHECK_EQUAL(img.GetImgType(), poutre::ImgType::ImgType_Dense);
   BOOST_CHECK_EQUAL(img.GetPType(), poutre::PType::PType_GrayUINT8);
   BOOST_CHECK_EQUAL(img.GetCType(), poutre::CompoundType::CompoundType_Scalar);
-  BOOST_CHECK_EQUAL(img.GetXSize(), 4);
+  BOOST_CHECK_EQUAL(img.GetXSize(), 4); //-V112
   BOOST_CHECK_EQUAL(img.GetYSize(), 3);
   BOOST_CHECK_EQUAL(img.GetNumDims(), 2);
   BOOST_CHECK(!img.empty());
@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(clone) {
   BOOST_CHECK_NE(cloned, &(img));
   //!= data address
   BOOST_CHECK_NE(&(*((*cloned).data())), &(*(img.data()))); //-V522
-  BOOST_CHECK_EQUAL((*cloned).GetPType(), poutre::PType::PType_GrayUINT8);
+  BOOST_CHECK_EQUAL((*cloned).GetPType(), poutre::PType::PType_GrayUINT8); //-V522
   BOOST_CHECK_EQUAL((*cloned).GetCType(),
                     poutre::CompoundType::CompoundType_Scalar);
   BOOST_CHECK_EQUAL((*cloned).GetImgType(), poutre::ImgType::ImgType_Dense);
@@ -141,11 +141,11 @@ BOOST_AUTO_TEST_CASE(Factory) {
   }
   {
     BOOST_CHECK_THROW(
-        poutre::CreateDense({3, 4}, poutre::CompoundType::CompoundType_Scalar,
+        poutre::CreateDense({3, 4}, poutre::CompoundType::CompoundType_Scalar, //-V112
                             poutre::PType::PType_Undef),
         std::runtime_error); //-V112
     BOOST_CHECK_THROW(
-        poutre::CreateDense({3, 4}, poutre::CompoundType::CompoundType_Undef,
+        poutre::CreateDense({3, 4}, poutre::CompoundType::CompoundType_Undef, //-V112
                             poutre::PType::PType_GrayINT64),
         std::runtime_error); //-V112
   }
@@ -250,7 +250,7 @@ BOOST_AUTO_TEST_CASE(SetPixelGetPixel) {
   auto img = dynamic_cast<ImageType *>(imgin.get());
   BOOST_REQUIRE(img);
   (*img).SetPixel(2, 0, 10);  // x then y
-  poutre::idx2d pix = {3, 0}; // y then x
+  poutre::idx2d pix = {3, 0}; // y then x //-V522
   (*img).SetPixel(pix, 8);
   poutre::pt2D_scoord pix2 = {5, 3}; // x then y
   (*img).SetPixel(pix2, 9);
@@ -284,7 +284,7 @@ BOOST_AUTO_TEST_CASE(GetLineBuffer) {
   auto img = dynamic_cast<ImageType *>(imgin.get());
   BOOST_REQUIRE(img);
   auto line = (*img).GetLineBuffer(3);
-  BOOST_CHECK_EQUAL(line[4], 5);
+  BOOST_CHECK_EQUAL(line[4], 5); //-V522
 
   BOOST_CHECK_EQUAL((*img).GetXSize(), 6);
   BOOST_CHECK_EQUAL((*img).GetYSize(), 5);

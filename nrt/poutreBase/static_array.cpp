@@ -29,7 +29,7 @@ BOOST_AUTO_TEST_CASE(static_array_init)
     {
     //initializer list
     auto array1 = { 1 };
-    auto array2 = { 1, 2, 3, 4, 5, 6 }; //-V112
+    auto array2 = { 1, 2, 3, 4, 5, 6 }; //-V112 //-V808
     }
 
     {

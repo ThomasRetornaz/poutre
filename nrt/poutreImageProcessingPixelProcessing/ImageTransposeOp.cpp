@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE(arrayview)
     poutre::DenseImage<poutre::pINT32,2> imgOut({ 6, 5 });
    //  auto v_img1 = poutre::view(*img); //-V522
    //  auto v_img2 = poutre::view(imgOut);
-    poutre::t_transpose(*img,imgOut);
+    poutre::t_transpose(*img,imgOut); //-V522
 
     std::string expected = "Dense Scalar GINT32 2 6 5 \
 1 7 13 19 25 \
@@ -115,7 +115,7 @@ BOOST_AUTO_TEST_CASE(arrayviewfloat)
    // auto v_img1 = poutre::view(*img); //-V522
    // auto v_img2 = poutre::view(imgOut);
    // poutre::t_transpose(v_img1, v_img2);
-   poutre::t_transpose(*img,imgOut);
+   poutre::t_transpose(*img,imgOut); //-V522
 
    std::string expected = "Dense Scalar F32 2 9 9 \
 1 1 1 1 1 1 1 1 1 \
@@ -159,7 +159,7 @@ BOOST_AUTO_TEST_CASE(arrayviewunint8)
    // auto v_img1 = poutre::view(*img); //-V522
    // auto v_img2 = poutre::view(imgOut);
    // poutre::t_transpose(v_img1, v_img2);
-   poutre::t_transpose(*img,imgOut);
+   poutre::t_transpose(*img,imgOut); //-V522
 
    std::string expected = "Dense Scalar GUINT8 2 17 17 \
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 \

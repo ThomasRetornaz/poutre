@@ -229,7 +229,9 @@ public:
   POUTRE_CXX14_CONSTEXPR size_type size() const POUTRE_NOEXCEPT {
     size_t volume = m_array[0]; // at least rank==1
     for (size_t i = 1; i < rank; i++)
-      volume *= m_array[i];
+    {
+        volume *= m_array[i];
+    }
     return volume;
   }
 
