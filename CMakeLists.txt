@@ -16,7 +16,7 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 OPTION(BUILD_TEST "Build Tests Suites" ON)
-OPTION(BUILD_BENCH "Build Benchmark Suites" ON)
+OPTION(BUILD_BENCH "Build Benchmark Suites" OFF)
 OPTION(BUILD_PY "Build python exports" ON)
 
 if(BUILD_TEST)

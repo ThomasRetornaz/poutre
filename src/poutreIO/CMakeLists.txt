@@ -3,7 +3,7 @@
 set(PoutreIOSubdirectory ${POUTRE_SRC_DIR}/poutreIO)
 
 
- find_package(OpenCV QUIET) #todo add converter to/from opencv
+find_package(OpenCV QUIET) #todo add converter to/from opencv
 
 INCLUDE_DIRECTORIES(BEFORE SYSTEM 
 	${ZLIB_INCLUDE_DIR}
@@ -56,10 +56,10 @@ target_link_libraries(PoutreIO
   PUBLIC ${Boost_LOG_LIBRARY}
   PUBLIC ${Boost_LOG_SETUP_LIBRARY}
   PRIVATE jsoncpp
-  #PRIVATE ${JPEG_LIBRARY}
-  PRIVATE ${ZLIB_LIBRARY} 
-  PRIVATE ${PNG_LIBRARY} 
-  #PRIVATE ${TIFF_LIBRARY} 
+  PUBLIC ${JPEG_LIBRARY}
+  PUBLIC ${ZLIB_LIBRARY} 
+  PUBLIC ${PNG_LIBRARY} 
+  PUBLIC ${TIFF_LIBRARY} 
   INTERFACE xsimd 
   
   PUBLIC   PoutreBase 

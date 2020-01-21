@@ -23,14 +23,14 @@ set_target_properties(PoutreIPCoreBenchs PROPERTIES
 
 IF(WIN32)
 target_link_libraries(PoutreIPCoreBenchs 
-  ${GOOGLE_BENCHMARK}
-  shlwapi.lib
-  PoutreIPCore
+  PUBLIC benchmark  
+  PUBLIC shlwapi.lib
+  PUBLIC PoutreIPCore
   )
 ELSE()
 target_link_libraries(PoutreIPCoreBenchs 
-  ${GOOGLE_BENCHMARK}
-  PoutreIPCore
+  PUBLIC benchmark  
+  PUBLIC PoutreIPCore
   )
 ENDIF()
 

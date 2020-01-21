@@ -23,15 +23,15 @@ set_target_properties(PoutreBaseBenchs PROPERTIES
 
 IF(WIN32)
 target_link_libraries(PoutreBaseBenchs 
-  ${GOOGLE_BENCHMARK}
-  shlwapi.lib
-  PoutreBase
+  PUBLIC benchmark  
+  PUBLIC shlwapi.lib
+  PUBLIC PoutreBase
   )
 ELSE()
 target_link_libraries(PoutreBaseBenchs 
-  ${GOOGLE_BENCHMARK}
-  PoutreBase
+  PUBLIC benchmark  
+  PUBLIC PoutreBase
   )
 ENDIF()
 
-add_dependencies(PoutreBaseBenchs ${GOOGLE_BENCHMARK})
+add_dependencies(PoutreBaseBenchs benchmark)

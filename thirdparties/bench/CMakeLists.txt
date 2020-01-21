@@ -19,17 +19,22 @@ ExternalProject_Add(googlebenchmark
     BINARY_DIR        "${CMAKE_CURRENT_BINARY_DIR}/googlebenchmark-build"
     #--Configure step-------------
     CMAKE_ARGS += ${BENCH_FLAG}
-    #UPDATE_COMMAND ""
-    #BUILD_COMMAND     ""
-    #INSTALL_COMMAND   ""
+    UPDATE_COMMAND ""
+    BUILD_COMMAND     --build . --config Release
+    INSTALL_COMMAND   ""
     TEST_COMMAND      ""
   ) 
 
-# Add googlebenchmark directly to our build. This defines
-add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googlebenchmark-src
-    ${CMAKE_CURRENT_BINARY_DIR}/googlebenchmark-build)
+ExternalProject_Get_Property(googlebenchmark TMP_DIR STAMP_DIR DOWNLOAD_DIR SOURCE_DIR BINARY_DIR INSTALL_DIR)   
+message("Build googlebenchmark src ${SOURCE_DIR} in ${BINARY_DIR}")
 
-set(GBENCHMARK_INCLUDE_DIRS "${CMAKE_CURRENT_BINARY_DIR}/src/googlebenchmark/include" PARENT_SCOPE)
-set(GOOGLE_BENCHMARK  benchmark_main benchmark PARENT_SCOPE)
+set(GOOGLE_BENCHMARK_INCLUDE_DIRS "${SOURCE_DIR}/include")
+set(GOOGLE_BENCHMARK_INCLUDE_DIRS ${GOOGLE_BENCHMARK_INCLUDE_DIRS}    PARENT_SCOPE)
+add_library(benchmark STATIC IMPORTED GLOBAL) #MARK AS IMPORTED AND GLOBAL SCOPE
 
-set_target_properties(googlebenchmark PROPERTIES FOLDER "3rdparty")	
+if(WIN32)
+set_target_properties(benchmark PROPERTIES IMPORTED_LOCATION ${BINARY_DIR}/src/Release/benchmark.lib)
+else()
+set_target_properties(benchmark PROPERTIES IMPORTED_LOCATION ${BINARY_DIR}/src/libbenchmark.a)
+endif()
+set(GOOGLE_BENCHMARK benchmark PARENT_SCOPE)

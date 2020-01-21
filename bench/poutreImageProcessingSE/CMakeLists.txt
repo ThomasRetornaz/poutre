@@ -22,16 +22,16 @@ set_target_properties(PoutreIPSEBenchs PROPERTIES
 
 IF(WIN32)
 target_link_libraries(PoutreIPSEBenchs 
-  ${GOOGLE_BENCHMARK}
-  shlwapi.lib
+  PUBLIC benchmark  
+  PUBLIC shlwapi.lib
   #PUBLIC PoutreIPSE
-  ${Boost_SYSTEM_LIBRARY} 
+  PUBLIC ${Boost_SYSTEM_LIBRARY} 
   )
 ELSE()
 target_link_libraries(PoutreIPSEBenchs 
-  ${GOOGLE_BENCHMARK}
+  PUBLIC benchmark  
   #PUBLIC PoutreIPSE 
-  ${Boost_SYSTEM_LIBRARY}   
+  PUBLIC ${Boost_SYSTEM_LIBRARY}   
   )
 ENDIF()
 

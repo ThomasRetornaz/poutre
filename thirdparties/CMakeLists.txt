@@ -55,9 +55,9 @@ else()
 endif()
 set(Boost_NO_BOOST_CMAKE ON)
 
-set(POUTRE_boost_version_minimal 1.62)
+set(POUTRE_boost_version_minimal 1.65)
 set(Boost_ADDITIONAL_VERSIONS   
-	"1.62" "1.63" "1.64" "1.65.1" "1.66.0" "1.67.0" "1.68.0" "1.69.0" "1.70.0")
+	"1.62" "1.63" "1.64" "1.65.1" "1.66.0" "1.67.0" "1.68.0" "1.69.0" "1.70.0"  "1.71.0"  "1.72.0")
 find_package(Boost ${POUTRE_boost_version_minimal}
              REQUIRED 
             COMPONENTS 
@@ -159,9 +159,11 @@ set(JPEG_LIBRARY         ${JPEG_LIBRARY}      PARENT_SCOPE)
 # eigen
 #add_subdirectory(eigen)
 # bench
-add_subdirectory(bench)
-set(GOOGLE_BENCHMARK_INCLUDE_DIRS       ${GOOGLE_BENCHMARK_INCLUDE_DIRS}    PARENT_SCOPE)
-set(GOOGLE_BENCHMARK         ${GOOGLE_BENCHMARK}      PARENT_SCOPE)
+if(BUILD_BENCH)
+  add_subdirectory(bench)
+  set(GOOGLE_BENCHMARK_INCLUDE_DIRS       ${GOOGLE_BENCHMARK_INCLUDE_DIRS}    PARENT_SCOPE)
+  set(GOOGLE_BENCHMARK         ${GOOGLE_BENCHMARK}      PARENT_SCOPE)
+endif()
 
 # Python libraries
 
