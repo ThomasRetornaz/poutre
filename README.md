@@ -1,7 +1,8 @@
 Poutre
 =======
 
-[![Travis]](https://travis-ci.com/ThomasRetornaz/poutre)
+[![Travis](https://travis-ci.org/ThomasRetornaz/poutre.svg?branch=master)](https://travis-ci.org/ThomasRetornaz/poutre)
+
 
 ## Rationale ##
 

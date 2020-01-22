@@ -5,14 +5,16 @@ set(PoutreImageProcessingLLMTestSRC
     ${PoutreImageProcessingLLMSubdirectory}/main.hpp
     ${PoutreImageProcessingLLMSubdirectory}/main.cpp
 	${PoutreImageProcessingLLMSubdirectory}/ImageErodeDilate.cpp
+    #${PoutreImageProcessingLLMSubdirectory}/ImageErodeDilateLin.cpp
+
 )
 
-add_executable(PoutreIPLLMTests ${PoutreImageProcessingLLMTestSRC})
-set_target_properties(PoutreIPLLMTests PROPERTIES 
+add_executable(PoutreIPLowLevelMorphologyTests ${PoutreImageProcessingLLMTestSRC})
+set_target_properties(PoutreIPLowLevelMorphologyTests PROPERTIES 
                       DEFINE_SYMBOL "JSON_DLL"
                       )
 
-target_link_libraries(PoutreIPLLMTests
+target_link_libraries(PoutreIPLowLevelMorphologyTests
     PUBLIC PoutreBase 
     PUBLIC PoutreIPCore
 	PUBLIC PoutreIO
@@ -20,8 +22,8 @@ target_link_libraries(PoutreIPLLMTests
     PUBLIC ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 	
-add_test(NAME PoutreIPLLMTests-1 
-         COMMAND PoutreIPLLMTests)
-set_property(TARGET PoutreIPLLMTests PROPERTY FOLDER "UnitTests/")
-test_environment_setup(PoutreIPLLMTests-1)
+add_test(NAME PoutreIPLowLevelMorphologyTests-1 
+         COMMAND PoutreIPLowLevelMorphologyTests)
+set_property(TARGET PoutreIPLowLevelMorphologyTests PROPERTY FOLDER "UnitTests/")
+test_environment_setup(PoutreIPLowLevelMorphologyTests-1)
 

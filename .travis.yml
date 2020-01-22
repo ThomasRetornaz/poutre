@@ -26,7 +26,7 @@ env:
 before_install:
     - sudo apt-get update
     # Boost and ninja build
-    - sudo apt-get install -qq libboost-dev-all ninja-build
+    - sudo apt-get install -qq libboost-all-dev ninja-build
     # cppcheck
     - sudo apt-get install -qq cppcheck
     #doc
