@@ -46,13 +46,11 @@ before_install:
 script:
   - mkdir -p build
   - cd build
-  #- cmake -GNinja "$POUTRE_CMAKE_EXTRA_ARGS" -DBUILD_SHARED_LIBS=ON -DBUILD_TEST=ON $POUTRE_CMAKE_EXTRA_ARGS ..
   - cmake "$POUTRE_CMAKE_EXTRA_ARGS" -DBUILD_SHARED_LIBS=ON -DBUILD_TEST=ON -DBUILD_BENCH=ON $POUTRE_CMAKE_EXTRA_ARGS ..
   - cmake --build . --config Release
   - ctest . -C Release --output-on-failure
   # cppcheck
-  #- cppcheck --quiet --error-exitcode=1 . 
-  - cppcheck --quiet . 
+  - cppcheck -f --std=c++11 --inline-suppr -i build -i thirdparties --quiet --error-exitcode=1 .
 # see https://github.com/richelbilderbeek/travis_cpp_tutorial/blob/master/travis_cpp_tutorial.pdf
 #after_success:
 #  - bash <(curl -s https://codecov.io/bash)
