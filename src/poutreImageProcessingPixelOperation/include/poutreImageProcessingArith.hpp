@@ -49,6 +49,7 @@ public:
     return -a0;
   }
 };
+
 template <typename T> struct op_Invert<T, T, tag_SIMD_enabled> {
 public:
   op_Invert() {}
@@ -70,30 +71,6 @@ template <typename T1, typename T2, ptrdiff_t Rank,
 void t_ArithNegate(const View1<T1, Rank> &i_vin, View2<T2, Rank> &o_vout) {
   PixelWiseUnaryOp<T1, T2, Rank, View1, View2, op_Invert>(i_vin, o_vout);
 }
-
-// template<typename T1, typename T2>
-// void t_ArithNegate(const Image2D<T1>& i_vin, Image2D<T2>& o_vout)
-// {
-//     auto viewIn=lview(const_cast<Image2D<T1>&>(i_vin));
-//     auto viewOut=lview(o_vout);
-//     return t_ArithNegate(viewIn,viewOut);
-// }
-
-// template<typename T1, typename T2>
-// void t_ArithNegate(const Signal<T1>& i_vin, Signal<T2>& o_vout)
-// {
-//     auto viewIn=lview(const_cast<Signal<T1>&>(i_vin));
-//     auto viewOut=lview(o_vout);
-//     return t_ArithNegate(viewIn,viewOut);
-// }
-
-// template<typename T1, typename T2>
-// void t_ArithNegate(const Image3D<T1>& i_vin, Image3D<T2>& o_vout)
-// {
-//     auto viewIn=lview(const_cast<Image3D<T1>&>(i_vin));
-//     auto viewOut=lview(o_vout);
-//     return t_ArithNegate(viewIn,viewOut);
-// }
 
 template <typename T1, typename T2, ptrdiff_t Rank>
 void t_ArithNegate(const DenseImage<T1, Rank> &i_vin,
@@ -145,15 +122,15 @@ public:
   template <typename U>
   POUTRE_ALWAYS_INLINE U operator()(U const &a0,
                                     U const &a1) const POUTRE_NOEXCEPT {
-    return a0 -
-           a1; // FIXME//boost::simd::saturated_(boost::simd::minus)(a0, a1);
+    return ssub(a0,
+           a1); // FIXME//boost::simd::saturated_(boost::simd::minus)(a0, a1);
   }
 };
 
 template <typename T1, typename T2, typename T3, ptrdiff_t Rank,
-          template <typename, ptrdiff_t> class View1,
-          template <typename, ptrdiff_t> class View2,
-          template <typename, ptrdiff_t> class View3>
+    template <typename, ptrdiff_t> class View1,
+    template <typename, ptrdiff_t> class View2,
+    template <typename, ptrdiff_t> class View3>
 void t_ArithSaturatedSub(const View1<T1, Rank> &i_vin1,
                          const View2<T2, Rank> &i_vin2,
                          View3<T3, Rank> &o_vout) {
@@ -161,35 +138,6 @@ void t_ArithSaturatedSub(const View1<T1, Rank> &i_vin1,
       i_vin1, i_vin2, o_vout);
 }
 
-// template<typename T1, typename T2, typename T3>
-// void t_ArithSaturatedSub(const Signal<T1>& i_vin1, const Signal<T2>& i_vin2,
-// Signal<T3>& o_vout)
-// {
-//     auto viewIn1=lview(const_cast<Signal<T1>&>(i_vin1));
-//     auto viewIn2=lview(const_cast<Signal<T1>&>(i_vin2));
-//     auto viewOut=lview(o_vout);
-//     return t_ArithSaturatedSub(viewIn1,viewIn2,viewOut);
-// }
-
-// template<typename T1, typename T2, typename T3>
-// void t_ArithSaturatedSub(const Image2D<T1>& i_vin1, const Image2D<T2>&
-// i_vin2, Image2D<T3>& o_vout)
-// {
-//     auto viewIn1=lview(const_cast<Image2D<T1>&>(i_vin1));
-//     auto viewIn2=lview(const_cast<Image2D<T1>&>(i_vin2));
-//     auto viewOut=lview(o_vout);
-//     return t_ArithSaturatedSub(viewIn1,viewIn2,viewOut);
-// }
-
-// template<typename T1, typename T2, typename T3>
-// void t_ArithSaturatedSub(const Image3D<T1>& i_vin1, const Image3D<T2>&
-// i_vin2, Image3D<T3>& o_vout)
-// {
-//     auto viewIn1=lview(const_cast<Image3D<T1>&>(i_vin1));
-//     auto viewIn2=lview(const_cast<Image3D<T1>&>(i_vin2));
-//     auto viewOut=lview(o_vout);
-//     return t_ArithSaturatedSub(viewIn1,viewIn2,viewOut);
-// }
 template <typename T1, typename T2, typename T3, ptrdiff_t Rank>
 void t_ArithSaturatedSub(const DenseImage<T1, Rank> &i_vin1,
                          const DenseImage<T2, Rank> &i_vin2,
@@ -239,7 +187,7 @@ public:
   template <typename U>
   POUTRE_ALWAYS_INLINE U operator()(U const &a0,
                                     U const &a1) const POUTRE_NOEXCEPT {
-    return a0 + a1; // FIXME//boost::simd::saturated_(boost::simd::plus)(a0,
+    return sadd(a0, a1); // FIXME//boost::simd::saturated_(boost::simd::plus)(a0,
                     // a1);
   }
 };
@@ -255,35 +203,6 @@ void t_ArithSaturatedAdd(const View1<T1, Rank> &i_vin1,
       i_vin1, i_vin2, o_vout);
 }
 
-// template<typename T1, typename T2, typename T3>
-// void t_ArithSaturatedAdd(const Signal<T1>& i_vin1, const Signal<T2>& i_vin2,
-// Signal<T3>& o_vout)
-// {
-//     auto viewIn1=lview(const_cast<Signal<T1>&>(i_vin1));
-//     auto viewIn2=lview(const_cast<Signal<T1>&>(i_vin2));
-//     auto viewOut=lview(o_vout);
-//     return t_ArithSaturatedAdd(viewIn1,viewIn2,viewOut);
-// }
-
-// template<typename T1, typename T2, typename T3>
-// void t_ArithSaturatedAdd(const Image2D<T1>& i_vin1, const Image2D<T2>&
-// i_vin2, Image2D<T3>& o_vout)
-// {
-//     auto viewIn1=lview(const_cast<Image2D<T1>&>(i_vin1));
-//     auto viewIn2=lview(const_cast<Image2D<T1>&>(i_vin2));
-//     auto viewOut=lview(o_vout);
-//     return t_ArithSaturatedAdd(viewIn1,viewIn2,viewOut);
-// }
-
-// template<typename T1, typename T2, typename T3>
-// void t_ArithSaturatedAdd(const Image3D<T1>& i_vin1, const Image3D<T2>&
-// i_vin2, Image3D<T3>& o_vout)
-// {
-//     auto viewIn1=lview(const_cast<Image3D<T1>&>(i_vin1));
-//     auto viewIn2=lview(const_cast<Image3D<T1>&>(i_vin2));
-//     auto viewOut=lview(o_vout);
-//     return t_ArithSaturatedAdd(viewIn1,viewIn2,viewOut);
-// }
 template <typename T1, typename T2, typename T3, ptrdiff_t Rank>
 void t_ArithSaturatedAdd(const DenseImage<T1, Rank> &i_vin1,
                          const DenseImage<T2, Rank> &i_vin2,
@@ -336,9 +255,8 @@ public:
   }
   template <typename U>
   POUTRE_ALWAYS_INLINE U operator()(U const &a0) const POUTRE_NOEXCEPT {
-    return a0 +
-           m_simd_val; // FIXME boost::simd::saturated_(boost::simd::plus)(a0,
-                       // m_val);
+    return sadd(a0,
+           m_simd_val);
   }
 };
 
@@ -352,32 +270,6 @@ void t_ArithSaturatedAddConstant(const View1<T1, Rank> &i_vin, T2 val,
                             op_Saturated_Add_Constant>(i_vin, val, o_vout);
 }
 
-// template<typename T1, typename T2>
-// void t_ArithSaturatedAddConstant(const Signal<T1>& i_vin,T2 val, Signal<T2>&
-// o_vout)
-// {
-//     auto viewIn=lview(const_cast<Signal<T1>&>(i_vin));
-//     auto viewOut=lview(o_vout);
-//     return t_ArithSaturatedAddConstant(viewIn,val,viewOut);
-// }
-
-// template<typename T1, typename T2>
-// void t_ArithSaturatedAddConstant(const Image2D<T1>& i_vin, T2 val,
-// Image2D<T2>& o_vout)
-// {
-//     auto viewIn=lview(const_cast<Image2D<T1>&>(i_vin));
-//     auto viewOut=lview(o_vout);
-//     return t_ArithSaturatedAddConstant(viewIn,val,viewOut);
-// }
-
-// template<typename T1, typename T2>
-// void t_ArithSaturatedAddConstant(const Image3D<T1>& i_vin, T2 val,
-// Image3D<T2>& o_vout)
-// {
-//     auto viewIn=lview(const_cast<Image3D<T1>&>(i_vin));
-//     auto viewOut=lview(o_vout);
-//     return t_ArithSaturatedAddConstant(viewIn,val,viewOut);
-// }
 template <typename T1, typename T2, ptrdiff_t Rank>
 void t_ArithSaturatedAddConstant(const DenseImage<T1, Rank> &i_vin, T2 val,
                                  DenseImage<T2, Rank> &o_vout) {
@@ -430,8 +322,8 @@ public:
 
   template <typename U>
   POUTRE_ALWAYS_INLINE U operator()(U const &a0) const POUTRE_NOEXCEPT {
-    return a0 -
-           m_simd_val; // FIXMEboost::simd::saturated_(boost::simd::minus)(a0,
+    return ssub(a0,
+           m_simd_val); // FIXMEboost::simd::saturated_(boost::simd::minus)(a0,
                        // m_val);
   }
 };
@@ -446,32 +338,6 @@ void t_ArithSaturatedSubConstant(const View1<T1, Rank> &i_vin, T2 val,
                             op_Saturated_Sub_Constant>(i_vin, val, o_vout);
 }
 
-// template<typename T1, typename T2>
-// void t_ArithSaturatedSubConstant(const Signal<T1>& i_vin,T2 val, Signal<T2>&
-// o_vout)
-// {
-//     auto viewIn=lview(const_cast<Signal<T1>&>(i_vin));
-//     auto viewOut=lview(o_vout);
-//     return t_ArithSaturatedSubConstant(viewIn,val,viewOut);
-// }
-
-// template<typename T1, typename T2>
-// void t_ArithSaturatedSubConstant(const Image2D<T1>& i_vin, T2 val,
-// Image2D<T2>& o_vout)
-// {
-//     auto viewIn=lview(const_cast<Image2D<T1>&>(i_vin));
-//     auto viewOut=lview(o_vout);
-//     return t_ArithSaturatedSubConstant(viewIn,val,viewOut);
-// }
-
-// template<typename T1, typename T2>
-// void t_ArithSaturatedSubConstant(const Image3D<T1>& i_vin, T2 val,
-// Image3D<T2>& o_vout)
-// {
-//     auto viewIn=lview(const_cast<Image3D<T1>&>(i_vin));
-//     auto viewOut=lview(o_vout);
-//     return t_ArithSaturatedSubConstant(viewIn,val,viewOut);
-// }
 template <typename T1, typename T2, ptrdiff_t Rank>
 void t_ArithSaturatedSubConstant(const DenseImage<T1, Rank> &i_vin, T2 val,
                                  DenseImage<T2, Rank> &o_vout) {

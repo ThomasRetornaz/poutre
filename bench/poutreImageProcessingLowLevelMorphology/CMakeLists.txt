@@ -12,11 +12,6 @@ set(PoutreImageProcessingLLMBenchSRC
   ${PoutreImageProcessingLLMBenchSubdirectory}/erodil.cpp
   )
 
-#UGLY fix this later
-if(WIN32)
-  LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/$(ConfigurationName))
-endif()  
-
 add_executable(PoutreIPLowLevelMorphologyBenchs ${PoutreImageProcessingLLMBenchSRC})
 set_target_properties(PoutreIPLowLevelMorphologyBenchs PROPERTIES  
   FOLDER "Bench/")
@@ -24,14 +19,14 @@ set_target_properties(PoutreIPLowLevelMorphologyBenchs PROPERTIES
 IF(WIN32)
 target_link_libraries(PoutreIPLowLevelMorphologyBenchs 
   PUBLIC benchmark  
+  PUBLIC benchmark_main 
   PUBLIC shlwapi.lib
   PUBLIC PoutreIPCore
   )
 ELSE()
 target_link_libraries(PoutreIPLowLevelMorphologyBenchs 
   PUBLIC benchmark  
+  PUBLIC benchmark_main 
   PUBLIC PoutreIPCore
   )
 ENDIF()
-
-add_dependencies(PoutreIPLowLevelMorphologyBenchs ${GOOGLE_BENCHMARK})

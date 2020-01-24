@@ -160,10 +160,20 @@ set(JPEG_LIBRARY         ${JPEG_LIBRARY}      PARENT_SCOPE)
 #add_subdirectory(eigen)
 # bench
 if(BUILD_BENCH)
-  add_subdirectory(bench)
-  set(GOOGLE_BENCHMARK_INCLUDE_DIRS       ${GOOGLE_BENCHMARK_INCLUDE_DIRS}    PARENT_SCOPE)
-  set(GOOGLE_BENCHMARK         ${GOOGLE_BENCHMARK}      PARENT_SCOPE)
+  set(BUILD_SHARED_LIBS OFF) #temporary
+  # We will not need to test benchmark lib itself.
+  set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Disable benchmark testing as we don't need it." FORCE)
+  # We will not need to install benchmark since we link it statically.
+  set(BENCHMARK_ENABLE_INSTALL OFF CACHE BOOL "Disable benchmark install to avoid overwriting vendor install." FORCE)
+  #set(BENCHMARK_ENABLE_LTO OFF CACHE BOOL "" FORCE)
+  set(BENCHMARK_ENABLE_EXCEPTIONS ON CACHE BOOL "" FORCE)
+  add_subdirectory(benchmark)
+  set(BUILD_SHARED_LIBS ON) #temporary
 endif()
+set_target_properties(benchmark PROPERTIES FOLDER "3rdparty/")
+set_target_properties(benchmark_main PROPERTIES FOLDER "3rdparty/")
+set(BUILD_SHARED_LIBS ON) #temporary
+
 
 # Python libraries
 

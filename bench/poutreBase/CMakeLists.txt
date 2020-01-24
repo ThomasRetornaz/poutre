@@ -12,26 +12,21 @@ set(PoutreBaseBenchSRC
   ${PoutreBaseBenchSubdirectory}/containerview.cpp
   )
 
-#UGLY fix this later
-if(WIN32)
-  LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/$(ConfigurationName))
-endif()  
-
 add_executable(PoutreBaseBenchs ${PoutreBaseBenchSRC})
 set_target_properties(PoutreBaseBenchs PROPERTIES  
   FOLDER "Bench/")
 
 IF(WIN32)
 target_link_libraries(PoutreBaseBenchs 
-  PUBLIC benchmark  
+  PUBLIC benchmark
+  PUBLIC benchmark_main  
   PUBLIC shlwapi.lib
   PUBLIC PoutreBase
   )
 ELSE()
 target_link_libraries(PoutreBaseBenchs 
-  PUBLIC benchmark  
+  PUBLIC benchmark
+  PUBLIC benchmark_main  
   PUBLIC PoutreBase
   )
 ENDIF()
-
-add_dependencies(PoutreBaseBenchs benchmark)

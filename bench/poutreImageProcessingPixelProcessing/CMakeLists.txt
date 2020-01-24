@@ -14,11 +14,6 @@ set(PoutreImageProcessingPixelProcessingBenchSRC
   ${PoutreImageProcessingPixelOperationBenchSubdirectory}/transpose.cpp
   )
 
-#UGLY fix this later
-if(WIN32)
-  LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/$(ConfigurationName))
-endif()  
-
 add_executable(PoutreIPPixelProcessingBenchs ${PoutreImageProcessingPixelProcessingBenchSRC})
 set_target_properties(PoutreIPPixelProcessingBenchs PROPERTIES  
   FOLDER "Bench/")
@@ -27,6 +22,7 @@ IF(WIN32)
 target_link_libraries(PoutreIPPixelProcessingBenchs 
   PUBLIC PoutreBase
   PUBLIC benchmark  
+  PUBLIC benchmark_main 
   #INTERFACE ${SIMD_LIB}
   PUBLIC shlwapi.lib
   PUBLIC PoutreIPPixelProcessing
@@ -36,10 +32,9 @@ ELSE()
 target_link_libraries(PoutreIPPixelProcessingBenchs 
   PUBLIC PoutreBase
   PUBLIC benchmark  
+  PUBLIC benchmark_main 
   #INTERFACE ${SIMD_LIB}
   PUBLIC PoutreIPPixelProcessing 
   PUBLIC ${Boost_SYSTEM_LIBRARY}   
   )
 ENDIF()
-
-add_dependencies(PoutreIPPixelProcessingBenchs ${GOOGLE_BENCHMARK})

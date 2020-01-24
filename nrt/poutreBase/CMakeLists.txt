@@ -45,6 +45,11 @@ IF(BUILD_SHARED_LIBS)
   SET_TARGET_PROPERTIES(PoutreBaseTests PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DYN_LINK) #FIXME not true should be linked with boost
 ENDIF(BUILD_SHARED_LIBS)
 
+#get_filename_component(LIBNAME "${Boost_UNIT_TEST_FRAMEWORK_LIBRARY_RELEASE}" NAME)
+#add_custom_command(TARGET PoutreBaseTests POST_BUILD
+#    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${Boost_UNIT_TEST_FRAMEWORK_LIBRARY_RELEASE}" "${CMAKE_CURRENT_BINARY_DIR}/${LIBNAME}"
+#)
+
 add_test(NAME PoutreBaseTests-1 
   COMMAND PoutreBaseTests)
 set_property(TARGET PoutreBaseTests PROPERTY FOLDER "UnitTests/")

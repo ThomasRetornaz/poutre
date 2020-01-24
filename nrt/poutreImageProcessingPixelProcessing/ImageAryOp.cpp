@@ -183,7 +183,7 @@ BOOST_AUTO_TEST_CASE(
 
 BOOST_AUTO_TEST_CASE(
     unaryopviewDispatchContiguousDifferentPtrType__addconstsaturated) {
-  poutre::DenseImage<poutre::pINT32> img1({5, 6});
+  poutre::DenseImage<poutre::pUINT8> img1({5, 6});
   img1.fill(250);
   poutre::DenseImage<poutre::pUINT8> img2({5, 6});
   // call UnaryOpDispatcher array view template specialization,fall back ptr
@@ -322,7 +322,7 @@ BOOST_AUTO_TEST_CASE(
 
 BOOST_AUTO_TEST_CASE(
     unaryopviewDispatchContiguousDifferentPtrType__subconstsaturated) {
-  poutre::DenseImage<poutre::pINT32> img1({5, 6});
+  poutre::DenseImage<poutre::pUINT8> img1({5, 6});
   img1.fill(5);
   poutre::DenseImage<poutre::pUINT8> img2({5, 6});
   // call UnaryOpDispatcher array view template specialization,fall back ptr

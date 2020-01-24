@@ -12,11 +12,6 @@ set(PoutreImageProcessingCoreBenchSRC
   ${PoutreImageProcessingCoreBenchSubdirectory}/priority_queue.cpp
   )
 
-#UGLY fix this later
-if(WIN32)
-  LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/$(ConfigurationName))
-endif()  
-
 add_executable(PoutreIPCoreBenchs ${PoutreImageProcessingCoreBenchSRC})
 set_target_properties(PoutreIPCoreBenchs PROPERTIES  
   FOLDER "Bench/")
@@ -24,6 +19,7 @@ set_target_properties(PoutreIPCoreBenchs PROPERTIES
 IF(WIN32)
 target_link_libraries(PoutreIPCoreBenchs 
   PUBLIC benchmark  
+  PUBLIC benchmark_main 
   PUBLIC shlwapi.lib
   PUBLIC PoutreIPCore
   )
@@ -33,5 +29,3 @@ target_link_libraries(PoutreIPCoreBenchs
   PUBLIC PoutreIPCore
   )
 ENDIF()
-
-add_dependencies(PoutreIPCoreBenchs ${GOOGLE_BENCHMARK})

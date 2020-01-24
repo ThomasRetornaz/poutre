@@ -255,13 +255,13 @@ BOOST_AUTO_TEST_CASE(SetPixelGetPixel) {
   poutre::pt2D_scoord pix2 = {5, 3}; // x then y
   (*img).SetPixel(pix2, 9);
 
-  std::string expected = "Dense Scalar GINT32 2 5 6\
- 1 1 10 1 1 1\
- 1 1 1 1 1 1\
- 1 1 1 1 1 1\
- 8 1 1 5 5 9\
- 1 1 1 5 5 5\
-";
+//  std::string expected = "Dense Scalar GINT32 2 5 6\
+// 1 1 10 1 1 1\
+// 1 1 1 1 1 1\
+// 1 1 1 1 1 1\
+// 8 1 1 5 5 9\
+// 1 1 1 5 5 5\
+//";
   auto val = (*img).GetPixel(2, 0); // x then y
   BOOST_CHECK_EQUAL(val, 10);
   poutre::idx2d p = {3, 0}; // y then x
