@@ -169,10 +169,9 @@ if(BUILD_BENCH)
   set(BENCHMARK_ENABLE_EXCEPTIONS ON CACHE BOOL "" FORCE)
   add_subdirectory(benchmark)
   set(BUILD_SHARED_LIBS ON) #temporary
+  set_target_properties(benchmark PROPERTIES FOLDER "3rdparty/")
+  set_target_properties(benchmark_main PROPERTIES FOLDER "3rdparty/")
 endif()
-set_target_properties(benchmark PROPERTIES FOLDER "3rdparty/")
-set_target_properties(benchmark_main PROPERTIES FOLDER "3rdparty/")
-set(BUILD_SHARED_LIBS ON) #temporary
 
 
 # Python libraries
