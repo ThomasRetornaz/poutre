@@ -9,8 +9,10 @@ include(ExternalProject)
 # clone approach
 find_package(git REQUIRED)
 ExternalProject_Add(XsimdDep
-  GIT_REPOSITORY https://github.com/QuantStack/xsimd.git
-  GIT_TAG master  
+  #https://github.com/QuantStack/xsimd.git
+  GIT_REPOSITORY  https://github.com/ThomasRetornaz/xsimd.git
+  #GIT_TAG master  
+  GIT_TAG  ref_314
   PREFIX ${CMAKE_CURRENT_BINARY_DIR}
   #--Update/Patch step----------
 	UPDATE_COMMAND ""
