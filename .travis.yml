@@ -47,7 +47,7 @@ script:
   - mkdir -p build
   - cd build
   #- cmake -GNinja "$POUTRE_CMAKE_EXTRA_ARGS" -DBUILD_SHARED_LIBS=ON -DBUILD_TEST=ON $POUTRE_CMAKE_EXTRA_ARGS ..
-  - cmake "$POUTRE_CMAKE_EXTRA_ARGS" -DBUILD_SHARED_LIBS=ON -DBUILD_TEST=ON $POUTRE_CMAKE_EXTRA_ARGS ..
+  - cmake "$POUTRE_CMAKE_EXTRA_ARGS" -DBUILD_SHARED_LIBS=ON -DBUILD_TEST=ON -DBUILD_BENCH=ON $POUTRE_CMAKE_EXTRA_ARGS ..
   - cmake --build . --config Release
   - ctest . -C Release --output-on-failure
   # cppcheck
