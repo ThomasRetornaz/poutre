@@ -63,7 +63,7 @@ target_link_libraries(PoutreBase
   )
 set_target_properties(PoutreBase PROPERTIES FOLDER "src/")
 #force custom target before start
-add_dependencies(PoutreBase XsimdDep)
+add_dependencies(PoutreBase xsimd)
 #add_dependencies(PoutreBase Eigendep)
 
 IF(BUILD_SHARED_LIBS)
