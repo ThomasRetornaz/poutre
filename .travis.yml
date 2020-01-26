@@ -2,14 +2,14 @@ language: cpp
 dist: bionic
 matrix:
   include:
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-7
-      env: COMPILER=gcc GCC=7 
+#    - os: linux
+#      addons:
+#        apt:
+#          sources:
+#            - ubuntu-toolchain-r-test
+#          packages:
+#            - g++-7
+#      env: COMPILER=gcc GCC=7 
     - os: linux
       addons:
         apt:
