@@ -2,7 +2,7 @@ Poutre
 =======
 
 [![Travis](https://travis-ci.org/ThomasRetornaz/poutre.svg?branch=master)](https://travis-ci.org/ThomasRetornaz/poutre)
-
+[![Coverage Status](https://coveralls.io/repos/github/ThomasRetornaz/poutre/badge.svg?branch=master)](https://coveralls.io/github/ThomasRetornaz/poutre?branch=master)
 
 ## Rationale ##
 
