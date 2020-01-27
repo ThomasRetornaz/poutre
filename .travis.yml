@@ -2,14 +2,13 @@ language: cpp
 dist: bionic
 matrix:
   include:
-#    - os: linux
-#      addons:
-#        apt:
-#          sources:
-#            - ubuntu-toolchain-r-test
-#          packages:
-#            - g++-7
-#      env: COMPILER=gcc GCC=7 
+    - compiler: gcc
+      addons:
+        apt:
+          packages:
+            - lcov
+      env: COMPILER=g++ C_COMPILER=gcc BUILD_TYPE=Coverage
+
     - os: linux
       addons:
         apt:
@@ -33,6 +32,7 @@ before_install:
     - sudo apt-get install -qq doxygen graphviz
     #coverage
     - sudo pip install codecov
+    - sudo pip install --user cpp-coveralls
     - |
       # Configure build variables
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
@@ -43,6 +43,12 @@ before_install:
           export CXX=clang++-$CLANG CC=clang-$CLANG;
         fi
       fi
+install:
+  - if [ "${BUILD_TYPE}" == "Coverage" -a "${TRAVIS_OS_NAME}" == "linux" ]; then
+      PATH=~/.local/bin:${PATH};
+      pip install --user --upgrade pip;
+      travis_wait pip install --user cpp-coveralls;
+    fi
 script:
   - mkdir -p build
   - cd build
@@ -54,3 +60,7 @@ script:
 # see https://github.com/richelbilderbeek/travis_cpp_tutorial/blob/master/travis_cpp_tutorial.pdf
 #after_success:
 #  - bash <(curl -s https://codecov.io/bash)
+after_success:
+  - if [ "${BUILD_TYPE}" == "Coverage" -a "${TRAVIS_OS_NAME}" == "linux" ]; then
+      coveralls --include src --include include --gcov-options '\-lp' --root .. --build-root .;
+    fi
