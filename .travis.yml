@@ -1,5 +1,10 @@
 language: cpp
 dist: bionic
+
+env:
+  global:
+    - /usr/local/bin:$PATH
+
 matrix:
   include:
     - compiler: gcc
@@ -30,9 +35,6 @@ before_install:
     - sudo apt-get install -qq cppcheck
     #doc
     - sudo apt-get install -qq doxygen graphviz
-    #coverage
-    - sudo pip install codecov
-    - sudo pip install --user cpp-coveralls
     - |
       # Configure build variables
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
