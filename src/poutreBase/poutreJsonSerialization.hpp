@@ -22,8 +22,8 @@
 #include <poutreBase/poutreBase.hpp>
 #endif
 
-#ifndef JSON_FORWARD_AMALGATED_H_INCLUDED
-#include <json/json-forwards.h>
+#ifndef JSON_FORWARDS_H_INCLUDED
+#include <json/forwards.h>
 #endif
 
 #ifndef BOOST_NONCOPYABLE_HPP_INCLUDED

@@ -55,7 +55,7 @@ target_link_libraries(PoutreBase
   PUBLIC ${Boost_FILESYSTEM_LIBRARY} 
   PUBLIC ${Boost_LOG_LIBRARY}
   PUBLIC ${Boost_LOG_SETUP_LIBRARY}
-  PUBLIC jsoncpp 
+  PUBLIC jsoncpp_lib 
   INTERFACE xsimd 
   # INTERFACE Eigen  
   # INTERFACE ${SIMD_LIB}

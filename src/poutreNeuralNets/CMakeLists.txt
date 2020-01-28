@@ -28,7 +28,7 @@ target_link_libraries(PoutreNeuralNets
   # PRIVATE ${Boost_REGEX_LIBRARY} 
   # PRIVATE ${Boost_THREAD_LIBRARY} 
   # PRIVATE ${Boost_SYSTEM_LIBRARY}
-  PRIVATE jsoncpp
+  PRIVATE jsoncpp_lib
   INTERFACE Eigen
   INTERFACE xsimd 
   PoutreBase 

@@ -55,7 +55,7 @@ target_link_libraries(PoutreIO
   PUBLIC ${Boost_FILESYSTEM_LIBRARY} 
   PUBLIC ${Boost_LOG_LIBRARY}
   PUBLIC ${Boost_LOG_SETUP_LIBRARY}
-  PRIVATE jsoncpp
+  PRIVATE jsoncpp_lib
   PUBLIC ${JPEG_LIBRARY}
   PUBLIC ${ZLIB_LIBRARY} 
   PUBLIC ${PNG_LIBRARY} 

@@ -34,7 +34,7 @@ target_link_libraries(PoutreIPSE
   # PRIVATE ${Boost_REGEX_LIBRARY} 
   # PRIVATE ${Boost_THREAD_LIBRARY} 
   PUBLIC ${Boost_SYSTEM_LIBRARY}
-  PRIVATE jsoncpp
+  PRIVATE jsoncpp_lib
   INTERFACE Eigen
   INTERFACE xsimd  
   PoutreBase

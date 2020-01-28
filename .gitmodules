@@ -1,3 +1,6 @@
 [submodule "thirdparties/benchmark"]
 	path = thirdparties/benchmark
 	url = https://github.com/google/benchmark.git
+[submodule "thirdparties/jsoncpp"]
+	path = thirdparties/jsoncpp
+	url = https://github.com/open-source-parsers/jsoncpp.git
