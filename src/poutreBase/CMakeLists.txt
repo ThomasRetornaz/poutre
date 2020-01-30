@@ -1,4 +1,7 @@
 
+# FORMAT
+cmake_format(cmake-format ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
+             CMakeLists.txt)
 
 set(PoutreBaseSubdirectory ${POUTRE_SRC_DIR}/poutreBase)
 

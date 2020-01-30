@@ -1,3 +1,6 @@
+# FORMAT
+cmake_format(cmake-format ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
+             CMakeLists.txt)
 
 set(PoutreNNSubdirectory ${POUTRE_SRC_DIR}/poutreNeuralNets)
 
