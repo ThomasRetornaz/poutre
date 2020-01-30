@@ -117,7 +117,8 @@ if(MSVC)
   #add_definitions(-DBOOST_TEST_NO_LIB)
 endif(MSVC)
 
-
+# Require C++14
+cxx_14()
 
 if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GNU"))
   message("Flags for GNUCXX And clang")
@@ -157,6 +158,24 @@ if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GN
   if(APPLE)
     set(CMAKE_OSX_ARCHITECTURES "i386;x86_64")
   endif()
+
+  # Coverage build type
+  set(BENCHMARK_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_DEBUG}"
+    CACHE STRING "Flags used by the C++ compiler during coverage builds."
+    FORCE)
+  set(BENCHMARK_EXE_LINKER_FLAGS_COVERAGE "${CMAKE_EXE_LINKER_FLAGS_DEBUG}"
+    CACHE STRING "Flags used for linking binaries during coverage builds."
+    FORCE)
+  set(BENCHMARK_SHARED_LINKER_FLAGS_COVERAGE "${CMAKE_SHARED_LINKER_FLAGS_DEBUG}"
+    CACHE STRING "Flags used by the shared libraries linker during coverage builds."
+    FORCE)
+  mark_as_advanced(
+    BENCHMARK_CXX_FLAGS_COVERAGE
+    BENCHMARK_EXE_LINKER_FLAGS_COVERAGE
+    BENCHMARK_SHARED_LINKER_FLAGS_COVERAGE)
+  set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
+    "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel Coverage.")
+    AddCompilerFlag(--coverage COVERAGE)
 endif()
 
 IF(NOT APPLE AND NOT MSVC)

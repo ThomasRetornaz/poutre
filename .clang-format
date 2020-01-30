@@ -1,0 +1,11 @@
+﻿---
+BasedOnStyle: Microsoft
+Cpp11BracedListStyle: 'true'
+IndentWidth: '4'
+Language: Cpp
+NamespaceIndentation: All
+Standard: Cpp11
+TabWidth: '2'
+UseTab: Never
+
+...
