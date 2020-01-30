@@ -13,11 +13,10 @@
 /**
  * @file   poutreRegistrar.hpp
  * @author Thomas Retornaz
- * @brief Define static objetc which store map to factories 
- * 
- * 
+ * @brief Define static objetc which store map to factories
+ *
+ *
  */
-
 
 #ifndef POUTRE_BASE_HPP__
 #include <poutreBase/poutreBase.hpp>
@@ -27,69 +26,66 @@
 #include <poutreBase/poutreTrace.hpp>
 #endif
 
-#include <unordered_map>
-#include <string>
 #include <functional>
-
+#include <string>
+#include <unordered_map>
 
 namespace poutre
-  {
+{
 
-/**
- * @brief Allow to register a set of factories regarding provided type
- * @note use singleton pattern with lazy construct
- */
- template<class Interface>
-  class Registrar
+    /**
+     * @brief Allow to register a set of factories regarding provided type
+     * @note use singleton pattern with lazy construct
+     */
+    template <class Interface> class Registrar
     {
-    public:
-      using  KeyFactoryMap = std::unordered_map< std::string, std::function<Interface*(void)>>;
-      //typedef std::unordered_map< std::string,
-      //std::function<std::unique_ptr<Interface>(void)>>
-      //KeyFactoryMap;
+      public:
+        using KeyFactoryMap = std::unordered_map<std::string, std::function<Interface *(void)>>;
+        // typedef std::unordered_map< std::string,
+        // std::function<std::unique_ptr<Interface>(void)>>
+        // KeyFactoryMap;
 
-      /** @name Singleton interface
-      */
-      //!Get concrete instance (lazy construct) 
-      static Registrar& getInstance()
+        /** @name Singleton interface
+         */
+        //! Get concrete instance (lazy construct)
+        static Registrar &getInstance()
         {
-        static Registrar instance; // Guaranteed to be destroyed. AND http://preshing.com/20130930/double-checked-locking-is-fixed-in-cpp11/
-        // Instantiated on first use.
-        return instance;
+            static Registrar instance; // Guaranteed to be destroyed. AND
+                                       // http://preshing.com/20130930/double-checked-locking-is-fixed-in-cpp11/
+            // Instantiated on first use.
+            return instance;
         }
 
-      Registrar(const Registrar&) = delete;
-      Registrar& operator=(const Registrar&) = delete;
-      Registrar(Registrar&& other) = delete;
-      Registrar& operator= (Registrar&& other) = delete;
+        Registrar(const Registrar &) = delete;
+        Registrar &operator=(const Registrar &) = delete;
+        Registrar(Registrar &&other) = delete;
+        Registrar &operator=(Registrar &&other) = delete;
 
-       
-    private:
-      //! Private ctor 
-      Registrar(){};
-    /**@}*/
+      private:
+        //! Private ctor
+        Registrar(){};
+        /**@}*/
 
-       KeyFactoryMap m_keyfactory_map; //! container which store factories
-    public:
-      //void Register(const std::string& key,
-      //std::function<std::unique_ptr<Interface>(void)>
-      //ImplFactoryFunction)
-       
-      /**
-       * @brief Register a factory 
-       * 
-       * @param key name associated with factory
-       * @param ImplFactoryFunction factory has ptr to function
-       * @throw runtime_error if key already used
-       */
-       void Register(const std::string& key, std::function<Interface*(void)> ImplFactoryFunction)
+        KeyFactoryMap m_keyfactory_map; //! container which store factories
+      public:
+        // void Register(const std::string& key,
+        // std::function<std::unique_ptr<Interface>(void)>
+        // ImplFactoryFunction)
+
+        /**
+         * @brief Register a factory
+         *
+         * @param key name associated with factory
+         * @param ImplFactoryFunction factory has ptr to function
+         * @throw runtime_error if key already used
+         */
+        void Register(const std::string &key, std::function<Interface *(void)> ImplFactoryFunction)
         {
-        auto it = m_keyfactory_map.find(key);
-        if (it != m_keyfactory_map.end()) POUTRE_RUNTIME_ERROR("Registrar::Add key already used");
-        m_keyfactory_map[key] = ImplFactoryFunction;
+            auto it = m_keyfactory_map.find(key);
+            if (it != m_keyfactory_map.end())
+                POUTRE_RUNTIME_ERROR("Registrar::Add key already used");
+            m_keyfactory_map[key] = ImplFactoryFunction;
         }
     };
-  }
-#endif //POUTRE_REGISTRATOR__HPP__
-
-
+} // namespace poutre
+#endif // POUTRE_REGISTRATOR__HPP__

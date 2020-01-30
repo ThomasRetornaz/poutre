@@ -10,15 +10,15 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#include <poutreImageProcessingSE/poutreImageProcessingSEInterface.hpp>
 #include <boost/lexical_cast.hpp>
+#include <poutreImageProcessingSE/poutreImageProcessingSEInterface.hpp>
 #include <string>
 
 namespace poutre
 {
     namespace se
     {
-        std::ostream& operator<<(std::ostream& os, SEType seType)
+        std::ostream &operator<<(std::ostream &os, SEType seType)
         {
             switch (seType)
             {
@@ -28,15 +28,14 @@ namespace poutre
             case SEType::SEType_Image:
                 os << "SE_Image";
                 break;
-            default://  SEType::SEType_Undef; 
+            default: //  SEType::SEType_Undef;
                 os << "Unknown SEType";
                 break;
             }
             return os;
         }
 
-
-        std::istream& operator>>(std::istream& is, SEType& seType)
+        std::istream &operator>>(std::istream &is, SEType &seType)
         {
             seType = SEType::SEType_Undef;
 
@@ -59,10 +58,10 @@ namespace poutre
             return is;
         }
 
-        std::ostream& operator<<(std::ostream& os, const IStructuringElement& se)
+        std::ostream &operator<<(std::ostream &os, const IStructuringElement &se)
         {
             return os;
         }
 
-    }//namespace se
-}//namespace
+    } // namespace se
+} // namespace poutre

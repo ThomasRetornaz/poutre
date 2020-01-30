@@ -14,15 +14,15 @@
  * @file   poutreImageProcessingLowLevelMorphology.hpp
  * @author Thomas Retornaz
  * @brief  Define import/export for shared librairies
- * 
- * 
+ *
+ *
  */
 
 #ifndef POUTRE_CONFIG__HPP__
 #include <poutreBase/poutreConfig.hpp>
 #endif
 
-#ifdef POUTRE_DYNAMIC// defined if POUTRE is compiled as a DLL
+#ifdef POUTRE_DYNAMIC                     // defined if POUTRE is compiled as a DLL
 #ifdef PoutreIPLowLevelMorphology_EXPORTS // defined if we are building the POUTRE DLL (instead of using it)
 #define IMP_CORE_API MODULE_EXPORT
 #else
@@ -35,10 +35,10 @@
 #endif // POUTRE_DLL
 
 namespace poutre
-  {
+{
 
-   //TODO Doxydoc module
-	IMP_CORE_API void Dummy();
+    // TODO Doxydoc module
+    IMP_CORE_API void Dummy();
 
-  }
-#endif //POUTRE_IMAGEPROCESSING_LOW_LEVEL_MORPHOLOGY_HPP__
+} // namespace poutre
+#endif // POUTRE_IMAGEPROCESSING_LOW_LEVEL_MORPHOLOGY_HPP__

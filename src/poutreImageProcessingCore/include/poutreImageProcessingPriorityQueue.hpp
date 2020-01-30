@@ -14,8 +14,8 @@
  * @file   poutrePriorityQueue.hpp
  * @author Thomas Retornaz
  * @brief  Define common pqueu data structures
- * 
- * 
+ *
+ *
  */
 
 #include <boost/heap/priority_queue.hpp>
@@ -31,48 +31,45 @@
 #endif
 
 namespace poutre
-  {
-    template<typename key, typename value>
-    struct lesserKey
-    {        
-        bool operator() (const std::pair<key,value> & lhs, const std::pair<key, value>& rhs) const
+{
+    template <typename key, typename value> struct lesserKey
+    {
+        bool operator()(const std::pair<key, value> &lhs, const std::pair<key, value> &rhs) const
         {
-            return std::less<key>()(lhs.first,rhs.first);
+            return std::less<key>()(lhs.first, rhs.first);
         }
     };
 
-    template<typename key, typename value>
-    struct greaterKey
+    template <typename key, typename value> struct greaterKey
     {
-        bool operator() (const std::pair<key, value> & lhs, const std::pair<key, value>& rhs) const
+        bool operator()(const std::pair<key, value> &lhs, const std::pair<key, value> &rhs) const
         {
             return std::greater<key>()(lhs.first, rhs.first);
         }
     };
 
-    template <class key, class value, class order = lesserKey<key,value>,bool IsStable=false,typename Enable=void>
-    class PriorityQueue : public boost::heap::priority_queue<
-            std::pair<key, value>,
-            boost::heap::compare<order>,
-            boost::heap::stable<IsStable>>
+    template <class key, class value, class order = lesserKey<key, value>, bool IsStable = false,
+              typename Enable = void>
+    class PriorityQueue : public boost::heap::priority_queue<std::pair<key, value>, boost::heap::compare<order>,
+                                                             boost::heap::stable<IsStable>>
     {
-    public:
-        using base = boost::heap::priority_queue<
-            std::pair<key, value>,
-            boost::heap::compare<order>,
-            boost::heap::stable<IsStable>>;
+      public:
+        using base = boost::heap::priority_queue<std::pair<key, value>, boost::heap::compare<order>,
+                                                 boost::heap::stable<IsStable>>;
 
-        PriorityQueue():base(){}
+        PriorityQueue() : base()
+        {
+        }
     };
 
-    //specialize for small integral types
-    //TODO
-    //template <class key, class value, class order = lesserKey<key, value>,bool IsStable = false, typename std::enable_if< (TypeTraits<key>::quant <= 16) >::type>  
-    //class PriorityQueue 
+    // specialize for small integral types
+    // TODO
+    // template <class key, class value, class order = lesserKey<key, value>,bool IsStable = false, typename
+    // std::enable_if< (TypeTraits<key>::quant <= 16) >::type> class PriorityQueue
     //{
-    //public:
+    // public:
     //    PriorityQueue(){}
     //};
 
-  }
-#endif //POUTRE_PRIORITYQUEUE_HPP__
+} // namespace poutre
+#endif // POUTRE_PRIORITYQUEUE_HPP__

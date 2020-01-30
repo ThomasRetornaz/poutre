@@ -14,8 +14,8 @@
  * @file   poutreJsonSerialization.hpp
  * @author Thomas Retornaz
  * @brief  Define json serialization interface
- * 
- * 
+ *
+ *
  */
 
 #ifndef POUTRE_BASE_HPP__
@@ -33,33 +33,34 @@
 #include <string>
 
 namespace poutre
-  {
-  //completely grabed from http://www.danielsoltyka.com/programming/2011/04/15/simple-class-serialization-with-jsoncpp/ tutorial :)
+{
+    // completely grabed from
+    // http://www.danielsoltyka.com/programming/2011/04/15/simple-class-serialization-with-jsoncpp/ tutorial :)
 
-  /**
-   * @brief Interface class. 
-   */
-  class BASE_API InterfaceJsonSerializable
+    /**
+     * @brief Interface class.
+     */
+    class BASE_API InterfaceJsonSerializable
     {
-    public:
-      virtual ~InterfaceJsonSerializable(void) = default;
-      virtual void Serialize(Json::Value& root) = 0;
-      virtual void Deserialize(Json::Value& root) = 0;
-    };
-     
-  /**
-   * @brief Default json serailizer object
-   */
-  class BASE_API JsonSerializer 
-    {
-    public:
-      JsonSerializer() = default;
-      JsonSerializer(const JsonSerializer&) = delete; // cannot be copy constructed
-      JsonSerializer& operator=(const JsonSerializer& orig) = delete;
-
-      static bool Serialize(InterfaceJsonSerializable* iptrJSObj, std::string& ostr);
-      static bool Deserialize(InterfaceJsonSerializable* iptrJSObj, const std::string& istr);
+      public:
+        virtual ~InterfaceJsonSerializable(void) = default;
+        virtual void Serialize(Json::Value &root) = 0;
+        virtual void Deserialize(Json::Value &root) = 0;
     };
 
-  }
-#endif //POUTRE_JSON_SERIALIZATION_HPP__
+    /**
+     * @brief Default json serailizer object
+     */
+    class BASE_API JsonSerializer
+    {
+      public:
+        JsonSerializer() = default;
+        JsonSerializer(const JsonSerializer &) = delete; // cannot be copy constructed
+        JsonSerializer &operator=(const JsonSerializer &orig) = delete;
+
+        static bool Serialize(InterfaceJsonSerializable *iptrJSObj, std::string &ostr);
+        static bool Deserialize(InterfaceJsonSerializable *iptrJSObj, const std::string &istr);
+    };
+
+} // namespace poutre
+#endif // POUTRE_JSON_SERIALIZATION_HPP__

@@ -14,7 +14,7 @@
 #include <poutreBase/poutreConfig.hpp>
 #endif
 
-#ifdef POUTRE_DYNAMIC// defined if POUTRE is compiled as a DLL
+#ifdef POUTRE_DYNAMIC   // defined if POUTRE is compiled as a DLL
 #ifdef PoutreIO_EXPORTS // defined if we are building the POUTRE DLL (instead of using it)
 #define IO_API MODULE_EXPORT
 #else
@@ -27,12 +27,11 @@
 #endif // POUTRE_DYNAMIC
 
 namespace poutre
-  {
+{
     enum class ImageIOFormat : unsigned int
     {
         PNG = 0,
         UNDEF = 1 << 0,
     };
-  }
-#endif	/* POUTRE_IO_HPP */
-
+}
+#endif /* POUTRE_IO_HPP */

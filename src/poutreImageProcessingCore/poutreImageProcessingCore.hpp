@@ -14,15 +14,15 @@
  * @file   poutreImageProcessingCore.hpp
  * @author Thomas Retornaz
  * @brief  Define import/export for shared librairies
- * 
- * 
+ *
+ *
  */
 
 #ifndef POUTRE_CONFIG__HPP__
 #include <poutreBase/poutreConfig.hpp>
 #endif
 
-#ifdef POUTRE_DYNAMIC// defined if POUTRE is compiled as a DLL
+#ifdef POUTRE_DYNAMIC       // defined if POUTRE is compiled as a DLL
 #ifdef PoutreIPCore_EXPORTS // defined if we are building the POUTRE DLL (instead of using it)
 #define IMP_CORE_API MODULE_EXPORT
 #else
@@ -35,9 +35,9 @@
 #endif // POUTRE_DLL
 
 namespace poutre
-  {
+{
 
-   //TODO Doxydoc module
+    // TODO Doxydoc module
 
-  }
-#endif //POUTRE_IMAGEPROCESSINGCORE_HPP__
+}
+#endif // POUTRE_IMAGEPROCESSINGCORE_HPP__

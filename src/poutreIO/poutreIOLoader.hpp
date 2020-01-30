@@ -8,17 +8,17 @@
 //==============================================================================
 
 /*
-* File:   poutreIOLoader.hpp
-* Author: thomas
-*
-* Created on 15 mars 2016
-*/
+ * File:   poutreIOLoader.hpp
+ * Author: thomas
+ *
+ * Created on 15 mars 2016
+ */
 
 #ifndef POUTREIOLOADER_HPP
-#define	POUTREIOLOADER_HPP
+#define POUTREIOLOADER_HPP
 
-#include <string>
 #include <memory>
+#include <string>
 
 #ifndef POUTRE_IO_HPP__
 #include <poutreIO/poutreIO.hpp>
@@ -32,41 +32,43 @@
 
 namespace poutre
 {
-	class ImageProvider;
+    class ImageProvider;
 }
 
 namespace poutre
 {
-	namespace bf = boost::filesystem;
+    namespace bf = boost::filesystem;
 
-	class IO_API ImageLoader
-	{
-		using self_type = ImageLoader;
-		friend class ImageProvider;
-		//bf::path m_imgPath;
+    class IO_API ImageLoader
+    {
+        using self_type = ImageLoader;
+        friend class ImageProvider;
+        // bf::path m_imgPath;
         std::string m_imgPath;
-		bool m_isready;
-	public:
-		ImageLoader() :m_imgPath(),m_isready(false){}
-		
-        //rule of 0
-		//virtual ~ImageLoader() {}
+        bool m_isready;
 
-		//ImageLoader(self_type &&rhs) = default;
+      public:
+        ImageLoader() : m_imgPath(), m_isready(false)
+        {
+        }
 
-		//self_type &operator=(self_type &&rhs) = default;
+        // rule of 0
+        // virtual ~ImageLoader() {}
 
-		//ImageLoader(const self_type& rhs) = default;
-		//
-		//self_type& operator=(const self_type& rhs) = default;
-		
-        self_type& SetPath(std::string&& i_imgpath);
+        // ImageLoader(self_type &&rhs) = default;
 
-        self_type& SetPath(const std::string& i_imgpath);
+        // self_type &operator=(self_type &&rhs) = default;
+
+        // ImageLoader(const self_type& rhs) = default;
+        //
+        // self_type& operator=(const self_type& rhs) = default;
+
+        self_type &SetPath(std::string &&i_imgpath);
+
+        self_type &SetPath(const std::string &i_imgpath);
 
         std::unique_ptr<IInterface> Load() const;
-	};
-}//poutre
+    };
+} // namespace poutre
 
-#endif	/* POUTREIOLOADER_HPP */
-
+#endif /* POUTREIOLOADER_HPP */

@@ -10,40 +10,40 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#include <poutreBase/poutreJsonSerialization.hpp>
 #include <json/json.h>
+#include <poutreBase/poutreJsonSerialization.hpp>
 
 namespace poutre
-  {
+{
 
-  bool JsonSerializer::Serialize(InterfaceJsonSerializable* iptrJSObj, std::string& ostr)
+    bool JsonSerializer::Serialize(InterfaceJsonSerializable *iptrJSObj, std::string &ostr)
     {
-    if (iptrJSObj == nullptr)
-      return false;
+        if (iptrJSObj == nullptr)
+            return false;
 
-    Json::Value serializeRoot;
-    iptrJSObj->Serialize(serializeRoot);
+        Json::Value serializeRoot;
+        iptrJSObj->Serialize(serializeRoot);
 
-    Json::StyledWriter writer;
-    ostr = writer.write(serializeRoot);
+        Json::StyledWriter writer;
+        ostr = writer.write(serializeRoot);
 
-    return true;
+        return true;
     }
 
-  bool JsonSerializer::Deserialize(InterfaceJsonSerializable* iptrJSObj, const std::string& istr)
+    bool JsonSerializer::Deserialize(InterfaceJsonSerializable *iptrJSObj, const std::string &istr)
     {
-    if (iptrJSObj == nullptr)
-      return false;
+        if (iptrJSObj == nullptr)
+            return false;
 
-    Json::Value deserializeRoot;
-    Json::Reader reader;
+        Json::Value deserializeRoot;
+        Json::Reader reader;
 
-    if (!reader.parse(istr, deserializeRoot))
-      return false;
+        if (!reader.parse(istr, deserializeRoot))
+            return false;
 
-    iptrJSObj->Deserialize(deserializeRoot);
+        iptrJSObj->Deserialize(deserializeRoot);
 
-    return true;
+        return true;
     }
 
-  }
+} // namespace poutre

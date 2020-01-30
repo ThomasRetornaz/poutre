@@ -10,15 +10,13 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-
 #include <iostream>
 #include <poutreNeuralNets/poutreNeuralNets.hpp>
 
-
 namespace poutre
-  {
-  void dummy(void)
+{
+    void dummy(void)
     {
-    size_t a = 0;
+        size_t a = 0;
     }
-  }
+} // namespace poutre

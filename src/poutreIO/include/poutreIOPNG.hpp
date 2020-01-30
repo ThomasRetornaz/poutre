@@ -8,17 +8,17 @@
 //==============================================================================
 
 /*
-* File:   poutreIOPNG.hpp
-* Author: thomas retornaz
-*
-* Created on 19 mars 2016
-*/
+ * File:   poutreIOPNG.hpp
+ * Author: thomas retornaz
+ *
+ * Created on 19 mars 2016
+ */
 
 #ifndef POUTREIOPNG_HPP
-#define	POUTREIOPNG_HPP
+#define POUTREIOPNG_HPP
 
-#include <string>
 #include <memory>
+#include <string>
 
 #ifndef POUTRE_IO_HPP__
 #include <poutreIO/poutreIO.hpp>
@@ -28,18 +28,16 @@
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
 #endif
 
-
 #include <boost/filesystem.hpp>
 
 namespace poutre
 {
-	namespace details
-	{
-		namespace bf = boost::filesystem;
-		IO_API  std::unique_ptr<IInterface> IOLoadPng(const bf::path& i_path);
-		IO_API  void IOSavePng(const bf::path& i_path,const poutre::IInterface& i_img);
+    namespace details
+    {
+        namespace bf = boost::filesystem;
+        IO_API std::unique_ptr<IInterface> IOLoadPng(const bf::path &i_path);
+        IO_API void IOSavePng(const bf::path &i_path, const poutre::IInterface &i_img);
 
-	}
-}
-#endif	/* POUTREIOPNG_HPP */
-
+    } // namespace details
+} // namespace poutre
+#endif /* POUTREIOPNG_HPP */

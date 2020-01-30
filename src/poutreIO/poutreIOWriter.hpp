@@ -8,17 +8,17 @@
 //==============================================================================
 
 /*
-* File:   poutreIOWritter.hpp
-* Author: thomas
-*
-* Created on 15 mars 2016
-*/
+ * File:   poutreIOWritter.hpp
+ * Author: thomas
+ *
+ * Created on 15 mars 2016
+ */
 
 #ifndef POUTREIOWRITTER_HPP
-#define	POUTREIOWRITTER_HPP
+#define POUTREIOWRITTER_HPP
 
-#include <string>
 #include <memory>
+#include <string>
 
 #ifndef POUTRE_IO_HPP__
 #include <poutreIO/poutreIO.hpp>
@@ -39,26 +39,29 @@ namespace poutre
         ImageIOFormat m_imgformat;
         bool m_isready;
 
-    public:
-        ImageWriter() :m_imgPath(), m_imgformat(ImageIOFormat::PNG), m_isready(false){}
+      public:
+        ImageWriter() : m_imgPath(), m_imgformat(ImageIOFormat::PNG), m_isready(false)
+        {
+        }
 
-        virtual ~ImageWriter() {}
+        virtual ~ImageWriter()
+        {
+        }
 
-        //rule of 0
-        //virtual ~ImageLoader() {}
+        // rule of 0
+        // virtual ~ImageLoader() {}
 
-        //ImageLoader(self_type &&rhs) = default;
+        // ImageLoader(self_type &&rhs) = default;
 
-        //self_type &operator=(self_type &&rhs) = default;
+        // self_type &operator=(self_type &&rhs) = default;
 
-        //ImageLoader(const self_type& rhs) = default;
+        // ImageLoader(const self_type& rhs) = default;
         //
-        //self_type& operator=(const self_type& rhs) = default;
+        // self_type& operator=(const self_type& rhs) = default;
 
-        self_type& SetPath(const std::string& i_imgpath);
-        void Write(const IInterface& i_img) const;
+        self_type &SetPath(const std::string &i_imgpath);
+        void Write(const IInterface &i_img) const;
     };
-}//poutre
+} // namespace poutre
 
-#endif	/* POUTREIOWRITTER_HPP */
-
+#endif /* POUTREIOWRITTER_HPP */

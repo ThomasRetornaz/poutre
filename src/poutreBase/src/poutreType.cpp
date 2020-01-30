@@ -15,9 +15,9 @@
 
 namespace poutre
 {
-    //NOTE JUST FOR CONVENIENCE AT INTERFACE LAYER TO USE STRING INSTEAD OF VERBOSE ENUM
+    // NOTE JUST FOR CONVENIENCE AT INTERFACE LAYER TO USE STRING INSTEAD OF VERBOSE ENUM
 
-    std::ostream& operator<<(std::ostream& os, CompOpType compOpType)
+    std::ostream &operator<<(std::ostream &os, CompOpType compOpType)
     {
         switch (compOpType)
         {
@@ -39,15 +39,14 @@ namespace poutre
         case CompOpType::CompOpSupEqual:
             os << ">=";
             break;
-        default://  CompOpType::CompOpUndef; 
+        default: //  CompOpType::CompOpUndef;
             os << "Unknown CompOpType";
             break;
         }
         return os;
     }
 
-
-    std::istream& operator >> (std::istream& is, CompOpType& compOpType)
+    std::istream &operator>>(std::istream &is, CompOpType &compOpType)
     {
         compOpType = CompOpType::CompOpUndef;
 
@@ -78,8 +77,7 @@ namespace poutre
         return is;
     }
 
-
-    std::ostream& operator<<(std::ostream& os, ArithOpType arithOpType)
+    std::ostream &operator<<(std::ostream &os, ArithOpType arithOpType)
     {
         switch (arithOpType)
         {
@@ -98,15 +96,14 @@ namespace poutre
         case ArithOpType::ArithOpMod:
             os << "%";
             break;
-        default://  ArithOpType::; 
+        default: //  ArithOpType::;
             os << "Unknown ArithOpType";
             break;
         }
         return os;
     }
 
-
-    std::istream& operator >> (std::istream& is, ArithOpType& arithOpType)
+    std::istream &operator>>(std::istream &is, ArithOpType &arithOpType)
     {
         arithOpType = ArithOpType::ArithOpUndef;
 
@@ -135,9 +132,7 @@ namespace poutre
         return is;
     }
 
-
-
-    std::ostream& operator<<(std::ostream& os, AssignOpType assignOpType)
+    std::ostream &operator<<(std::ostream &os, AssignOpType assignOpType)
     {
         switch (assignOpType)
         {
@@ -159,15 +154,14 @@ namespace poutre
         case AssignOpType::AssignOp:
             os << "=";
             break;
-        default://  AssignOpType::; 
+        default: //  AssignOpType::;
             os << "Unknown AssignOpType";
             break;
         }
         return os;
     }
 
-
-    std::istream& operator >> (std::istream& is, AssignOpType& assignOpType)
+    std::istream &operator>>(std::istream &is, AssignOpType &assignOpType)
     {
         assignOpType = AssignOpType::AssignOpUndef;
 
@@ -198,7 +192,4 @@ namespace poutre
         return is;
     }
 
-
-
-
-}
+} // namespace poutre

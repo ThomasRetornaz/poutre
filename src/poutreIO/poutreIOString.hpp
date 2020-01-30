@@ -7,7 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-/* 
+/*
  * File:   poutreIOString.hpp
  * Author: thomas
  *
@@ -15,10 +15,10 @@
  */
 
 #ifndef POUTREIOSTRING_HPP
-#define	POUTREIOSTRING_HPP
+#define POUTREIOSTRING_HPP
 
-#include <string>
 #include <memory>
+#include <string>
 
 #ifndef POUTRE_IO_HPP__
 #include <poutreIO/poutreIO.hpp>
@@ -29,11 +29,10 @@
 #endif
 
 namespace poutre
-{   
-    IO_API std::string ImageToString(const IInterface& i_image);    
-    IO_API std::unique_ptr<IInterface> ImageFromString(const std::string& i_str); 
-    
-}
+{
+    IO_API std::string ImageToString(const IInterface &i_image);
+    IO_API std::unique_ptr<IInterface> ImageFromString(const std::string &i_str);
 
-#endif	/* POUTREIOSTRING_HPP */
+} // namespace poutre
 
+#endif /* POUTREIOSTRING_HPP */

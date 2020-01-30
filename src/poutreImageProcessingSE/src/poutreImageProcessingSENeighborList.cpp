@@ -22,6 +22,6 @@ namespace poutre
     namespace se
     {
     }
-    
-}
-#endif //POUTRE_IPSENL_HPP__
+
+} // namespace poutre
+#endif // POUTRE_IPSENL_HPP__

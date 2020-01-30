@@ -7,30 +7,26 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-
 #include <boost/lexical_cast.hpp>
 #include <iostream>
 #include <sstream>
 
-#include <poutreIO/include/poutreIOTIFF.hpp>
 #include <poutreBase/poutreTrace.hpp>
+#include <poutreIO/include/poutreIOTIFF.hpp>
 #include <poutreImageProcessing/core/include/poutreImageProcessingContainer.hpp>
-
-
 
 namespace poutre
 {
-	namespace details
-	{
-		namespace bf = boost::filesystem;
-		std::unique_ptr<IInterface> IOLoadTiff(const bf::path& i_path)
-		{
-			return std::unique_ptr<IInterface>();
-		}
-		void IOSaveTiff(const bf::path& i_path,const poutre::IInterface& i_image)
-		{
+    namespace details
+    {
+        namespace bf = boost::filesystem;
+        std::unique_ptr<IInterface> IOLoadTiff(const bf::path &i_path)
+        {
+            return std::unique_ptr<IInterface>();
+        }
+        void IOSaveTiff(const bf::path &i_path, const poutre::IInterface &i_image)
+        {
+        }
+    } // namespace details
 
-		}
-	}
-
-} //namespace
+} // namespace poutre

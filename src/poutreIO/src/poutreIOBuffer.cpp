@@ -7,22 +7,19 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-
 #include <boost/lexical_cast.hpp>
 #include <iostream>
 #include <sstream>
 
-#include <poutreIO/include/poutreIOBUFFER.hpp>
 #include <poutreBase/poutreTrace.hpp>
+#include <poutreIO/include/poutreIOBUFFER.hpp>
 #include <poutreImageProcessing/core/include/poutreImageProcessingContainer.hpp>
-
-
 
 namespace poutre
 {
-	namespace details
-	{
+    namespace details
+    {
 
-	}
+    }
 
-} //namespace
+} // namespace poutre

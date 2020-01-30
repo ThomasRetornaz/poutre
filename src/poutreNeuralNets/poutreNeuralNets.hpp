@@ -14,7 +14,7 @@
 #include <poutreBase/poutreConfig.hpp>
 #endif
 
-#ifdef POUTRE_DYNAMIC// defined if POUTRE is compiled as a DLL
+#ifdef POUTRE_DYNAMIC           // defined if POUTRE is compiled as a DLL
 #ifdef PoutreNeuralNets_EXPORTS // defined if we are building the POUTRE DLL (instead of using it)
 #define NN_API MODULE_EXPORT
 #else
@@ -27,8 +27,8 @@
 #endif // POUTRE_DLL
 
 namespace poutre
-  {
-  NN_API void dummy(void);
+{
+    NN_API void dummy(void);
 
-  }
-#endif //POUTRE_NEURALNETS_HPP__
+}
+#endif // POUTRE_NEURALNETS_HPP__
