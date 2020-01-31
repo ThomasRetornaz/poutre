@@ -1,4 +1,5 @@
 cmake_minimum_required (VERSION 3.0)
+include(AddCXXCompilerFlag)
 include(CheckCXXCompilerFlag)
 message(STATUS "host processor " ${CMAKE_HOST_SYSTEM_PROCESSOR} " target processor " ${CMAKE_SYSTEM_PROCESSOR})
 
@@ -175,7 +176,7 @@ if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GN
     BENCHMARK_SHARED_LINKER_FLAGS_COVERAGE)
   set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
     "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel Coverage.")
-    AddCompilerFlag(--coverage COVERAGE)
+    add_cxx_compiler_flag(--coverage COVERAGE)
 endif()
 
 IF(NOT APPLE AND NOT MSVC)

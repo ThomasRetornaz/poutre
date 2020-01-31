@@ -83,6 +83,7 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 # Compiler specific configurations
 include(cmake/AddCompilerFlag.cmake)
+include(cmake/AddCXXCompilerFlag.cmake)
 include(cmake/c++-standards.cmake)
 include(cmake/formatting.cmake)
 include(cmake/CMakeCompilerSpecific.cmake)
