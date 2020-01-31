@@ -1,7 +1,3 @@
-# FORMAT
-cmake_format(cmake-format ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
-             CMakeLists.txt)
-
 include_directories(${POUTRE_SRC_DIR})
 
 set(PoutreIPLLMSubdirectory ${POUTRE_SRC_DIR}/poutreImageProcessingLowLevelMorphology)

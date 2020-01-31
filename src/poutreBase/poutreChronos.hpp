@@ -46,7 +46,7 @@ namespace poutre
         using double_milliseconds =
             std::chrono::duration<double, std::milli>; // switch to other duration through template<rep,duration> ?
         using timerep = double_milliseconds::rep;      // todo use
-                                                  // decltype(auto)
+                                                       // decltype(auto)
         //! ctor
         Timer(void);
 

@@ -1,7 +1,3 @@
-# FORMAT
-cmake_format(cmake-format ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
-             CMakeLists.txt)
-
 set(poutreImageProcessingSE ${POUTRE_SRC_DIR}/poutreImageProcessingSE)
 
 set(poutreImageProcessingSE_SRC_DETAILS 

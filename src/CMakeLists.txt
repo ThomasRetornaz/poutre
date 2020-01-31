@@ -2,8 +2,7 @@
 file(GLOB_RECURSE FFILES *.[hc] *.[hc]pp)
 clang_format(ClangformatSRC ${FFILES})
 
-cmake_format(cmake-format ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
-             CMakeLists.txt)
+cmake_format(cmake-format ${CMAKEFILES})
 
 add_subdirectory (poutreBase  ${TEMPORARY_DIRECTORY}/poutreBase)
 add_subdirectory (poutreImageProcessingCore  ${TEMPORARY_DIRECTORY}/poutreImageProcessingCore)

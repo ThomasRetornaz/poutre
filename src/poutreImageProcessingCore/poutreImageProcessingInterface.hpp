@@ -74,7 +74,7 @@ namespace poutre
 
     //! operator<< for IInterface
     //@warning Serialize a description of image. Doesn't serialize data. Use @c poutreIO::ImageFromString,@c
-    //poutreIO::ImageToString
+    // poutreIO::ImageToString
     IMP_CORE_API std::ostream &operator<<(std::ostream &, const IInterface &img);
 
     /**
