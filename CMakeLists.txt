@@ -85,6 +85,7 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 include(cmake/AddCompilerFlag.cmake)
 include(cmake/AddCXXCompilerFlag.cmake)
 include(cmake/c++-standards.cmake)
+include(cmake/code-coverage.cmake)
 include(cmake/formatting.cmake)
 include(cmake/CMakeCompilerSpecific.cmake)
 include(cmake/OptimizeForArchitecture.cmake)
@@ -109,6 +110,13 @@ if(BUILD_SHARED_LIBS)
   add_definitions(-DPOUTRE_DYNAMIC)
 else()
   message(STATUS "Building static libraries")
+endif()
+
+if(CMAKE_BUILD_TYPE)
+    string(TOLOWER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_LOWER)
+    if (${CMAKE_BUILD_TYPE_LOWER} MATCHES "coverage")
+        set(CODE_COVERAGE cache bool ON)
+    endif()
 endif()
 
 # Some useful functions
@@ -137,6 +145,10 @@ include_directories(${POUTRE_PYTHONEXT_DIR})
 
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${JSONCPP_INCLUDE_DIR})
+
+if(CODE_COVERAGE)
+   add_code_coverage_all_targets(EXCLUDE */boost/* */7/*)
+endif()
 
 # the poutre core libraries
 add_subdirectory (${POUTRE_SRC_DIR})
