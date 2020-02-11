@@ -4,3 +4,9 @@
 [submodule "thirdparties/jsoncpp"]
 	path = thirdparties/jsoncpp
 	url = https://github.com/open-source-parsers/jsoncpp.git
+[submodule "thirdparties/oiio"]
+	path = thirdparties/oiio
+	url = https://github.com/OpenImageIO/oiio.git
+[submodule "thirdparties/openexr"]
+	path = thirdparties/openexr
+	url = https://github.com/AcademySoftwareFoundation/openexr.git

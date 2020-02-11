@@ -144,18 +144,37 @@ SET(JSONCPP_INCLUDE_DIR "${THIRD_PARTIES_PATH}/jsoncpp/include" PARENT_SCOPE)
 add_subdirectory(zlib)
 set(ZLIB_INCLUDE_DIR       ${ZLIB_INCLUDE_DIR}    PARENT_SCOPE)
 set(ZLIB_LIBRARY         ${ZLIB_LIBRARY}      PARENT_SCOPE)
+
 # png
 add_subdirectory(libpng)
 set(PNG_INCLUDE_DIR       ${PNG_INCLUDE_DIR}    PARENT_SCOPE)
+#set(PNG_PNG_INCLUDE_DIR ${PNG_INCLUDE_DIR}    PARENT_SCOPE) #for oiio
 set(PNG_LIBRARY         ${PNG_LIBRARY}      PARENT_SCOPE)
+set(PNG_PNG_INCLUDE_DIR "${THIRD_PARTIES_PATH}/libpng")
+
+#exr
+set(OPENEXR_BUILD_UTILS CACHE BOOL OFF FORCE)
+set(PYILMBASE_ENABLE CACHE BOOL OFF FORCE)
+set(OPENEXR_VIEWERS_ENABLE CACHE BOOL OFF FORCE)
+set(BUILD_TESTING CACHE BOOL OFF FORCE) #naming collisions ....
+add_subdirectory(openexr)
+set(ILMBASE_INCLUDE_PATH "${THIRD_PARTIES_PATH}/openexr/IImImf")
+set(OpenEXR_ROOT "${THIRD_PARTIES_PATH}/openexr/")
+set(OpenEXR_includedir "${THIRD_PARTIES_PATH}/openexr/OpenEXR")
+
 # jpeg
 add_subdirectory(libjpeg)
 set(JPEG_INCLUDE_DIR       ${JPEG_INCLUDE_DIR}    PARENT_SCOPE)
 set(JPEG_LIBRARY         ${JPEG_LIBRARY}      PARENT_SCOPE)
+
 # tiff
-#add_subdirectory(libtiff)
-#set(TIFF_INCLUDE_DIR       ${TIFF_INCLUDE_DIR}    PARENT_SCOPE)
-#set(TIFF_LIBRARY         ${TIFF_LIBRARY}      PARENT_SCOPE)
+add_subdirectory(libtiff)
+set(TIFF_INCLUDE_DIR "${THIRD_PARTIES_PATH}/libtiff/libtiff")
+set(TIFF_LIBRARY tiff tiffxx)
+# set(TIFF_INCLUDE_DIR  ${TIFF_INCLUDES} ${tiff_HEADERS} ${nodist_tiff_HEADERS}    PARENT_SCOPE)
+# message(FATAL_ERROR " ${TIFF_INCLUDES} ${tiff_HEADERS} ${nodist_tiff_HEADERS}")
+# set(TIFF_LIBRARY         ${TIFF_LIBRARY}      PARENT_SCOPE)
+
 # hdf5
 #SET(HDF5_EXTERNALLY_CONFIGURED ON)
 #add_subdirectory(hdf5)
@@ -163,6 +182,19 @@ set(JPEG_LIBRARY         ${JPEG_LIBRARY}      PARENT_SCOPE)
 #set(HDF5_LIBRARY         ${HDF5_LIBRARY}      PARENT_SCOPE)
 # eigen
 #add_subdirectory(eigen)
+
+#openImageIO
+set(OpenImageIO_BUILD_TOOLS CACHE BOOL OFF FORCE)
+set(OpenImageIO_BUILD_TESTS CACHE BOOL OFF FORCE)
+set(OIIO_BUILD_TESTS CACHE BOOL OFF FORCE)
+set(OIIO_BUILD_TOOLS CACHE BOOL OFF FORCE)
+set(BUILD_DOCS CACHE BOOL OFF FORCE)
+set(INSTALL_DOCS CACHE BOOL OFF FORCE)
+set(INSTALL_FONTS CACHE BOOL OFF FORCE)
+#set(INSTALL_CMAKE_HELPER "If On, install FindOpenImageIO.cmake" ON)
+#option (EMBEDPLUGINS "Embed format plugins in libOpenImageIO" ON)
+add_subdirectory(oiio)
+
 # bench
 if(BUILD_BENCH)
   set(BUILD_SHARED_LIBS OFF) #temporary
