@@ -38,7 +38,7 @@ endif()
 # Optional: ARGN - The list of targets OR files to format. Relative and absolute
 # paths are accepted.
 # ~~~
-function(clang_format TARGET_NAME)
+function(poutre_clang_format TARGET_NAME)
   if(CLANG_FORMAT_EXE)
     set(FORMAT_FILES)
     # Check through the ARGN's, determine existent files
@@ -77,11 +77,11 @@ function(clang_format TARGET_NAME)
         add_custom_target(${TARGET_NAME} COMMAND ${CLANG_FORMAT_EXE} -i
                                                  -style=file ${FORMAT_FILES})
 
-        if(NOT TARGET format)
-          add_custom_target(format)
+        if(NOT TARGET poutre-format)
+          add_custom_target(poutre-format)
         endif()
 
-        add_dependencies(format ${TARGET_NAME})
+        add_dependencies(poutre-format ${TARGET_NAME})
       endif()
     endif()
 
@@ -110,7 +110,7 @@ endif()
 # formatting on. Any items that are not files will be ignored. Both relative and
 # absolute paths are accepted.
 # ~~~
-function(cmake_format TARGET_NAME)
+function(poutre-cmake_format TARGET_NAME)
   if(CMAKE_FORMAT_EXE)
     set(FORMAT_FILES)
     # Determine files that exist
@@ -132,10 +132,10 @@ function(cmake_format TARGET_NAME)
         add_custom_target(${TARGET_NAME} COMMAND ${CMAKE_FORMAT_EXE} -i
                                                  ${FORMAT_FILES})
 
-        if(NOT TARGET cmake-format)
-          add_custom_target(cmake-format)
+        if(NOT TARGET poutre-cmake-format)
+          add_custom_target(poutre-cmake-format)
         endif()
-        add_dependencies(cmake-format ${TARGET_NAME})
+        add_dependencies(poutre-cmake-format ${TARGET_NAME})
       endif()
     endif()
   endif()
