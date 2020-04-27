@@ -1,6 +1,7 @@
 #Most of the initial cmake skeleton  was heavely inspired from yayi project see https://bitbucket.org/renficiaud/yayi.git. and rapidjosn
 cmake_minimum_required (VERSION 3.0)
-project(Poutre)
+project(Poutre C CXX)
+set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 14)
 
 # some global properties
@@ -15,11 +16,11 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
-OPTION(BUILD_TEST "Build Tests Suites" ON)
-OPTION(BUILD_BENCH "Build Benchmark Suites" OFF)
-OPTION(BUILD_PY "Build python exports" ON)
+OPTION(POUTRE_BUILD_TEST "Build Tests Suites" ON)
+OPTION(POUTRE_BUILD_BENCH "Build Benchmark Suites" OFF)
+OPTION(POUTRE_BUILD_PY "Build python exports" ON)
 
-if(BUILD_TEST)
+if(POUTRE_BUILD_TEST)
     enable_testing()
 endif()
 
@@ -80,7 +81,6 @@ set(POUTRE_DOCUMENTATION_INSTALLATION_RELATIVE_PATH   "documentation" CACHE PATH
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
-
 # Compiler specific configurations
 include(cmake/AddCompilerFlag.cmake)
 include(cmake/AddCXXCompilerFlag.cmake)
@@ -94,16 +94,29 @@ foreach(flag ${Vc_ARCHITECTURE_FLAGS})
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flag}")
 endforeach()
 
-message(STATUS "CMake running on OS ${CMAKE_HOST_SYSTEM_NAME} version ${CMAKE_HOST_SYSTEM_VERSION} on processor ${CMAKE_HOST_SYSTEM_PROCESSOR}")
-message(STATUS "HDF5 support is ${ENABLE_HDF5}")
-message(STATUS "NumPy support is ${ENABLE_NUMPY}")
-MESSAGE(STATUS "Build type: " ${CMAKE_BUILD_TYPE})
-MESSAGE(STATUS "Library Type: " ${LIB_TYPE})
-MESSAGE(STATUS "Compiler flags:" ${CMAKE_CXX_COMPILE_FLAGS})
-MESSAGE(STATUS "Compiler cxx debug flags:" ${CMAKE_CXX_FLAGS_DEBUG})
-MESSAGE(STATUS "Compiler cxx release flags:" ${CMAKE_CXX_FLAGS_RELEASE})
-MESSAGE(STATUS "Compiler cxx min size flags:" ${CMAKE_CXX_FLAGS_MINSIZEREL})
-MESSAGE(STATUS "Compiler cxx flags:" ${CMAKE_CXX_FLAGS})
+message(STATUS "")
+message(STATUS "******** Summary ********")
+message(STATUS "General:")
+message(STATUS "  CMake version         : ${CMAKE_VERSION}")
+message(STATUS "  CMake command         : ${CMAKE_COMMAND}")
+message(STATUS "  CMake generator       : ${CMAKE_GENERATOR}")
+message(STATUS "  Host System           : ${CMAKE_HOST_SYSTEM_NAME}")
+message(STATUS "  System                : ${CMAKE_SYSTEM_NAME}")
+message(STATUS "  Target OS             : ${TARGET_OS}")
+message(STATUS "  C++ compiler          : ${CMAKE_CXX_COMPILER}")
+message(STATUS "  C++ compiler id       : ${CMAKE_CXX_COMPILER_ID}")
+message(STATUS "  C++ compiler version  : ${CMAKE_CXX_COMPILER_VERSION}")
+message(STATUS "  C compiler            : ${CMAKE_C_COMPILER}")
+message(STATUS "  C compiler id         : ${CMAKE_C_COMPILER_ID}")
+message(STATUS "  C compiler version    : ${CMAKE_C_COMPILER_VERSION}")
+message(STATUS "  Link flags             : ${CMAKE_EXE_LINKER_FLAGS}")
+message(STATUS "  CXX flags             : ${CMAKE_CXX_FLAGS}")
+message(STATUS "  Build type            : ${CMAKE_BUILD_TYPE}")
+message(STATUS "  CMAKE_PREFIX_PATH     : ${CMAKE_PREFIX_PATH}")
+message(STATUS "  CMAKE_INSTALL_PREFIX  : ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "HDF5 support            : ${ENABLE_HDF5}")
+message(STATUS "NumPy                   : ${ENABLE_NUMPY}")
+
 
 if(BUILD_SHARED_LIBS)
   message(STATUS "Building shared libraries")
@@ -152,13 +165,13 @@ endif()
 
 # the poutre core libraries
 add_subdirectory (${POUTRE_SRC_DIR})
-if(BUILD_TEST)
+if(POUTRE_BUILD_TEST)
     add_subdirectory (${POUTRE_NRT_DIR})
 endif()
-if(BUILD_BENCH)
+if(POUTRE_BUILD_BENCH)
     add_subdirectory (${POUTRE_BENCH_DIR})
 endif()    
-if(BUILD_PY)
+if(POUTRE_BUILD_PY)
     # creates the python package
     #create_python_package()
 endif()    

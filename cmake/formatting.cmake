@@ -110,7 +110,7 @@ endif()
 # formatting on. Any items that are not files will be ignored. Both relative and
 # absolute paths are accepted.
 # ~~~
-function(poutre-cmake_format TARGET_NAME)
+function(poutre_cmake_format TARGET_NAME)
   if(CMAKE_FORMAT_EXE)
     set(FORMAT_FILES)
     # Determine files that exist
