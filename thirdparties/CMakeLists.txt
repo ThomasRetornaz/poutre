@@ -11,8 +11,6 @@ if(MSVC)
   endif()
 endif()
 
-
-
 # --------------------------------------------------------------------------------
 # boost
 if(NOT BOOST_ROOT)
@@ -137,51 +135,92 @@ set(JSONCPP_WITH_CMAKE_PACKAGE CACHE BOOL OFF FORCE)
 set(JSONCPP_WITH_PKGCONFIG_SUPPORT CACHE BOOL OFF FORCE)
 set(JSONCPP_WITH_POST_BUILD_UNITTEST CACHE BOOL OFF FORCE)
 add_subdirectory(jsoncpp)
-set_target_properties(jsoncpp_lib PROPERTIES FOLDER "3rdparty/")
+set_target_properties(jsoncpp_lib PROPERTIES FOLDER "3rdparties/")
 SET(JSONCPP_INCLUDE_DIR "${THIRD_PARTIES_PATH}/jsoncpp/include" PARENT_SCOPE)
 
 # zlib
-add_subdirectory(zlib)
-set(ZLIB_INCLUDE_DIR       ${ZLIB_INCLUDE_DIR}    PARENT_SCOPE)
-set(ZLIB_LIBRARY         ${ZLIB_LIBRARY}      PARENT_SCOPE)
+ADD_SUBDIRECTORY(zlib)
+INCLUDE_DIRECTORIES(
+    ${CMAKE_CURRENT_SOURCE_DIR}/zlib
+    ${CMAKE_CURRENT_BINARY_DIR}/zlib)
+SET(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/zlib ${CMAKE_CURRENT_BINARY_DIR}/zlib)
+SET(ZLIB_LIBRARY zlib)
+if(WIN32)
+  add_definitions(-DWIN32)
+ENDIF()
+if(MSVC)
+set_property(TARGET zlib PROPERTY DEBUG_POSTFIX "") # turn off the d trailer on library name, too messy for import in openexr.
+endif()
+SET_PROPERTY(TARGET zlib PROPERTY FOLDER "3rdparties")
+set(ZLIB_LIBRARIES ${ZLIB_LIBRARY})
+set(ZLIB_INCLUDE_DIRS ${ZLIB_INCLUDE_DIR})
+set(ZLIB_LIBRARY ${ZLIB_LIBRARY})
+set(ZLIB_FOUND TRUE)
+message(STATUS "**************ZLIB: ${ZLIB_INCLUDE_DIR} ${ZLIB_LIBRARIES}")
 
-# png
-add_subdirectory(libpng)
-set(PNG_INCLUDE_DIR       ${PNG_INCLUDE_DIR}    PARENT_SCOPE)
-#set(PNG_PNG_INCLUDE_DIR ${PNG_INCLUDE_DIR}    PARENT_SCOPE) #for oiio
-set(PNG_LIBRARY         ${PNG_LIBRARY}      PARENT_SCOPE)
-set(PNG_PNG_INCLUDE_DIR "${THIRD_PARTIES_PATH}/libpng")
-
-#exr
-set(OPENEXR_BUILD_UTILS CACHE BOOL OFF FORCE)
-set(PYILMBASE_ENABLE CACHE BOOL OFF FORCE)
-set(OPENEXR_VIEWERS_ENABLE CACHE BOOL OFF FORCE)
-set(BUILD_TESTING CACHE BOOL OFF FORCE) #naming collisions ....
-add_subdirectory(openexr)
-set(ILMBASE_INCLUDE_PATH "${THIRD_PARTIES_PATH}/openexr/IImImf")
-set(OpenEXR_ROOT "${THIRD_PARTIES_PATH}/openexr/")
-set(OpenEXR_includedir "${THIRD_PARTIES_PATH}/openexr/OpenEXR")
-
-# jpeg
+# libjpeg
+set(BUILD_JPEG_STATIC ON)
 add_subdirectory(libjpeg)
-set(JPEG_INCLUDE_DIR       ${JPEG_INCLUDE_DIR}    PARENT_SCOPE)
-set(JPEG_LIBRARY         ${JPEG_LIBRARY}      PARENT_SCOPE)
+set(JPEG_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libjpeg ${CMAKE_CURRENT_BINARY_DIR}/libjpeg) 
+set(JPEG_LIBRARY jpeg)
+set(JPEG_INCLUDE_DIRS ${JPEG_INCLUDE_DIR}) 
+set(JPEG_LIBRARIES ${JPEG_LIBRARY})
+INCLUDE_DIRECTORIES(
+    ${CMAKE_CURRENT_SOURCE_DIR}/libjpeg 
+    ${CMAKE_CURRENT_BINARY_DIR}/libjpeg
+)
+SET_PROPERTY(TARGET jpeg PROPERTY FOLDER "3rdparties")
+set(JPEG_FOUND TRUE)
+message(STATUS "**************JPEG: ${JPEG_INCLUDE_DIRS} ${JPEG_LIBRARIES}")
 
-# tiff
-add_subdirectory(libtiff)
-set(TIFF_INCLUDE_DIR "${THIRD_PARTIES_PATH}/libtiff/libtiff")
-set(TIFF_LIBRARY tiff tiffxx)
-# set(TIFF_INCLUDE_DIR  ${TIFF_INCLUDES} ${tiff_HEADERS} ${nodist_tiff_HEADERS}    PARENT_SCOPE)
-# message(FATAL_ERROR " ${TIFF_INCLUDES} ${tiff_HEADERS} ${nodist_tiff_HEADERS}")
-# set(TIFF_LIBRARY         ${TIFF_LIBRARY}      PARENT_SCOPE)
+# libpng
+set(PNG_STATIC ON)
+add_subdirectory(libpng)
+set(PNG_PNG_INCLUDE_DIR 
+  ${CMAKE_CURRENT_SOURCE_DIR}/libpng
+  ${CMAKE_CURRENT_BINARY_DIR}/libpng)
+set(PNG_INCLUDE_DIR  ${PNG_PNG_INCLUDE_DIR}) 
+# set(PNG_LIBRARY png${PNG_LIB_TARGETS})
+set(PNG_LIBRARY png_static)
+set(PNG_LIBRARIES ${PNG_LIBRARY})
+INCLUDE_DIRECTORIES(
+    ${PNG_INCLUDE_DIR}
+)
+#SET_PROPERTY(TARGET png PROPERTY FOLDER "3rdparties")
+set(PNG_FOUND TRUE)
+message(STATUS "***************PNG: ${PNG_INCLUDE_DIR} ${PNG_LIBRARY}")
 
-# hdf5
-#SET(HDF5_EXTERNALLY_CONFIGURED ON)
-#add_subdirectory(hdf5)
-#set(HDF5_INCLUDE_DIR       ${HDF5_INCLUDE_DIR}    PARENT_SCOPE)
-#set(HDF5_LIBRARY         ${HDF5_LIBRARY}      PARENT_SCOPE)
-# eigen
-#add_subdirectory(eigen)
+# libtiff
+add_subdirectory(tiff)
+set(TIFF_INCLUDE_DIR 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiff/libtiff
+  ${CMAKE_CURRENT_BINARY_DIR}/tiff/libtiff) 
+set(TIFF_LIBRARY tiff)
+INCLUDE_DIRECTORIES(
+    ${TIFF_INCLUDE_DIR}
+)
+message(STATUS "**************TIFF: ${TIFF_INCLUDE_DIR} ${TIFF_LIBRARY}")
+
+#openexr
+add_subdirectory(openexr)
+set(OPENEXR_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/openexr)
+set(OPENEXR_INCLUDE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/openexr)
+set(ILMBASE_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/openexr/IlmBase)
+set(_OPENEXR_VERSION "2.3")
+set(ILMBASE_INCLUDE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/openexr/IlmBase)
+SET(OPENEXR_HALF_LIBRARY Half)
+SET(OPENEXR_IEX_LIBRARY Iex)
+set(OPENEXR_IMATH_LIBRARY Imath)
+set(OPENEXR_ILMIMF_LIBRARY IlmImf)
+set(OPENEXR_ILMTHREAD_LIBRARY IlmThread)
+INCLUDE_DIRECTORIES(
+    ${OPENEXR_INCLUDE_PATH}
+    ${ILMBASE_INCLUDE_PATH}
+    ${ILMBASE_INCLUDE_PATH}/Iex
+    ${ILMBASE_INCLUDE_PATH}/Imath
+    ${ILMBASE_INCLUDE_PATH}/Half
+    ${CMAKE_CURRENT_BINARY_DIR}/openexr/OpenEXR/config
+)
 
 #openImageIO
 set(OpenImageIO_BUILD_TOOLS CACHE BOOL OFF FORCE)
@@ -191,8 +230,10 @@ set(OIIO_BUILD_TOOLS CACHE BOOL OFF FORCE)
 set(BUILD_DOCS CACHE BOOL OFF FORCE)
 set(INSTALL_DOCS CACHE BOOL OFF FORCE)
 set(INSTALL_FONTS CACHE BOOL OFF FORCE)
-#set(INSTALL_CMAKE_HELPER "If On, install FindOpenImageIO.cmake" ON)
-#option (EMBEDPLUGINS "Embed format plugins in libOpenImageIO" ON)
+set(USE_QT CACHE BOOL OFF FORCE)
+set(BUILD_FMT_FORCE CACHE BOOL ON FORCE)
+set(USE_PYTHON CACHE BOOL OFF FORCE)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/oiio/src/include)
 add_subdirectory(oiio)
 
 # bench
@@ -206,8 +247,8 @@ if(BUILD_BENCH)
   set(BENCHMARK_ENABLE_EXCEPTIONS ON CACHE BOOL "" FORCE)
   add_subdirectory(benchmark)
   set(BUILD_SHARED_LIBS ON) #temporary
-  set_target_properties(benchmark PROPERTIES FOLDER "3rdparty/")
-  set_target_properties(benchmark_main PROPERTIES FOLDER "3rdparty/")
+  set_target_properties(benchmark PROPERTIES FOLDER "3rdparties/")
+  set_target_properties(benchmark_main PROPERTIES FOLDER "3rdparties/")
 endif()
 
 

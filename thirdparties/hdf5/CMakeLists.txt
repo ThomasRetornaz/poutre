@@ -48,4 +48,4 @@ ExternalProject_Add(hdf5
 
 ExternalProject_Get_Property(hdf5 TMP_DIR STAMP_DIR DOWNLOAD_DIR SOURCE_DIR BINARY_DIR INSTALL_DIR)
 message("Build hdf5 src ${SOURCE_DIR} in ${BINARY_DIR}")
-set_target_properties(hdf5 PROPERTIES FOLDER "3rdparty")
+set_target_properties(hdf5 PROPERTIES FOLDER "3rdparties")

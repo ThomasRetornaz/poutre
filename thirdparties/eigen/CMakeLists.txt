@@ -34,7 +34,7 @@ target_include_directories(Eigen INTERFACE
   $<BUILD_INTERFACE:${SOURCE_DIR}/Eigen> #we can do better
   $<INSTALL_INTERFACE:include/Eigen>
 )
-set_target_properties(Eigendep PROPERTIES FOLDER "3rdparty/")	
+set_target_properties(Eigendep PROPERTIES FOLDER "3rdparties/")	
 
 
 #think about this later

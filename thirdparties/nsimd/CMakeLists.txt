@@ -44,7 +44,7 @@ endif()
 
 #FIXME INTERFACE NOT WORKING
 SET(SIMD_INLCUDE_DIRECTORY "${SOURCE_DIR}/include" PARENT_SCOPE)
-set_target_properties(NSimdDep PROPERTIES FOLDER "3rdparty/")	
+set_target_properties(NSimdDep PROPERTIES FOLDER "3rdparties/")	
   
 #think about this later
 # install(TARGETS Eigen EXPORT eigenExport)

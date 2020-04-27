@@ -33,5 +33,5 @@ target_include_directories(xsimd INTERFACE
   $<INSTALL_INTERFACE:include/xsimd>
 )
 SET(SIMD_INLCUDE_DIRECTORY "${SOURCE_DIR}/include" PARENT_SCOPE)
-set_target_properties(XsimdDep PROPERTIES FOLDER "3rdparty/")	
+set_target_properties(XsimdDep PROPERTIES FOLDER "3rdparties/")	
 
