@@ -21,8 +21,8 @@ matrix:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-focal-10.0
           packages:
-            - clang-10.0
-      env: COMPILER=clang CLANG=10.0
+            - clang-10
+      env: COMPILER=clang CLANG=10
 env:
   global:
         - POUTRE_CMAKE_EXTRA_ARGS="-DBUILD_PYTHON=ON -DCMAKE_BUILD_TYPE=Release" 
