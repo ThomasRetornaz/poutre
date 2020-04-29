@@ -237,7 +237,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/oiio/src/include)
 add_subdirectory(oiio)
 
 # bench
-if(BUILD_BENCH)
+if(POUTRE_BUILD_BENCH)
   set(BUILD_SHARED_LIBS OFF) #temporary
   # We will not need to test benchmark lib itself.
   set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Disable benchmark testing as we don't need it." FORCE)

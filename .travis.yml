@@ -19,7 +19,7 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-focal-10
+            - llvm-toolchain-focal-10.0
           packages:
             - clang-10.0
       env: COMPILER=clang CLANG=10.0
@@ -54,7 +54,7 @@ install:
 script:
   - mkdir -p build
   - cd build
-  - cmake "$POUTRE_CMAKE_EXTRA_ARGS" -DBUILD_SHARED_LIBS=ON -DBUILD_TEST=ON -DBUILD_BENCH=ON $POUTRE_CMAKE_EXTRA_ARGS ..
+  - cmake "$POUTRE_CMAKE_EXTRA_ARGS" -DBUILD_SHARED_LIBS=ON -DPOUTRE_BUILD_TEST=ON -DPOUTRE_BUILD_BENCH=ON $POUTRE_CMAKE_EXTRA_ARGS ..
   - cmake --build . --config Release
   - ctest . -C Release --output-on-failure
   # cppcheck
