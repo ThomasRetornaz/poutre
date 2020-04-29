@@ -13,9 +13,6 @@ INCLUDE_DIRECTORIES(BEFORE SYSTEM
 	)
 
 set(PoutreIOSRC_DETAILS
-  ${PoutreIOSubdirectory}/include/poutreIOPNG.hpp
-  #${PoutreIOSubdirectory}/include/poutreIOJPG.hpp
-  #${PoutreIOSubdirectory}/include/poutreIOTIFF.hpp
   ${PoutreIOSubdirectory}/include/poutreIOBuffer.hpp
 
 )  
@@ -32,10 +29,7 @@ set(PoutreIOSRC_CPP
   ${PoutreIOSubdirectory}/src/poutreIOString.cpp
   ${PoutreIOSubdirectory}/src/poutreIOLoader.cpp
   ${PoutreIOSubdirectory}/src/poutreIOWriter.cpp
-  ${PoutreIOSubdirectory}/src/poutreIOPNG.cpp
   ${PoutreIOSubdirectory}/src/poutreIOProvider.cpp
-  #${PoutreIOSubdirectory}/src/poutreIOJPG.cpp
-  #${PoutreIOSubdirectory}/src/poutreIOTIFF.cpp
   )
 source_group(details FILES ${PoutreIOSRC_DETAILS})
 source_group(src FILES ${PoutreIOSRC_CPP})

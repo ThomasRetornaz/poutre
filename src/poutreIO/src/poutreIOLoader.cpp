@@ -19,7 +19,6 @@
 #include <memory>
 #include <string>
 
-#include <poutreIO/include/poutreIOPNG.hpp>
 #include <poutreIO/poutreIO.hpp>
 #include <poutreIO/poutreIOLoader.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
@@ -59,8 +58,8 @@ namespace poutre
         boost::algorithm::to_lower(extension);
         if (extension == "png")
         {
-            return details::IOLoadPng(m_imgPath);
-        } // else if
+            return std::unique_ptr<IInterface>(); // shut up warning
+        }                                         // else if
         else
         {
             POUTRE_RUNTIME_ERROR((boost::format("ImageLoader::Load unsupported extension %s") % extension).str());

@@ -19,7 +19,6 @@
 #include <memory>
 #include <string>
 
-#include <poutreIO/include/poutreIOPNG.hpp>
 #include <poutreIO/poutreIO.hpp>
 #include <poutreIO/poutreIOWriter.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
@@ -52,14 +51,8 @@ namespace poutre
         // switch on extension
         auto extension = bf::extension(localPath);
         boost::algorithm::to_lower(extension);
-        if (extension == "png")
-        {
-            return details::IOSavePng(m_imgPath, i_img);
-        } // else if
-        else
-        {
-            POUTRE_RUNTIME_ERROR((boost::format("ImageWriter::Write unsupported extension %s") % extension).str());
-        }
+
+        POUTRE_RUNTIME_ERROR((boost::format("ImageWriter::Write unsupported extension %s") % extension).str());
     }
 
 } // namespace poutre

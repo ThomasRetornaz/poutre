@@ -12,7 +12,6 @@
 
 #include "main.hpp"
 
-#include <poutreIO/include/poutreIOPNG.hpp>
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 
 BOOST_AUTO_TEST_SUITE(iopng)
