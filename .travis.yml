@@ -1,5 +1,5 @@
 language: cpp
-dist: bionic
+dist: focal
 
 env:
   global:
@@ -19,10 +19,10 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-bionic-6.0
+            - llvm-toolchain-focal-10.0
           packages:
-            - clang-6.0
-      env: COMPILER=clang CLANG=6.0
+            - clang-10.0
+      env: COMPILER=clang CLANG=10.0
 env:
   global:
         - POUTRE_CMAKE_EXTRA_ARGS="-DBUILD_PYTHON=ON -DCMAKE_BUILD_TYPE=Release" 
