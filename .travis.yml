@@ -19,7 +19,7 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-focal-10.0
+            - llvm-toolchain-focal-10
           packages:
             - clang-10.0
       env: COMPILER=clang CLANG=10.0
