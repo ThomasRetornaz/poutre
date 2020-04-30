@@ -28,3 +28,11 @@
 	path = thirdparties/tiff
 	url = https://github.com/ThomasRetornaz/tiff.git
 	branch = cmake_allow_as_submodule
+[submodule "thirdparties/hdf5"]
+	path = thirdparties/hdf5
+	url = https://github.com/ThomasRetornaz/hdf5.git
+	branch = cmake_allow_as_submodule
+[submodule "thirdparties/HighFive"]
+	path = thirdparties/HighFive
+	url = https://github.com/ThomasRetornaz/HighFive.git
+	branch = cmake_allow_as_submodule

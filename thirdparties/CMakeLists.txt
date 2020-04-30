@@ -201,6 +201,34 @@ INCLUDE_DIRECTORIES(
 )
 message(STATUS "**************TIFF: ${TIFF_INCLUDE_DIR} ${TIFF_LIBRARY}")
 
+# hdf5
+SET(HDF5_EXTERNALLY_CONFIGURED ON CACHE BOOL "HDF5_EXTERNALLY_CONFIGURED" FORCE)
+# # Avoid duplicating names of installed libraries
+# set (HDF5_EXTERNAL_LIB_PREFIX "poutre" )
+# # Export configuration to this export variable
+# set (HDF5_EXPORTED_TARGETS "poutre-targets")
+add_subdirectory(hdf5)
+
+set(HDF5_FOUND TRUE)
+set(HDF5_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/hdf5")
+set(HDF5_INCLUDE_DIRS 
+  ${CMAKE_CURRENT_SOURCE_DIR}/hdf5/c++/src/header_files
+  ${CMAKE_CURRENT_SOURCE_DIR}/hdf5/hl/c++/src
+  ${CMAKE_CURRENT_SOURCE_DIR}/hdf5/hl/src
+  ${CMAKE_CURRENT_SOURCE_DIR}/hdf5/src
+  ${CMAKE_CURRENT_BINARY_DIR}/hdf5
+)
+set(HDF5_LIBRARIES 
+  hdf5_cpp-shared
+  hdf5-shared
+  # hdf5_hl_cpp-shared
+  # hdf5_hl-shared
+
+)
+
+# HighFive
+add_subdirectory(HighFive)
+
 #openexr
 add_subdirectory(openexr)
 set(OPENEXR_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/openexr)
