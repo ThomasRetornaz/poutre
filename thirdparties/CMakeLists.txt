@@ -144,13 +144,14 @@ INCLUDE_DIRECTORIES(
     ${CMAKE_CURRENT_SOURCE_DIR}/zlib
     ${CMAKE_CURRENT_BINARY_DIR}/zlib)
 SET(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/zlib ${CMAKE_CURRENT_BINARY_DIR}/zlib)
-SET(ZLIB_LIBRARY zlib)
+SET(ZLIB_LIBRARY zlibstatic)
 if(WIN32)
   add_definitions(-DWIN32)
 ENDIF()
 if(MSVC)
-set_property(TARGET zlib PROPERTY DEBUG_POSTFIX "") # turn off the d trailer on library name, too messy for import in openexr.
+set_property(TARGET zlibstatic PROPERTY DEBUG_POSTFIX "") # turn off the d trailer on library name, too messy for import in openexr.
 endif()
+SET_PROPERTY(TARGET zlibstatic PROPERTY FOLDER "3rdparties")
 SET_PROPERTY(TARGET zlib PROPERTY FOLDER "3rdparties")
 set(ZLIB_LIBRARIES ${ZLIB_LIBRARY})
 set(ZLIB_INCLUDE_DIRS ${ZLIB_INCLUDE_DIR})
@@ -186,7 +187,9 @@ set(PNG_LIBRARIES ${PNG_LIBRARY})
 INCLUDE_DIRECTORIES(
     ${PNG_INCLUDE_DIR}
 )
-#SET_PROPERTY(TARGET png PROPERTY FOLDER "3rdparties")
+SET_PROPERTY(TARGET png_static PROPERTY FOLDER "3rdparties")
+SET_PROPERTY(TARGET genfiles PROPERTY FOLDER "3rdparties")
+
 set(PNG_FOUND TRUE)
 message(STATUS "***************PNG: ${PNG_INCLUDE_DIR} ${PNG_LIBRARY}")
 
@@ -199,6 +202,9 @@ set(TIFF_LIBRARY tiff)
 INCLUDE_DIRECTORIES(
     ${TIFF_INCLUDE_DIR}
 )
+SET_PROPERTY(TARGET tiff PROPERTY FOLDER "3rdparties")
+SET_PROPERTY(TARGET tiffxx PROPERTY FOLDER "3rdparties")
+SET_PROPERTY(TARGET port PROPERTY FOLDER "3rdparties")
 message(STATUS "**************TIFF: ${TIFF_INCLUDE_DIR} ${TIFF_LIBRARY}")
 
 # hdf5
@@ -225,6 +231,12 @@ set(HDF5_LIBRARIES
   # hdf5_hl-shared
 
 )
+SET_PROPERTY(TARGET hdf5_cpp-shared PROPERTY FOLDER "3rdparties")
+SET_PROPERTY(TARGET hdf5-shared PROPERTY FOLDER "3rdparties")
+SET_PROPERTY(TARGET hdf5_hl_cpp-shared PROPERTY FOLDER "3rdparties")
+SET_PROPERTY(TARGET hdf5_hl-shared PROPERTY FOLDER "3rdparties")
+SET_PROPERTY(TARGET H5make_libsettings PROPERTY FOLDER "3rdparties")
+SET_PROPERTY(TARGET gen_hdf5-shared PROPERTY FOLDER "3rdparties")
 
 # HighFive
 add_subdirectory(HighFive)
@@ -249,6 +261,16 @@ INCLUDE_DIRECTORIES(
     ${ILMBASE_INCLUDE_PATH}/Half
     ${CMAKE_CURRENT_BINARY_DIR}/openexr/OpenEXR/config
 )
+SET_PROPERTY(TARGET Half PROPERTY FOLDER "3rdparties")
+SET_PROPERTY(TARGET Iex PROPERTY FOLDER "3rdparties")
+SET_PROPERTY(TARGET Imath PROPERTY FOLDER "3rdparties")
+SET_PROPERTY(TARGET IlmImf PROPERTY FOLDER "3rdparties")
+SET_PROPERTY(TARGET IlmThread PROPERTY FOLDER "3rdparties")
+SET_PROPERTY(TARGET IexMath PROPERTY FOLDER "3rdparties")
+SET_PROPERTY(TARGET IlmImfUtil PROPERTY FOLDER "3rdparties")
+
+
+
 
 #openImageIO
 set(OpenImageIO_BUILD_TOOLS CACHE BOOL OFF FORCE)
@@ -263,6 +285,8 @@ set(BUILD_FMT_FORCE CACHE BOOL ON FORCE)
 set(USE_PYTHON CACHE BOOL OFF FORCE)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/oiio/src/include)
 add_subdirectory(oiio)
+SET_PROPERTY(TARGET OpenImageIO PROPERTY FOLDER "3rdparties")
+SET_PROPERTY(TARGET OpenImageIO_Util PROPERTY FOLDER "3rdparties")
 
 # bench
 if(POUTRE_BUILD_BENCH)
