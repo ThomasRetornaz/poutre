@@ -254,4 +254,4 @@ namespace poutre
 
     } // namespace details
 } // namespace poutre
-#endif /* POUTREIOPNG_HPP */
+#endif /* POUTREIOBUFFER_HPP */

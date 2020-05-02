@@ -4,17 +4,17 @@ set(PoutreIOSubdirectory ${POUTRE_SRC_DIR}/poutreIO)
 find_package(OpenCV QUIET) #todo add converter to/from opencv
 
 INCLUDE_DIRECTORIES(BEFORE SYSTEM 
-	${ZLIB_INCLUDE_DIR}
-	${PNG_INCLUDE_DIR}
-	${JPEG_INCLUDE_DIR}
-	${TIFF_INCLUDE_DIR}
-	${HDF5_INCLUDE_DIR}
-  ${CMAKE_CURRENT_BINARY_DIR} #for module with ./configure
+	${OIIO_INCLUDE_DIR}
+	#${PNG_INCLUDE_DIR}
+	#${JPEG_INCLUDE_DIR}
+	#${TIFF_INCLUDE_DIR}
+	#${HDF5_INCLUDE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR} #for module with ./configure
 	)
 
 set(PoutreIOSRC_DETAILS
   ${PoutreIOSubdirectory}/include/poutreIOBuffer.hpp
-
+  ${PoutreIOSubdirectory}/include/poutreOIIO.hpp
 )  
 
 set(PoutreIOSRC_PUBLICHEADERS  
@@ -30,6 +30,7 @@ set(PoutreIOSRC_CPP
   ${PoutreIOSubdirectory}/src/poutreIOLoader.cpp
   ${PoutreIOSubdirectory}/src/poutreIOWriter.cpp
   ${PoutreIOSubdirectory}/src/poutreIOProvider.cpp
+  ${PoutreIOSubdirectory}/src/poutreOIIO.cpp
   )
 source_group(details FILES ${PoutreIOSRC_DETAILS})
 source_group(src FILES ${PoutreIOSRC_CPP})
@@ -48,10 +49,8 @@ target_link_libraries(PoutreIO
   PUBLIC ${Boost_LOG_LIBRARY}
   PUBLIC ${Boost_LOG_SETUP_LIBRARY}
   PRIVATE jsoncpp_lib
-  PUBLIC ${JPEG_LIBRARY}
-  PUBLIC ${ZLIB_LIBRARY} 
-  PUBLIC ${PNG_LIBRARY} 
-  PUBLIC ${TIFF_LIBRARY} 
+  PUBLIC ${OpenImageIO}
+  PUBLIC ${OpenImageIO_Util}
   INTERFACE xsimd 
   
   PUBLIC   PoutreBase 

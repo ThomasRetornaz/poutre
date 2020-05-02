@@ -241,6 +241,12 @@ SET_PROPERTY(TARGET gen_hdf5-shared PROPERTY FOLDER "3rdparties")
 # HighFive
 add_subdirectory(HighFive)
 
+#openxr/oiio
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  # using regular Clang or AppleClang
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wdeprecated-register")
+endif()
+
 #openexr
 add_subdirectory(openexr)
 set(OPENEXR_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/openexr)
@@ -287,6 +293,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/oiio/src/include)
 add_subdirectory(oiio)
 SET_PROPERTY(TARGET OpenImageIO PROPERTY FOLDER "3rdparties")
 SET_PROPERTY(TARGET OpenImageIO_Util PROPERTY FOLDER "3rdparties")
+SET(OIIO_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/oiio/src/include PARENT_SCOPE)
 
 # bench
 if(POUTRE_BUILD_BENCH)
