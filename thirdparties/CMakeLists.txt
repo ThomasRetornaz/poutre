@@ -244,8 +244,8 @@ add_subdirectory(HighFive)
 #openxr/oiio
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   # using regular Clang or AppleClang
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wdeprecated-register")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wimplicit-float-conversion")
+  add_compile_options("-Wno-deprecated-register")
+  add_compile_options("-Wno-implicit-float-conversion")
 endif()
 
 #openexr
