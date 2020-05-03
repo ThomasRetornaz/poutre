@@ -245,7 +245,7 @@ add_subdirectory(HighFive)
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   # using regular Clang or AppleClang
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wdeprecated-register")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wimplicit-int-float-conversion")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wimplicit-float-conversion")
 endif()
 
 #openexr
