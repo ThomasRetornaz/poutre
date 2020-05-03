@@ -3,13 +3,15 @@ set(PoutreIOSubdirectory ${POUTRE_SRC_DIR}/poutreIO)
 
 find_package(OpenCV QUIET) #todo add converter to/from opencv
 
-INCLUDE_DIRECTORIES(BEFORE SYSTEM 
+INCLUDE_DIRECTORIES(BEFORE SYSTEM
+  ${OPENEXR_INCLUDE_DIR} 
 	${OIIO_INCLUDE_DIR}
 	#${PNG_INCLUDE_DIR}
 	#${JPEG_INCLUDE_DIR}
 	#${TIFF_INCLUDE_DIR}
 	#${HDF5_INCLUDE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR} #for module with ./configure
+    # ${CMAKE_CURRENT_BINARY_DIR}/include #for module with ./configure
+    # ${CMAKE_BINARY_DIR}/include
 	)
 
 set(PoutreIOSRC_DETAILS
