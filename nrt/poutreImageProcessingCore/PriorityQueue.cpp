@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_CASE(ctor)
 BOOST_AUTO_TEST_CASE(increase_nostable)
 {
     poutre::PriorityQueue<poutre::offset, unsigned char> pq;
-    pq.emplace(0, 1);
+    pq.emplace(0, 1); //-V525
     pq.emplace(50, 1);
     pq.emplace(0, 2);
     pq.emplace(50, 2);
@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE(increase_nostable)
 BOOST_AUTO_TEST_CASE(increase_stable)
 {
     poutre::PriorityQueue<poutre::offset, unsigned char, poutre::lesserKey<poutre::offset, unsigned char>, true> pq;
-    pq.emplace(0, 1);
+    pq.emplace(0, 1); //-V525
     pq.emplace(50, 1);
     pq.emplace(0, 2);
     pq.emplace(50, 2);
@@ -82,7 +82,7 @@ BOOST_AUTO_TEST_CASE(increase_stable)
 BOOST_AUTO_TEST_CASE(decrease_nostable)
 {
     poutre::PriorityQueue<poutre::offset, unsigned char, poutre::greaterKey<poutre::offset, unsigned char>> pq;
-    pq.emplace(0, 1);
+    pq.emplace(0, 1); //-V525
     pq.emplace(50, 1);
     pq.emplace(0, 2);
     pq.emplace(50, 2);
@@ -110,7 +110,7 @@ BOOST_AUTO_TEST_CASE(decrease_nostable)
 BOOST_AUTO_TEST_CASE(decrease_stable)
 {
     poutre::PriorityQueue<poutre::offset, unsigned char, poutre::greaterKey<poutre::offset, unsigned char>, true> pq;
-    pq.emplace(0, 1);
+    pq.emplace(0, 1); //-V525
     pq.emplace(50, 1);
     pq.emplace(0, 2);
     pq.emplace(50, 2);

@@ -33,7 +33,7 @@ class TestClassA : public poutre::InterfaceJsonSerializable
     std::vector<float> m_array;
   };
 
-TestClassA::TestClassA(void) : m_nTestInt(42), m_fTestFloat(3.14159), m_TestString("foo"), m_bTestBool(true), m_array()
+TestClassA::TestClassA(void) : m_nTestInt(42), m_fTestFloat(3.14159), m_TestString("foo"), m_bTestBool(true), m_array() //-V624
   {
   m_array = { 1.1f, 2.1f, 3.1f };
   }
