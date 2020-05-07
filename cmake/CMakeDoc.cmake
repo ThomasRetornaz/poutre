@@ -33,13 +33,13 @@ elseif(DOXYGEN_CONFIG_FILE)
   mark_as_advanced(DOXYGEN_GENERATE_HTML)
 
   #GRAB FOLDER TO DOCUMENT
-  get_property(POUTRE_CORE_DIR GLOBAL PROPERTY POUTRE_CORE_DIR)
+  get_property(POUTRE_SRC_DIR GLOBAL PROPERTY POUTRE_SRC_DIR)
   set(DOXY_INPUT_DIRS \"${POUTRE_DOCUMENTATION_ROOT}/Doxygen\")
-  foreach(_DIR ${POUTRE_CORE_DIR})
+  foreach(_DIR ${POUTRE_SRC_DIR})
     list(APPEND DOXY_INPUT_DIRS \"${_DIR}/\")
-  endforeach(_DIR ${POUTRE_CORE_DIR})
+  endforeach(_DIR ${POUTRE_SRC_DIR})
 
-
+  #message(FATAL_ERROR "${DOXY_INPUT_DIRS}")
   set(DOXY_FILES_PATTERN *.h *.hpp *.dox) 
   set(DOXY_IMAGE_PATH   \"${POUTRE_HTML_FILES_DIR}\" CACHE FILEPATH  "Doxygen image path")
   set(DOXY_UNIT_TEST_PATH \"${POUTRE_HTML_FILES_DIR}\" \"${POUTRE_ROOT_DIR}/coreTests\" CACHE FILEPATH  "Doxygen unit tests path")
