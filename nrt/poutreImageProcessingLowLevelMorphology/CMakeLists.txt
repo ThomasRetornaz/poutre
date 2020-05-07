@@ -19,6 +19,7 @@ target_link_libraries(PoutreIPLowLevelMorphologyTests
     PUBLIC PoutreIPCore
 	PUBLIC PoutreIO
     PUBLIC PoutreIPPixelProcessing
+    PUBLIC ${OpenImageIO_LIBRARIES}
     PUBLIC ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 	

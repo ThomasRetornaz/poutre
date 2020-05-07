@@ -13,10 +13,11 @@ set(poutreIPCoreTestSRC
 add_executable(poutreIPCoreTests ${poutreIPCoreTestSRC})
 
 target_link_libraries(poutreIPCoreTests
-    PoutreBase 
-    PoutreIPCore
-    PoutreIO
-    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    PUBLIC PoutreBase 
+    PUBLIC PoutreIPCore
+    PUBLIC PoutreIO
+    PUBLIC ${OpenImageIO_LIBRARIES}
+    PUBLIC ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 	
 add_test(NAME poutreIPCoreTests-1 
