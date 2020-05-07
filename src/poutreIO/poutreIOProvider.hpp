@@ -31,6 +31,16 @@
 
 namespace poutre
 {
+    /**
+     * @addtogroup image_processing_io_group Image Processing IO API
+     * @ingroup image_processing_group
+     *@{
+     */
+
+    /**
+     * @brief Collection of @c ImageLoader
+     *
+     */
     class IO_API ImageProvider
     {
       private:
@@ -41,8 +51,18 @@ namespace poutre
         container_type m_container_loader;
 
       public:
+        /**
+         * @brief Construct a new Image Provider object, fill it with @c AddImage
+         *
+         */
         ImageProvider();
 
+        /**
+         * @brief Check emptiness
+         *
+         * @return true if empty
+         * @return false otherwise
+         */
         bool IsEmpty() const;
 
         //! Accessor to the image collection @c begin() iterator.
@@ -54,8 +74,18 @@ namespace poutre
         //! Allow operator @c [] for sequential access.
         const ImageLoader &operator[](size_t index) const;
 
+        /**
+         * @brief Get current imageloader
+         *
+         * @return ImageLoader
+         */
         ImageLoader Fetch();
 
+        /**
+         * @brief Add a path of an image to load see @c Fetch
+         *
+         * @param i_imgpath
+         */
         void AddImage(const std::string &i_imgpath);
 
         // TODO
@@ -72,6 +102,8 @@ namespace poutre
         //
         // self_type& operator=(const self_type& rhs) = default;
     };
+
+    //! @} doxygroup: image_processing_io_group
 } // namespace poutre
 
 #endif /* POUTREIOPROVIDER_HPP */

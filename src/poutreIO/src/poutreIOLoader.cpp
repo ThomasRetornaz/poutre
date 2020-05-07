@@ -56,14 +56,7 @@ namespace poutre
 
         auto extension = bf::extension(localPath);
         boost::algorithm::to_lower(extension);
-        if (extension == "png")
-        {
-            return std::unique_ptr<IInterface>(); // shut up warning
-        }                                         // else if
-        else
-        {
-            POUTRE_RUNTIME_ERROR((boost::format("ImageLoader::Load unsupported extension %s") % extension).str());
-        }
+
         return std::unique_ptr<IInterface>(); // shut up warning
     }
 

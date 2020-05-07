@@ -32,15 +32,20 @@
 
 namespace poutre
 {
+    /**
+     * @addtogroup image_processing_io_group Image Processing IO API
+     * @ingroup image_processing_group
+     *@{
+     */
+
     class IO_API ImageWriter
     {
         using self_type = ImageWriter;
         std::string m_imgPath;
-        ImageIOFormat m_imgformat;
         bool m_isready;
 
       public:
-        ImageWriter() : m_imgPath(), m_imgformat(ImageIOFormat::PNG), m_isready(false)
+        ImageWriter() : m_imgPath(), m_isready(false)
         {
         }
 
@@ -62,6 +67,7 @@ namespace poutre
         self_type &SetPath(const std::string &i_imgpath);
         void Write(const IInterface &i_img) const;
     };
+    //! @} doxygroup: image_processing_io_group
 } // namespace poutre
 
 #endif /* POUTREIOWRITTER_HPP */

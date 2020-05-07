@@ -28,10 +28,11 @@
 
 namespace poutre
 {
-    enum class ImageIOFormat : unsigned int
-    {
-        PNG = 0,
-        UNDEF = 1 << 0,
-    };
-}
+    /**
+     * @addtogroup image_processing_io_group Image Processing IO API
+     * @ingroup image_processing_group
+     *@{
+     */
+    //! @} doxygroup: image_processing_io_group
+} // namespace poutre
 #endif /* POUTRE_IO_HPP */

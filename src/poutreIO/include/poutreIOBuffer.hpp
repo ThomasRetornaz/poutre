@@ -32,6 +32,16 @@
 
 namespace poutre
 {
+    /**
+     * @addtogroup image_processing_io_group Image Processing IO API
+     * @ingroup image_processing_group
+     *@{
+     */
+    /**
+     * @addtogroup image_processing_io_group_details Image Processing IO API details
+     * @ingroup image_processing_io_group
+     *@{
+     */
     namespace details
     {
         // Scalar
@@ -54,7 +64,7 @@ namespace poutre
             auto index = 0;
             for (const auto &it : im)
             {
-                buffer[index] = it;
+                buffer[(size_t)index] = it;
                 ++index;
             }
         }
@@ -180,7 +190,7 @@ namespace poutre
             auto index = 0;
             for (auto &it : im)
             {
-                it = buffer[index];
+                it = buffer[(size_t)index];
                 ++index;
             }
         }
@@ -253,5 +263,7 @@ namespace poutre
         }
 
     } // namespace details
+    //! @} doxygroup: image_processing_io_group_details
+    //! @} doxygroup: image_processing_io_group
 } // namespace poutre
 #endif /* POUTREIOBUFFER_HPP */
