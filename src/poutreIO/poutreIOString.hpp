@@ -30,8 +30,29 @@
 
 namespace poutre
 {
+    /**
+     * @addtogroup image_processing_io_group Image Processing IO API
+     * @ingroup image_processing_group
+     *@{
+     */
+
+    /**
+     * @brief Convert IInterface to human readable string
+     *
+     * @param i_image
+     * @return std::string
+     */
     IO_API std::string ImageToString(const IInterface &i_image);
+
+    /**
+     * @brief From human readable string create an IInterface see @c ImageToString
+     *
+     * @param i_image
+     * @return Image
+     */
     IO_API std::unique_ptr<IInterface> ImageFromString(const std::string &i_str);
+
+    //! @} doxygroup: image_processing_io_group
 
 } // namespace poutre
 
