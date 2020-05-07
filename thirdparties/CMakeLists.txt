@@ -192,6 +192,7 @@ SET_PROPERTY(TARGET genfiles PROPERTY FOLDER "3rdparties")
 
 set(PNG_FOUND TRUE)
 message(STATUS "***************PNG: ${PNG_INCLUDE_DIR} ${PNG_LIBRARY}")
+add_dependencies(png_static zlib zlibstatic)
 
 # libtiff
 add_subdirectory(tiff)
@@ -206,7 +207,7 @@ SET_PROPERTY(TARGET tiff PROPERTY FOLDER "3rdparties")
 SET_PROPERTY(TARGET tiffxx PROPERTY FOLDER "3rdparties")
 SET_PROPERTY(TARGET port PROPERTY FOLDER "3rdparties")
 message(STATUS "**************TIFF: ${TIFF_INCLUDE_DIR} ${TIFF_LIBRARY}")
-
+add_dependencies(tiff jpeg png_static)
 # hdf5
 SET(HDF5_EXTERNALLY_CONFIGURED ON CACHE BOOL "HDF5_EXTERNALLY_CONFIGURED" FORCE)
 # # Avoid duplicating names of installed libraries
@@ -237,7 +238,7 @@ SET_PROPERTY(TARGET hdf5_hl_cpp-shared PROPERTY FOLDER "3rdparties")
 SET_PROPERTY(TARGET hdf5_hl-shared PROPERTY FOLDER "3rdparties")
 SET_PROPERTY(TARGET H5make_libsettings PROPERTY FOLDER "3rdparties")
 SET_PROPERTY(TARGET gen_hdf5-shared PROPERTY FOLDER "3rdparties")
-
+add_dependencies(hdf5_cpp-shared zlib zlibstatic)
 # HighFive
 add_subdirectory(HighFive)
 
@@ -310,6 +311,8 @@ SET(OIIO_INCLUDE_DIR
   ${CMAKE_CURRENT_SOURCE_DIR}/oiio/ext/fmt/include
   PARENT_SCOPE
 )
+add_dependencies(OpenImageIO tiff jpeg png_static)
+set(OpenImageIO_LIBRARIES OpenImageIO OpenImageIO_Util PARENT_SCOPE)
 
 # bench
 if(POUTRE_BUILD_BENCH)
