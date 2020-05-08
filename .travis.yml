@@ -1,32 +1,35 @@
-language: cpp
 dist: bionic
+language: 
+- cpp
+- python
 
 env:
   global:
     - /usr/local/bin:$PATH
+python:
+  - "3.8"
 
 matrix:
   include:
-    - compiler: gcc
-      addons:
-        apt:
-          packages:
-            - lcov
-      env: COMPILER=g++ C_COMPILER=gcc BUILD_TYPE=Coverage
-
+    # - os: osx
+    #   osx_image: xcode8
+    #   compiler: clang
+    - os: linux
+      env: COMPILER=g++ C_COMPILER=gcc 
     - os: linux
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-focal-9.0
+            - llvm-toolchain-bionic-9.0
           packages:
             - clang-9
+            - cmake
       env: COMPILER=clang CLANG=9
 env:
   global:
         - POUTRE_CMAKE_EXTRA_ARGS="-DBUILD_PYTHON=ON -DCMAKE_BUILD_TYPE=Release" 
-        #- POUTRE_CMAKE_GENERATOR="Ninja"
+        - POUTRE_CMAKE_GENERATOR="Ninja"
 before_install:
     - sudo apt-get update
     # Boost and ninja build
@@ -45,12 +48,14 @@ before_install:
           export CXX=clang++-$CLANG CC=clang-$CLANG;
         fi
       fi
+# install:
+#   - if [ "${BUILD_TYPE}" == "Coverage" -a "${TRAVIS_OS_NAME}" == "linux" ]; then
+#       PATH=~/.local/bin:${PATH};
+#       pip install --user --upgrade pip;
+#       travis_wait pip install --user cpp-coveralls;
+#     fi
 install:
-  - if [ "${BUILD_TYPE}" == "Coverage" -a "${TRAVIS_OS_NAME}" == "linux" ]; then
-      PATH=~/.local/bin:${PATH};
-      pip install --user --upgrade pip;
-      travis_wait pip install --user cpp-coveralls;
-    fi
+  - pip install -r requirements.txt
 script:
   - mkdir -p build
   - cd build
@@ -62,7 +67,7 @@ script:
 # see https://github.com/richelbilderbeek/travis_cpp_tutorial/blob/master/travis_cpp_tutorial.pdf
 #after_success:
 #  - bash <(curl -s https://codecov.io/bash)
-after_success:
-  - if [ "${BUILD_TYPE}" == "Coverage" -a "${TRAVIS_OS_NAME}" == "linux" ]; then
-      coveralls --include src --include include --gcov-options '\-lp' --root .. --build-root .;
-    fi
+# after_success:
+#   - if [ "${BUILD_TYPE}" == "Coverage" -a "${TRAVIS_OS_NAME}" == "linux" ]; then
+#       coveralls --include src --include include --gcov-options '\-lp' --root .. --build-root .;
+#     fi
