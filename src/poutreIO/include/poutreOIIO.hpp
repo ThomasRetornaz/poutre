@@ -67,8 +67,25 @@ namespace poutre
      */
     namespace details
     {
+        namespace bf = boost::filesystem;
+
+        /**
+         * Load an image from file at filename.
+         * Storage format is deduced from file ending.
+         *
+         * @param image_path The path of the file to load
+         *
+         * @return std::unique_ptr<IInterface> corresponding to the loaded image
+         */
         std::unique_ptr<IInterface> LoadFromOIIO(const std::string &image_path)
         {
+            bf::path localPath(image_path);
+            if (!(bf::exists(localPath)))
+            {
+                POUTRE_RUNTIME_ERROR(boost::format("LoadFromOIIO: provided path %s doesn't exists") %
+                                     localPath.string());
+            }
+
             auto in(OIIO::ImageInput::open(image_path));
             if (!in)
             {
@@ -141,6 +158,65 @@ namespace poutre
             in->close();
 
             return iimage;
+        }
+        /**
+         * @brief Way to pass options to
+         *
+         */
+        struct StoreWithOIIOOptions
+        {
+            /**
+             * @brief Construct a new options with default compression quality to 100
+             *
+             */
+            StoreWithOIIOOptions() : spec(0, 0, 0), autoconvert(true)
+            {
+                spec.attribute("CompressionQuality", 100);
+            }
+
+            /**
+             * @brief Forward an attribute to an OpenImageIO ImageSpec.
+             *   See the documentation of OIIO::ImageSpec::attribute() for a list
+             *   of supported attributes.
+             *   Default: "CompressionQuality" = 100
+             *
+             * @tparam T
+             * @param name
+             * @param v
+             * @return StoreWithOIIOOptions&
+             */
+            template <class T> StoreWithOIIOOptions &attribute(OIIO::string_view name, T const &v)
+            {
+                spec.attribute(name, v);
+                return *this;
+            }
+
+            OIIO::ImageSpec spec;
+            bool autoconvert;
+        };
+
+        /**
+         * Save image to disk.
+         * The desired image format is deduced from ``filename``.
+         * Supported formats are those supported by OpenImageIO.
+         * Most common formats are supported (jpg, png, gif, bmp, tiff).
+         *
+         * @param path The path to the desired file
+         * @param image Image Interface
+         * @param options Pass a dump_image_options object to fine-tune image export
+         */
+        void StoreWithOIIO(const std::string &path, const IInterface &image,
+                           StoreWithOIIOOptions const &options = StoreWithOIIOOptions())
+        {
+
+            bf::path localPath(path);
+            boost::filesystem::path dir = localPath.parent_path();
+            if (!(bf::exists(dir)))
+            {
+                POUTRE_RUNTIME_ERROR(boost::format("StoreFromOIIO: provided path %s doesn't exists") % dir);
+            }
+            if (image.GetNumDims() > 3)
+                POUTRE_RUNTIME_ERROR(boost::format("For nd images with n>3 use StoreWithHDF5") % dir);
         }
     } // namespace details
 
