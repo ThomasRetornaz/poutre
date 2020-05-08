@@ -1,0 +1,13 @@
+os: Visual Studio 2019
+
+# Boost is already installed on AppVeyor.
+environment:
+  BOOST_ROOT: C:\Libraries\boost_1_73_0
+  #BOOST_LIBRARYDIR: C:\Libraries\boost_1_73_0\lib64-msvc-16.0
+
+build_script:
+  - md build
+  - cd build
+  - cmake -G "Visual Studio 16 2019" ..
+  - cmake --build . --config Release
+  - ctest
