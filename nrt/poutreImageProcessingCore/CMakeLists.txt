@@ -10,9 +10,9 @@ set(poutreIPCoreTestSRC
 	${poutreIPCoreTestSubdirectory}/PriorityQueue.cpp
 )
 
-add_executable(poutreIPCoreTests ${poutreIPCoreTestSRC})
+add_executable(PoutreIPCoreTests ${poutreIPCoreTestSRC})
 
-target_link_libraries(poutreIPCoreTests
+target_link_libraries(PoutreIPCoreTests
     PUBLIC PoutreBase 
     PUBLIC PoutreIPCore
     PUBLIC PoutreIO
@@ -20,8 +20,8 @@ target_link_libraries(poutreIPCoreTests
     PUBLIC ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 	
-add_test(NAME poutreIPCoreTests-1 
-         COMMAND poutreIPCoreTests)
-set_property(TARGET poutreIPCoreTests PROPERTY FOLDER "UnitTests/")
-test_environment_setup(poutreIPCoreTests-1)
+add_test(NAME PoutreIPCoreTests-1 
+         COMMAND PoutreIPCoreTests)
+set_property(TARGET PoutreIPCoreTests PROPERTY FOLDER "UnitTests/")
+test_environment_setup(PoutreIPCoreTests-1)
 
