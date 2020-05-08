@@ -1,7 +1,8 @@
 Poutre
 =======
 
-[![Travis](https://travis-ci.org/ThomasRetornaz/poutre.svg?branch=master)](https://travis-ci.org/ThomasRetornaz/poutre)
+[![Travis: GCC + CLang](https://travis-ci.org/ThomasRetornaz/poutre.svg?branch=master)](https://travis-ci.org/ThomasRetornaz/poutre)
+[![Appveyor: Visual 2019](https://ci.appveyor.com/api/projects/status/uscgdq4dx73haq89?svg=true)](https://ci.appveyor.com/project/ThomasRetornaz/poutre)
 [![Coverage Status](https://coveralls.io/repos/github/ThomasRetornaz/poutre/badge.svg?branch=master)](https://coveralls.io/github/ThomasRetornaz/poutre?branch=master)
 
 ## Rationale ##
