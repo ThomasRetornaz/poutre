@@ -32,12 +32,6 @@
 namespace poutre
 {
     /**
-     * @addtogroup image_processing_group Image Processing Group
-     *
-     *@{
-     */
-
-    /**
      * @addtogroup image_processing_interface_group Image Processing Interface API
      * @ingroup image_processing_group
      *@{
@@ -114,7 +108,6 @@ namespace poutre
                                                          PType ptype);
 
     //! @} doxygroup: image_processing_interface_group
-    //! @} doxygroup: image_processing_group
 
 } // namespace poutre
 #endif // POUTRE_IMAGEPROCESSING_INTERFACE_HPP__

@@ -47,15 +47,15 @@
 namespace poutre
 {
     /**
-     * @addtogroup image_processing_group Image Processing Group
-     *
+     * @addtogroup image_processing_mm_group Image Processing Morphology
+     * @ingroup image_processing_group
      *@{
      */
 
     /**
      * @addtogroup image_processing_erodil_group Image Processing Erosion Dilatation
      *functions
-     * @ingroup image_processing_group
+     * @ingroup image_processing_mm_group
      *@{
      */
 

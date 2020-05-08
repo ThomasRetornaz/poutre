@@ -36,6 +36,10 @@
 
 namespace poutre
 {
-    // TODO Doxydoc module
-}
+    /**
+     * @addtogroup poutre_base_group Base/Common objects and types
+     *@{
+     */
+    //! @} doxygroup: poutre_base_group
+} // namespace poutre
 #endif // POUTRE_BASE_HPP__

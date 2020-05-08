@@ -9,7 +9,16 @@
 
 #ifndef POUTRE_IMAGEPROCESSING_ARITH_HPP__
 #define POUTRE_IMAGEPROCESSING_ARITH_HPP__
-
+/**
+ * @file poutreImageProcessingArith.hpp
+ * @author thomas.retornaz@mines_paris.org
+ * @brief Arithmetic operations
+ * @version 0.1
+ * @date 2020-05-08
+ *
+ * @copyright Copyright (c) 2020
+ *
+ */
 #ifndef POUTRE_IMAGEPROCESSINGCORE_HPP__
 #include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
 #endif
@@ -36,6 +45,11 @@
 
 namespace poutre
 {
+    /**
+     * @addtogroup image_processing_linear_group Image Processing Linear Operations
+     * @ingroup image_processing_group
+     *@{
+     */
 
     /***********************************************************************************************************************************/
     /*                                                          NEGATE/INVERT */
@@ -519,6 +533,7 @@ namespace poutre
         auto viewOut = lview(o_vout);
         return t_ArithInf(viewIn1, viewIn2, viewOut);
     }
+    //! @} doxygroup: image_processing_linear_group
 } // namespace poutre
 
 #endif // POUTRE_IMAGEPROCESSING_ARITH_HPP__

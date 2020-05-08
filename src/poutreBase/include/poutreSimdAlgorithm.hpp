@@ -32,6 +32,11 @@
 
 namespace poutre
 {
+    /**
+     * @addtogroup simd_group SIMD facilities
+     * @ingroup poutre_base_group
+     *@{
+     */
     namespace simd
     {
         template <typename T, typename U, typename UnOp>
@@ -165,5 +170,6 @@ namespace poutre
             return out;
         }
     } // namespace simd
+      //! @} doxygroup: simd_group
 } // namespace poutre
 #endif // POUTRE_SIMD_ALGORITHM_HPP__

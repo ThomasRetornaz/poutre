@@ -9,7 +9,16 @@
 
 #ifndef POUTRE_IMAGEPROCESSING_UNARYOP_HPP__
 #define POUTRE_IMAGEPROCESSING_UNARYOP_HPP__
-
+/**
+ * @file poutreImageProcessingUnaryOp.hpp
+ * @author thomas.retornaz@mines-paris.org
+ * @brief Genneric unary operations over images or views
+ * @version 0.1
+ * @date 2020-05-08
+ *
+ * @copyright Copyright (c) 2020
+ *
+ */
 #ifndef POUTRE_IMAGEPROCESSINGCORE_HPP__
 #include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
 #endif
@@ -31,6 +40,11 @@
 // move this in a dedicated here in PoutreCore
 namespace poutre
 {
+    /**
+     * @addtogroup image_processing_linear_group
+     *@{
+     */
+
     /****************************************************************************************/
     /*                               PixelWiseUnaryOp                                        */
     /****************************************************************************************/
@@ -336,7 +350,7 @@ namespace poutre
         PixelWiseUnaryOpWithValueDispatcherWithTag<TIn, TOut, Rank, ViewIn, ViewOut, UnOp> dispatcher;
         dispatcher(i_vin, a0, o_vout);
     }
-
+    //! @} doxygroup: image_processing_linear_group
 } // namespace poutre
 
 #endif // POUTRE_IMAGEPROCESSING_UNARYOP_HPP__

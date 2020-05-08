@@ -28,6 +28,11 @@
 
 namespace poutre
 {
+    /*!
+     * @defgroup types_group Define type alias
+     * @ingroup poutre_base_group
+     * @{
+     */
     using pbool = bool;           //! boolean type
     using pUINT8 = unsigned char; //! UINT8 type
     // using  pINT8 = signed char; //!INT8 type
@@ -108,6 +113,6 @@ namespace poutre
 
     //! operator>> for AssignOpType
     BASE_API std::istream &operator>>(std::istream &, AssignOpType &);
-
+    // !@} doxygroup: types_group
 } // namespace poutre
 #endif // POUTRE_TYPE_HPP__

@@ -49,6 +49,11 @@ namespace poutre
  using cstrided_array_view = strided_array_view<const T, Rank>;*/
 #endif
 
+    /**
+     * @addtogroup views_group Define views
+     * @ingroup poutre_base_group
+     *@{
+     */
     namespace details
     {
         // from
@@ -652,7 +657,9 @@ namespace poutre
     template <class ViewType> struct is_same_view_type<ViewType, ViewType> : std::true_type
     {
     };
-
+    /**
+    //! @} doxygroup: views_group
+    */
 } // namespace poutre
 
 #ifdef _MSC_VER

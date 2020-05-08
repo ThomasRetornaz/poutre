@@ -33,6 +33,11 @@
 
 namespace poutre
 {
+    /**
+     * @addtogroup unrolling_helper_group Unrolling for array
+     * @ingroup poutre_base_group
+     *@{
+     */
     namespace details
     {
 
@@ -626,7 +631,9 @@ namespace poutre
         };
 
     } // namespace details
-
+    /**
+    //! @} doxygroup: unrolling_helper_group
+    */
 } // namespace poutre
 #endif // DOXYGEN_SHOULD_SKIP_THIS
 

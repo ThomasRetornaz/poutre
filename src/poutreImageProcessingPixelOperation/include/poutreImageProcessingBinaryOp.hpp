@@ -10,6 +10,16 @@
 #ifndef POUTRE_IMAGEPROCESSING_BINARYOP_HPP__
 #define POUTRE_IMAGEPROCESSING_BINARYOP_HPP__
 
+/**
+ * @file poutreImageProcessingBinaryOp.hpp
+ * @author thomas.retornaz@mines-paris.org
+ * @brief
+ * @version 0.1
+ * @date 2020-05-08
+ *
+ * @copyright Copyright (c) 2020
+ *
+ */
 #ifndef POUTRE_IMAGEPROCESSINGTYPE_HPP__
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
 #endif
@@ -26,6 +36,10 @@
 
 namespace poutre
 {
+    /**
+     * @addtogroup image_processing_linear_group
+     *@{
+     */
     /****************************************************************************************/
     /*                               PixelWiseBinaryOp                                      */
     /****************************************************************************************/
@@ -242,6 +256,6 @@ namespace poutre
         PixelWiseBinaryOpDispatcherWithTag<T1, T2, Tout, Rank, View1, View2, View3, BinOp> dispatcher;
         dispatcher(i_vin1, i_vin2, o_vout);
     }
-
+    //! @} doxygroup: image_processing_linear_group
 } // namespace poutre
 #endif // POUTRE_IMAGEPROCESSING_BINARYOP_HPP__

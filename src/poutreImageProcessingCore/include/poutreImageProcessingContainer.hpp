@@ -17,7 +17,16 @@
 #include <sstream>
 #include <utility>
 #include <vector>
-
+/**
+ * @file poutreImageProcessingContainer.hpp
+ * @author thomas.retornaz@mines-paris.org
+ * @brief Define image container
+ * @version 0.1
+ * @date 2020-05-08
+ *
+ * @copyright Copyright (c) 2020
+ *
+ */
 #ifndef POUTRE_CONFIG__HPP__
 #include <poutreBase/poutreConfig.hpp>
 #endif
@@ -60,6 +69,12 @@ using aligned_allocator =
 
 namespace poutre
 {
+    /**
+     * @addtogroup image_processing_container_group Image Processing Template Container
+     * @ingroup image_processing_group
+     *@{
+     */
+
     // Maybe inherit/compose with nt2::table or blaze::DenseMatrix or
     // Eigen::Tensor would be more effective depending on algorithms
     //! TODO dispatch on coord and allow unset dims
@@ -856,5 +871,6 @@ namespace poutre
     extern template class DenseImage<pINT64, 4>;
     extern template class DenseImage<pDOUBLE, 4>;
 
+    //! @} doxygroup: image_processing_container_group
 } // namespace poutre
 #endif // POUTRE_IMAGEPROCESSING_CONTAINER_HPP__

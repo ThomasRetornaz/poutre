@@ -30,7 +30,7 @@ namespace poutre
 {
     /**
      * @addtogroup timer_group Timing facilities
-     * @ingroup poutre_base
+     * @ingroup poutre_base_group
      *@{
      */
 

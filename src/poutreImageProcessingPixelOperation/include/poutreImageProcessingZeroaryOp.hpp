@@ -10,6 +10,16 @@
 #ifndef POUTRE_IMAGEPROCESSING_ZEROARYOP_HPP__
 #define POUTRE_IMAGEPROCESSING_ZEROARYOP_HPP__
 
+/**
+ * @file poutreImageProcessingZeroaryOp.hpp
+ * @author thomas.retornaz@mines-paris.org
+ * @brief ZeroAry operation over images and views
+ * @version 0.1
+ * @date 2020-05-08
+ *
+ * @copyright Copyright (c) 2020
+ *
+ */
 #ifndef POUTRE_IMAGEPROCESSING_HPP__
 #include <poutreImageProcessing/poutreImageProcessing.hpp>
 #endif
@@ -33,6 +43,11 @@
 namespace poutre
 {
     namespace bs = boost::simd;
+
+    /**
+     * @addtogroup image_processing_linear_group
+     *@{
+     */
 
     /****************************************************************************************/
     /*                               ZeroaryOp                                                */
@@ -114,7 +129,7 @@ namespace poutre
             bs::transform(i_vinbeg, i_vinend, i_voutbeg, op);
         }
     };
-
+    //! @} doxygroup: image_processing_linear_group
 } // namespace poutre
 
 #endif // POUTRE_IMAGEPROCESSING_ZEROARYOP_HPP__

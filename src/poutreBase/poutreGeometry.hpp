@@ -34,6 +34,11 @@
 
 namespace poutre
 {
+    /*!
+     * @defgroup geometry_group Define common geometry object
+     * @ingroup poutre_base_group
+     * @{
+     */
     // see http://www.boost.org/doc/libs/1_58_0/libs/geometry/doc/html/geometry/matrix.html
     namespace bg = boost::geometry;
     namespace bgi = boost::geometry::index;
@@ -44,16 +49,6 @@ namespace poutre
     template <int NumDims> using point_scoord = point_t<scoord, NumDims>;
 
     template <int NumDims> using bounding_box = bg::model::box<point_t<scoord, NumDims>>;
-
-    // extern template class point_scoord<1>;
-    // extern template class point_scoord<2>;
-    // extern template class point_scoord<3>;
-    // extern template class point_scoord<4>;
-
-    // extern template class point_rcoord<1>;
-    // extern template class point_rcoord<2>;
-    // extern template class point_rcoord<3>;
-    // extern template class point_rcoord<4>;
 
     typedef point_scoord<1> pt1D_scoord; //! alias scalar point 1D
     typedef point_scoord<2> pt2D_scoord; //! alias scalar point 2D
@@ -69,7 +64,9 @@ namespace poutre
     typedef point_rcoord<2> pt2D_rcoord; //! alias real point 2D
     typedef point_rcoord<3> pt3D_rcoord; //! alias real point 3D
     typedef point_rcoord<4> pt4D_rcoord; //! alias real point 4D
-
+    /**
+    //! @} doxygroup: geometry_group
+    */
 } // namespace poutre
 
 //#ifdef _MSC_VER

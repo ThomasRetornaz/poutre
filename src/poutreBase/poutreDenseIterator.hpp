@@ -26,7 +26,11 @@
 
 namespace poutre
 {
-
+    /*!
+     * @defgroup iterator_group Define iterators
+     * @ingroup poutre_base_group
+     * @{
+     */
     struct strided_iterator_tag : std::random_access_iterator_tag
     {
     };
@@ -246,6 +250,8 @@ namespace poutre
             return forwardIterator;
         }
     };
-
+    /**
+    //! @} doxygroup: iterator_group
+    */
 } // namespace poutre
 #endif // POUTRE_DENSE_ITERATOR_HPP__

@@ -35,7 +35,11 @@
 
 namespace poutre
 {
-
+    /*!
+     * @defgroup iterator_domain_group Define iterators which handle padding
+     * @ingroup poutre_base_group
+     * @{
+     */
     //! Domain iterator with bidirectional access
     template <typename DataType, ptrdiff_t Rank>
     class pdomain_iterator
@@ -147,6 +151,6 @@ namespace poutre
             return details::view_offset(*m_boundit, m_strides);
         }
     };
-
+    //! @} doxygroup: iterator_domain_group
 } // namespace poutre
 #endif // POUTRE_DOMAIN_ITERATOR_HPP__

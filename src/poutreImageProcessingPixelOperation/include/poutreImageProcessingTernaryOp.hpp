@@ -10,6 +10,16 @@
 #ifndef POUTRE_IMAGEPROCESSING_TERNARYOP_HPP__
 #define POUTRE_IMAGEPROCESSING_TERNARYOP_HPP__
 
+/**
+ * @file poutreImageProcessingTernaryOp.hpp
+ * @author thomas.retornaz@mines-paris.org
+ * @brief Ternary op over images and views
+ * @version 0.1
+ * @date 2020-05-08
+ *
+ * @copyright Copyright (c) 2020
+ *
+ */
 #ifndef POUTRE_IMAGEPROCESSINGCORE_HPP__
 #include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
 #endif
@@ -20,6 +30,11 @@
 
 namespace poutre
 {
+
+    /**
+     * @addtogroup image_processing_linear_group
+     *@{
+     */
 
     /****************************************************************************************/
     /*                               PixelWiseTernaryOp                                      */
@@ -115,7 +130,7 @@ namespace poutre
         PixelWiseTernaryOpDispatcher<T1, T2, T3, Tout, Rank, View1, View2, View3, ViewOut, TerOp> dispatcher;
         dispatcher(i_vin1, op, i_vin2, i_vin3, o_vout);
     }
-
+    //! @} doxygroup: image_processing_linear_group
 } // namespace poutre
 
 #endif // POUTRE_IMAGEPROCESSING_TERNARYOP_HPP__

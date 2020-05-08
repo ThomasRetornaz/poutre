@@ -140,7 +140,7 @@ namespace poutre
             // now fill it
             in->close();
 
-            return std::unique_ptr<IInterface>();
+            return iimage;
         }
     } // namespace details
 

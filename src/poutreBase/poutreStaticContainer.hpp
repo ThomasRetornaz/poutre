@@ -49,7 +49,7 @@ namespace poutre
 
     /*!
      * @defgroup static_array_group Static Array
-     * @ingroup container_group
+     * @ingroup poutre_base_group
      * @{
      */
 
@@ -367,6 +367,7 @@ namespace poutre
          */
 
         /**@{*/
+        //! Access element
         POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR reference operator[](difference_type n) POUTRE_NOEXCEPTONLYNDEBUG
         {
             POUTRE_ASSERTCHECK(n < rank, "static_array_base[n] n must be in [0,rank)");
@@ -374,6 +375,7 @@ namespace poutre
             return m_array[n];
         }
 
+        //! Access element
         POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR const_reference
         operator[](difference_type n) const POUTRE_NOEXCEPTONLYNDEBUG
         {

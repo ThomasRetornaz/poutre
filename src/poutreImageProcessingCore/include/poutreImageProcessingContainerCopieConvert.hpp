@@ -10,12 +10,27 @@
 #ifndef POUTRE_IMAGEPROCESSING_CONTAINER_COPIECONVERT_HPP__
 #define POUTRE_IMAGEPROCESSING_CONTAINER_COPIECONVERT_HPP__
 
+/**
+ * @file poutreImageProcessingContainerCopieConvert.hpp
+ * @author thomas.retornaz@mines-paris.org
+ * @brief
+ * @version 0.1
+ * @date 2020-05-08
+ *
+ * @copyright Copyright (c) 2020
+ *
+ */
 #ifndef POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 #endif
 
 namespace poutre
 {
+    /**
+     * @addtogroup image_processing_copy_group Image Processing Template Copy/Convert facilities
+     * @ingroup image_processing_group
+     *@{
+     */
     // primary use strided view
     template <typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1,
               template <typename, ptrdiff_t> class View2>
@@ -96,5 +111,6 @@ namespace poutre
         auto viewOut = lview(o_image);
         CopyOp(viewIn, viewOut);
     }
+    //! @} doxygroup: image_processing_copy_group
 } // namespace poutre
 #endif // POUTRE_IMAGEPROCESSING_CONTAINER_COPIECONVERT_HPP__

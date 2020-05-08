@@ -7,11 +7,15 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-/*
- * File:   poutreIOLoader.hpp
- * Author: thomas
+/**
+ * @file poutreIOLoader.hpp
+ * @author thomas.retornaz@mines-paris.org
+ * @brief Common image loader
+ * @version 0.1
+ * @date 2020-05-08
  *
- * Created on 15 mars 2016
+ * @copyright Copyright (c) 2020
+ *
  */
 
 #ifndef POUTREIOLOADER_HPP
@@ -95,7 +99,7 @@ namespace poutre
         self_type &SetPath(const std::string &i_imgpath);
 
         /**
-         * @brief Load the image according to @SetPath
+         * @brief Load the image according to SetPath
          *
          * @return std::unique_ptr<IInterface>
          */

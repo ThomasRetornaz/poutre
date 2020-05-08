@@ -47,7 +47,7 @@ namespace poutre
     /**
      * @brief From human readable string create an IInterface see @c ImageToString
      *
-     * @param i_image
+     * @param i_str
      * @return Image
      */
     IO_API std::unique_ptr<IInterface> ImageFromString(const std::string &i_str);

@@ -9,6 +9,16 @@
 #ifndef POUTRE_IMAGEPROCESSING_COMPARE_HPP__
 #define POUTRE_IMAGEPROCESSING_COMPARE_HPP__
 
+/**
+ * @file poutreImageProcessingCompare.hpp
+ * @author thomas.retornaz@mines-paris.org
+ * @brief Comparaisons op over images and views
+ * @version 0.1
+ * @date 2020-05-08
+ *
+ * @copyright Copyright (c) 2020
+ *
+ */
 #ifndef POUTRE_IMAGEPROCESSINGCORE_HPP__
 #include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
 #endif
@@ -43,7 +53,10 @@
 
 namespace poutre
 {
-
+    /**
+     * @addtogroup image_processing_linear_group
+     *@{
+     */
     template <typename T1> struct OpCompEqualValue
     {
         T1 m_val;
@@ -1020,6 +1033,6 @@ namespace poutre
     {
         return ViewCompare_iss_dispatch(i_vin1, compOpType, i_vin2, i_valtrue, i_valfalse, o_vout);
     }
-
+    //! @} doxygroup: image_processing_linear_group
 } // namespace poutre
 #endif // POUTRE_IMAGEPROCESSING_COMPARE_HPP__

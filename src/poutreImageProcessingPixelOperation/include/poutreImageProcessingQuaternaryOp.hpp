@@ -10,6 +10,16 @@
 #ifndef POUTRE_IMAGEPROCESSING_QUATERNARYOP_HPP__
 #define POUTRE_IMAGEPROCESSING_QUATERNARYOP_HPP__
 
+/**
+ * @file poutreImageProcessingQuaternaryOp.hpp
+ * @author thomas.retornaz@mines-paris.org
+ * @brief QUaternary op over images and views
+ * @version 0.1
+ * @date 2020-05-08
+ *
+ * @copyright Copyright (c) 2020
+ *
+ */
 #ifndef POUTRE_IMAGEPROCESSINGCORE_HPP__
 #include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
 #endif
@@ -20,6 +30,11 @@
 
 namespace poutre
 {
+    /**
+     * @addtogroup image_processing_linear_group
+     *@{
+     */
+
     /****************************************************************************************/
     /*                               PixelWiseQuaTernaryOp                                      */
     /****************************************************************************************/
@@ -127,6 +142,6 @@ namespace poutre
             dispatcher;
         dispatcher(i_vin1, op, i_vin2, i_vin3, i_vin4, o_vout);
     }
-
+    //! @} doxygroup: image_processing_linear_group
 } // namespace poutre
 #endif // POUTRE_IMAGEPROCESSING_QUATERNARYOP_HPP__

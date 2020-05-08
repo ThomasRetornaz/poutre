@@ -37,7 +37,11 @@
 namespace poutre
 {
 
-    // TODO Doxydoc module
-
-}
+    /**
+     * @addtogroup image_processing_group Image Processing Group
+     *
+     *@{
+     */
+    //! @} doxygroup: image_processing_group
+} // namespace poutre
 #endif // POUTRE_IMAGEPROCESSINGCORE_HPP__

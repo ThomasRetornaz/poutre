@@ -10,6 +10,16 @@
 #ifndef POUTRE_IMAGEPROCESSING_TRANSPOSE_HPP__
 #define POUTRE_IMAGEPROCESSING_TRANSPOSE_HPP__
 
+/**
+ * @file poutreImageProcessingTranspose.hpp
+ * @author thomas.retornaz@mines-paris.org
+ * @brief 2D transpose
+ * @version 0.1
+ * @date 2020-05-08
+ *
+ * @copyright Copyright (c) 2020
+ *
+ */
 #ifndef POUTRE_IMAGEPROCESSINGCORE_HPP__
 #include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
 #endif
@@ -24,6 +34,10 @@
 
 namespace poutre
 {
+    /**
+     * @addtogroup image_processing_linear_group
+     *@{
+     */
     /***********************************************************************************************************************************/
     /*                                                  2D transpose along x */
     /************************************************************
@@ -471,7 +485,7 @@ and do transposition
         auto op = t_transposeOp<T1, T2>();
         op(i_vin1, o_vout);
     }
-
+    //! @} doxygroup: image_processing_linear_group
 } // namespace poutre
 
 #endif // POUTRE_IMAGEPROCESSING_TRANSPOSE_HPP__

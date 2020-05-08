@@ -34,6 +34,12 @@
 
 namespace poutre
 {
+    /*!
+     * @defgroup json_group Define serialisations process in json
+     * @ingroup poutre_base_group
+     * @{
+     */
+
     // completely grabed from
     // http://www.danielsoltyka.com/programming/2011/04/15/simple-class-serialization-with-jsoncpp/ tutorial :)
 
@@ -61,6 +67,9 @@ namespace poutre
         static bool Serialize(InterfaceJsonSerializable *iptrJSObj, std::string &ostr);
         static bool Deserialize(InterfaceJsonSerializable *iptrJSObj, const std::string &istr);
     };
+    /**
+    //! @} doxygroup: json_group
+    */
 
 } // namespace poutre
 #endif // POUTRE_JSON_SERIALIZATION_HPP__

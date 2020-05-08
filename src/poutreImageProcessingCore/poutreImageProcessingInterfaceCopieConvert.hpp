@@ -29,9 +29,11 @@
 namespace poutre
 {
     /**
-     * @ingroup image_processing_interface_group
+     * @addtogroup image_processing_copy_group
+     * @ingroup image_processing_group
      *@{
      */
+
     //! Deep clone of provided image
     IMP_CORE_API std::unique_ptr<IInterface> Clone(const IInterface &i_img1);
 
@@ -48,6 +50,6 @@ namespace poutre
     //! Copy i_img1 in i_img2
     IMP_CORE_API void Copy(const IInterface &i_img1, IInterface &i_img2);
 
-    //! @} doxygroup: image_processing_group
+    //! @} doxygroup: image_processing_copy_group
 } // namespace poutre
 #endif // POUTRE_IMAGEPROCESSING_INTERFACE_COPIECONVERT_HPP__

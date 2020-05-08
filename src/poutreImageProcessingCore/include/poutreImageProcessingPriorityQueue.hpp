@@ -11,10 +11,13 @@
 #define POUTRE_PRIORITYQUEUE_HPP__
 
 /**
- * @file   poutrePriorityQueue.hpp
- * @author Thomas Retornaz
- * @brief  Define common pqueu data structures
+ * @file poutreImageProcessingPriorityQueue.hpp
+ * @author thomas.retornaz@mines-paris.org
+ * @brief Define common pqueue data structures
+ * @version 0.1
+ * @date 2020-05-08
  *
+ * @copyright Copyright (c) 2020
  *
  */
 
@@ -32,6 +35,11 @@
 
 namespace poutre
 {
+    /**
+     * @addtogroup image_processing_pqueue_group Priority queue facilities
+     * @ingroup image_processing_group
+     *@{
+     */
     template <typename key, typename value> struct lesserKey
     {
         bool operator()(const std::pair<key, value> &lhs, const std::pair<key, value> &rhs) const
@@ -70,6 +78,6 @@ namespace poutre
     // public:
     //    PriorityQueue(){}
     //};
-
+    //! @} doxygroup: image_processing_pqueue_group
 } // namespace poutre
 #endif // POUTRE_PRIORITYQUEUE_HPP__

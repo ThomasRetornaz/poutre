@@ -33,6 +33,11 @@
 namespace poutre
 {
 
+    /*!
+     * @defgroup register_group Register factories of image operations
+     * @ingroup poutre_base_group
+     * @{
+     */
     /**
      * @brief Allow to register a set of factories regarding provided type
      * @note use singleton pattern with lazy construct
@@ -87,5 +92,8 @@ namespace poutre
             m_keyfactory_map[key] = ImplFactoryFunction;
         }
     };
+    /**
+    //! @} doxygroup: register_group
+    */
 } // namespace poutre
 #endif // POUTRE_REGISTRATOR__HPP__

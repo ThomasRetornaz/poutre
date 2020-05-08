@@ -70,6 +70,11 @@ namespace xs = xsimd;
 
 namespace poutre
 {
+    /**
+     * @addtogroup simd_group SIMD facilities
+     * @ingroup poutre_base_group
+     *@{
+     */
     namespace simd
     {
         POUTRE_ALWAYS_INLINE bool IsAligned(
@@ -173,5 +178,6 @@ namespace poutre
         }
         */
     } // namespace simd
+    //! @} doxygroup: simd_group
 } // namespace poutre
 #endif // POUTRE_SIMD_HPP__

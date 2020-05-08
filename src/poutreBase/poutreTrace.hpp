@@ -41,7 +41,7 @@
 
 /**
  * @addtogroup trace_group Trace facilities
- * @ingroup poutre_base
+ * @ingroup poutre_base_group
  *@{
  */
 namespace poutre
@@ -110,6 +110,6 @@ namespace poutre
 
 } // namespace poutre
 
-// !@} doxygroup: image_processing_group
+// !@} doxygroup: trace_group
 
 #endif // POUTRE_TRACE__HPP__

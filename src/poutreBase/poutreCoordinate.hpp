@@ -50,18 +50,18 @@ namespace poutre
 #endif
 
     /*!
-     * @defgroup coordinate_group_group Define coordinates  with bounds, index, View
-     * and Strided view other multi-dimentionnal array Implement bounds,index, View
+     * @defgroup coordinate_group Define coordinates  with bounds, index
+     * View and Strided view other multi-dimentionnal array Implement bounds,index, View
      * and StridedView as defined in
      * http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n3851.pdf
-     * @ingroup poutre_base
+     * @ingroup poutre_base_group
      * @{
      */
 
     /**
      * @brief bounds has N-dimensional rectangle semantic
      * bounds is a type that represents rectangular bounds on an N-dimensional
-     * discrete space \image bounds_index.svg
+     * discrete space \image misc\bounds_index.svg
      * @return
      */
 
