@@ -44,7 +44,7 @@ PROJECT_NUMBER         = @POUTRE_VERSION@
 # for a project that appears at the top of each page and should give viewer a
 # quick idea about the purpose of the project. Keep the description short.
 
-PROJECT_BRIEF          = "Image processing and Deep Learning template library"
+PROJECT_BRIEF          = "Image processing template library"
 
 # With the PROJECT_LOGO tag one can specify an logo or icon that is included in
 # the documentation. The maximum height of the logo should not exceed 55 pixels
@@ -68,7 +68,7 @@ OUTPUT_DIRECTORY       = "@DOXY_OUTPUT_DIR@"
 # performance problems for the file system.
 # The default value is: NO.
 
-CREATE_SUBDIRS         = YES
+CREATE_SUBDIRS         = NO
 
 # If the ALLOW_UNICODE_NAMES tag is set to YES, doxygen will allow non-ASCII
 # characters to appear in the names of generated files. If set to NO, non-ASCII
@@ -830,7 +830,7 @@ EXCLUDE_SYMBOLS        = internal
 # that contain example code fragments that are included (see the \include
 # command).
 
-EXAMPLE_PATH           =
+EXAMPLE_PATH           = @DOXY_EXAMPLE_PATH@
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the
 # EXAMPLE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp and
@@ -898,7 +898,7 @@ FILTER_SOURCE_PATTERNS =
 # (index.html). This can be useful if you have a project on for instance GitHub
 # and want to reuse the introduction page also for the doxygen output.
 
-USE_MDFILE_AS_MAINPAGE = readme.md
+USE_MDFILE_AS_MAINPAGE = main_page.md 
 
 #---------------------------------------------------------------------------
 # Configuration options related to source browsing
@@ -1408,7 +1408,7 @@ ENUM_VALUES_PER_LINE   = 4
 # Minimum value: 0, maximum value: 1500, default value: 250.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-TREEVIEW_WIDTH         = 200
+TREEVIEW_WIDTH         = 150
 
 # When the EXT_LINKS_IN_WINDOW option is set to YES doxygen will open links to
 # external symbols imported via tag files in a separate window.
@@ -2124,7 +2124,7 @@ DOT_FONTNAME           = Helvetica
 # Minimum value: 4, maximum value: 24, default value: 10.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
-DOT_FONTSIZE           = 10
+DOT_FONTSIZE           = 8
 
 # By default doxygen will tell dot to use the default font as specified with
 # DOT_FONTNAME. If you specify a different font using DOT_FONTNAME you can set

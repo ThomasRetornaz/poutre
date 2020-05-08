@@ -4,6 +4,7 @@ get_filename_component(POUTRE_root_dir_abs ${POUTRE_ROOT_DIR} ABSOLUTE)
 set(POUTRE_DOCUMENTATION_ROOT ${POUTRE_root_dir_abs}/doc)
 set(POUTRE_DOXYGEN_PATH ${POUTRE_DOCUMENTATION_ROOT}/Doxygen)
 find_file(DOXYGEN_CONFIG_FILE Doxyfile.in ${POUTRE_DOXYGEN_PATH})
+mark_as_advanced(DOXYGEN_CONFIG_FILE)
 
 find_package(Doxygen)
 if(NOT DOXYGEN_FOUND)
@@ -32,6 +33,10 @@ elseif(DOXYGEN_CONFIG_FILE)
   mark_as_advanced(DOXYGEN_GENERATE_XML)
   mark_as_advanced(DOXYGEN_GENERATE_HTML)
 
+  mark_as_advanced(DOXYGEN_HTML_HEADER)
+  mark_as_advanced(DOXYGEN_HTML_FOOTER)
+  mark_as_advanced(DOXYGEN_HTML_STYLESHEET)
+  
   #GRAB FOLDER TO DOCUMENT
   get_property(POUTRE_SRC_DIR GLOBAL PROPERTY POUTRE_SRC_DIR)
   set(DOXY_INPUT_DIRS \"${POUTRE_DOCUMENTATION_ROOT}/Doxygen\")
@@ -39,9 +44,9 @@ elseif(DOXYGEN_CONFIG_FILE)
     list(APPEND DOXY_INPUT_DIRS \"${_DIR}/\")
   endforeach(_DIR ${POUTRE_SRC_DIR})
 
-  #message(FATAL_ERROR "${DOXY_INPUT_DIRS}")
-  set(DOXY_FILES_PATTERN *.h *.hpp *.dox) 
-  set(DOXY_IMAGE_PATH   \"${POUTRE_HTML_FILES_DIR}\" CACHE FILEPATH  "Doxygen image path")
+
+  set(DOXY_FILES_PATTERN *.h *.hpp *.dox *.md) 
+  set(DOXY_IMAGE_PATH    \"${POUTRE_HTML_FILES_DIR}\" \"${POUTRE_DOXYGEN_PATH}/misc\" CACHE FILEPATH  "Doxygen image path")
   set(DOXY_UNIT_TEST_PATH \"${POUTRE_HTML_FILES_DIR}\" \"${POUTRE_ROOT_DIR}/coreTests\" CACHE FILEPATH  "Doxygen unit tests path")
   set(DOXY_LOGO_PATH    "${POUTRE_ROOT_DIR}/doc/Doxygen/misc/yun_5048_small.jpg" CACHE FILEPATH  "Doxygen logo")
   set(DOXY_INCLUDE_PATH \"${JPEG_LIB_SRC}\" \"${PNG_LIB_SRC}\" \"${ZLIB_SRC_DIR}\" \"${Boost_INCLUDE_DIRS}\" CACHE FILEPATH "Doxygen preprocessor paths")
@@ -93,7 +98,7 @@ elseif(DOXYGEN_CONFIG_FILE)
   message(STATUS "[POUTREDoc] Configuring file ${DOXYGEN_CONFIG_FILE} to ${DOXY_CONFIG_FILE}")
   configure_file(${DOXYGEN_CONFIG_FILE} ${DOXY_CONFIG_FILE} @ONLY)
 
-  file(GLOB doxygen_pages ${POUTRE_DOXYGEN_PATH}/*.dox)
+  file(GLOB doxygen_pages ${POUTRE_DOXYGEN_PATH}/*.dox ${POUTRE_DOXYGEN_PATH}/*.md)
   set(doxygen_layout_files 
       ${POUTRE_DOXYGEN_PATH}/misc/DoxygenLayout.xml
       ${DOXY_HTML_STYLESHEET}
