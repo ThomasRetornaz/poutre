@@ -58,6 +58,7 @@ target_link_libraries(PoutreIO
   PUBLIC   PoutreIPCore 
   )
 set_target_properties(PoutreIO PROPERTIES FOLDER "src/")
+add_dependencies( PoutreIO OpenImageIO OpenImageIO_Util) #gcc warn -- ?
 
 IF(BUILD_SHARED_LIBS)
   SET_TARGET_PROPERTIES(PoutreIO PROPERTIES COMPILE_FLAGS -DJSON_DLL)

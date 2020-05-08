@@ -311,7 +311,7 @@ SET(OIIO_INCLUDE_DIR
   ${CMAKE_CURRENT_SOURCE_DIR}/oiio/ext/fmt/include
   PARENT_SCOPE
 )
-add_dependencies(OpenImageIO tiff jpeg png_static)
+add_dependencies(OpenImageIO tiff jpeg png_static hdf5_cpp-shared libdeps)
 set(OpenImageIO_LIBRARIES OpenImageIO OpenImageIO_Util PARENT_SCOPE)
 
 # bench
