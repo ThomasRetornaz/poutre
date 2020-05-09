@@ -48,6 +48,10 @@
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
 #endif
 
+#ifndef POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
+#include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
+#endif
+
 #include <boost/filesystem.hpp>
 
 #include <memory>
@@ -69,6 +73,61 @@ namespace poutre
     {
         namespace bf = boost::filesystem;
 
+        template <typename T> void FillImageFromOIIOScalar(OIIO::ImageInput &input, DenseImage<T, 2> &im)
+        {
+            input.read_image(OIIO::BaseTypeFromC<T>::value, im.data());
+        }
+
+        template <typename T>
+        void FillImageFromOIIOCompound3(OIIO::ImageInput &input, DenseImage<compound_pixel<T, 3>, 2> &im)
+        {
+            const OIIO::ImageSpec &spec = input.spec();
+            if (spec.nchannels != 3)
+            {
+                POUTRE_RUNTIME_ERROR(
+                    boost::format("FillImageFromOIIOCompound3: wrong number of channels expected 3 found %d") %
+                    spec.nchannels);
+            }
+
+            std::vector<T> tmp;
+            tmp.resize(spec.x * spec.y * spec.nchannels);
+            input.read_image(OIIO::BaseTypeFromC<T>::value, &tmp[0]);
+            const auto ptr_tmp = tmp.data();
+            auto ptr_img = im.data();
+            for (size_t i = 0; i < tmp.size(); i += 3)
+            {
+                (*ptr_img)[0] = ptr_tmp[i];
+                (*ptr_img)[1] = ptr_tmp[i + 1];
+                (*ptr_img)[2] = ptr_tmp[i + 2];
+                ptr_img++;
+            }
+        }
+
+        template <typename T>
+        void FillImageFromOIIOCompound4(OIIO::ImageInput &input, DenseImage<compound_pixel<T, 4>, 2> &im)
+        {
+            const OIIO::ImageSpec &spec = input.spec();
+            if (spec.nchannels != 4)
+            {
+                POUTRE_RUNTIME_ERROR(
+                    boost::format("FillImageFromOIIOCompound4: wrong number of channels expected 4 found %d") %
+                    spec.nchannels);
+            }
+
+            std::vector<T> tmp;
+            tmp.resize(spec.x * spec.y * spec.nchannels);
+            input.read_image(OIIO::BaseTypeFromC<T>::value, &tmp[0]);
+            const auto ptr_tmp = tmp.data();
+            auto ptr_img = im.data();
+            for (size_t i = 0; i < tmp.size(); i += 4)
+            {
+                (*ptr_img)[0] = ptr_tmp[i];
+                (*ptr_img)[1] = ptr_tmp[i + 1];
+                (*ptr_img)[2] = ptr_tmp[i + 2];
+                (*ptr_img)[3] = ptr_tmp[i + 3];
+                ptr_img++;
+            }
+        }
         /**
          * Load an image from file at filename.
          * Storage format is deduced from file ending.
@@ -153,7 +212,238 @@ namespace poutre
                 POUTRE_RUNTIME_ERROR(errorstream.str());
             };
             auto iimage = CreateDense(dims, ctype, ptype);
-            
+            switch (ptype)
+            {
+            case PType::PType_GrayUINT8: {
+                switch (ctype)
+                {
+                case CompoundType::CompoundType_Scalar: {
+                    using ImageType_t = poutre::DenseImage<poutre::pUINT8, 2>;
+                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
+                    if (!img_t)
+                    {
+                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                    }
+                    FillImageFromOIIOScalar(*in, *img_t);
+                }
+                break;
+                case CompoundType::CompoundType_3Planes: {
+                    using ImageType_t = poutre::DenseImage<compound_pixel<pUINT8, 3>, 2>;
+                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
+                    if (!img_t)
+                    {
+                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                    }
+                    FillImageFromOIIOCompound3(*in, *img_t);
+                }
+                break;
+                case CompoundType::CompoundType_4Planes: {
+                    using ImageType_t = poutre::DenseImage<compound_pixel<pUINT8, 4>, 2>;
+                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
+                    if (!img_t)
+                    {
+                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                    }
+                    FillImageFromOIIOCompound4(*in, *img_t);
+                }
+                break;
+                default:
+                    std::ostringstream errorstream;
+                    errorstream << " load_image(): Error reading image '";
+                    errorstream << image_path;
+                    errorstream << " unsupported number of channels ";
+                    errorstream << spec.nchannels;
+                    errorstream << " see desc \n" << spec.to_xml();
+                    POUTRE_RUNTIME_ERROR(errorstream.str());
+                };
+            }
+            break;
+            case PType::PType_GrayINT32: {
+                switch (ctype)
+                {
+                case CompoundType::CompoundType_Scalar: {
+                    using ImageType_t = poutre::DenseImage<poutre::pINT32, 2>;
+                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
+                    if (!img_t)
+                    {
+                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                    }
+                    FillImageFromOIIOScalar(*in, *img_t);
+                }
+                break;
+                case CompoundType::CompoundType_3Planes: {
+                    using ImageType_t = poutre::DenseImage<compound_pixel<pINT32, 3>, 2>;
+                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
+                    if (!img_t)
+                    {
+                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                    }
+                    FillImageFromOIIOCompound3(*in, *img_t);
+                }
+                break;
+                case CompoundType::CompoundType_4Planes: {
+                    using ImageType_t = poutre::DenseImage<compound_pixel<pINT32, 4>, 2>;
+                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
+                    if (!img_t)
+                    {
+                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                    }
+                    FillImageFromOIIOCompound4(*in, *img_t);
+                }
+                break;
+                default:
+                    std::ostringstream errorstream;
+                    errorstream << " load_image(): Error reading image '";
+                    errorstream << image_path;
+                    errorstream << " unsupported number of channels ";
+                    errorstream << spec.nchannels;
+                    errorstream << " see desc \n" << spec.to_xml();
+                    POUTRE_RUNTIME_ERROR(errorstream.str());
+                };
+            }
+            break;
+            case PType::PType_F32: {
+                switch (ctype)
+                {
+                case CompoundType::CompoundType_Scalar: {
+                    using ImageType_t = poutre::DenseImage<poutre::pFLOAT, 2>;
+                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
+                    if (!img_t)
+                    {
+                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                    }
+                    FillImageFromOIIOScalar(*in, *img_t);
+                }
+                break;
+                case CompoundType::CompoundType_3Planes: {
+                    using ImageType_t = poutre::DenseImage<compound_pixel<pFLOAT, 3>, 2>;
+                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
+                    if (!img_t)
+                    {
+                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                    }
+                    FillImageFromOIIOCompound3(*in, *img_t);
+                }
+                break;
+                case CompoundType::CompoundType_4Planes: {
+                    using ImageType_t = poutre::DenseImage<compound_pixel<pFLOAT, 4>, 2>;
+                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
+                    if (!img_t)
+                    {
+                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                    }
+                    FillImageFromOIIOCompound4(*in, *img_t);
+                }
+                break;
+                default:
+                    std::ostringstream errorstream;
+                    errorstream << " load_image(): Error reading image '";
+                    errorstream << image_path;
+                    errorstream << " unsupported number of channels ";
+                    errorstream << spec.nchannels;
+                    errorstream << " see desc \n" << spec.to_xml();
+                    POUTRE_RUNTIME_ERROR(errorstream.str());
+                };
+            }
+            break;
+            case PType::PType_GrayINT64: {
+                switch (ctype)
+                {
+                case CompoundType::CompoundType_Scalar: {
+                    using ImageType_t = poutre::DenseImage<poutre::pINT64, 2>;
+                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
+                    if (!img_t)
+                    {
+                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                    }
+                    FillImageFromOIIOScalar(*in, *img_t);
+                }
+                break;
+                case CompoundType::CompoundType_3Planes: {
+                    using ImageType_t = poutre::DenseImage<compound_pixel<pINT64, 3>, 2>;
+                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
+                    if (!img_t)
+                    {
+                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                    }
+                    FillImageFromOIIOCompound3(*in, *img_t);
+                }
+                break;
+                case CompoundType::CompoundType_4Planes: {
+                    using ImageType_t = poutre::DenseImage<compound_pixel<pINT64, 4>, 2>;
+                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
+                    if (!img_t)
+                    {
+                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                    }
+                    FillImageFromOIIOCompound4(*in, *img_t);
+                }
+                break;
+                default:
+                    std::ostringstream errorstream;
+                    errorstream << " load_image(): Error reading image '";
+                    errorstream << image_path;
+                    errorstream << " unsupported number of channels ";
+                    errorstream << spec.nchannels;
+                    errorstream << " see desc \n" << spec.to_xml();
+                    POUTRE_RUNTIME_ERROR(errorstream.str());
+                };
+            }
+            break;
+            case PType::PType_D64: {
+                switch (ctype)
+                {
+                case CompoundType::CompoundType_Scalar: {
+                    using ImageType_t = poutre::DenseImage<poutre::pDOUBLE, 2>;
+                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
+                    if (!img_t)
+                    {
+                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                    }
+                    FillImageFromOIIOScalar(*in, *img_t);
+                }
+                break;
+                case CompoundType::CompoundType_3Planes: {
+                    using ImageType_t = poutre::DenseImage<compound_pixel<pDOUBLE, 3>, 2>;
+                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
+                    if (!img_t)
+                    {
+                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                    }
+                    FillImageFromOIIOCompound3(*in, *img_t);
+                }
+                break;
+                case CompoundType::CompoundType_4Planes: {
+                    using ImageType_t = poutre::DenseImage<compound_pixel<pDOUBLE, 4>, 2>;
+                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
+                    if (!img_t)
+                    {
+                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                    }
+                    FillImageFromOIIOCompound4(*in, *img_t);
+                }
+                break;
+                default:
+                    std::ostringstream errorstream;
+                    errorstream << " load_image(): Error reading image '";
+                    errorstream << image_path;
+                    errorstream << " unsupported number of channels ";
+                    errorstream << spec.nchannels;
+                    errorstream << " see desc \n" << spec.to_xml();
+                    POUTRE_RUNTIME_ERROR(errorstream.str());
+                };
+            }
+            break;
+
+            default:
+                std::ostringstream errorstream;
+                errorstream << " load_image(): Error reading image '";
+                errorstream << image_path;
+                errorstream << " unsupported type ";
+                errorstream << spec.format.basetype;
+                errorstream << " see desc \n" << spec.to_xml();
+                POUTRE_RUNTIME_ERROR(errorstream.str());
+            };
             // now fill it
             in->close();
 
