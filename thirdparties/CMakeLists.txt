@@ -13,7 +13,7 @@ endif()
 
 
 #shut massive amount of warnings comming from thirdparties libaries
-if (${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
+if (MSVC)
   add_compile_options(
       ##########################################
       /wd4018 # 'expression' : signed/unsigned mismatch
@@ -81,10 +81,13 @@ else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-strict-overflow")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-strict-aliasing")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=deprecated-declarations")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-cast-qual") #hdf5 s***ks
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-discarded-qualifiers") #idem
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-maybe-uninitialized") #idem
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno--Wattributes") #""
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-cast-qual") #hdf5 s***ks
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-discarded-qualifiers") #idem
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-maybe-uninitialized") #idem
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-ignored-qualifiers") #openexr
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-attributes") #hdf5
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-implicit-fallthrough") #oiio
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-clobbered")#jpeg
   if(CMAKE_COMPILER_IS_GNUCXX AND NOT (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7.0.0))
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-stringop-overflow")
   endif()
@@ -118,14 +121,14 @@ else()
     AND(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 7.0 AND NOT APPLE)))
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -faligned-new")
   endif()
-  if(WERROR)
-    check_cxx_compiler_flag("-Werror" COMPILER_SUPPORT_WERROR)
-    if(NOT COMPILER_SUPPORT_WERROR)
-      set(WERROR FALSE)
-    else()
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
-    endif()
-  endif(WERROR)
+  # if(WERROR)
+  #   check_cxx_compiler_flag("-Werror" COMPILER_SUPPORT_WERROR)
+  #   if(NOT COMPILER_SUPPORT_WERROR)
+  #     set(WERROR FALSE)
+  #   else()
+  #     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+  #   endif()
+  # endif(WERROR)
   if(NOT APPLE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-but-set-variable")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-maybe-uninitialized")
