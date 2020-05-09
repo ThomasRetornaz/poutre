@@ -11,6 +11,134 @@ if(MSVC)
   endif()
 endif()
 
+
+#shut massive amount of warnings comming from thirdparties libaries
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
+  add_compile_options(
+      ##########################################
+      /wd4018 # 'expression' : signed/unsigned mismatch
+      /wd4065 # (3): switch with default but no case.
+      /wd4146 # unary minus operator applied to unsigned type, result still unsigned
+      /wd4244 # Conversion from 'type1' to 'type2', possible loss of data.
+      /wd4251 # 'identifier' : class 'type' needs to have dll-interface to be used by clients of class 'type2'
+      /wd4267 # Conversion from 'size_t' to 'type', possible loss of data.
+      /wd4305 # 'identifier' : truncation from 'type1' to 'type2'
+      /wd4355 # 'this' : used in base member initializer list
+      /wd4661 # No suitable definition provided for explicit template instantiation request
+      /wd4800 # 'type' : forcing value to bool 'true' or 'false' (performance warning)
+      /wd4838 # (1): conversion from 'type_1' to 'type_2' requires a
+              #      narrowing conversion
+      /wd4267 # (3): Conversion of size_t to smaller type. Same as 4244.
+      /wd4244
+      /wd4273 # (1): inconsistent dll linkage. 
+      /wd4090
+      /wd4311
+      /wd26451
+      /wd4312
+      /wd4267
+      /wd26495
+      /wd26812
+      /wd26495
+      /wd26498
+      /wd28251
+      /wd6385
+      /wd4244
+      /wd4334
+      /wd4047
+      /wd4013
+      /wd4334
+      /wd4101
+      /wd4834
+      /wd4005 #'_CRT_SECURE_NO_WARNINGS' : redéfinition de macro
+    )
+
+  set(CMAKE_SHARED_LINKER_FLAGS
+      "${CMAKE_SHARED_LINKER_FLAGS} 
+      /ignore:4049 
+      /ignore:4217") #symbol 'symbol' defined in 'filename.obj' is imported and  symbol 'symbol' defined in 'filename_1.obj' is imported by 'filename_2.obj' in function 'function' 
+  set(CMAKE_EXE_LINKER_FLAGS
+      "${CMAKE_EXE_LINKER_FLAGS} /ignore:4049 /ignore:4217")
+
+else()
+
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -fPIC")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-narrowing")
+  # Eigen fails to build with some versions, so convert this to a warning
+  # Details at http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1459
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-missing-field-initializers")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-type-limits")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-array-bounds")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-sign-compare")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-variable")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-but-set-variable")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-function")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-result")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-strict-overflow")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-strict-aliasing")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=deprecated-declarations")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-cast-qual") #hdf5 s***ks
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-discarded-qualifiers") #idem
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-maybe-uninitialized") #idem
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno--Wattributes") #""
+  if(CMAKE_COMPILER_IS_GNUCXX AND NOT (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7.0.0))
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-stringop-overflow")
+  endif()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=pedantic")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=redundant-decls")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=old-style-cast")
+  # These flags are not available in GCC-4.8.5. Set only when using clang.
+  # Compared against https://gcc.gnu.org/onlinedocs/gcc-4.8.5/gcc/Option-Summary.html
+  if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-invalid-partial-specialization")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-typedef-redefinition")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-warning-option")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-private-field")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-inconsistent-missing-override")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-aligned-allocation-unavailable")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-c++14-extensions")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-constexpr-not-const")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-missing-braces")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Qunused-arguments")
+    if(${COLORIZE_OUTPUT})
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics")
+    endif()
+  endif()
+  if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9)
+    if(${COLORIZE_OUTPUT})
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=always")
+    endif()
+  endif()
+  if((APPLE AND (NOT ("${CLANG_VERSION_STRING}" VERSION_LESS "9.0")))
+    OR(CMAKE_COMPILER_IS_GNUCXX
+    AND(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 7.0 AND NOT APPLE)))
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -faligned-new")
+  endif()
+  if(WERROR)
+    check_cxx_compiler_flag("-Werror" COMPILER_SUPPORT_WERROR)
+    if(NOT COMPILER_SUPPORT_WERROR)
+      set(WERROR FALSE)
+    else()
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+    endif()
+  endif(WERROR)
+  if(NOT APPLE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-but-set-variable")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-maybe-uninitialized")
+  endif()
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -O0")
+  set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_STATIC_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -O0")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-math-errno")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-trapping-math")
+  check_cxx_compiler_flag("-Werror=format" HAS_WERROR_FORMAT)
+  if(HAS_WERROR_FORMAT)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=format")
+  endif()
+endif()
 # --------------------------------------------------------------------------------
 # boost
 if(NOT BOOST_ROOT)
@@ -364,5 +492,4 @@ if(ENABLE_NUMPY)
   set(debian_dependencies ${debian_dependencies} "python-numpy (>= 1:1.8)")
   
 endif()
-
 
