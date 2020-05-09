@@ -153,7 +153,7 @@ namespace poutre
                 POUTRE_RUNTIME_ERROR(errorstream.str());
             };
             auto iimage = CreateDense(dims, ctype, ptype);
-
+            
             // now fill it
             in->close();
 
@@ -215,8 +215,8 @@ namespace poutre
             {
                 POUTRE_RUNTIME_ERROR(boost::format("StoreFromOIIO: provided path %s doesn't exists") % dir);
             }
-            if (image.GetNumDims() > 3)
-                POUTRE_RUNTIME_ERROR(boost::format("For nd images with n>3 use StoreWithHDF5") % dir);
+            if (image.GetNumDims() > 2)
+                POUTRE_RUNTIME_ERROR(boost::format("For nd images with n>2 use StoreWithHDF5") % dir);
         }
     } // namespace details
 

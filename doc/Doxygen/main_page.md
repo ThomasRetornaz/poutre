@@ -11,7 +11,7 @@ It is written in modern C++ at least c++14
 With python bindings thanks to boost
 
 It is widely inspired from other greats existing frameworks, mainly:
-- [MorphM](https://www.cmm.mines-paristech.fr/Morph-M/index_en.html) infortinately closed source :/
+- [MorphM](https://www.cmm.mines-paristech.fr/Morph-M/index_en.html) unfortinately closed source :/
 - [Yayi](https://bitbucket.org/renficiaud/yayi/src/master/)
 - [Olena](https://gitlab.lrde.epita.fr/olena/olena)
 
