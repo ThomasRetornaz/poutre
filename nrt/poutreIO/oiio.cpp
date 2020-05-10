@@ -14,7 +14,7 @@
 
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 #include <poutreIO/poutreIOString.hpp>
-//#include <poutreIO/include/poutreOIIO.hpp>
+#include <poutreIO/include/poutreOIIO.hpp>
 #include <poutreIO/poutreIOLoader.hpp>
 #include <poutreIO/poutreIOWriter.hpp>
 #include <boost/filesystem.hpp>
@@ -144,4 +144,52 @@ BOOST_AUTO_TEST_CASE(iopngsaveRGBA)
     BOOST_CHECK_EQUAL(imgstr, str);
 }
 
+BOOST_AUTO_TEST_CASE(iotifffloat)
+{
+    std::string str = "Dense 3Planes F32 2 2 3 \
+0 0 0 255 0 0 0 255 0 \
+0 0 255 228 135 255 255 255 255\
+";
+    // store
+    auto expected = poutre::ImageFromString(str);
+    bf::path tempDir = /*bf::path(POUTREIO_NRT_DATAS) /*/ "POUTRE_NRT_IO_TMP_DIR";
+    if (!bf::is_directory(tempDir))
+    {
+        bf::create_directory(tempDir);
+    }
+    bf::path image_path = tempDir / "write_test_RGBFLOAT.tif";
+    auto writter = poutre::ImageWriter().SetPath(image_path.string());
+    writter.Write(*expected);
+    // load again and check
+    auto loader = poutre::ImageLoader().SetPath(image_path.string());
+    auto img = loader.Load();
+    auto imgstr = poutre::ImageToString(*img);
+    BOOST_CHECK_EQUAL(imgstr, str);
+}
+
+BOOST_AUTO_TEST_CASE(execptions)
+{
+    BOOST_TEST_MESSAGE("3D image not supported use hdf5 instead");
+    {
+    
+    std::string str = "Dense Scalar GUINT8 3 1 1 1 \
+0\
+";
+    auto expected = poutre::ImageFromString(str);
+    
+    bf::path tempDir = /*bf::path(POUTREIO_NRT_DATAS) /*/ "POUTRE_NRT_IO_TMP_DIR";
+    if (!bf::is_directory(tempDir))
+    {
+        bf::create_directory(tempDir);
+    }
+    bf::path image_path = tempDir / "write_test_3DGRAYMUSTFAIL.tif";
+    BOOST_CHECK_THROW(poutre::details::StoreWithOIIO(image_path.string(), *expected), std::runtime_error);
+    }
+
+    BOOST_TEST_MESSAGE("Path doesn't exist");
+    {
+        bf::path image_path = "bli.mouf";
+        BOOST_CHECK_THROW(poutre::details::LoadFromOIIO(image_path.string()), std::runtime_error);
+    }
+  }
 BOOST_AUTO_TEST_SUITE_END()

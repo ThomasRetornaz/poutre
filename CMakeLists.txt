@@ -34,8 +34,7 @@ set(POUTRE_VERSION ${POUTRE_MAJOR}.${POUTRE_MINOR}.${POUTRE_SUBMINOR})
 
 option(BUILD_SHARED_LIBS "Build Shared Libraries" ON)
 
-set(ENABLE_HDF5  FALSE CACHE BOOL "Enable HDF5 support (you should have it already built)")
-set(ENABLE_NUMPY FALSE CACHE BOOL "Enable NumPy support for IOPython (should be installed in your python distribution")
+set(ENABLE_NUMPY TRUE CACHE BOOL "Enable NumPy support for IOPython (should be installed in your python distribution")
 
 set(POUTRE_SOURCE_DIR         ${CMAKE_CURRENT_SOURCE_DIR}   CACHE PATH "Base of the input directory")
 set(POUTRE_ROOT_DIR         ${POUTRE_SOURCE_DIR}   CACHE PATH "Base of the input directory")
@@ -114,7 +113,6 @@ message(STATUS "  CXX flags             : ${CMAKE_CXX_FLAGS}")
 message(STATUS "  Build type            : ${CMAKE_BUILD_TYPE}")
 message(STATUS "  CMAKE_PREFIX_PATH     : ${CMAKE_PREFIX_PATH}")
 message(STATUS "  CMAKE_INSTALL_PREFIX  : ${CMAKE_INSTALL_PREFIX}")
-message(STATUS "HDF5 support            : ${ENABLE_HDF5}")
 message(STATUS "NumPy                   : ${ENABLE_NUMPY}")
 
 
