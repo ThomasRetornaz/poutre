@@ -106,18 +106,18 @@ namespace poutre
          */
         template <typename T> void FillImageFromOIIOScalar(const std::string &path, DenseImage<T, 2> &im)
         {
-            bf::path localPath(image_path);
+            bf::path localPath(path);
             if (!(bf::exists(localPath)))
             {
                 POUTRE_RUNTIME_ERROR(boost::format("FillImageFromOIIOScalar: provided path %s doesn't exists") %
                                      localPath.string());
             }
-            auto in(OIIO::ImageInput::open(image_path));
+            auto in(OIIO::ImageInput::open(path));
             if (!in)
             {
                 std::ostringstream errorstream;
                 errorstream << " FillImageFromOIIOScalar load_image(): Error reading image '";
-                errorstream << image_path;
+                errorstream << path;
                 errorstream << "\n" << OIIO::geterror();
                 POUTRE_RUNTIME_ERROR(errorstream.str());
             }
@@ -181,18 +181,18 @@ namespace poutre
         template <typename T>
         void FillImageFromOIIOCompound3(const std::string &path, DenseImage<compound_pixel<T, 3>, 2> &im)
         {
-            bf::path localPath(image_path);
+            bf::path localPath(path);
             if (!(bf::exists(localPath)))
             {
                 POUTRE_RUNTIME_ERROR(boost::format("FillImageFromOIIOCompound3: provided path %s doesn't exists") %
                                      localPath.string());
             }
-            auto in(OIIO::ImageInput::open(image_path));
+            auto in(OIIO::ImageInput::open(path));
             if (!in)
             {
                 std::ostringstream errorstream;
                 errorstream << " FillImageFromOIIOCompound3 load_image(): Error reading image '";
-                errorstream << image_path;
+                errorstream << path;
                 errorstream << "\n" << OIIO::geterror();
                 POUTRE_RUNTIME_ERROR(errorstream.str());
             }
@@ -258,18 +258,18 @@ namespace poutre
         template <typename T>
         void FillImageFromOIIOCompound4(const std::string &path, DenseImage<compound_pixel<T, 4>, 2> &im)
         {
-            bf::path localPath(image_path);
+            bf::path localPath(path);
             if (!(bf::exists(localPath)))
             {
                 POUTRE_RUNTIME_ERROR(boost::format("FillImageFromOIIOCompound4: provided path %s doesn't exists") %
                                      localPath.string());
             }
-            auto in(OIIO::ImageInput::open(image_path));
+            auto in(OIIO::ImageInput::open(path));
             if (!in)
             {
                 std::ostringstream errorstream;
                 errorstream << " FillImageFromOIIOCompound4 load_image(): Error reading image '";
-                errorstream << image_path;
+                errorstream << path;
                 errorstream << "\n" << OIIO::geterror();
                 POUTRE_RUNTIME_ERROR(errorstream.str());
             }
