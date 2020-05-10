@@ -52,8 +52,9 @@ namespace poutre
     /**
      * @brief Concrete ImageLoader
      * Powered by OpenImageIO toolset see https://sites.google.com/site/openimageio/home
-     * so various formats are supported
-     * at least the most common ones (PNG,JPEG,TIFF,BMP,...)
+     * so various formats are supported (and deduced from path)
+     * at least the most common ones (PNG,JPEG,TIFF,BMP,hdf5,...)
+     * @note for Image with more than 2 dimensions, only hdf5 format is supported
      */
     class IO_API ImageLoader
     {

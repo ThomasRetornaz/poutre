@@ -38,6 +38,13 @@ namespace poutre
      *@{
      */
 
+    /**
+     * @brief Concrete ImageWritter
+     * Powered by OpenImageIO toolset see https://sites.google.com/site/openimageio/home
+     * so various formats are supported (and deduced from path)
+     * at least the most common ones (PNG,JPEG,TIFF,BMP,hdf5,...)
+     * @note for Image with more than 2 dimensions, only hdf5 format is supported
+     */
     class IO_API ImageWriter
     {
         using self_type = ImageWriter;
@@ -45,10 +52,17 @@ namespace poutre
         bool m_isready;
 
       public:
+        /**
+         * @brief Construct a new Image Writer object
+         *
+         */
         ImageWriter() : m_imgPath(), m_isready(false)
         {
         }
-
+        /**
+         * @brief Destroy the Image Writer object
+         *
+         */
         virtual ~ImageWriter()
         {
         }
@@ -64,6 +78,13 @@ namespace poutre
         //
         // self_type& operator=(const self_type& rhs) = default;
 
+        /**
+         * @brief Set the Path object
+         *
+         * @param i_imgpath path where to store the image, format is deduced from extention
+         * @return self_type& chain
+         * @note For image with more than 2 dimentions only hdf5 format is supported
+         */
         self_type &SetPath(const std::string &i_imgpath);
         void Write(const IInterface &i_img) const;
     };

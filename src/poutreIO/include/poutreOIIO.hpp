@@ -60,11 +60,6 @@
 namespace poutre
 {
     /**
-     * @addtogroup image_processing_io_group Image Processing IO API
-     * @ingroup image_processing_group
-     *@{
-     */
-    /**
      * @addtogroup image_processing_io_group_details Image Processing IO API details
      * @ingroup image_processing_io_group
      *@{
@@ -72,12 +67,85 @@ namespace poutre
     namespace details
     {
         namespace bf = boost::filesystem;
-
+        /**
+         * @brief  Helper function which copy contant of input OIIO object in DenseImage 2D assuming scalar type
+         *
+         * @tparam T DenseImage pType
+         * @param input preconstructed OIIO object
+         * @param im Image where to copy data
+         * @warning Unsafe method use @c ImageLoader for safety check
+         */
         template <typename T> void FillImageFromOIIOScalar(OIIO::ImageInput &input, DenseImage<T, 2> &im)
         {
-            input.read_image(OIIO::BaseTypeFromC<T>::value, im.data());
+            // input.read_image(OIIO::BaseTypeFromC<T>::value, im.data()); //Not so simple we have to handle possible
+            // padding
+            const OIIO::ImageSpec &spec = input.spec();
+            std::vector<T> buffer(spec.width * spec.height);
+            input.read_image(OIIO::BaseTypeFromC<T>::value, &buffer[0]);
+            auto ptr_img = im.data();
+            auto ptr_buff = buffer.data();
+            const auto &padding = im.padding();
+            const auto x_pad = padding[0];
+            // const auto y_pad = padding[1];
+
+            for (size_t y = 0; y < (size_t)spec.height; ++y)
+            {
+                memcpy(ptr_img, ptr_buff, (size_t)spec.width);
+                ptr_buff += (size_t)spec.width;
+                ptr_img += (size_t)spec.width + x_pad;
+            }
         }
 
+        /**
+         * @brief Helper function which copy contant of input file in DenseImage 2D assuming scalar type
+         *
+         * @tparam T  T DenseImage pType
+         * @param path path of the image to load
+         * Image where to copy data
+         * @warning Unsafe method use @c ImageLoader for safety check
+         */
+        template <typename T> void FillImageFromOIIOScalar(const std::string &path, DenseImage<T, 2> &im)
+        {
+            bf::path localPath(image_path);
+            if (!(bf::exists(localPath)))
+            {
+                POUTRE_RUNTIME_ERROR(boost::format("FillImageFromOIIOScalar: provided path %s doesn't exists") %
+                                     localPath.string());
+            }
+            auto in(OIIO::ImageInput::open(image_path));
+            if (!in)
+            {
+                std::ostringstream errorstream;
+                errorstream << " FillImageFromOIIOScalar load_image(): Error reading image '";
+                errorstream << image_path;
+                errorstream << "\n" << OIIO::geterror();
+                POUTRE_RUNTIME_ERROR(errorstream.str());
+            }
+            const OIIO::ImageSpec &spec = input.spec();
+            if (spec.nchannels != 1)
+            {
+                POUTRE_RUNTIME_ERROR(
+                    boost::format("FillImageFromOIIOScalar: wrong number of channels expected 1 found %d") %
+                    spec.nchannels);
+            }
+            if (spec.depth > 1)
+            {
+                POUTRE_RUNTIME_ERROR(
+                    boost::format("FillImageFromOIIOScalar: wrong number of dim expected 2 found depth dim"));
+            }
+            FillImageFromOIIOScalar(*in, im);
+
+            in->close();
+        }
+        /**
+         * @brief  Helper function which copy contant of input OIIO object in DenseImage 2D assuming RGB like color
+         * space
+         *
+         * @tparam T DenseImage pType
+         * @param input preconstructed OIIO object
+         * @param im Image where to copy data
+         * @warning Unsafe method use @c ImageLoader for safety check
+         */
         template <typename T>
         void FillImageFromOIIOCompound3(OIIO::ImageInput &input, DenseImage<compound_pixel<T, 3>, 2> &im)
         {
@@ -90,7 +158,7 @@ namespace poutre
             }
 
             std::vector<T> tmp;
-            tmp.resize(spec.x * spec.y * spec.nchannels);
+            tmp.resize((size_t)spec.width * (size_t)spec.height * (size_t)spec.nchannels);
             input.read_image(OIIO::BaseTypeFromC<T>::value, &tmp[0]);
             const auto ptr_tmp = tmp.data();
             auto ptr_img = im.data();
@@ -102,7 +170,57 @@ namespace poutre
                 ptr_img++;
             }
         }
+        /**
+         * @brief Helper function which copy contant of input file in DenseImage 2D assuming like RGB color space
+         *
+         * @tparam T  T DenseImage pType
+         * @param path path of the image to load
+         * Image where to copy data
+         * @warning Unsafe method use @c ImageLoader for safety check
+         */
+        template <typename T>
+        void FillImageFromOIIOCompound3(const std::string &path, DenseImage<compound_pixel<T, 3>, 2> &im)
+        {
+            bf::path localPath(image_path);
+            if (!(bf::exists(localPath)))
+            {
+                POUTRE_RUNTIME_ERROR(boost::format("FillImageFromOIIOCompound3: provided path %s doesn't exists") %
+                                     localPath.string());
+            }
+            auto in(OIIO::ImageInput::open(image_path));
+            if (!in)
+            {
+                std::ostringstream errorstream;
+                errorstream << " FillImageFromOIIOCompound3 load_image(): Error reading image '";
+                errorstream << image_path;
+                errorstream << "\n" << OIIO::geterror();
+                POUTRE_RUNTIME_ERROR(errorstream.str());
+            }
+            const OIIO::ImageSpec &spec = input.spec();
+            if (spec.nchannels != 3)
+            {
+                POUTRE_RUNTIME_ERROR(
+                    boost::format("FillImageFromOIIOCompound3: wrong number of channels expected 3 found %d") %
+                    spec.nchannels);
+            }
+            if (spec.depth > 1)
+            {
+                POUTRE_RUNTIME_ERROR(
+                    boost::format("FillImageFromOIIOCompound3: wrong number of dim expected 2 found depth dim"));
+            }
+            FillImageFromOIIOCompound3(*in, im);
 
+            in->close();
+        }
+        /**
+         * @brief  Helper function which copy contant of input OIIO object in DenseImage 2D assuming RGBA like color
+         * space
+         *
+         * @tparam T DenseImage pType
+         * @param input preconstructed OIIO object
+         * @param im Image where to copy data
+         * @warning Unsafe method use @c ImageLoader for safety check
+         */
         template <typename T>
         void FillImageFromOIIOCompound4(OIIO::ImageInput &input, DenseImage<compound_pixel<T, 4>, 2> &im)
         {
@@ -115,7 +233,7 @@ namespace poutre
             }
 
             std::vector<T> tmp;
-            tmp.resize(spec.x * spec.y * spec.nchannels);
+            tmp.resize((size_t)spec.width * (size_t)spec.height * (size_t)spec.nchannels);
             input.read_image(OIIO::BaseTypeFromC<T>::value, &tmp[0]);
             const auto ptr_tmp = tmp.data();
             auto ptr_img = im.data();
@@ -128,329 +246,52 @@ namespace poutre
                 ptr_img++;
             }
         }
+
         /**
-         * Load an image from file at filename.
-         * Storage format is deduced from file ending.
+         * @brief Helper function which copy contant of input file in DenseImage 2D assuming like RGBA color space
          *
-         * @param image_path The path of the file to load
-         *
-         * @return std::unique_ptr<IInterface> corresponding to the loaded image
+         * @tparam T  T DenseImage pType
+         * @param path path of the image to load
+         * Image where to copy data
+         * @warning Unsafe method use @c ImageLoader for safety check
          */
-        std::unique_ptr<IInterface> LoadFromOIIO(const std::string &image_path)
+        template <typename T>
+        void FillImageFromOIIOCompound4(const std::string &path, DenseImage<compound_pixel<T, 4>, 2> &im)
         {
             bf::path localPath(image_path);
             if (!(bf::exists(localPath)))
             {
-                POUTRE_RUNTIME_ERROR(boost::format("LoadFromOIIO: provided path %s doesn't exists") %
+                POUTRE_RUNTIME_ERROR(boost::format("FillImageFromOIIOCompound4: provided path %s doesn't exists") %
                                      localPath.string());
             }
-
             auto in(OIIO::ImageInput::open(image_path));
             if (!in)
             {
                 std::ostringstream errorstream;
-                errorstream << " load_image(): Error reading image '";
+                errorstream << " FillImageFromOIIOCompound4 load_image(): Error reading image '";
                 errorstream << image_path;
+                errorstream << "\n" << OIIO::geterror();
                 POUTRE_RUNTIME_ERROR(errorstream.str());
             }
-
-            const OIIO::ImageSpec &spec = in->spec();
-            std::vector<std::size_t> dims;
-            if (spec.width > 1)
-                dims.push_back((size_t)spec.width);
-            if (spec.height > 1)
-                dims.push_back((size_t)spec.height);
+            const OIIO::ImageSpec &spec = input.spec();
+            if (spec.nchannels != 4)
+            {
+                POUTRE_RUNTIME_ERROR(
+                    boost::format("FillImageFromOIIOCompound4: wrong number of channels expected 4 found %d") %
+                    spec.nchannels);
+            }
             if (spec.depth > 1)
-                dims.push_back((size_t)spec.depth);
+            {
+                POUTRE_RUNTIME_ERROR(
+                    boost::format("FillImageFromOIIOCompound4: wrong number of dim expected 2 found depth dim"));
+            }
+            FillImageFromOIIOCompound4(*in, im);
 
-            CompoundType ctype = CompoundType::CompoundType_Undef;
-            switch (spec.nchannels)
-            {
-            case 1:
-                ctype = CompoundType::CompoundType_Scalar;
-                break;
-            case 3:
-                ctype = CompoundType::CompoundType_3Planes;
-                break;
-            case 4:
-                ctype = CompoundType::CompoundType_4Planes;
-                break;
-            default:
-                std::ostringstream errorstream;
-                errorstream << " load_image(): Error reading image '";
-                errorstream << image_path;
-                errorstream << " unsupported number of channels ";
-                errorstream << spec.nchannels;
-                errorstream << " see desc \n" << spec.to_xml();
-                POUTRE_RUNTIME_ERROR(errorstream.str());
-            };
-            PType ptype = PType::PType_Undef;
-            switch (spec.format.basetype)
-            {
-            case OpenImageIO_v2_2::TypeDesc::BASETYPE::UINT8:
-                ptype = PType::PType_GrayUINT8;
-                break;
-            case OpenImageIO_v2_2::TypeDesc::BASETYPE::INT32:
-                ptype = PType::PType_GrayINT32;
-                break;
-            case OpenImageIO_v2_2::TypeDesc::BASETYPE::FLOAT:
-                ptype = PType::PType_F32;
-                break;
-            case OpenImageIO_v2_2::TypeDesc::BASETYPE::INT64:
-                ptype = PType::PType_GrayINT64;
-                break;
-            case OpenImageIO_v2_2::TypeDesc::BASETYPE::DOUBLE:
-                ptype = PType::PType_D64;
-                break;
-            default:
-                std::ostringstream errorstream;
-                errorstream << " load_image(): Error reading image '";
-                errorstream << image_path;
-                errorstream << " unsupported type ";
-                errorstream << spec.format.basetype;
-                errorstream << " see desc \n" << spec.to_xml();
-                POUTRE_RUNTIME_ERROR(errorstream.str());
-            };
-            auto iimage = CreateDense(dims, ctype, ptype);
-            switch (ptype)
-            {
-            case PType::PType_GrayUINT8: {
-                switch (ctype)
-                {
-                case CompoundType::CompoundType_Scalar: {
-                    using ImageType_t = poutre::DenseImage<poutre::pUINT8, 2>;
-                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
-                    if (!img_t)
-                    {
-                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                    }
-                    FillImageFromOIIOScalar(*in, *img_t);
-                }
-                break;
-                case CompoundType::CompoundType_3Planes: {
-                    using ImageType_t = poutre::DenseImage<compound_pixel<pUINT8, 3>, 2>;
-                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
-                    if (!img_t)
-                    {
-                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                    }
-                    FillImageFromOIIOCompound3(*in, *img_t);
-                }
-                break;
-                case CompoundType::CompoundType_4Planes: {
-                    using ImageType_t = poutre::DenseImage<compound_pixel<pUINT8, 4>, 2>;
-                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
-                    if (!img_t)
-                    {
-                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                    }
-                    FillImageFromOIIOCompound4(*in, *img_t);
-                }
-                break;
-                default:
-                    std::ostringstream errorstream;
-                    errorstream << " load_image(): Error reading image '";
-                    errorstream << image_path;
-                    errorstream << " unsupported number of channels ";
-                    errorstream << spec.nchannels;
-                    errorstream << " see desc \n" << spec.to_xml();
-                    POUTRE_RUNTIME_ERROR(errorstream.str());
-                };
-            }
-            break;
-            case PType::PType_GrayINT32: {
-                switch (ctype)
-                {
-                case CompoundType::CompoundType_Scalar: {
-                    using ImageType_t = poutre::DenseImage<poutre::pINT32, 2>;
-                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
-                    if (!img_t)
-                    {
-                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                    }
-                    FillImageFromOIIOScalar(*in, *img_t);
-                }
-                break;
-                case CompoundType::CompoundType_3Planes: {
-                    using ImageType_t = poutre::DenseImage<compound_pixel<pINT32, 3>, 2>;
-                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
-                    if (!img_t)
-                    {
-                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                    }
-                    FillImageFromOIIOCompound3(*in, *img_t);
-                }
-                break;
-                case CompoundType::CompoundType_4Planes: {
-                    using ImageType_t = poutre::DenseImage<compound_pixel<pINT32, 4>, 2>;
-                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
-                    if (!img_t)
-                    {
-                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                    }
-                    FillImageFromOIIOCompound4(*in, *img_t);
-                }
-                break;
-                default:
-                    std::ostringstream errorstream;
-                    errorstream << " load_image(): Error reading image '";
-                    errorstream << image_path;
-                    errorstream << " unsupported number of channels ";
-                    errorstream << spec.nchannels;
-                    errorstream << " see desc \n" << spec.to_xml();
-                    POUTRE_RUNTIME_ERROR(errorstream.str());
-                };
-            }
-            break;
-            case PType::PType_F32: {
-                switch (ctype)
-                {
-                case CompoundType::CompoundType_Scalar: {
-                    using ImageType_t = poutre::DenseImage<poutre::pFLOAT, 2>;
-                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
-                    if (!img_t)
-                    {
-                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                    }
-                    FillImageFromOIIOScalar(*in, *img_t);
-                }
-                break;
-                case CompoundType::CompoundType_3Planes: {
-                    using ImageType_t = poutre::DenseImage<compound_pixel<pFLOAT, 3>, 2>;
-                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
-                    if (!img_t)
-                    {
-                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                    }
-                    FillImageFromOIIOCompound3(*in, *img_t);
-                }
-                break;
-                case CompoundType::CompoundType_4Planes: {
-                    using ImageType_t = poutre::DenseImage<compound_pixel<pFLOAT, 4>, 2>;
-                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
-                    if (!img_t)
-                    {
-                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                    }
-                    FillImageFromOIIOCompound4(*in, *img_t);
-                }
-                break;
-                default:
-                    std::ostringstream errorstream;
-                    errorstream << " load_image(): Error reading image '";
-                    errorstream << image_path;
-                    errorstream << " unsupported number of channels ";
-                    errorstream << spec.nchannels;
-                    errorstream << " see desc \n" << spec.to_xml();
-                    POUTRE_RUNTIME_ERROR(errorstream.str());
-                };
-            }
-            break;
-            case PType::PType_GrayINT64: {
-                switch (ctype)
-                {
-                case CompoundType::CompoundType_Scalar: {
-                    using ImageType_t = poutre::DenseImage<poutre::pINT64, 2>;
-                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
-                    if (!img_t)
-                    {
-                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                    }
-                    FillImageFromOIIOScalar(*in, *img_t);
-                }
-                break;
-                case CompoundType::CompoundType_3Planes: {
-                    using ImageType_t = poutre::DenseImage<compound_pixel<pINT64, 3>, 2>;
-                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
-                    if (!img_t)
-                    {
-                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                    }
-                    FillImageFromOIIOCompound3(*in, *img_t);
-                }
-                break;
-                case CompoundType::CompoundType_4Planes: {
-                    using ImageType_t = poutre::DenseImage<compound_pixel<pINT64, 4>, 2>;
-                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
-                    if (!img_t)
-                    {
-                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                    }
-                    FillImageFromOIIOCompound4(*in, *img_t);
-                }
-                break;
-                default:
-                    std::ostringstream errorstream;
-                    errorstream << " load_image(): Error reading image '";
-                    errorstream << image_path;
-                    errorstream << " unsupported number of channels ";
-                    errorstream << spec.nchannels;
-                    errorstream << " see desc \n" << spec.to_xml();
-                    POUTRE_RUNTIME_ERROR(errorstream.str());
-                };
-            }
-            break;
-            case PType::PType_D64: {
-                switch (ctype)
-                {
-                case CompoundType::CompoundType_Scalar: {
-                    using ImageType_t = poutre::DenseImage<poutre::pDOUBLE, 2>;
-                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
-                    if (!img_t)
-                    {
-                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                    }
-                    FillImageFromOIIOScalar(*in, *img_t);
-                }
-                break;
-                case CompoundType::CompoundType_3Planes: {
-                    using ImageType_t = poutre::DenseImage<compound_pixel<pDOUBLE, 3>, 2>;
-                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
-                    if (!img_t)
-                    {
-                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                    }
-                    FillImageFromOIIOCompound3(*in, *img_t);
-                }
-                break;
-                case CompoundType::CompoundType_4Planes: {
-                    using ImageType_t = poutre::DenseImage<compound_pixel<pDOUBLE, 4>, 2>;
-                    ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
-                    if (!img_t)
-                    {
-                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                    }
-                    FillImageFromOIIOCompound4(*in, *img_t);
-                }
-                break;
-                default:
-                    std::ostringstream errorstream;
-                    errorstream << " load_image(): Error reading image '";
-                    errorstream << image_path;
-                    errorstream << " unsupported number of channels ";
-                    errorstream << spec.nchannels;
-                    errorstream << " see desc \n" << spec.to_xml();
-                    POUTRE_RUNTIME_ERROR(errorstream.str());
-                };
-            }
-            break;
-
-            default:
-                std::ostringstream errorstream;
-                errorstream << " load_image(): Error reading image '";
-                errorstream << image_path;
-                errorstream << " unsupported type ";
-                errorstream << spec.format.basetype;
-                errorstream << " see desc \n" << spec.to_xml();
-                POUTRE_RUNTIME_ERROR(errorstream.str());
-            };
-            // now fill it
             in->close();
-
-            return iimage;
         }
+
         /**
-         * @brief Way to pass options to
+         * @brief Way to pass options to @c StoreWithOIIO
          *
          */
         struct StoreWithOIIOOptions
@@ -486,33 +327,369 @@ namespace poutre
         };
 
         /**
+         * @brief Read 2D Image from path powered by OpenImageIO
+         *
+         * @param image_path
+         * @return std::unique_ptr<IInterface> fresh image instance
+         */
+        IO_API std::unique_ptr<IInterface> LoadFromOIIO(const std::string &image_path);
+
+        /**
+         * @brief  Helper function which copy contant of DenseImage into OIIO object assuming scalar type
+         *
+         * @tparam T DenseImage pType
+         * @param im Image to copy into OIIO object
+         * @param output preconstructed OIIO object
+         * @warning Unsafe method use @c ImageWriter for safety check
+         */
+        template <typename T> void StoreWithOIIOScalar(const DenseImage<T, 2> &im, OIIO::ImageOutput &out)
+        {
+            const OIIO::ImageSpec &spec = out.spec();
+            POUTRE_CHECK(spec.nchannels == 1, "Wrong number of channels");
+            std::vector<T> buffer(spec.width * spec.height);
+
+            auto ptr_img = im.data();
+            auto ptr_buff = buffer.data();
+            const auto &padding = im.padding();
+            const auto x_pad = padding[0];
+            // const auto y_pad = padding[1];
+
+            for (size_t y = 0; y < (size_t)spec.height; ++y)
+            {
+                memcpy(ptr_buff, ptr_img, (size_t)spec.width);
+                ptr_buff += (size_t)spec.width;
+                ptr_img += (size_t)spec.width + x_pad;
+            }
+            // stolen from https://github.com/xtensor-stack/xtensor-io/blob/master/include/xtensor-io/ximage.hpp
+            if (out.spec().format != OIIO::BaseTypeFromC<T>::value)
+            {
+                // OpenImageIO changed the target type because the file format doesn't support value_type.
+                // It will do automatic conversion, but the data should be in the range 0...1
+                // for good results.
+
+                //! TODO! make measurement module
+                //! TODO! vectorize
+                const auto iters = std::minmax_element(buffer.cbegin(), buffer.cend());
+                const pDOUBLE min = (iters.first != buffer.cend() ? *iters.first : TypeTraits<pDOUBLE>::sup());
+                const pDOUBLE max = (iters.second != buffer.cend() ? *iters.second : TypeTraits<pDOUBLE>::inf());
+
+                if (max != min)
+                {
+                    std::vector<pDOUBLE> normalized(buffer.size());
+                    for (size_t i = 0; i < buffer.size(); ++i)
+                        normalized[i] = (pDOUBLE(1.0) / (max - min)) * (buffer[i] - min);
+                    out.write_image(OIIO::BaseTypeFromC<pDOUBLE>::value, &normalized[0]);
+                }
+                else
+                {
+                    out.write_image(OIIO::BaseTypeFromC<T>::value, &buffer[0]);
+                }
+            }
+            else
+            {
+                out.write_image(OIIO::BaseTypeFromC<T>::value, &buffer[0]);
+            }
+            out.close();
+        }
+
+        /**
+         * @brief  Helper function which copy contant of DenseImage on disk
+         *
+         * @tparam T DenseImage pType
+         * @param im Image to serialize
+         * @param path path where image is serialized
+         * @warning Unsafe method use @c ImageWriter for safety check
+         */
+        template <typename T>
+        void StoreWithOIIOScalar(const DenseImage<T, 2> &im, const std::string &path,
+                                 StoreWithOIIOOptions const &options)
+        {
+            bf::path localPath(path);
+            bf::path dir = localPath.parent_path();
+            if (!(bf::exists(dir)))
+            {
+                POUTRE_RUNTIME_ERROR(boost::format("StoreWithOIIOScalar: provided path %s doesn't exists") % dir);
+            }
+            const auto shape = im.shape();
+            POUTRE_CHECK(shape.size() == 2, "StoreWithOIIOScalar(): Image must have 2 dimensions");
+
+            auto out(OIIO::ImageOutput::create(path));
+            if (!out)
+            {
+                std::ostringstream errorstream;
+                errorstream << " StoreWithOIIOScalar(): Error opening file '";
+                errorstream << path;
+                errorstream << "\nGet last error:\n";
+                errorstream << OIIO::geterror();
+                POUTRE_RUNTIME_ERROR(errorstream.str());
+            }
+            OIIO::ImageSpec spec = options.spec;
+
+            spec.width = static_cast<int>(shape[1]);
+            spec.height = static_cast<int>(shape[0]);
+            spec.nchannels = 1;
+            spec.format = OIIO::BaseTypeFromC<T>::value;
+
+            out->open(path, spec);
+
+            StoreWithOIIOScalar(im, *out);
+        }
+
+        /**
+         * @brief  Helper function which copy contant of DenseImage into OIIO object assuming RGB like color space
+         *
+         * @tparam T DenseImage pType
+         * @param im Image to copy into OIIO object
+         * @param output preconstructed OIIO object
+         * @warning Unsafe method use @c ImageWriter for safety check
+         */
+        template <typename T>
+        void StoreWithOIIOCompound3(const DenseImage<compound_pixel<T, 3>, 2> &im, OIIO::ImageOutput &out)
+        {
+            const OIIO::ImageSpec &spec = out.spec();
+            POUTRE_CHECK(spec.nchannels == 3, "StoreWithOIIOCompound3(): Nb of channels must be 3");
+            std::vector<T> buffer(spec.width * spec.height * spec.nchannels);
+            const auto ptr_buffer = buffer.data();
+            auto ptr_img = im.data();
+
+            pDOUBLE min_0 = TypeTraits<pDOUBLE>::sup(), min_1 = TypeTraits<pDOUBLE>::sup(),
+                    min_2 = TypeTraits<pDOUBLE>::sup();
+            pDOUBLE max_0 = TypeTraits<pDOUBLE>::inf(), max_1 = TypeTraits<pDOUBLE>::inf(),
+                    max_2 = TypeTraits<pDOUBLE>::inf();
+
+            for (size_t i = 0; i < buffer.size(); i += 3)
+            {
+                ptr_buffer[i] = (*ptr_img)[0];
+                min_0 = std::min(min_0, (pDOUBLE)ptr_buffer[i]);
+                max_0 = std::max(max_0, (pDOUBLE)ptr_buffer[i]);
+
+                ptr_buffer[i + 1] = (*ptr_img)[1];
+                min_1 = std::min(min_1, (pDOUBLE)ptr_buffer[i + 1]);
+                max_1 = std::max(max_1, (pDOUBLE)ptr_buffer[i + 1]);
+
+                ptr_buffer[i + 2] = (*ptr_img)[2];
+                min_2 = std::min(min_2, (pDOUBLE)ptr_buffer[i + 2]);
+                max_2 = std::max(max_2, (pDOUBLE)ptr_buffer[i + 2]);
+
+                ptr_img++;
+            }
+
+            // stolen from https://github.com/xtensor-stack/xtensor-io/blob/master/include/xtensor-io/ximage.hpp
+            if (out.spec().format != OIIO::BaseTypeFromC<T>::value)
+            {
+                // OpenImageIO changed the target type because the file format doesn't support value_type.
+                // It will do automatic conversion, but the data should be in the range 0...1
+                // for good results.
+
+                //! TODO! make measurement module
+                //! TODO! vectorize
+
+                if (max_0 != max_0 && max_1 != min_1 && max_2 != min_2)
+                {
+                    std::vector<pDOUBLE> normalized(buffer.size());
+                    for (size_t i = 0; i < buffer.size(); i += 3)
+                    {
+                        normalized[i] = (pDOUBLE(1.0) / (max_0 - min_0)) * (buffer[i] - min_0);
+                        normalized[i + 1] = (pDOUBLE(1.0) / (max_1 - min_1)) * (buffer[i + 1] - min_1);
+                        normalized[i + 2] = (pDOUBLE(1.0) / (max_2 - min_2)) * (buffer[i + 2] - min_2);
+                    }
+                    out.write_image(OIIO::BaseTypeFromC<pDOUBLE>::value, &normalized[0]);
+                }
+                else
+                {
+                    out.write_image(OIIO::BaseTypeFromC<T>::value, &buffer[0]);
+                }
+            }
+            else
+            {
+                out.write_image(OIIO::BaseTypeFromC<T>::value, &buffer[0]);
+            }
+            out.close();
+        }
+
+        /**
+         * @brief  Helper function which copy contant of DenseImage on disk assuming RGB like color space
+         *
+         * @tparam T DenseImage pType
+         * @param im Image to serialize
+         * @param path path where image is serialized
+         * @warning Unsafe method use @c ImageWriter for safety check
+         */
+        template <typename T>
+        void StoreWithOIIOCompound3(const DenseImage<compound_pixel<T, 3>, 2> &im, const std::string &path,
+                                    StoreWithOIIOOptions const &options)
+        {
+            bf::path localPath(path);
+            bf::path dir = localPath.parent_path();
+            if (!(bf::exists(dir)))
+            {
+                POUTRE_RUNTIME_ERROR(boost::format("StoreWithOIIOCompound3: provided path %s doesn't exists") % dir);
+            }
+            const auto shape = im.shape();
+            POUTRE_CHECK(shape.size() == 2, "StoreWithOIIOCompound3(): Image must have 2 dimensions");
+
+            auto out(OIIO::ImageOutput::create(path));
+            if (!out)
+            {
+                std::ostringstream errorstream;
+                errorstream << " StoreWithOIIOCompound3(): Error opening file '";
+                errorstream << path;
+                errorstream << "\nGet last error:\n";
+                errorstream << OIIO::geterror();
+                POUTRE_RUNTIME_ERROR(errorstream.str());
+            }
+            OIIO::ImageSpec spec = options.spec;
+
+            spec.width = static_cast<int>(shape[1]);
+            spec.height = static_cast<int>(shape[0]);
+            spec.nchannels = 3;
+            spec.format = OIIO::BaseTypeFromC<T>::value;
+
+            out->open(path, spec);
+
+            StoreWithOIIOCompound3(im, *out);
+        }
+
+        /**
+         * @brief  Helper function which copy contant of DenseImage into OIIO object assuming RGBA like color space
+         *
+         * @tparam T DenseImage pType
+         * @param im Image to copy into OIIO object
+         * @param output preconstructed OIIO object
+         * @warning Unsafe method use @c ImageWriter for safety check
+         */
+        template <typename T>
+        void StoreWithOIIOCompound4(const DenseImage<compound_pixel<T, 4>, 2> &im, OIIO::ImageOutput &out)
+        {
+            const OIIO::ImageSpec &spec = out.spec();
+            POUTRE_CHECK(spec.nchannels == 4, "StoreWithOIIOCompound4(): Nb of channels must be 4");
+            std::vector<T> buffer(spec.width * spec.height * spec.nchannels);
+            const auto ptr_buffer = buffer.data();
+            auto ptr_img = im.data();
+
+            pDOUBLE min_0 = TypeTraits<pDOUBLE>::sup(), min_1 = TypeTraits<pDOUBLE>::sup(),
+                    min_2 = TypeTraits<pDOUBLE>::sup(), min_3 = TypeTraits<pDOUBLE>::sup();
+            pDOUBLE max_0 = TypeTraits<pDOUBLE>::inf(), max_1 = TypeTraits<pDOUBLE>::inf(),
+                    max_2 = TypeTraits<pDOUBLE>::inf(), max_3 = TypeTraits<pDOUBLE>::inf();
+
+            for (size_t i = 0; i < buffer.size(); i += 4)
+            {
+                ptr_buffer[i] = (*ptr_img)[0];
+                min_0 = std::min(min_0, (pDOUBLE)ptr_buffer[i]);
+                max_0 = std::max(max_0, (pDOUBLE)ptr_buffer[i]);
+
+                ptr_buffer[i + 1] = (*ptr_img)[1];
+                min_1 = std::min(min_1, (pDOUBLE)ptr_buffer[i + 1]);
+                max_1 = std::max(max_1, (pDOUBLE)ptr_buffer[i + 1]);
+
+                ptr_buffer[i + 2] = (*ptr_img)[2];
+                min_2 = std::min(min_2, (pDOUBLE)ptr_buffer[i + 2]);
+                max_2 = std::max(max_2, (pDOUBLE)ptr_buffer[i + 2]);
+
+                ptr_buffer[i + 3] = (*ptr_img)[3];
+                min_3 = std::min(min_3, (pDOUBLE)ptr_buffer[i + 2]);
+                max_3 = std::max(max_3, (pDOUBLE)ptr_buffer[i + 2]);
+
+                ptr_img++;
+            }
+
+            // stolen from https://github.com/xtensor-stack/xtensor-io/blob/master/include/xtensor-io/ximage.hpp
+            if (out.spec().format != OIIO::BaseTypeFromC<T>::value)
+            {
+                // OpenImageIO changed the target type because the file format doesn't support value_type.
+                // It will do automatic conversion, but the data should be in the range 0...1
+                // for good results.
+
+                //! TODO! make measurement module
+                //! TODO! vectorize
+
+                if (max_0 != max_0 && max_1 != min_1 && max_2 != min_2 && max_3 != min_3)
+                {
+                    std::vector<pDOUBLE> normalized(buffer.size());
+                    for (size_t i = 0; i < buffer.size(); i += 3)
+                    {
+                        normalized[i] = (pDOUBLE(1.0) / (max_0 - min_0)) * (buffer[i] - min_0);
+                        normalized[i + 1] = (pDOUBLE(1.0) / (max_1 - min_1)) * (buffer[i + 1] - min_1);
+                        normalized[i + 2] = (pDOUBLE(1.0) / (max_2 - min_2)) * (buffer[i + 2] - min_2);
+                        normalized[i + 3] = (pDOUBLE(1.0) / (max_3 - min_3)) * (buffer[i + 3] - min_3);
+                    }
+                    out.write_image(OIIO::BaseTypeFromC<pDOUBLE>::value, &normalized[0]);
+                }
+                else
+                {
+                    out.write_image(OIIO::BaseTypeFromC<T>::value, &buffer[0]);
+                }
+            }
+            else
+            {
+                out.write_image(OIIO::BaseTypeFromC<T>::value, &buffer[0]);
+            }
+            out.close();
+        }
+
+        /**
+         * @brief  Helper function which copy contant of DenseImage on disk assuming RGBA like color space
+         *
+         * @tparam T DenseImage pType
+         * @param im Image to serialize
+         * @param path path where image is serialized
+         * @warning Unsafe method use @c ImageWriter for safety check
+         */
+        template <typename T>
+        void StoreWithOIIOCompound4(const DenseImage<compound_pixel<T, 4>, 2> &im, const std::string &path,
+                                    StoreWithOIIOOptions const &options)
+        {
+            bf::path localPath(path);
+            bf::path dir = localPath.parent_path();
+            if (!(bf::exists(dir)))
+            {
+                std::ostringstream errorstream;
+                errorstream << " StoreWithOIIOCompound4(): Error opening file '";
+                errorstream << path;
+                POUTRE_RUNTIME_ERROR(errorstream.str());
+            }
+            const auto shape = im.shape();
+            POUTRE_CHECK(shape.size() == 2, "StoreWithOIIOCompound3(): Image must have 2 dimensions");
+
+            auto out(OIIO::ImageOutput::create(path));
+            if (!out)
+            {
+
+                std::ostringstream errorstream;
+                errorstream << " StoreWithOIIOCompound3(): Error opening file '";
+                errorstream << path;
+                errorstream << "\nGet last error:\n";
+                errorstream << OIIO::geterror();
+                POUTRE_RUNTIME_ERROR(errorstream.str());
+            }
+            OIIO::ImageSpec spec = options.spec;
+
+            spec.width = static_cast<int>(shape[1]);
+            spec.height = static_cast<int>(shape[0]);
+            spec.nchannels = 4;
+            spec.format = OIIO::BaseTypeFromC<T>::value;
+
+            out->open(path, spec);
+
+            StoreWithOIIOCompound4(im, *out);
+        }
+
+        /**
          * Save image to disk.
          * The desired image format is deduced from ``filename``.
          * Supported formats are those supported by OpenImageIO.
          * Most common formats are supported (jpg, png, gif, bmp, tiff).
          *
          * @param path The path to the desired file
-         * @param image Image Interface
+         * @param iimage Image Interface
          * @param options Pass a dump_image_options object to fine-tune image export
          */
-        void StoreWithOIIO(const std::string &path, const IInterface &image,
-                           StoreWithOIIOOptions const &options = StoreWithOIIOOptions())
-        {
-
-            bf::path localPath(path);
-            boost::filesystem::path dir = localPath.parent_path();
-            if (!(bf::exists(dir)))
-            {
-                POUTRE_RUNTIME_ERROR(boost::format("StoreFromOIIO: provided path %s doesn't exists") % dir);
-            }
-            if (image.GetNumDims() > 2)
-                POUTRE_RUNTIME_ERROR(boost::format("For nd images with n>2 use StoreWithHDF5") % dir);
-        }
+        IO_API void StoreWithOIIO(const std::string &path, const IInterface &iimage,
+                                  StoreWithOIIOOptions const &options = StoreWithOIIOOptions());
     } // namespace details
 
     //! @} doxygroup: image_processing_io_group_details
-    //! @} doxygroup: image_processing_io_group
 
 } // namespace poutre
 
-#endif /* POUTREOIIO_HPP */
+#endif // POUTREOIIO_HPP

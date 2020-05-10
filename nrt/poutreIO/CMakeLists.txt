@@ -5,9 +5,17 @@ set(PoutreIOTestSRC
     ${PoutreIOTestSubdirectory}/main.hpp
     ${PoutreIOTestSubdirectory}/main.cpp
     ${PoutreIOTestSubdirectory}/iostring.cpp
-	${PoutreIOTestSubdirectory}/png.cpp
-	${PoutreIOTestSubdirectory}/buffer.cpp
+    ${PoutreIOTestSubdirectory}/oiio.cpp
+    ${PoutreIOTestSubdirectory}/buffer.cpp
 )
+
+INCLUDE_DIRECTORIES(BEFORE SYSTEM
+    ${OPENEXR_INCLUDE_DIR} 
+	${OIIO_INCLUDE_DIR}
+    )
+
+set(POUTREIO_NRT_DATAS "\"${CMAKE_CURRENT_SOURCE_DIR}/Datas\"")
+add_definitions(-DPOUTREIO_NRT_DATAS=${POUTREIO_NRT_DATAS})
 
 add_executable(PoutreIOTests ${PoutreIOTestSRC})
 set_target_properties(PoutreIOTests PROPERTIES 
@@ -20,7 +28,12 @@ target_link_libraries(PoutreIOTests
     PUBLIC ${OpenImageIO_LIBRARIES}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
-	
+
+#target_include_directories(PoutreIOTests
+#    ${OPENEXR_INCLUDE_DIR} 
+#	${OIIO_INCLUDE_DIR}
+#)	
+
 add_test(NAME PoutreIOTests-1 
          COMMAND PoutreIOTests)
 set_property(TARGET PoutreIOTests PROPERTY FOLDER "UnitTests/")

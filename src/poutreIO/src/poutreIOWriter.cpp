@@ -19,12 +19,12 @@
 #include <memory>
 #include <string>
 
+#include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
+#include <poutreIO/include/poutreOIIO.hpp>
 #include <poutreIO/poutreIO.hpp>
 #include <poutreIO/poutreIOWriter.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
-
-#include <boost/algorithm/string.hpp>
-#include <boost/filesystem.hpp>
 
 namespace poutre
 {
@@ -52,7 +52,7 @@ namespace poutre
         auto extension = bf::extension(localPath);
         boost::algorithm::to_lower(extension);
 
-        POUTRE_RUNTIME_ERROR((boost::format("ImageWriter::Write unsupported extension %s") % extension).str());
+        details::StoreWithOIIO(localPath.string(), i_img);
     }
 
 } // namespace poutre

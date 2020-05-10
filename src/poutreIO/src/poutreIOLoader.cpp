@@ -19,12 +19,12 @@
 #include <memory>
 #include <string>
 
+#include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
+#include <poutreIO/include/poutreOIIO.hpp>
 #include <poutreIO/poutreIO.hpp>
 #include <poutreIO/poutreIOLoader.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
-
-#include <boost/algorithm/string.hpp>
-#include <boost/filesystem.hpp>
 
 namespace poutre
 {
@@ -51,13 +51,13 @@ namespace poutre
         bf::path localPath(m_imgPath);
         if (!bf::exists(localPath))
         {
-            POUTRE_RUNTIME_ERROR((boost::format("IOSavePng:: path don't exist %s") % m_imgPath).str());
+            POUTRE_RUNTIME_ERROR((boost::format("ImageLoader:: path don't exist %s") % m_imgPath).str());
         }
-
+        // switch on extension
         auto extension = bf::extension(localPath);
         boost::algorithm::to_lower(extension);
 
-        return std::unique_ptr<IInterface>(); // shut up warning
+        return details::LoadFromOIIO(localPath.string());
     }
 
 } // namespace poutre
