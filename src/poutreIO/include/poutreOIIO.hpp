@@ -85,8 +85,8 @@ namespace poutre
             auto ptr_img = im.data();
             auto ptr_buff = buffer.data();
             const auto &padding = im.padding();
-            const auto x_pad = padding[0];
-            // const auto y_pad = padding[1];
+            const auto x_pad = padding[1];
+            // const auto y_pad = padding[0];
 
             for (size_t y = 0; y < (size_t)spec.height; ++y)
             {
@@ -121,7 +121,7 @@ namespace poutre
                 errorstream << "\n" << OIIO::geterror();
                 POUTRE_RUNTIME_ERROR(errorstream.str());
             }
-            const OIIO::ImageSpec &spec = input.spec();
+            const OIIO::ImageSpec &spec = in->spec();
             if (spec.nchannels != 1)
             {
                 POUTRE_RUNTIME_ERROR(
@@ -196,7 +196,7 @@ namespace poutre
                 errorstream << "\n" << OIIO::geterror();
                 POUTRE_RUNTIME_ERROR(errorstream.str());
             }
-            const OIIO::ImageSpec &spec = input.spec();
+            const OIIO::ImageSpec &spec = in->spec();
             if (spec.nchannels != 3)
             {
                 POUTRE_RUNTIME_ERROR(
@@ -273,7 +273,7 @@ namespace poutre
                 errorstream << "\n" << OIIO::geterror();
                 POUTRE_RUNTIME_ERROR(errorstream.str());
             }
-            const OIIO::ImageSpec &spec = input.spec();
+            const OIIO::ImageSpec &spec = in->spec();
             if (spec.nchannels != 4)
             {
                 POUTRE_RUNTIME_ERROR(
@@ -351,8 +351,8 @@ namespace poutre
             auto ptr_img = im.data();
             auto ptr_buff = buffer.data();
             const auto &padding = im.padding();
-            const auto x_pad = padding[0];
-            // const auto y_pad = padding[1];
+            const auto x_pad = padding[1];
+            // const auto y_pad = padding[0];
 
             for (size_t y = 0; y < (size_t)spec.height; ++y)
             {

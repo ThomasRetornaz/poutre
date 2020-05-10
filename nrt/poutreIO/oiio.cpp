@@ -36,6 +36,15 @@ BOOST_AUTO_TEST_SUITE(oiio)
 
 BOOST_AUTO_TEST_CASE(iopngloadUINT8)
 {
+    std::string expected = "Dense Scalar GUINT8 2 2 3 \
+0 76 149 \
+28 176 255\
+";
+    bf::path image_path = bf::path(POUTREIO_NRT_DATAS) / "test_GRAY256.png";
+    auto loader = poutre::ImageLoader().SetPath(image_path.string());
+    auto img = loader.Load();
+    auto imgstr = poutre::ImageToString(*img);
+    BOOST_CHECK_EQUAL(imgstr, expected);
 }
 BOOST_AUTO_TEST_CASE(iopngloadRGB)
 {
