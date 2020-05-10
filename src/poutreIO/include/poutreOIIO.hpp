@@ -411,7 +411,6 @@ namespace poutre
                 POUTRE_RUNTIME_ERROR(boost::format("StoreWithOIIOScalar: provided path %s doesn't exists") % dir);
             }
             const auto shape = im.shape();
-            POUTRE_CHECK(shape.size() == 2, "StoreWithOIIOScalar(): Image must have 2 dimensions");
 
             auto out(OIIO::ImageOutput::create(path));
             if (!out)
@@ -526,7 +525,6 @@ namespace poutre
                 POUTRE_RUNTIME_ERROR(boost::format("StoreWithOIIOCompound3: provided path %s doesn't exists") % dir);
             }
             const auto shape = im.shape();
-            POUTRE_CHECK(shape.size() == 2, "StoreWithOIIOCompound3(): Image must have 2 dimensions");
 
             auto out(OIIO::ImageOutput::create(path));
             if (!out)
@@ -649,7 +647,6 @@ namespace poutre
                 POUTRE_RUNTIME_ERROR(errorstream.str());
             }
             const auto shape = im.shape();
-            POUTRE_CHECK(shape.size() == 2, "StoreWithOIIOCompound3(): Image must have 2 dimensions");
 
             auto out(OIIO::ImageOutput::create(path));
             if (!out)
