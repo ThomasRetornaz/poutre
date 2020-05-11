@@ -478,7 +478,7 @@ list(GET VERSION_LIST 0 PYTHONLIBS_VERSION_MAJOR)
 list(GET VERSION_LIST 1 PYTHONLIBS_VERSION_MINOR)
 
 if(ENABLE_NUMPY)
-  find_package (Python COMPONENTS Interpreter NumPy)
+  find_package (Python COMPONENTS NumPy)
   
   if(NOT Python_NumPy_FOUND)
     message(FATAL_ERROR "[POUTREIO | NUMPY] the following error occured: numpy not found")

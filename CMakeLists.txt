@@ -34,7 +34,7 @@ set(POUTRE_VERSION ${POUTRE_MAJOR}.${POUTRE_MINOR}.${POUTRE_SUBMINOR})
 
 option(BUILD_SHARED_LIBS "Build Shared Libraries" ON)
 
-set(ENABLE_NUMPY TRUE CACHE BOOL "Enable NumPy support for IOPython (should be installed in your python distribution")
+set(ENABLE_NUMPY FALSE CACHE BOOL "Enable NumPy support for IOPython (should be installed in your python distribution")
 
 set(POUTRE_SOURCE_DIR         ${CMAKE_CURRENT_SOURCE_DIR}   CACHE PATH "Base of the input directory")
 set(POUTRE_ROOT_DIR         ${POUTRE_SOURCE_DIR}   CACHE PATH "Base of the input directory")
