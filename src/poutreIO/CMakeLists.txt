@@ -52,8 +52,8 @@ target_link_libraries(PoutreIO
   PUBLIC ${Boost_LOG_LIBRARY}
   PUBLIC ${Boost_LOG_SETUP_LIBRARY}
   PRIVATE jsoncpp_lib
-  PRIVATE ${OpenImageIO_LIBRARIES}
-  PRIVATE ${HDF5_LIBRARIES}
+  PUBLIC ${OpenImageIO_LIBRARIES}
+  PUBLIC ${HDF5_LIBRARIES}
   INTERFACE xsimd 
   
   PUBLIC   PoutreBase 
