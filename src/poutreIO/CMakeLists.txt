@@ -5,13 +5,11 @@ find_package(OpenCV QUIET) #todo add converter to/from opencv
 
 INCLUDE_DIRECTORIES(BEFORE SYSTEM
   ${OPENEXR_INCLUDE_DIR} 
-	${OIIO_INCLUDE_DIR}
-	#${PNG_INCLUDE_DIR}
-	#${JPEG_INCLUDE_DIR}
-	#${TIFF_INCLUDE_DIR}
-	#${HDF5_INCLUDE_DIR}
-    # ${CMAKE_CURRENT_BINARY_DIR}/include #for module with ./configure
-    # ${CMAKE_BINARY_DIR}/include
+  ${OIIO_INCLUDE_DIR}
+  ${HIGH_FIVE_INCLUDE_DIR}
+	${HDF5_INCLUDE_DIRS}
+  ${CMAKE_BINARY_DIR}/include
+  ${CMAKE_BINARY_DIR}
 	)
 
 set(PoutreIOSRC_DETAILS
@@ -54,7 +52,8 @@ target_link_libraries(PoutreIO
   PUBLIC ${Boost_LOG_LIBRARY}
   PUBLIC ${Boost_LOG_SETUP_LIBRARY}
   PRIVATE jsoncpp_lib
-  PUBLIC ${OpenImageIO_LIBRARIES}
+  PRIVATE ${OpenImageIO_LIBRARIES}
+  PRIVATE ${HDF5_LIBRARIES}
   INTERFACE xsimd 
   
   PUBLIC   PoutreBase 
