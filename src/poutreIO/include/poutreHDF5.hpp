@@ -222,22 +222,6 @@ namespace poutre
             {
                 POUTRE_RUNTIME_ERROR("Dynamic cast fail");
             }
-            if (*im_t.GetCType() == CompoundType::CompoundType_Scalar) // take into account padding
-            {
-                auto bd = im_t->shape();
-                std::vector<typename Image::value_type> buffer(bd.size());
-                for (size_t = i = 0, ; i < buffer.size(); ++i)
-                {
-                }
-                herr_t status = H5Dwrite(data_id, data_type, H5S_ALL, H5S_ALL, H5P_DEFAULT,
-                                         reinterpret_cast<const void *>(&buffer.data()));
-                if (!status)
-                {
-                    POUTRE_RUNTIME_ERROR((boost::format("StoreWithHDF5_helper: H5Dwrite fail")).str());
-                }
-                return;
-            }
-
             herr_t status = H5Dwrite(data_id, data_type, H5S_ALL, H5S_ALL, H5P_DEFAULT,
                                      reinterpret_cast<const void *>(&im_t->data()));
             if (!status)

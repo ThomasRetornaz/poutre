@@ -35,10 +35,6 @@
 #include <poutreBase/poutreDenseIterator.hpp>
 #endif
 
-#ifndef POUTRE_DOMAIN_ITERATOR_HPP__
-#include <poutreBase/poutreDomainIterator.hpp>
-#endif
-
 #ifndef POUTRE_IMAGEPROCESSING_INTERFACE_HPP__
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
 #endif
@@ -110,20 +106,18 @@ namespace poutre
         pointer m_data;
         coordinate_type m_coordinnates;
         index_type m_strides;
-        coordinate_type m_padding;
         allocator_type m_allocator;
-        size_type m_numelemwithpaddingifany;
+        size_type m_numelement;
 
       public:
         using self_type = DenseTensor<valuetype, NumDims, allocator_type_t>;
 
       protected:
-        DenseTensor()
-            : m_data(nullptr), m_coordinnates(), m_strides(), m_padding(), m_allocator(), m_numelemwithpaddingifany(0)
+        DenseTensor() : m_data(nullptr), m_coordinnates(), m_strides(), m_allocator(), m_numelement(0)
         {
         }
         DenseTensor(const std::vector<size_t> &dims)
-            : m_data(nullptr), m_coordinnates(), m_strides(), m_padding(), m_allocator(), m_numelemwithpaddingifany(0)
+            : m_data(nullptr), m_coordinnates(), m_strides(), m_allocator(), m_numelement(0)
         {
             if (dims.size() != m_numdims)
                 POUTRE_RUNTIME_ERROR("Invalid input initializer regarding NumDims of "
@@ -132,32 +126,27 @@ namespace poutre
             {
                 m_coordinnates[i] = dims[i];
             }
-            for (size_t i = 0; i < m_numdims; ++i)
-            {
-                m_padding[i] = 0;
-            }
-            // compute full array size with include possible padding for each first
-            // stride
+            // compute full array size
             if (!m_coordinnates.empty())
             {
-                m_numelemwithpaddingifany = m_coordinnates[0] + m_padding[0];
+                m_numelement = m_coordinnates[0];
                 for (size_t i = 1; i < (size_t)m_numdims; i++)
                 {
-                    m_numelemwithpaddingifany *= (m_coordinnates[i] + m_padding[i]);
+                    m_numelement *= (m_coordinnates[i]);
                 }
-                m_data = m_allocator.allocate(m_numelemwithpaddingifany);
+                m_data = m_allocator.allocate(m_numelement);
 
                 // fill stride
                 m_strides[m_numdims - 1] = 1;
                 for (ptrdiff_t dim = m_numdims - 2; dim >= 0; --dim)
                 {
-                    m_strides[dim] = m_strides[dim + 1] * (bound()[dim + 1] + m_padding[dim + 1]);
+                    m_strides[dim] = m_strides[dim + 1] * (bound()[dim + 1]);
                 }
             }
         }
 
         DenseTensor(const std::initializer_list<size_t> &dims)
-            : m_data(nullptr), m_coordinnates(), m_strides(), m_padding(), m_allocator(), m_numelemwithpaddingifany(0)
+            : m_data(nullptr), m_coordinnates(), m_strides(), m_allocator(), m_numelement(0)
         {
             if (dims.size() != m_numdims)
                 POUTRE_RUNTIME_ERROR("Invalid input initializer regarding NumDims of "
@@ -168,35 +157,20 @@ namespace poutre
             {
                 m_coordinnates[i] = *it;
             }
-            for (size_t i = 0; i < m_numdims; ++i)
-            {
-                m_padding[i] = 0;
-            }
-            // compute full array size with include possible padding for each first
-            // stride
+            // compute full array size
             if (!m_coordinnates.empty())
+                m_numelement = m_coordinnates[0];
+            for (size_t i = 1; i < (size_t)m_numdims; i++)
             {
-                // if (m_numdims == 2)
-                //  {
-                //  m_numelemwithpadding = ((m_size_list[0] + default_padding_size - 1) &
-                //  ~(default_padding_size - 1));
-                //  }
-                // else
-                //  {
-                //  }
-                m_numelemwithpaddingifany = m_coordinnates[0] + m_padding[0];
-                for (size_t i = 1; i < (size_t)m_numdims; i++)
-                {
-                    m_numelemwithpaddingifany *= (m_coordinnates[i] + m_padding[i]);
-                }
-                m_data = m_allocator.allocate(m_numelemwithpaddingifany);
+                m_numelement *= m_coordinnates[i];
+            }
+            m_data = m_allocator.allocate(m_numelement);
 
-                // fill stride
-                m_strides[m_numdims - 1] = 1;
-                for (ptrdiff_t dim = m_numdims - 2; dim >= 0; --dim)
-                {
-                    m_strides[dim] = m_strides[dim + 1] * (bound()[dim + 1] + m_padding[dim + 1]);
-                }
+            // fill stride
+            m_strides[m_numdims - 1] = 1;
+            for (ptrdiff_t dim = m_numdims - 2; dim >= 0; --dim)
+            {
+                m_strides[dim] = m_strides[dim + 1] * (bound()[dim + 1]);
             }
         }
 
@@ -204,7 +178,7 @@ namespace poutre
         ~DenseTensor() POUTRE_NOEXCEPT
         {
             if (m_data)
-                m_allocator.deallocate(m_data, m_numelemwithpaddingifany);
+                m_allocator.deallocate(m_data, m_numelement);
         }
 
         const coordinate_type bound() const POUTRE_NOEXCEPT
@@ -219,11 +193,6 @@ namespace poutre
         {
             return m_strides;
         }
-        const coordinate_type padding() const POUTRE_NOEXCEPT
-        {
-            return m_padding;
-        }
-
         std::size_t GetNumDims() const POUTRE_NOEXCEPT
         {
             return m_numdims;
@@ -234,7 +203,7 @@ namespace poutre
 
         const size_type size() const POUTRE_NOEXCEPT
         {
-            return m_numelemwithpaddingifany; // FIXME COULD BE != if padding present
+            return m_numelement;
         }
 
         const size_type max_size() const POUTRE_NOEXCEPT
@@ -251,28 +220,28 @@ namespace poutre
 
         reference operator[](size_type n) POUTRE_NOEXCEPT
         {
-            POUTRE_ASSERTCHECK(n < m_numelemwithpaddingifany, "Access out of bound");
+            POUTRE_ASSERTCHECK(n < m_numelement, "Access out of bound");
             POUTRE_ASSERTCHECK(n >= 0, "Access out of bound");
             return m_data[n];
         }
 
         const_reference operator[](size_type n) const POUTRE_NOEXCEPT
         {
-            POUTRE_ASSERTCHECK(n < m_numelemwithpaddingifany, "Access out of bound");
+            POUTRE_ASSERTCHECK(n < m_numelement, "Access out of bound");
             // POUTRE_ASSERTCHECK(n >= 0, "Access out of bound");
             return m_data[n];
         }
 
         reference at(size_type n)
         {
-            if (n >= m_numelemwithpaddingifany)
+            if (n >= m_numelement)
                 POUTRE_RUNTIME_ERROR("Access out of bound");
             return m_data[n];
         }
 
         const_reference at(size_type n) const
         {
-            if (n >= m_numelemwithpaddingifany)
+            if (n >= m_numelement)
                 POUTRE_RUNTIME_ERROR("Access out of bound");
             return m_data[n];
         }
@@ -289,12 +258,12 @@ namespace poutre
 
         reference back() POUTRE_NOEXCEPT
         {
-            return m_data[m_numelemwithpaddingifany - 1];
+            return m_data[m_numelement - 1];
         }
 
         const_reference back() const POUTRE_NOEXCEPT
         {
-            return m_data[m_numelemwithpaddingifany - 1];
+            return m_data[m_numelement - 1];
         }
 
         pointer data() POUTRE_NOEXCEPT
@@ -329,11 +298,10 @@ namespace poutre
             {
                 using std::swap;
                 swap(this->m_data, rhs.m_data); // nothrow
-                swap(this->m_numelemwithpaddingifany,
-                     rhs.m_numelemwithpaddingifany);            // notthrow
+                swap(this->m_numelement,
+                     rhs.m_numelement);                         // notthrow
                 swap(this->m_coordinnates, rhs.m_coordinnates); //?throw
                 swap(this->m_strides, rhs.m_strides);           //?throw
-                swap(this->m_padding, rhs.m_padding);           //?throw
                 swap(this->m_allocator, rhs.m_allocator);       //?throw
             }
         }
@@ -350,22 +318,22 @@ namespace poutre
 
         iterator end() POUTRE_NOEXCEPT
         {
-            return iterator(m_data + m_numelemwithpaddingifany, m_data);
+            return iterator(m_data + m_numelement, m_data);
         }
 
         const_iterator cend() const POUTRE_NOEXCEPT
         {
-            return const_iterator(m_data + m_numelemwithpaddingifany, m_data);
+            return const_iterator(m_data + m_numelement, m_data);
         }
 
         reverse_iterator rbegin() POUTRE_NOEXCEPT
         {
-            return (reverse_iterator(m_data + m_numelemwithpaddingifany - 1, m_data));
+            return (reverse_iterator(m_data + m_numelement - 1, m_data));
         }
 
         const_reverse_iterator crbegin() const POUTRE_NOEXCEPT
         {
-            return (const_reverse_iterator(m_data + m_numelemwithpaddingifany - 1, m_data));
+            return (const_reverse_iterator(m_data + m_numelement - 1, m_data));
         }
 
         reverse_iterator rend() POUTRE_NOEXCEPT
@@ -383,12 +351,11 @@ namespace poutre
         // protected copyctor used through clone
 
         DenseTensor(const self_type &rhs)
-            : m_data(nullptr), m_numelemwithpaddingifany(rhs.m_numelemwithpaddingifany),
-              m_coordinnates(rhs.m_coordinnates), m_strides(rhs.m_strides), m_padding(rhs.m_padding),
-              m_allocator(rhs.m_allocator)
+            : m_data(nullptr), m_numelement(rhs.m_numelement), m_coordinnates(rhs.m_coordinnates),
+              m_strides(rhs.m_strides), m_allocator(rhs.m_allocator)
         {
-            m_data = m_allocator.allocate(m_numelemwithpaddingifany);
-            std::copy(rhs.m_data, rhs.m_data + m_numelemwithpaddingifany, m_data);
+            m_data = m_allocator.allocate(m_numelement);
+            std::copy(rhs.m_data, rhs.m_data + m_numelement, m_data);
         }
 
       public:
@@ -397,18 +364,16 @@ namespace poutre
 
         // move constructor
 
-        DenseTensor(self_type &&rhs) noexcept
-            : m_data(nullptr), m_numelemwithpaddingifany(0), m_coordinnates(), m_allocator()
+        DenseTensor(self_type &&rhs) noexcept : m_data(nullptr), m_numelement(0), m_coordinnates(), m_allocator()
         {
             m_data = rhs.m_data;
-            m_numelemwithpaddingifany = rhs.m_numelemwithpaddingifany;
+            m_numelement = rhs.m_numelement;
             m_coordinnates = rhs.m_coordinnates;
             m_strides = rhs.m_strides;
-            m_padding = rhs.m_m_padding;
             m_allocator = rhs.m_allocator;
 
-            // relase
-            rhs.m_numelemwithpaddingifany = 0;
+            // release
+            rhs.m_numelement = 0;
             rhs.m_data = nullptr;
             /*m_coordinnates = {};*/
         }
@@ -421,23 +386,22 @@ namespace poutre
                               // http://scottmeyers.blogspot.fr/2014/06/the-drawbacks-of-implementing-move.html
             {
                 // release resource
-                m_allocator.deallocate(m_data, m_numelemwithpaddingifany);
+                m_allocator.deallocate(m_data, m_numelement);
                 // Copy the data pointer and its length from the source object.
                 m_data = rhs.m_data;
-                m_numelemwithpaddingifany = rhs.m_numelemwithpaddingifany;
+                m_numelement = rhs.m_numelement;
                 m_coordinnates = rhs.m_coordinnates;
                 m_strides = rhs.m_strides;
-                m_padding = rhs.m_m_padding;
                 m_allocator = rhs.m_allocator;
 
                 // release
-                rhs.m_numelemwithpaddingifany = 0;
+                rhs.m_numelement = 0;
                 rhs.m_data = nullptr;
                 /* m_coordinnates = {};*/
             }
             return *this;
         }
-    };
+    }; // namespace poutre
 
     template <class valuetype, std::ptrdiff_t NumDims = 2, class allocator_type_t = aligned_allocator<valuetype>>
     class DenseImage : public IInterface, public DenseTensor<valuetype, NumDims, allocator_type_t>
@@ -458,12 +422,11 @@ namespace poutre
         using const_reference = value_type const &;
         using difference_type = std::ptrdiff_t;
 
-        using iterator = pdomain_iterator<value_type, NumDims>;
-        using const_iterator = pdomain_iterator<const value_type, NumDims>;
+        using iterator = pdense_iterator<value_type>;
+        using const_iterator = pdense_iterator<const value_type>;
 
-        // using reverse_contiguous_iterator = pdense_reverse_iterator<value_type>;
-        // using const_reverse_contiguous_iterator =
-        //     pdense_reverse_iterator<const value_type>;
+        using reverse_iterator = pdense_reverse_iterator<value_type>;
+        using const_reverse_iterator = pdense_reverse_iterator<const value_type>;
 
         using index = offset;
         using size_type = std::size_t;
@@ -484,37 +447,21 @@ namespace poutre
             {
                 parent_template::m_coordinnates[i] = dims[i];
             }
-            for (size_t i = 0; i < parent_template::m_numdims; ++i)
-            {
-                parent_template::m_padding[i] = 0;
-            }
-
-            // ADD PADDING LEAST SIGNIFICANT DIM FOR ARITHMETIC TYPES
-            if (TypeTraits<valuetype>::alignment != 1)
-            {
-                parent_template::m_padding[parent_template::m_numdims - 1] = simd::t_ReachNextAlignedSize<valuetype>(
-                    parent_template::m_coordinnates[parent_template::m_numdims - 1]);
-            }
-            // compute full array size with include possible padding for each first
-            // stride
+            // compute full array size
             if (!parent_template::m_coordinnates.empty())
             {
-                parent_template::m_numelemwithpaddingifany =
-                    parent_template::m_coordinnates[0] + parent_template::m_padding[0];
+                parent_template::m_numelement = parent_template::m_coordinnates[0];
                 for (size_t i = 1; i < (size_t)parent_template::m_numdims; i++)
                 {
-                    parent_template::m_numelemwithpaddingifany *=
-                        (parent_template::m_coordinnates[i] + parent_template::m_padding[i]);
+                    parent_template::m_numelement *= (parent_template::m_coordinnates[i]);
                 }
-                parent_template::m_data =
-                    parent_template::m_allocator.allocate(parent_template::m_numelemwithpaddingifany);
+                parent_template::m_data = parent_template::m_allocator.allocate(parent_template::m_numelement);
 
                 // fill stride
                 parent_template::m_strides[parent_template::m_numdims - 1] = 1;
                 for (ptrdiff_t dim = parent_template::m_numdims - 2; dim >= 0; --dim)
                 {
-                    parent_template::m_strides[dim] =
-                        parent_template::m_strides[dim + 1] * (bound()[dim + 1] + parent_template::m_padding[dim + 1]);
+                    parent_template::m_strides[dim] = parent_template::m_strides[dim + 1] * (bound()[dim + 1]);
                 }
             }
         }
@@ -530,38 +477,20 @@ namespace poutre
             {
                 parent_template::m_coordinnates[i] = *it;
             }
-            for (size_t i = 0; i < parent_template::m_numdims; ++i)
-            {
-                parent_template::m_padding[i] = 0;
-            }
-
-            // ADD PADDING LEAST SIGNIFICANT DIM FOR ARITHMETIC TYPES
-            if (TypeTraits<valuetype>::alignment != 1)
-            {
-                parent_template::m_padding[parent_template::m_numdims - 1] = simd::t_ReachNextAlignedSize<valuetype>(
-                    parent_template::m_coordinnates[parent_template::m_numdims - 1]);
-            }
-
-            // compute full array size with include possible padding for each first
-            // stride
             if (!parent_template::m_coordinnates.empty())
             {
-                parent_template::m_numelemwithpaddingifany =
-                    parent_template::m_coordinnates[0] + parent_template::m_padding[0];
+                parent_template::m_numelement = parent_template::m_coordinnates[0];
                 for (size_t i = 1; i < (size_t)parent_template::m_numdims; i++)
                 {
-                    parent_template::m_numelemwithpaddingifany *=
-                        (parent_template::m_coordinnates[i] + parent_template::m_padding[i]);
+                    parent_template::m_numelement *= (parent_template::m_coordinnates[i]);
                 }
-                parent_template::m_data =
-                    parent_template::m_allocator.allocate(parent_template::m_numelemwithpaddingifany);
+                parent_template::m_data = parent_template::m_allocator.allocate(parent_template::m_numelement);
 
                 // fill stride
                 parent_template::m_strides[parent_template::m_numdims - 1] = 1;
                 for (ptrdiff_t dim = parent_template::m_numdims - 2; dim >= 0; --dim)
                 {
-                    parent_template::m_strides[dim] =
-                        parent_template::m_strides[dim + 1] * (bound()[dim + 1] + parent_template::m_padding[dim + 1]);
+                    parent_template::m_strides[dim] = parent_template::m_strides[dim + 1] * (bound()[dim + 1]);
                 }
             }
         }
@@ -626,7 +555,6 @@ namespace poutre
 
         using parent_template::bound;
         using parent_template::GetNumDims;
-        using parent_template::padding;
         using parent_template::shape;
         using parent_template::stride;
 
@@ -726,37 +654,49 @@ namespace poutre
             if (this != &rhs)
             {
                 using std::swap;
+                // swap(this->, rhs.); // nothrow)
                 parent_template::swap(*this);
             }
         }
 
         iterator begin() POUTRE_NOEXCEPT
         {
-            return iterator(data(), bound(), stride(), 0);
-        }
-
-        const_iterator begin() const POUTRE_NOEXCEPT
-        {
-            return const_iterator(data(), bound(), stride(), 0);
+            return iterator(m_data, m_data);
         }
 
         const_iterator cbegin() const POUTRE_NOEXCEPT
         {
-            return const_iterator(data(), bound(), stride(), 0);
+            return const_iterator(m_data, m_data);
         }
 
         iterator end() POUTRE_NOEXCEPT
         {
-            return iterator(data(), bound(), stride(), bound().size() /*+ 1*/);
-        }
-        const_iterator end() const POUTRE_NOEXCEPT
-        {
-            return const_iterator(data(), bound(), stride(), bound().size() /*+ 1*/);
+            return iterator(m_data + m_numelement, m_data);
         }
 
         const_iterator cend() const POUTRE_NOEXCEPT
         {
-            return const_iterator(data(), bound(), stride(), bound().size() /*+ 1*/);
+            return const_iterator(m_data + m_numelement, m_data);
+        }
+
+        reverse_iterator rbegin() POUTRE_NOEXCEPT
+        {
+            return (reverse_iterator(m_data + m_numelement - 1, m_data));
+        }
+
+        const_reverse_iterator crbegin() const POUTRE_NOEXCEPT
+        {
+            return (const_reverse_iterator(m_data + m_numelement - 1, m_data));
+        }
+
+        reverse_iterator rend() POUTRE_NOEXCEPT
+        {
+            return (reverse_iterator(m_data - 1, m_data));
+        }
+
+        const_reverse_iterator crend() const POUTRE_NOEXCEPT
+        {
+            return (const_reverse_iterator(m_data - 1, m_data));
         }
         // end std::array like interface
       public:
@@ -784,17 +724,16 @@ namespace poutre
             if (this != &rhs) // http://scottmeyers.blogspot.fr/2014/06/the-drawbacks-of-implementing-move.html
             {
                 // release resource
-                this->m_allocator.deallocate(this->m_data, this->m_numelemwithpaddingifany);
+                this->m_allocator.deallocate(this->m_data, this->m_numelement);
                 // Copy the data pointer and its length from the source object.
                 this->m_data = rhs.m_data;
-                this->m_numelemwithpaddingifany = rhs.m_numelemwithpaddingifany;
+                this->m_numelement = rhs.m_numelement;
                 this->m_coordinnates = rhs.m_coordinnates;
                 this->m_strides = rhs.m_strides;
-                this->m_padding = rhs.m_padding;
                 this->m_allocator = rhs.m_allocator;
 
                 // release
-                rhs.m_numelemwithpaddingifany = 0;
+                rhs.m_numelement = 0;
                 rhs.m_data = nullptr;
                 /* m_coordinnates = {};*/
             }
@@ -805,7 +744,7 @@ namespace poutre
     ///////////////////////////////////////////////////////////////////////////////////
     /* Translate to view*/
 
-    // Linear view, linearize container padding included
+    // Linear view, linearize container
     template <class valuetype, std::ptrdiff_t Rank>
     poutre::array_view<valuetype, 1> lview(DenseImage<valuetype, Rank> &iImg)
     {
@@ -816,19 +755,19 @@ namespace poutre
     template <class valuetype, std::ptrdiff_t Rank>
     poutre::array_view<valuetype, 1> lview(const DenseImage<valuetype, Rank> &iImg)
     {
-        return lview(const_cast<DenseImage<valuetype, Rank> &>(iImg));
+        return view(const_cast<DenseImage<valuetype, Rank> &>(iImg));
     }
 
-    // Default view is strided due to padding
+    // Default view
     template <class valuetype, std::ptrdiff_t Rank>
-    poutre::strided_array_view<valuetype, Rank> view(DenseImage<valuetype, Rank> &iImg)
+    poutre::array_view<valuetype, Rank> view(DenseImage<valuetype, Rank> &iImg)
     {
-        return poutre::strided_array_view<valuetype, Rank>(iImg.data(), iImg.shape(), iImg.stride());
+        return poutre::array_view<valuetype, Rank>(iImg.data(), iImg.shape());
     }
 
     // FIXME convertion loose qualifiers
     template <class valuetype, std::ptrdiff_t Rank>
-    poutre::strided_array_view<valuetype, Rank> view(const DenseImage<valuetype, Rank> &iImg)
+    poutre::array_view<valuetype, Rank> view(const DenseImage<valuetype, Rank> &iImg)
     {
         return view(const_cast<DenseImage<valuetype, Rank> &>(iImg));
     }

@@ -23,10 +23,6 @@
 #include <poutreIO/poutreIO.hpp>
 #endif
 
-#ifndef POUTRE_IMAGEPROCESSING_INTERFACE_HPP__
-#include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
-#endif
-
 #ifdef __CLANG__
 #pragma clang diagnostic push
 // silencing warnings from OpenEXR 2.2.0 / OpenImageIO
@@ -77,23 +73,7 @@ namespace poutre
          */
         template <typename T> void FillImageFromOIIOScalar(OIIO::ImageInput &input, DenseImage<T, 2> &im)
         {
-            // input.read_image(OIIO::BaseTypeFromC<T>::value, im.data()); //Not so simple we have to handle possible
-            // padding
-            const OIIO::ImageSpec &spec = input.spec();
-            std::vector<T> buffer(spec.width * spec.height);
-            input.read_image(OIIO::BaseTypeFromC<T>::value, &buffer[0]);
-            auto ptr_img = im.data();
-            auto ptr_buff = buffer.data();
-            const auto &padding = im.padding();
-            const auto x_pad = padding[1];
-            // const auto y_pad = padding[0];
-
-            for (size_t y = 0; y < (size_t)spec.height; ++y)
-            {
-                memcpy(ptr_img, ptr_buff, (size_t)spec.width);
-                ptr_buff += (size_t)spec.width;
-                ptr_img += (size_t)spec.width + x_pad;
-            }
+            input.read_image(OIIO::BaseTypeFromC<T>::value, im.data());
         }
 
         /**
@@ -354,20 +334,7 @@ namespace poutre
         {
             const OIIO::ImageSpec &spec = out.spec();
             POUTRE_CHECK(spec.nchannels == 1, "Wrong number of channels");
-            std::vector<T> buffer(spec.width * spec.height);
 
-            auto ptr_img = im.data();
-            auto ptr_buff = buffer.data();
-            const auto &padding = im.padding();
-            const auto x_pad = padding[1];
-            // const auto y_pad = padding[0];
-
-            for (size_t y = 0; y < (size_t)spec.height; ++y)
-            {
-                memcpy(ptr_buff, ptr_img, (size_t)spec.width);
-                ptr_buff += (size_t)spec.width;
-                ptr_img += (size_t)spec.width + x_pad;
-            }
             // stolen from https://github.com/xtensor-stack/xtensor-io/blob/master/include/xtensor-io/ximage.hpp
             if (out.spec().format != OIIO::BaseTypeFromC<T>::value)
             {
@@ -377,25 +344,25 @@ namespace poutre
 
                 //! TODO! make measurement module
                 //! TODO! vectorize
-                const auto iters = std::minmax_element(buffer.cbegin(), buffer.cend());
-                const pDOUBLE min = (iters.first != buffer.cend() ? *iters.first : TypeTraits<pDOUBLE>::sup());
-                const pDOUBLE max = (iters.second != buffer.cend() ? *iters.second : TypeTraits<pDOUBLE>::inf());
+                const auto iters = std::minmax_element(im.cbegin(), im.cend());
+                const pDOUBLE min = (iters.first != im.cend() ? *iters.first : TypeTraits<pDOUBLE>::sup());
+                const pDOUBLE max = (iters.second != im.cend() ? *iters.second : TypeTraits<pDOUBLE>::inf());
 
                 if (max != min)
                 {
-                    std::vector<pDOUBLE> normalized(buffer.size());
-                    for (size_t i = 0; i < buffer.size(); ++i)
-                        normalized[i] = (pDOUBLE(1.0) / (max - min)) * (buffer[i] - min);
+                    std::vector<pDOUBLE> normalized(im.size());
+                    for (size_t i = 0; i < im.size(); ++i)
+                        normalized[i] = (pDOUBLE(1.0) / (max - min)) * (im[i] - min);
                     out.write_image(OIIO::BaseTypeFromC<pDOUBLE>::value, &normalized[0]);
                 }
                 else
                 {
-                    out.write_image(OIIO::BaseTypeFromC<T>::value, &buffer[0]);
+                    out.write_image(OIIO::BaseTypeFromC<T>::value, im.data());
                 }
             }
             else
             {
-                out.write_image(OIIO::BaseTypeFromC<T>::value, &buffer[0]);
+                out.write_image(OIIO::BaseTypeFromC<T>::value, im.data());
             }
             out.close();
         }

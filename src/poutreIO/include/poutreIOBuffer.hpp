@@ -58,15 +58,8 @@ namespace poutre
                 POUTRE_RUNTIME_ERROR("t_ImageToTypedBufferScalar:Bad size for the output buffer");
             }
 
-            // pUINT8 *ptr_buffer = reinterpret_cast<pUINT8 *>(buffer);
-            // memcpy(ptr_buffer, im.data(), size_buffer);
-            // Handle padding ...
-            auto index = 0;
-            for (const auto &it : im)
-            {
-                buffer[(size_t)index] = it;
-                ++index;
-            }
+            pUINT8 *ptr_buffer = reinterpret_cast<pUINT8 *>(buffer);
+            memcpy(ptr_buffer, im.data(), size_buffer);
         }
 
         // compound 3 Interleaved or planes by planes ?
