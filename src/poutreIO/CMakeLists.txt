@@ -17,6 +17,8 @@ INCLUDE_DIRECTORIES(BEFORE SYSTEM
 set(PoutreIOSRC_DETAILS
   ${PoutreIOSubdirectory}/include/poutreIOBuffer.hpp
   ${PoutreIOSubdirectory}/include/poutreOIIO.hpp
+  ${PoutreIOSubdirectory}/include/poutreHDF5.hpp
+  
 )  
 
 set(PoutreIOSRC_PUBLICHEADERS  
@@ -33,6 +35,7 @@ set(PoutreIOSRC_CPP
   ${PoutreIOSubdirectory}/src/poutreIOWriter.cpp
   ${PoutreIOSubdirectory}/src/poutreIOProvider.cpp
   ${PoutreIOSubdirectory}/src/poutreOIIO.cpp
+  ${PoutreIOSubdirectory}/src/poutreHDF5.cpp
   )
 source_group(details FILES ${PoutreIOSRC_DETAILS})
 source_group(src FILES ${PoutreIOSRC_CPP})
