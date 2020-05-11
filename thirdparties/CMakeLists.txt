@@ -343,6 +343,8 @@ SET_PROPERTY(TARGET tiffxx PROPERTY FOLDER "3rdparties")
 SET_PROPERTY(TARGET port PROPERTY FOLDER "3rdparties")
 message(STATUS "**************TIFF: ${TIFF_INCLUDE_DIR} ${TIFF_LIBRARY}")
 add_dependencies(tiff jpeg png_static)
+
+
 # hdf5
 SET(HDF5_EXTERNALLY_CONFIGURED ON CACHE BOOL "HDF5_EXTERNALLY_CONFIGURED" FORCE)
 # # Avoid duplicating names of installed libraries
@@ -354,18 +356,24 @@ add_subdirectory(hdf5)
 set(HDF5_FOUND TRUE)
 set(HDF5_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/hdf5")
 set(HDF5_INCLUDE_DIRS 
-  ${CMAKE_CURRENT_SOURCE_DIR}/hdf5/c++/src/header_files
   ${CMAKE_CURRENT_SOURCE_DIR}/hdf5/hl/c++/src
   ${CMAKE_CURRENT_SOURCE_DIR}/hdf5/hl/src
+  ${CMAKE_CURRENT_SOURCE_DIR}/hdf5/c++/src
   ${CMAKE_CURRENT_SOURCE_DIR}/hdf5/src
   ${CMAKE_CURRENT_BINARY_DIR}/hdf5
+  ${CMAKE_CURRENT_BINARY_DIR}
 )
 set(HDF5_LIBRARIES 
   hdf5_cpp-shared
   hdf5-shared
-  # hdf5_hl_cpp-shared
-  # hdf5_hl-shared
-
+  hdf5_hl_cpp-shared
+  hdf5_hl-shared
+)
+set(HDF5_LIBRARIES 
+  ${HDF5_LIBRARIES} PARENT_SCOPE
+)
+set(HDF5_INCLUDE_DIRS
+  ${HDF5_INCLUDE_DIRS} PARENT_SCOPE
 )
 SET_PROPERTY(TARGET hdf5_cpp-shared PROPERTY FOLDER "3rdparties")
 SET_PROPERTY(TARGET hdf5-shared PROPERTY FOLDER "3rdparties")
@@ -374,8 +382,16 @@ SET_PROPERTY(TARGET hdf5_hl-shared PROPERTY FOLDER "3rdparties")
 SET_PROPERTY(TARGET H5make_libsettings PROPERTY FOLDER "3rdparties")
 SET_PROPERTY(TARGET gen_hdf5-shared PROPERTY FOLDER "3rdparties")
 add_dependencies(hdf5_cpp-shared zlib zlibstatic)
+
 # HighFive
 add_subdirectory(HighFive)
+add_dependencies(libdeps hdf5_cpp-shared hdf5-shared)
+set(HIGH_FIVE_INCLUDE_DIR 
+  ${CMAKE_CURRENT_SOURCE_DIR}/HighFive/include) 
+INCLUDE_DIRECTORIES(
+ ${HIGH_FIVE_INCLUDE_DIR}
+)
+SET(HIGH_FIVE_INCLUDE_DIR ${HIGH_FIVE_INCLUDE_DIR} PARENT_SCOPE)
 
 #openxr/oiio
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
