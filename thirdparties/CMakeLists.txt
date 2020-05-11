@@ -477,21 +477,11 @@ string(REPLACE "." ";" VERSION_LIST ${PYTHONLIBS_VERSION_STRING})
 list(GET VERSION_LIST 0 PYTHONLIBS_VERSION_MAJOR)
 list(GET VERSION_LIST 1 PYTHONLIBS_VERSION_MINOR)
 
-# notes:
-# the way boost.python was compiled should be verified (linking against the found python lib)
-# the python interpreter should be verified against the python libs (a distribution mismatch might happen)
-# set(debian_dependencies ${debian_dependencies} "libpython-dev (= ${PYTHONLIBS_VERSION_MAJOR}.${PYTHONLIBS_VERSION_MINOR})")
-# set(debian_dependencies ${debian_dependencies} "python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
-
 if(ENABLE_NUMPY)
-  execute_process(
-    COMMAND ${PYTHON_EXECUTABLE} -c "import numpy; print numpy.get_include()"
-    OUTPUT_VARIABLE NUMPY_INCLUDE_PATH
-    ERROR_VARIABLE  NUMPY_ERROR
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-  if(NOT (NUMPY_ERROR STREQUAL "") OR (NUMPY_INCLUDE_PATH STREQUAL ""))
-    message(FATAL_ERROR "[POUTREIO | NUMPY] the following error occured: ${NUMPY_ERROR} - Consider setting PYTHON_ROOT in the environment")
+  find_package (Python COMPONENTS Interpreter NumPy)
+  
+  if(NOT Python_NumPy_FOUND)
+    message(FATAL_ERROR "[POUTREIO | NUMPY] the following error occured: numpy not found")
   endif()
   message(STATUS "[POUTREIO] Getting headers for Numpy from ${NUMPY_INCLUDE_PATH}")
   set(NUMPY_INCLUDE_PATH   ${NUMPY_INCLUDE_PATH}     PARENT_SCOPE)
