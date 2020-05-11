@@ -661,42 +661,44 @@ namespace poutre
 
         iterator begin() POUTRE_NOEXCEPT
         {
-            return iterator(m_data, m_data);
+            return iterator(parent_template::m_data, parent_template::m_data);
         }
 
         const_iterator cbegin() const POUTRE_NOEXCEPT
         {
-            return const_iterator(m_data, m_data);
+            return const_iterator(parent_template::m_data, parent_template::m_data);
         }
 
         iterator end() POUTRE_NOEXCEPT
         {
-            return iterator(m_data + m_numelement, m_data);
+            return iterator(parent_template::m_data + parent_template::m_numelement, parent_template::m_data);
         }
 
         const_iterator cend() const POUTRE_NOEXCEPT
         {
-            return const_iterator(m_data + m_numelement, m_data);
+            return const_iterator(parent_template::m_data + parent_template::m_numelement, parent_template::m_data);
         }
 
         reverse_iterator rbegin() POUTRE_NOEXCEPT
         {
-            return (reverse_iterator(m_data + m_numelement - 1, m_data));
+            return (
+                reverse_iterator(parent_template::m_data + parent_template::m_numelement - 1, parent_template::m_data));
         }
 
         const_reverse_iterator crbegin() const POUTRE_NOEXCEPT
         {
-            return (const_reverse_iterator(m_data + m_numelement - 1, m_data));
+            return (const_reverse_iterator(parent_template::m_data + parent_template::m_numelement - 1,
+                                           parent_template::m_data));
         }
 
         reverse_iterator rend() POUTRE_NOEXCEPT
         {
-            return (reverse_iterator(m_data - 1, m_data));
+            return (reverse_iterator(parent_template::m_data - 1, parent_template::m_data));
         }
 
         const_reverse_iterator crend() const POUTRE_NOEXCEPT
         {
-            return (const_reverse_iterator(m_data - 1, m_data));
+            return (const_reverse_iterator(parent_template::m_data - 1, parent_template::m_data));
         }
         // end std::array like interface
       public:
