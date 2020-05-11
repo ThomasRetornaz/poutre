@@ -47,7 +47,7 @@ namespace poutre
     //! Create a clone of provided image using same geometries but with different  @c PType, no data is copied
     IMP_CORE_API std::unique_ptr<IInterface> ConvertGeometry(const IInterface &i_img1, PType ptype);
 
-    //! Copy i_img1 in i_img2
+    //! Copy i_img1 in i_img2 with hard casting!
     IMP_CORE_API void Copy(const IInterface &i_img1, IInterface &i_img2);
 
     //! @} doxygroup: image_processing_copy_group

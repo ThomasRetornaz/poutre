@@ -59,7 +59,10 @@ namespace poutre
     void Copy(const IInterface &i_img1, IInterface &i_img2)
     {
         AssertSizesCompatible(i_img1, i_img2, "Copy images have not compatible sizes");
-        AssertAsTypesCompatible(i_img1, i_img2, "Copy images have not compatible types");
+        if (i_img1.GetImgType() != i_img2.GetImgType())
+            POUTRE_RUNTIME_ERROR("Different image type");
+        if (i_img1.GetCType() != i_img2.GetCType())
+            POUTRE_RUNTIME_ERROR("Different compound type");
         auto dims = i_img1.GetNumDims();
         switch (dims)
         {
