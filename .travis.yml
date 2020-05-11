@@ -1,12 +1,10 @@
 dist: bionic
-language: 
-  - c++
+languages: 
+  - cpp
   - python
-
 branches:
   only:
     - master
-
 env:
   global:
     - /usr/local/bin:$PATH
@@ -83,8 +81,7 @@ script:
   - cppcheck -f --std=c++11 --inline-suppr -i build -i thirdparties --quiet --error-exitcode=1 .
 # see https://github.com/richelbilderbeek/travis_cpp_tutorial/blob/master/travis_cpp_tutorial.pdf
 after_success:
- - bash <(curl -s https://codecov.io/bash)
-after_success:
+  - bash <(curl -s https://codecov.io/bash)
   - if [ "${BUILD_TYPE}" == "Coverage" -a "${TRAVIS_OS_NAME}" == "linux" ]; then
       coveralls --include src --include include --gcov-options '\-lp' --root .. --build-root .;
     fi
