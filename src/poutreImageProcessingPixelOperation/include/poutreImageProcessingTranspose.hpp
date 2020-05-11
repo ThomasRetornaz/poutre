@@ -303,8 +303,7 @@ and do transposition
                     _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 1) * oxstep + y), r7);
                     _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 2) * oxstep + y), r11);
                     _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 3) * oxstep + y), r3);
-                    _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 4) * oxstep + y),
-                                     r13); //-V112
+                    _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 4) * oxstep + y), r13); //-V112
                     _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 5) * oxstep + y), r5);
                     _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 6) * oxstep + y), r9);
                     _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 7) * oxstep + y), r1);
