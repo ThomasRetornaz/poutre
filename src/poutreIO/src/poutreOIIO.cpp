@@ -154,52 +154,52 @@ namespace poutre
                 };
             }
             break;
-            //#FIXME translate to long under minux which no supported by OIIO
+                //#FIXME translate to long under minux which no supported by OIIO
 
-            //case PType::PType_GrayINT32: {
-            //    switch (ctype)
-            //    {
-            //    case CompoundType::CompoundType_Scalar: {
-            //        using ImageType_t = poutre::DenseImage<poutre::pINT32, 2>;
-            //        ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
-            //        if (!img_t)
-            //        {
-            //            POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-            //        }
-            //        FillImageFromOIIOScalar(*in, *img_t);
-            //    }
-            //    break;
-            //    case CompoundType::CompoundType_3Planes: {
-            //        using ImageType_t = poutre::DenseImage<compound_pixel<pINT32, 3>, 2>;
-            //        ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
-            //        if (!img_t)
-            //        {
-            //            POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-            //        }
-            //        FillImageFromOIIOCompound3(*in, *img_t);
-            //    }
-            //    break;
-            //    case CompoundType::CompoundType_4Planes: {
-            //        using ImageType_t = poutre::DenseImage<compound_pixel<pINT32, 4>, 2>;
-            //        ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
-            //        if (!img_t)
-            //        {
-            //            POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-            //        }
-            //        FillImageFromOIIOCompound4(*in, *img_t);
-            //    }
-            //    break;
-            //    default:
-            //        std::ostringstream errorstream;
-            //        errorstream << " load_image(): Error reading image '";
-            //        errorstream << image_path;
-            //        errorstream << " unsupported number of channels ";
-            //        errorstream << spec.nchannels;
-            //        errorstream << " see desc \n" << spec.to_xml();
-            //        POUTRE_RUNTIME_ERROR(errorstream.str());
-            //    };
-            //}
-            break;
+                // case PType::PType_GrayINT32: {
+                //    switch (ctype)
+                //    {
+                //    case CompoundType::CompoundType_Scalar: {
+                //        using ImageType_t = poutre::DenseImage<poutre::pINT32, 2>;
+                //        ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
+                //        if (!img_t)
+                //        {
+                //            POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                //        }
+                //        FillImageFromOIIOScalar(*in, *img_t);
+                //    }
+                //    break;
+                //    case CompoundType::CompoundType_3Planes: {
+                //        using ImageType_t = poutre::DenseImage<compound_pixel<pINT32, 3>, 2>;
+                //        ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
+                //        if (!img_t)
+                //        {
+                //            POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                //        }
+                //        FillImageFromOIIOCompound3(*in, *img_t);
+                //    }
+                //    break;
+                //    case CompoundType::CompoundType_4Planes: {
+                //        using ImageType_t = poutre::DenseImage<compound_pixel<pINT32, 4>, 2>;
+                //        ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
+                //        if (!img_t)
+                //        {
+                //            POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                //        }
+                //        FillImageFromOIIOCompound4(*in, *img_t);
+                //    }
+                //    break;
+                //    default:
+                //        std::ostringstream errorstream;
+                //        errorstream << " load_image(): Error reading image '";
+                //        errorstream << image_path;
+                //        errorstream << " unsupported number of channels ";
+                //        errorstream << spec.nchannels;
+                //        errorstream << " see desc \n" << spec.to_xml();
+                //        POUTRE_RUNTIME_ERROR(errorstream.str());
+                //    };
+                //}
+                break;
             case PType::PType_F32: {
                 switch (ctype)
                 {
@@ -407,45 +407,45 @@ namespace poutre
             break;
 #ifdef _WIN32
             case PType::PType_GrayINT32: {
-               switch (ctype)
-               {
-               case CompoundType::CompoundType_Scalar: {
-                   using ImageType_t = poutre::DenseImage<poutre::pINT32, 2>;
-                   const ImageType_t *img_t = dynamic_cast<const ImageType_t *>(&iimage);
-                   if (!img_t)
-                   {
-                       POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                   }
-                   StoreWithOIIOScalar(*img_t, path, options);
-               }
-               break;
-               case CompoundType::CompoundType_3Planes: {
-                   using ImageType_t = poutre::DenseImage<compound_pixel<pINT32, 3>, 2>;
-                   const ImageType_t *img_t = dynamic_cast<const ImageType_t *>(&iimage);
-                   if (!img_t)
-                   {
-                       POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                   }
-                   StoreWithOIIOCompound3(*img_t, path, options);
-               }
-               break;
-               case CompoundType::CompoundType_4Planes: {
-                   using ImageType_t = poutre::DenseImage<compound_pixel<pINT32, 4>, 2>;
-                   const ImageType_t *img_t = dynamic_cast<const ImageType_t *>(&iimage);
-                   if (!img_t)
-                   {
-                       POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                   }
-                   StoreWithOIIOCompound4(*img_t, path, options);
-               }
-               break;
-               default:
-                   std::ostringstream errorstream;
-                   errorstream << " load_image(): Error reading image '";
-                   errorstream << path;
+                switch (ctype)
+                {
+                case CompoundType::CompoundType_Scalar: {
+                    using ImageType_t = poutre::DenseImage<poutre::pINT32, 2>;
+                    const ImageType_t *img_t = dynamic_cast<const ImageType_t *>(&iimage);
+                    if (!img_t)
+                    {
+                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                    }
+                    StoreWithOIIOScalar(*img_t, path, options);
+                }
+                break;
+                case CompoundType::CompoundType_3Planes: {
+                    using ImageType_t = poutre::DenseImage<compound_pixel<pINT32, 3>, 2>;
+                    const ImageType_t *img_t = dynamic_cast<const ImageType_t *>(&iimage);
+                    if (!img_t)
+                    {
+                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                    }
+                    StoreWithOIIOCompound3(*img_t, path, options);
+                }
+                break;
+                case CompoundType::CompoundType_4Planes: {
+                    using ImageType_t = poutre::DenseImage<compound_pixel<pINT32, 4>, 2>;
+                    const ImageType_t *img_t = dynamic_cast<const ImageType_t *>(&iimage);
+                    if (!img_t)
+                    {
+                        POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                    }
+                    StoreWithOIIOCompound4(*img_t, path, options);
+                }
+                break;
+                default:
+                    std::ostringstream errorstream;
+                    errorstream << " load_image(): Error reading image '";
+                    errorstream << path;
 
-                   POUTRE_RUNTIME_ERROR(errorstream.str());
-               };
+                    POUTRE_RUNTIME_ERROR(errorstream.str());
+                };
             }
             break;
 #endif
@@ -534,7 +534,7 @@ namespace poutre
                 };
             }
             break;
-#endif 
+#endif
             case PType::PType_D64: {
                 switch (ctype)
                 {
