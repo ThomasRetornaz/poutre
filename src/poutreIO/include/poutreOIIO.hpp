@@ -19,10 +19,6 @@
 #include <memory>
 #include <string>
 
-#ifndef POUTRE_IO_HPP__
-#include <poutreIO/poutreIO.hpp>
-#endif
-
 #ifdef __CLANG__
 #pragma clang diagnostic push
 // silencing warnings from OpenEXR 2.2.0 / OpenImageIO
@@ -315,14 +311,6 @@ namespace poutre
         };
 
         /**
-         * @brief Read 2D Image from path powered by OpenImageIO
-         *
-         * @param image_path
-         * @return std::unique_ptr<IInterface> fresh image instance
-         */
-        IO_API std::unique_ptr<IInterface> LoadFromOIIO(const std::string &image_path);
-
-        /**
          * @brief  Helper function which copy contant of DenseImage into OIIO object assuming scalar type
          *
          * @tparam T DenseImage pType
@@ -349,7 +337,7 @@ namespace poutre
                 const pDOUBLE max = (iters.second != im.cend() ? *iters.second : TypeTraits<pDOUBLE>::inf());
 
                 if (max != min)
-                {
+                { //-V550
                     std::vector<pDOUBLE> normalized(im.size());
                     for (size_t i = 0; i < im.size(); ++i)
                         normalized[i] = (pDOUBLE(1.0) / (max - min)) * (im[i] - min);
@@ -428,9 +416,9 @@ namespace poutre
             auto ptr_img = im.data();
 
             pDOUBLE min_0 = TypeTraits<pDOUBLE>::sup(), min_1 = TypeTraits<pDOUBLE>::sup(),
-                    min_2 = TypeTraits<pDOUBLE>::sup();
+                    min_2 = TypeTraits<pDOUBLE>::sup(); //-V656
             pDOUBLE max_0 = TypeTraits<pDOUBLE>::inf(), max_1 = TypeTraits<pDOUBLE>::inf(),
-                    max_2 = TypeTraits<pDOUBLE>::inf();
+                    max_2 = TypeTraits<pDOUBLE>::inf(); //-V656
 
             for (size_t i = 0; i < buffer.size(); i += 3)
             {
@@ -460,7 +448,7 @@ namespace poutre
                 //! TODO! vectorize
 
                 if (max_0 != max_0 && max_1 != min_1 && max_2 != min_2)
-                {
+                { //-V550
                     std::vector<pDOUBLE> normalized(buffer.size());
                     for (size_t i = 0; i < buffer.size(); i += 3)
                     {
@@ -543,9 +531,9 @@ namespace poutre
             auto ptr_img = im.data();
 
             pDOUBLE min_0 = TypeTraits<pDOUBLE>::sup(), min_1 = TypeTraits<pDOUBLE>::sup(),
-                    min_2 = TypeTraits<pDOUBLE>::sup(), min_3 = TypeTraits<pDOUBLE>::sup();
+                    min_2 = TypeTraits<pDOUBLE>::sup(), min_3 = TypeTraits<pDOUBLE>::sup(); //-V656
             pDOUBLE max_0 = TypeTraits<pDOUBLE>::inf(), max_1 = TypeTraits<pDOUBLE>::inf(),
-                    max_2 = TypeTraits<pDOUBLE>::inf(), max_3 = TypeTraits<pDOUBLE>::inf();
+                    max_2 = TypeTraits<pDOUBLE>::inf(), max_3 = TypeTraits<pDOUBLE>::inf(); //-V656
 
             for (size_t i = 0; i < buffer.size(); i += 4)
             {
@@ -579,7 +567,7 @@ namespace poutre
                 //! TODO! vectorize
 
                 if (max_0 != max_0 && max_1 != min_1 && max_2 != min_2 && max_3 != min_3)
-                {
+                { //-V550
                     std::vector<pDOUBLE> normalized(buffer.size());
                     for (size_t i = 0; i < buffer.size(); i += 3)
                     {
@@ -648,18 +636,6 @@ namespace poutre
             StoreWithOIIOCompound4(im, *out);
         }
 
-        /**
-         * Save image to disk.
-         * The desired image format is deduced from ``filename``.
-         * Supported formats are those supported by OpenImageIO.
-         * Most common formats are supported (jpg, png, gif, bmp, tiff).
-         *
-         * @param path The path to the desired file
-         * @param iimage Image Interface
-         * @param options Pass a dump_image_options object to fine-tune image export
-         */
-        IO_API void StoreWithOIIO(const std::string &path, const IInterface &iimage,
-                                  StoreWithOIIOOptions const &options = StoreWithOIIOOptions());
     } // namespace details
 
     //! @} doxygroup: image_processing_io_group_details

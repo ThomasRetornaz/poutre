@@ -44,6 +44,7 @@ namespace poutre
      * so various formats are supported (and deduced from path)
      * at least the most common ones (PNG,JPEG,TIFF,BMP,hdf5,...)
      * @note for Image with more than 2 dimensions, only hdf5 format is supported
+     * @note FOr hdf5 case the image is stored with "poutre_img_1" naming
      */
     class IO_API ImageWriter
     {

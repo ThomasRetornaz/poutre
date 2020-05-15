@@ -20,18 +20,6 @@
 #include <boost/filesystem.hpp>
 
 namespace bf = boost::filesystem;
-
-namespace
-{
- /*   xarray<uint8_t> test_image_rgb = {{{0, 0, 0}, {255, 0, 0}, {0, 255, 0}},
-                                      {{0, 0, 255}, {228, 135, 255}, {255, 255, 255}}};
-
-    xarray<uint8_t> test_image_rgba = {{{0, 0, 0, 255}, {255, 0, 0, 255}, {0, 255, 0, 255}},
-                                       {{0, 0, 255, 255}, {228, 135, 255, 255}, {255, 255, 255, 255}}};
-
-    xarray<uint8_t> test_image_jpg = {{{0, 0, 35}, {255, 12, 0}, {0, 255, 0}},
-                                      {{5, 10, 236}, {222, 124, 237}, {255, 253, 255}}};*/
-}
 BOOST_AUTO_TEST_SUITE(oiio)
 
 BOOST_AUTO_TEST_CASE(iopngloadUINT8)
@@ -167,7 +155,7 @@ BOOST_AUTO_TEST_CASE(iotifffloat)
     BOOST_CHECK_EQUAL(imgstr, str);
 }
 
-BOOST_AUTO_TEST_CASE(execptions)
+BOOST_AUTO_TEST_CASE(exceptions)
 {
     BOOST_TEST_MESSAGE("3D image not supported use hdf5 instead");
     {
@@ -183,13 +171,13 @@ BOOST_AUTO_TEST_CASE(execptions)
         bf::create_directory(tempDir);
     }
     bf::path image_path = tempDir / "write_test_3DGRAYMUSTFAIL.tif";
-    BOOST_CHECK_THROW(poutre::details::StoreWithOIIO(image_path.string(), *expected), std::runtime_error);
+    BOOST_CHECK_THROW(poutre::StoreWithOIIO(image_path.string(), *expected), std::runtime_error);
     }
 
     BOOST_TEST_MESSAGE("Path doesn't exist");
     {
         bf::path image_path = "bli.mouf";
-        BOOST_CHECK_THROW(poutre::details::LoadFromOIIO(image_path.string()), std::runtime_error);
+        BOOST_CHECK_THROW(poutre::LoadFromOIIO(image_path.string()), std::runtime_error);
     }
   }
 BOOST_AUTO_TEST_SUITE_END()

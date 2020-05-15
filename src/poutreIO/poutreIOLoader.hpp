@@ -55,6 +55,8 @@ namespace poutre
      * so various formats are supported (and deduced from path)
      * at least the most common ones (PNG,JPEG,TIFF,BMP,hdf5,...)
      * @note for Image with more than 2 dimensions, only hdf5 format is supported
+     * @warning in HDF5 case, only one image is loaded correspond to name "poutre_img_1", @c StoreWithHDF5 for advanced
+     * options
      */
     class IO_API ImageLoader
     {

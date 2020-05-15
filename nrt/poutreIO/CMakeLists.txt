@@ -7,12 +7,17 @@ set(PoutreIOTestSRC
     ${PoutreIOTestSubdirectory}/iostring.cpp
     ${PoutreIOTestSubdirectory}/oiio.cpp
     ${PoutreIOTestSubdirectory}/buffer.cpp
+    ${PoutreIOTestSubdirectory}/hdf5.cpp
 )
 
 INCLUDE_DIRECTORIES(BEFORE SYSTEM
-    ${OPENEXR_INCLUDE_DIR} 
-	${OIIO_INCLUDE_DIR}
-    )
+  ${OPENEXR_INCLUDE_DIR} 
+  ${OIIO_INCLUDE_DIR}
+  ${HIGH_FIVE_INCLUDE_DIR}
+  ${HDF5_INCLUDE_DIRS}
+  ${CMAKE_BINARY_DIR}/include
+  ${CMAKE_BINARY_DIR}
+)
 
 set(POUTREIO_NRT_DATAS "\"${CMAKE_CURRENT_SOURCE_DIR}/Datas\"")
 add_definitions(-DPOUTREIO_NRT_DATAS=${POUTREIO_NRT_DATAS})

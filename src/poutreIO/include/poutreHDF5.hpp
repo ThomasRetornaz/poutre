@@ -23,10 +23,6 @@
 #include <poutreIO/poutreIO.hpp>
 #endif
 
-#ifndef POUTRE_IO_HPP__
-#include <poutreIO/poutreIO.hpp>
-#endif
-
 #ifndef POUTRE_IMAGEPROCESSING_INTERFACE_HPP__
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
 #endif
@@ -35,7 +31,7 @@
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 #endif
 
-#include <H5pubconf.h>
+#include "H5pubconf.h"
 #include <H5public.h>
 #include <hdf5_hl.h>
 
@@ -51,7 +47,7 @@ namespace poutre
      * @ingroup image_processing_io_group
      *@{
      */
-    namespace details
+    namespace details // https://support.hdfgroup.org/HDF5/doc1.8/UG/HDF5_Users_Guide.pdf
     {
         namespace bf = boost::filesystem;
 
@@ -81,16 +77,17 @@ namespace poutre
 
         PType HDF5ScalarTypeToPType(const hid_t &t)
         {
-            if (H5Tequal(t, H5T_NATIVE_UCHAR) == 0)
+            if (H5Tequal(t, H5T_NATIVE_UCHAR) > 0)
                 return PType::PType_GrayUINT8;
-            if (H5Tequal(t, H5T_NATIVE_INT32) == 0)
+            if (H5Tequal(t, H5T_NATIVE_INT32) > 0)
                 return PType::PType_GrayINT32;
-            if (H5Tequal(t, H5T_NATIVE_FLOAT) == 0)
-                return PType::PType_F32;
-            if (H5Tequal(t, H5T_NATIVE_DOUBLE) == 0)
-                return PType::PType_D64;
-            if (H5Tequal(t, H5T_NATIVE_LLONG) == 0)
+            if (H5Tequal(t, H5T_NATIVE_LLONG) > 0)
                 return PType::PType_GrayINT64;
+            if (H5Tequal(t, H5T_NATIVE_FLOAT) > 0)
+                return PType::PType_F32;
+            if (H5Tequal(t, H5T_NATIVE_DOUBLE) > 0)
+                return PType::PType_D64;
+            ;
             POUTRE_RUNTIME_ERROR(
                 (boost::format("pTypeToHDF5Tyoe: provided type %s unsupported") % boost::lexical_cast<std::string>(t))
                     .str());
@@ -100,11 +97,11 @@ namespace poutre
         hid_t TypeToHDF5Type(const PType &p, const CompoundType &c)
         {
             hid_t scalar = pTypeToHDF5ScalarType(p); // throw
-
-            herr_t status = H5Tset_order(scalar, H5T_ORDER_LE); // do something with this order
+            hid_t datatype = H5Tcopy(scalar);
+            herr_t status = H5Tset_order(datatype, H5T_ORDER_LE); // do something with this order
             if (status < 0)
             {
-                H5Tclose(scalar);
+                H5Tclose(datatype);
                 POUTRE_RUNTIME_ERROR((boost::format("TypeToHDF5Type: provided ptype %s unsupported") %
                                       boost::lexical_cast<std::string>(p))
                                          .str());
@@ -112,7 +109,7 @@ namespace poutre
             switch (c)
             {
             case CompoundType::CompoundType_Scalar:
-                return scalar;
+                return datatype;
             case CompoundType::CompoundType_3Planes: {
                 static const unsigned long long adims[] = {1, 1, 1};
                 return H5Tarray_create2(scalar, 3, adims);
@@ -122,7 +119,7 @@ namespace poutre
                 return H5Tarray_create2(scalar, 4, adims);
             }
             default:
-                H5Tclose(scalar);
+                H5Tclose(datatype);
                 POUTRE_RUNTIME_ERROR((boost::format("TypeToHDF5Type: provided ctype %s unsupported") %
                                       boost::lexical_cast<std::string>(c))
                                          .str());
@@ -192,6 +189,7 @@ namespace poutre
             hsize_t *res = new hsize_t[s.size()];
             for (size_t i = 0; i < s.size(); ++i)
                 res[i] = s[s.size() - i - (size_t)1];
+            // res[i] = s[i];
             return res;
         }
 
@@ -210,23 +208,49 @@ namespace poutre
 
             std::vector<std::size_t> res(rank);
 
-            for (size_t i = 0; i < rank; i++)
-                res[i] = ss[(size_t)rank - i - 1];
+            for (ptrdiff_t i = 0; i < (ptrdiff_t)rank; i++)
+                res[i] = ss[(ptrdiff_t)rank - i - 1];
+            // res[i] = ss[i];
             return res;
         }
 
-        template <class Image> void StoreWithHDF5_helper(IInterface &iimage, hid_t &data_id, hid_t &data_type)
+        template <class Image> void StoreWithHDF5_helper(const IInterface &iimage, hid_t &data_id, hid_t &data_type)
         {
-            const Image *im_t = dynamic_cast<const Image *>(iimage);
+            const Image *im_t = dynamic_cast<const Image *>(&iimage);
             if (!im_t)
             {
                 POUTRE_RUNTIME_ERROR("Dynamic cast fail");
             }
             herr_t status = H5Dwrite(data_id, data_type, H5S_ALL, H5S_ALL, H5P_DEFAULT,
-                                     reinterpret_cast<const void *>(&im_t->data()));
-            if (!status)
+                                     reinterpret_cast<const void *>(im_t->data()));
+            if (status < 0)
             {
                 POUTRE_RUNTIME_ERROR((boost::format("StoreWithHDF5_helper: H5Dwrite fail")).str());
+            }
+            return;
+        }
+
+        template <class Image>
+        void LoadFromHDF5_helper(IInterface &iimage, hid_t &data_id, hid_t &data_type, hid_t &filespace_id)
+        {
+            Image *im_t = dynamic_cast<Image *>(&iimage);
+            if (!im_t)
+            {
+                POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+            }
+
+            hsize_t *s = CoordToHDF5Dim(im_t->GetCoords());
+            hid_t mem_data_space = H5Screate_simple((int)im_t->GetNumDims(), s, 0);
+
+            herr_t status = H5Dread(data_id, data_type, mem_data_space, filespace_id, H5P_DEFAULT,
+                                    reinterpret_cast<void *>(im_t->data()));
+
+            H5Sclose(mem_data_space);
+            delete[] s;
+
+            if (!status)
+            {
+                POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5_helper: H5Dread fail")).str());
             }
             return;
         }

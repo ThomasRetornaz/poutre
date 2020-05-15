@@ -56,8 +56,9 @@ namespace poutre
         // switch on extension
         auto extension = bf::extension(localPath);
         boost::algorithm::to_lower(extension);
-
-        return details::LoadFromOIIO(localPath.string());
+        if (extension == ".h5")
+            return LoadFromHDF5(localPath.string());
+        return LoadFromOIIO(localPath.string());
     }
 
 } // namespace poutre
