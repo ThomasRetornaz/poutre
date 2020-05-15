@@ -107,7 +107,7 @@ namespace poutre
 #endif
 
 #define POUTRE_RUNTIME_ERROR(MSG)                                                                                      \
-    throw std::runtime_error((boost::format("Throw %s at %s(%d)") % MSG % __FILE__ % __LINE__).str()) //-V1003
+    throw std::runtime_error((boost::format("Throw %s at %s(%d)") % (MSG) % __FILE__ % __LINE__).str()) //-V1003
 #define POUTRE_NEVER_REACH_HERE POUTRE_RUNTIME_ERROR("Code should never reach here, WTF Oo")
 #define POUTRE_CHECK(CONDITION, MSG)                                                                                   \
     {                                                                                                                  \

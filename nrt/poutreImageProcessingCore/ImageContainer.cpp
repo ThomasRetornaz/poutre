@@ -234,7 +234,7 @@ BOOST_AUTO_TEST_CASE(viewoverimage) {
   auto vimg1 = poutre::view(img1);
   BOOST_CHECK_EQUAL(vimg1.size(), 12);
   BOOST_CHECK_EQUAL(vimg1.bound(), (poutre::bd2d{3, 4})); //-V112
-  BOOST_CHECK_EQUAL(vimg1.stride(), (poutre::idx2d{4, 1}));
+  BOOST_CHECK_EQUAL(vimg1.stride(), (poutre::idx2d{4, 1})); //-V112
 }
 
 BOOST_AUTO_TEST_CASE(SetPixelGetPixel) {
