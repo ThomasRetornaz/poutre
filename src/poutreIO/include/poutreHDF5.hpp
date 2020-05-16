@@ -188,8 +188,7 @@ namespace poutre
         {
             hsize_t *res = new hsize_t[s.size()];
             for (size_t i = 0; i < s.size(); ++i)
-                res[i] = s[s.size() - i - (size_t)1];
-            // res[i] = s[i];
+               res[i] = s[i];
             return res;
         }
 
@@ -209,8 +208,7 @@ namespace poutre
             std::vector<std::size_t> res(rank);
 
             for (ptrdiff_t i = 0; i < (ptrdiff_t)rank; i++)
-                res[i] = ss[(ptrdiff_t)rank - i - 1];
-            // res[i] = ss[i];
+                res[i] = ss[i];
             return res;
         }
 
