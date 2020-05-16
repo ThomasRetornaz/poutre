@@ -47,29 +47,29 @@ BOOST_AUTO_TEST_CASE(iohdf5UINT8)
     BOOST_CHECK_EQUAL(imgstr, str);
 }
 
-//BOOST_AUTO_TEST_CASE(iohdf5RGBA)
-//{
-//    std::string str = "Dense 4Planes GUINT8 2 2 3 \
-//0 0 0 255 255 0 0 255 0 255 0 255 \
-//0 0 255 255 228 135 255 255 255 255 255 255\
-//";
-//
-//    // store
-//    auto expected = poutre::ImageFromString(str);
-//    bf::path tempDir = /*bf::path(POUTREIO_NRT_DATAS) /*/ "POUTRE_NRT_IO_TMP_DIR";
-//    if (!bf::is_directory(tempDir))
-//    {
-//        bf::create_directory(tempDir);
-//    }
-//    bf::path image_path = tempDir / "write_test_RGBA.h5";
-//    auto writter = poutre::ImageWriter().SetPath(image_path.string());
-//    writter.Write(*expected);
-//
-//    // load again and check
-//    auto loader = poutre::ImageLoader().SetPath(image_path.string());
-//    auto img = loader.Load();
-//    auto imgstr = poutre::ImageToString(*img);
-//    BOOST_CHECK_EQUAL(imgstr, str);
-//}
+BOOST_AUTO_TEST_CASE(iohdf5RGBA)
+{
+    std::string str = "Dense 3Planes GUINT8 2 2 3 \
+0 0 0 255 0 0 0 255 0 \
+0 0 255 228 135 255 255 255 255\
+";
+
+    // store
+    auto expected = poutre::ImageFromString(str);
+    bf::path tempDir = /*bf::path(POUTREIO_NRT_DATAS) /*/ "POUTRE_NRT_IO_TMP_DIR";
+    if (!bf::is_directory(tempDir))
+    {
+        bf::create_directory(tempDir);
+    }
+    bf::path image_path = tempDir / "write_test_RGB.h5";
+    auto writter = poutre::ImageWriter().SetPath(image_path.string());
+    writter.Write(*expected);
+
+    // load again and check
+    auto loader = poutre::ImageLoader().SetPath(image_path.string());
+    auto img = loader.Load();
+    auto imgstr = poutre::ImageToString(*img);
+    BOOST_CHECK_EQUAL(imgstr, str);
+}
 
 BOOST_AUTO_TEST_SUITE_END()

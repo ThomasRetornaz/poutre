@@ -412,8 +412,8 @@ namespace poutre
             const OIIO::ImageSpec &spec = out.spec();
             POUTRE_CHECK(spec.nchannels == 3, "StoreWithOIIOCompound3(): Nb of channels must be 3");
             std::vector<T> buffer(spec.width * spec.height * spec.nchannels);
-            const auto ptr_buffer = buffer.data();
-            auto ptr_img = im.data();
+            T *ptr_buffer = buffer.data();
+            const auto *ptr_img = im.data();
 
             pDOUBLE min_0 = TypeTraits<pDOUBLE>::sup(), min_1 = TypeTraits<pDOUBLE>::sup(),
                     min_2 = TypeTraits<pDOUBLE>::sup(); //-V656
