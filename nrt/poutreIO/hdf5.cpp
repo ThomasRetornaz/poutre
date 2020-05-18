@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(iohdf5UINT8)
     BOOST_CHECK_EQUAL(imgstr, str);
 }
 
-BOOST_AUTO_TEST_CASE(iohdf5RGBA)
+BOOST_AUTO_TEST_CASE(iohdf5RGB)
 {
     std::string str = "Dense 3Planes GUINT8 2 2 3 \
 0 0 0 255 0 0 0 255 0 \

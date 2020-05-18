@@ -58,6 +58,204 @@ namespace poutre
      */
     namespace details
     {
+        /**
+         * @brief  Helper operator which copy contant of input file in DenseImage 2D assuming scalar type
+         *
+         * @param[in] path path on underlying image
+         * @param{in] iimage  Image where to copy data
+         * @warning Unsafe method use @c ImageLoader for safety check
+         */
+        /* template <class Image> class LoadImageFromOIIO_helper_op
+         {
+           public:
+             void operator()(const std::string &path, IInterface &iimage)
+             {
+                 bf::path localPath(path);
+                 if (!(bf::exists(localPath)))
+                 {
+                     POUTRE_RUNTIME_ERROR(
+                         (boost::format("FillImageFromOIIO_helper_op: provided path %s doesn't exists") %
+                          localPath.string())
+                             .str());
+                 }
+
+                 Image *im_t = dynamic_cast<Image *>(&iimage);
+                 if (!im_t)
+                 {
+                     POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+                 }
+                 auto in(OIIO::ImageInput::open(path));
+                 if (!in)
+                 {
+                     std::ostringstream errorstream;
+                     errorstream << " FillImageFromOIIO_helper_op load_image(): Error reading image '";
+                     errorstream << path;
+                     errorstream << "\n" << OIIO::geterror();
+                     POUTRE_RUNTIME_ERROR(errorstream.str());
+                 }
+                 const OIIO::ImageSpec &spec = in->spec();
+                 if (spec.nchannels != 1)
+                 {
+                     POUTRE_RUNTIME_ERROR(
+                         (boost::format("FillImageFromOIIO_helper_op: wrong number of channels expected 1 found %d") %
+                          spec.nchannels)
+                             .str());
+                 }
+                 if (spec.depth > 1)
+                 {
+                     POUTRE_RUNTIME_ERROR(
+                         boost::format("FillImageFromOIIO_helper_op: wrong number of dim expected 2 found depth dim"));
+                 }
+                 in->read_image(OIIO::BaseTypeFromC<typename Image::value_type>::value, im_t->data());
+                 in->close();
+             }
+         };*/
+        /**
+         * @brief  Helper operator which copy contant of input file in DenseImage 2D assuming compound_pixel<3> type
+         *
+         * @param[in] path path on underlying image
+         * @param{in] iimage  Image where to copy data
+         * @warning Unsafe method use @c ImageLoader for safety check
+         */
+        // template <typename T, ptrdiff_t rank, template <typename, ptrdiff_t> class DenseImage>
+        // class LoadImageFromOIIO_helper_op<DenseImage<compound_pixel<T, 3>, rank>>
+        //{
+        //  public:
+        //    void operator()(const std::string &path, IInterface &iimage)
+        //    {
+        //        bf::path localPath(path);
+        //        if (!(bf::exists(localPath)))
+        //        {
+        //            POUTRE_RUNTIME_ERROR(
+        //                (boost::format("LoadImageFromOIIO_helper_op: provided path %s doesn't exists") %
+        //                 localPath.string())
+        //                    .str());
+        //        }
+        //        auto *im_t = dynamic_cast < DenseImage<compound_pixel<T, 3> *>(&iimage);
+        //        if (!im_t)
+        //        {
+        //            POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+        //        }
+        //        auto in(OIIO::ImageInput::open(path));
+        //        if (!in)
+        //        {
+        //            std::ostringstream errorstream;
+        //            errorstream << " LoadImageFromOIIO_helper_op load_image(): Error reading image '";
+        //            errorstream << path;
+        //            errorstream << "\n" << OIIO::geterror();
+        //            POUTRE_RUNTIME_ERROR(errorstream.str());
+        //        }
+        //        const OIIO::ImageSpec &spec = in->spec();
+        //        if (spec.nchannels != 3)
+        //        {
+        //            POUTRE_RUNTIME_ERROR(
+        //                (boost::format("LoadImageFromOIIO_helper_op: wrong number of channels expected 3 found %d") %
+        //                 spec.nchannels)
+        //                    .str());
+        //        }
+        //        if (spec.depth > 1)
+        //        {
+        //            POUTRE_RUNTIME_ERROR(
+        //                boost::format("LoadImageFromOIIO_helper_op: wrong number of dim expected 2 found depth dim"));
+        //        }
+        //        const OIIO::ImageSpec &spec = input.spec();
+        //        if (spec.nchannels != 3)
+        //        {
+        //            POUTRE_RUNTIME_ERROR(
+        //                (boost::format("LoadImageFromOIIO_helper_op: wrong number of channels expected 3 found %d") %
+        //                 spec.nchannels)
+        //                    .str());
+        //        }
+
+        //        std::vector<T> tmp;
+        //        tmp.resize((size_t)spec.width * (size_t)spec.height * (size_t)spec.nchannels);
+        //        input.read_image(OIIO::BaseTypeFromC<T>::value, &tmp[0]);
+        //        const auto ptr_tmp = tmp.data();
+        //        auto ptr_img = im_t->data();
+        //        for (size_t i = 0; i < tmp.size(); i += 3)
+        //        {
+        //            (*ptr_img)[0] = ptr_tmp[i];
+        //            (*ptr_img)[1] = ptr_tmp[i + 1];
+        //            (*ptr_img)[2] = ptr_tmp[i + 2];
+        //            ptr_img++;
+        //        }
+        //        in->close();
+        //    }
+        //};
+
+        ///**
+        // * @brief  Helper operator which copy contant of input file in DenseImage 2D assuming compound_pixel<4> type
+        // *
+        // * @param[in] path path on underlying image
+        // * @param{in] iimage  Image where to copy data
+        // * @warning Unsafe method use @c ImageLoader for safety check
+        // */
+        // template <typename T, ptrdiff_t rank, template <typename, ptrdiff_t> class DenseImage>
+        // class LoadImageFromOIIO_helper_op<DenseImage<compound_pixel<T, 4>, rank>>
+        //{
+        //  public:
+        //    void operator()(const std::string &path, IInterface &iimage)
+        //    {
+        //        bf::path localPath(path);
+        //        if (!(bf::exists(localPath)))
+        //        {
+        //            POUTRE_RUNTIME_ERROR(
+        //                (boost::format("LoadImageFromOIIO_helper_op: provided path %s doesn't exists") %
+        //                 localPath.string())
+        //                    .str());
+        //        }
+        //        auto *im_t = dynamic_cast < DenseImage<compound_pixel<T, 4> *>(&iimage);
+        //        if (!im_t)
+        //        {
+        //            POUTRE_RUNTIME_ERROR("Dynamic cast fail");
+        //        }
+        //        auto in(OIIO::ImageInput::open(path));
+        //        if (!in)
+        //        {
+        //            std::ostringstream errorstream;
+        //            errorstream << " LoadImageFromOIIO_helper_op load_image(): Error reading image '";
+        //            errorstream << path;
+        //            errorstream << "\n" << OIIO::geterror();
+        //            POUTRE_RUNTIME_ERROR(errorstream.str());
+        //        }
+        //        const OIIO::ImageSpec &spec = in->spec();
+        //        if (spec.nchannels != 4)
+        //        {
+        //            POUTRE_RUNTIME_ERROR(
+        //                (boost::format("LoadImageFromOIIO_helper_op: wrong number of channels expected 4 found %d") %
+        //                 spec.nchannels)
+        //                    .str());
+        //        }
+        //        if (spec.depth > 1)
+        //        {
+        //            POUTRE_RUNTIME_ERROR(
+        //                boost::format("LoadImageFromOIIO_helper_op: wrong number of dim expected 2 found depth dim"));
+        //        }
+        //        if (spec.nchannels != 4)
+        //        {
+        //            POUTRE_RUNTIME_ERROR(
+        //                (boost::format("LoadImageFromOIIO_helper_op: wrong number of channels expected 4 found %d") %
+        //                 spec.nchannels)
+        //                    .str());
+        //        }
+
+        //        std::vector<T> tmp;
+        //        tmp.resize((size_t)spec.width * (size_t)spec.height * (size_t)spec.nchannels);
+        //        in->read_image(OIIO::BaseTypeFromC<T>::value, &tmp[0]);
+        //        const auto ptr_tmp = tmp.data();
+        //        auto ptr_img = im_t->data();
+        //        for (size_t i = 0; i < tmp.size(); i += 4)
+        //        {
+        //            (*ptr_img)[0] = ptr_tmp[i];
+        //            (*ptr_img)[1] = ptr_tmp[i + 1];
+        //            (*ptr_img)[2] = ptr_tmp[i + 2];
+        //            (*ptr_img)[3] = ptr_tmp[i + 3];
+        //            ptr_img++;
+        //        }
+
+        //        in->close();
+        //    }
+        //};
         namespace bf = boost::filesystem;
         /**
          * @brief  Helper function which copy contant of input OIIO object in DenseImage 2D assuming scalar type
@@ -412,8 +610,8 @@ namespace poutre
             const OIIO::ImageSpec &spec = out.spec();
             POUTRE_CHECK(spec.nchannels == 3, "StoreWithOIIOCompound3(): Nb of channels must be 3");
             std::vector<T> buffer(spec.width * spec.height * spec.nchannels);
-            T *ptr_buffer = buffer.data();
-            const auto *ptr_img = im.data();
+            const auto ptr_buffer = buffer.data();
+            auto ptr_img = im.data();
 
             pDOUBLE min_0 = TypeTraits<pDOUBLE>::sup(), min_1 = TypeTraits<pDOUBLE>::sup(),
                     min_2 = TypeTraits<pDOUBLE>::sup(); //-V656

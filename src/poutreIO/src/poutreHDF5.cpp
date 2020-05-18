@@ -61,21 +61,21 @@ namespace poutre
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF5_helper_op<DenseImage<pUINT8, 1>>()(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pUINT8, 1>(iimage, dataset_id, data_type_id);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF5_helper_op<DenseImage<pINT32, 1>>()(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pINT32, 1>(iimage, dataset_id, data_type_id);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF5_helper_op<DenseImage<pINT64, 1>>()(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pINT64, 1>(iimage, dataset_id, data_type_id);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF5_helper_op<DenseImage<pFLOAT, 1>>()(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pFLOAT, 1>(iimage, dataset_id, data_type_id);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF5_helper_op<DenseImage<pDOUBLE, 1>>()(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pDOUBLE, 1>(iimage, dataset_id, data_type_id);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
@@ -88,26 +88,21 @@ namespace poutre
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pUINT8, 3>, 1>>()(iimage, dataset_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF53Planes_helper<pUINT8, 1>(iimage, dataset_id, data_type_id);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pINT32, 3>, 1>>()(iimage, dataset_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF53Planes_helper<pINT32, 1>(iimage, dataset_id, data_type_id);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pINT64, 3>, 1>>()(iimage, dataset_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF53Planes_helper<pINT64, 1>(iimage, dataset_id, data_type_id);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pFLOAT, 3>, 1>>()(iimage, dataset_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF53Planes_helper<pFLOAT, 1>(iimage, dataset_id, data_type_id);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pDOUBLE, 3>, 1>>()(iimage, dataset_id,
-                                                                                                  data_type_id);
+                    details::StoreWithHDF53Planes_helper<pDOUBLE, 1>(iimage, dataset_id, data_type_id);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
@@ -120,26 +115,21 @@ namespace poutre
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pUINT8, 4>, 1>>()(iimage, dataset_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF54Planes_helper<pUINT8, 1>(iimage, dataset_id, data_type_id);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pINT32, 4>, 1>>()(iimage, dataset_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF54Planes_helper<pINT32, 1>(iimage, dataset_id, data_type_id);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pINT64, 4>, 1>>()(iimage, dataset_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF54Planes_helper<pINT64, 1>(iimage, dataset_id, data_type_id);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pFLOAT, 4>, 1>>()(iimage, dataset_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF54Planes_helper<pFLOAT, 1>(iimage, dataset_id, data_type_id);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pDOUBLE, 4>, 1>>()(iimage, dataset_id,
-                                                                                                  data_type_id);
+                    details::StoreWithHDF54Planes_helper<pDOUBLE, 1>(iimage, dataset_id, data_type_id);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
@@ -161,52 +151,75 @@ namespace poutre
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF5_helper_op<DenseImage<pUINT8, 2>>()(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pUINT8, 2>(iimage, dataset_id, data_type_id);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF5_helper_op<DenseImage<pINT32, 2>>()(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pINT32, 2>(iimage, dataset_id, data_type_id);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF5_helper_op<DenseImage<pINT64, 2>>()(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pINT64, 2>(iimage, dataset_id, data_type_id);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF5_helper_op<DenseImage<pFLOAT, 2>>()(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pFLOAT, 2>(iimage, dataset_id, data_type_id);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF5_helper_op<DenseImage<pDOUBLE, 2>>()(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pDOUBLE, 2>(iimage, dataset_id, data_type_id);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
                         (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
                             .str());
+                    break;
                 }
                 break;
             case CompoundType::CompoundType_3Planes:
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pUINT8, 3>, 2>>()(iimage, dataset_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF53Planes_helper<pUINT8, 2>(iimage, dataset_id, data_type_id);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pINT32, 3>, 2>>()(iimage, dataset_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF53Planes_helper<pINT32, 2>(iimage, dataset_id, data_type_id);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pINT64, 3>, 2>>()(iimage, dataset_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF53Planes_helper<pINT64, 2>(iimage, dataset_id, data_type_id);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pFLOAT, 3>, 2>>()(iimage, dataset_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF53Planes_helper<pFLOAT, 2>(iimage, dataset_id, data_type_id);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pDOUBLE, 3>, 2>>()(iimage, dataset_id,
-                                                                                                  data_type_id);
+                    details::StoreWithHDF53Planes_helper<pDOUBLE, 2>(iimage, dataset_id, data_type_id);
+                    break;
+                default:
+                    POUTRE_RUNTIME_ERROR(
+                        (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
+                            .str());
+                    break;
+                }
+                break;
+            case CompoundType::CompoundType_4Planes:
+                switch (ptype)
+                {
+                case PType::PType_GrayUINT8:
+                    details::StoreWithHDF54Planes_helper<pUINT8, 2>(iimage, dataset_id, data_type_id);
+                    break;
+
+                case PType::PType_GrayINT32:
+                    details::StoreWithHDF54Planes_helper<pINT32, 2>(iimage, dataset_id, data_type_id);
+                    break;
+
+                case PType::PType_GrayINT64:
+                    details::StoreWithHDF54Planes_helper<pINT64, 2>(iimage, dataset_id, data_type_id);
+                    break;
+                case PType::PType_F32:
+                    details::StoreWithHDF54Planes_helper<pFLOAT, 2>(iimage, dataset_id, data_type_id);
+                    break;
+                case PType::PType_D64:
+                    details::StoreWithHDF54Planes_helper<pDOUBLE, 2>(iimage, dataset_id, data_type_id);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
@@ -214,38 +227,6 @@ namespace poutre
                             .str());
                 }
                 break;
-            case CompoundType::CompoundType_4Planes:
-                switch (ptype)
-                {
-                case PType::PType_GrayUINT8:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pUINT8, 4>, 2>>()(iimage, dataset_id,
-                                                                                                 data_type_id);
-                    break;
-
-                case PType::PType_GrayINT32:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pINT32, 4>, 2>>()(iimage, dataset_id,
-                                                                                                 data_type_id);
-                    break;
-
-                case PType::PType_GrayINT64:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pINT64, 4>, 2>>()(iimage, dataset_id,
-                                                                                                 data_type_id);
-                    break;
-                case PType::PType_F32:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pFLOAT, 4>, 2>>()(iimage, dataset_id,
-                                                                                                 data_type_id);
-                    break;
-                case PType::PType_D64:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pDOUBLE, 4>, 2>>()(iimage, dataset_id,
-                                                                                                  data_type_id);
-                    break;
-                default:
-                    POUTRE_RUNTIME_ERROR(
-                        (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
-                }
-                break; // ptype
-
             default:
                 POUTRE_RUNTIME_ERROR(
                     (boost::format("StoreWithHDF5: unsupported cTYpe %s") % boost::lexical_cast<std::string>(ctype))
@@ -260,52 +241,75 @@ namespace poutre
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF5_helper_op<DenseImage<pUINT8, 3>>()(iimage, data_space_id, data_type_id);
+                    details::StoreWithHDF5_helper<pUINT8, 3>(iimage, dataset_id, data_type_id);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF5_helper_op<DenseImage<pINT32, 3>>()(iimage, data_space_id, data_type_id);
+                    details::StoreWithHDF5_helper<pINT32, 3>(iimage, dataset_id, data_type_id);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF5_helper_op<DenseImage<pINT64, 3>>()(iimage, data_space_id, data_type_id);
+                    details::StoreWithHDF5_helper<pINT64, 3>(iimage, dataset_id, data_type_id);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF5_helper_op<DenseImage<pFLOAT, 3>>()(iimage, data_space_id, data_type_id);
+                    details::StoreWithHDF5_helper<pFLOAT, 3>(iimage, dataset_id, data_type_id);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF5_helper_op<DenseImage<pDOUBLE, 3>>()(iimage, data_space_id, data_type_id);
+                    details::StoreWithHDF5_helper<pDOUBLE, 3>(iimage, dataset_id, data_type_id);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
                         (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
                             .str());
+                    break;
                 }
                 break;
             case CompoundType::CompoundType_3Planes:
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pUINT8, 3>, 3>>()(iimage, data_space_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF53Planes_helper<pUINT8, 3>(iimage, dataset_id, data_type_id);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pINT32, 3>, 3>>()(iimage, data_space_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF53Planes_helper<pINT32, 3>(iimage, dataset_id, data_type_id);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pINT64, 3>, 3>>()(iimage, data_space_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF53Planes_helper<pINT64, 3>(iimage, dataset_id, data_type_id);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pFLOAT, 3>, 3>>()(iimage, data_space_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF53Planes_helper<pFLOAT, 3>(iimage, dataset_id, data_type_id);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pDOUBLE, 3>, 3>>()(iimage, data_space_id,
-                                                                                                  data_type_id);
+                    details::StoreWithHDF53Planes_helper<pDOUBLE, 3>(iimage, dataset_id, data_type_id);
+                    break;
+                default:
+                    POUTRE_RUNTIME_ERROR(
+                        (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
+                            .str());
+                    break;
+                }
+                break;
+            case CompoundType::CompoundType_4Planes:
+                switch (ptype)
+                {
+                case PType::PType_GrayUINT8:
+                    details::StoreWithHDF54Planes_helper<pUINT8, 3>(iimage, dataset_id, data_type_id);
+                    break;
+
+                case PType::PType_GrayINT32:
+                    details::StoreWithHDF54Planes_helper<pINT32, 3>(iimage, dataset_id, data_type_id);
+                    break;
+
+                case PType::PType_GrayINT64:
+                    details::StoreWithHDF54Planes_helper<pINT64, 3>(iimage, dataset_id, data_type_id);
+                    break;
+                case PType::PType_F32:
+                    details::StoreWithHDF54Planes_helper<pFLOAT, 3>(iimage, dataset_id, data_type_id);
+                    break;
+                case PType::PType_D64:
+                    details::StoreWithHDF54Planes_helper<pDOUBLE, 3>(iimage, dataset_id, data_type_id);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
@@ -313,38 +317,6 @@ namespace poutre
                             .str());
                 }
                 break;
-            case CompoundType::CompoundType_4Planes:
-                switch (ptype)
-                {
-                case PType::PType_GrayUINT8:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pUINT8, 4>, 3>>()(iimage, data_space_id,
-                                                                                                 data_type_id);
-                    break;
-
-                case PType::PType_GrayINT32:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pINT32, 4>, 3>>()(iimage, data_space_id,
-                                                                                                 data_type_id);
-                    break;
-
-                case PType::PType_GrayINT64:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pINT64, 4>, 3>>()(iimage, data_space_id,
-                                                                                                 data_type_id);
-                    break;
-                case PType::PType_F32:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pFLOAT, 4>, 3>>()(iimage, data_space_id,
-                                                                                                 data_type_id);
-                    break;
-                case PType::PType_D64:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pDOUBLE, 4>, 3>>()(iimage, data_space_id,
-                                                                                                  data_type_id);
-                    break;
-                default:
-                    POUTRE_RUNTIME_ERROR(
-                        (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
-                }
-                break; // ptype
-
             default:
                 POUTRE_RUNTIME_ERROR(
                     (boost::format("StoreWithHDF5: unsupported cTYpe %s") % boost::lexical_cast<std::string>(ctype))
@@ -359,52 +331,75 @@ namespace poutre
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF5_helper_op<DenseImage<pUINT8, 4>>()(iimage, data_space_id, data_type_id);
+                    details::StoreWithHDF5_helper<pUINT8, 4>(iimage, dataset_id, data_type_id);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF5_helper_op<DenseImage<pINT32, 4>>()(iimage, data_space_id, data_type_id);
+                    details::StoreWithHDF5_helper<pINT32, 4>(iimage, dataset_id, data_type_id);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF5_helper_op<DenseImage<pINT64, 4>>()(iimage, data_space_id, data_type_id);
+                    details::StoreWithHDF5_helper<pINT64, 4>(iimage, dataset_id, data_type_id);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF5_helper_op<DenseImage<pFLOAT, 4>>()(iimage, data_space_id, data_type_id);
+                    details::StoreWithHDF5_helper<pFLOAT, 4>(iimage, dataset_id, data_type_id);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF5_helper_op<DenseImage<pDOUBLE, 4>>()(iimage, data_space_id, data_type_id);
+                    details::StoreWithHDF5_helper<pDOUBLE, 4>(iimage, dataset_id, data_type_id);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
                         (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
                             .str());
+                    break;
                 }
                 break;
             case CompoundType::CompoundType_3Planes:
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pUINT8, 4>, 3>>()(iimage, data_space_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF53Planes_helper<pUINT8, 4>(iimage, dataset_id, data_type_id);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pINT32, 4>, 3>>()(iimage, data_space_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF53Planes_helper<pINT32, 4>(iimage, dataset_id, data_type_id);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pINT64, 4>, 3>>()(iimage, data_space_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF53Planes_helper<pINT64, 4>(iimage, dataset_id, data_type_id);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pFLOAT, 4>, 3>>()(iimage, data_space_id,
-                                                                                                 data_type_id);
+                    details::StoreWithHDF53Planes_helper<pFLOAT, 4>(iimage, dataset_id, data_type_id);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pDOUBLE, 4>, 3>>()(iimage, data_space_id,
-                                                                                                  data_type_id);
+                    details::StoreWithHDF53Planes_helper<pDOUBLE, 4>(iimage, dataset_id, data_type_id);
+                    break;
+                default:
+                    POUTRE_RUNTIME_ERROR(
+                        (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
+                            .str());
+                    break;
+                }
+                break;
+            case CompoundType::CompoundType_4Planes:
+                switch (ptype)
+                {
+                case PType::PType_GrayUINT8:
+                    details::StoreWithHDF54Planes_helper<pUINT8, 4>(iimage, dataset_id, data_type_id);
+                    break;
+
+                case PType::PType_GrayINT32:
+                    details::StoreWithHDF54Planes_helper<pINT32, 4>(iimage, dataset_id, data_type_id);
+                    break;
+
+                case PType::PType_GrayINT64:
+                    details::StoreWithHDF54Planes_helper<pINT64, 4>(iimage, dataset_id, data_type_id);
+                    break;
+                case PType::PType_F32:
+                    details::StoreWithHDF54Planes_helper<pFLOAT, 4>(iimage, dataset_id, data_type_id);
+                    break;
+                case PType::PType_D64:
+                    details::StoreWithHDF54Planes_helper<pDOUBLE, 4>(iimage, dataset_id, data_type_id);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
@@ -412,38 +407,6 @@ namespace poutre
                             .str());
                 }
                 break;
-            case CompoundType::CompoundType_4Planes:
-                switch (ptype)
-                {
-                case PType::PType_GrayUINT8:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pUINT8, 4>, 4>>()(iimage, data_space_id,
-                                                                                                 data_type_id);
-                    break;
-
-                case PType::PType_GrayINT32:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pINT32, 4>, 4>>()(iimage, data_space_id,
-                                                                                                 data_type_id);
-                    break;
-
-                case PType::PType_GrayINT64:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pINT64, 4>, 4>>()(iimage, data_space_id,
-                                                                                                 data_type_id);
-                    break;
-                case PType::PType_F32:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pFLOAT, 4>, 4>>()(iimage, data_space_id,
-                                                                                                 data_type_id);
-                    break;
-                case PType::PType_D64:
-                    details::StoreWithHDF5_helper_op<DenseImage<compound_pixel<pDOUBLE, 4>, 4>>()(iimage, data_space_id,
-                                                                                                  data_type_id);
-                    break;
-                default:
-                    POUTRE_RUNTIME_ERROR(
-                        (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
-                }
-                break; // ptype
-
             default:
                 POUTRE_RUNTIME_ERROR(
                     (boost::format("StoreWithHDF5: unsupported cTYpe %s") % boost::lexical_cast<std::string>(ctype))
@@ -505,26 +468,21 @@ namespace poutre
                     switch (ptype)
                     {
                     case PType::PType_GrayUINT8:
-                        details::LoadFromHDF5_helper_op<DenseImage<pUINT8, 1>>()(*res, dataset_id, data_type_id,
-                                                                                 data_space_id);
+                        details::LoadFromHDF5_helper<pUINT8, 1>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT32:
-                        details::LoadFromHDF5_helper_op<DenseImage<pINT32, 1>>()(*res, dataset_id, data_type_id,
-                                                                                 data_space_id);
+                        details::LoadFromHDF5_helper<pINT32, 1>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT64:
-                        details::LoadFromHDF5_helper_op<DenseImage<pINT64, 1>>()(*res, dataset_id, data_type_id,
-                                                                                 data_space_id);
+                        details::LoadFromHDF5_helper<pINT64, 1>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_F32:
-                        details::LoadFromHDF5_helper_op<DenseImage<pFLOAT, 1>>()(*res, dataset_id, data_type_id,
-                                                                                 data_space_id);
+                        details::LoadFromHDF5_helper<pFLOAT, 1>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_D64:
-                        details::LoadFromHDF5_helper_op<DenseImage<pDOUBLE, 1>>()(*res, dataset_id, data_type_id,
-                                                                                  data_space_id);
+                        details::LoadFromHDF5_helper<pDOUBLE, 1>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     default:
                         POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
@@ -537,26 +495,21 @@ namespace poutre
                     switch (ptype)
                     {
                     case PType::PType_GrayUINT8:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pUINT8, 3>, 1>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pUINT8, 1>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT32:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pINT32, 3>, 1>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pINT32, 1>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT64:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pINT64, 3>, 1>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pINT64, 1>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_F32:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pFLOAT, 3>, 1>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pFLOAT, 1>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_D64:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pDOUBLE, 3>, 1>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pDOUBLE, 1>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     default:
                         POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
@@ -569,26 +522,21 @@ namespace poutre
                     switch (ptype)
                     {
                     case PType::PType_GrayUINT8:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pUINT8, 4>, 1>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF54Planes_helper<pUINT8, 1>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT32:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pINT32, 4>, 1>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF54Planes_helper<pINT32, 1>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT64:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pINT64, 4>, 1>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF54Planes_helper<pINT64, 1>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_F32:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pFLOAT, 4>, 1>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF54Planes_helper<pFLOAT, 1>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_D64:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pDOUBLE, 4>, 1>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF54Planes_helper<pDOUBLE, 1>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     default:
                         POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
@@ -610,26 +558,21 @@ namespace poutre
                     switch (ptype)
                     {
                     case PType::PType_GrayUINT8:
-                        details::LoadFromHDF5_helper_op<DenseImage<pUINT8, 2>>()(*res, dataset_id, data_type_id,
-                                                                                 data_space_id);
+                        details::LoadFromHDF5_helper<pUINT8, 2>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT32:
-                        details::LoadFromHDF5_helper_op<DenseImage<pINT32, 2>>()(*res, dataset_id, data_type_id,
-                                                                                 data_space_id);
+                        details::LoadFromHDF5_helper<pINT32, 2>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT64:
-                        details::LoadFromHDF5_helper_op<DenseImage<pINT64, 2>>()(*res, dataset_id, data_type_id,
-                                                                                 data_space_id);
+                        details::LoadFromHDF5_helper<pINT64, 2>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_F32:
-                        details::LoadFromHDF5_helper_op<DenseImage<pFLOAT, 2>>()(*res, dataset_id, data_type_id,
-                                                                                 data_space_id);
+                        details::LoadFromHDF5_helper<pFLOAT, 2>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_D64:
-                        details::LoadFromHDF5_helper_op<DenseImage<pDOUBLE, 2>>()(*res, dataset_id, data_type_id,
-                                                                                  data_space_id);
+                        details::LoadFromHDF5_helper<pDOUBLE, 2>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     default:
                         POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
@@ -641,26 +584,21 @@ namespace poutre
                     switch (ptype)
                     {
                     case PType::PType_GrayUINT8:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pUINT8, 3>, 2>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pUINT8, 2>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT32:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pINT32, 3>, 2>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pINT32, 2>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT64:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pINT64, 3>, 2>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pINT64, 2>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_F32:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pFLOAT, 3>, 2>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pFLOAT, 2>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_D64:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pDOUBLE, 3>, 2>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pDOUBLE, 2>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     default:
                         POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
@@ -672,26 +610,21 @@ namespace poutre
                     switch (ptype)
                     {
                     case PType::PType_GrayUINT8:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pUINT8, 4>, 2>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF54Planes_helper<pUINT8, 2>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT32:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pINT32, 4>, 2>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF54Planes_helper<pINT32, 2>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT64:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pINT64, 4>, 2>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF54Planes_helper<pINT64, 2>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_F32:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pFLOAT, 4>, 2>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF54Planes_helper<pFLOAT, 2>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_D64:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pDOUBLE, 4>, 2>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF54Planes_helper<pDOUBLE, 2>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     default:
                         POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
@@ -714,29 +647,24 @@ namespace poutre
                     switch (ptype)
                     {
                     case PType::PType_GrayUINT8:
-                        details::LoadFromHDF5_helper_op<DenseImage<pUINT8, 3>>()(*res, dataset_id, data_type_id,
-                                                                                 data_space_id);
+                        details::LoadFromHDF5_helper<pUINT8, 3>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT32:
-                        details::LoadFromHDF5_helper_op<DenseImage<pINT32, 3>>()(*res, dataset_id, data_type_id,
-                                                                                 data_space_id);
+                        details::LoadFromHDF5_helper<pINT32, 3>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT64:
-                        details::LoadFromHDF5_helper_op<DenseImage<pINT64, 3>>()(*res, dataset_id, data_type_id,
-                                                                                 data_space_id);
+                        details::LoadFromHDF5_helper<pINT64, 3>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_F32:
-                        details::LoadFromHDF5_helper_op<DenseImage<pFLOAT, 3>>()(*res, dataset_id, data_type_id,
-                                                                                 data_space_id);
+                        details::LoadFromHDF5_helper<pFLOAT, 3>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_D64:
-                        details::LoadFromHDF5_helper_op<DenseImage<pDOUBLE, 3>>()(*res, dataset_id, data_type_id,
-                                                                                  data_space_id);
+                        details::LoadFromHDF5_helper<pDOUBLE, 3>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     default:
-                        POUTRE_RUNTIME_ERROR((boost::format("StoreWithHDF5: unsupported pTYpe %s") %
+                        POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
                                               boost::lexical_cast<std::string>(ptype))
                                                  .str());
                     }
@@ -745,26 +673,21 @@ namespace poutre
                     switch (ptype)
                     {
                     case PType::PType_GrayUINT8:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pUINT8, 3>, 3>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pUINT8, 3>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT32:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pINT32, 3>, 3>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pINT32, 3>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT64:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pINT64, 3>, 3>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pINT64, 3>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_F32:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pFLOAT, 3>, 3>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pFLOAT, 3>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_D64:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pDOUBLE, 3>, 3>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pDOUBLE, 3>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     default:
                         POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
@@ -776,26 +699,21 @@ namespace poutre
                     switch (ptype)
                     {
                     case PType::PType_GrayUINT8:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pUINT8, 4>, 3>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF54Planes_helper<pUINT8, 3>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT32:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pINT32, 4>, 3>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF54Planes_helper<pINT32, 3>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT64:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pINT64, 4>, 3>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF54Planes_helper<pINT64, 3>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_F32:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pFLOAT, 4>, 3>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF54Planes_helper<pFLOAT, 3>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_D64:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pDOUBLE, 4>, 3>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF54Planes_helper<pDOUBLE, 3>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     default:
                         POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
@@ -818,29 +736,24 @@ namespace poutre
                     switch (ptype)
                     {
                     case PType::PType_GrayUINT8:
-                        details::LoadFromHDF5_helper_op<DenseImage<pUINT8, 4>>()(*res, dataset_id, data_type_id,
-                                                                                 data_space_id);
+                        details::LoadFromHDF5_helper<pUINT8, 4>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT32:
-                        details::LoadFromHDF5_helper_op<DenseImage<pINT32, 4>>()(*res, dataset_id, data_type_id,
-                                                                                 data_space_id);
+                        details::LoadFromHDF5_helper<pINT32, 4>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT64:
-                        details::LoadFromHDF5_helper_op<DenseImage<pINT64, 4>>()(*res, dataset_id, data_type_id,
-                                                                                 data_space_id);
+                        details::LoadFromHDF5_helper<pINT64, 4>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_F32:
-                        details::LoadFromHDF5_helper_op<DenseImage<pFLOAT, 4>>()(*res, dataset_id, data_type_id,
-                                                                                 data_space_id);
+                        details::LoadFromHDF5_helper<pFLOAT, 4>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_D64:
-                        details::LoadFromHDF5_helper_op<DenseImage<pDOUBLE, 4>>()(*res, dataset_id, data_type_id,
-                                                                                  data_space_id);
+                        details::LoadFromHDF5_helper<pDOUBLE, 4>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     default:
-                        POUTRE_RUNTIME_ERROR((boost::format("StoreWithHDF5: unsupported pTYpe %s") %
+                        POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
                                               boost::lexical_cast<std::string>(ptype))
                                                  .str());
                     }
@@ -849,26 +762,21 @@ namespace poutre
                     switch (ptype)
                     {
                     case PType::PType_GrayUINT8:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pUINT8, 4>, 3>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pUINT8, 4>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT32:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pINT32, 4>, 3>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pINT32, 4>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT64:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pINT64, 4>, 3>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pINT64, 4>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_F32:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pFLOAT, 4>, 3>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pFLOAT, 4>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_D64:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pDOUBLE, 4>, 3>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF53Planes_helper<pDOUBLE, 4>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     default:
                         POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
@@ -880,26 +788,21 @@ namespace poutre
                     switch (ptype)
                     {
                     case PType::PType_GrayUINT8:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pUINT8, 4>, 4>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF54Planes_helper<pUINT8, 4>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT32:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pINT32, 4>, 4>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF54Planes_helper<pINT32, 4>(*res, dataset_id, data_type_id, data_space_id);
                         break;
 
                     case PType::PType_GrayINT64:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pINT64, 4>, 4>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF54Planes_helper<pINT64, 4>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_F32:
-                        details::LoadFromHDF5_helper_op<DenseImage<compound_pixel<pFLOAT, 4>, 4>>()(
-                            *res, dataset_id, data_type_id, data_space_id);
+                        details::LoadFromHDF54Planes_helper<pFLOAT, 4>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     case PType::PType_D64:
-                        details::LoadFromHDF5_helper_op<DenseImage<pDOUBLE, 4>>()(*res, dataset_id, data_type_id,
-                                                                                  data_space_id);
+                        details::LoadFromHDF54Planes_helper<pDOUBLE, 4>(*res, dataset_id, data_type_id, data_space_id);
                         break;
                     default:
                         POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %

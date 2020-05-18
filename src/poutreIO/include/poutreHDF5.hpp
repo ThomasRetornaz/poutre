@@ -168,7 +168,8 @@ namespace poutre
                     POUTRE_RUNTIME_ERROR((boost::format("HDF5TypeToType: dimention has not size of 1") % i).str());
                 }
             }
-            resp = HDF5ScalarTypeToPType(H5Tget_super(t));//http://davis.lbl.gov/Manuals/HDF5-1.8.7/UG/11_Datatypes.html
+            resp =
+                HDF5ScalarTypeToPType(H5Tget_super(t)); // http://davis.lbl.gov/Manuals/HDF5-1.8.7/UG/11_Datatypes.html
             if (dims_data == 1)
                 return std::make_pair(CompoundType::CompoundType_Scalar, resp);
             else if (dims_data == 3)
@@ -211,191 +212,173 @@ namespace poutre
             return res;
         }
 
-        template <class Image> class StoreWithHDF5_helper_op
+        template <typename T, ptrdiff_t rank>
+        void StoreWithHDF5_helper(const IInterface &iimage, hid_t &data_id, hid_t &data_type)
         {
-          public:
-            void operator()(const IInterface &iimage, hid_t &data_id, hid_t &data_type)
+            const auto *im_t = dynamic_cast<const DenseImage<T, rank> *>(&iimage);
+            if (!im_t)
             {
-                const Image *im_t = dynamic_cast<const Image *>(&iimage);
-                if (!im_t)
-                {
-                    POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                }
-                herr_t status = H5Dwrite(data_id, data_type, H5S_ALL, H5S_ALL, H5P_DEFAULT,
-                                         reinterpret_cast<const void *>(im_t->data()));
-                if (status < 0)
-                {
-                    POUTRE_RUNTIME_ERROR((boost::format("StoreWithHDF5_helper: H5Dwrite fail")).str());
-                }
-                return;
+                POUTRE_RUNTIME_ERROR("Dynamic cast fail");
             }
-        };
+            herr_t status = H5Dwrite(data_id, data_type, H5S_ALL, H5S_ALL, H5P_DEFAULT,
+                                     reinterpret_cast<const void *>(im_t->data()));
+            if (status < 0)
+            {
+                POUTRE_RUNTIME_ERROR((boost::format("StoreWithHDF5_helper: H5Dwrite fail")).str());
+            }
+            return;
+        }
 
-        template <typename T, ptrdiff_t rank, template <typename, ptrdiff_t> class DenseImage>
-        class StoreWithHDF5_helper_op<DenseImage<compound_pixel<T, 3>, rank>>
+        template <typename T, ptrdiff_t rank>
+        void StoreWithHDF53Planes_helper(const IInterface &iimage, hid_t &data_id, hid_t &data_type)
         {
-          public:
-            void operator()(const IInterface &iimage, hid_t &data_id, hid_t &data_type)
+            const auto *im_t = dynamic_cast<const DenseImage<compound_pixel<T, 3>, rank> *>(&iimage);
+            if (!im_t)
             {
-                const Image *im_t = dynamic_cast<typename DenseImage<compound_pixel<T, 3>, rank> *>(&iimage);
-                if (!im_t)
-                {
-                    POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                }
-                std::vector<T> buffer(im_t->size() * 3);
-                auto ptr_buffer = buffer.data();
-                const auto ptr_img = im_t->data();
-                for (size_t i = 0; i < buffer.size(); i += 3)
-                {
-                    ptr_buffer[i] = (*ptr_img)[0];
-                    ptr_buffer[i + 1] = (*ptr_img)[1];
-                    ptr_buffer[i + 2] = (*ptr_img)[2];
-                }
-                herr_t status = H5Dwrite(data_id, data_type, H5S_ALL, H5S_ALL, H5P_DEFAULT,
-                                         reinterpret_cast<const void *>(&buffer[0]));
-                if (status < 0)
-                {
-                    POUTRE_RUNTIME_ERROR((boost::format("StoreWithHDF5_helper: H5Dwrite fail")).str());
-                }
-                return;
+                POUTRE_RUNTIME_ERROR("Dynamic cast fail");
             }
-        };
-        template <typename T, ptrdiff_t rank, template <typename, ptrdiff_t> class DenseImage>
-        class StoreWithHDF5_helper_op<DenseImage<compound_pixel<T, 4>, rank>>
+            std::vector<T> buffer(im_t->size() * 3);
+            auto ptr_buffer = buffer.data();
+            const auto ptr_img = im_t->data();
+            for (size_t i = 0; i < buffer.size(); i += 3)
+            {
+                ptr_buffer[i] = (*ptr_img)[0];
+                ptr_buffer[i + 1] = (*ptr_img)[1];
+                ptr_buffer[i + 2] = (*ptr_img)[2];
+            }
+            herr_t status =
+                H5Dwrite(data_id, data_type, H5S_ALL, H5S_ALL, H5P_DEFAULT, reinterpret_cast<const void *>(&buffer[0]));
+            // reinterpret_cast<const void *>(im_t->data()));
+            if (status < 0)
+            {
+                POUTRE_RUNTIME_ERROR((boost::format("StoreWithHDF5_helper: H5Dwrite fail")).str());
+            }
+            return;
+        }
+
+        template <typename T, ptrdiff_t rank>
+        void StoreWithHDF54Planes_helper(const IInterface &iimage, hid_t &data_id, hid_t &data_type)
         {
-          public:
-            void operator()(const IInterface &iimage, hid_t &data_id, hid_t &data_type)
+            const auto *im_t = dynamic_cast<const DenseImage<compound_pixel<T, 4>, rank> *>(&iimage);
+            if (!im_t)
             {
-                const Image *im_t = dynamic_cast<typename DenseImage<compound_pixel<T, 4>, rank> *>(&iimage);
-                if (!im_t)
-                {
-                    POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                }
-                std::vector<T> buffer(im_t->size() * 4);
-                auto ptr_buffer = buffer.data();
-                const auto ptr_img = im_t->data();
-                for (size_t i = 0; i < buffer.size(); i += 4)
-                {
-                    ptr_buffer[i] = (*ptr_img)[0];
-                    ptr_buffer[i + 1] = (*ptr_img)[1];
-                    ptr_buffer[i + 2] = (*ptr_img)[2];
-                    ptr_buffer[i + 3] = (*ptr_img)[3];
-                }
-                herr_t status = H5Dwrite(data_id, data_type, H5S_ALL, H5S_ALL, H5P_DEFAULT,
-                                         reinterpret_cast<const void *>(&buffer[0]));
-                if (status < 0)
-                {
-                    POUTRE_RUNTIME_ERROR((boost::format("StoreWithHDF5_helper: H5Dwrite fail")).str());
-                }
-                return;
+                POUTRE_RUNTIME_ERROR("Dynamic cast fail");
             }
-        };
+            std::vector<T> buffer(im_t->size() * 4);
+            auto ptr_buffer = buffer.data();
+            const auto ptr_img = im_t->data();
+            for (size_t i = 0; i < buffer.size(); i += 4)
+            {
+                ptr_buffer[i] = (*ptr_img)[0];
+                ptr_buffer[i + 1] = (*ptr_img)[1];
+                ptr_buffer[i + 2] = (*ptr_img)[2];
+                ptr_buffer[i + 3] = (*ptr_img)[3];
+            }
+            herr_t status =
+                H5Dwrite(data_id, data_type, H5S_ALL, H5S_ALL, H5P_DEFAULT, reinterpret_cast<const void *>(&buffer[0]));
+            if (status < 0)
+            {
+                POUTRE_RUNTIME_ERROR((boost::format("StoreWithHDF5_helper: H5Dwrite fail")).str());
+            }
+            return;
+        }
 
-        template <class Image> class LoadFromHDF5_helper_op
+        template <typename T, ptrdiff_t rank>
+        void LoadFromHDF5_helper(IInterface &iimage, hid_t &data_id, hid_t &data_type, hid_t &filespace_id)
         {
-          public:
-            void operator()(IInterface &iimage, hid_t &data_id, hid_t &data_type, hid_t &filespace_id)
+            auto *im_t = dynamic_cast<DenseImage<T, rank> *>(&iimage);
+            if (!im_t)
             {
-                Image *im_t = dynamic_cast<Image *>(&iimage);
-                if (!im_t)
-                {
-                    POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                }
-
-                hsize_t *s = CoordToHDF5Dim(im_t->GetCoords());
-                hid_t mem_data_space = H5Screate_simple((int)im_t->GetNumDims(), s, 0);
-
-                herr_t status = H5Dread(data_id, data_type, mem_data_space, filespace_id, H5P_DEFAULT,
-                                        reinterpret_cast<void *>(im_t->data()));
-
-                H5Sclose(mem_data_space);
-                delete[] s;
-
-                if (status < 0)
-                {
-                    POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5_helper: H5Dread fail")).str());
-                }
-                return;
+                POUTRE_RUNTIME_ERROR("Dynamic cast fail");
             }
-        };
 
-        template <typename T, ptrdiff_t rank, template <typename, ptrdiff_t> class DenseImage>
-        class LoadFromHDF5_helper_op<DenseImage<compound_pixel<T, 3>, rank>>
+            hsize_t *s = CoordToHDF5Dim(im_t->GetCoords());
+            hid_t mem_data_space = H5Screate_simple((int)im_t->GetNumDims(), s, 0);
+
+            herr_t status = H5Dread(data_id, data_type, mem_data_space, filespace_id, H5P_DEFAULT,
+                                    reinterpret_cast<void *>(im_t->data()));
+
+            H5Sclose(mem_data_space);
+            delete[] s;
+
+            if (status < 0)
+            {
+                POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5_helper: H5Dread fail")).str());
+            }
+            return;
+        }
+
+        template <typename T, ptrdiff_t rank>
+        void LoadFromHDF53Planes_helper(IInterface &iimage, hid_t &data_id, hid_t &data_type, hid_t &filespace_id)
         {
-          public:
-            void operator()(IInterface &iimage, hid_t &data_id, hid_t &data_type, hid_t &filespace_id)
+            auto *im_t = dynamic_cast<DenseImage<compound_pixel<T, 3>, rank> *>(&iimage);
+            if (!im_t)
             {
-                Image *im_t = dynamic_cast<Image *>(&iimage);
-                if (!im_t)
-                {
-                    POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                }
-
-                hsize_t *s = CoordToHDF5Dim(im_t->GetCoords());
-                hid_t mem_data_space = H5Screate_simple((int)im_t->GetNumDims(), s, 0);
-
-                std::vector<T> buffer(im_t->size() * 3);
-                auto ptr_buffer = buffer.data();
-
-                herr_t status = H5Dread(data_id, data_type, mem_data_space, filespace_id, H5P_DEFAULT,
-                                        reinterpret_cast<void *>(ptr_buffer));
-
-                auto ptr_img = im_t->data();
-                for (size_t i = 0; i < buffer.size(); i += 4)
-                {
-                    (*ptr_img)[0] = ptr_buffer[i];
-                    (*ptr_img)[1] = ptr_buffer[i + 1];
-                    (*ptr_img)[2] = ptr_buffer[i + 2];
-                }
-                H5Sclose(mem_data_space);
-                delete[] s;
-
-                if (status < 0)
-                {
-                    POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5_helper: H5Dread fail")).str());
-                }
-                return;
+                POUTRE_RUNTIME_ERROR("LoadFromHDF53Planes_helper Dynamic cast fail");
             }
-        };
-        template <typename T, ptrdiff_t rank, template <typename, ptrdiff_t> class DenseImage>
-        class LoadFromHDF5_helper_op<DenseImage<compound_pixel<T, 4>, rank>>
+
+            hsize_t *s = CoordToHDF5Dim(im_t->GetCoords());
+            hid_t mem_data_space = H5Screate_simple((int)im_t->GetNumDims(), s, 0);
+
+            std::vector<T> buffer(im_t->size() * 3);
+            auto ptr_buffer = buffer.data();
+
+            herr_t status = H5Dread(data_id, data_type, mem_data_space, filespace_id, H5P_DEFAULT,
+                                    reinterpret_cast<void *>(&buffer[0]));
+            // reinterpret_cast<void *>(im_t->data()));
+
+            auto ptr_img = im_t->data();
+            for (size_t i = 0; i < buffer.size(); i += 3)
+            {
+                (*ptr_img)[0] = ptr_buffer[i];
+                (*ptr_img)[1] = ptr_buffer[i + 1];
+                (*ptr_img)[2] = ptr_buffer[i + 2];
+            }
+            H5Sclose(mem_data_space);
+            delete[] s;
+
+            if (status < 0)
+            {
+                POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF53Planes_helper: H5Dread fail")).str());
+            }
+            return;
+        }
+
+        template <typename T, ptrdiff_t rank>
+        void LoadFromHDF54Planes_helper(IInterface &iimage, hid_t &data_id, hid_t &data_type, hid_t &filespace_id)
         {
-          public:
-            void operator()(IInterface &iimage, hid_t &data_id, hid_t &data_type, hid_t &filespace_id)
+            auto *im_t = dynamic_cast<DenseImage<compound_pixel<T, 4>, rank> *>(&iimage);
+            if (!im_t)
             {
-                Image *im_t = dynamic_cast<Image *>(&iimage);
-                if (!im_t)
-                {
-                    POUTRE_RUNTIME_ERROR("Dynamic cast fail");
-                }
-
-                hsize_t *s = CoordToHDF5Dim(im_t->GetCoords());
-                hid_t mem_data_space = H5Screate_simple((int)im_t->GetNumDims(), s, 0);
-
-                std::vector<T> buffer(im_t->size() * 4);
-                auto ptr_buffer = buffer.data();
-
-                herr_t status = H5Dread(data_id, data_type, mem_data_space, filespace_id, H5P_DEFAULT,
-                                        reinterpret_cast<void *>(ptr_buffer));
-
-                auto ptr_img = im_t->data();
-                for (size_t i = 0; i < buffer.size(); i += 4)
-                {
-                    (*ptr_img)[0] = ptr_buffer[i];
-                    (*ptr_img)[1] = ptr_buffer[i + 1];
-                    (*ptr_img)[2] = ptr_buffer[i + 2];
-                    (*ptr_img)[3] = ptr_buffer[i + 3];
-                }
-                H5Sclose(mem_data_space);
-                delete[] s;
-
-                if (status < 0)
-                {
-                    POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5_helper: H5Dread fail")).str());
-                }
-                return;
+                POUTRE_RUNTIME_ERROR("LoadFromHDF54Planes_helper Dynamic cast fail");
             }
-        };
+
+            hsize_t *s = CoordToHDF5Dim(im_t->GetCoords());
+            hid_t mem_data_space = H5Screate_simple((int)im_t->GetNumDims(), s, 0);
+
+            std::vector<T> buffer(im_t->size() * 4);
+            auto ptr_buffer = buffer.data();
+
+            herr_t status = H5Dread(data_id, data_type, mem_data_space, filespace_id, H5P_DEFAULT,
+                                    reinterpret_cast<void *>(ptr_buffer));
+
+            auto ptr_img = im_t->data();
+            for (size_t i = 0; i < buffer.size(); i += 4)
+            {
+                (*ptr_img)[0] = ptr_buffer[i];
+                (*ptr_img)[1] = ptr_buffer[i + 1];
+                (*ptr_img)[2] = ptr_buffer[i + 2];
+                (*ptr_img)[3] = ptr_buffer[i + 3];
+            }
+            H5Sclose(mem_data_space);
+            delete[] s;
+
+            if (status < 0)
+            {
+                POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF54Planes_helper: H5Dread fail")).str());
+            }
+            return;
+        }
 
     } // namespace details
 
