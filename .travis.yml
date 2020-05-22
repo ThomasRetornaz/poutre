@@ -43,10 +43,13 @@ matrix:
           - CXXFLAGS="-O0 --coverage"
           - BUILD_TYPE=Coverage
           - GCC=9
-      before_script:
+          - CMAKE_OPTIONS=-DENABLE_COVERAGE=ON
+      before_install:
         - pip install --user cpp-coveralls
-      after_success:
-        - coveralls --gcov gcov-9 --gcov-options '\-lp' --exclude nrt
+      # script:
+      #   - ./configure --enable-gcov && make && make check
+      # after_success:
+      #   - coveralls --exclude nrt --gcov-options '\-lp' nrt
 env:
   global:
         - POUTRE_CMAKE_EXTRA_ARGS="-DBUILD_PYTHON=ON -DCMAKE_BUILD_TYPE=Release" 
@@ -81,7 +84,8 @@ script:
   - cppcheck -f --std=c++11 --inline-suppr -i build -i thirdparties --quiet --error-exitcode=1 .
 # see https://github.com/richelbilderbeek/travis_cpp_tutorial/blob/master/travis_cpp_tutorial.pdf
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  
   - if [ "${BUILD_TYPE}" == "Coverage" -a "${TRAVIS_OS_NAME}" == "linux" ]; then
-      coveralls --include src --include include --gcov-options '\-lp' --root .. --build-root .;
+      coveralls --include src --exclude thirdparties --gcov-options '\-lp' --root .. --build-root .;
     fi
+  - bash <(curl -s https://codecov.io/bash)
