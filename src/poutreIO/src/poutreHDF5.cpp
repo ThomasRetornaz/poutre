@@ -23,35 +23,17 @@ namespace poutre
     void StoreWithHDF5(const std::string &path, const IInterface &iimage,
                        const std::string &image_name /*= "poutre_img_1"*/)
     {
+
+        /*
+         * Turn off the auto-printing when failure occurs so that we can
+         * handle the errors appropriately
+         */
+        H5::Exception::dontPrint();
+
         auto ptype = iimage.GetPType();
         auto ctype = iimage.GetCType();
-        hid_t data_type_id = details::TypeToHDF5Type(ptype, ctype);
-
-        // create a HDF5
-        hid_t file_id = H5Fcreate(path.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
-        if (file_id < 0)
-        {
-            POUTRE_RUNTIME_ERROR((boost::format("StoreWithHDF5: H5Fcreate failed")).str());
-        }
-
-        // create an array with imgae coords
         const auto coords = iimage.GetCoords();
-        hsize_t *dims = details::CoordToHDF5Dim(coords);
-        hid_t data_space_id = H5Screate_simple((int)coords.size(), dims, NULL);
-        delete[] dims;
-        if (data_space_id < 0)
-        {
-            H5Sclose(data_type_id);
-            H5Fclose(file_id);
-            POUTRE_RUNTIME_ERROR((boost::format("StoreWithHDF5: H5Screate_simple failed")).str());
-        }
 
-        hid_t dataset_id =
-            H5Dcreate2(file_id, image_name.c_str(), data_type_id, data_space_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-        if (dataset_id < 0)
-        {
-            POUTRE_RUNTIME_ERROR((boost::format("StoreWithHDF5: H5Dcreate2 failed")).str());
-        }
         switch (coords.size())
         {
         case 1: {
@@ -61,21 +43,21 @@ namespace poutre
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF5_helper<pUINT8, 1>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pUINT8, 1>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF5_helper<pINT32, 1>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pINT32, 1>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF5_helper<pINT64, 1>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pINT64, 1>(iimage, path, image_name);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF5_helper<pFLOAT, 1>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pFLOAT, 1>(iimage, path, image_name);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF5_helper<pDOUBLE, 1>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pDOUBLE, 1>(iimage, path, image_name);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
@@ -88,21 +70,21 @@ namespace poutre
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF53Planes_helper<pUINT8, 1>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pUINT8, 1>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF53Planes_helper<pINT32, 1>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pINT32, 1>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF53Planes_helper<pINT64, 1>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pINT64, 1>(iimage, path, image_name);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF53Planes_helper<pFLOAT, 1>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pFLOAT, 1>(iimage, path, image_name);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF53Planes_helper<pDOUBLE, 1>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pDOUBLE, 1>(iimage, path, image_name);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
@@ -115,21 +97,21 @@ namespace poutre
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF54Planes_helper<pUINT8, 1>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pUINT8, 1>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF54Planes_helper<pINT32, 1>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pINT32, 1>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF54Planes_helper<pINT64, 1>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pINT64, 1>(iimage, path, image_name);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF54Planes_helper<pFLOAT, 1>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pFLOAT, 1>(iimage, path, image_name);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF54Planes_helper<pDOUBLE, 1>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pDOUBLE, 1>(iimage, path, image_name);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
@@ -151,21 +133,21 @@ namespace poutre
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF5_helper<pUINT8, 2>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pUINT8, 2>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF5_helper<pINT32, 2>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pINT32, 2>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF5_helper<pINT64, 2>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pINT64, 2>(iimage, path, image_name);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF5_helper<pFLOAT, 2>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pFLOAT, 2>(iimage, path, image_name);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF5_helper<pDOUBLE, 2>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pDOUBLE, 2>(iimage, path, image_name);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
@@ -178,21 +160,21 @@ namespace poutre
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF53Planes_helper<pUINT8, 2>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pUINT8, 2>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF53Planes_helper<pINT32, 2>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pINT32, 2>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF53Planes_helper<pINT64, 2>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pINT64, 2>(iimage, path, image_name);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF53Planes_helper<pFLOAT, 2>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pFLOAT, 2>(iimage, path, image_name);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF53Planes_helper<pDOUBLE, 2>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pDOUBLE, 2>(iimage, path, image_name);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
@@ -205,21 +187,21 @@ namespace poutre
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF54Planes_helper<pUINT8, 2>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pUINT8, 2>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF54Planes_helper<pINT32, 2>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pINT32, 2>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF54Planes_helper<pINT64, 2>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pINT64, 2>(iimage, path, image_name);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF54Planes_helper<pFLOAT, 2>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pFLOAT, 2>(iimage, path, image_name);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF54Planes_helper<pDOUBLE, 2>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pDOUBLE, 2>(iimage, path, image_name);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
@@ -241,21 +223,21 @@ namespace poutre
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF5_helper<pUINT8, 3>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pUINT8, 3>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF5_helper<pINT32, 3>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pINT32, 3>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF5_helper<pINT64, 3>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pINT64, 3>(iimage, path, image_name);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF5_helper<pFLOAT, 3>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pFLOAT, 3>(iimage, path, image_name);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF5_helper<pDOUBLE, 3>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pDOUBLE, 3>(iimage, path, image_name);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
@@ -268,21 +250,21 @@ namespace poutre
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF53Planes_helper<pUINT8, 3>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pUINT8, 3>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF53Planes_helper<pINT32, 3>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pINT32, 3>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF53Planes_helper<pINT64, 3>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pINT64, 3>(iimage, path, image_name);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF53Planes_helper<pFLOAT, 3>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pFLOAT, 3>(iimage, path, image_name);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF53Planes_helper<pDOUBLE, 3>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pDOUBLE, 3>(iimage, path, image_name);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
@@ -295,21 +277,21 @@ namespace poutre
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF54Planes_helper<pUINT8, 3>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pUINT8, 3>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF54Planes_helper<pINT32, 3>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pINT32, 3>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF54Planes_helper<pINT64, 3>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pINT64, 3>(iimage, path, image_name);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF54Planes_helper<pFLOAT, 3>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pFLOAT, 3>(iimage, path, image_name);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF54Planes_helper<pDOUBLE, 3>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pDOUBLE, 3>(iimage, path, image_name);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
@@ -331,21 +313,21 @@ namespace poutre
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF5_helper<pUINT8, 4>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pUINT8, 4>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF5_helper<pINT32, 4>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pINT32, 4>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF5_helper<pINT64, 4>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pINT64, 4>(iimage, path, image_name);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF5_helper<pFLOAT, 4>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pFLOAT, 4>(iimage, path, image_name);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF5_helper<pDOUBLE, 4>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF5_helper<pDOUBLE, 4>(iimage, path, image_name);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
@@ -358,21 +340,21 @@ namespace poutre
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF53Planes_helper<pUINT8, 4>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pUINT8, 4>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF53Planes_helper<pINT32, 4>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pINT32, 4>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF53Planes_helper<pINT64, 4>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pINT64, 4>(iimage, path, image_name);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF53Planes_helper<pFLOAT, 4>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pFLOAT, 4>(iimage, path, image_name);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF53Planes_helper<pDOUBLE, 4>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF53Planes_helper<pDOUBLE, 4>(iimage, path, image_name);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
@@ -385,21 +367,21 @@ namespace poutre
                 switch (ptype)
                 {
                 case PType::PType_GrayUINT8:
-                    details::StoreWithHDF54Planes_helper<pUINT8, 4>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pUINT8, 4>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT32:
-                    details::StoreWithHDF54Planes_helper<pINT32, 4>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pINT32, 4>(iimage, path, image_name);
                     break;
 
                 case PType::PType_GrayINT64:
-                    details::StoreWithHDF54Planes_helper<pINT64, 4>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pINT64, 4>(iimage, path, image_name);
                     break;
                 case PType::PType_F32:
-                    details::StoreWithHDF54Planes_helper<pFLOAT, 4>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pFLOAT, 4>(iimage, path, image_name);
                     break;
                 case PType::PType_D64:
-                    details::StoreWithHDF54Planes_helper<pDOUBLE, 4>(iimage, dataset_id, data_type_id);
+                    details::StoreWithHDF54Planes_helper<pDOUBLE, 4>(iimage, path, image_name);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
@@ -417,425 +399,530 @@ namespace poutre
         default:
             POUTRE_RUNTIME_ERROR((boost::format("StoreWithHDF5: unsupported number of dims %d") % coords.size()).str());
         } // dims
-        H5Tclose(data_type_id);
-        H5Dclose(dataset_id);
-        H5Sclose(data_space_id);
-        H5Fclose(file_id);
     }
 
     std::unique_ptr<IInterface> LoadFromHDF5(const std::string &filename,
                                              const std::string &image_name /* = poutre_img_1 */)
     {
+        /*
+         * Turn off the auto-printing when failure occurs so that we can
+         * handle the errors appropriately
+         */
+        H5::Exception::dontPrint();
+
+        PType ptype = PType::PType_Undef;
+        CompoundType ctype = CompoundType::CompoundType_Undef;
         auto res = std::unique_ptr<IInterface>();
-        hid_t file_id = H5Fopen(filename.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
-        if (file_id < 0)
+
+        H5::H5File file(filename.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
+        H5::DataSet dataset = file.openDataSet(image_name.c_str());
+
+        // Handle sizes
+        H5::DataSpace dataspace = dataset.getSpace();
+        int rank = dataspace.getSimpleExtentNdims();
+        std::vector<hsize_t> dims_out(rank);
+        int ndims = dataspace.getSimpleExtentDims(&dims_out[0], NULL);
+
+        // by hand attribute
+        // get compoundtype
+        H5std_string attrTypeCompound;
+        H5::Attribute resAttr = dataset.openAttribute("IMAGE_COMP_TYPE");
+        H5::StrType stype = resAttr.getStrType();
+        resAttr.read(stype, attrTypeCompound);
+        if (attrTypeCompound == details::IMAGEScalar)
+            ctype = CompoundType::CompoundType_Scalar;
+        else if (attrTypeCompound == details::IMAGE3Planes)
+            ctype = CompoundType::CompoundType_3Planes;
+        else if (attrTypeCompound == details::IMAGE4Planes)
+            ctype = CompoundType::CompoundType_4Planes;
+        else
         {
-            POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: H5Fopen fail")).str());
+            POUTRE_RUNTIME_ERROR(
+                (boost::format("LoadFromHDF5: unsupported compound type %s") % attrTypeCompound).str());
+        }
+        // get ptype
+        H5std_string attrpType;
+        resAttr = dataset.openAttribute("IMAGE_P_TYPE");
+        stype = resAttr.getStrType();
+        resAttr.read(stype, attrpType);
+        if (attrpType == details::PUINT8)
+            ptype = PType::PType_GrayUINT8;
+        else if (attrpType == details::PINT32)
+            ptype = PType::PType_GrayINT32;
+        else if (attrpType == details::PINT64)
+            ptype = PType::PType_GrayINT64;
+        else if (attrpType == details::PFLOAT)
+            ptype = PType::PType_F32;
+        else if (attrpType == details::PDOUBLE)
+            ptype = PType::PType_D64;
+        else
+        {
+            POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported type %s") % attrpType).str());
         }
 
-        hid_t dataset_id = H5Dopen2(file_id, image_name.c_str(), H5P_DEFAULT);
-        if (dataset_id < 0)
+        // Handle type
+        // H5T_class_t type_class = dataset.getTypeClass();
+        // if (type_class == H5T_INTEGER) //or use attribute ?
+        //{
+        //    H5::IntType intType = dataset.getIntType();
+        //    auto byteSize = intType.getSize();
+        //    auto signType = intType.getSign();
+        //    if ((byteSize == 1) && (signType == H5T_SGN_NONE))
+        //    {
+        //        resp = PType::PType_GrayUINT8;
+        //        resc = CompoundType::CompoundType_Scalar;
+        //    }
+        //    else if ((byteSize == 4) && (signType == H5T_SGN_2))
+        //    {
+        //        resp = PType::PType_GrayINT32;
+        //        resc = CompoundType::CompoundType_Scalar;
+        //    }
+        //    else if ((byteSize == 8) && (signType == H5T_SGN_2))
+        //    {
+        //        resp = PType::PType_GrayINT64;
+        //        resc = CompoundType::CompoundType_Scalar;
+        //    }
+        //    else
+        //    {
+        //        POUTRE_RUNTIME_ERROR(
+        //            (boost::format("LoadFromHDF5: unsupported type %s") %
+        //            boost::lexical_cast<std::string>(type_class))
+        //                .str());
+        //    }
+        //}
+        // else if (type_class == H5T_FLOAT)
+        //{
+        //    H5::FloatType floaType = dataset.getFloatType();
+        //    auto byteSize = floaType.getSize();
+
+        //    if (byteSize == 4)
+        //    {
+        //        // use PredType::NATIVE_FLOAT to write
+        //        resp = PType::PType_F32;
+        //        resc = CompoundType::CompoundType_Scalar;
+        //    }
+        //    else if (byteSize == 8)
+        //    {
+        //        // use PredType::NATIVE_DOUBLE to write
+        //        resp = PType::PType_D64;
+        //        resc = CompoundType::CompoundType_Scalar;
+        //    }
+        //    else
+        //    {
+        //        POUTRE_RUNTIME_ERROR(
+        //            (boost::format("LoadFromHDF5: unsupported type %s") %
+        //            boost::lexical_cast<std::string>(type_class))
+        //                .str());
+        //    }
+        //}
+        // else if (type_class == H5T_COMPOUND)
+        //{
+        //    H5std_string attrTypeCompound;
+        //    H5::Attribute resAttr = dataset.openAttribute("IMAGE_SUBCLASS");
+        //    H5::StrType stype = resAttr.getStrType();
+        //    resAttr.read(stype, attrTypeCompound);
+
+        //     H5std_string attrpType;
+        //    resAttr = dataset.openAttribute("IMAGE_P_TYPE");
+        //    stype = resAttr.getStrType();
+        //    resAttr.read(stype, attrpType);
+
+        //    if (attrTypeCompound == "Scalar")
+        //    {
+        //        POUTRE_RUNTIME_ERROR(
+        //            (boost::format("LoadFromHDF5: unsupported type %s") %
+        //            boost::lexical_cast<std::string>(type_class))
+        //                .str());
+        //    }
+        //    else if (attrTypeCompound == "3Planes")
+        //    {
+        //        resc = CompoundType::CompoundType_3Planes;
+        //    }
+        //    else if (attrTypeCompound == "4Planes")
+        //    {
+        //        resc = CompoundType::CompoundType_4Planes;
+        //    }
+        //    else
+        //    {
+        //        POUTRE_RUNTIME_ERROR(
+        //            (boost::format("LoadFromHDF5: unsupported type %s") %
+        //            boost::lexical_cast<std::string>(type_class))
+        //                .str());
+        //    }
+        //}
+        // else
+        //{
+        //    POUTRE_RUNTIME_ERROR(
+        //        (boost::format("LoadFromHDF5: unsupported type %s") % boost::lexical_cast<std::string>(type_class))
+        //            .str());
+        //}
+
+        res = CreateDense(dims_out, ctype, ptype);
+
+        switch (dims_out.size())
         {
-            H5Fclose(file_id);
-            POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: H5Dopen2 fail")).str());
-        }
-
-        // datatype identifier
-        hid_t data_type_id = H5Dget_type(dataset_id);
-
-        // dataspace identifier
-        hid_t data_space_id = H5Dget_space(dataset_id);
-        try
-        {
-            // map
-            auto types = details::HDF5TypeToType(data_type_id);
-
-            // dimensions of the array
-            int dim = H5Sget_simple_extent_ndims(data_space_id);
-
-            const auto &coords = details::HDF5DimToCoord(data_space_id);
-
-            auto ctype = types.first;
-            auto ptype = types.second;
-            res = CreateDense(coords, ctype, ptype);
-
-            switch (coords.size())
+        case 1: {
+            switch (ctype)
             {
-            case 1: {
-                switch (ctype)
+            case CompoundType::CompoundType_Scalar:
+                switch (ptype)
                 {
-                case CompoundType::CompoundType_Scalar:
-                    switch (ptype)
-                    {
-                    case PType::PType_GrayUINT8:
-                        details::LoadFromHDF5_helper<pUINT8, 1>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT32:
-                        details::LoadFromHDF5_helper<pINT32, 1>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT64:
-                        details::LoadFromHDF5_helper<pINT64, 1>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_F32:
-                        details::LoadFromHDF5_helper<pFLOAT, 1>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_D64:
-                        details::LoadFromHDF5_helper<pDOUBLE, 1>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    default:
-                        POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
-                                              boost::lexical_cast<std::string>(ptype))
-                                                 .str());
-                        break;
-                    }
+                case PType::PType_GrayUINT8:
+                    details::LoadFromHDF5_helper<pUINT8, 1>(*res, dataset);
                     break;
-                case CompoundType::CompoundType_3Planes:
-                    switch (ptype)
-                    {
-                    case PType::PType_GrayUINT8:
-                        details::LoadFromHDF53Planes_helper<pUINT8, 1>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
 
-                    case PType::PType_GrayINT32:
-                        details::LoadFromHDF53Planes_helper<pINT32, 1>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT64:
-                        details::LoadFromHDF53Planes_helper<pINT64, 1>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_F32:
-                        details::LoadFromHDF53Planes_helper<pFLOAT, 1>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_D64:
-                        details::LoadFromHDF53Planes_helper<pDOUBLE, 1>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    default:
-                        POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
-                                              boost::lexical_cast<std::string>(ptype))
-                                                 .str());
-                        break;
-                    }
+                case PType::PType_GrayINT32:
+                    details::LoadFromHDF5_helper<pINT32, 1>(*res, dataset);
                     break;
-                case CompoundType::CompoundType_4Planes:
-                    switch (ptype)
-                    {
-                    case PType::PType_GrayUINT8:
-                        details::LoadFromHDF54Planes_helper<pUINT8, 1>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
 
-                    case PType::PType_GrayINT32:
-                        details::LoadFromHDF54Planes_helper<pINT32, 1>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT64:
-                        details::LoadFromHDF54Planes_helper<pINT64, 1>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_F32:
-                        details::LoadFromHDF54Planes_helper<pFLOAT, 1>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_D64:
-                        details::LoadFromHDF54Planes_helper<pDOUBLE, 1>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    default:
-                        POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
-                                              boost::lexical_cast<std::string>(ptype))
-                                                 .str());
-                    }
+                case PType::PType_GrayINT64:
+                    details::LoadFromHDF5_helper<pINT64, 1>(*res, dataset);
+                    break;
+                case PType::PType_F32:
+                    details::LoadFromHDF5_helper<pFLOAT, 1>(*res, dataset);
+                    break;
+                case PType::PType_D64:
+                    details::LoadFromHDF5_helper<pDOUBLE, 1>(*res, dataset);
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("LoadFromHDF5: unsupported cTYpe %s") % boost::lexical_cast<std::string>(ctype))
+                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
                             .str());
+                    break;
                 }
-            } // case 1
-            break;
-            case 2: {
-                switch (ctype)
+                break;
+            case CompoundType::CompoundType_3Planes:
+                switch (ptype)
                 {
-                case CompoundType::CompoundType_Scalar:
-                    switch (ptype)
-                    {
-                    case PType::PType_GrayUINT8:
-                        details::LoadFromHDF5_helper<pUINT8, 2>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT32:
-                        details::LoadFromHDF5_helper<pINT32, 2>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT64:
-                        details::LoadFromHDF5_helper<pINT64, 2>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_F32:
-                        details::LoadFromHDF5_helper<pFLOAT, 2>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_D64:
-                        details::LoadFromHDF5_helper<pDOUBLE, 2>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    default:
-                        POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
-                                              boost::lexical_cast<std::string>(ptype))
-                                                 .str());
-                    }
+                case PType::PType_GrayUINT8:
+                    details::LoadFromHDF53Planes_helper<pUINT8, 1>(*res, dataset);
                     break;
-                case CompoundType::CompoundType_3Planes:
-                    switch (ptype)
-                    {
-                    case PType::PType_GrayUINT8:
-                        details::LoadFromHDF53Planes_helper<pUINT8, 2>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
 
-                    case PType::PType_GrayINT32:
-                        details::LoadFromHDF53Planes_helper<pINT32, 2>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT64:
-                        details::LoadFromHDF53Planes_helper<pINT64, 2>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_F32:
-                        details::LoadFromHDF53Planes_helper<pFLOAT, 2>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_D64:
-                        details::LoadFromHDF53Planes_helper<pDOUBLE, 2>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    default:
-                        POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
-                                              boost::lexical_cast<std::string>(ptype))
-                                                 .str());
-                    }
+                case PType::PType_GrayINT32:
+                    details::LoadFromHDF53Planes_helper<pINT32, 1>(*res, dataset);
                     break;
-                case CompoundType::CompoundType_4Planes:
-                    switch (ptype)
-                    {
-                    case PType::PType_GrayUINT8:
-                        details::LoadFromHDF54Planes_helper<pUINT8, 2>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
 
-                    case PType::PType_GrayINT32:
-                        details::LoadFromHDF54Planes_helper<pINT32, 2>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT64:
-                        details::LoadFromHDF54Planes_helper<pINT64, 2>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_F32:
-                        details::LoadFromHDF54Planes_helper<pFLOAT, 2>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_D64:
-                        details::LoadFromHDF54Planes_helper<pDOUBLE, 2>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    default:
-                        POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
-                                              boost::lexical_cast<std::string>(ptype))
-                                                 .str());
-                    }
-                    break; // ptype
-
+                case PType::PType_GrayINT64:
+                    details::LoadFromHDF53Planes_helper<pINT64, 1>(*res, dataset);
+                    break;
+                case PType::PType_F32:
+                    details::LoadFromHDF53Planes_helper<pFLOAT, 1>(*res, dataset);
+                    break;
+                case PType::PType_D64:
+                    details::LoadFromHDF53Planes_helper<pDOUBLE, 1>(*res, dataset);
+                    break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("LoadFromHDF5: unsupported cTYpe %s") % boost::lexical_cast<std::string>(ctype))
+                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
+                            .str());
+                    break;
+                }
+                break;
+            case CompoundType::CompoundType_4Planes:
+                switch (ptype)
+                {
+                case PType::PType_GrayUINT8:
+                    details::LoadFromHDF54Planes_helper<pUINT8, 1>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT32:
+                    details::LoadFromHDF54Planes_helper<pINT32, 1>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT64:
+                    details::LoadFromHDF54Planes_helper<pINT64, 1>(*res, dataset);
+                    break;
+                case PType::PType_F32:
+                    details::LoadFromHDF54Planes_helper<pFLOAT, 1>(*res, dataset);
+                    break;
+                case PType::PType_D64:
+                    details::LoadFromHDF54Planes_helper<pDOUBLE, 1>(*res, dataset);
+                    break;
+                default:
+                    POUTRE_RUNTIME_ERROR(
+                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
                             .str());
                 }
                 break;
-            } // case 2!
-            case 3: {
-                switch (ctype)
-                {
-                case CompoundType::CompoundType_Scalar:
-                    switch (ptype)
-                    {
-                    case PType::PType_GrayUINT8:
-                        details::LoadFromHDF5_helper<pUINT8, 3>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT32:
-                        details::LoadFromHDF5_helper<pINT32, 3>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT64:
-                        details::LoadFromHDF5_helper<pINT64, 3>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_F32:
-                        details::LoadFromHDF5_helper<pFLOAT, 3>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_D64:
-                        details::LoadFromHDF5_helper<pDOUBLE, 3>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    default:
-                        POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
-                                              boost::lexical_cast<std::string>(ptype))
-                                                 .str());
-                    }
-                    break;
-                case CompoundType::CompoundType_3Planes:
-                    switch (ptype)
-                    {
-                    case PType::PType_GrayUINT8:
-                        details::LoadFromHDF53Planes_helper<pUINT8, 3>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT32:
-                        details::LoadFromHDF53Planes_helper<pINT32, 3>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT64:
-                        details::LoadFromHDF53Planes_helper<pINT64, 3>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_F32:
-                        details::LoadFromHDF53Planes_helper<pFLOAT, 3>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_D64:
-                        details::LoadFromHDF53Planes_helper<pDOUBLE, 3>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    default:
-                        POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
-                                              boost::lexical_cast<std::string>(ptype))
-                                                 .str());
-                    }
-                    break;
-                case CompoundType::CompoundType_4Planes:
-                    switch (ptype)
-                    {
-                    case PType::PType_GrayUINT8:
-                        details::LoadFromHDF54Planes_helper<pUINT8, 3>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT32:
-                        details::LoadFromHDF54Planes_helper<pINT32, 3>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT64:
-                        details::LoadFromHDF54Planes_helper<pINT64, 3>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_F32:
-                        details::LoadFromHDF54Planes_helper<pFLOAT, 3>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_D64:
-                        details::LoadFromHDF54Planes_helper<pDOUBLE, 3>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    default:
-                        POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
-                                              boost::lexical_cast<std::string>(ptype))
-                                                 .str());
-                    }
-                    break; // ptype
-
-                default:
-                    POUTRE_RUNTIME_ERROR(
-                        (boost::format("LoadFromHDF5: unsupported cTYpe %s") % boost::lexical_cast<std::string>(ctype))
-                            .str());
-                }
-                break;
-            } // case 3!
-            case 4: {
-                switch (ctype)
-                {
-                case CompoundType::CompoundType_Scalar:
-                    switch (ptype)
-                    {
-                    case PType::PType_GrayUINT8:
-                        details::LoadFromHDF5_helper<pUINT8, 4>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT32:
-                        details::LoadFromHDF5_helper<pINT32, 4>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT64:
-                        details::LoadFromHDF5_helper<pINT64, 4>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_F32:
-                        details::LoadFromHDF5_helper<pFLOAT, 4>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_D64:
-                        details::LoadFromHDF5_helper<pDOUBLE, 4>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    default:
-                        POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
-                                              boost::lexical_cast<std::string>(ptype))
-                                                 .str());
-                    }
-                    break;
-                case CompoundType::CompoundType_3Planes:
-                    switch (ptype)
-                    {
-                    case PType::PType_GrayUINT8:
-                        details::LoadFromHDF53Planes_helper<pUINT8, 4>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT32:
-                        details::LoadFromHDF53Planes_helper<pINT32, 4>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT64:
-                        details::LoadFromHDF53Planes_helper<pINT64, 4>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_F32:
-                        details::LoadFromHDF53Planes_helper<pFLOAT, 4>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_D64:
-                        details::LoadFromHDF53Planes_helper<pDOUBLE, 4>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    default:
-                        POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
-                                              boost::lexical_cast<std::string>(ptype))
-                                                 .str());
-                    }
-                    break;
-                case CompoundType::CompoundType_4Planes:
-                    switch (ptype)
-                    {
-                    case PType::PType_GrayUINT8:
-                        details::LoadFromHDF54Planes_helper<pUINT8, 4>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT32:
-                        details::LoadFromHDF54Planes_helper<pINT32, 4>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-
-                    case PType::PType_GrayINT64:
-                        details::LoadFromHDF54Planes_helper<pINT64, 4>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_F32:
-                        details::LoadFromHDF54Planes_helper<pFLOAT, 4>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    case PType::PType_D64:
-                        details::LoadFromHDF54Planes_helper<pDOUBLE, 4>(*res, dataset_id, data_type_id, data_space_id);
-                        break;
-                    default:
-                        POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported pTYpe %s") %
-                                              boost::lexical_cast<std::string>(ptype))
-                                                 .str());
-                    }
-                    break; // ptype
-
-                default:
-                    POUTRE_RUNTIME_ERROR(
-                        (boost::format("LoadFromHDF5: unsupported cTYpe %s") % boost::lexical_cast<std::string>(ctype))
-                            .str());
-                }
-                break;
-            } // case 4!
             default:
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("StoreWithHDF5: unsupported number of dims %d") % coords.size()).str());
-            } // dims
-        }
-        catch (const std::exception &e)
-        {
-            H5Sclose(data_space_id);
-            H5Tclose(data_type_id);
-            H5Dclose(dataset_id);
-            H5Fclose(file_id);
-            throw e;
-            return res;
-        }
-        H5Sclose(data_space_id);
-        H5Tclose(data_type_id);
-        H5Dclose(dataset_id);
-        H5Fclose(file_id);
+                    (boost::format("LoadFromHDF5: unsupported cTYpe %s") % boost::lexical_cast<std::string>(ctype))
+                        .str());
+            }
+        } // case 1
+        break;
+        case 2: {
+            switch (ctype)
+            {
+            case CompoundType::CompoundType_Scalar:
+                switch (ptype)
+                {
+                case PType::PType_GrayUINT8:
+                    details::LoadFromHDF5_helper<pUINT8, 2>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT32:
+                    details::LoadFromHDF5_helper<pINT32, 2>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT64:
+                    details::LoadFromHDF5_helper<pINT64, 2>(*res, dataset);
+                    break;
+                case PType::PType_F32:
+                    details::LoadFromHDF5_helper<pFLOAT, 2>(*res, dataset);
+                    break;
+                case PType::PType_D64:
+                    details::LoadFromHDF5_helper<pDOUBLE, 2>(*res, dataset);
+                    break;
+                default:
+                    POUTRE_RUNTIME_ERROR(
+                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
+                            .str());
+                }
+                break;
+            case CompoundType::CompoundType_3Planes:
+                switch (ptype)
+                {
+                case PType::PType_GrayUINT8:
+                    details::LoadFromHDF53Planes_helper<pUINT8, 2>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT32:
+                    details::LoadFromHDF53Planes_helper<pINT32, 2>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT64:
+                    details::LoadFromHDF53Planes_helper<pINT64, 2>(*res, dataset);
+                    break;
+                case PType::PType_F32:
+                    details::LoadFromHDF53Planes_helper<pFLOAT, 2>(*res, dataset);
+                    break;
+                case PType::PType_D64:
+                    details::LoadFromHDF53Planes_helper<pDOUBLE, 2>(*res, dataset);
+                    break;
+                default:
+                    POUTRE_RUNTIME_ERROR(
+                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
+                            .str());
+                }
+                break;
+            case CompoundType::CompoundType_4Planes:
+                switch (ptype)
+                {
+                case PType::PType_GrayUINT8:
+                    details::LoadFromHDF54Planes_helper<pUINT8, 2>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT32:
+                    details::LoadFromHDF54Planes_helper<pINT32, 2>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT64:
+                    details::LoadFromHDF54Planes_helper<pINT64, 2>(*res, dataset);
+                    break;
+                case PType::PType_F32:
+                    details::LoadFromHDF54Planes_helper<pFLOAT, 2>(*res, dataset);
+                    break;
+                case PType::PType_D64:
+                    details::LoadFromHDF54Planes_helper<pDOUBLE, 2>(*res, dataset);
+                    break;
+                default:
+                    POUTRE_RUNTIME_ERROR(
+                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
+                            .str());
+                }
+                break; // ptype
+
+            default:
+                POUTRE_RUNTIME_ERROR(
+                    (boost::format("LoadFromHDF5: unsupported cTYpe %s") % boost::lexical_cast<std::string>(ctype))
+                        .str());
+            }
+            break;
+        } // case 2!
+        case 3: {
+            switch (ctype)
+            {
+            case CompoundType::CompoundType_Scalar:
+                switch (ptype)
+                {
+                case PType::PType_GrayUINT8:
+                    details::LoadFromHDF5_helper<pUINT8, 3>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT32:
+                    details::LoadFromHDF5_helper<pINT32, 3>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT64:
+                    details::LoadFromHDF5_helper<pINT64, 3>(*res, dataset);
+                    break;
+                case PType::PType_F32:
+                    details::LoadFromHDF5_helper<pFLOAT, 3>(*res, dataset);
+                    break;
+                case PType::PType_D64:
+                    details::LoadFromHDF5_helper<pDOUBLE, 3>(*res, dataset);
+                    break;
+                default:
+                    POUTRE_RUNTIME_ERROR(
+                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
+                            .str());
+                }
+                break;
+            case CompoundType::CompoundType_3Planes:
+                switch (ptype)
+                {
+                case PType::PType_GrayUINT8:
+                    details::LoadFromHDF53Planes_helper<pUINT8, 3>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT32:
+                    details::LoadFromHDF53Planes_helper<pINT32, 3>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT64:
+                    details::LoadFromHDF53Planes_helper<pINT64, 3>(*res, dataset);
+                    break;
+                case PType::PType_F32:
+                    details::LoadFromHDF53Planes_helper<pFLOAT, 3>(*res, dataset);
+                    break;
+                case PType::PType_D64:
+                    details::LoadFromHDF53Planes_helper<pDOUBLE, 3>(*res, dataset);
+                    break;
+                default:
+                    POUTRE_RUNTIME_ERROR(
+                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
+                            .str());
+                }
+                break;
+            case CompoundType::CompoundType_4Planes:
+                switch (ptype)
+                {
+                case PType::PType_GrayUINT8:
+                    details::LoadFromHDF54Planes_helper<pUINT8, 3>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT32:
+                    details::LoadFromHDF54Planes_helper<pINT32, 3>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT64:
+                    details::LoadFromHDF54Planes_helper<pINT64, 3>(*res, dataset);
+                    break;
+                case PType::PType_F32:
+                    details::LoadFromHDF54Planes_helper<pFLOAT, 3>(*res, dataset);
+                    break;
+                case PType::PType_D64:
+                    details::LoadFromHDF54Planes_helper<pDOUBLE, 3>(*res, dataset);
+                    break;
+                default:
+                    POUTRE_RUNTIME_ERROR(
+                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
+                            .str());
+                }
+                break; // ptype
+
+            default:
+                POUTRE_RUNTIME_ERROR(
+                    (boost::format("LoadFromHDF5: unsupported cTYpe %s") % boost::lexical_cast<std::string>(ctype))
+                        .str());
+            }
+            break;
+        } // case 3!
+        case 4: {
+            switch (ctype)
+            {
+            case CompoundType::CompoundType_Scalar:
+                switch (ptype)
+                {
+                case PType::PType_GrayUINT8:
+                    details::LoadFromHDF5_helper<pUINT8, 4>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT32:
+                    details::LoadFromHDF5_helper<pINT32, 4>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT64:
+                    details::LoadFromHDF5_helper<pINT64, 4>(*res, dataset);
+                    break;
+                case PType::PType_F32:
+                    details::LoadFromHDF5_helper<pFLOAT, 4>(*res, dataset);
+                    break;
+                case PType::PType_D64:
+                    details::LoadFromHDF5_helper<pDOUBLE, 4>(*res, dataset);
+                    break;
+                default:
+                    POUTRE_RUNTIME_ERROR(
+                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
+                            .str());
+                }
+                break;
+            case CompoundType::CompoundType_3Planes:
+                switch (ptype)
+                {
+                case PType::PType_GrayUINT8:
+                    details::LoadFromHDF53Planes_helper<pUINT8, 4>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT32:
+                    details::LoadFromHDF53Planes_helper<pINT32, 4>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT64:
+                    details::LoadFromHDF53Planes_helper<pINT64, 4>(*res, dataset);
+                    break;
+                case PType::PType_F32:
+                    details::LoadFromHDF53Planes_helper<pFLOAT, 4>(*res, dataset);
+                    break;
+                case PType::PType_D64:
+                    details::LoadFromHDF53Planes_helper<pDOUBLE, 4>(*res, dataset);
+                    break;
+                default:
+                    POUTRE_RUNTIME_ERROR(
+                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
+                            .str());
+                }
+                break;
+            case CompoundType::CompoundType_4Planes:
+                switch (ptype)
+                {
+                case PType::PType_GrayUINT8:
+                    details::LoadFromHDF54Planes_helper<pUINT8, 4>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT32:
+                    details::LoadFromHDF54Planes_helper<pINT32, 4>(*res, dataset);
+                    break;
+
+                case PType::PType_GrayINT64:
+                    details::LoadFromHDF54Planes_helper<pINT64, 4>(*res, dataset);
+                    break;
+                case PType::PType_F32:
+                    details::LoadFromHDF54Planes_helper<pFLOAT, 4>(*res, dataset);
+                    break;
+                case PType::PType_D64:
+                    details::LoadFromHDF54Planes_helper<pDOUBLE, 4>(*res, dataset);
+                    break;
+                default:
+                    POUTRE_RUNTIME_ERROR(
+                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
+                            .str());
+                }
+                break; // ptype
+
+            default:
+                POUTRE_RUNTIME_ERROR(
+                    (boost::format("LoadFromHDF5: unsupported cTYpe %s") % boost::lexical_cast<std::string>(ctype))
+                        .str());
+            }
+            break;
+        } // case 4!
+        default:
+            POUTRE_RUNTIME_ERROR(
+                (boost::format("StoreWithHDF5: unsupported number of dims %d") % dims_out.size()).str());
+        } // dims
+
         return res;
     }
 
