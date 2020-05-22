@@ -556,10 +556,11 @@ namespace poutre
         //        (boost::format("LoadFromHDF5: unsupported type %s") % boost::lexical_cast<std::string>(type_class))
         //            .str());
         //}
+        std::vector<size_t> coords(dims_out.size());
+        std::copy(dims_out.begin(), dims_out.end(), coords.begin());
+        res = CreateDense(coords, ctype, ptype);
 
-        res = CreateDense(dims_out, ctype, ptype);
-
-        switch (dims_out.size())
+        switch (coords.size())
         {
         case 1: {
             switch (ctype)
@@ -919,8 +920,7 @@ namespace poutre
             break;
         } // case 4!
         default:
-            POUTRE_RUNTIME_ERROR(
-                (boost::format("StoreWithHDF5: unsupported number of dims %d") % dims_out.size()).str());
+            POUTRE_RUNTIME_ERROR((boost::format("StoreWithHDF5: unsupported number of dims %d") % coords.size()).str());
         } // dims
 
         return res;
