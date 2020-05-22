@@ -1,0 +1,24 @@
+path_classifiers:
+  generated:
+    - exclude: /  
+  library:
+    - exclude: "thirdparties/*"
+  template:
+    - exclude: "thirdparties/*"
+  test: 
+    - exclude: /
+    - nrt
+  docs:
+    - README.md
+    - LICENSE.txt
+
+
+extraction:
+  cpp:
+    prepare:
+      packages: 
+        - libboost-all-dev
+      # configure:
+      #   command:
+      #     - ./bootstrap
+      #     - ./configure --with-modules="" --without-lua
