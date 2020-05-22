@@ -756,7 +756,7 @@ namespace poutre
     // FIXME convertion loose qualifiers
     template <class valuetype, std::ptrdiff_t Rank>
     poutre::array_view<valuetype, 1> lview(const DenseImage<valuetype, Rank> &iImg)
-    {
+    { //-V659
         return view(const_cast<DenseImage<valuetype, Rank> &>(iImg));
     }
 

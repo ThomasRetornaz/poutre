@@ -25,7 +25,7 @@ template <typename T> void TransposeBenchmark(benchmark::State &state) {
   while (state.KeepRunning()) {
     for (auto i = 0u; i < size; ++i) {
       auto ImageIn = poutre::DenseImage<T,2>({(std::size_t)sqrt(size), (std::size_t)sqrt(size)});
-      auto ImageOut = poutre::DenseImage<T,2>({(std::size_t)sqrt(size), (std::size_t)sqrt(size)});
+      auto ImageOut = poutre::DenseImage<T,2>({(std::size_t)sqrt(size), (std::size_t)sqrt(size)}); //-V656
       poutre::t_transpose(ImageIn, ImageOut);
     }
   }

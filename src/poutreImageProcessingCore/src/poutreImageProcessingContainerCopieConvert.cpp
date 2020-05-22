@@ -59,17 +59,11 @@ namespace poutre
     void Copy(const IInterface &i_img1, IInterface &i_img2)
     {
         AssertSizesCompatible(i_img1, i_img2, "Copy images have not compatible sizes");
-        if (i_img1.GetImgType() != i_img2.GetImgType())
-            POUTRE_RUNTIME_ERROR("Different image type");
-        if (i_img1.GetCType() != i_img2.GetCType())
-            POUTRE_RUNTIME_ERROR("Different compound type");
+        AssertAsTypesCompatible(i_img1, i_img2,
+                                "Copy images have not compatible types may you have to use convert instead");
         auto dims = i_img1.GetNumDims();
         switch (dims)
         {
-        case 0: {
-            POUTRE_RUNTIME_ERROR("Unsupported number of dims:0");
-        }
-        break;
         case 1: {
         }
         break;
@@ -77,7 +71,7 @@ namespace poutre
         }
         break;
         default:
-            POUTRE_RUNTIME_ERROR("Unsupported number of dims");
+            POUTRE_RUNTIME_ERROR((boost::format("Unsupported number of dims %d") % dims).str());
         }
     }
 } // namespace poutre

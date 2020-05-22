@@ -255,7 +255,7 @@ and do transposition
             POUTRE_CHECK(ibd[1] = obd[0], "ibd[1]!=obd[0] bound not compatible");
             auto i_vinbeg1 = i_vin1.data();
             auto o_voutbeg = o_vout.data();
-            scoord ysize = ibd[0];
+            scoord ysize = ibd[0]; //-V525
             scoord xsize = ibd[1];
             scoord oxsize = obd[1];
             scoord oxstep = o_vout.stride()[0];
@@ -346,7 +346,7 @@ and do transposition
         }
     };
 #endif //__SSE2__
-       // Note slower than simple double loop dur probably to unaligned load
+       // Note slower than simple double loop due probably to unaligned load
     // #ifdef __AVX__
 
     //    //see
