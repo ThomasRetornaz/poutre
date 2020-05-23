@@ -45,8 +45,8 @@ matrix:
           - CXXFLAGS="-O0 --coverage"
           - BUILD_TYPE=Coverage
           - GCC=9
-      before_install:
-        - pip install --user cpp-coveralls
+      #before_install:
+        
       # script:
       #   - ./configure --enable-gcov && make && make check
       # after_success:
@@ -55,6 +55,7 @@ env:
   global:
     - POUTRE_CMAKE_GENERATOR="Ninja"
 before_install:
+    - pip install --user cpp-coveralls
     - sudo apt-get update
     # Boost and ninja build
     - sudo apt-get install -qq libboost-all-dev ninja-build
@@ -78,8 +79,8 @@ script:
   - mkdir -p build
   - cd build
   - cmake "$POUTRE_CMAKE_EXTRA_ARGS" -DBUILD_SHARED_LIBS=ON -DPOUTRE_BUILD_TEST=ON -DPOUTRE_BUILD_BENCH=ON $POUTRE_CMAKE_EXTRA_ARGS -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
-  - cmake --build . --config Release
-  - ctest . -C Release --output-on-failure
+  - cmake --build .
+  - ctest . --output-on-failure
   # cppcheck
   - cppcheck -f --std=c++11 --inline-suppr -i build -i thirdparties --quiet --error-exitcode=1 .
 # see https://github.com/richelbilderbeek/travis_cpp_tutorial/blob/master/travis_cpp_tutorial.pdf
