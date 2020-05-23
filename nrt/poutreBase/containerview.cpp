@@ -28,12 +28,8 @@ BOOST_AUTO_TEST_CASE(ctor)
     BOOST_CHECK_EQUAL(dummyview.size(), 0);
     BOOST_CHECK(dummyview.data() == nullptr);
     BOOST_CHECK(dummyview.stride() == poutre::idx1d{ 1 }); //stride is 1 for empty view
-    //BOOST_CHECK_THROW(dummyview[idxtype{ 0 }],std::runtime_error); //throw in debug
-    //BOOST_CHECK_THROW(dummyview[5], std::runtime_error); //can't slice
+   
     //on 1D
-#ifndef NDEBUG  
-    BOOST_CHECK_THROW(dummyview.section(poutre::bd1d{ 3 }), std::runtime_error); //section
-#endif
     BOOST_TEST_MESSAGE("sview");
     using sview1DINt = poutre::strided_array_view < int, 1 >;
     using sview2DINt = poutre::strided_array_view < int, 2 >;
@@ -44,9 +40,6 @@ BOOST_AUTO_TEST_CASE(ctor)
     BOOST_CHECK_EQUAL(dummysview.size(), 0);
     std::cout << "dummysview.stride()" << dummysview.stride() << std::endl;
     BOOST_CHECK(dummysview.stride() == poutre::idx1d{ 0 }); //stride is 0 for empty stridedview
-    //BOOST_CHECK_THROW(dummysview[idxtype{ 0 }], std::runtime_error); //throw in debug
-    //BOOST_CHECK_THROW(dummysview[5], std::runtime_error); //can't slice on 1D
-    //BOOST_CHECK_THROW(dummysview.section(poutre::bd1d{ 3 }), std::runtime_error); //section
 }
 
 
@@ -157,11 +150,6 @@ BOOST_AUTO_TEST_CASE(section_and_slice_1d)
     BOOST_CHECK(sectionwithbound.bound() == (poutre::bd1d{ 3 }));
     BOOST_CHECK_EQUAL(sectionwithbound[poutre::idx1d{ 0 }], 2);
     BOOST_CHECK_EQUAL(sectionwithbound[poutre::idx1d{ 1 }], 3);
-#ifndef NDEBUG
-    BOOST_TEST_MESSAGE("throw on invalid parameter");
-    BOOST_CHECK_THROW(view.section(poutre::idx1d{ 10 }), std::runtime_error);
-    BOOST_CHECK_THROW(view.section(poutre::idx1d{ 0 }, (poutre::bd1d{ 11 })), std::runtime_error);
-#endif
 }
 
 
