@@ -79,8 +79,8 @@ script:
   - mkdir -p build
   - cd build
   - cmake "$POUTRE_CMAKE_EXTRA_ARGS" -DBUILD_SHARED_LIBS=ON -DPOUTRE_BUILD_TEST=ON -DPOUTRE_BUILD_BENCH=ON $POUTRE_CMAKE_EXTRA_ARGS -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
-  - cmake --build .
-  - ctest . --output-on-failure
+  - cmake --build . --config Release
+  - ctest . -C Release --output-on-failure
   # cppcheck
   - cppcheck -f --std=c++11 --inline-suppr -i build -i thirdparties --quiet --error-exitcode=1 .
 # see https://github.com/richelbilderbeek/travis_cpp_tutorial/blob/master/travis_cpp_tutorial.pdf
