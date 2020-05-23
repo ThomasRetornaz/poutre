@@ -1,0 +1,33 @@
+path_classifiers:
+  generated:
+    - exclude: /  
+  library:
+    - exclude: /
+    - src
+  template:
+    - exclude: /
+    - src
+  test: 
+    - exclude: /
+    - nrt
+  docs:
+    - README.md
+    - LICENSE.txt
+
+
+extraction:
+  cpp:
+    prepare:
+      packages: 
+        - build-essential
+        - cmake
+        - libboost-all-dev
+    configure:
+      command:
+        - mkdir build
+        - cd build
+        - cmake ..
+    index:
+      build_command:
+        - cd build
+        - make
