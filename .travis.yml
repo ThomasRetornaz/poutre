@@ -21,6 +21,7 @@ matrix:
       env: 
         - CXX=g++-9
         - GCC=9
+        - BUILD_TYPE=Release
     - compiler: clang
       addons:
         apt:
@@ -33,6 +34,7 @@ matrix:
       env: 
         - COMPILER=clang 
         - CLANG=9
+        - BUILD_TYPE=Release
     - compiler: gcc
       addons:
         apt:
@@ -43,7 +45,6 @@ matrix:
           - CXXFLAGS="-O0 --coverage"
           - BUILD_TYPE=Coverage
           - GCC=9
-          - CMAKE_OPTIONS=-DENABLE_COVERAGE=ON
       before_install:
         - pip install --user cpp-coveralls
       # script:
@@ -52,8 +53,7 @@ matrix:
       #   - coveralls --exclude nrt --gcov-options '\-lp' nrt
 env:
   global:
-        - POUTRE_CMAKE_EXTRA_ARGS="-DBUILD_PYTHON=ON -DCMAKE_BUILD_TYPE=Release" 
-        - POUTRE_CMAKE_GENERATOR="Ninja"
+    - POUTRE_CMAKE_GENERATOR="Ninja"
 before_install:
     - sudo apt-get update
     # Boost and ninja build
@@ -77,7 +77,7 @@ install:
 script:
   - mkdir -p build
   - cd build
-  - cmake "$POUTRE_CMAKE_EXTRA_ARGS" -DBUILD_SHARED_LIBS=ON -DPOUTRE_BUILD_TEST=ON -DPOUTRE_BUILD_BENCH=ON $POUTRE_CMAKE_EXTRA_ARGS ..
+  - cmake "$POUTRE_CMAKE_EXTRA_ARGS" -DBUILD_SHARED_LIBS=ON -DPOUTRE_BUILD_TEST=ON -DPOUTRE_BUILD_BENCH=ON $POUTRE_CMAKE_EXTRA_ARGS -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
   - cmake --build . --config Release
   - ctest . -C Release --output-on-failure
   # cppcheck
@@ -89,3 +89,10 @@ after_success:
       coveralls --include src --exclude thirdparties --gcov-options '\-lp' --root .. --build-root .;
     fi
   - bash <(curl -s https://codecov.io/bash)
+
+notifications:
+  email:
+    recipients:
+      - thomas.retornaz@mines-paris.org
+    on_success: change
+    on_failure: always
