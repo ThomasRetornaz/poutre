@@ -79,17 +79,17 @@ script:
   - mkdir -p build
   - cd build
   - cmake "$POUTRE_CMAKE_EXTRA_ARGS" -DBUILD_SHARED_LIBS=ON -DPOUTRE_BUILD_TEST=ON -DPOUTRE_BUILD_BENCH=ON $POUTRE_CMAKE_EXTRA_ARGS -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
-  - cmake --build . --config Release
-  - ctest . -C Release --output-on-failure
+  - cmake --build .
+  - ctest . --output-on-failure
   # cppcheck
   - cppcheck -f --std=c++11 --inline-suppr -i build -i thirdparties --quiet --error-exitcode=1 .
 # see https://github.com/richelbilderbeek/travis_cpp_tutorial/blob/master/travis_cpp_tutorial.pdf
 after_success:
-  
+  - bash <(curl -s https://codecov.io/bash)
   - if [ "${BUILD_TYPE}" == "Coverage" -a "${TRAVIS_OS_NAME}" == "linux" ]; then
       coveralls --include src --exclude thirdparties --gcov-options '\-lp' --root .. --build-root .;
     fi
-  - bash <(curl -s https://codecov.io/bash)
+
 
 notifications:
   email:
