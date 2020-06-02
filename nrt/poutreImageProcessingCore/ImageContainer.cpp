@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE(clone) {
   BOOST_CHECK_EQUAL((*cloned).GetCType(),
                     poutre::CompoundType::CompoundType_Scalar);
   BOOST_CHECK_EQUAL((*cloned).GetImgType(), poutre::ImgType::ImgType_Dense);
-  BOOST_CHECK_EQUAL((*cloned).GetXSize(), 4);
+  BOOST_CHECK_EQUAL((*cloned).GetXSize(), 4); //-V112
   BOOST_CHECK_EQUAL((*cloned).GetYSize(), 3);
   BOOST_CHECK_EQUAL((*cloned).GetNumDims(), 2);
   BOOST_CHECK(!(*cloned).empty());
@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE(clone) {
 BOOST_AUTO_TEST_CASE(Factory) {
   {
     auto img =
-        poutre::CreateDense({3, 4}, poutre::CompoundType::CompoundType_Scalar,
+        poutre::CreateDense({3, 4}, poutre::CompoundType::CompoundType_Scalar, //-V112
                             poutre::PType::PType_GrayUINT8); //-V112
     BOOST_REQUIRE(img);
     BOOST_CHECK_EQUAL((*img).GetImgType(), poutre::ImgType::ImgType_Dense);
@@ -96,7 +96,7 @@ BOOST_AUTO_TEST_CASE(Factory) {
 
   {
     auto img =
-        poutre::CreateDense({3, 4}, poutre::CompoundType::CompoundType_Scalar,
+        poutre::CreateDense({3, 4}, poutre::CompoundType::CompoundType_Scalar, //-V112
                             poutre::PType::PType_GrayINT32); //-V112
     BOOST_REQUIRE(img);
     BOOST_CHECK_EQUAL((*img).GetImgType(), poutre::ImgType::ImgType_Dense);
@@ -111,7 +111,7 @@ BOOST_AUTO_TEST_CASE(Factory) {
   }
   {
     auto img =
-        poutre::CreateDense({3, 4}, poutre::CompoundType::CompoundType_Scalar,
+        poutre::CreateDense({3, 4}, poutre::CompoundType::CompoundType_Scalar, //-V112
                             poutre::PType::PType_F32); //-V112
     BOOST_REQUIRE(img);
     BOOST_CHECK_EQUAL((*img).GetImgType(), poutre::ImgType::ImgType_Dense);
@@ -126,7 +126,7 @@ BOOST_AUTO_TEST_CASE(Factory) {
   }
   {
     auto img =
-        poutre::CreateDense({3, 4}, poutre::CompoundType::CompoundType_Scalar,
+        poutre::CreateDense({3, 4}, poutre::CompoundType::CompoundType_Scalar, //-V112
                             poutre::PType::PType_GrayINT64); //-V112
     BOOST_REQUIRE(img);
     BOOST_CHECK_EQUAL((*img).GetImgType(), poutre::ImgType::ImgType_Dense);
@@ -248,7 +248,7 @@ BOOST_AUTO_TEST_CASE(SetPixelGetPixel) {
 ");
   auto img = dynamic_cast<ImageType *>(imgin.get());
   BOOST_REQUIRE(img);
-  (*img).SetPixel(2, 0, 10);  // x then y
+  (*img).SetPixel(2, 0, 10);  // x then y //-V522
   poutre::idx2d pix = {3, 0}; // y then x //-V522
   (*img).SetPixel(pix, 8);
   poutre::pt2D_scoord pix2 = {5, 3}; // x then y
@@ -282,7 +282,7 @@ BOOST_AUTO_TEST_CASE(GetLineBuffer) {
 ");
   auto img = dynamic_cast<ImageType *>(imgin.get());
   BOOST_REQUIRE(img);
-  auto line = (*img).GetLineBuffer(3);
+  auto line = (*img).GetLineBuffer(3); //-V522
   BOOST_CHECK_EQUAL(line[4], 5); //-V522
 
   BOOST_CHECK_EQUAL((*img).GetXSize(), 6);

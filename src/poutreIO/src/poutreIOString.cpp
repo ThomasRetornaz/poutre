@@ -52,7 +52,7 @@ namespace poutre
     template <size_t dims, typename ptype>
     void ImageFromStringDense3PlanesDispatchPTypeHelper(poutre::IInterface &img, std::istringstream &istrm)
     {
-        using ImgType = DenseImage<typename TypeTraits<compound_pixel<ptype, 3>>::storage_type, dims>;
+        using ImgType = DenseImage<typename TypeTraits<compound<ptype, 3>>::storage_type, dims>;
         ImgType *img_t = dynamic_cast<ImgType *>(&img);
         typename TypeTraits<ptype>::str_type tmp;
         if (!img_t)
@@ -95,7 +95,7 @@ namespace poutre
     template <size_t dims, typename ptype>
     void ImageFromStringDense4PlanesDispatchPTypeHelper(poutre::IInterface &img, std::istringstream &istrm)
     {
-        using ImgType = DenseImage<typename TypeTraits<compound_pixel<ptype, 4>>::storage_type, dims>;
+        using ImgType = DenseImage<typename TypeTraits<compound<ptype, 4>>::storage_type, dims>;
         ImgType *img_t = dynamic_cast<ImgType *>(&img);
         typename TypeTraits<ptype>::str_type tmp;
         if (!img_t)
@@ -338,13 +338,6 @@ namespace poutre
             dims.push_back(current_dim);
         }
 
-        // TODO dispatch sparse type ?
-        if (imgtype != ImgType::ImgType_Dense)
-        { //-V547
-            std::string err = "ImageFromString: ImgType unknown or not supported yet from " + i_str;
-            POUTRE_RUNTIME_ERROR(err);
-        }
-
         // create image
         std::unique_ptr<poutre::IInterface> img = CreateDense(dims, cptype, ptype);
 
@@ -389,7 +382,7 @@ namespace poutre
     void ImageToStringDenseCompoundType_4PlanesDispatchPTypeHelper(const poutre::IInterface &img,
                                                                    std::ostringstream &ostrm)
     {
-        using ImgType = DenseImage<typename TypeTraits<compound_pixel<ptype, 4>>::storage_type, dims>;
+        using ImgType = DenseImage<typename TypeTraits<compound<ptype, 4>>::storage_type, dims>;
         const ImgType *img_t = dynamic_cast<const ImgType *>(&img);
         if (!img_t)
             POUTRE_RUNTIME_ERROR("ImageFromStringDenseCompoundType_"
@@ -412,7 +405,7 @@ namespace poutre
     void ImageToStringDenseCompoundType_3PlanesDispatchPTypeHelper(const poutre::IInterface &img,
                                                                    std::ostringstream &ostrm)
     {
-        using ImgType = DenseImage<typename TypeTraits<compound_pixel<ptype, 3>>::storage_type, dims>;
+        using ImgType = DenseImage<typename TypeTraits<compound<ptype, 3>>::storage_type, dims>;
         const ImgType *img_t = dynamic_cast<const ImgType *>(&img);
         if (!img_t)
             POUTRE_RUNTIME_ERROR("ImageFromStringDenseCompoundType_"

@@ -184,14 +184,14 @@ namespace poutre
         void StoreWithHDF53Planes_helper(const IInterface &iimage, const std::string &file_name,
                                          const std::string &data_set_name)
         {
-            const auto *im_t = dynamic_cast<const DenseImage<compound_pixel<T, 3>, rank> *>(&iimage);
+            const auto *im_t = dynamic_cast<const DenseImage<compound<T, 3>, rank> *>(&iimage);
             if (!im_t)
             {
                 POUTRE_RUNTIME_ERROR("StoreWithHDF53Planes_helper Dynamic cast fail");
             }
             nativeTypeToH5DataType<T> native_hdf5_type;
             nativeTypeToAttrStr<T> str_type;
-            H5::CompType hdf5_type = H5::CompType(sizeof(compound_pixel<T, 3>));
+            H5::CompType hdf5_type = H5::CompType(sizeof(compound<T, 3>));
             hdf5_type.insertMember(CHANNEL1, 0, native_hdf5_type.type);
             hdf5_type.insertMember(CHANNEL2, sizeof(T), native_hdf5_type.type);
             hdf5_type.insertMember(CHANNEL3, 2 * sizeof(T), native_hdf5_type.type);
@@ -223,14 +223,14 @@ namespace poutre
         void StoreWithHDF54Planes_helper(const IInterface &iimage, const std::string &file_name,
                                          const std::string &data_set_name)
         {
-            const auto *im_t = dynamic_cast<const DenseImage<compound_pixel<T, 4>, rank> *>(&iimage);
+            const auto *im_t = dynamic_cast<const DenseImage<compound<T, 4>, rank> *>(&iimage);
             if (!im_t)
             {
                 POUTRE_RUNTIME_ERROR("StoreWithHDF54Planes_helper Dynamic cast fail");
             }
             nativeTypeToH5DataType<T> native_hdf5_type;
             nativeTypeToAttrStr<T> str_type;
-            H5::CompType hdf5_type = H5::CompType(sizeof(compound_pixel<T, 4>));
+            H5::CompType hdf5_type = H5::CompType(sizeof(compound<T, 4>));
             hdf5_type.insertMember(CHANNEL1, 0, native_hdf5_type.type);
             hdf5_type.insertMember(CHANNEL2, sizeof(T), native_hdf5_type.type);
             hdf5_type.insertMember(CHANNEL3, 2 * sizeof(T), native_hdf5_type.type);
@@ -315,13 +315,13 @@ namespace poutre
         void LoadFromHDF53Planes_helper(IInterface &iimage, const H5::DataSet &data_set)
         {
 
-            auto *im_t = dynamic_cast<DenseImage<compound_pixel<T, 3>, rank> *>(&iimage);
+            auto *im_t = dynamic_cast<DenseImage<compound<T, 3>, rank> *>(&iimage);
             if (!im_t)
             {
                 POUTRE_RUNTIME_ERROR("LoadFromHDF53Planes_helper Dynamic cast fail");
             }
             nativeTypeToH5DataType<T> native_hdf5_type;
-            H5::CompType hdf5_type = H5::CompType(sizeof(compound_pixel<T, 3>));
+            H5::CompType hdf5_type = H5::CompType(sizeof(compound<T, 3>));
             hdf5_type.insertMember(CHANNEL1, 0, native_hdf5_type.type);
             hdf5_type.insertMember(CHANNEL2, sizeof(T), native_hdf5_type.type);
             hdf5_type.insertMember(CHANNEL3, 2 * sizeof(T), native_hdf5_type.type);
@@ -341,13 +341,13 @@ namespace poutre
         void LoadFromHDF54Planes_helper(IInterface &iimage, const H5::DataSet &data_set)
         {
 
-            auto *im_t = dynamic_cast<DenseImage<compound_pixel<T, 4>, rank> *>(&iimage);
+            auto *im_t = dynamic_cast<DenseImage<compound<T, 4>, rank> *>(&iimage);
             if (!im_t)
             {
                 POUTRE_RUNTIME_ERROR("LoadFromHDF53Planes_helper Dynamic cast fail");
             }
             nativeTypeToH5DataType<T> native_hdf5_type;
-            H5::CompType hdf5_type = H5::CompType(sizeof(compound_pixel<T, 4>));
+            H5::CompType hdf5_type = H5::CompType(sizeof(compound<T, 4>));
             hdf5_type.insertMember(CHANNEL1, 0, native_hdf5_type.type);
             hdf5_type.insertMember(CHANNEL2, sizeof(T), native_hdf5_type.type);
             hdf5_type.insertMember(CHANNEL3, 2 * sizeof(T), native_hdf5_type.type);

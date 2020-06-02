@@ -28,17 +28,17 @@ namespace poutre
     template class DenseImage<pINT64, 2>;
     template class DenseImage<pDOUBLE, 2>;
 
-    template class DenseImage<compound_pixel<pUINT8, 3>, 2>;
-    template class DenseImage<compound_pixel<pINT32, 3>, 2>;
-    template class DenseImage<compound_pixel<pFLOAT, 3>, 2>;
-    template class DenseImage<compound_pixel<pINT64, 3>, 2>;
-    template class DenseImage<compound_pixel<pDOUBLE, 3>, 2>;
+    template class DenseImage<compound<pUINT8, 3>, 2>;
+    template class DenseImage<compound<pINT32, 3>, 2>;
+    template class DenseImage<compound<pFLOAT, 3>, 2>;
+    template class DenseImage<compound<pINT64, 3>, 2>;
+    template class DenseImage<compound<pDOUBLE, 3>, 2>;
 
-    template class DenseImage<compound_pixel<pUINT8, 4>, 2>;
-    template class DenseImage<compound_pixel<pINT32, 4>, 2>;
-    template class DenseImage<compound_pixel<pFLOAT, 4>, 2>;
-    template class DenseImage<compound_pixel<pINT64, 4>, 2>;
-    template class DenseImage<compound_pixel<pDOUBLE, 4>, 2>;
+    template class DenseImage<compound<pUINT8, 4>, 2>;
+    template class DenseImage<compound<pINT32, 4>, 2>;
+    template class DenseImage<compound<pFLOAT, 4>, 2>;
+    template class DenseImage<compound<pINT64, 4>, 2>;
+    template class DenseImage<compound<pDOUBLE, 4>, 2>;
 
     template class DenseImage<pUINT8, 3>;
     template class DenseImage<pINT32, 3>;

@@ -122,7 +122,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_3Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pUINT8, 3>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pUINT8, 3>, 2>;
                 ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
                 if (!img_t)
                 {
@@ -132,7 +132,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_4Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pUINT8, 4>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pUINT8, 4>, 2>;
                 ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
                 if (!img_t)
                 {
@@ -169,7 +169,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_3Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pINT32, 3>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pINT32, 3>, 2>;
                 ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
                 if (!img_t)
                 {
@@ -179,7 +179,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_4Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pINT32, 4>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pINT32, 4>, 2>;
                 ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
                 if (!img_t)
                 {
@@ -214,7 +214,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_3Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pFLOAT, 3>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pFLOAT, 3>, 2>;
                 ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
                 if (!img_t)
                 {
@@ -224,7 +224,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_4Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pFLOAT, 4>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pFLOAT, 4>, 2>;
                 ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
                 if (!img_t)
                 {
@@ -259,7 +259,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_3Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pINT64, 3>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pINT64, 3>, 2>;
                 ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
                 if (!img_t)
                 {
@@ -269,7 +269,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_4Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pINT64, 4>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pINT64, 4>, 2>;
                 ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
                 if (!img_t)
                 {
@@ -304,7 +304,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_3Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pDOUBLE, 3>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pDOUBLE, 3>, 2>;
                 ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
                 if (!img_t)
                 {
@@ -314,7 +314,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_4Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pDOUBLE, 4>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pDOUBLE, 4>, 2>;
                 ImageType_t *img_t = dynamic_cast<ImageType_t *>(iimage.get());
                 if (!img_t)
                 {
@@ -380,7 +380,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_3Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pUINT8, 3>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pUINT8, 3>, 2>;
                 const ImageType_t *img_t = dynamic_cast<const ImageType_t *>(&iimage);
                 if (!img_t)
                 {
@@ -390,7 +390,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_4Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pUINT8, 4>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pUINT8, 4>, 2>;
                 const ImageType_t *img_t = dynamic_cast<const ImageType_t *>(&iimage);
                 if (!img_t)
                 {
@@ -422,7 +422,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_3Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pINT32, 3>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pINT32, 3>, 2>;
                 const ImageType_t *img_t = dynamic_cast<const ImageType_t *>(&iimage);
                 if (!img_t)
                 {
@@ -432,7 +432,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_4Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pINT32, 4>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pINT32, 4>, 2>;
                 const ImageType_t *img_t = dynamic_cast<const ImageType_t *>(&iimage);
                 if (!img_t)
                 {
@@ -466,7 +466,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_3Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pFLOAT, 3>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pFLOAT, 3>, 2>;
                 const ImageType_t *img_t = dynamic_cast<const ImageType_t *>(&iimage);
                 if (!img_t)
                 {
@@ -476,7 +476,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_4Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pFLOAT, 4>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pFLOAT, 4>, 2>;
                 const ImageType_t *img_t = dynamic_cast<const ImageType_t *>(&iimage);
                 if (!img_t)
                 {
@@ -509,7 +509,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_3Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pINT64, 3>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pINT64, 3>, 2>;
                 const ImageType_t *img_t = dynamic_cast<const ImageType_t *>(&iimage);
                 if (!img_t)
                 {
@@ -519,7 +519,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_4Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pINT64, 4>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pINT64, 4>, 2>;
                 const ImageType_t *img_t = dynamic_cast<const ImageType_t *>(&iimage);
                 if (!img_t)
                 {
@@ -551,7 +551,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_3Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pDOUBLE, 3>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pDOUBLE, 3>, 2>;
                 const ImageType_t *img_t = dynamic_cast<const ImageType_t *>(&iimage);
                 if (!img_t)
                 {
@@ -561,7 +561,7 @@ namespace poutre
             }
             break;
             case CompoundType::CompoundType_4Planes: {
-                using ImageType_t = poutre::DenseImage<compound_pixel<pDOUBLE, 4>, 2>;
+                using ImageType_t = poutre::DenseImage<compound<pDOUBLE, 4>, 2>;
                 const ImageType_t *img_t = dynamic_cast<const ImageType_t *>(&iimage);
                 if (!img_t)
                 {

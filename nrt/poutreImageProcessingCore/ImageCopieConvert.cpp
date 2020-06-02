@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_CASE(Clone) {
                     poutre::CompoundType::CompoundType_Scalar);
   BOOST_CHECK_EQUAL((*getSame).GetPType(), poutre::PType::PType_GrayUINT8);
   BOOST_CHECK_EQUAL((*getSame).GetImgType(), poutre::ImgType::ImgType_Dense);
-  BOOST_CHECK_EQUAL((*getSame).GetXSize(), 4);
+  BOOST_CHECK_EQUAL((*getSame).GetXSize(), 4); //-V112
   BOOST_CHECK_EQUAL((*getSame).GetYSize(), 3);
   BOOST_CHECK_EQUAL((*getSame).GetNumDims(), 2);
   BOOST_CHECK(!(*getSame).empty());
@@ -67,11 +67,11 @@ BOOST_AUTO_TEST_CASE(getsamecoord) {
 
   ImageType *getSame = dynamic_cast<ImageType *>(getSameii.get());
   BOOST_REQUIRE(getSame);
-  BOOST_CHECK_EQUAL((*getSame).GetCType(),
+  BOOST_CHECK_EQUAL((*getSame).GetCType(), //-V522
                     poutre::CompoundType::CompoundType_Scalar); //-V522
   BOOST_CHECK_EQUAL((*getSame).GetPType(), poutre::PType::PType_F32);
   BOOST_CHECK_EQUAL((*getSame).GetImgType(), poutre::ImgType::ImgType_Dense);
-  BOOST_CHECK_EQUAL((*getSame).GetXSize(), 4);
+  BOOST_CHECK_EQUAL((*getSame).GetXSize(), 4); //-V112
   BOOST_CHECK_EQUAL((*getSame).GetYSize(), 3);
   BOOST_CHECK_EQUAL((*getSame).GetNumDims(), 2);
   auto getSamecoords = (*getSame).GetCoords();

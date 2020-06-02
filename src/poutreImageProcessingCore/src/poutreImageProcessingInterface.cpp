@@ -89,15 +89,15 @@ namespace poutre
         {
             // todo think about bool/binary here
         case PType::PType_GrayUINT8:
-            return std::make_unique<DenseImage<compound_pixel<pUINT8, 3>, numDims>>(dims);
+            return std::make_unique<DenseImage<compound<pUINT8, 3>, numDims>>(dims);
         case PType::PType_GrayINT32:
-            return std::make_unique<DenseImage<compound_pixel<pINT32, 3>, numDims>>(dims);
+            return std::make_unique<DenseImage<compound<pINT32, 3>, numDims>>(dims);
         case PType::PType_F32:
-            return std::make_unique<DenseImage<compound_pixel<pFLOAT, 3>, numDims>>(dims);
+            return std::make_unique<DenseImage<compound<pFLOAT, 3>, numDims>>(dims);
         case PType::PType_GrayINT64:
-            return std::make_unique<DenseImage<compound_pixel<pINT64, 3>, numDims>>(dims);
+            return std::make_unique<DenseImage<compound<pINT64, 3>, numDims>>(dims);
         case PType::PType_D64:
-            return std::make_unique<DenseImage<compound_pixel<pDOUBLE, 3>, numDims>>(dims);
+            return std::make_unique<DenseImage<compound<pDOUBLE, 3>, numDims>>(dims);
         default: {
             POUTRE_RUNTIME_ERROR(("CreateDenseDispatchPType3PLanes:: Unsupported compound type 3 with " +
                                   boost::lexical_cast<std::string>(ptype)));
@@ -113,15 +113,15 @@ namespace poutre
         {
             // todo think about bool/binary here
         case PType::PType_GrayUINT8:
-            return std::make_unique<DenseImage<compound_pixel<pUINT8, 4>, numDims>>(dims);
+            return std::make_unique<DenseImage<compound<pUINT8, 4>, numDims>>(dims);
         case PType::PType_GrayINT32:
-            return std::make_unique<DenseImage<compound_pixel<pINT32, 4>, numDims>>(dims);
+            return std::make_unique<DenseImage<compound<pINT32, 4>, numDims>>(dims);
         case PType::PType_F32:
-            return std::make_unique<DenseImage<compound_pixel<pFLOAT, 4>, numDims>>(dims);
+            return std::make_unique<DenseImage<compound<pFLOAT, 4>, numDims>>(dims);
         case PType::PType_GrayINT64:
-            return std::make_unique<DenseImage<compound_pixel<pINT64, 4>, numDims>>(dims);
+            return std::make_unique<DenseImage<compound<pINT64, 4>, numDims>>(dims);
         case PType::PType_D64:
-            return std::make_unique<DenseImage<compound_pixel<pDOUBLE, 4>, numDims>>(dims);
+            return std::make_unique<DenseImage<compound<pDOUBLE, 4>, numDims>>(dims);
         default: {
             POUTRE_RUNTIME_ERROR(("CreateDenseDispatchPType3PLanes:: Unsupported compound type 3 with " +
                                   boost::lexical_cast<std::string>(ptype)));
@@ -237,15 +237,15 @@ namespace poutre
         {
         // todo think about bool/binary here
         case PType::PType_GrayUINT8:
-            return std::make_unique<DenseImage<compound_pixel<pUINT8, 3>, 2>>(dims);
+            return std::make_unique<DenseImage<compound<pUINT8, 3>, 2>>(dims);
         case PType::PType_GrayINT32:
-            return std::make_unique<DenseImage<compound_pixel<pINT32, 3>, 2>>(dims);
+            return std::make_unique<DenseImage<compound<pINT32, 3>, 2>>(dims);
         case PType::PType_F32:
-            return std::make_unique<DenseImage<compound_pixel<pFLOAT, 3>, 2>>(dims);
+            return std::make_unique<DenseImage<compound<pFLOAT, 3>, 2>>(dims);
         case PType::PType_GrayINT64:
-            return std::make_unique<DenseImage<compound_pixel<pINT64, 3>, 2>>(dims);
+            return std::make_unique<DenseImage<compound<pINT64, 3>, 2>>(dims);
         case PType::PType_D64:
-            return std::make_unique<DenseImage<compound_pixel<pDOUBLE, 3>, 2>>(dims);
+            return std::make_unique<DenseImage<compound<pDOUBLE, 3>, 2>>(dims);
         default: {
             POUTRE_RUNTIME_ERROR(("CreateImage2DDispatchPType3PLanes:: Unsupported scalar type:" +
                                   boost::lexical_cast<std::string>(ptype)));
@@ -261,15 +261,15 @@ namespace poutre
         {
         // todo think about bool/binary here
         case PType::PType_GrayUINT8:
-            return std::make_unique<DenseImage<compound_pixel<pUINT8, 4>, 2>>(dims);
+            return std::make_unique<DenseImage<compound<pUINT8, 4>, 2>>(dims);
         case PType::PType_GrayINT32:
-            return std::make_unique<DenseImage<compound_pixel<pINT32, 4>, 2>>(dims);
+            return std::make_unique<DenseImage<compound<pINT32, 4>, 2>>(dims);
         case PType::PType_F32:
-            return std::make_unique<DenseImage<compound_pixel<pFLOAT, 4>, 2>>(dims);
+            return std::make_unique<DenseImage<compound<pFLOAT, 4>, 2>>(dims);
         case PType::PType_GrayINT64:
-            return std::make_unique<DenseImage<compound_pixel<pINT64, 4>, 2>>(dims);
+            return std::make_unique<DenseImage<compound<pINT64, 4>, 2>>(dims);
         case PType::PType_D64:
-            return std::make_unique<DenseImage<compound_pixel<pDOUBLE, 4>, 2>>(dims);
+            return std::make_unique<DenseImage<compound<pDOUBLE, 4>, 2>>(dims);
         default: {
             POUTRE_RUNTIME_ERROR(("CreateImage2DDispatchPType4PLanes:: Unsupported scalar type:" +
                                   boost::lexical_cast<std::string>(ptype)));
@@ -335,15 +335,15 @@ namespace poutre
         {
         // todo think about bool/binary here
         case PType::PType_GrayUINT8:
-            return std::make_unique<DenseImage<compound_pixel<pUINT8, 3>>>(dims);
+            return std::make_unique<DenseImage<compound<pUINT8, 3>>>(dims);
         case PType::PType_GrayINT32:
-            return std::make_unique<DenseImage<compound_pixel<pINT32, 3>>>(dims);
+            return std::make_unique<DenseImage<compound<pINT32, 3>>>(dims);
         case PType::PType_F32:
-            return std::make_unique<DenseImage<compound_pixel<pFLOAT, 3>>>(dims);
+            return std::make_unique<DenseImage<compound<pFLOAT, 3>>>(dims);
         case PType::PType_GrayINT64:
-            return std::make_unique<DenseImage<compound_pixel<pINT64, 3>>>(dims);
+            return std::make_unique<DenseImage<compound<pINT64, 3>>>(dims);
         case PType::PType_D64:
-            return std::make_unique<DenseImage<compound_pixel<pDOUBLE, 3>>>(dims);
+            return std::make_unique<DenseImage<compound<pDOUBLE, 3>>>(dims);
         default: {
             POUTRE_RUNTIME_ERROR(("CreateImage3DDispatchPType3PLanes:: Unsupported scalar type:" +
                                   boost::lexical_cast<std::string>(ptype)));
@@ -359,15 +359,15 @@ namespace poutre
         {
         // todo think about bool/binary here
         case PType::PType_GrayUINT8:
-            return std::make_unique<DenseImage<compound_pixel<pUINT8, 4>>>(dims);
+            return std::make_unique<DenseImage<compound<pUINT8, 4>>>(dims);
         case PType::PType_GrayINT32:
-            return std::make_unique<DenseImage<compound_pixel<pINT32, 4>>>(dims);
+            return std::make_unique<DenseImage<compound<pINT32, 4>>>(dims);
         case PType::PType_F32:
-            return std::make_unique<DenseImage<compound_pixel<pFLOAT, 4>>>(dims);
+            return std::make_unique<DenseImage<compound<pFLOAT, 4>>>(dims);
         case PType::PType_GrayINT64:
-            return std::make_unique<DenseImage<compound_pixel<pINT64, 4>>>(dims);
+            return std::make_unique<DenseImage<compound<pINT64, 4>>>(dims);
         case PType::PType_D64:
-            return std::make_unique<DenseImage<compound_pixel<pDOUBLE, 4>>>(dims);
+            return std::make_unique<DenseImage<compound<pDOUBLE, 4>>>(dims);
         default: {
             POUTRE_RUNTIME_ERROR(("CreateImage3DDispatchPType4PLanes:: Unsupported scalar type:" +
                                   boost::lexical_cast<std::string>(ptype)));

@@ -42,6 +42,10 @@
 #include <poutreBase/include/poutreSimd.hpp>
 #endif
 
+#ifndef POUTRE_COORDINATE_HPP__
+#include <poutreBase/poutreCoordinate.hpp>
+#endif
+
 namespace poutre
 {
 
@@ -102,19 +106,19 @@ namespace poutre
     //! operator>> for PType
     IMP_CORE_API std::istream &operator>>(std::istream &, PType &);
 
-    template <typename value_type, ptrdiff_t Rank> using compound_pixel = static_array<value_type, Rank>;
+    template <typename value_type, ptrdiff_t Rank> using compound = static_array<value_type, Rank>;
 
-    typedef compound_pixel<pUINT8, 3> c3pUINT8;
-    typedef compound_pixel<pINT32, 3> c3pINT32;
-    typedef compound_pixel<pFLOAT, 3> c3pFLOAT;
-    typedef compound_pixel<pINT64, 3> c3pINT64;
-    typedef compound_pixel<pDOUBLE, 3> c3pDOUBLE;
+    using c3pUINT8 = compound<pUINT8, 3>;
+    using c3pINT32 = compound<pINT32, 3>;
+    using c3pFLOAT = compound<pFLOAT, 3>;
+    using c3pINT64 = compound<pINT64, 3>;
+    using c3pDOUBLE = compound<pDOUBLE, 3>;
 
-    typedef compound_pixel<pUINT8, 4> c4pUINT8;
-    typedef compound_pixel<pINT32, 4> c4pINT32;
-    typedef compound_pixel<pFLOAT, 4> c4pFLOAT;
-    typedef compound_pixel<pINT64, 4> c4pINT64;
-    typedef compound_pixel<pDOUBLE, 4> c4pDOUBLE;
+    using c4pUINT8 = compound<pUINT8, 4>;
+    using c4pINT32 = compound<pINT32, 4>;
+    using c4pFLOAT = compound<pFLOAT, 4>;
+    using c4pINT64 = compound<pINT64, 4>;
+    using c4pDOUBLE = compound<pDOUBLE, 4>;
 
     //! Helper to retrieve dim off pixel storage type
     template <class storagetype> struct get_dim
@@ -122,8 +126,8 @@ namespace poutre
         POUTRE_STATIC_CONSTEXPR ptrdiff_t dim = 1;
     };
 
-    //! Helper to retrieve dim off compound_pixel
-    template <class storagetype, std::ptrdiff_t Rank> struct get_dim<compound_pixel<storagetype, Rank>>
+    //! Helper to retrieve dim off compound
+    template <class storagetype, std::ptrdiff_t Rank> struct get_dim<compound<storagetype, Rank>>
     {
         POUTRE_STATIC_CONSTEXPR ptrdiff_t dim = Rank;
     };
@@ -352,18 +356,18 @@ namespace poutre
     {
     };
 
-    //! TypeTraits compound_pixel
-    template <class valuetype, std::ptrdiff_t Rank> struct TypeTraits<compound_pixel<valuetype, Rank>>
+    //! TypeTraits compound
+    template <class valuetype, std::ptrdiff_t Rank> struct TypeTraits<compound<valuetype, Rank>>
     {
     };
 
-    //! TypeTraits compound_pixel 3 channel
-    // template <class valuetype> struct TypeTraits<compound_pixel<valuetype, 3>>
+    //! TypeTraits compound 3 channel
+    // template <class valuetype> struct TypeTraits<compound<valuetype, 3>>
     // {
-    //     using storage_type = compound_pixel<valuetype, 3>;
-    //     using safe_signed_type = compound_pixel<typename TypeTraits<valuetype>::safe_signed_type, 3>;
-    //     using str_type = compound_pixel<typename TypeTraits<valuetype>::str_type, 3>;
-    //     using accu_type = compound_pixel<typename TypeTraits<valuetype>::accu_type, 3>;
+    //     using storage_type = compound<valuetype, 3>;
+    //     using safe_signed_type = compound<typename TypeTraits<valuetype>::safe_signed_type, 3>;
+    //     using str_type = compound<typename TypeTraits<valuetype>::str_type, 3>;
+    //     using accu_type = compound<typename TypeTraits<valuetype>::accu_type, 3>;
 
     //     static const PType pixel_type = TypeTraits<valuetype>::pixel_type;
     //     static const CompoundType compound_type = CompoundType::CompoundType_3Planes;
@@ -374,7 +378,7 @@ namespace poutre
     //     // todo decltype
     //     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
     //     {
-    //         return compound_pixel<valuetype, 3>(std::numeric_limits<valuetype>::lowest(),
+    //         return compound<valuetype, 3>(std::numeric_limits<valuetype>::lowest(),
     //                                             std::numeric_limits<valuetype>::lowest(),
     //                                             std::numeric_limits<valuetype>::lowest());
     //     }
@@ -382,7 +386,7 @@ namespace poutre
     //     // todo decltype
     //     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
     //     {
-    //         return compound_pixel<valuetype, 3>(std::numeric_limits<valuetype>::min(),
+    //         return compound<valuetype, 3>(std::numeric_limits<valuetype>::min(),
     //                                             std::numeric_limits<valuetype>::min(),
     //                                             std::numeric_limits<valuetype>::min());
     //     }
@@ -390,7 +394,7 @@ namespace poutre
     //     // todo decltype
     //     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
     //     {
-    //         return compound_pixel<valuetype, 3>(std::numeric_limits<valuetype>::max(),
+    //         return compound<valuetype, 3>(std::numeric_limits<valuetype>::max(),
     //                                             std::numeric_limits<valuetype>::max(),
     //                                             std::numeric_limits<valuetype>::max());
     //     }
@@ -403,12 +407,12 @@ namespace poutre
     //         return max();
     //     }
     // };
-    template <> struct TypeTraits<compound_pixel<pUINT8, 3>>
+    template <> struct TypeTraits<compound<pUINT8, 3>>
     {
-        using storage_type = compound_pixel<pUINT8, 3>;
-        using safe_signed_type = compound_pixel<typename TypeTraits<pUINT8>::safe_signed_type, 3>;
-        using str_type = compound_pixel<typename TypeTraits<pUINT8>::str_type, 3>;
-        using accu_type = compound_pixel<typename TypeTraits<pUINT8>::accu_type, 3>;
+        using storage_type = compound<pUINT8, 3>;
+        using safe_signed_type = compound<typename TypeTraits<pUINT8>::safe_signed_type, 3>;
+        using str_type = compound<typename TypeTraits<pUINT8>::str_type, 3>;
+        using accu_type = compound<typename TypeTraits<pUINT8>::accu_type, 3>;
 
         static const PType pixel_type = TypeTraits<pUINT8>::pixel_type;
         static const CompoundType compound_type = CompoundType::CompoundType_3Planes;
@@ -419,23 +423,22 @@ namespace poutre
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pUINT8, 3>(std::numeric_limits<pUINT8>::lowest(),
-                                             std::numeric_limits<pUINT8>::lowest(),
-                                             std::numeric_limits<pUINT8>::lowest());
+            return compound<pUINT8, 3>(std::numeric_limits<pUINT8>::lowest(), std::numeric_limits<pUINT8>::lowest(),
+                                       std::numeric_limits<pUINT8>::lowest());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pUINT8, 3>(std::numeric_limits<pUINT8>::min(), std::numeric_limits<pUINT8>::min(),
-                                             std::numeric_limits<pUINT8>::min());
+            return compound<pUINT8, 3>(std::numeric_limits<pUINT8>::min(), std::numeric_limits<pUINT8>::min(),
+                                       std::numeric_limits<pUINT8>::min());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pUINT8, 3>(std::numeric_limits<pUINT8>::max(), std::numeric_limits<pUINT8>::max(),
-                                             std::numeric_limits<pUINT8>::max());
+            return compound<pUINT8, 3>(std::numeric_limits<pUINT8>::max(), std::numeric_limits<pUINT8>::max(),
+                                       std::numeric_limits<pUINT8>::max());
         }
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf()
         {
@@ -447,16 +450,16 @@ namespace poutre
         }
     };
 
-    template <> struct TypeTraits<const compound_pixel<pUINT8, 3>> : public TypeTraits<compound_pixel<pUINT8, 3>>
+    template <> struct TypeTraits<const compound<pUINT8, 3>> : public TypeTraits<compound<pUINT8, 3>>
     {
     };
 
-    template <> struct TypeTraits<compound_pixel<pINT32, 3>>
+    template <> struct TypeTraits<compound<pINT32, 3>>
     {
-        using storage_type = compound_pixel<pINT32, 3>;
-        using safe_signed_type = compound_pixel<typename TypeTraits<pINT32>::safe_signed_type, 3>;
-        using str_type = compound_pixel<typename TypeTraits<pINT32>::str_type, 3>;
-        using accu_type = compound_pixel<typename TypeTraits<pINT32>::accu_type, 3>;
+        using storage_type = compound<pINT32, 3>;
+        using safe_signed_type = compound<typename TypeTraits<pINT32>::safe_signed_type, 3>;
+        using str_type = compound<typename TypeTraits<pINT32>::str_type, 3>;
+        using accu_type = compound<typename TypeTraits<pINT32>::accu_type, 3>;
 
         static const PType pixel_type = TypeTraits<pINT32>::pixel_type;
         static const CompoundType compound_type = CompoundType::CompoundType_3Planes;
@@ -467,23 +470,22 @@ namespace poutre
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pINT32, 3>(std::numeric_limits<pINT32>::lowest(),
-                                             std::numeric_limits<pINT32>::lowest(),
-                                             std::numeric_limits<pINT32>::lowest());
+            return compound<pINT32, 3>(std::numeric_limits<pINT32>::lowest(), std::numeric_limits<pINT32>::lowest(),
+                                       std::numeric_limits<pINT32>::lowest());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pINT32, 3>(std::numeric_limits<pINT32>::min(), std::numeric_limits<pINT32>::min(),
-                                             std::numeric_limits<pINT32>::min());
+            return compound<pINT32, 3>(std::numeric_limits<pINT32>::min(), std::numeric_limits<pINT32>::min(),
+                                       std::numeric_limits<pINT32>::min());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pINT32, 3>(std::numeric_limits<pINT32>::max(), std::numeric_limits<pINT32>::max(),
-                                             std::numeric_limits<pINT32>::max());
+            return compound<pINT32, 3>(std::numeric_limits<pINT32>::max(), std::numeric_limits<pINT32>::max(),
+                                       std::numeric_limits<pINT32>::max());
         }
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf()
         {
@@ -494,15 +496,15 @@ namespace poutre
             return max();
         }
     };
-    template <> struct TypeTraits<const compound_pixel<pINT32, 3>> : public TypeTraits<compound_pixel<pINT32, 3>>
+    template <> struct TypeTraits<const compound<pINT32, 3>> : public TypeTraits<compound<pINT32, 3>>
     {
     };
-    template <> struct TypeTraits<compound_pixel<pINT64, 3>>
+    template <> struct TypeTraits<compound<pINT64, 3>>
     {
-        using storage_type = compound_pixel<pINT64, 3>;
-        using safe_signed_type = compound_pixel<typename TypeTraits<pINT64>::safe_signed_type, 3>;
-        using str_type = compound_pixel<typename TypeTraits<pINT64>::str_type, 3>;
-        using accu_type = compound_pixel<typename TypeTraits<pINT64>::accu_type, 3>;
+        using storage_type = compound<pINT64, 3>;
+        using safe_signed_type = compound<typename TypeTraits<pINT64>::safe_signed_type, 3>;
+        using str_type = compound<typename TypeTraits<pINT64>::str_type, 3>;
+        using accu_type = compound<typename TypeTraits<pINT64>::accu_type, 3>;
 
         static const PType pixel_type = TypeTraits<pINT64>::pixel_type;
         static const CompoundType compound_type = CompoundType::CompoundType_3Planes;
@@ -513,23 +515,22 @@ namespace poutre
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pINT64, 3>(std::numeric_limits<pINT64>::lowest(),
-                                             std::numeric_limits<pINT64>::lowest(),
-                                             std::numeric_limits<pINT64>::lowest());
+            return compound<pINT64, 3>(std::numeric_limits<pINT64>::lowest(), std::numeric_limits<pINT64>::lowest(),
+                                       std::numeric_limits<pINT64>::lowest());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pINT64, 3>(std::numeric_limits<pINT64>::min(), std::numeric_limits<pINT64>::min(),
-                                             std::numeric_limits<pINT64>::min());
+            return compound<pINT64, 3>(std::numeric_limits<pINT64>::min(), std::numeric_limits<pINT64>::min(),
+                                       std::numeric_limits<pINT64>::min());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pINT64, 3>(std::numeric_limits<pINT64>::max(), std::numeric_limits<pINT64>::max(),
-                                             std::numeric_limits<pINT64>::max());
+            return compound<pINT64, 3>(std::numeric_limits<pINT64>::max(), std::numeric_limits<pINT64>::max(),
+                                       std::numeric_limits<pINT64>::max());
         }
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf()
         {
@@ -540,15 +541,15 @@ namespace poutre
             return max();
         }
     };
-    template <> struct TypeTraits<const compound_pixel<pINT64, 3>> : public TypeTraits<compound_pixel<pINT64, 3>>
+    template <> struct TypeTraits<const compound<pINT64, 3>> : public TypeTraits<compound<pINT64, 3>>
     {
     };
-    template <> struct TypeTraits<compound_pixel<pFLOAT, 3>>
+    template <> struct TypeTraits<compound<pFLOAT, 3>>
     {
-        using storage_type = compound_pixel<pFLOAT, 3>;
-        using safe_signed_type = compound_pixel<typename TypeTraits<pFLOAT>::safe_signed_type, 3>;
-        using str_type = compound_pixel<typename TypeTraits<pFLOAT>::str_type, 3>;
-        using accu_type = compound_pixel<typename TypeTraits<pFLOAT>::accu_type, 3>;
+        using storage_type = compound<pFLOAT, 3>;
+        using safe_signed_type = compound<typename TypeTraits<pFLOAT>::safe_signed_type, 3>;
+        using str_type = compound<typename TypeTraits<pFLOAT>::str_type, 3>;
+        using accu_type = compound<typename TypeTraits<pFLOAT>::accu_type, 3>;
 
         static const PType pixel_type = TypeTraits<pFLOAT>::pixel_type;
         static const CompoundType compound_type = CompoundType::CompoundType_3Planes;
@@ -559,23 +560,22 @@ namespace poutre
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pFLOAT, 3>(std::numeric_limits<pFLOAT>::lowest(),
-                                             std::numeric_limits<pFLOAT>::lowest(),
-                                             std::numeric_limits<pFLOAT>::lowest());
+            return compound<pFLOAT, 3>(std::numeric_limits<pFLOAT>::lowest(), std::numeric_limits<pFLOAT>::lowest(),
+                                       std::numeric_limits<pFLOAT>::lowest());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pFLOAT, 3>(std::numeric_limits<pFLOAT>::min(), std::numeric_limits<pFLOAT>::min(),
-                                             std::numeric_limits<pFLOAT>::min());
+            return compound<pFLOAT, 3>(std::numeric_limits<pFLOAT>::min(), std::numeric_limits<pFLOAT>::min(),
+                                       std::numeric_limits<pFLOAT>::min());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pFLOAT, 3>(std::numeric_limits<pFLOAT>::max(), std::numeric_limits<pFLOAT>::max(),
-                                             std::numeric_limits<pFLOAT>::max());
+            return compound<pFLOAT, 3>(std::numeric_limits<pFLOAT>::max(), std::numeric_limits<pFLOAT>::max(),
+                                       std::numeric_limits<pFLOAT>::max());
         }
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf()
         {
@@ -586,15 +586,15 @@ namespace poutre
             return max();
         }
     };
-    template <> struct TypeTraits<const compound_pixel<pFLOAT, 3>> : public TypeTraits<compound_pixel<pFLOAT, 3>>
+    template <> struct TypeTraits<const compound<pFLOAT, 3>> : public TypeTraits<compound<pFLOAT, 3>>
     {
     };
-    template <> struct TypeTraits<compound_pixel<pDOUBLE, 3>>
+    template <> struct TypeTraits<compound<pDOUBLE, 3>>
     {
-        using storage_type = compound_pixel<pDOUBLE, 3>;
-        using safe_signed_type = compound_pixel<typename TypeTraits<pDOUBLE>::safe_signed_type, 3>;
-        using str_type = compound_pixel<typename TypeTraits<pDOUBLE>::str_type, 3>;
-        using accu_type = compound_pixel<typename TypeTraits<pDOUBLE>::accu_type, 3>;
+        using storage_type = compound<pDOUBLE, 3>;
+        using safe_signed_type = compound<typename TypeTraits<pDOUBLE>::safe_signed_type, 3>;
+        using str_type = compound<typename TypeTraits<pDOUBLE>::str_type, 3>;
+        using accu_type = compound<typename TypeTraits<pDOUBLE>::accu_type, 3>;
 
         static const PType pixel_type = TypeTraits<pDOUBLE>::pixel_type;
         static const CompoundType compound_type = CompoundType::CompoundType_3Planes;
@@ -605,23 +605,22 @@ namespace poutre
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pDOUBLE, 3>(std::numeric_limits<pDOUBLE>::lowest(),
-                                              std::numeric_limits<pDOUBLE>::lowest(),
-                                              std::numeric_limits<pDOUBLE>::lowest());
+            return compound<pDOUBLE, 3>(std::numeric_limits<pDOUBLE>::lowest(), std::numeric_limits<pDOUBLE>::lowest(),
+                                        std::numeric_limits<pDOUBLE>::lowest());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pDOUBLE, 3>(std::numeric_limits<pDOUBLE>::min(), std::numeric_limits<pDOUBLE>::min(),
-                                              std::numeric_limits<pDOUBLE>::min());
+            return compound<pDOUBLE, 3>(std::numeric_limits<pDOUBLE>::min(), std::numeric_limits<pDOUBLE>::min(),
+                                        std::numeric_limits<pDOUBLE>::min());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pDOUBLE, 3>(std::numeric_limits<pDOUBLE>::max(), std::numeric_limits<pDOUBLE>::max(),
-                                              std::numeric_limits<pDOUBLE>::max());
+            return compound<pDOUBLE, 3>(std::numeric_limits<pDOUBLE>::max(), std::numeric_limits<pDOUBLE>::max(),
+                                        std::numeric_limits<pDOUBLE>::max());
         }
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf()
         {
@@ -632,16 +631,16 @@ namespace poutre
             return max();
         }
     };
-    template <> struct TypeTraits<const compound_pixel<pDOUBLE, 3>> : public TypeTraits<compound_pixel<pDOUBLE, 3>>
+    template <> struct TypeTraits<const compound<pDOUBLE, 3>> : public TypeTraits<compound<pDOUBLE, 3>>
     {
     };
-    ////! TypeTraits compound_pixel 4 channel
-    // template <class valuetype> struct TypeTraits<compound_pixel<valuetype, 4>>
+    ////! TypeTraits compound 4 channel
+    // template <class valuetype> struct TypeTraits<compound<valuetype, 4>>
     //{
-    //    using storage_type = compound_pixel<valuetype, 4>;
-    //    using safe_signed_type = compound_pixel<typename TypeTraits<valuetype>::safe_signed_type, 4>;
-    //    using str_type = compound_pixel<typename TypeTraits<valuetype>::str_type, 4>;
-    //    using accu_type = compound_pixel<typename TypeTraits<valuetype>::accu_type, 4>;
+    //    using storage_type = compound<valuetype, 4>;
+    //    using safe_signed_type = compound<typename TypeTraits<valuetype>::safe_signed_type, 4>;
+    //    using str_type = compound<typename TypeTraits<valuetype>::str_type, 4>;
+    //    using accu_type = compound<typename TypeTraits<valuetype>::accu_type, 4>;
 
     //    static const PType pixel_type = TypeTraits<valuetype>::pixel_type;
     //    static const CompoundType compound_type = CompoundType::CompoundType_4Planes;
@@ -651,7 +650,7 @@ namespace poutre
     //    // todo decltype
     //    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
     //    {
-    //        return compound_pixel<valuetype, 4>(
+    //        return compound<valuetype, 4>(
     //            std::numeric_limits<valuetype>::lowest(), std::numeric_limits<valuetype>::lowest(),
     //            std::numeric_limits<valuetype>::lowest(), std::numeric_limits<valuetype>::lowest());
     //    }
@@ -659,7 +658,7 @@ namespace poutre
     //    // todo decltype
     //    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
     //    {
-    //        return compound_pixel<valuetype, 4>(
+    //        return compound<valuetype, 4>(
     //            std::numeric_limits<valuetype>::min(), std::numeric_limits<valuetype>::min(),
     //            std::numeric_limits<valuetype>::min(), std::numeric_limits<valuetype>::min());
     //    }
@@ -667,7 +666,7 @@ namespace poutre
     //    // todo decltype
     //    POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
     //    {
-    //        return compound_pixel<valuetype, 4>(
+    //        return compound<valuetype, 4>(
     //            std::numeric_limits<valuetype>::max(), std::numeric_limits<valuetype>::max(),
     //            std::numeric_limits<valuetype>::max(), std::numeric_limits<valuetype>::max());
     //    }
@@ -681,12 +680,12 @@ namespace poutre
     //    }
     //};
 
-    template <> struct TypeTraits<compound_pixel<pUINT8, 4>>
+    template <> struct TypeTraits<compound<pUINT8, 4>>
     {
-        using storage_type = compound_pixel<pUINT8, 4>;
-        using safe_signed_type = compound_pixel<typename TypeTraits<pUINT8>::safe_signed_type, 4>;
-        using str_type = compound_pixel<typename TypeTraits<pUINT8>::str_type, 4>;
-        using accu_type = compound_pixel<typename TypeTraits<pUINT8>::accu_type, 4>;
+        using storage_type = compound<pUINT8, 4>;
+        using safe_signed_type = compound<typename TypeTraits<pUINT8>::safe_signed_type, 4>;
+        using str_type = compound<typename TypeTraits<pUINT8>::str_type, 4>;
+        using accu_type = compound<typename TypeTraits<pUINT8>::accu_type, 4>;
 
         static const PType pixel_type = TypeTraits<pUINT8>::pixel_type;
         static const CompoundType compound_type = CompoundType::CompoundType_4Planes;
@@ -697,23 +696,22 @@ namespace poutre
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pUINT8, 4>(
-                std::numeric_limits<pUINT8>::lowest(), std::numeric_limits<pUINT8>::lowest(),
-                std::numeric_limits<pUINT8>::lowest(), std::numeric_limits<pUINT8>::lowest());
+            return compound<pUINT8, 4>(std::numeric_limits<pUINT8>::lowest(), std::numeric_limits<pUINT8>::lowest(),
+                                       std::numeric_limits<pUINT8>::lowest(), std::numeric_limits<pUINT8>::lowest());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pUINT8, 4>(std::numeric_limits<pUINT8>::min(), std::numeric_limits<pUINT8>::min(),
-                                             std::numeric_limits<pUINT8>::min(), std::numeric_limits<pUINT8>::min());
+            return compound<pUINT8, 4>(std::numeric_limits<pUINT8>::min(), std::numeric_limits<pUINT8>::min(),
+                                       std::numeric_limits<pUINT8>::min(), std::numeric_limits<pUINT8>::min());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pUINT8, 4>(std::numeric_limits<pUINT8>::max(), std::numeric_limits<pUINT8>::max(),
-                                             std::numeric_limits<pUINT8>::max(), std::numeric_limits<pUINT8>::max());
+            return compound<pUINT8, 4>(std::numeric_limits<pUINT8>::max(), std::numeric_limits<pUINT8>::max(),
+                                       std::numeric_limits<pUINT8>::max(), std::numeric_limits<pUINT8>::max());
         }
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf()
         {
@@ -725,16 +723,16 @@ namespace poutre
         }
     };
 
-    template <> struct TypeTraits<const compound_pixel<pUINT8, 4>> : public TypeTraits<compound_pixel<pUINT8, 4>>
+    template <> struct TypeTraits<const compound<pUINT8, 4>> : public TypeTraits<compound<pUINT8, 4>>
     {
     };
 
-    template <> struct TypeTraits<compound_pixel<pINT32, 4>>
+    template <> struct TypeTraits<compound<pINT32, 4>>
     {
-        using storage_type = compound_pixel<pINT32, 4>;
-        using safe_signed_type = compound_pixel<typename TypeTraits<pINT32>::safe_signed_type, 4>;
-        using str_type = compound_pixel<typename TypeTraits<pINT32>::str_type, 4>;
-        using accu_type = compound_pixel<typename TypeTraits<pINT32>::accu_type, 4>;
+        using storage_type = compound<pINT32, 4>;
+        using safe_signed_type = compound<typename TypeTraits<pINT32>::safe_signed_type, 4>;
+        using str_type = compound<typename TypeTraits<pINT32>::str_type, 4>;
+        using accu_type = compound<typename TypeTraits<pINT32>::accu_type, 4>;
 
         static const PType pixel_type = TypeTraits<pINT32>::pixel_type;
         static const CompoundType compound_type = CompoundType::CompoundType_4Planes;
@@ -745,23 +743,22 @@ namespace poutre
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pINT32, 4>(
-                std::numeric_limits<pINT32>::lowest(), std::numeric_limits<pINT32>::lowest(),
-                std::numeric_limits<pINT32>::lowest(), std::numeric_limits<pINT32>::lowest());
+            return compound<pINT32, 4>(std::numeric_limits<pINT32>::lowest(), std::numeric_limits<pINT32>::lowest(),
+                                       std::numeric_limits<pINT32>::lowest(), std::numeric_limits<pINT32>::lowest());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pINT32, 4>(std::numeric_limits<pINT32>::min(), std::numeric_limits<pINT32>::min(),
-                                             std::numeric_limits<pINT32>::min(), std::numeric_limits<pINT32>::min());
+            return compound<pINT32, 4>(std::numeric_limits<pINT32>::min(), std::numeric_limits<pINT32>::min(),
+                                       std::numeric_limits<pINT32>::min(), std::numeric_limits<pINT32>::min());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pINT32, 4>(std::numeric_limits<pINT32>::max(), std::numeric_limits<pINT32>::max(),
-                                             std::numeric_limits<pINT32>::max(), std::numeric_limits<pINT32>::max());
+            return compound<pINT32, 4>(std::numeric_limits<pINT32>::max(), std::numeric_limits<pINT32>::max(),
+                                       std::numeric_limits<pINT32>::max(), std::numeric_limits<pINT32>::max());
         }
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf()
         {
@@ -772,15 +769,15 @@ namespace poutre
             return max();
         }
     };
-    template <> struct TypeTraits<const compound_pixel<pINT32, 4>> : public TypeTraits<compound_pixel<pINT32, 4>>
+    template <> struct TypeTraits<const compound<pINT32, 4>> : public TypeTraits<compound<pINT32, 4>>
     {
     };
-    template <> struct TypeTraits<compound_pixel<pINT64, 4>>
+    template <> struct TypeTraits<compound<pINT64, 4>>
     {
-        using storage_type = compound_pixel<pINT64, 4>;
-        using safe_signed_type = compound_pixel<typename TypeTraits<pINT64>::safe_signed_type, 4>;
-        using str_type = compound_pixel<typename TypeTraits<pINT64>::str_type, 4>;
-        using accu_type = compound_pixel<typename TypeTraits<pINT64>::accu_type, 4>;
+        using storage_type = compound<pINT64, 4>;
+        using safe_signed_type = compound<typename TypeTraits<pINT64>::safe_signed_type, 4>;
+        using str_type = compound<typename TypeTraits<pINT64>::str_type, 4>;
+        using accu_type = compound<typename TypeTraits<pINT64>::accu_type, 4>;
 
         static const PType pixel_type = TypeTraits<pINT64>::pixel_type;
         static const CompoundType compound_type = CompoundType::CompoundType_4Planes;
@@ -791,23 +788,22 @@ namespace poutre
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pINT64, 4>(
-                std::numeric_limits<pINT64>::lowest(), std::numeric_limits<pINT64>::lowest(),
-                std::numeric_limits<pINT64>::lowest(), std::numeric_limits<pINT64>::lowest());
+            return compound<pINT64, 4>(std::numeric_limits<pINT64>::lowest(), std::numeric_limits<pINT64>::lowest(),
+                                       std::numeric_limits<pINT64>::lowest(), std::numeric_limits<pINT64>::lowest());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pINT64, 4>(std::numeric_limits<pINT64>::min(), std::numeric_limits<pINT64>::min(),
-                                             std::numeric_limits<pINT64>::min(), std::numeric_limits<pINT64>::min());
+            return compound<pINT64, 4>(std::numeric_limits<pINT64>::min(), std::numeric_limits<pINT64>::min(),
+                                       std::numeric_limits<pINT64>::min(), std::numeric_limits<pINT64>::min());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pINT64, 4>(std::numeric_limits<pINT64>::max(), std::numeric_limits<pINT64>::max(),
-                                             std::numeric_limits<pINT64>::max(), std::numeric_limits<pINT64>::max());
+            return compound<pINT64, 4>(std::numeric_limits<pINT64>::max(), std::numeric_limits<pINT64>::max(),
+                                       std::numeric_limits<pINT64>::max(), std::numeric_limits<pINT64>::max());
         }
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf()
         {
@@ -818,15 +814,15 @@ namespace poutre
             return max();
         }
     };
-    template <> struct TypeTraits<const compound_pixel<pINT64, 4>> : public TypeTraits<compound_pixel<pINT64, 4>>
+    template <> struct TypeTraits<const compound<pINT64, 4>> : public TypeTraits<compound<pINT64, 4>>
     {
     };
-    template <> struct TypeTraits<compound_pixel<pFLOAT, 4>>
+    template <> struct TypeTraits<compound<pFLOAT, 4>>
     {
-        using storage_type = compound_pixel<pFLOAT, 4>;
-        using safe_signed_type = compound_pixel<typename TypeTraits<pFLOAT>::safe_signed_type, 4>;
-        using str_type = compound_pixel<typename TypeTraits<pFLOAT>::str_type, 4>;
-        using accu_type = compound_pixel<typename TypeTraits<pFLOAT>::accu_type, 4>;
+        using storage_type = compound<pFLOAT, 4>;
+        using safe_signed_type = compound<typename TypeTraits<pFLOAT>::safe_signed_type, 4>;
+        using str_type = compound<typename TypeTraits<pFLOAT>::str_type, 4>;
+        using accu_type = compound<typename TypeTraits<pFLOAT>::accu_type, 4>;
 
         static const PType pixel_type = TypeTraits<pFLOAT>::pixel_type;
         static const CompoundType compound_type = CompoundType::CompoundType_4Planes;
@@ -837,23 +833,22 @@ namespace poutre
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pFLOAT, 4>(
-                std::numeric_limits<pFLOAT>::lowest(), std::numeric_limits<pFLOAT>::lowest(),
-                std::numeric_limits<pFLOAT>::lowest(), std::numeric_limits<pFLOAT>::lowest());
+            return compound<pFLOAT, 4>(std::numeric_limits<pFLOAT>::lowest(), std::numeric_limits<pFLOAT>::lowest(),
+                                       std::numeric_limits<pFLOAT>::lowest(), std::numeric_limits<pFLOAT>::lowest());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pFLOAT, 4>(std::numeric_limits<pFLOAT>::min(), std::numeric_limits<pFLOAT>::min(),
-                                             std::numeric_limits<pFLOAT>::min(), std::numeric_limits<pFLOAT>::min());
+            return compound<pFLOAT, 4>(std::numeric_limits<pFLOAT>::min(), std::numeric_limits<pFLOAT>::min(),
+                                       std::numeric_limits<pFLOAT>::min(), std::numeric_limits<pFLOAT>::min());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pFLOAT, 4>(std::numeric_limits<pFLOAT>::max(), std::numeric_limits<pFLOAT>::max(),
-                                             std::numeric_limits<pFLOAT>::max(), std::numeric_limits<pFLOAT>::max());
+            return compound<pFLOAT, 4>(std::numeric_limits<pFLOAT>::max(), std::numeric_limits<pFLOAT>::max(),
+                                       std::numeric_limits<pFLOAT>::max(), std::numeric_limits<pFLOAT>::max());
         }
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf()
         {
@@ -864,15 +859,15 @@ namespace poutre
             return max();
         }
     };
-    template <> struct TypeTraits<const compound_pixel<pFLOAT, 4>> : public TypeTraits<compound_pixel<pFLOAT, 4>>
+    template <> struct TypeTraits<const compound<pFLOAT, 4>> : public TypeTraits<compound<pFLOAT, 4>>
     {
     };
-    template <> struct TypeTraits<compound_pixel<pDOUBLE, 4>>
+    template <> struct TypeTraits<compound<pDOUBLE, 4>>
     {
-        using storage_type = compound_pixel<pDOUBLE, 4>;
-        using safe_signed_type = compound_pixel<typename TypeTraits<pDOUBLE>::safe_signed_type, 4>;
-        using str_type = compound_pixel<typename TypeTraits<pDOUBLE>::str_type, 4>;
-        using accu_type = compound_pixel<typename TypeTraits<pDOUBLE>::accu_type, 4>;
+        using storage_type = compound<pDOUBLE, 4>;
+        using safe_signed_type = compound<typename TypeTraits<pDOUBLE>::safe_signed_type, 4>;
+        using str_type = compound<typename TypeTraits<pDOUBLE>::str_type, 4>;
+        using accu_type = compound<typename TypeTraits<pDOUBLE>::accu_type, 4>;
 
         static const PType pixel_type = TypeTraits<pDOUBLE>::pixel_type;
         static const CompoundType compound_type = CompoundType::CompoundType_4Planes;
@@ -883,23 +878,22 @@ namespace poutre
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pDOUBLE, 4>(
-                std::numeric_limits<pDOUBLE>::lowest(), std::numeric_limits<pDOUBLE>::lowest(),
-                std::numeric_limits<pDOUBLE>::lowest(), std::numeric_limits<pDOUBLE>::lowest());
+            return compound<pDOUBLE, 4>(std::numeric_limits<pDOUBLE>::lowest(), std::numeric_limits<pDOUBLE>::lowest(),
+                                        std::numeric_limits<pDOUBLE>::lowest(), std::numeric_limits<pDOUBLE>::lowest());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pDOUBLE, 4>(std::numeric_limits<pDOUBLE>::min(), std::numeric_limits<pDOUBLE>::min(),
-                                              std::numeric_limits<pDOUBLE>::min(), std::numeric_limits<pDOUBLE>::min());
+            return compound<pDOUBLE, 4>(std::numeric_limits<pDOUBLE>::min(), std::numeric_limits<pDOUBLE>::min(),
+                                        std::numeric_limits<pDOUBLE>::min(), std::numeric_limits<pDOUBLE>::min());
         }
 
         // todo decltype
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
         {
-            return compound_pixel<pDOUBLE, 4>(std::numeric_limits<pDOUBLE>::max(), std::numeric_limits<pDOUBLE>::max(),
-                                              std::numeric_limits<pDOUBLE>::max(), std::numeric_limits<pDOUBLE>::max());
+            return compound<pDOUBLE, 4>(std::numeric_limits<pDOUBLE>::max(), std::numeric_limits<pDOUBLE>::max(),
+                                        std::numeric_limits<pDOUBLE>::max(), std::numeric_limits<pDOUBLE>::max());
         }
         POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf()
         {
@@ -910,9 +904,124 @@ namespace poutre
             return max();
         }
     };
-    template <> struct TypeTraits<const compound_pixel<pDOUBLE, 4>> : public TypeTraits<compound_pixel<pDOUBLE, 4>>
+    template <> struct TypeTraits<const compound<pDOUBLE, 4>> : public TypeTraits<compound<pDOUBLE, 4>>
     {
     };
+
+    template <class valuetype, std::ptrdiff_t Rank = 2> class pixel_t
+    {
+      private:
+        using point_t = index<Rank>;
+        using value_type = valuetype;
+        using self_type = pixel_t<valuetype, Rank>;
+        point_t m_point;
+        value_type m_value;
+        using const_reference = const value_type &;
+        using reference = value_type &;
+
+      public:
+        self_type &operator=(const self_type &other) = delete;
+        self_type &operator=(self_type &&other) = delete;
+        pixel_t() = delete;
+        pixel_t(const self_type &) = default;
+        pixel_t(self_type &&) = default;
+
+        // read only
+        POUTRE_CXX14_CONSTEXPR const point_t &point() const POUTRE_NOEXCEPT
+        {
+            return m_point;
+        }
+        // POUTRE_CXX14_CONSTEXPR const point_t &point() const POUTRE_NOEXCEPT
+        //{
+        //    return m_point;
+        //}
+        // read only
+        POUTRE_CXX14_CONSTEXPR const value_type &value() const POUTRE_NOEXCEPT
+        {
+            return m_value;
+        }
+        // write allowed
+        POUTRE_CXX14_CONSTEXPR value_type &value() POUTRE_NOEXCEPT
+        {
+            return m_value;
+        }
+    };
+
+    // pixel 1D
+    using px1du8 = pixel_t<pUINT8, 1>;  //! alias scalar pixel 1D UINT8
+    using px1di32 = pixel_t<pINT32, 1>; //! alias scalar pixel 1D INT32
+    using px1di64 = pixel_t<pINT64, 1>; //! alias scalar pixel 1D INT64
+    using px1dF = pixel_t<pFLOAT, 1>;   //! alias scalar pixel 1D FLOAT
+    using px1dD = pixel_t<pDOUBLE, 1>;  //! alias scalar pixel 1D FLOAT
+
+    using px1dc3u8 = pixel_t<c3pUINT8, 1>;  //! alias compund pixel 1D 3*UINT8
+    using px1dc3i32 = pixel_t<c3pINT32, 1>; //! alias compund pixel 1D 3*INT32
+    using px1dc3i64 = pixel_t<c3pINT64, 1>; //! alias compund pixel 1D 3*INT64
+    using px1dc3F = pixel_t<c3pFLOAT, 1>;   //! alias compund pixel 1D 3*FLOAT
+    using px1dc3D = pixel_t<c3pDOUBLE, 1>;  //! alias compund pixel 1D 3*FLOAT
+
+    using px1dc4u8 = pixel_t<c4pUINT8, 1>;  //! alias compund pixel 1D 3*UINT8
+    using px1dc4i32 = pixel_t<c4pINT32, 1>; //! alias compund pixel 1D 3*INT32
+    using px1dc4i64 = pixel_t<c4pINT64, 1>; //! alias compund pixel 1D 3*INT64
+    using px1dc4F = pixel_t<c4pFLOAT, 1>;   //! alias compund pixel 1D 3*FLOAT
+    using px1dc4D = pixel_t<c4pDOUBLE, 1>;  //! alias compund pixel 1D 3*FLOAT
+
+    // pixel 2D
+    using px2du8 = pixel_t<pUINT8, 2>;  //! alias scalar pixel 2D UINT8
+    using px2di32 = pixel_t<pINT32, 2>; //! alias scalar pixel 2D INT32
+    using px2di64 = pixel_t<pINT64, 2>; //! alias scalar pixel 2D INT64
+    using px2dF = pixel_t<pFLOAT, 2>;   //! alias scalar pixel 2D FLOAT
+    using px2dD = pixel_t<pDOUBLE, 2>;  //! alias scalar pixel 2D FLOAT
+
+    using px2dc3u8 = pixel_t<c3pUINT8, 2>;  //! alias compund pixel 2D 3*UINT8
+    using px2dc3i32 = pixel_t<c3pINT32, 2>; //! alias compund pixel 2D 3*INT32
+    using px2dc3i64 = pixel_t<c3pINT64, 2>; //! alias compund pixel 2D 3*INT64
+    using px2dc3F = pixel_t<c3pFLOAT, 2>;   //! alias compund pixel 2D 3*FLOAT
+    using px2dc3D = pixel_t<c3pDOUBLE, 2>;  //! alias compund pixel 2D 3*FLOAT
+
+    using px2dc4u8 = pixel_t<c4pUINT8, 2>;  //! alias compund pixel 2D 4*UINT8
+    using px2dc4i32 = pixel_t<c4pINT32, 2>; //! alias compund pixel 2D 4*INT32
+    using px2dc4i64 = pixel_t<c4pINT64, 2>; //! alias compund pixel 2D 4*INT64
+    using px2dc4F = pixel_t<c4pFLOAT, 2>;   //! alias compund pixel 2D 4*FLOAT
+    using px2dc4D = pixel_t<c4pDOUBLE, 2>;  //! alias compund pixel 2D 4*FLOAT
+
+    // pixel 3D
+    using px3du8 = pixel_t<pUINT8, 3>;  //! alias scalar pixel 3D UINT8
+    using px3di32 = pixel_t<pINT32, 3>; //! alias scalar pixel 3D INT32
+    using px3di64 = pixel_t<pINT64, 3>; //! alias scalar pixel 3D INT64
+    using px3dF = pixel_t<pFLOAT, 3>;   //! alias scalar pixel 3D FLOAT
+    using px3dD = pixel_t<pDOUBLE, 3>;  //! alias scalar pixel 3D FLOAT
+
+    using px3dc3u8 = pixel_t<c3pUINT8, 3>;  //! alias compund pixel 3D 3*UINT8
+    using px3dc3i32 = pixel_t<c3pINT32, 3>; //! alias compund pixel 3D 3*INT32
+    using px3dc3i64 = pixel_t<c3pINT64, 3>; //! alias compund pixel 3D 3*INT64
+    using px3dc3F = pixel_t<c3pFLOAT, 3>;   //! alias compund pixel 3D 3*FLOAT
+    using px3dc3D = pixel_t<c3pDOUBLE, 3>;  //! alias compund pixel 3D 3*FLOAT
+
+    using px3dc4u8 = pixel_t<c4pUINT8, 3>;  //! alias compund pixel 3D 4*UINT8
+    using px3dc4i32 = pixel_t<c4pINT32, 3>; //! alias compund pixel 3D 4*INT32
+    using px3dc4i64 = pixel_t<c4pINT64, 3>; //! alias compund pixel 3D 4*INT64
+    using px3dc4F = pixel_t<c4pFLOAT, 3>;   //! alias compund pixel 3D 4*FLOAT
+    using px3dc4D = pixel_t<c4pDOUBLE, 3>;  //! alias compund pixel 3D 4*FLOAT
+
+    // pixel 4D
+    using px4du8 = pixel_t<pUINT8, 4>;  //! alias scalar pixel 4D UINT8
+    using px4di32 = pixel_t<pINT32, 4>; //! alias scalar pixel 4D INT32
+    using px4di64 = pixel_t<pINT64, 4>; //! alias scalar pixel 4D INT64
+    using px4dF = pixel_t<pFLOAT, 4>;   //! alias scalar pixel 4D FLOAT
+    using px4dD = pixel_t<pDOUBLE, 4>;  //! alias scalar pixel 4D FLOAT
+
+    using px4dc3u8 = pixel_t<c3pUINT8, 4>;  //! alias compund pixel 4D 3*UINT8
+    using px4dc3i32 = pixel_t<c3pINT32, 4>; //! alias compund pixel 4D 3*INT32
+    using px4dc3i64 = pixel_t<c3pINT64, 4>; //! alias compund pixel 4D 3*INT64
+    using px4dc3F = pixel_t<c3pFLOAT, 4>;   //! alias compund pixel 4D 3*FLOAT
+    using px4dc3D = pixel_t<c3pDOUBLE, 4>;  //! alias compund pixel 4D 3*FLOAT
+
+    using px4dc4u8 = pixel_t<c4pUINT8, 4>;  //! alias compund pixel 4D 4*UINT8
+    using px4dc4i32 = pixel_t<c4pINT32, 4>; //! alias compund pixel 4D 4*INT32
+    using px4dc4i64 = pixel_t<c4pINT64, 4>; //! alias compund pixel 4D 4*INT64
+    using px4dc4F = pixel_t<c4pFLOAT, 4>;   //! alias compund pixel 4D 4*FLOAT
+    using px4dc4D = pixel_t<c4pDOUBLE, 4>;  //! alias compund pixel 4D 4*FLOAT
     //! @} doxygroup:
 } // namespace poutre
 #endif // POUTRE_IMAGEPROCESSING_TYPE_HPP__

@@ -64,7 +64,7 @@ namespace poutre
 
         // compound 3 Interleaved or planes by planes ?
         template <typename valuetype, std::ptrdiff_t NumDims = 2> // default dim == 2
-        void t_ImageToBufferCompound3(const DenseImage<compound_pixel<valuetype, 3>, NumDims> &im,
+        void t_ImageToBufferCompound3(const DenseImage<compound<valuetype, 3>, NumDims> &im,
                                       const size_t size_buffer, // Size in bytes!!!
                                       valuetype *buffer)
         {
@@ -79,7 +79,7 @@ namespace poutre
 
         // compound 4
         template <typename valuetype, std::ptrdiff_t NumDims = 2> // default dim == 2
-        void t_ImageToBufferCompound4(const DenseImage<compound_pixel<valuetype, 4>, NumDims> &im,
+        void t_ImageToBufferCompound4(const DenseImage<compound<valuetype, 4>, NumDims> &im,
                                       const size_t size_buffer, // Size in bytes!!!
                                       valuetype *buffer)
         {

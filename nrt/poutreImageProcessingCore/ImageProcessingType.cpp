@@ -192,7 +192,7 @@ BOOST_AUTO_TEST_CASE(basictypecompound)
 
 BOOST_AUTO_TEST_CASE(compound_pixel_container)
 {
-  using c5G8 = poutre::compound_pixel<poutre::pUINT8, 5>;
+  using c5G8 = poutre::compound<poutre::pUINT8, 5>;
   BOOST_CHECK(poutre::get_dim<c5G8>::dim == 5);
   c5G8 p00;
   p00.assign(10);
@@ -213,7 +213,7 @@ BOOST_AUTO_TEST_CASE(compound_pixel_container)
 
 BOOST_AUTO_TEST_CASE(compound_pixel_3)
 {
-  using c3G8 = poutre::compound_pixel<poutre::pUINT8, 3>;
+  using c3G8 = poutre::compound<poutre::pUINT8, 3>;
   BOOST_CHECK(poutre::get_dim<c3G8>::dim == 3);
   c3G8 p00(0, 1, 2);
   BOOST_CHECK(p00[0] == 0);
@@ -253,7 +253,7 @@ BOOST_AUTO_TEST_CASE(compound_pixel_3)
 
 BOOST_AUTO_TEST_CASE(compound_pixel_4)
 {
-  using c4G8 = poutre::compound_pixel<poutre::pUINT8, 4>;
+  using c4G8 = poutre::compound<poutre::pUINT8, 4>;
   BOOST_CHECK(poutre::get_dim<c4G8>::dim == 4); //-V112
   c4G8 p00(0, 1, 2, 3);
   BOOST_CHECK(p00[0] == 0);

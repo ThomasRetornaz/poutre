@@ -111,14 +111,14 @@ namespace poutre
              }
          };*/
         /**
-         * @brief  Helper operator which copy contant of input file in DenseImage 2D assuming compound_pixel<3> type
+         * @brief  Helper operator which copy contant of input file in DenseImage 2D assuming compound<3> type
          *
          * @param[in] path path on underlying image
          * @param{in] iimage  Image where to copy data
          * @warning Unsafe method use @c ImageLoader for safety check
          */
         // template <typename T, ptrdiff_t rank, template <typename, ptrdiff_t> class DenseImage>
-        // class LoadImageFromOIIO_helper_op<DenseImage<compound_pixel<T, 3>, rank>>
+        // class LoadImageFromOIIO_helper_op<DenseImage<compound<T, 3>, rank>>
         //{
         //  public:
         //    void operator()(const std::string &path, IInterface &iimage)
@@ -131,7 +131,7 @@ namespace poutre
         //                 localPath.string())
         //                    .str());
         //        }
-        //        auto *im_t = dynamic_cast < DenseImage<compound_pixel<T, 3> *>(&iimage);
+        //        auto *im_t = dynamic_cast < DenseImage<compound<T, 3> *>(&iimage);
         //        if (!im_t)
         //        {
         //            POUTRE_RUNTIME_ERROR("Dynamic cast fail");
@@ -184,14 +184,14 @@ namespace poutre
         //};
 
         ///**
-        // * @brief  Helper operator which copy contant of input file in DenseImage 2D assuming compound_pixel<4> type
+        // * @brief  Helper operator which copy contant of input file in DenseImage 2D assuming compound<4> type
         // *
         // * @param[in] path path on underlying image
         // * @param{in] iimage  Image where to copy data
         // * @warning Unsafe method use @c ImageLoader for safety check
         // */
         // template <typename T, ptrdiff_t rank, template <typename, ptrdiff_t> class DenseImage>
-        // class LoadImageFromOIIO_helper_op<DenseImage<compound_pixel<T, 4>, rank>>
+        // class LoadImageFromOIIO_helper_op<DenseImage<compound<T, 4>, rank>>
         //{
         //  public:
         //    void operator()(const std::string &path, IInterface &iimage)
@@ -204,7 +204,7 @@ namespace poutre
         //                 localPath.string())
         //                    .str());
         //        }
-        //        auto *im_t = dynamic_cast < DenseImage<compound_pixel<T, 4> *>(&iimage);
+        //        auto *im_t = dynamic_cast < DenseImage<compound<T, 4> *>(&iimage);
         //        if (!im_t)
         //        {
         //            POUTRE_RUNTIME_ERROR("Dynamic cast fail");
@@ -323,7 +323,7 @@ namespace poutre
          * @warning Unsafe method use @c ImageLoader for safety check
          */
         template <typename T>
-        void FillImageFromOIIOCompound3(OIIO::ImageInput &input, DenseImage<compound_pixel<T, 3>, 2> &im)
+        void FillImageFromOIIOCompound3(OIIO::ImageInput &input, DenseImage<compound<T, 3>, 2> &im)
         {
             const OIIO::ImageSpec &spec = input.spec();
             if (spec.nchannels != 3)
@@ -356,7 +356,7 @@ namespace poutre
          * @warning Unsafe method use @c ImageLoader for safety check
          */
         template <typename T>
-        void FillImageFromOIIOCompound3(const std::string &path, DenseImage<compound_pixel<T, 3>, 2> &im)
+        void FillImageFromOIIOCompound3(const std::string &path, DenseImage<compound<T, 3>, 2> &im)
         {
             bf::path localPath(path);
             if (!(bf::exists(localPath)))
@@ -401,10 +401,10 @@ namespace poutre
          * @warning Unsafe method use @c ImageLoader for safety check
          */
         template <typename T>
-        void FillImageFromOIIOCompound4(OIIO::ImageInput &input, DenseImage<compound_pixel<T, 4>, 2> &im)
+        void FillImageFromOIIOCompound4(OIIO::ImageInput &input, DenseImage<compound<T, 4>, 2> &im)
         {
             const OIIO::ImageSpec &spec = input.spec();
-            if (spec.nchannels != 4)
+            if (spec.nchannels != 4) //-V112
             {
                 POUTRE_RUNTIME_ERROR(
                     (boost::format("FillImageFromOIIOCompound4: wrong number of channels expected 4 found %d") %
@@ -417,7 +417,7 @@ namespace poutre
             input.read_image(OIIO::BaseTypeFromC<T>::value, &tmp[0]);
             const auto ptr_tmp = tmp.data();
             auto ptr_img = im.data();
-            for (size_t i = 0; i < tmp.size(); i += 4)
+            for (size_t i = 0; i < tmp.size(); i += 4) //-V112
             {
                 (*ptr_img)[0] = ptr_tmp[i];
                 (*ptr_img)[1] = ptr_tmp[i + 1];
@@ -436,7 +436,7 @@ namespace poutre
          * @warning Unsafe method use @c ImageLoader for safety check
          */
         template <typename T>
-        void FillImageFromOIIOCompound4(const std::string &path, DenseImage<compound_pixel<T, 4>, 2> &im)
+        void FillImageFromOIIOCompound4(const std::string &path, DenseImage<compound<T, 4>, 2> &im)
         {
             bf::path localPath(path);
             if (!(bf::exists(localPath)))
@@ -455,7 +455,7 @@ namespace poutre
                 POUTRE_RUNTIME_ERROR(errorstream.str());
             }
             const OIIO::ImageSpec &spec = in->spec();
-            if (spec.nchannels != 4)
+            if (spec.nchannels != 4) //-V112
             {
                 POUTRE_RUNTIME_ERROR(
                     (boost::format("FillImageFromOIIOCompound4: wrong number of channels expected 4 found %d") %
@@ -534,8 +534,8 @@ namespace poutre
                 const pDOUBLE min = (iters.first != im.cend() ? *iters.first : TypeTraits<pDOUBLE>::sup());
                 const pDOUBLE max = (iters.second != im.cend() ? *iters.second : TypeTraits<pDOUBLE>::inf());
 
-                if (max != min)
-                { //-V550
+                if (max != min) //-V550
+                {               //-V550
                     std::vector<pDOUBLE> normalized(im.size());
                     for (size_t i = 0; i < im.size(); ++i)
                         normalized[i] = (pDOUBLE(1.0) / (max - min)) * (im[i] - min);
@@ -605,7 +605,7 @@ namespace poutre
          * @warning Unsafe method use @c ImageWriter for safety check
          */
         template <typename T>
-        void StoreWithOIIOCompound3(const DenseImage<compound_pixel<T, 3>, 2> &im, OIIO::ImageOutput &out)
+        void StoreWithOIIOCompound3(const DenseImage<compound<T, 3>, 2> &im, OIIO::ImageOutput &out)
         {
             const OIIO::ImageSpec &spec = out.spec();
             POUTRE_CHECK(spec.nchannels == 3, "StoreWithOIIOCompound3(): Nb of channels must be 3");
@@ -613,10 +613,10 @@ namespace poutre
             const auto ptr_buffer = buffer.data();
             auto ptr_img = im.data();
 
-            pDOUBLE min_0 = TypeTraits<pDOUBLE>::sup(), min_1 = TypeTraits<pDOUBLE>::sup(),
-                    min_2 = TypeTraits<pDOUBLE>::sup(); //-V656
-            pDOUBLE max_0 = TypeTraits<pDOUBLE>::inf(), max_1 = TypeTraits<pDOUBLE>::inf(),
-                    max_2 = TypeTraits<pDOUBLE>::inf(); //-V656
+            pDOUBLE min_0 = TypeTraits<pDOUBLE>::sup(), min_1 = TypeTraits<pDOUBLE>::sup(), //-V656
+                min_2 = TypeTraits<pDOUBLE>::sup();                                         //-V656
+            pDOUBLE max_0 = TypeTraits<pDOUBLE>::inf(), max_1 = TypeTraits<pDOUBLE>::inf(), //-V656
+                max_2 = TypeTraits<pDOUBLE>::inf();                                         //-V656
 
             for (size_t i = 0; i < buffer.size(); i += 3)
             {
@@ -645,8 +645,8 @@ namespace poutre
                 //! TODO! make measurement module
                 //! TODO! vectorize
 
-                if (max_0 != max_0 && max_1 != min_1 && max_2 != min_2)
-                { //-V550
+                if (max_0 != max_0 && max_1 != min_1 && max_2 != min_2) //-V550
+                {                                                       //-V550
                     std::vector<pDOUBLE> normalized(buffer.size());
                     for (size_t i = 0; i < buffer.size(); i += 3)
                     {
@@ -677,7 +677,7 @@ namespace poutre
          * @warning Unsafe method use @c ImageWriter for safety check
          */
         template <typename T>
-        void StoreWithOIIOCompound3(const DenseImage<compound_pixel<T, 3>, 2> &im, const std::string &path,
+        void StoreWithOIIOCompound3(const DenseImage<compound<T, 3>, 2> &im, const std::string &path,
                                     StoreWithOIIOOptions const &options)
         {
             bf::path localPath(path);
@@ -720,20 +720,20 @@ namespace poutre
          * @warning Unsafe method use @c ImageWriter for safety check
          */
         template <typename T>
-        void StoreWithOIIOCompound4(const DenseImage<compound_pixel<T, 4>, 2> &im, OIIO::ImageOutput &out)
+        void StoreWithOIIOCompound4(const DenseImage<compound<T, 4>, 2> &im, OIIO::ImageOutput &out)
         {
             const OIIO::ImageSpec &spec = out.spec();
-            POUTRE_CHECK(spec.nchannels == 4, "StoreWithOIIOCompound4(): Nb of channels must be 4");
+            POUTRE_CHECK(spec.nchannels == 4, "StoreWithOIIOCompound4(): Nb of channels must be 4"); //-V112
             std::vector<T> buffer(spec.width * spec.height * spec.nchannels);
             const auto ptr_buffer = buffer.data();
             auto ptr_img = im.data();
 
-            pDOUBLE min_0 = TypeTraits<pDOUBLE>::sup(), min_1 = TypeTraits<pDOUBLE>::sup(),
-                    min_2 = TypeTraits<pDOUBLE>::sup(), min_3 = TypeTraits<pDOUBLE>::sup(); //-V656
-            pDOUBLE max_0 = TypeTraits<pDOUBLE>::inf(), max_1 = TypeTraits<pDOUBLE>::inf(),
-                    max_2 = TypeTraits<pDOUBLE>::inf(), max_3 = TypeTraits<pDOUBLE>::inf(); //-V656
+            pDOUBLE min_0 = TypeTraits<pDOUBLE>::sup(), min_1 = TypeTraits<pDOUBLE>::sup(), //-V656
+                min_2 = TypeTraits<pDOUBLE>::sup(), min_3 = TypeTraits<pDOUBLE>::sup();     //-V656
+            pDOUBLE max_0 = TypeTraits<pDOUBLE>::inf(), max_1 = TypeTraits<pDOUBLE>::inf(), //-V656
+                max_2 = TypeTraits<pDOUBLE>::inf(), max_3 = TypeTraits<pDOUBLE>::inf();     //-V656
 
-            for (size_t i = 0; i < buffer.size(); i += 4)
+            for (size_t i = 0; i < buffer.size(); i += 4) //-V112
             {
                 ptr_buffer[i] = (*ptr_img)[0];
                 min_0 = std::min(min_0, (pDOUBLE)ptr_buffer[i]);
@@ -764,8 +764,8 @@ namespace poutre
                 //! TODO! make measurement module
                 //! TODO! vectorize
 
-                if (max_0 != max_0 && max_1 != min_1 && max_2 != min_2 && max_3 != min_3)
-                { //-V550
+                if (max_0 != max_0 && max_1 != min_1 && max_2 != min_2 && max_3 != min_3) //-V550
+                {                                                                         //-V550
                     std::vector<pDOUBLE> normalized(buffer.size());
                     for (size_t i = 0; i < buffer.size(); i += 3)
                     {
@@ -797,7 +797,7 @@ namespace poutre
          * @warning Unsafe method use @c ImageWriter for safety check
          */
         template <typename T>
-        void StoreWithOIIOCompound4(const DenseImage<compound_pixel<T, 4>, 2> &im, const std::string &path,
+        void StoreWithOIIOCompound4(const DenseImage<compound<T, 4>, 2> &im, const std::string &path,
                                     StoreWithOIIOOptions const &options)
         {
             bf::path localPath(path);
@@ -826,7 +826,7 @@ namespace poutre
 
             spec.width = static_cast<int>(shape[1]);
             spec.height = static_cast<int>(shape[0]);
-            spec.nchannels = 4;
+            spec.nchannels = 4; //-V112
             spec.format = OIIO::BaseTypeFromC<T>::value;
 
             out->open(path, spec);
