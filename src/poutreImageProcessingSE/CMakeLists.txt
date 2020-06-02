@@ -2,6 +2,7 @@ set(poutreImageProcessingSE ${POUTRE_SRC_DIR}/poutreImageProcessingSE)
 
 set(poutreImageProcessingSE_SRC_DETAILS 
   ${poutreImageProcessingSE}/include/poutreImageProcessingSENeighborhood.hpp
+  ${poutreImageProcessingSE}/include/poutreImageProcessingSETypesAndTags.hpp
   )
 
 set(poutreImageProcessingSE_PUBLICHEADERS  

@@ -80,8 +80,8 @@ namespace poutre
     };
 
     //-----STRIDED VIEW OR DenseImage generic
-    template <se::NeighborListStaticSE nl, typename T1, typename T2, ptrdiff_t Rank,
-              template <typename, ptrdiff_t> class View1, template <typename, ptrdiff_t> class View2, class BinOp>
+    template <se::NLS nl, typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1,
+              template <typename, ptrdiff_t> class View2, class BinOp>
     struct t_ErodeDilateOpispatcher
     {
         static_assert(Rank == se::NeighborListStaticSETraits<nl>::Rank, "SE and view have not the same Rank");
@@ -135,7 +135,7 @@ namespace poutre
     };
 
     //----2D array_view/DenseImage<T,2>
-    template <se::NeighborListStaticSE nl, typename T1, typename T2, class BinOp>
+    template <se::NLS nl, typename T1, typename T2, class BinOp>
     void t_ErodeDilateIterateBorderArrayView2DHelper(const T1 *&i_vin, T2 *&o_vout, scoord xsize, scoord ysize,
                                                      scoord stride, ptrdiff_t i_XCenter, ptrdiff_t i_YCenter)
     {
@@ -163,7 +163,7 @@ namespace poutre
         o_voutbeg[stride * i_YCenter + i_XCenter] = static_cast<T2>(val);
     }
 
-    template <se::NeighborListStaticSE nl, typename T1, typename T2, class BinOp>
+    template <se::NLS nl, typename T1, typename T2, class BinOp>
     struct t_ErodeDilateOpispatcher<nl, T1, T2, 2, array_view, array_view, BinOp>
     {
         static_assert(2 == se::NeighborListStaticSETraits<nl>::Rank, "SE and view have not the same Rank");
@@ -384,8 +384,7 @@ namespace poutre
 
     // FIXME check TIn, Tout equals cv
     template <typename TIn, typename TOut, class HelperOp>
-    struct t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSquare, TIn, TOut, 2, array_view,
-                                    array_view, HelperOp>
+    struct t_ErodeDilateOpispatcher<se::NLS::NLS_c8_2d, TIn, TOut, 2, array_view, array_view, HelperOp>
     {
         void operator()(const array_view<TIn, 2> &i_vin, array_view<TOut, 2> &o_vout)
         {
@@ -477,8 +476,7 @@ namespace poutre
 
     // FIXME check TIn, Tout equals cv
     template <typename TIn, typename TOut, class HelperOp>
-    struct t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DCross, TIn, TOut, 2, array_view,
-                                    array_view, HelperOp>
+    struct t_ErodeDilateOpispatcher<se::NLS::NLS_c4_2d, TIn, TOut, 2, array_view, array_view, HelperOp>
     {
         void operator()(const array_view<TIn, 2> &i_vin, array_view<TOut, 2> &o_vout)
         {
@@ -564,8 +562,7 @@ namespace poutre
 
     // FIXME check TIn, Tout equals cv
     template <typename TIn, typename TOut, class HelperOp>
-    struct t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg0, TIn, TOut, 2, array_view,
-                                    array_view, HelperOp>
+    struct t_ErodeDilateOpispatcher<se::NLS::NLS_c2_2dH, TIn, TOut, 2, array_view, array_view, HelperOp>
     {
         void operator()(const array_view<TIn, 2> &i_vin, array_view<TOut, 2> &o_vout)
         {
@@ -606,8 +603,7 @@ namespace poutre
 
     // FIXME check TIn, Tout equals cv
     template <typename TIn, typename TOut, class HelperOp>
-    struct t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg90, TIn, TOut, 2, array_view,
-                                    array_view, HelperOp>
+    struct t_ErodeDilateOpispatcher<se::NLS::NLS_c2_2dV, TIn, TOut, 2, array_view, array_view, HelperOp>
     {
         void operator()(const array_view<TIn, 2> &i_vin, array_view<TOut, 2> &o_vout)
         {
@@ -679,8 +675,7 @@ namespace poutre
     /////Seg45
     // FIXME check TIn, Tout equals cv
     template <typename TIn, typename TOut, class HelperOp>
-    struct t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg45, TIn, TOut, 2, array_view,
-                                    array_view, HelperOp>
+    struct t_ErodeDilateOpispatcher<se::NLS::NLS_c2_2d_Diag45, TIn, TOut, 2, array_view, array_view, HelperOp>
     {
         void operator()(const array_view<TIn, 2> &i_vin, array_view<TOut, 2> &o_vout)
         {
@@ -760,8 +755,7 @@ namespace poutre
     /////Seg135
     // FIXME check TIn, Tout equals cv
     template <typename TIn, typename TOut, class HelperOp>
-    struct t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg135, TIn, TOut, 2, array_view,
-                                    array_view, HelperOp>
+    struct t_ErodeDilateOpispatcher<se::NLS::NLS_c2_2d_Diag135, TIn, TOut, 2, array_view, array_view, HelperOp>
     {
         void operator()(const array_view<TIn, 2> &i_vin, array_view<TOut, 2> &o_vout)
         {
@@ -843,67 +837,55 @@ namespace poutre
 
     template <typename TIn, typename TOut, ptrdiff_t Rank, template <typename, ptrdiff_t> class ViewIn,
               template <typename, ptrdiff_t> class ViewOut>
-    void t_Dilate(const ViewIn<TIn, Rank> &i_vin, se::NeighborListStaticSE nl, ViewOut<TOut, Rank> &o_vout)
+    void t_Dilate(const ViewIn<TIn, Rank> &i_vin, se::NLS nl, ViewOut<TOut, Rank> &o_vout)
     {
         POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
         switch (nl)
         {
-        case se::NeighborListStaticSE::NeighborListStaticSE2DSquare: {
+        case se::NLS::NLS_c8_2d: {
             using LineOp = LineBufferShiftAndArithDilateHelperOp<TIn>;
-            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSquare, TIn, TOut, Rank, ViewIn,
-                                     ViewOut, LineOp>
-                dispatcher;
+            t_ErodeDilateOpispatcher<se::NLS::NLS_c8_2d, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
             dispatcher(i_vin, o_vout);
         }
         break;
-        case se::NeighborListStaticSE::NeighborListStaticSE2DCross: {
+        case se::NLS::NLS_c4_2d: {
             using LineOp = LineBufferShiftAndArithDilateHelperOp<TIn>;
-            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DCross, TIn, TOut, Rank, ViewIn,
-                                     ViewOut, LineOp>
-                dispatcher;
+            t_ErodeDilateOpispatcher<se::NLS::NLS_c4_2d, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
             dispatcher(i_vin, o_vout);
         }
         break;
-        case se::NeighborListStaticSE::NeighborListStaticSE2DSeg0: {
+        case se::NLS::NLS_c2_2dH: {
             using LineOp = LineBufferShiftAndArithDilateHelperOp<TIn>;
-            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg0, TIn, TOut, Rank, ViewIn,
-                                     ViewOut, LineOp>
-                dispatcher;
+            t_ErodeDilateOpispatcher<se::NLS::NLS_c2_2dH, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
             dispatcher(i_vin, o_vout);
         }
         break;
-        case se::NeighborListStaticSE::NeighborListStaticSE2DSeg90: {
+        case se::NLS::NLS_c2_2dV: {
             using LineOp = LineBufferShiftAndArithDilateHelperOp<TIn>;
-            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg90, TIn, TOut, Rank, ViewIn,
-                                     ViewOut, LineOp>
-                dispatcher;
+            t_ErodeDilateOpispatcher<se::NLS::NLS_c2_2dV, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
             dispatcher(i_vin, o_vout);
         }
         break;
-        case se::NeighborListStaticSE::NeighborListStaticSE2DSeg45: {
+        case se::NLS::NLS_c2_2d_Diag45: {
             using LineOp = LineBufferShiftAndArithDilateHelperOp<TIn>;
-            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg45, TIn, TOut, Rank, ViewIn,
-                                     ViewOut, LineOp>
-                dispatcher;
+            t_ErodeDilateOpispatcher<se::NLS::NLS_c2_2d_Diag45, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
             dispatcher(i_vin, o_vout);
         }
         break;
-        case se::NeighborListStaticSE::NeighborListStaticSE2DSeg135: {
+        case se::NLS::NLS_c2_2d_Diag135: {
             using LineOp = LineBufferShiftAndArithDilateHelperOp<TIn>;
-            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg135, TIn, TOut, Rank, ViewIn,
-                                     ViewOut, LineOp>
-                dispatcher;
+            t_ErodeDilateOpispatcher<se::NLS::NLS_c2_2d_Diag135, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
             dispatcher(i_vin, o_vout);
         }
         break;
         default: {
-            POUTRE_RUNTIME_ERROR("t_Dilate se::NeighborListStaticSE not implemented");
+            POUTRE_RUNTIME_ERROR("t_Dilate se::NLS not implemented");
         }
         }
     }
 
     template <typename TIn, typename TOut, ptrdiff_t Rank>
-    void t_Dilate(const DenseImage<TIn, Rank> &i_vin, se::NeighborListStaticSE nl, DenseImage<TOut, Rank> &o_vout)
+    void t_Dilate(const DenseImage<TIn, Rank> &i_vin, se::NLS nl, DenseImage<TOut, Rank> &o_vout)
     {
         AssertSizesCompatible(i_vin, o_vout, "t_Dilate incompatible size");
         AssertAsTypesCompatible(i_vin, o_vout, "t_Dilate incompatible types");
@@ -914,66 +896,54 @@ namespace poutre
 
     template <typename TIn, typename TOut, ptrdiff_t Rank, template <typename, ptrdiff_t> class ViewIn,
               template <typename, ptrdiff_t> class ViewOut>
-    void t_Erode(const ViewIn<TIn, Rank> &i_vin, se::NeighborListStaticSE nl, ViewOut<TOut, Rank> &o_vout)
+    void t_Erode(const ViewIn<TIn, Rank> &i_vin, se::NLS nl, ViewOut<TOut, Rank> &o_vout)
     {
         POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
         switch (nl)
         {
-        case se::NeighborListStaticSE::NeighborListStaticSE2DSquare: {
+        case se::NLS::NLS_c8_2d: {
             using LineOp = LineBufferShiftAndArithErodeHelperOp<TIn>;
-            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSquare, TIn, TOut, Rank, ViewIn,
-                                     ViewOut, LineOp>
-                dispatcher;
+            t_ErodeDilateOpispatcher<se::NLS::NLS_c8_2d, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
             dispatcher(i_vin, o_vout);
         }
         break;
-        case se::NeighborListStaticSE::NeighborListStaticSE2DCross: {
+        case se::NLS::NLS_c4_2d: {
             using LineOp = LineBufferShiftAndArithErodeHelperOp<TIn>;
-            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DCross, TIn, TOut, Rank, ViewIn,
-                                     ViewOut, LineOp>
-                dispatcher;
+            t_ErodeDilateOpispatcher<se::NLS::NLS_c4_2d, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
             dispatcher(i_vin, o_vout);
         }
         break;
-        case se::NeighborListStaticSE::NeighborListStaticSE2DSeg0: {
+        case se::NLS::NLS_c2_2dH: {
             using LineOp = LineBufferShiftAndArithErodeHelperOp<TIn>;
-            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg0, TIn, TOut, Rank, ViewIn,
-                                     ViewOut, LineOp>
-                dispatcher;
+            t_ErodeDilateOpispatcher<se::NLS::NLS_c2_2dH, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
             dispatcher(i_vin, o_vout);
         }
         break;
-        case se::NeighborListStaticSE::NeighborListStaticSE2DSeg90: {
+        case se::NLS::NLS_c2_2dV: {
             using LineOp = LineBufferShiftAndArithErodeHelperOp<TIn>;
-            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg90, TIn, TOut, Rank, ViewIn,
-                                     ViewOut, LineOp>
-                dispatcher;
+            t_ErodeDilateOpispatcher<se::NLS::NLS_c2_2dV, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
             dispatcher(i_vin, o_vout);
         }
         break;
-        case se::NeighborListStaticSE::NeighborListStaticSE2DSeg45: {
+        case se::NLS::NLS_c2_2d_Diag45: {
             using LineOp = LineBufferShiftAndArithErodeHelperOp<TIn>;
-            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg45, TIn, TOut, Rank, ViewIn,
-                                     ViewOut, LineOp>
-                dispatcher;
+            t_ErodeDilateOpispatcher<se::NLS::NLS_c2_2d_Diag45, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
             dispatcher(i_vin, o_vout);
         }
         break;
-        case se::NeighborListStaticSE::NeighborListStaticSE2DSeg135: {
+        case se::NLS::NLS_c2_2d_Diag135: {
             using LineOp = LineBufferShiftAndArithErodeHelperOp<TIn>;
-            t_ErodeDilateOpispatcher<se::NeighborListStaticSE::NeighborListStaticSE2DSeg135, TIn, TOut, Rank, ViewIn,
-                                     ViewOut, LineOp>
-                dispatcher;
+            t_ErodeDilateOpispatcher<se::NLS::NLS_c2_2d_Diag135, TIn, TOut, Rank, ViewIn, ViewOut, LineOp> dispatcher;
             dispatcher(i_vin, o_vout);
         }
         break;
         default: {
-            POUTRE_RUNTIME_ERROR("t_Erode se::NeighborListStaticSE not implemented");
+            POUTRE_RUNTIME_ERROR("t_Erode se::NLS not implemented");
         }
         }
     }
     template <typename TIn, typename TOut, ptrdiff_t Rank>
-    void t_Erode(const DenseImage<TIn, Rank> &i_vin, se::NeighborListStaticSE nl, DenseImage<TOut, Rank> &o_vout)
+    void t_Erode(const DenseImage<TIn, Rank> &i_vin, se::NLS nl, DenseImage<TOut, Rank> &o_vout)
     {
         AssertSizesCompatible(i_vin, o_vout, "t_Erode incompatible size");
         AssertAsTypesCompatible(i_vin, o_vout, "t_Erode incompatible types");

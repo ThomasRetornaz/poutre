@@ -16,6 +16,13 @@
 #ifndef POUTRE_COORDINATE_HPP__
 #include <poutreBase/poutreCoordinate.hpp>
 #endif
+#ifndef POUTRE_CONTAINER_VIEW_HPP__
+#include <poutreBase/poutreContainerView.hpp>
+#endif
+#ifndef POUTRE_IPSENEIGHBORHOOD_HPP__
+#include <poutreImageProcessingSE/include/poutreImageProcessingSENeighborhood.hpp>
+#endif
+
 /**
  * @file   poutreImageProcessingSENeighborList.hpp
  * @author Thomas Retornaz
@@ -33,202 +40,497 @@ namespace poutre
          * @ingroup se_grp
          *@{
          */
-        enum class NeighborListStaticSE
+        enum class NLS
         {
-            NeighborListStaticSE2DCTUndefined, //!< Undefined type
-            NeighborListStaticSE2DSquare,      //!< Connection Square SE
-            NeighborListStaticSE2DCross,       //!< Connection Cross SE
-            NeighborListStaticSE2DSeg0,        //!< Connection Seg0zontal Segement symmetric SE
-            NeighborListStaticSE2DSeg90,       //!< Connection Vertical Segement symmetric SE
-            NeighborListStaticSE2DSeg45,       //!< Connection 45° Segement symmetric SE
-            NeighborListStaticSE2DSeg135,      //!< Connection 135° Segement symmetric SE
+            NLS_Undef,         //!< Undefined type
+            NLS_c2_1d,         //!< Connection 1D segement SE (symmetric no center)
+            NLS_c8_2d,         //!< Connection 2D Square SE (symmetric no center)
+            NLS_c4_2d,         //!< Connection 2D Cross SE (symmetric no center)
+            NLS_c2_2dH,        //!< Connection 2D Horizontal Segement (symmetric no center)
+            NLS_c2_2dV,        //!< Connection 2D Vertical Segement (symmetric no center)
+            NLS_c2_2d_Diag45,  //!< Connection 2D 45 degree Segement (symmetric no center)
+            NLS_c2_2d_Diag135, //!< Connection 2D 135 degree Segement (symmetric no center)
+            NLS_c6_3d,         //!< Connection 3D C6 (symmetric no center)
+            NLS_c26_3d,        //!< Connection 3D C6 (symmetric no center)
         };
         //! @} // se_nl_grp
 
-        template <NeighborListStaticSE> struct NeighborListStaticSETraits
+        /************************************************/
+        //---1D
+        /************************************************/
+
+        struct c2_1D_t : neighborhood_t_interface<c2_1D_t>
         {
+          public:
+            using idx = idx1d;
+            using view_t = array_view<const idx, 1>;
+
+          private:
+            // bloody visual....
+            static /*POUTRE_CONSTEXPR_OR_CONST*/ const std::array<idx, 2> m_neighboursList;
+
+          public:
+            NLS nlstype = NLS::NLS_c2_1d;
+            using category = static_neighbourhood_tag;
+            using incremental = std::false_type;
+            using decomposable = std::false_type;
+            using separable = std::false_type;
+
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t Rank = 1;
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t NbNeighbours = 2;
+
+            POUTRE_STATIC_CONSTEXPR view_t offsets()
+            {
+                return {m_neighboursList};
+            }
+            POUTRE_STATIC_CONSTEXPR view_t before_offsets()
+            {
+                return {m_neighboursList.data(), bd1d{1}};
+            }
+            POUTRE_STATIC_CONSTEXPR view_t after_offsets()
+            {
+                return {m_neighboursList.data() + 1, bd1d{1}};
+            }
+
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t radial_extent()
+            {
+                return 1;
+            }
         };
 
-        template <> struct NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSquare>
+        // clang-format off
+        const std::array<idx1d, 2> c2_1D_t::m_neighboursList= {{
+            idx1d{-1},          idx1d{+1},
+        }};
+        // clang-format on
+        // POUTRE_STATIC_CONSTEXPR c2_1D_t c2_1D = {};
+
+        /************************************************/
+        //---2D
+        /************************************************/
+
+        struct c2_2DH_t : neighborhood_t_interface<c2_2DH_t>
         {
+          public:
+            using view_t = array_view<const idx2d, 1>;
+
+          private:
+            // bloody visual....
+            static /*POUTRE_CONSTEXPR_OR_CONST*/ const std::array<idx2d, 2> m_neighboursList;
+
+          public:
+            NLS nlstype = NLS::NLS_c2_2dH;
+            using category = static_neighbourhood_tag;
+            using incremental = std::false_type;
+            using decomposable = std::false_type;
+            using separable = std::false_type;
+
             POUTRE_STATIC_CONSTEXPR ptrdiff_t Rank = 2;
-            POUTRE_STATIC_CONSTEXPR ptrdiff_t NbNeighbor = 9;
-            const static idx2d surroundingSquareHalfSize; // FXIME should be constexpr
-            const static std::array<idx2d, 9> NlList;
-            const static std::array<idx2d, 9> NlListTransposed;
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t NbNeighbours = 2;
+
+            POUTRE_STATIC_CONSTEXPR view_t offsets()
+            {
+                return {m_neighboursList};
+            }
+            POUTRE_STATIC_CONSTEXPR view_t before_offsets()
+            {
+                return {m_neighboursList.data(), bd1d{1}};
+            }
+            POUTRE_STATIC_CONSTEXPR view_t after_offsets()
+            {
+                return {m_neighboursList.data() + 1, bd1d{1}};
+            }
+
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t radial_extent()
+            {
+                return 1;
+            }
         };
 
-        const idx2d
-            NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSquare>::surroundingSquareHalfSize =
-                idx2d{1, 1};
-        const std::array<idx2d, 9>
-            NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSquare>::NlList = {
-                idx2d{0, 0},
-                //
-                idx2d{-1, -1},
-                idx2d{-1, 0},
-                idx2d{-1, 1},
-                //
-                idx2d{0, -1},
-                idx2d{0, 1},
-                //
-                idx2d{1, -1},
-                idx2d{1, 0},
-                idx2d{1, 1},
-        };
-        const std::array<idx2d, 9>
-            NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSquare>::NlListTransposed = {
-                idx2d{0, 0},
-                //
-                idx2d{-1, -1},
-                idx2d{-1, 0},
-                idx2d{-1, 1},
-                //
-                idx2d{0, -1},
-                idx2d{0, 1},
-                //
-                idx2d{1, -1},
-                idx2d{1, 0},
-                idx2d{1, 1},
-        };
-        template <> struct NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DCross>
+        // clang-format off
+        const std::array<idx2d, 2> c2_2DH_t::m_neighboursList= {{
+            idx2d{-1,+0},          idx2d{+1,+0},
+        }};
+        // clang-format on
+        POUTRE_STATIC_CONSTEXPR c2_2DH_t c2_2DH = {};
+
+        struct c2_2DV_t : neighborhood_t_interface<c2_2DV_t>
         {
+          public:
+            using view_t = array_view<const idx2d, 1>;
+
+          private:
+            // bloody visual....
+            static /*POUTRE_CONSTEXPR_OR_CONST*/ const std::array<idx2d, 2> m_neighboursList;
+
+          public:
+            NLS nlstype = NLS::NLS_c2_2dV;
+            using category = static_neighbourhood_tag;
+            using incremental = std::false_type;
+            using decomposable = std::false_type;
+            using separable = std::false_type;
+
             POUTRE_STATIC_CONSTEXPR ptrdiff_t Rank = 2;
-            POUTRE_STATIC_CONSTEXPR ptrdiff_t NbNeighbor = 5;
-            const static idx2d surroundingSquareHalfSize; // FXIME should be constexpr
-            const static std::array<idx2d, 5> NlList;
-            const static std::array<idx2d, 5> NlListTransposed;
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t NbNeighbours = 2;
+
+            POUTRE_STATIC_CONSTEXPR view_t offsets()
+            {
+                return {m_neighboursList};
+            }
+            POUTRE_STATIC_CONSTEXPR view_t before_offsets()
+            {
+                return {m_neighboursList.data(), bd1d{1}};
+            }
+            POUTRE_STATIC_CONSTEXPR view_t after_offsets()
+            {
+                return {m_neighboursList.data() + 1, bd1d{1}};
+            }
+
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t radial_extent()
+            {
+                return 1;
+            }
         };
 
-        const idx2d
-            NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DCross>::surroundingSquareHalfSize =
-                idx2d{1, 1};
-        const std::array<idx2d, 5>
-            NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DCross>::NlList = {idx2d{0, 0},
-                                                                                                     //
-                                                                                                     idx2d{-1, 0},
-                                                                                                     //
-                                                                                                     idx2d{0, -1},
-                                                                                                     idx2d{0, 1},
-                                                                                                     //
-                                                                                                     idx2d{1, 0}};
+        // clang-format off
+        const std::array<idx2d, 2> c2_2DV_t::m_neighboursList= {{
+            idx2d{+0,-1},
+            idx2d{+0,+1}
+        }};
+        // clang-format on
+        POUTRE_STATIC_CONSTEXPR c2_2DV_t c2_2DV = {};
 
-        const std::array<idx2d, 5>
-            NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DCross>::NlListTransposed = {
-                idx2d{0, 0},
-                //
-                idx2d{-1, 0},
-                //
-                idx2d{0, -1}, idx2d{0, 1},
-                //
-                idx2d{1, 0}};
-
-        template <> struct NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSeg0>
+        struct c2_2D_Diag45_t : neighborhood_t_interface<c2_2D_Diag45_t>
         {
+          public:
+            using view_t = array_view<const idx2d, 1>;
+
+          private:
+            // bloody visual....
+            static /*POUTRE_CONSTEXPR_OR_CONST*/ const std::array<idx2d, 2> m_neighboursList;
+
+          public:
+            NLS nlstype = NLS::NLS_c2_2d_Diag45;
+            using category = static_neighbourhood_tag;
+            using incremental = std::false_type;
+            using decomposable = std::false_type;
+            using separable = std::false_type;
+
             POUTRE_STATIC_CONSTEXPR ptrdiff_t Rank = 2;
-            POUTRE_STATIC_CONSTEXPR ptrdiff_t NbNeighbor = 3;
-            const static idx2d surroundingSquareHalfSize; // FXIME should be constexpr
-            const static std::array<idx2d, NbNeighbor> NlList;
-            const static std::array<idx2d, NbNeighbor> NlListTransposed;
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t NbNeighbours = 2;
+
+            POUTRE_STATIC_CONSTEXPR view_t offsets()
+            {
+                return {m_neighboursList};
+            }
+            POUTRE_STATIC_CONSTEXPR view_t before_offsets()
+            {
+                return {m_neighboursList.data(), bd1d{1}};
+            }
+            POUTRE_STATIC_CONSTEXPR view_t after_offsets()
+            {
+                return {m_neighboursList.data() + 1, bd1d{1}};
+            }
+
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t radial_extent()
+            {
+                return 1;
+            }
         };
 
-        const idx2d
-            NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSeg0>::surroundingSquareHalfSize =
-                idx2d{1, 1};
-        const std::array<idx2d, 3>
-            NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSeg0>::NlList = {
-                idx2d{0, 0},
-                //
-                idx2d{0, 1},
-                idx2d{0, -1},
-        };
-        const std::array<idx2d, 3>
-            NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSeg0>::NlListTransposed = {
-                idx2d{0, 0},
-                //
-                idx2d{0, 1},
-                idx2d{0, -1},
-        };
+        // clang-format off
+        const std::array<idx2d, 2> c2_2D_Diag45_t::m_neighboursList= {{
+                        idx2d{+1,-1},
 
-        template <> struct NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSeg90>
+            idx2d{-1,+1}
+        }};
+        // clang-format on
+        POUTRE_STATIC_CONSTEXPR c2_2D_Diag45_t c2_2D_Diag45 = {};
+
+        struct c2_2D_Diag135_t : neighborhood_t_interface<c2_2D_Diag135_t>
         {
+          public:
+            using view_t = array_view<const idx2d, 1>;
+
+          private:
+            // bloody visual....
+            static /*POUTRE_CONSTEXPR_OR_CONST*/ const std::array<idx2d, 2> m_neighboursList;
+
+          public:
+            NLS nlstype = NLS::NLS_c2_2d_Diag135;
+            using category = static_neighbourhood_tag;
+            using incremental = std::false_type;
+            using decomposable = std::false_type;
+            using separable = std::false_type;
+
             POUTRE_STATIC_CONSTEXPR ptrdiff_t Rank = 2;
-            POUTRE_STATIC_CONSTEXPR ptrdiff_t NbNeighbor = 3;
-            const static idx2d surroundingSquareHalfSize; // FXIME should be constexpr
-            const static std::array<idx2d, NbNeighbor> NlList;
-            const static std::array<idx2d, NbNeighbor> NlListTransposed;
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t NbNeighbours = 2;
+
+            POUTRE_STATIC_CONSTEXPR view_t offsets()
+            {
+                return {m_neighboursList};
+            }
+            POUTRE_STATIC_CONSTEXPR view_t before_offsets()
+            {
+                return {m_neighboursList.data(), bd1d{1}};
+            }
+            POUTRE_STATIC_CONSTEXPR view_t after_offsets()
+            {
+                return {m_neighboursList.data() + 1, bd1d{1}};
+            }
+
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t radial_extent()
+            {
+                return 1;
+            }
         };
 
-        const idx2d
-            NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSeg90>::surroundingSquareHalfSize =
-                idx2d{1, 1};
-        const std::array<idx2d, 3>
-            NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSeg90>::NlList = {
-                idx2d{0, 0},
-                //
-                idx2d{1, 0},
-                idx2d{-1, 0},
-        };
-        const std::array<idx2d, 3>
-            NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSeg90>::NlListTransposed = {
-                idx2d{0, 0},
-                //
-                idx2d{1, 0},
-                idx2d{-1, 0},
-        };
+        // clang-format off
+        const std::array<idx2d, 2> c2_2D_Diag135_t::m_neighboursList= {{
+            idx2d{-1,-1},
 
-        template <> struct NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSeg45>
+                          idx2d{+1,+1}
+        }};
+        // clang-format on
+        POUTRE_STATIC_CONSTEXPR c2_2D_Diag135_t c2_2D_Diag135 = {};
+
+        struct c4_2D_t : neighborhood_t_interface<c4_2D_t>
         {
+          public:
+            using view_t = array_view<const idx2d, 1>;
+
+          private:
+            // bloody visual....
+            static /*POUTRE_CONSTEXPR_OR_CONST*/ const std::array<idx2d, 4> m_neighboursList;
+
+          public:
+            NLS nlstype = NLS::NLS_c4_2d;
+            using category = static_neighbourhood_tag;
+            using incremental = std::false_type;
+            using decomposable = std::false_type;
+            using separable = std::false_type;
             POUTRE_STATIC_CONSTEXPR ptrdiff_t Rank = 2;
-            POUTRE_STATIC_CONSTEXPR ptrdiff_t NbNeighbor = 3;
-            const static idx2d surroundingSquareHalfSize; // FXIME should be constexpr
-            const static std::array<idx2d, NbNeighbor> NlList;
-            const static std::array<idx2d, NbNeighbor> NlListTransposed;
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t NbNeighbours = 4;
+
+            POUTRE_STATIC_CONSTEXPR view_t offsets()
+            {
+                return {m_neighboursList};
+            }
+            POUTRE_STATIC_CONSTEXPR view_t before_offsets()
+            {
+                return {m_neighboursList.data(), bd1d{2}};
+            }
+            POUTRE_STATIC_CONSTEXPR view_t after_offsets()
+            {
+                return {m_neighboursList.data() + 2, bd1d{2}};
+            }
+
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t radial_extent()
+            {
+                return 1;
+            }
         };
 
-        const idx2d
-            NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSeg45>::surroundingSquareHalfSize =
-                idx2d{1, 1};
-        const std::array<idx2d, 3>
-            NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSeg45>::NlList = {
-                idx2d{0, 0},
-                //
-                idx2d{-1, -1},
-                idx2d{1, 1},
-        };
-        const std::array<idx2d, 3>
-            NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSeg45>::NlListTransposed = {
-                idx2d{0, 0},
-                //
-                idx2d{-1, -1},
-                idx2d{1, 1},
-        };
+        // clang-format off
+        const std::array<idx2d, 4> c4_2D_t::m_neighboursList= {{
+                 {+0, -1},
+        {-1, +0},          {+1, +0},
+                 {+0, +1}
+        }};
+        // clang-format on
 
-        template <> struct NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSeg135>
+        POUTRE_STATIC_CONSTEXPR c4_2D_t c4_2D = {};
+
+        struct c8_2D_t : neighborhood_t_interface<c8_2D_t>
         {
+          public:
+            using view_t = array_view<const idx2d, 1>;
+
+          private:
+            // bloody visual....
+            static /*POUTRE_CONSTEXPR_OR_CONST*/ const std::array<idx2d, 8> m_neighboursList;
+
+          public:
+            NLS nlstype = NLS::NLS_c8_2d;
+            using category = static_neighbourhood_tag;
+            using incremental = std::false_type;
+            using decomposable = std::false_type;
+            using separable = std::false_type;
             POUTRE_STATIC_CONSTEXPR ptrdiff_t Rank = 2;
-            POUTRE_STATIC_CONSTEXPR ptrdiff_t NbNeighbor = 3;
-            const static idx2d surroundingSquareHalfSize; // FXIME should be constexpr
-            const static std::array<idx2d, NbNeighbor> NlList;
-            const static std::array<idx2d, NbNeighbor> NlListTransposed;
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t NbNeighbours = 8;
+
+            POUTRE_STATIC_CONSTEXPR view_t offsets()
+            {
+                return {m_neighboursList};
+            }
+            POUTRE_STATIC_CONSTEXPR view_t before_offsets()
+            {
+                return {m_neighboursList.data(), bd1d{4}}; //-V112
+            }
+            POUTRE_STATIC_CONSTEXPR view_t after_offsets()
+            {
+                return {m_neighboursList.data() + 4, bd1d{4}}; //-V112
+            }
+
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t radial_extent()
+            {
+                return 1;
+            }
         };
 
-        const idx2d
-            NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSeg135>::surroundingSquareHalfSize =
-                idx2d{1, 1};
-        const std::array<idx2d, 3>
-            NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSeg135>::NlList = {
-                idx2d{0, 0},
-                //
-                idx2d{-1, 1},
-                idx2d{1, -1},
+        // clang-format off
+        const std::array<idx2d, 8> c8_2D_t::m_neighboursList= {{
+        {-1, -1}, {+0, -1}, {+1, -1},
+        {-1, +0},           {+1, +0},
+        {-1, +1}, {+0, +1}, {+1, +1}
+        }};
+        // clang-format on
+        POUTRE_STATIC_CONSTEXPR c8_2D_t c8_2D = {};
+
+        /************************************************/
+        //---3D
+        /************************************************/
+        struct c6_3D_t : neighborhood_t_interface<c6_3D_t>
+        {
+          public:
+            using view_t = array_view<const idx3d, 1>;
+
+          private:
+            // bloody visual....
+            static /*POUTRE_CONSTEXPR_OR_CONST*/ const std::array<idx3d, 6> m_neighboursList;
+
+          public:
+            NLS nlstype = NLS::NLS_c6_3d;
+            using category = static_neighbourhood_tag;
+            using incremental = std::false_type;
+            using decomposable = std::false_type;
+            using separable = std::false_type;
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t Rank = 3;
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t NbNeighbours = 6;
+
+            POUTRE_STATIC_CONSTEXPR view_t offsets()
+            {
+                return {m_neighboursList};
+            }
+            POUTRE_STATIC_CONSTEXPR view_t before_offsets()
+            {
+                return {m_neighboursList.data(), bd1d{3}};
+            }
+            POUTRE_STATIC_CONSTEXPR view_t after_offsets()
+            {
+                return {m_neighboursList.data() + 3, bd1d{3}};
+            }
+
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t radial_extent()
+            {
+                return 1;
+            }
         };
-        const std::array<idx2d, 3>
-            NeighborListStaticSETraits<NeighborListStaticSE::NeighborListStaticSE2DSeg135>::NlListTransposed = {
-                idx2d{0, 0},
-                //
-                idx2d{-1, 1},
-                idx2d{1, -1},
+
+        // clang-format off
+        const std::array<idx3d, 6> c6_3D_t::m_neighboursList= {{
+          {+0, +0, -1}, {+0, -1, +0}, {-1, +0, +0},          {+1, +0, +0}, {+0, +1, +0}, {+0, +0, +1}
+          }};
+        // clang-format on
+        // POUTRE_STATIC_CONSTEXPR c6_3D_t c6_3D = {};
+
+        struct c26_3D_t : neighborhood_t_interface<c26_3D_t>
+        {
+          public:
+            using view_t = array_view<const idx3d, 1>;
+
+          private:
+            // bloody visual....
+            static /*POUTRE_CONSTEXPR_OR_CONST*/ const std::array<idx3d, 26> m_neighboursList;
+
+          public:
+            NLS nlstype = NLS::NLS_c26_3d;
+            using category = static_neighbourhood_tag;
+            using incremental = std::false_type;
+            using decomposable = std::false_type;
+            using separable = std::false_type;
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t Rank = 3;
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t NbNeighbours = 6;
+
+            POUTRE_STATIC_CONSTEXPR view_t offsets()
+            {
+                return {m_neighboursList};
+            }
+            POUTRE_STATIC_CONSTEXPR view_t before_offsets()
+            {
+                return {m_neighboursList.data(), bd1d{4}}; //-V112
+            }
+            POUTRE_STATIC_CONSTEXPR view_t after_offsets()
+            {
+                return {m_neighboursList.data() + 4, bd1d{4}}; //-V112
+            }
+
+            POUTRE_STATIC_CONSTEXPR ptrdiff_t radial_extent()
+            {
+                return 1;
+            }
+        };
+
+        // clang-format off
+        const std::array<idx3d, 26> c26_3D_t::m_neighboursList= {{
+        // clang-format off
+        {-1, -1, -1}, {+0, -1, -1}, {+1, -1, -1},
+        {-1, +0, -1}, {+0, +0, -1}, {+1, +0, -1},
+        {-1, +1, -1}, {+0, +1, -1}, {+1, +1, -1},
+        // ----
+        {-1, -1, +0}, {+0, -1, +0}, {+1, -1, +0},
+        {-1, +0, +0},               {+1, +0, +0},
+        {-1, +1, +0}, {+0, +1, +0}, {+1, +1, +0},
+        // ----
+        {-1, -1, +1}, {+0, -1, +1}, {+1, -1, +1},
+        {-1, +0, +1}, {+0, +0, +1}, {+1, +0, +1},
+        {-1, +1, +1}, {+0, +1, +1}, {+1, +1, +1},
+            // clang-format on
+        }};
+        // clang-format on
+        POUTRE_STATIC_CONSTEXPR c26_3D_t c26_3D = {};
+
+        template <NLS> struct NeighborListStaticSETraits
+        {
+        };
+
+        template <> struct NeighborListStaticSETraits<NLS::NLS_c2_1d>
+        {
+            using nlStaticSE = c2_1D_t;
+        };
+
+        template <> struct NeighborListStaticSETraits<NLS::NLS_c8_2d>
+        {
+            using nlStaticSE = c8_2D_t;
+        };
+
+        template <> struct NeighborListStaticSETraits<NLS::NLS_c4_2d>
+        {
+            using nlStaticSE = c4_2D_t;
+        };
+        template <> struct NeighborListStaticSETraits<NLS::NLS_c2_2dH>
+        {
+            using nlStaticSE = c2_2DH_t;
+        };
+        template <> struct NeighborListStaticSETraits<NLS::NLS_c2_2dV>
+        {
+            using nlStaticSE = c2_2DH_t;
+        };
+        template <> struct NeighborListStaticSETraits<NLS::NLS_c2_2d_Diag45>
+        {
+            using nlStaticSE = c2_2D_Diag45_t;
+        };
+        template <> struct NeighborListStaticSETraits<NLS::NLS_c2_2d_Diag135>
+        {
+            using nlStaticSE = c2_2D_Diag135_t;
+        };
+        template <> struct NeighborListStaticSETraits<NLS::NLS_c6_3d>
+        {
+            using nlStaticSE = c6_3D_t;
+        };
+        template <> struct NeighborListStaticSETraits<NLS::NLS_c26_3d>
+        {
+            using nlStaticSE = c26_3D_t;
         };
     } // namespace se
 

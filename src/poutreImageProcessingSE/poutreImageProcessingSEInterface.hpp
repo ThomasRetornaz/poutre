@@ -10,8 +10,8 @@
 #ifndef POUTRE_IPSEINTERFACE_HPP__
 #define POUTRE_IPSEINTERFACE_HPP__
 
-#ifndef POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
-#include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
+#ifndef POUTRE_IPSETYPES_AND_TAGS_HPP__
+#include <poutreImageProcessingSE/include/poutreImageProcessingSETypesAndTags.hpp>
 #endif
 
 #ifndef POUTRE_IPSECORE_HPP__
@@ -36,22 +36,6 @@ namespace poutre
          *@{
 
          */
-
-        /*! Type of structuring element
-         *
-         */
-        enum class SEType
-        {
-            SEType_Undef = 0,      //!< Undefined type
-            SEType_NL = 1 << 0,    //!< Neighborlist Type
-            SEType_Image = 1 << 1, //!< Image Type
-        };
-
-        //! operator<< for SEType
-        IPPSE_API std::ostream &operator<<(std::ostream &, SEType);
-
-        //! operator>> for SEType
-        IPPSE_API std::istream &operator>>(std::istream &, SEType &);
 
         /**
          * @brief Pure interface class for all "SE" object
@@ -79,7 +63,7 @@ namespace poutre
 
         //! operator<< for IStructuringElement
         //@warning Serialize a description of StructuringElement. Doesn't serialize data. Use @c TODO,@c TODO
-        IPPSE_API std::ostream &operator<<(std::ostream &, const IStructuringElement &img);
+        IPPSE_API std::ostream &operator<<(std::ostream &, const IStructuringElement &ise);
 
     } // namespace se
     //! @} // se_grp

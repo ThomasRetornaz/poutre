@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE(static_se_view_dilate_SE2DSquare) {
   auto v_imgOut = poutre::view(imgOut);
 
   poutre::t_Dilate(
-      v_img1, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSquare,
+      v_img1, poutre::se::NLS::NLS_c8_2d,
       v_imgOut);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -72,7 +72,7 @@ BOOST_AUTO_TEST_CASE(static_se_dilate_SE2DSquare) {
   imgOut.fill(4); //-V112
 
   poutre::t_Dilate(
-      *img, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSquare, //-V522
+      *img, poutre::se::NLS::NLS_c8_2d, //-V522
       imgOut);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -103,7 +103,7 @@ BOOST_AUTO_TEST_CASE(static_se_view_dilate_SE2DCross) {
   auto v_img1 = poutre::view(*img); //-V522
   auto v_img2 = poutre::view(imgOut);
   poutre::t_Dilate(
-      v_img1, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DCross,
+      v_img1, poutre::se::NLS::NLS_c4_2d,
       v_img2);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -132,7 +132,7 @@ BOOST_AUTO_TEST_CASE(static_se_dilate_SE2DCross) {
   poutre::DenseImage<poutre::pINT32> imgOut({5, 5});
   imgOut.fill(-1);
   poutre::t_Dilate(
-      *img, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DCross, //-V522
+      *img, poutre::se::NLS::NLS_c4_2d, //-V522
       imgOut);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -164,7 +164,7 @@ BOOST_AUTO_TEST_CASE(static_se_view_dilate_SE2DSeg0) {
   auto v_imgOut = poutre::view(imgOut);
 
   poutre::t_Dilate(v_img1,
-                   poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg0,
+                   poutre::se::NLS::NLS_c2_2dH,
                    v_imgOut);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -194,7 +194,7 @@ BOOST_AUTO_TEST_CASE(static_se_dilate_SE2DSeg0) {
   imgOut.fill(4); //-V112
 
   poutre::t_Dilate(*img, //-V522
-                   poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg0,
+                   poutre::se::NLS::NLS_c2_2dH,
                    imgOut);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -225,7 +225,7 @@ BOOST_AUTO_TEST_CASE(static_se_view_dilate_SE2DSeg90) {
   auto v_img1 = poutre::view(*img); //-V522
   auto v_img2 = poutre::view(imgOut);
   poutre::t_Dilate(
-      v_img1, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg90,
+      v_img1, poutre::se::NLS::NLS_c2_2dV,
       v_img2);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -254,7 +254,7 @@ BOOST_AUTO_TEST_CASE(static_se_dilate_SE2DSeg90) {
   poutre::DenseImage<poutre::pINT32> imgOut({5, 5});
   imgOut.fill(-1);
   poutre::t_Dilate(
-      *img, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg90, //-V522
+      *img, poutre::se::NLS::NLS_c2_2dV, //-V522
       imgOut);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -285,7 +285,7 @@ BOOST_AUTO_TEST_CASE(static_se_view_dilate_SE2DSeg45) {
   auto v_img1 = poutre::view(*img); //-V522
   auto v_img2 = poutre::view(imgOut);
   poutre::t_Dilate(
-      v_img1, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg45,
+      v_img1, poutre::se::NLS::NLS_c2_2d_Diag45,
       v_img2);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -314,7 +314,7 @@ BOOST_AUTO_TEST_CASE(static_se_dilate_SE2DSeg45) {
   poutre::DenseImage<poutre::pINT32> imgOut({5, 5});
   imgOut.fill(-1);
   poutre::t_Dilate(
-      *img, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg45, //-V522
+      *img, poutre::se::NLS::NLS_c2_2d_Diag45, //-V522
       imgOut);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -345,7 +345,7 @@ BOOST_AUTO_TEST_CASE(static_se_view_dilate_SE2DSeg135) {
   auto v_img1 = poutre::view(*img); //-V522
   auto v_img2 = poutre::view(imgOut);
   poutre::t_Dilate(
-      v_img1, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg135,
+      v_img1, poutre::se::NLS::NLS_c2_2d_Diag135,
       v_img2);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -374,7 +374,7 @@ BOOST_AUTO_TEST_CASE(static_se_dilate_SE2DSeg135) {
   poutre::DenseImage<poutre::pINT32> imgOut({5, 5});
   imgOut.fill(-1);
   poutre::t_Dilate(
-      *img, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg135, //-V522
+      *img, poutre::se::NLS::NLS_c2_2d_Diag135, //-V522
       imgOut);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -406,7 +406,7 @@ BOOST_AUTO_TEST_CASE(static_se_view_erode_SE2DSquare) {
   auto v_img1 = poutre::view(*img); //-V522
   auto v_img2 = poutre::view(imgOut);
   poutre::t_Erode(
-      v_img1, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSquare,
+      v_img1, poutre::se::NLS::NLS_c8_2d,
       v_img2);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -435,7 +435,7 @@ BOOST_AUTO_TEST_CASE(static_se_erode_SE2DSquare) {
   poutre::DenseImage<poutre::pINT32> imgOut({5, 5});
   imgOut.fill(-1);
   poutre::t_Erode(
-      *img, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSquare, //-V522
+      *img, poutre::se::NLS::NLS_c8_2d, //-V522
       imgOut);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -466,7 +466,7 @@ BOOST_AUTO_TEST_CASE(static_se_view_erode_SE2DCross) {
   auto v_img1 = poutre::view(*img); //-V522
   auto v_img2 = poutre::view(imgOut);
   poutre::t_Erode(v_img1,
-                  poutre::se::NeighborListStaticSE::NeighborListStaticSE2DCross,
+                  poutre::se::NLS::NLS_c4_2d,
                   v_img2);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -495,7 +495,7 @@ BOOST_AUTO_TEST_CASE(static_se_erode_SE2DCross) {
   poutre::DenseImage<poutre::pINT32> imgOut({5, 5});
   imgOut.fill(-1);
   poutre::t_Erode(*img, //-V522
-                  poutre::se::NeighborListStaticSE::NeighborListStaticSE2DCross,
+                  poutre::se::NLS::NLS_c4_2d,
                   imgOut);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -526,7 +526,7 @@ BOOST_AUTO_TEST_CASE(static_se_view_erode_SE2DSeg0) {
   auto v_img1 = poutre::view(*img); //-V522
   auto v_img2 = poutre::view(imgOut);
   poutre::t_Erode(v_img1,
-                  poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg0,
+                  poutre::se::NLS::NLS_c2_2dH,
                   v_img2);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -555,7 +555,7 @@ BOOST_AUTO_TEST_CASE(static_se_erode_SE2DSeg0) {
   poutre::DenseImage<poutre::pINT32> imgOut({5, 5});
   imgOut.fill(-1);
   poutre::t_Erode(*img, //-V522
-                  poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg0,
+                  poutre::se::NLS::NLS_c2_2dH,
                   imgOut);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -586,7 +586,7 @@ BOOST_AUTO_TEST_CASE(static_se_view_erode_SE2DSeg90) {
   auto v_img1 = poutre::view(*img); //-V522
   auto v_img2 = poutre::view(imgOut);
   poutre::t_Erode(v_img1,
-                  poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg90,
+                  poutre::se::NLS::NLS_c2_2dV,
                   v_img2);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -615,7 +615,7 @@ BOOST_AUTO_TEST_CASE(static_se_erode_SE2DSeg90) {
   poutre::DenseImage<poutre::pINT32> imgOut({5, 5});
   imgOut.fill(-1);
   poutre::t_Erode(*img, //-V522
-                  poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg90,
+                  poutre::se::NLS::NLS_c2_2dV,
                   imgOut);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -646,7 +646,7 @@ BOOST_AUTO_TEST_CASE(static_se_view_erode_SE2DSeg45) {
   auto v_img1 = poutre::view(*img); //-V522
   auto v_img2 = poutre::view(imgOut);
   poutre::t_Erode(v_img1,
-                  poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg45,
+                  poutre::se::NLS::NLS_c2_2d_Diag45,
                   v_img2);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -675,7 +675,7 @@ BOOST_AUTO_TEST_CASE(static_se_erode_SE2DSeg45) {
   poutre::DenseImage<poutre::pINT32> imgOut({5, 5});
   imgOut.fill(-1);
   poutre::t_Erode(*img, //-V522
-                  poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg45,
+                  poutre::se::NLS::NLS_c2_2d_Diag45,
                   imgOut);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -706,7 +706,7 @@ BOOST_AUTO_TEST_CASE(static_se_view_erode_SE2DSeg135) {
   auto v_img1 = poutre::view(*img); //-V522
   auto v_img2 = poutre::view(imgOut);
   poutre::t_Erode(
-      v_img1, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg135,
+      v_img1, poutre::se::NLS::NLS_c2_2d_Diag135,
       v_img2);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
@@ -734,7 +734,7 @@ BOOST_AUTO_TEST_CASE(static_se_erode_SE2DSeg135) {
   poutre::DenseImage<poutre::pINT32> imgOut({5, 5});
   imgOut.fill(-1);
   poutre::t_Erode(
-      *img, poutre::se::NeighborListStaticSE::NeighborListStaticSE2DSeg135, //-V522
+      *img, poutre::se::NLS::NLS_c2_2d_Diag135, //-V522
       imgOut);
 
   std::string expected = "Dense Scalar GINT32 2 5 5\
