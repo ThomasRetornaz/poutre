@@ -3,6 +3,7 @@ set(PoutreBaseSubdirectory ${POUTRE_SRC_DIR}/poutreBase)
 set(PoutreBaseSRC_DETAILS
   ${PoutreBaseSubdirectory}/include/poutreSimd.hpp	
   ${PoutreBaseSubdirectory}/include/poutreSimdAlgorithm.hpp
+  ${PoutreBaseSubdirectory}/include/poutreThreading.hpp
   )
 
 set(PoutreBaseSRC_PUBLICHEADERS  

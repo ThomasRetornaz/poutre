@@ -18,6 +18,7 @@ set(PoutreBaseTestSRC
   ${PoutreBaseTestSubdirectory}/static_array.cpp
   ${PoutreBaseTestSubdirectory}/types.cpp
   ${PoutreBaseTestSubdirectory}/containerview.cpp
+  ${PoutreBaseTestSubdirectory}/threading.cpp
   #${PoutreBaseTestSubdirectory}/tree.cpp
   )
 
