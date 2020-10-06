@@ -67,8 +67,8 @@ TEST(static_container,static_array_iteration_acces_capacity)
 
   auto expected = {1, 2, 3, 4, 5, 6}; //-V112
   auto rexpected = { 6,5,4,3,2,1}; //-V112
-  EXPECT_EQ(starray.begin( ), starray.end( ),expected.begin(),expected.end());
-  EXPECT_EQ(starray.rbegin( ), starray.rend( ), rexpected.begin( ), rexpected.end( ));
+  EXPECT_TRUE(CheckEqualCollections(starray.begin( ), starray.end( ),expected.begin()));
+  EXPECT_TRUE(CheckEqualCollections(starray.rbegin(), starray.rend(), rexpected.begin()));
 
   auto sum_const = std::accumulate(starray.cbegin( ), starray.cend( ), ptrdiff_t(0));
   EXPECT_EQ(sum_const, 21);

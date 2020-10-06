@@ -111,8 +111,8 @@ TEST(coordinate,bounds_iterator_1d)
   //TODO ?
   //std::vector<idx> rexpected = { {9}, {8}, {7}, {6}, {5}, {4}, {3}, {2}, {1}, {0} };
 
-  EXPECT_EQ(bnd1D.begin( ), bnd1D.end( ), expected.begin( ), expected.end());
-  EXPECT_EQ(begin(bnd1D), end(bnd1D), expected.begin(), expected.end());
+  EXPECT_TRUE(CheckEqualCollections(bnd1D.begin(), bnd1D.end(), expected.begin()));
+  EXPECT_TRUE(CheckEqualCollections(begin(bnd1D), end(bnd1D), expected.begin()));
 
   /*EXPECT_EQ_COLLECTIONS(bnd1D.rbegin( ), bnd1D.rend( ), rexpected.begin( ), rexpected.end( ));
   EXPECT_EQ_COLLECTIONS(rbegin(bnd1D), rend(bnd1D), rexpected.begin( ), rexpected.end( ));*/
@@ -145,8 +145,8 @@ TEST(coordinate,bounds_iterator_2d)
 
   bnd bnd2D{ 2, 4 };
   std::vector<idx> expected = { idx{ 0, 0 }, idx{ 0, 1 }, idx{ 0, 2 }, idx{ 0, 3 }, idx{ 1, 0 }, idx{ 1, 1 }, idx{ 1, 2 }, idx{ 1, 3 } };
-  EXPECT_EQ(bnd2D.cbegin( ), bnd2D.cend( ), expected.begin( ), expected.end( ));
-  EXPECT_EQ(cbegin(bnd2D), cend(bnd2D), expected.begin( ), expected.end( ));
+  EXPECT_TRUE(CheckEqualCollections(bnd2D.cbegin( ), bnd2D.cend( ), expected.begin( )));
+  EXPECT_TRUE(CheckEqualCollections(cbegin(bnd2D), cend(bnd2D), expected.begin( )));
   
   iterator it(bnd2D);
   ++it;
@@ -202,8 +202,8 @@ TEST(coordinate,bounds_iterator_3d)
  
 
   std::vector<idx> expected = { idx{0, 0, 0}, idx{0, 0, 1}, idx{0, 0, 2}, idx{0, 1, 0}, idx{0, 1, 1}, idx{0, 1, 2} };
-  EXPECT_EQ(bnd.cbegin( ), bnd.cend( ), expected.begin( ), expected.end( ));
-  EXPECT_EQ(cbegin(bnd), cend(bnd), expected.begin( ), expected.end( ));
+  EXPECT_TRUE(CheckEqualCollections(bnd.cbegin( ), bnd.cend( ), expected.begin( )));
+  EXPECT_TRUE(CheckEqualCollections(cbegin(bnd), cend(bnd), expected.begin( )));
 
   iterator it(bnd);
   ++it;
