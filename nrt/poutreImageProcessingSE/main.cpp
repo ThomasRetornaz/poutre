@@ -10,15 +10,11 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-//#define BOOST_TEST_NO_MAIN
-#define BOOST_TEST_MAIN
-#define BOOST_TEST_MODULE poutre se
 #include "main.hpp"
+#include <gtest/gtest.h>
 
-BOOST_AUTO_TEST_SUITE(ras)
-
-//http://nt2.metascale.fr/doc/html/tutorials/simd_hello_world.html
-BOOST_AUTO_TEST_CASE(ras)
-  {
-  }
-BOOST_AUTO_TEST_SUITE_END()
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}

@@ -13,15 +13,12 @@
 #include "main.hpp"
 #include <poutreImageProcessingCore/include/poutreImageProcessingPriorityQueue.hpp>
 
-
-
-BOOST_AUTO_TEST_SUITE(poutreImageProcessingPriorityQueue)
-BOOST_AUTO_TEST_CASE(ctor)
+TEST(poutreImageProcessingPriorityQueue,ctor)
 {
     poutre::PriorityQueue<unsigned char, poutre::offset> pq;
 }
 
-BOOST_AUTO_TEST_CASE(increase_nostable)
+TEST(poutreImageProcessingPriorityQueue,increase_nostable)
 {
     poutre::PriorityQueue<poutre::offset, unsigned char> pq;
     pq.emplace(0, 1); //-V525
@@ -40,17 +37,17 @@ BOOST_AUTO_TEST_CASE(increase_nostable)
         results.push_back(pq.top());
         pq.pop();
     }
-    //BOOST_CHECK_EQUAL_COLLECTIONS(results.begin(), results.end(), expected.begin(), expected.end());
-    BOOST_REQUIRE(expected.size() == results.size());
+    //EXPECT_EQ_COLLECTIONS(results.begin(), results.end(), expected.begin(), expected.end());
+    EXPECT_TRUE(expected.size() == results.size());
     for (size_t i = 0u; i < expected.size(); i++)
     {
-        BOOST_CHECK_EQUAL(expected[i].first, results[i].first);
-        BOOST_CHECK_EQUAL(expected[i].second, results[i].second);
+        EXPECT_EQ(expected[i].first, results[i].first);
+        EXPECT_EQ(expected[i].second, results[i].second);
     }
 }
 
 
-BOOST_AUTO_TEST_CASE(increase_stable)
+TEST(poutreImageProcessingPriorityQueue,increase_stable)
 {
     poutre::PriorityQueue<poutre::offset, unsigned char, poutre::lesserKey<poutre::offset, unsigned char>, true> pq;
     pq.emplace(0, 1); //-V525
@@ -69,17 +66,17 @@ BOOST_AUTO_TEST_CASE(increase_stable)
         results.push_back(pq.top());
         pq.pop();
     }
-    //BOOST_CHECK_EQUAL_COLLECTIONS(results.begin(), results.end(), expected.begin(), expected.end());
-    BOOST_REQUIRE(expected.size() == results.size());
+    //EXPECT_EQ_COLLECTIONS(results.begin(), results.end(), expected.begin(), expected.end());
+    EXPECT_TRUE(expected.size() == results.size());
     for (size_t i = 0u; i < expected.size(); i++)
     {
-        BOOST_CHECK_EQUAL(expected[i].first, results[i].first);
-        BOOST_CHECK_EQUAL(expected[i].second, results[i].second);
+        EXPECT_EQ(expected[i].first, results[i].first);
+        EXPECT_EQ(expected[i].second, results[i].second);
     }
 }
 
 
-BOOST_AUTO_TEST_CASE(decrease_nostable)
+TEST(poutreImageProcessingPriorityQueue,decrease_nostable)
 {
     poutre::PriorityQueue<poutre::offset, unsigned char, poutre::greaterKey<poutre::offset, unsigned char>> pq;
     pq.emplace(0, 1); //-V525
@@ -97,17 +94,17 @@ BOOST_AUTO_TEST_CASE(decrease_nostable)
         results.push_back(pq.top());
         pq.pop();
     }
-    //BOOST_CHECK_EQUAL_COLLECTIONS(results.begin(), results.end(), expected.begin(), expected.end());
-    BOOST_REQUIRE(expected.size() == results.size());
+    //EXPECT_EQ_COLLECTIONS(results.begin(), results.end(), expected.begin(), expected.end());
+    EXPECT_TRUE(expected.size() == results.size());
     for (size_t i = 0; i < expected.size(); i++)
     {
-        BOOST_CHECK_EQUAL(expected[i].first, results[i].first);
-        BOOST_CHECK_EQUAL(expected[i].second, results[i].second);
+        EXPECT_EQ(expected[i].first, results[i].first);
+        EXPECT_EQ(expected[i].second, results[i].second);
     }
 }
 
 
-BOOST_AUTO_TEST_CASE(decrease_stable)
+TEST(poutreImageProcessingPriorityQueue,decrease_stable)
 {
     poutre::PriorityQueue<poutre::offset, unsigned char, poutre::greaterKey<poutre::offset, unsigned char>, true> pq;
     pq.emplace(0, 1); //-V525
@@ -125,15 +122,13 @@ BOOST_AUTO_TEST_CASE(decrease_stable)
         results.push_back(pq.top());
         pq.pop();
     }
-    //BOOST_CHECK_EQUAL_COLLECTIONS(results.begin(), results.end(), expected.begin(), expected.end());
-    BOOST_REQUIRE(expected.size() == results.size());
+    //EXPECT_EQ_COLLECTIONS(results.begin(), results.end(), expected.begin(), expected.end());
+    EXPECT_TRUE(expected.size() == results.size());
     for (size_t i = 0; i < expected.size(); i++)
     {
-        BOOST_CHECK_EQUAL(expected[i].first, results[i].first);
-        BOOST_CHECK_EQUAL(expected[i].second, results[i].second);
+        EXPECT_EQ(expected[i].first, results[i].first);
+        EXPECT_EQ(expected[i].second, results[i].second);
     }
 }
-BOOST_AUTO_TEST_SUITE_END()
-
 
 

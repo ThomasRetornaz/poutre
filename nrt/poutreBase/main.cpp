@@ -10,7 +10,11 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-//#define BOOST_TEST_NO_MAIN
-#define BOOST_TEST_MAIN
-#define BOOST_TEST_MODULE poutre base
+#include <gtest/gtest.h>
 #include "main.hpp"
+
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}

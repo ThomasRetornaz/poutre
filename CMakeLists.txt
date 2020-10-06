@@ -2,7 +2,7 @@
 cmake_minimum_required (VERSION 3.0)
 project(Poutre C CXX)
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 # some global properties
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)

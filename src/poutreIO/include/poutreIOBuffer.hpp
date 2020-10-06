@@ -28,8 +28,6 @@
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 #endif
 
-#include <boost/filesystem.hpp>
-
 namespace poutre
 {
     /**

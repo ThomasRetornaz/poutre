@@ -12,7 +12,6 @@
 //==============================================================================
 
 #include "main.hpp"
-#include <boost/lexical_cast.hpp>
 #include <iostream>
 #include <poutreBase/poutreChronos.hpp>
 #include <poutreIO/poutreIOString.hpp>
@@ -21,9 +20,7 @@
 #include <random>
 #include <vector>
 
-BOOST_AUTO_TEST_SUITE(poutreImageProcessingArithOp)
-
-BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType_negate) {
+TEST(poutreImageProcessingArithOp,unaryopviewDispatchContiguousSamePtrType_negate) {
   poutre::DenseImage<poutre::pINT32> img1({5, 6});
   img1.fill(1);
   poutre::DenseImage<poutre::pINT32> img2({5, 6});
@@ -37,10 +34,10 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType_negate) {
 -1 -1 -1 -1 -1 -1\
 ";
   auto imgstr = poutre::ImageToString(img2);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousDifferentPtrType_negate) {
+TEST(poutreImageProcessingArithOp,unaryopviewDispatchContiguousDifferentPtrType_negate) {
   poutre::DenseImage<poutre::pINT32> img1({5, 6});
   img1.fill(1);
   poutre::DenseImage<poutre::pINT64> img2({5, 6});
@@ -55,10 +52,10 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousDifferentPtrType_negate) {
 -1 -1 -1 -1 -1 -1\
 ";
   auto imgstr = poutre::ImageToString(img2);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(unaryopviewDispatchOneIdxSamePtrType_negate) {
+TEST(poutreImageProcessingArithOp,unaryopviewDispatchOneIdxSamePtrType_negate) {
   poutre::DenseImage<poutre::pINT32> img1({5, 6});
   img1.fill(1);
   poutre::DenseImage<poutre::pINT32> img2({5, 6});
@@ -68,10 +65,10 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchOneIdxSamePtrType_negate) {
   // Extract section
   auto s_img1 = v_img1.section(/*poutre::idx2d*/ {1, 1});
   auto s_img2 = v_img2.section(/*poutre::idx2d*/ {1, 1});
-  BOOST_CHECK_EQUAL(s_img1.size(), 20);
-  BOOST_CHECK_EQUAL(s_img1.bound(), (poutre::bd2d({4, 5}))); //-V112
-  BOOST_CHECK_EQUAL(s_img2.size(), 20);
-  BOOST_CHECK_EQUAL(s_img2.bound(), (poutre::bd2d({4, 5}))); //-V112
+  EXPECT_EQ(s_img1.size(), 20);
+  EXPECT_EQ(s_img1.bound(), (poutre::bd2d({4, 5}))); //-V112
+  EXPECT_EQ(s_img2.size(), 20);
+  EXPECT_EQ(s_img2.bound(), (poutre::bd2d({4, 5}))); //-V112
   // call UnaryOpDispatcher one idx
   poutre::t_ArithNegate(s_img1, s_img2);
 
@@ -83,10 +80,10 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchOneIdxSamePtrType_negate) {
 3 -1 -1 -1 -1 -1\
 ";
   auto imgstr = poutre::ImageToString(img2);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(unaryopviewDispatchOneIdxDiferentPtrType_negate) {
+TEST(poutreImageProcessingArithOp,unaryopviewDispatchOneIdxDiferentPtrType_negate) {
   poutre::DenseImage<poutre::pINT32> img1({5, 6});
   img1.fill(1);
   poutre::DenseImage<poutre::pINT64> img2({5, 6});
@@ -96,10 +93,10 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchOneIdxDiferentPtrType_negate) {
   // Extract section
   auto s_img1 = v_img1.section({1, 1});
   auto s_img2 = v_img2.section({1, 1});
-  BOOST_CHECK_EQUAL(s_img1.size(), 20);
-  BOOST_CHECK_EQUAL(s_img1.bound(), (poutre::bd2d({4, 5}))); //-V112
-  BOOST_CHECK_EQUAL(s_img2.size(), 20);
-  BOOST_CHECK_EQUAL(s_img2.bound(), (poutre::bd2d({4, 5}))); //-V112
+  EXPECT_EQ(s_img1.size(), 20);
+  EXPECT_EQ(s_img1.bound(), (poutre::bd2d({4, 5}))); //-V112
+  EXPECT_EQ(s_img2.size(), 20);
+  EXPECT_EQ(s_img2.bound(), (poutre::bd2d({4, 5}))); //-V112
 
   poutre::t_ArithNegate(s_img1, s_img2);
   std::string expected = "Dense Scalar GINT64 2 5 6 \
@@ -110,10 +107,10 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchOneIdxDiferentPtrType_negate) {
 3 -1 -1 -1 -1 -1\
 ";
   auto imgstr = poutre::ImageToString(img2);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(unaryopviewDispatchViewCompatibleShiftedOffset_negate) {
+TEST(poutreImageProcessingArithOp,unaryopviewDispatchViewCompatibleShiftedOffset_negate) {
   poutre::DenseImage<poutre::pINT32> img1({5, 6});
   img1.fill(1);
   poutre::DenseImage<poutre::pINT32> img2({5, 6});
@@ -135,10 +132,10 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchViewCompatibleShiftedOffset_negate) {
 3 3 3 -1 -1 3\
 ";
   auto imgstr = poutre::ImageToString(img2);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(unaryopviewDispatchViewAllDiff_negate) {
+TEST(poutreImageProcessingArithOp,unaryopviewDispatchViewAllDiff_negate) {
   poutre::DenseImage<poutre::pINT32> img1({5, 6});
   img1.fill(1);
   poutre::DenseImage<poutre::pINT64> img2({5, 6});
@@ -159,10 +156,10 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchViewAllDiff_negate) {
 3 3 3 3 3 3\
 ";
   auto imgstr = poutre::ImageToString(img2);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(
+TEST(poutreImageProcessingArithOp,
     unaryopviewDispatchContiguousSamePtrType_addconstsaturated) {
   poutre::DenseImage<poutre::pUINT8> img1({5, 6});
   img1.fill(250);
@@ -178,10 +175,10 @@ BOOST_AUTO_TEST_CASE(
 255 255 255 255 255 255\
 ";
   auto imgstr = poutre::ImageToString(img2);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(
+TEST(poutreImageProcessingArithOp,
     unaryopviewDispatchContiguousDifferentPtrType__addconstsaturated) {
   poutre::DenseImage<poutre::pUINT8> img1({5, 6});
   img1.fill(250);
@@ -197,10 +194,10 @@ BOOST_AUTO_TEST_CASE(
 255 255 255 255 255 255\
 ";
   auto imgstr = poutre::ImageToString(img2);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(unaryopviewDispatchOneIdxSamePtrType_addconstsaturated) {
+TEST(poutreImageProcessingArithOp,unaryopviewDispatchOneIdxSamePtrType_addconstsaturated) {
   poutre::DenseImage<poutre::pUINT8> img1({5, 6});
   img1.fill(250);
   poutre::DenseImage<poutre::pUINT8> img2({5, 6});
@@ -221,10 +218,10 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchOneIdxSamePtrType_addconstsaturated) {
 3 255 255 255 255 255\
 ";
   auto imgstr = poutre::ImageToString(img2);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(
+TEST(poutreImageProcessingArithOp,
     unaryopviewDispatchOneIdxDiferentPtrType_addconstsaturated) {
   poutre::DenseImage<poutre::pINT32> img1({5, 6});
   img1.fill(250);
@@ -246,10 +243,10 @@ BOOST_AUTO_TEST_CASE(
 3 255 255 255 255 255\
 ";
   auto imgstr = poutre::ImageToString(img2);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(
+TEST(poutreImageProcessingArithOp,
     unaryopviewDispatchViewCompatibleShiftedOffset_addconstsaturated) {
   poutre::DenseImage<poutre::pUINT8> img1({5, 6});
   img1.fill(250);
@@ -273,10 +270,10 @@ BOOST_AUTO_TEST_CASE(
 3 3 3 255 255 3\
 ";
   auto imgstr = poutre::ImageToString(img2);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(unaryopviewDispatchViewAllDiff_addconstsaturated) {
+TEST(poutreImageProcessingArithOp,unaryopviewDispatchViewAllDiff_addconstsaturated) {
   poutre::DenseImage<poutre::pINT64> img1({5, 6});
   img1.fill(250);
   poutre::DenseImage<poutre::pUINT8> img2({5, 6});
@@ -298,10 +295,10 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchViewAllDiff_addconstsaturated) {
 3 3 3 3 3 3\
 ";
   auto imgstr = poutre::ImageToString(img2);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(
+TEST(poutreImageProcessingArithOp,
     unaryopviewDispatchContiguousSamePtrType_Subconstsaturated) {
   poutre::DenseImage<poutre::pUINT8> img1({5, 6});
   img1.fill(5);
@@ -317,10 +314,10 @@ BOOST_AUTO_TEST_CASE(
 0 0 0 0 0 0\
 ";
   auto imgstr = poutre::ImageToString(img2);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(
+TEST(poutreImageProcessingArithOp,
     unaryopviewDispatchContiguousDifferentPtrType__subconstsaturated) {
   poutre::DenseImage<poutre::pUINT8> img1({5, 6});
   img1.fill(5);
@@ -338,10 +335,10 @@ BOOST_AUTO_TEST_CASE(
 ";
   auto imgstr = poutre::ImageToString(img2);
   // std::cout << "********" << "\n" << img2<<"\n"<< imgstr;
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(unaryopviewDispatchOneIdxSamePtrType_subconstsaturated) {
+TEST(poutreImageProcessingArithOp,unaryopviewDispatchOneIdxSamePtrType_subconstsaturated) {
   poutre::DenseImage<poutre::pUINT8> img1({5, 6});
   img1.fill(5);
   poutre::DenseImage<poutre::pUINT8> img2({5, 6});
@@ -362,10 +359,10 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchOneIdxSamePtrType_subconstsaturated) {
 3 0 0 0 0 0\
 ";
   auto imgstr = poutre::ImageToString(img2);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(
+TEST(poutreImageProcessingArithOp,
     unaryopviewDispatchOneIdxDiferentPtrType_subconstsaturated) {
   poutre::DenseImage<poutre::pINT32> img1({5, 6});
   img1.fill(5);
@@ -387,10 +384,10 @@ BOOST_AUTO_TEST_CASE(
 3 0 0 0 0 0\
 ";
   auto imgstr = poutre::ImageToString(img2);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(
+TEST(poutreImageProcessingArithOp,
     unaryopviewDispatchViewCompatibleShiftedOffset_subconstsaturated) {
   poutre::DenseImage<poutre::pUINT8> img1({5, 6});
   img1.fill(5);
@@ -414,10 +411,10 @@ BOOST_AUTO_TEST_CASE(
 3 3 3 0 0 3\
 ";
   auto imgstr = poutre::ImageToString(img2);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(unaryopviewDispatchViewAllDiff_subconstsaturated) {
+TEST(poutreImageProcessingArithOp,unaryopviewDispatchViewAllDiff_subconstsaturated) {
   poutre::DenseImage<poutre::pINT64> img1({5, 6});
   img1.fill(5);
   poutre::DenseImage<poutre::pUINT8> img2({5, 6});
@@ -439,10 +436,10 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchViewAllDiff_subconstsaturated) {
 3 3 3 3 3 3\
 ";
   auto imgstr = poutre::ImageToString(img2);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(unaryopviewDispatchViewAllDiff_sup) {
+TEST(poutreImageProcessingArithOp,unaryopviewDispatchViewAllDiff_sup) {
   poutre::DenseImage<poutre::pINT64> img1({5, 6});
   img1.fill(250);
   poutre::DenseImage<poutre::pUINT8> img2({5, 6});
@@ -468,10 +465,10 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchViewAllDiff_sup) {
 3 3 3 3 3 3\
 ";
   auto imgstr = poutre::ImageToString(img3);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType_sup) {
+TEST(poutreImageProcessingArithOp,unaryopviewDispatchContiguousSamePtrType_sup) {
   poutre::DenseImage<poutre::pUINT8> img1({5, 6});
   img1.fill(255);
   poutre::DenseImage<poutre::pUINT8> img2({5, 6});
@@ -487,10 +484,10 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType_sup) {
 255 255 255 255 255 255\
 ";
   auto imgstr = poutre::ImageToString(img3);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(unaryopviewDispatchViewAllDiff_inf) {
+TEST(poutreImageProcessingArithOp,unaryopviewDispatchViewAllDiff_inf) {
   poutre::DenseImage<poutre::pINT64> img1({5, 6});
   img1.fill(250);
   poutre::DenseImage<poutre::pUINT8> img2({5, 6});
@@ -516,10 +513,10 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchViewAllDiff_inf) {
 3 3 3 3 3 3\
 ";
   auto imgstr = poutre::ImageToString(img3);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType_inf) {
+TEST(poutreImageProcessingArithOp,unaryopviewDispatchContiguousSamePtrType_inf) {
   poutre::DenseImage<poutre::pUINT8> img1({5, 6});
   img1.fill(255);
   poutre::DenseImage<poutre::pUINT8> img2({5, 6});
@@ -538,10 +535,10 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType_inf) {
 150 150 150 150 150 150\
 ";
   auto imgstr = poutre::ImageToString(img3);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(unaryopviewDispatchViewAllDiff_add) {
+TEST(poutreImageProcessingArithOp,unaryopviewDispatchViewAllDiff_add) {
   poutre::DenseImage<poutre::pINT64> img1({5, 6});
   img1.fill(250);
   poutre::DenseImage<poutre::pUINT8> img2({5, 6});
@@ -569,10 +566,10 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchViewAllDiff_add) {
   auto imgstr = poutre::ImageToString(img3);
   // std::cout << "***********************\n" << imgstr <<
   // "***********************\n";
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType_add) {
+TEST(poutreImageProcessingArithOp,unaryopviewDispatchContiguousSamePtrType_add) {
   poutre::DenseImage<poutre::pUINT8> img1({5, 6});
   img1.fill(250);
   poutre::DenseImage<poutre::pUINT8> img2({5, 6});
@@ -588,10 +585,10 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType_add) {
 255 255 255 255 255 255\
 ";
   auto imgstr = poutre::ImageToString(img3);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(unaryopviewDispatchViewAllDiff_sub) {
+TEST(poutreImageProcessingArithOp,unaryopviewDispatchViewAllDiff_sub) {
   poutre::DenseImage<poutre::pINT64> img1({5, 6});
   img1.fill(250);
   poutre::DenseImage<poutre::pUINT8> img2({5, 6});
@@ -619,10 +616,10 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchViewAllDiff_sub) {
   auto imgstr = poutre::ImageToString(img3);
   // std::cout << "***********************\n" << imgstr <<
   // "***********************\n";
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
-BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType_sub) {
+TEST(poutreImageProcessingArithOp,unaryopviewDispatchContiguousSamePtrType_sub) {
   poutre::DenseImage<poutre::pUINT8> img1({5, 6});
   img1.fill(150);
   poutre::DenseImage<poutre::pUINT8> img2({5, 6});
@@ -638,7 +635,7 @@ BOOST_AUTO_TEST_CASE(unaryopviewDispatchContiguousSamePtrType_sub) {
 0 0 0 0 0 0\
 ";
   auto imgstr = poutre::ImageToString(img3);
-  BOOST_CHECK_EQUAL(imgstr, expected);
+  EXPECT_EQ(imgstr, expected);
 }
 
 namespace {
@@ -658,7 +655,7 @@ decltype(auto) ConstructVector(size_t size) {
 } // namespace
 
 #if 0
-BOOST_AUTO_TEST_CASE(benchmark)
+TEST(poutreImageProcessingArithOp,benchmark)
 {
 	const auto size = 1000 * 1000;
 	const auto inputVect1 = ConstructVector(size);
@@ -743,5 +740,3 @@ BOOST_AUTO_TEST_CASE(benchmark)
 	std::cout << "********************************" << std::endl;
 }
 #endif
-
-BOOST_AUTO_TEST_SUITE_END()

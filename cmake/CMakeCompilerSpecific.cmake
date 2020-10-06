@@ -118,8 +118,8 @@ if(MSVC)
   #add_definitions(-DBOOST_TEST_NO_LIB)
 endif(MSVC)
 
-# Require C++14
-cxx_14()
+# Require C++17
+cxx_17()
 
 if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GNU"))
   message("Flags for GNUCXX And clang")

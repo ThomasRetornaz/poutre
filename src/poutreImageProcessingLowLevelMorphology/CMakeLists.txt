@@ -4,6 +4,8 @@ set(PoutreIPLLMSubdirectory ${POUTRE_SRC_DIR}/poutreImageProcessingLowLevelMorph
 
 set(PoutreIPLLMRC_DETAILS
   ${PoutreIPLLMSubdirectory}/include/poutreImageProcessingEroDil.hpp
+  ${PoutreIPLLMSubdirectory}/include/poutreImageProcessingEroDilNLS.hpp
+  ${PoutreIPLLMSubdirectory}/include/poutreImageProcessingEroDilLine.hpp
   )
 
 set(PoutreIPLLMSRC_PUBLICHEADERS  

@@ -15,6 +15,7 @@
 #include <iostream>
 #include <sstream>
 
+#include <boost/filesystem.hpp>
 #include <poutreBase/poutreTrace.hpp>
 #include <poutreIO/include/poutreOIIO.hpp>
 

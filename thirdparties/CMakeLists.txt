@@ -188,9 +188,9 @@ else()
 endif()
 set(Boost_NO_BOOST_CMAKE ON)
 
-set(POUTRE_boost_version_minimal 1.65.1)
+set(POUTRE_boost_version_minimal 1.70.0)
 set(Boost_ADDITIONAL_VERSIONS   
-	"1.66.0" "1.67.0" "1.68.0" "1.69.0" "1.70.0"  "1.71.0"  "1.72.0" "1.73.0")
+	 "1.70.0"  "1.71.0"  "1.72.0" "1.73.0" "1.74.0")
 find_package(Boost ${POUTRE_boost_version_minimal}
              REQUIRED 
             COMPONENTS 
@@ -464,6 +464,14 @@ SET(OIIO_INCLUDE_DIR
 )
 add_dependencies(OpenImageIO tiff jpeg png_static hdf5_cpp-shared libdeps)
 set(OpenImageIO_LIBRARIES OpenImageIO OpenImageIO_Util PARENT_SCOPE)
+
+#test
+set(BUILD_GMOCK OFF CACHE BOOL "Disable google test mock." FORCE)
+set(INSTALL_GTEST OFF CACHE BOOL "Disable google test install." FORCE)
+add_subdirectory(googletest)
+set_target_properties(gtest PROPERTIES FOLDER "3rdparties/")
+set_target_properties(gtest_main PROPERTIES FOLDER "3rdparties/")
+SET(GTEST_INCLUDE_DIR "${THIRD_PARTIES_PATH}/googletest/include" PARENT_SCOPE)
 
 # bench
 if(POUTRE_BUILD_BENCH)

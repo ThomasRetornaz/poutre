@@ -11,29 +11,24 @@
 //==============================================================================
 
 #include "main.hpp"
-#include <iostream>
-#include <thread>
+#include <gtest/gtest.h>
 #include <poutreBase/poutreGeometry.hpp>
 
-BOOST_AUTO_TEST_SUITE(geometrybase)
+TEST(geometry, ctor)
+{
+    using namespace poutre;
+    pt1D_scoord pt1;
+    pt2D_scoord pt2;
+    pt3D_scoord pt3;
+    pt4D_scoord pt4;
 
-BOOST_AUTO_TEST_CASE(ctor)
-  {
-  using namespace poutre;
-  pt1D_scoord pt1;
-  pt2D_scoord pt2;
-  pt3D_scoord pt3;
-  pt4D_scoord pt4;
+    bb1D_scoord bb1;
+    bb2D_scoord bb2;
+    bb3D_scoord bb3;
+    bb4D_scoord bb4;
 
-  bb1D_scoord bb1;
-  bb2D_scoord bb2;
-  bb3D_scoord bb3;
-  bb4D_scoord bb4;
-
-  pt1D_rcoord ptr1;
-  pt2D_rcoord ptr2;
-  pt3D_rcoord ptr3;
-  pt4D_rcoord ptr4;
-  }
-
-BOOST_AUTO_TEST_SUITE_END( )
+    pt1D_rcoord ptr1;
+    pt2D_rcoord ptr2;
+    pt3D_rcoord ptr3;
+    pt4D_rcoord ptr4;
+}

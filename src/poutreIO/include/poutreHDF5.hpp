@@ -36,8 +36,6 @@
 #include <H5public.h>
 #include <hdf5_hl.h>
 
-#include <boost/filesystem.hpp>
-
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -139,8 +137,6 @@ namespace poutre
             std::copy(s.begin(), s.end(), res.begin());
             return res;
         }
-
-        namespace bf = boost::filesystem;
 
         template <typename T, ptrdiff_t rank>
         void StoreWithHDF5_helper(const IInterface &iimage, const std::string &file_name,

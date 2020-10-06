@@ -42,30 +42,22 @@ namespace poutre
     /*                                                  2D transpose along x */
     /************************************************************
      * **********************************************************************/
-    // primary use strided view
-    template <typename T1, typename Tout, typename = void> struct t_transposeOp
-    {
-        // static_assert(false, "Not implemented for strided view");
-        // static_assert((
-        //    std::is_same< View1<T1, 2>, strided_array_view<T1, 2> >::value
-        //    || std::is_same< View1<T1, 2>, strided_array_view<const T1, 2> >::value
-        //    || std::is_same< ViewOut<Tout, 2>, strided_array_view<Tout, 2> >::value
-        //    ), "strided view only specialization fail for arrayview");
 
-        // void operator()(const View1<T1, 2>& i_vin, ViewOut<Tout, 2>& o_vout) const
-        // {
-        //    static_assert(false, "Not implemented for strided view");
-        // }
+    template <typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1,
+              template <typename, ptrdiff_t> class View2>
+    struct t_transposeDispatcher
+    {
+        // generic case not supported yet
+        // static_assert(false, "To be implemented for generic views");
     };
 
-    // template specialization both array_view
-    template <typename T1, typename Tout> struct t_transposeOp<T1, Tout>
+    template <typename T> struct t_transposeDispatcher<T, T, 2, array_view, array_view>
     {
-
-        void operator()(const DenseImage<T1, 2> &i_vin1, DenseImage<Tout, 2> &o_vout) const
+        void operator()(const array_view<T, 2> &i_vin, array_view<T, 2> &o_vout)
         {
+            POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
             // check bound compatibility
-            auto ibd = i_vin1.bound();
+            auto ibd = i_vin.bound();
             auto obd = o_vout.bound();
             scoord oysize = obd[0];
             scoord oxsize = obd[1];
@@ -73,17 +65,17 @@ namespace poutre
             scoord xsize = ibd[1];
 
             scoord oxstep = o_vout.stride()[0];
-            scoord xstep = i_vin1.stride()[0];
+            scoord xstep = i_vin.stride()[0];
 
             POUTRE_CHECK(oysize == xsize, "ibd[0]!=obd[1] bound not compatible");
             POUTRE_CHECK(oxsize == ysize, "ibd[1]!=obd[0] bound not compatible");
 
-            auto i_vinbeg1 = i_vin1.data();
+            auto i_vinbeg = i_vin.data();
             auto o_voutbeg = o_vout.data();
 
             for (scoord y = 0; y < xsize; y++)
                 for (scoord x = 0; x < ysize; x++)
-                    o_voutbeg[oxstep * y + x] = i_vinbeg1[xstep * x + y];
+                    o_voutbeg[oxstep * y + x] = i_vinbeg[xstep * x + y];
         }
     };
 
@@ -243,23 +235,22 @@ and do transposition
 
 // https ://software.intel.com/sites/landingpage/IntrinsicsGuide/
 #include <emmintrin.h>
-    template <> struct t_transposeOp<pUINT8, pUINT8>
+    template <> struct t_transposeDispatcher<pUINT8, pUINT8, 2, array_view, array_view>
     {
-
-        void operator()(const DenseImage<pUINT8, 2> &i_vin1, DenseImage<pUINT8, 2> &o_vout) const
+        void operator()(const array_view<pUINT8, 2> &i_vin, array_view<pUINT8, 2> &o_vout)
         {
             constexpr scoord loopStep = 16;
-            auto ibd = i_vin1.bound();
+            auto ibd = i_vin.bound();
             auto obd = o_vout.bound();
             POUTRE_CHECK(ibd[0] = obd[1], "ibd[0]!=obd[1] bound not compatible");
             POUTRE_CHECK(ibd[1] = obd[0], "ibd[1]!=obd[0] bound not compatible");
-            auto i_vinbeg1 = i_vin1.data();
+            auto i_vinbeg1 = i_vin.data();
             auto o_voutbeg = o_vout.data();
             scoord ysize = ibd[0]; //-V525
             scoord xsize = ibd[1];
             scoord oxsize = obd[1];
             scoord oxstep = o_vout.stride()[0];
-            scoord xstep = i_vin1.stride()[0];
+            scoord xstep = i_vin.stride()[0];
             scoord ySizeSimdLoop = ysize - (ysize % loopStep);
             scoord xSizeSimdLoop = xsize - (xsize % loopStep);
             scoord x, y;
@@ -477,12 +468,22 @@ and do transposition
     //       }
     //    };
     // #endif //__AVX__
-    template <typename T1, typename T2> //, template <typename> class ImageIn,
-                                        // template <typename> class ImageOut >
-    void t_transpose(const DenseImage<T1, 2> &i_vin1, DenseImage<T2, 2> &o_vout)
+
+    template <typename TIn, typename TOut, ptrdiff_t Rank, template <typename, ptrdiff_t> class ViewIn,
+              template <typename, ptrdiff_t> class ViewOut>
+    void t_transpose(const ViewIn<TIn, Rank> &i_vin, ViewOut<TOut, Rank> &o_vout)
     {
-        auto op = t_transposeOp<T1, T2>();
-        op(i_vin1, o_vout);
+        POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
+        t_transposeDispatcher<TIn, TOut, Rank, ViewIn, ViewOut> dispatcher;
+        dispatcher(i_vin, o_vout);
+    }
+    template <typename TIn, typename TOut, ptrdiff_t Rank>
+    void t_transpose(const DenseImage<TIn, Rank> &i_vin, DenseImage<TOut, Rank> &o_vout)
+    {
+        AssertAsTypesCompatible(i_vin, o_vout, "t_transpose incompatible types");
+        auto viewIn = view(const_cast<DenseImage<TIn, Rank> &>(i_vin));
+        auto viewOut = view(o_vout);
+        t_transpose(viewIn, viewOut);
     }
     //! @} doxygroup: image_processing_linear_group
 } // namespace poutre

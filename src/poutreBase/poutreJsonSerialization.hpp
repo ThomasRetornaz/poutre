@@ -26,10 +26,6 @@
 #include <json/forwards.h>
 #endif
 
-#ifndef BOOST_NONCOPYABLE_HPP_INCLUDED
-#include <boost/noncopyable.hpp>
-#endif
-
 #include <string>
 
 namespace poutre

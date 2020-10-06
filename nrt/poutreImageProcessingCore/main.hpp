@@ -1,15 +1,35 @@
+//==============================================================================
+//                  Copyright (c) 2015 - Thomas Retornaz                      //
+//                     thomas.retornaz@mines-paris.org                        //
+//          Distributed under the Boost Software License, Version 1.0.        //
+//                 See accompanying file LICENSE.txt or copy at               //
+//                     http://www.boost.org/LICENSE_1_0.txt                   //
+//==============================================================================
+
 #ifndef _PNNTESTS_MAIN_HPP__
 #define _PNNTESTS_MAIN_HPP__
 
-#include <boost/test/unit_test_suite.hpp>
-#include <boost/test/unit_test_log.hpp>
-#include <boost/test/unit_test.hpp>
-#include <boost/test/framework.hpp>
-#include <boost/test/test_tools.hpp>
-using boost::unit_test::test_suite;
-
 #include <iostream>
+#include <gtest/gtest.h>
 
-
-#endif
+template <typename LeftIter, typename RightIter>
+::testing::AssertionResult CheckEqualCollections(LeftIter left_begin, LeftIter left_end, RightIter right_begin)
+{
+    bool equal(true);
+    std::string message;
+    std::size_t index(0);
+    while (left_begin != left_end)
+    {
+        if (*left_begin++ != *right_begin++)
+        {
+            equal = false;
+            message += "\n\tMismatch at index " + std::to_string(index);
+        }
+        ++index;
+    }
+    if (message.size())
+        message += "\n\t";
+    return equal ? ::testing::AssertionSuccess() : ::testing::AssertionFailure() << message;
+}
+#endif //_PIOTESTS_MAIN_HPP__
 

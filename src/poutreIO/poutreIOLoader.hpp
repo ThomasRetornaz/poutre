@@ -21,6 +21,7 @@
 #ifndef POUTREIOLOADER_HPP
 #define POUTREIOLOADER_HPP
 
+#include <filesystem>
 #include <memory>
 #include <string>
 
@@ -32,8 +33,6 @@
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
 #endif
 
-#include <boost/filesystem.hpp>
-
 namespace poutre
 {
     class ImageProvider;
@@ -41,7 +40,7 @@ namespace poutre
 
 namespace poutre
 {
-    namespace bf = boost::filesystem;
+    namespace fs = std::filesystem;
 
     /**
      * @addtogroup image_processing_io_group Image Processing IO API

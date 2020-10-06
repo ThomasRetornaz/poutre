@@ -19,23 +19,22 @@
 #include <vector>
 
 #include "main.hpp"
+#include <gtest/gtest.h>
 #include <poutreBase/include/poutreThreading.hpp>
 
-BOOST_AUTO_TEST_SUITE(threading)
-
-BOOST_AUTO_TEST_CASE(threadpool_ctor)
+TEST(threading, threadpool_ctor)
 {
     poutre::thread::TreadPool pool;
-    BOOST_CHECK_EQUAL(pool.capacity(), std::thread::hardware_concurrency()-1);
+    EXPECT_EQ(pool.capacity(), std::thread::hardware_concurrency() - 1);
 }
 
-BOOST_AUTO_TEST_CASE(threadpool_ctor_defaut0)
+TEST(threading, threadpool_ctor_defaut0)
 {
     poutre::thread::TreadPool pool(0);
-    BOOST_CHECK_EQUAL(pool.capacity(), 1);
+    EXPECT_EQ(pool.capacity(), 1);
 }
 
-BOOST_AUTO_TEST_CASE(threadpool_RunMoreTasksThanThreads)
+TEST(threading, threadpool_RunMoreTasksThanThreads)
 {
     using namespace std::chrono_literals;
     const size_t THREAD_COUNT{2u};
@@ -60,22 +59,22 @@ BOOST_AUTO_TEST_CASE(threadpool_RunMoreTasksThanThreads)
     {
         f.get();
     }
-    //BOOST_CHECK_EQUAL(pool.empty(), true);
-    BOOST_CHECK_EQUAL(result, TASK_COUNT);
-    BOOST_CHECK_EQUAL(thread_ids.size(), THREAD_COUNT);
+    // EXPECT_EQ(pool.empty(), true);
+    EXPECT_EQ(result, TASK_COUNT);
+    EXPECT_EQ(thread_ids.size(), THREAD_COUNT);
 }
 
-BOOST_AUTO_TEST_CASE(threadpool_VariousTypesOfTasks)
+TEST(threading, threadpool_VariousTypesOfTasks)
 {
     using namespace poutre::thread;
     TreadPool pool{2u};
     auto fi = pool.submit([] { return 42; });
     auto fs = pool.submit([] { return std::string{"42"}; });
-    BOOST_CHECK_EQUAL(fi.get(), 42);
-    BOOST_CHECK_EQUAL(fs.get(), std::string{"42"});
+    EXPECT_EQ(fi.get(), 42);
+    EXPECT_EQ(fs.get(), std::string{"42"});
 }
 
-BOOST_AUTO_TEST_CASE(threadpool_Lambdas)
+TEST(threading, threadpool_Lambdas)
 {
     using namespace poutre::thread;
     using namespace std::chrono_literals;
@@ -91,28 +90,28 @@ BOOST_AUTO_TEST_CASE(threadpool_Lambdas)
     }
     for (size_t i = 0; i < TASK_COUNT; ++i)
     {
-        BOOST_CHECK_EQUAL(i, v[i].get());
+        EXPECT_EQ(i, v[i].get());
     }
-    //BOOST_CHECK_EQUAL(pool.empty(), true);
+    // EXPECT_EQ(pool.empty(), true);
 }
 
-BOOST_AUTO_TEST_CASE(threadpool_Exception)
+TEST(threading, threadpool_Exception)
 {
     using namespace poutre::thread;
     TreadPool pool{1u};
     auto f = pool.submit([] { throw std::runtime_error{"Error"}; });
 
-    BOOST_CHECK_THROW(f.get(), std::runtime_error);
+    EXPECT_THROW(f.get(), std::runtime_error);
 }
 
-BOOST_AUTO_TEST_CASE(threadpool_capacity)
+TEST(threading, threadpool_capacity)
 {
     using namespace poutre::thread;
     TreadPool pool{1u};
-    BOOST_CHECK_EQUAL(pool.capacity(), 1u);
+    EXPECT_EQ(pool.capacity(), 1u);
 }
 
-BOOST_AUTO_TEST_CASE(threadpool_empty)
+TEST(threading, threadpool_empty)
 {
     using namespace std::chrono_literals;
     using namespace poutre::thread;
@@ -125,13 +124,13 @@ static int sum(int a, int b)
     return a + b;
 }
 
-BOOST_AUTO_TEST_CASE(threadpool_FunctionWithArgs)
+TEST(threading, threadpool_FunctionWithArgs)
 {
     using namespace std::chrono_literals;
     using namespace poutre::thread;
     TreadPool pool{4u};
     auto f = pool.submit(sum, 2, 2);
-    BOOST_CHECK_EQUAL(f.get(), 4);
+    EXPECT_EQ(f.get(), 4);
 }
 
 static std::thread::id test_function(size_t delay)
@@ -140,7 +139,7 @@ static std::thread::id test_function(size_t delay)
     return std::this_thread::get_id();
 }
 
-BOOST_AUTO_TEST_CASE(threadpool_ThreadsAreReused)
+TEST(threading, threadpool_ThreadsAreReused)
 {
     using namespace std::chrono_literals;
     using namespace poutre::thread;
@@ -160,7 +159,7 @@ BOOST_AUTO_TEST_CASE(threadpool_ThreadsAreReused)
         auto r = futures[i].get();
         auto iter = thread_ids.insert(r);
         // New thread is used
-        BOOST_CHECK(iter.second);
+        EXPECT_TRUE(iter.second);
     }
 
     futures.clear();
@@ -174,8 +173,7 @@ BOOST_AUTO_TEST_CASE(threadpool_ThreadsAreReused)
     {
         auto r = futures[i].get();
         auto iter = thread_ids.find(r);
-        BOOST_CHECK(iter != thread_ids.end());
+        EXPECT_TRUE(iter != thread_ids.end());
         thread_ids.erase(iter);
     }
 }
-BOOST_AUTO_TEST_SUITE_END()

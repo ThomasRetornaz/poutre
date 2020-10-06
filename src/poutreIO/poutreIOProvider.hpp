@@ -23,8 +23,6 @@
 #include <poutreIO/poutreIO.hpp>
 #endif
 
-#include <boost/filesystem.hpp>
-
 #ifndef POUTREIOLOADER_HPP
 #include <poutreIO/poutreIOLoader.hpp>
 #endif

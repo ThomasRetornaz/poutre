@@ -1,4 +1,5 @@
 
+include_directories(${GTEST_INCLUDE_DIR})
 # Test project
 set(PoutreImageProcessingLLMSubdirectory ${POUTRE_NRT_DIR}/poutreImageProcessingLowLevelMorphology)
 set(PoutreImageProcessingLLMTestSRC
@@ -20,9 +21,14 @@ target_link_libraries(PoutreIPLowLevelMorphologyTests
 	PUBLIC PoutreIO
     PUBLIC PoutreIPPixelProcessing
     PUBLIC ${OpenImageIO_LIBRARIES}
-    PUBLIC ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    PRIVATE gtest  
+    PRIVATE gtest_main
 )
-	
+
+
+add_custom_command(TARGET PoutreIPLowLevelMorphologyTests POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:gtest> $<TARGET_FILE_DIR:PoutreIPLowLevelMorphologyTests>)
+add_custom_command(TARGET PoutreIPLowLevelMorphologyTests POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:gtest_main> $<TARGET_FILE_DIR:PoutreIPLowLevelMorphologyTests>)
+
 add_test(NAME PoutreIPLowLevelMorphologyTests-1 
          COMMAND PoutreIPLowLevelMorphologyTests)
 set_property(TARGET PoutreIPLowLevelMorphologyTests PROPERTY FOLDER "UnitTests/")

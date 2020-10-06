@@ -1,5 +1,6 @@
 
 include_directories(${POUTRE_SRC_DIR})
+include_directories(${GTEST_INCLUDE_DIR})
 
 # Test project
 set(PoutreBaseTestSubdirectory ${POUTRE_NRT_DIR}/poutreBase)
@@ -12,7 +13,6 @@ set(PoutreBaseTestSRC
   ${PoutreBaseTestSubdirectory}/chronos.cpp
   ${PoutreBaseTestSubdirectory}/jsonSerialize.cpp
   ${PoutreBaseTestSubdirectory}/registrar.cpp
-  ${PoutreBaseTestSubdirectory}/trace.cpp
   ${PoutreBaseTestSubdirectory}/geometry.cpp
   ${PoutreBaseTestSubdirectory}/coordinate.cpp
   ${PoutreBaseTestSubdirectory}/static_array.cpp
@@ -28,28 +28,18 @@ set_target_properties(PoutreBaseTests PROPERTIES
 )
 
 target_link_libraries(PoutreBaseTests 
-  #INTERFACE Eigen  
-  #INTERFACE ${SIMD_LIB} 
-  PRIVATE ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}  
-  # ${Boost_THREAD_LIBRARY} 
-  # ${Boost_SYSTEM_LIBRARY} 
-  # ${Boost_LOG_LIBRARY}
-  # ${Boost_LOG_SETUP_LIBRARY}
+  PRIVATE gtest  
+  PRIVATE gtest_main
   PUBLIC PoutreBase
   )
 add_dependencies(PoutreBaseTests ${SIMD_LIB_DEP})
-#add_dependencies(PoutreBaseTests Eigendep)
 
 IF(BUILD_SHARED_LIBS)
   SET_TARGET_PROPERTIES(PoutreBaseTests PROPERTIES COMPILE_FLAGS -DJSON_DLL)
-  SET_TARGET_PROPERTIES(PoutreBaseTests PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DLL) #FIXME not true should be linked with boost
-  SET_TARGET_PROPERTIES(PoutreBaseTests PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DYN_LINK) #FIXME not true should be linked with boost
 ENDIF(BUILD_SHARED_LIBS)
 
-#get_filename_component(LIBNAME "${Boost_UNIT_TEST_FRAMEWORK_LIBRARY_RELEASE}" NAME)
-#add_custom_command(TARGET PoutreBaseTests POST_BUILD
-#    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${Boost_UNIT_TEST_FRAMEWORK_LIBRARY_RELEASE}" "${CMAKE_CURRENT_BINARY_DIR}/${LIBNAME}"
-#)
+add_custom_command(TARGET PoutreBaseTests POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:gtest> $<TARGET_FILE_DIR:PoutreBaseTests>)
+add_custom_command(TARGET PoutreBaseTests POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:gtest_main> $<TARGET_FILE_DIR:PoutreBaseTests>)
 
 add_test(NAME PoutreBaseTests-1 
   COMMAND PoutreBaseTests)

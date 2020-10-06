@@ -10,7 +10,12 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-//#define BOOST_TEST_NO_MAIN
-#define BOOST_TEST_MAIN
-#define BOOST_TEST_MODULE poutre imageprocessing_pixel_processing
+
 #include "main.hpp"
+#include <gtest/gtest.h>
+
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}

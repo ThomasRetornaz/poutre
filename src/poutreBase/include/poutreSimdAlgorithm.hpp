@@ -42,9 +42,9 @@ namespace poutre
         template <typename T, typename U, typename UnOp>
         U *transform(T const *first, T const *last, U *out, UnOp f) POUTRE_NOEXCEPTONLYNDEBUG
         {
-            POUTRE_ASSERTCHECK(!first, "null ptr");
-            POUTRE_ASSERTCHECK(!last, "null ptr");
-            POUTRE_ASSERTCHECK(!out, "null ptr");
+            POUTRE_ASSERTCHECK(first, "null ptr");
+            POUTRE_ASSERTCHECK(last, "null ptr");
+            POUTRE_ASSERTCHECK(out, "null ptr");
 
             using simd_type_T = typename TypeTraits<T>::simd_type;
             using simd_type_U = typename TypeTraits<U>::simd_type;
@@ -105,10 +105,10 @@ namespace poutre
         template <typename T1, typename T2, typename U, typename BinOp>
         U *transform(T1 const *first1, T1 const *last1, T2 const *first2, U *out, BinOp f) POUTRE_NOEXCEPTONLYNDEBUG
         {
-            POUTRE_ASSERTCHECK(!first1, "null ptr");
-            POUTRE_ASSERTCHECK(!last1, "null ptr");
-            POUTRE_ASSERTCHECK(!first2, "null ptr");
-            POUTRE_ASSERTCHECK(!out, "null ptr");
+            POUTRE_ASSERTCHECK(first1, "null ptr");
+            POUTRE_ASSERTCHECK(last1, "null ptr");
+            POUTRE_ASSERTCHECK(first2, "null ptr");
+            POUTRE_ASSERTCHECK(out, "null ptr");
 
             using simd_type_T1 = typename TypeTraits<T1>::simd_type;
             using simd_type_T2 = typename TypeTraits<T2>::simd_type;

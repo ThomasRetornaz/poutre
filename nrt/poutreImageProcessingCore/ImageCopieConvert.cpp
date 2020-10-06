@@ -18,47 +18,43 @@
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainerCopieConvert.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterfaceCopieConvert.hpp>
 
-BOOST_AUTO_TEST_SUITE(poutreImageProcessingCopyConvert)
-
-BOOST_AUTO_TEST_CASE(Clone) {
+TEST(poutreImageProcessingCopyConvert,Clone) {
   using ImageType = poutre::DenseImage<poutre::pUINT8>;
   using ImageTypeInterface = std::unique_ptr<poutre::IInterface>;
   ImageType img({3, 4}); //-V112
-  BOOST_CHECK_EQUAL(img.GetPType(), poutre::PType::PType_GrayUINT8);
+  EXPECT_EQ(img.GetPType(), poutre::PType::PType_GrayUINT8);
   img.assign(10);
 
   ImageTypeInterface getSameii = poutre::Clone(img);
 
   ImageType *getSame = dynamic_cast<ImageType *>(getSameii.get());
-  BOOST_REQUIRE(getSame);
+  EXPECT_TRUE(getSame);
   //!= address
-  BOOST_CHECK_NE(getSame, &(img));
+  EXPECT_NE(getSame, &(img));
   //!= data address
-  BOOST_CHECK_NE(&(*((*getSame).data())), &(*(img.data()))); //-V522
-  BOOST_CHECK_EQUAL((*getSame).GetCType(),
+  EXPECT_NE(&(*((*getSame).data())), &(*(img.data()))); //-V522
+  EXPECT_EQ((*getSame).GetCType(),
                     poutre::CompoundType::CompoundType_Scalar);
-  BOOST_CHECK_EQUAL((*getSame).GetPType(), poutre::PType::PType_GrayUINT8);
-  BOOST_CHECK_EQUAL((*getSame).GetImgType(), poutre::ImgType::ImgType_Dense);
-  BOOST_CHECK_EQUAL((*getSame).GetXSize(), 4); //-V112
-  BOOST_CHECK_EQUAL((*getSame).GetYSize(), 3);
-  BOOST_CHECK_EQUAL((*getSame).GetNumDims(), 2);
-  BOOST_CHECK(!(*getSame).empty());
+  EXPECT_EQ((*getSame).GetPType(), poutre::PType::PType_GrayUINT8);
+  EXPECT_EQ((*getSame).GetImgType(), poutre::ImgType::ImgType_Dense);
+  EXPECT_EQ((*getSame).GetXSize(), 4); //-V112
+  EXPECT_EQ((*getSame).GetYSize(), 3);
+  EXPECT_EQ((*getSame).GetNumDims(), 2);
+  EXPECT_TRUE(!(*getSame).empty());
   auto getSamecoords = (*getSame).GetCoords();
   auto getSameexpectedcoords = {3, 4}; //-V112
-  BOOST_CHECK_EQUAL_COLLECTIONS(getSamecoords.begin(), getSamecoords.end(),
-                                getSameexpectedcoords.begin(),
-                                getSameexpectedcoords.end());
+  EXPECT_TRUE(CheckEqualCollections(getSamecoords.begin(), getSamecoords.end(), getSameexpectedcoords.begin()));
 
   for (const auto &var : (*getSame)) {
-    BOOST_CHECK_EQUAL(var, 10);
+    EXPECT_EQ(var, 10);
   }
 }
 
-BOOST_AUTO_TEST_CASE(getsamecoord) {
+TEST(poutreImageProcessingCopyConvert,getsamecoord) {
   using ImageTypeBase = poutre::DenseImage<poutre::pUINT8>;
   using ImageTypeInterface = std::unique_ptr<poutre::IInterface>;
   ImageTypeBase img({3, 4}); //-V112
-  BOOST_CHECK_EQUAL(img.GetPType(), poutre::PType::PType_GrayUINT8);
+  EXPECT_EQ(img.GetPType(), poutre::PType::PType_GrayUINT8);
   img.assign(10);
 
   using ImageType = poutre::DenseImage<poutre::pFLOAT>;
@@ -66,22 +62,20 @@ BOOST_AUTO_TEST_CASE(getsamecoord) {
       poutre::ConvertGeometry(img, poutre::PType::PType_F32);
 
   ImageType *getSame = dynamic_cast<ImageType *>(getSameii.get());
-  BOOST_REQUIRE(getSame);
-  BOOST_CHECK_EQUAL((*getSame).GetCType(), //-V522
+  EXPECT_TRUE(getSame);
+  EXPECT_EQ((*getSame).GetCType(), //-V522
                     poutre::CompoundType::CompoundType_Scalar); //-V522
-  BOOST_CHECK_EQUAL((*getSame).GetPType(), poutre::PType::PType_F32);
-  BOOST_CHECK_EQUAL((*getSame).GetImgType(), poutre::ImgType::ImgType_Dense);
-  BOOST_CHECK_EQUAL((*getSame).GetXSize(), 4); //-V112
-  BOOST_CHECK_EQUAL((*getSame).GetYSize(), 3);
-  BOOST_CHECK_EQUAL((*getSame).GetNumDims(), 2);
+  EXPECT_EQ((*getSame).GetPType(), poutre::PType::PType_F32);
+  EXPECT_EQ((*getSame).GetImgType(), poutre::ImgType::ImgType_Dense);
+  EXPECT_EQ((*getSame).GetXSize(), 4); //-V112
+  EXPECT_EQ((*getSame).GetYSize(), 3);
+  EXPECT_EQ((*getSame).GetNumDims(), 2);
   auto getSamecoords = (*getSame).GetCoords();
   auto getSameexpectedcoords = {3, 4}; //-V112
-  BOOST_CHECK_EQUAL_COLLECTIONS(getSamecoords.begin(), getSamecoords.end(),
-                                getSameexpectedcoords.begin(),
-                                getSameexpectedcoords.end());
+  EXPECT_TRUE(CheckEqualCollections(getSamecoords.begin(), getSamecoords.end(), getSameexpectedcoords.begin()));
 }
 
-BOOST_AUTO_TEST_CASE(copy_same_type) {
+TEST(poutreImageProcessingCopyConvert,copy_same_type) {
   { // integral types
     using ImageTypeBase = poutre::DenseImage<poutre::pUINT8>;
 
@@ -89,9 +83,8 @@ BOOST_AUTO_TEST_CASE(copy_same_type) {
     img.assign(10);
     ImageTypeBase img2({3, 4}); //-V112
     img2.assign(4);             //-V112
-    poutre::CopyOp(img, img2);
-    BOOST_CHECK_EQUAL_COLLECTIONS(img.begin(), img.end(), img2.begin(),
-                                  img2.end());
+    poutre::t_Copy(img, img2);
+    EXPECT_TRUE(CheckEqualCollections(img.begin(), img.end(), img2.begin()));
   }
   { // compound
     using ImageTypeBase = poutre::DenseImage<poutre::c3pUINT8>;
@@ -99,10 +92,7 @@ BOOST_AUTO_TEST_CASE(copy_same_type) {
     img.assign({1, 2, 3});
     ImageTypeBase img2({3, 4}); //-V112
     img2.assign({4, 5, 6});     //-V112
-    poutre::CopyOp(img, img2);
-    BOOST_CHECK_EQUAL_COLLECTIONS(img.begin(), img.end(), img2.begin(),
-                                  img2.end());
+    poutre::t_Copy(img, img2);
+    EXPECT_TRUE(CheckEqualCollections(img.begin(), img.end(), img2.begin()));
   }
 }
-
-BOOST_AUTO_TEST_SUITE_END()

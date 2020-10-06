@@ -1,4 +1,5 @@
 
+include_directories(${GTEST_INCLUDE_DIR})
 # Test project
 set(PoutreIOTestSubdirectory ${POUTRE_NRT_DIR}/poutreIO)
 set(PoutreIOTestSRC
@@ -27,17 +28,17 @@ set_target_properties(PoutreIOTests PROPERTIES
                       DEFINE_SYMBOL "JSON_DLL")
 
 target_link_libraries(PoutreIOTests
+    PRIVATE gtest  
+    PRIVATE gtest_main
     PUBLIC PoutreBase 
     PUBLIC PoutreIPCore 
     PUBLIC PoutreIO
     PUBLIC ${OpenImageIO_LIBRARIES}
-    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 
-#target_include_directories(PoutreIOTests
-#    ${OPENEXR_INCLUDE_DIR} 
-#	${OIIO_INCLUDE_DIR}
-#)	
+
+add_custom_command(TARGET PoutreIOTests POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:gtest> $<TARGET_FILE_DIR:PoutreIOTests>)
+add_custom_command(TARGET PoutreIOTests POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:gtest_main> $<TARGET_FILE_DIR:PoutreIOTests>)
 
 add_test(NAME PoutreIOTests-1 
          COMMAND PoutreIOTests)

@@ -22,9 +22,9 @@
 #include <future>
 #include <mutex>
 #include <queue>
-#include <vector>
 #include <thread>
 #include <utility>
+#include <vector>
 
 namespace poutre
 {
@@ -43,7 +43,7 @@ namespace poutre
           public:
             /**
              * ctor.
-             * 
+             *
              * \param threads
              */
             JoinThreads(std::vector<std::thread> &threads) : m_threads(threads)
@@ -55,9 +55,9 @@ namespace poutre
             JoinThreads &operator=(JoinThreads &&) = delete;
             /**
              * dtor.
-             * 
+             *
              */
-            ~JoinThreads() //todo C++20 remove this
+            ~JoinThreads() // todo C++20 remove this
             {
                 for (auto &t : m_threads)
                 {
@@ -112,10 +112,7 @@ namespace poutre
             bool wait_and_pop(T &value)
             {
                 std::unique_lock<std::mutex> lk(m_mutex);
-                m_condition.wait(lk, [this] 
-                  { 
-                    return !m_queue.empty() || !m_valid; 
-                  });
+                m_condition.wait(lk, [this] { return !m_queue.empty() || !m_valid; });
                 /*
                  * Using the condition in the predicate ensures that spurious wakeups with a valid
                  * but empty queue will not proceed, so only need to check for validity before proceeding.
@@ -228,8 +225,7 @@ namespace poutre
             Func m_func;
         };
 
-
-         /**
+        /**
          * A wrapper around a std::future that adds the behavior of futures returned from std::async.
          * Specifically, this object will block and wait for execution to finish before going out of scope.
          */
@@ -287,7 +283,7 @@ namespace poutre
                 }
             }
 
-             /**
+            /**
              * Constantly running function each thread uses to acquire work items from the queue.
              */
             void worker_thread(void)
@@ -303,7 +299,8 @@ namespace poutre
             }
 
           public:
-            TreadPool(unsigned int threadCount):m_pool_work_queue(), m_done(false), m_threads(), m_joiner(m_threads), m_thread_count(threadCount)
+            TreadPool(unsigned int threadCount)
+                : m_pool_work_queue(), m_done(false), m_threads(), m_joiner(m_threads), m_thread_count(threadCount)
             {
                 if (0u == m_thread_count)
                 {
@@ -327,7 +324,7 @@ namespace poutre
             TreadPool() : TreadPool(std::max(std::thread::hardware_concurrency(), 2u) - 1u)
             {
             }
-            
+
             ~TreadPool()
             {
                 destroy();
@@ -338,7 +335,7 @@ namespace poutre
                 return m_threads.size();
             }
 
-             /**
+            /**
              * Submit a job to be run by the thread pool.
              */
             template <typename Func, typename... Args> auto submit(Func &&func, Args &&... args)
@@ -377,7 +374,7 @@ namespace poutre
                 return getThreadPool().submit(std::forward<Func>(func), std::forward<Args>(args)...);
             }
         } // namespace DefaultThreadPool
-    } // namespace thread
+    }     // namespace thread
     //! @} doxygroup: threading_group
 } // namespace poutre
 #endif // POUTRE_THREADING_HPP__

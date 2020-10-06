@@ -97,7 +97,7 @@ namespace poutre
     // Quiet stupid here we rewrite Processing unary op without simd specialization
     template <typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1,
               template <typename, ptrdiff_t> class View2>
-    void CopyOp(const View1<T1, Rank> &i_vin, View2<T2, Rank> &o_vout)
+    void t_Copy(const View1<T1, Rank> &i_vin, View2<T2, Rank> &o_vout)
     {
         POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
         CopyOpDispatcher<T1, T2, Rank, View1, View2> dispatcher;
@@ -105,11 +105,25 @@ namespace poutre
     }
 
     template <typename T1, typename T2, ptrdiff_t Rank>
-    void CopyOp(const DenseImage<T1, Rank> &i_image, DenseImage<T2, Rank> &o_image)
+    void t_Copy(const DenseImage<T1, Rank> &i_image, DenseImage<T2, Rank> &o_image)
     {
         auto viewIn = lview(i_image);
         auto viewOut = lview(o_image);
-        CopyOp(viewIn, viewOut);
+        t_Copy(viewIn, viewOut);
+    }
+
+    template <typename T, ptrdiff_t Rank>
+    std::unique_ptr<DenseImage<T, Rank>> t_CloneGeometry(const DenseImage<T, Rank> &i_image)
+    {
+        return std::make_unique<DenseImage<T, Rank>>(i_image.GetCoords());
+    }
+
+    template <typename T, ptrdiff_t Rank>
+    std::unique_ptr<DenseImage<T, Rank>> t_Clone(const DenseImage<T, Rank> &i_image)
+    {
+        auto res = std::make_unique<DenseImage<T, Rank>>(i_image.GetCoords());
+        t_Copy(i_image, *res);
+        return res;
     }
     //! @} doxygroup: image_processing_copy_group
 } // namespace poutre

@@ -11,18 +11,18 @@
 //==============================================================================
 
 #include "main.hpp"
+#include <gtest/gtest.h>
+#include <filesystem>
 
-#include <boost/filesystem.hpp>
 #include <poutreIO/include/poutreHDF5.hpp>
 #include <poutreIO/poutreIOLoader.hpp>
 #include <poutreIO/poutreIOString.hpp>
 #include <poutreIO/poutreIOWriter.hpp>
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 
-namespace bf = boost::filesystem;
-BOOST_AUTO_TEST_SUITE(hdf5)
+namespace fs = std::filesystem;
 
-BOOST_AUTO_TEST_CASE(iohdf5UINT8)
+TEST(hdf5,iohdf5UINT8)
 {
     std::string str = "Dense Scalar GUINT8 2 2 3 \
 0 76 149 \
@@ -31,12 +31,12 @@ BOOST_AUTO_TEST_CASE(iohdf5UINT8)
 
     // store
     auto expected = poutre::ImageFromString(str);
-    bf::path tempDir = /*bf::path(POUTREIO_NRT_DATAS) /*/ "POUTRE_NRT_IO_TMP_DIR";
-    if (!bf::is_directory(tempDir))
+    fs::path tempDir = /*fs::path(POUTREIO_NRT_DATAS) /*/ "POUTRE_NRT_IO_TMP_DIR";
+    if (!fs::is_directory(tempDir))
     {
-        bf::create_directory(tempDir);
+        fs::create_directory(tempDir);
     }
-    bf::path image_path = tempDir / "write_test_GRAY256.h5";
+    fs::path image_path = tempDir / "write_test_GRAY256.h5";
     auto writter = poutre::ImageWriter().SetPath(image_path.string());
     writter.Write(*expected);
 
@@ -44,10 +44,10 @@ BOOST_AUTO_TEST_CASE(iohdf5UINT8)
     auto loader = poutre::ImageLoader().SetPath(image_path.string());
     auto img = loader.Load();
     auto imgstr = poutre::ImageToString(*img);
-    BOOST_CHECK_EQUAL(imgstr, str);
+    EXPECT_EQ(imgstr, str);
 }
 
-BOOST_AUTO_TEST_CASE(iohdf5RGB)
+TEST(hdf5,iohdf5RGB)
 {
     std::string str = "Dense 3Planes GUINT8 2 2 3 \
 0 0 0 255 0 0 0 255 0 \
@@ -56,12 +56,12 @@ BOOST_AUTO_TEST_CASE(iohdf5RGB)
 
     // store
     auto expected = poutre::ImageFromString(str);
-    bf::path tempDir = /*bf::path(POUTREIO_NRT_DATAS) /*/ "POUTRE_NRT_IO_TMP_DIR";
-    if (!bf::is_directory(tempDir))
+    fs::path tempDir = /*fs::path(POUTREIO_NRT_DATAS) /*/ "POUTRE_NRT_IO_TMP_DIR";
+    if (!fs::is_directory(tempDir))
     {
-        bf::create_directory(tempDir);
+        fs::create_directory(tempDir);
     }
-    bf::path image_path = tempDir / "write_test_RGB.h5";
+    fs::path image_path = tempDir / "write_test_RGB.h5";
     auto writter = poutre::ImageWriter().SetPath(image_path.string());
     writter.Write(*expected);
 
@@ -69,7 +69,5 @@ BOOST_AUTO_TEST_CASE(iohdf5RGB)
     auto loader = poutre::ImageLoader().SetPath(image_path.string());
     auto img = loader.Load();
     auto imgstr = poutre::ImageToString(*img);
-    BOOST_CHECK_EQUAL(imgstr, str);
+    EXPECT_EQ(imgstr, str);
 }
-
-BOOST_AUTO_TEST_SUITE_END()

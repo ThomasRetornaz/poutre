@@ -103,7 +103,7 @@ namespace poutre
             idx1d{-1},          idx1d{+1},
         }};
         // clang-format on
-        // POUTRE_STATIC_CONSTEXPR c2_1D_t c2_1D = {};
+        POUTRE_STATIC_CONSTEXPR c2_1D_t c2_1D = {};
 
         /************************************************/
         //---2D

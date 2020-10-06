@@ -126,8 +126,8 @@ namespace poutre
         const std::pair<ptrdiff_t, ptrdiff_t> POUTRE_ALWAYS_INLINE t_SIMDInputRange(const T *first, const T *last)
             POUTRE_NOEXCEPTONLYNDEBUG
         {
-            POUTRE_ASSERTCHECK(!first, "null ptr");
-            POUTRE_ASSERTCHECK(!last, "null ptr");
+            POUTRE_ASSERTCHECK(first, "null ptr");
+            POUTRE_ASSERTCHECK(last, "null ptr");
             const auto simd_size = xs::simd_type<T>::size;
             const auto size = last - first;
             // get aligned adress from first
