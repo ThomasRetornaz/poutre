@@ -188,7 +188,7 @@ else()
 endif()
 set(Boost_NO_BOOST_CMAKE ON)
 
-set(POUTRE_boost_version_minimal 1.70.0)
+set(POUTRE_boost_version_minimal 1.65.1)
 set(Boost_ADDITIONAL_VERSIONS   
 	 "1.70.0"  "1.71.0"  "1.72.0" "1.73.0" "1.74.0")
 find_package(Boost ${POUTRE_boost_version_minimal}
