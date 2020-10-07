@@ -92,7 +92,7 @@ namespace poutre
              */
             bool empty() const
             {
-                std::lock_guard<std::m_mutexex> lk(m_mutex);
+                std::lock_guard<std::mutex> lk(m_mutex);
                 return m_queue.empty();
             }
             /**
@@ -131,7 +131,7 @@ namespace poutre
              */
             bool try_pop(T &res)
             {
-                std::lock_guard<std::m_mutexex> lk(m_mutex);
+                std::lock_guard<std::mutex> lk(m_mutex);
                 if (m_queue.empty() || !m_valid)
                 {
                     return false;
@@ -147,7 +147,7 @@ namespace poutre
              */
             void clear(void)
             {
-                std::lock_guard<std::m_mutexex> lock{m_mutex};
+                std::lock_guard<std::mutex> lock{m_mutex};
                 while (!m_queue.empty())
                 {
                     m_queue.pop();
@@ -174,7 +174,7 @@ namespace poutre
              */
             bool isValid(void) const
             {
-                std::lock_guard<std::m_mutexex> lock{m_mutex};
+                std::lock_guard<std::mutex> lock{m_mutex};
                 return m_valid;
             }
             // todo add emplace back/front?
