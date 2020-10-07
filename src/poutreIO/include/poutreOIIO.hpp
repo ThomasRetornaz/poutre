@@ -44,11 +44,13 @@
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 #endif
 
+#include <boost/filesystem.hpp>
 #include <memory>
 #include <string>
 
 namespace poutre
 {
+    namespace bf = boost::filesystem;
     /**
      * @addtogroup image_processing_io_group_details Image Processing IO API details
      * @ingroup image_processing_io_group
