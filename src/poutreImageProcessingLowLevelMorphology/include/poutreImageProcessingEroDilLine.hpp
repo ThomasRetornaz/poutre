@@ -136,8 +136,8 @@ namespace poutre
                 return;
             }
             using lineView = T *;
-            lineview rawLineIn = i_vin.data();
-            lineview rawLineOut = o_vout.data();
+            lineView rawLineIn = i_vin.data();
+            lineView rawLineOut = o_vout.data();
 
             // need auxilary buffer
             using tmpBuffer =
@@ -213,8 +213,8 @@ namespace poutre
                 return;
             }
             using lineView = T *;
-            lineview rawLineIn = i_vin.data();
-            lineview rawLineOut = o_vout.data();
+            lineView rawLineIn = i_vin.data();
+            lineView rawLineOut = o_vout.data();
 
             // need auxilary buffer
             using tmpBuffer =
