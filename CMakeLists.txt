@@ -147,15 +147,15 @@ add_definitions(-DBOOST_TEST_DYN_LINK)
 
 #FIXME
 include_directories(BEFORE "${SIMD_INLCUDE_DIRECTORY}")
+include_directories(${Boost_INCLUDE_DIRS})
+include_directories(${JSONCPP_INCLUDE_DIR})
 
 # warning the order is important
 include_directories(${POUTRE_SRC_DIR})
-
 include_directories(${POUTRE_NRT_DIR})
 include_directories(${POUTRE_PYTHONEXT_DIR})
 
-include_directories(${Boost_INCLUDE_DIRS})
-include_directories(${JSONCPP_INCLUDE_DIR})
+
 
 if(CODE_COVERAGE)
    add_code_coverage_all_targets(EXCLUDE */boost/* */7/*)

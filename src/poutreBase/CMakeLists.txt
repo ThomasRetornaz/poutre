@@ -57,11 +57,10 @@ target_link_libraries(PoutreBase
   INTERFACE xsimd 
   # INTERFACE Eigen  
   # INTERFACE ${SIMD_LIB}
-  INTERFACE xsimd 
   )
 set_target_properties(PoutreBase PROPERTIES FOLDER "src/")
 #force custom target before start
-add_dependencies(PoutreBase xsimd)
+add_dependencies(PoutreBase xsimd jsoncpp_lib)
 #add_dependencies(PoutreBase Eigendep)
 
 IF(BUILD_SHARED_LIBS)

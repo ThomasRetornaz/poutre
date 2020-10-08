@@ -253,6 +253,19 @@ if(NOT POUTRE_BOOST_FROM_SYSTEM)
   #add_files_to_python_packaging(FILES ${BoostFilesToInstall})
 endif()
 
+
+#test
+if(POUTRE_BUILD_TEST)
+    set(BUILD_GMOCK OFF CACHE BOOL "Disable google test mock." FORCE)
+    set(INSTALL_GTEST OFF CACHE BOOL "Disable google test install." FORCE)
+    set(gtest_build_tests OFF CACHE BOOL "Disable google test " FORCE)
+    add_subdirectory(googletest)
+    set_target_properties(gtest PROPERTIES FOLDER "3rdparties/")
+    set_target_properties(gtest_main PROPERTIES FOLDER "3rdparties/")
+    SET(GTEST_INCLUDE_DIR "${THIRD_PARTIES_PATH}/googletest/include" PARENT_SCOPE)
+endif()
+
+
 #SIMD library
 add_subdirectory(xsimd)
 SET(SIMD_INLCUDE_DIRECTORY "${SIMD_INLCUDE_DIRECTORY}" PARENT_SCOPE)
@@ -310,7 +323,8 @@ set(JPEG_FOUND TRUE)
 message(STATUS "**************JPEG: ${JPEG_INCLUDE_DIRS} ${JPEG_LIBRARIES}")
 
 # libpng
-set(PNG_STATIC ON)
+SET(PNG_STATIC ON CACHE BOOL "PNG STATIC BUILD" FORCE)
+set(HAVE_LD_VERSION_SCRIPT OFF CACHE BOOL "PNG STATIC BUILD WORKAROUND" FORCE)
 add_subdirectory(libpng)
 set(PNG_PNG_INCLUDE_DIR 
   ${CMAKE_CURRENT_SOURCE_DIR}/libpng
@@ -347,6 +361,9 @@ add_dependencies(tiff jpeg png_static)
 
 # hdf5
 SET(HDF5_EXTERNALLY_CONFIGURED ON CACHE BOOL "HDF5_EXTERNALLY_CONFIGURED" FORCE)
+set(HDF5_GENERATE_HEADERS OFF CACHE BOOL "Turn off header generation for HDF5" FORCE)
+set(HDF5_DISABLE_COMPILER_WARNINGS ON CACHE BOOL "Turn off HDF5 compiler warnings" FORCE)
+
 # # Avoid duplicating names of installed libraries
 # set (HDF5_EXTERNAL_LIB_PREFIX "poutre" )
 # # Export configuration to this export variable
@@ -465,13 +482,6 @@ SET(OIIO_INCLUDE_DIR
 add_dependencies(OpenImageIO tiff jpeg png_static hdf5_cpp-shared libdeps)
 set(OpenImageIO_LIBRARIES OpenImageIO OpenImageIO_Util PARENT_SCOPE)
 
-#test
-set(BUILD_GMOCK OFF CACHE BOOL "Disable google test mock." FORCE)
-set(INSTALL_GTEST OFF CACHE BOOL "Disable google test install." FORCE)
-add_subdirectory(googletest)
-set_target_properties(gtest PROPERTIES FOLDER "3rdparties/")
-set_target_properties(gtest_main PROPERTIES FOLDER "3rdparties/")
-SET(GTEST_INCLUDE_DIR "${THIRD_PARTIES_PATH}/googletest/include" PARENT_SCOPE)
 
 # bench
 if(POUTRE_BUILD_BENCH)

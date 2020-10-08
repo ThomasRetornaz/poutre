@@ -28,12 +28,12 @@ set_target_properties(PoutreIOTests PROPERTIES
                       DEFINE_SYMBOL "JSON_DLL")
 
 target_link_libraries(PoutreIOTests
-    PRIVATE gtest  
-    PRIVATE gtest_main
     PUBLIC PoutreBase 
     PUBLIC PoutreIPCore 
     PUBLIC PoutreIO
     PUBLIC ${OpenImageIO_LIBRARIES}
+    PRIVATE gtest  
+    PRIVATE gtest_main
 )
 
 

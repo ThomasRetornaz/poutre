@@ -23,14 +23,11 @@ set(PoutreBaseTestSRC
   )
 
 add_executable(PoutreBaseTests ${PoutreBaseTestSRC})
-set_target_properties(PoutreBaseTests PROPERTIES 
-  DEFINE_SYMBOL "JSON_DLL"
-)
 
 target_link_libraries(PoutreBaseTests 
+  PUBLIC PoutreBase
   PRIVATE gtest  
   PRIVATE gtest_main
-  PUBLIC PoutreBase
   )
 add_dependencies(PoutreBaseTests ${SIMD_LIB_DEP})
 
