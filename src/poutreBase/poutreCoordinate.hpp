@@ -620,23 +620,18 @@ namespace poutre
      * Dereferencing the iterator returns  an  index  object designating the current
      * element in the space.
      */
-    template <ptrdiff_t Rank>
-    class bounds_iterator : public std::iterator<strided_iterator_tag, index<Rank>, ptrdiff_t,
-                                                 const index<Rank>, // NOTE HERE BY VALUE
-                                                 const index<Rank>> // NOTE HERE BY VALUE
+    template <ptrdiff_t Rank> class bounds_iterator
     {
         static_assert(Rank > 0, "bounds_iterator requires a Rank>0");
         POUTRE_STATIC_CONSTEXPR ptrdiff_t rank = Rank;
 
       public:
-        using parent =
-            std::iterator<strided_iterator_tag, index<Rank>, ptrdiff_t, const index<Rank>, const index<Rank>>;
         using self_type = bounds_iterator<Rank>;
-        using difference_type = typename parent::difference_type;
-        using reference = typename parent::reference;
-        using pointer = typename parent::pointer;
-        using value_type = typename parent::value_type;
-        using iterator_category = typename parent::iterator_category;
+        using difference_type = ptrdiff_t;
+        using reference = const index<Rank>; // NOTE HERE BY VALUE
+        using pointer = const index<Rank>;   // NOTE HERE BY VALUE
+        using value_type = index<Rank>;
+        using iterator_category = typename strided_iterator_tag;
 
       protected:
         bounds<Rank> m_bnd;

@@ -40,17 +40,14 @@ namespace poutre
     };
 
     //! Raw dense iterator with random access
-    template <typename DataType>
-    class pdense_iterator
-        : public std::iterator<contiguous_iterator_tag, DataType, std::ptrdiff_t, DataType *, DataType &>
+    template <typename DataType> class pdense_iterator
     {
       public:
-        using parent = std::iterator<contiguous_iterator_tag, DataType, std::ptrdiff_t, DataType *, DataType &>;
-        using reference = typename parent::reference;
-        using pointer = typename parent::pointer;
-        using difference_type = typename parent::difference_type;
-        using value_type = typename parent::value_type;
-        using iterator_category = typename parent::iterator_category;
+        using reference = typename DataType &;
+        using pointer = typename DataType *;
+        using difference_type = ptrdiff_t;
+        using value_type = typename DataType;
+        using iterator_category = contiguous_iterator_tag;
         using self_type = pdense_iterator<DataType>;
 
         pdense_iterator(DataType *ptr = nullptr, DataType *ptrorig = nullptr) : m_ptr(ptr), m_ptrorig(ptrorig)
