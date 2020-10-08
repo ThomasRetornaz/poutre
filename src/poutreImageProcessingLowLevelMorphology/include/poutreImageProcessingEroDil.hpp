@@ -78,7 +78,7 @@ namespace poutre
             auto vOutbound = o_vout.bound();
             auto stridevIN = i_vin.stride();
             auto stridevOut = o_vout.stride();
-            auto NlList = se::NeighborListStaticSETraits<nl>::nlStaticSE::;
+            auto NlList = se::NeighborListStaticSETraits<nl>::nlStaticSE;
             if (vInbound == vOutbound && stridevIN == stridevOut) // same bound + same stride -> one idx
             {
                 auto beg1 = begin(vInbound);
