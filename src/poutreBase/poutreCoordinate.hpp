@@ -631,7 +631,7 @@ namespace poutre
         using reference = const index<Rank>; // NOTE HERE BY VALUE
         using pointer = const index<Rank>;   // NOTE HERE BY VALUE
         using value_type = index<Rank>;
-        using iterator_category = typename strided_iterator_tag;
+        using iterator_category = strided_iterator_tag;
 
       protected:
         bounds<Rank> m_bnd;

@@ -43,10 +43,10 @@ namespace poutre
     template <typename DataType> class pdense_iterator
     {
       public:
-        using reference = typename DataType &;
-        using pointer = typename DataType *;
+        using reference = DataType &;
+        using pointer = DataType *;
         using difference_type = ptrdiff_t;
-        using value_type = typename DataType;
+        using value_type = DataType;
         using iterator_category = contiguous_iterator_tag;
         using self_type = pdense_iterator<DataType>;
 
