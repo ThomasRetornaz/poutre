@@ -259,7 +259,7 @@ namespace poutre
         };
 
         class TreadPool
-        {
+        { // https://codereview.stackexchange.com/questions/221626/c17-thread-pool
           private:
             ThreadSafeQueue<std::unique_ptr<IThreadTask>> m_pool_work_queue;
             std::atomic_bool m_done;
@@ -306,10 +306,10 @@ namespace poutre
                 {
                     m_thread_count = 1u;
                 }
-                m_threads.reserve(m_thread_count);
+                m_threads.reserve((size_t)m_thread_count);
                 try
                 {
-                    for (size_t i = 0; i < m_thread_count; ++i)
+                    for (size_t i = 0; i < (size_t)m_thread_count; ++i)
                     {
                         m_threads.emplace_back(&TreadPool::worker_thread, this);
                     }
@@ -341,7 +341,7 @@ namespace poutre
             template <typename Func, typename... Args> auto submit(Func &&func, Args &&... args)
             {
                 auto boundTask = std::bind(std::forward<Func>(func), std::forward<Args>(args)...);
-                using ResultType = std::result_of_t<decltype(boundTask)()>;
+                using ResultType = std::invoke_result_t<Func, Args...>;
                 using PackagedTask = std::packaged_task<ResultType()>;
                 using TaskType = ThreadTask<PackagedTask>;
 
