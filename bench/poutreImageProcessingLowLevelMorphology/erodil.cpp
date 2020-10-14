@@ -425,7 +425,7 @@ BENCHMARK_TEMPLATE_DEFINE_F(DilateXFixtureView, DilateXFixtureView_UINT8, poutre
     for (auto _ : state)
     {
         std::vector<poutre::pUINT8> res(m_vect.size());
-        auto sizeextent = sqrt(m_vect.size());
+        auto sizeextent = sqrt((double)m_vect.size());
         auto view2din = poutre::array_view<poutre::pUINT8, 2>(m_vect, {int(sizeextent), int(sizeextent)});
         auto view2dout = poutre::array_view<poutre::pUINT8, 2>(res, {int(sizeextent), int(sizeextent)});
         poutre::t_DilateX(view2din, sizeSE, view2dout);
@@ -450,7 +450,7 @@ BENCHMARK_TEMPLATE_DEFINE_F(DilateXFixtureView, DilateXFixtureView_INT32, poutre
     for (auto _ : state)
     {
         std::vector<poutre::pINT32> res(m_vect.size());
-        auto sizeextent = sqrt(m_vect.size());
+        auto sizeextent = sqrt((double)m_vect.size());
         auto view2din = poutre::array_view<poutre::pINT32, 2>(m_vect, {int(sizeextent), int(sizeextent)});
         auto view2dout = poutre::array_view<poutre::pINT32, 2>(res, {int(sizeextent), int(sizeextent)});
         poutre::t_DilateX(view2din, sizeSE, view2dout);

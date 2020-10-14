@@ -426,7 +426,7 @@ namespace poutre
       public:
         POUTRE_CXX14_CONSTEXPR T &operator[](const idx2d &idx) const POUTRE_NOEXCEPTONLYNDEBUG
         {
-            POUTRE_ASSERTCHECK(m_bnd.contains(idx) == true, "Out of bound");
+            POUTRE_ASSERTCHECK(this->m_bnd.contains(idx) == true, "Out of bound");
             auto SizeX = this->m_bnd[0];
             return this->m_data[idx[1] * SizeX + idx[0]];
         }

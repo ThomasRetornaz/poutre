@@ -45,7 +45,7 @@ TEST(static_container,static_array_iteration_acces_capacity)
   //std::cout << starray;
   EXPECT_EQ(starray.size( ), 6);
   EXPECT_EQ(starray.max_size( ), 6);
-  EXPECT_EQ(starray.empty( ), false);
+  EXPECT_EQ(starray.empty( ), false); //-V601
 
   EXPECT_EQ(starray.front( ), 1);
   EXPECT_EQ(starray.back( ), 6);

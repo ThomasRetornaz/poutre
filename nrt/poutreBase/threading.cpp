@@ -59,7 +59,7 @@ TEST(threading, threadpool_RunMoreTasksThanThreads)
     {
         f.get();
     }
-    // EXPECT_EQ(pool.empty(), true);
+    //EXPECT_EQ(pool.empty(), true);
     EXPECT_EQ(result, TASK_COUNT);
     EXPECT_EQ(thread_ids.size(), THREAD_COUNT);
 }
@@ -78,7 +78,7 @@ TEST(threading, threadpool_Lambdas)
 {
     using namespace poutre::thread;
     using namespace std::chrono_literals;
-    const size_t TASK_COUNT{4u};
+    const size_t TASK_COUNT{4u}; //-V112
     std::vector<poutre::thread::TaskFuture<size_t>> v;
     TreadPool pool{4u};
     for (size_t i = 0; i < TASK_COUNT; ++i)
@@ -130,7 +130,7 @@ TEST(threading, threadpool_FunctionWithArgs)
     using namespace poutre::thread;
     TreadPool pool{4u};
     auto f = pool.submit(sum, 2, 2);
-    EXPECT_EQ(f.get(), 4);
+    EXPECT_EQ(f.get(), 4); //-V112
 }
 
 static std::thread::id test_function(size_t delay)
@@ -144,7 +144,7 @@ TEST(threading, threadpool_ThreadsAreReused)
     using namespace std::chrono_literals;
     using namespace poutre::thread;
 
-    const size_t THREAD_COUNT{4u};
+    const size_t THREAD_COUNT{4u}; //-V112
     TreadPool pool{THREAD_COUNT};
     std::vector<poutre::thread::TaskFuture<std::thread::id>> futures;
     std::set<std::thread::id> thread_ids;

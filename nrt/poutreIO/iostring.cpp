@@ -48,7 +48,7 @@ TEST(iostring,ioreadstring_scalar_GUINT8) {
   //   }
   //   std::cout << "\n**************************************************\n";
   //   abort();
-  EXPECT_TRUE(CheckEqualCollections((*img_t).begin(), (*img_t).end(), expectedvalues.begin()));
+  EXPECT_TRUE(CheckEqualCollections((*img_t).begin(), (*img_t).end(), expectedvalues.begin())); //-V522
 }
 
 TEST(iostring,ioreadstring_scalar_INT32) {
@@ -78,7 +78,7 @@ TEST(iostring,ioreadstring_scalar_INT32) {
   //        {
   //        std::cout<<"\nval\t"<<(poutre::TypeTraits<poutre::pUINT8>::str_type)(val);
   //        }
-  EXPECT_TRUE(CheckEqualCollections((*img_t).begin(), (*img_t).end(), expectedvalues.begin()));
+  EXPECT_TRUE(CheckEqualCollections((*img_t).begin(), (*img_t).end(), expectedvalues.begin())); //-V522
 }
 
 TEST(iostring,ioreadstring_3Planes_UNT8) {
