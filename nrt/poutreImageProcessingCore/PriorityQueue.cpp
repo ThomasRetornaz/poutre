@@ -20,7 +20,7 @@ TEST(poutreImageProcessingPriorityQueue,ctor)
 
 TEST(poutreImageProcessingPriorityQueue,increase_nostable)
 {
-    poutre::PriorityQueue<poutre::offset, unsigned char> pq;
+    poutre::PriorityQueue<unsigned char, poutre::offset> pq;
     pq.emplace(0, 1); //-V525
     pq.emplace(50, 1);
     pq.emplace(0, 2);
@@ -30,8 +30,8 @@ TEST(poutreImageProcessingPriorityQueue,increase_nostable)
     pq.emplace(80, 3);
     pq.emplace(0, 3);
 
-    std::vector < std::pair<poutre::offset, unsigned char>> expected = { {80,1},{80,2},{80,3},{50,1},{50,2},{0,2},{0,1},{0,3} };
-    std::vector < std::pair<poutre::offset, unsigned char>> results;
+    std::vector < std::pair<unsigned char, poutre::offset>> expected = { {80,1},{80,2},{80,3},{50,1},{50,2},{0,2},{0,1},{0,3} };
+    std::vector < std::pair<unsigned char, poutre::offset>> results;
     while (!pq.empty())
     {
         results.push_back(pq.top());
@@ -49,7 +49,7 @@ TEST(poutreImageProcessingPriorityQueue,increase_nostable)
 
 TEST(poutreImageProcessingPriorityQueue,increase_stable)
 {
-    poutre::PriorityQueue<poutre::offset, unsigned char, poutre::lesserKey<poutre::offset, unsigned char>, true> pq;
+    poutre::PriorityQueue<unsigned char, poutre::offset, poutre::lesserKey<unsigned char, poutre::offset>, true> pq;
     pq.emplace(0, 1); //-V525
     pq.emplace(50, 1);
     pq.emplace(0, 2);
@@ -59,8 +59,8 @@ TEST(poutreImageProcessingPriorityQueue,increase_stable)
     pq.emplace(80, 3);
     pq.emplace(0, 3);
 
-    std::vector < std::pair<poutre::offset, unsigned char>> expected = { { 80,1 },{ 80,2 },{ 80,3 },{ 50,1 },{ 50,2 },{ 0,1 },{ 0,2 },{ 0,3 } };
-    std::vector < std::pair<poutre::offset, unsigned char>> results;
+    std::vector < std::pair<unsigned char, poutre::offset>> expected = { { 80,1 },{ 80,2 },{ 80,3 },{ 50,1 },{ 50,2 },{ 0,1 },{ 0,2 },{ 0,3 } };
+    std::vector < std::pair<unsigned char, poutre::offset>> results;
     while (!pq.empty())
     {
         results.push_back(pq.top());
@@ -78,7 +78,7 @@ TEST(poutreImageProcessingPriorityQueue,increase_stable)
 
 TEST(poutreImageProcessingPriorityQueue,decrease_nostable)
 {
-    poutre::PriorityQueue<poutre::offset, unsigned char, poutre::greaterKey<poutre::offset, unsigned char>> pq;
+    poutre::PriorityQueue<unsigned char, poutre::offset, poutre::greaterKey<unsigned char, poutre::offset>> pq;
     pq.emplace(0, 1); //-V525
     pq.emplace(50, 1);
     pq.emplace(0, 2);
@@ -87,8 +87,8 @@ TEST(poutreImageProcessingPriorityQueue,decrease_nostable)
     pq.emplace(80, 2);
     pq.emplace(80, 3);
     pq.emplace(0, 3);
-    std::vector < std::pair<poutre::offset, unsigned char>> expected = { {0,1}, {0,2},{0,3}, {50,2},{50,1},{80,2},{80,3},{80,1} };
-    std::vector < std::pair<poutre::offset, unsigned char>> results;
+    std::vector < std::pair<unsigned char, poutre::offset>> expected = { {0,1}, {0,2},{0,3}, {50,2},{50,1},{80,2},{80,3},{80,1} };
+    std::vector < std::pair<unsigned char, poutre::offset>> results;
     while (!pq.empty())
     {
         results.push_back(pq.top());
@@ -106,7 +106,7 @@ TEST(poutreImageProcessingPriorityQueue,decrease_nostable)
 
 TEST(poutreImageProcessingPriorityQueue,decrease_stable)
 {
-    poutre::PriorityQueue<poutre::offset, unsigned char, poutre::greaterKey<poutre::offset, unsigned char>, true> pq;
+    poutre::PriorityQueue<unsigned char, poutre::offset, poutre::greaterKey<unsigned char, poutre::offset>, true> pq;
     pq.emplace(0, 1); //-V525
     pq.emplace(50, 1);
     pq.emplace(0, 2);
@@ -115,8 +115,8 @@ TEST(poutreImageProcessingPriorityQueue,decrease_stable)
     pq.emplace(80, 2);
     pq.emplace(80, 3);
     pq.emplace(0, 3);
-    std::vector < std::pair<poutre::offset, unsigned char>> expected = { { 0,1 },{ 0,2 },{ 0,3 },{ 50,1 },{ 50,2 },{ 80,1 }, { 80,2 },{ 80,3 }};
-    std::vector < std::pair<poutre::offset, unsigned char>> results;
+    std::vector < std::pair<unsigned char, poutre::offset>> expected = { { 0,1 },{ 0,2 },{ 0,3 },{ 50,1 },{ 50,2 },{ 80,1 }, { 80,2 },{ 80,3 }};
+    std::vector < std::pair<unsigned char, poutre::offset>> results;
     while (!pq.empty())
     {
         results.push_back(pq.top());
