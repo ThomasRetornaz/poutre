@@ -401,14 +401,14 @@ SET_PROPERTY(TARGET gen_hdf5-shared PROPERTY FOLDER "3rdparties")
 add_dependencies(hdf5_cpp-shared zlib zlibstatic)
 
 # HighFive
-add_subdirectory(HighFive)
-add_dependencies(libdeps hdf5_cpp-shared hdf5-shared)
-set(HIGH_FIVE_INCLUDE_DIR 
-  ${CMAKE_CURRENT_SOURCE_DIR}/HighFive/include) 
-INCLUDE_DIRECTORIES(
- ${HIGH_FIVE_INCLUDE_DIR}
-)
-SET(HIGH_FIVE_INCLUDE_DIR ${HIGH_FIVE_INCLUDE_DIR} PARENT_SCOPE)
+# add_subdirectory(HighFive)
+# add_dependencies(libdeps hdf5_cpp-shared hdf5-shared)
+# set(HIGH_FIVE_INCLUDE_DIR 
+#   ${CMAKE_CURRENT_SOURCE_DIR}/HighFive/include) 
+# INCLUDE_DIRECTORIES(
+#  ${HIGH_FIVE_INCLUDE_DIR}
+# )
+# SET(HIGH_FIVE_INCLUDE_DIR ${HIGH_FIVE_INCLUDE_DIR} PARENT_SCOPE)
 
 #openxr/oiio
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -479,7 +479,7 @@ SET(OIIO_INCLUDE_DIR
   ${CMAKE_CURRENT_SOURCE_DIR}/oiio/ext/fmt/include
   PARENT_SCOPE
 )
-add_dependencies(OpenImageIO tiff jpeg png_static hdf5_cpp-shared libdeps)
+add_dependencies(OpenImageIO tiff jpeg png_static hdf5_cpp-shared)
 set(OpenImageIO_LIBRARIES OpenImageIO OpenImageIO_Util PARENT_SCOPE)
 
 
