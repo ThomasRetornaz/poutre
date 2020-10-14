@@ -119,7 +119,7 @@ if(MSVC)
 endif(MSVC)
 
 # Require C++17
-cxx_17()
+cxx_20()
 
 if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GNU"))
   message("Flags for GNUCXX And clang")
