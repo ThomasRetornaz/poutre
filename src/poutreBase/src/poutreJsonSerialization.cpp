@@ -24,8 +24,17 @@ namespace poutre
         Json::Value serializeRoot;
         iptrJSObj->Serialize(serializeRoot);
 
-        Json::StyledWriter writer;
-        ostr = writer.write(serializeRoot);
+        Json::StreamWriterBuilder builder;
+        Json::Value settings = Json::nullValue;
+        Json::Value invalid_settings;
+        builder.setDefaults(&settings);
+
+        if (!builder.validate(&invalid_settings))
+        {
+            return false;
+        }
+
+        ostr = Json::writeString(builder, serializeRoot);
 
         return true;
     }
@@ -35,13 +44,17 @@ namespace poutre
         if (iptrJSObj == nullptr)
             return false;
 
-        Json::Value deserializeRoot;
-        Json::Reader reader;
+        Json::Value value;
 
-        if (!reader.parse(istr, deserializeRoot))
+        std::string jsonReaderError;
+        Json::CharReaderBuilder jsonReaderBuilder;
+        std::unique_ptr<Json::CharReader> const reader(jsonReaderBuilder.newCharReader());
+
+        if (!reader->parse(istr.c_str(), istr.c_str() + istr.size(), &value, &jsonReaderError))
+        {
             return false;
-
-        iptrJSObj->Deserialize(deserializeRoot);
+        }
+        iptrJSObj->Deserialize(value);
 
         return true;
     }

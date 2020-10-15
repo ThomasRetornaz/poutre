@@ -82,7 +82,7 @@ TEST(json, serializer)
     std::string expected = "\
 {\n\
 \"m_TestString\" : \"foo\",\n\
-\"m_array\" : [ 1.1000000238418579, 2.0999999046325684, 3.0999999046325684 ],\n\
+\"m_array\" : [\n1.1000000238418579,\n2.0999999046325684,\n3.0999999046325684\n],\n\
 \"m_bTestBool\" : true,\n\
 \"m_fTestFloat\" : 3.1415899999999999,\n\
 \"m_nTestInt\" : 42\n\
