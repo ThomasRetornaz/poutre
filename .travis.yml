@@ -82,7 +82,7 @@ script:
   - cmake --build .
   - ctest . --output-on-failure
   # cppcheck
-  - cppcheck -f --std=c++20 --inline-suppr -ibuild -ithirdparties -ibench --quiet --error-exitcode=1 .
+  - cppcheck -f --std=c++20 --inline-suppr src -ibuild -ithirdparties -ibench --quiet --error-exitcode=1 .
 # see https://github.com/richelbilderbeek/travis_cpp_tutorial/blob/master/travis_cpp_tutorial.pdf
 after_success:
   - bash <(curl -s https://codecov.io/bash)
