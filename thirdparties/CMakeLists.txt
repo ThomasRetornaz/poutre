@@ -454,6 +454,7 @@ SET(OPENEXR_INCLUDE_DIR
   ${CMAKE_CURRENT_BINARY_DIR}/openexr/IlmBase/config
   PARENT_SCOPE
 )
+INCLUDE_DIRECTORIES(${OPENEXR_INCLUDE_DIR})
 
 
 
@@ -472,11 +473,13 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/oiio/src/include)
 add_subdirectory(oiio)
 SET_PROPERTY(TARGET OpenImageIO PROPERTY FOLDER "3rdparties")
 SET_PROPERTY(TARGET OpenImageIO_Util PROPERTY FOLDER "3rdparties")
+#MESSAGE(FATAL_ERROR ${CMAKE_CURRENT_BINARY_DIR}/include/OpenImageIO)
 SET(OIIO_INCLUDE_DIR 
   ${CMAKE_CURRENT_SOURCE_DIR}/oiio/src/include
   ${CMAKE_CURRENT_BINARY_DIR}/include
+  ${CMAKE_BINARY_DIR}/include/OpenImageIO
   ${CMAKE_BINARY_DIR}/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/oiio/ext/fmt/include
+  ${fmt_SOURCE_DIR}/include
   PARENT_SCOPE
 )
 add_dependencies(OpenImageIO tiff jpeg png_static hdf5_cpp-shared)
