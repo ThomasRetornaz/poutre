@@ -59,7 +59,7 @@ namespace poutre
              */
             ~JoinThreads() // todo C++20 remove this
             {
-                for (auto &t : m_threads)
+                for (auto &&t : m_threads)
                 {
                     if (t.joinable())
                         t.join();
@@ -338,7 +338,7 @@ namespace poutre
             /**
              * Submit a job to be run by the thread pool.
              */
-            template <typename Func, typename... Args> auto submit(Func &&func, Args &&... args)
+            template <typename Func, typename... Args> auto submit(Func &&func, Args &&...args)
             {
                 auto boundTask = std::bind(std::forward<Func>(func), std::forward<Args>(args)...);
                 using ResultType = std::invoke_result_t<Func, Args...>;
@@ -369,7 +369,7 @@ namespace poutre
             /**
              * Submit a job to the default thread pool.
              */
-            template <typename Func, typename... Args> inline auto submitJob(Func &&func, Args &&... args)
+            template <typename Func, typename... Args> inline auto submitJob(Func &&func, Args &&...args)
             {
                 return getThreadPool().submit(std::forward<Func>(func), std::forward<Args>(args)...);
             }

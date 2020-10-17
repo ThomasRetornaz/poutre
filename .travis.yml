@@ -27,13 +27,13 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-focal-9.0
+            - llvm-toolchain-focal-10.0
           packages:
-            - clang-9
+            - clang-10
             - cmake
       env: 
         - COMPILER=clang 
-        - CLANG=9
+        - CLANG=10
         - BUILD_TYPE=Release
     - compiler: gcc
       addons:

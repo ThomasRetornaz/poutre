@@ -108,7 +108,7 @@ namespace poutre
 
         using parent::operator=;
         using parent::operator==;
-        using parent::operator!=;
+        using parent::operator<=>;
         using parent::operator/=;
         using parent::operator*=;
         using parent::operator%=;
@@ -287,13 +287,13 @@ namespace poutre
     }
 
     template <ptrdiff_t Rank>
-    POUTRE_CXX14_CONSTEXPR bounds<Rank> operator*(const bounds<Rank> &rhs, ptrdiff_t v)POUTRE_NOEXCEPT
+    POUTRE_CXX14_CONSTEXPR bounds<Rank> operator*(const bounds<Rank> &rhs, ptrdiff_t v) POUTRE_NOEXCEPT
     {
         return rhs * v;
     }
 
     template <ptrdiff_t Rank>
-    POUTRE_CXX14_CONSTEXPR bounds<Rank> operator*(ptrdiff_t v, const bounds<Rank> &rhs)POUTRE_NOEXCEPT
+    POUTRE_CXX14_CONSTEXPR bounds<Rank> operator*(ptrdiff_t v, const bounds<Rank> &rhs) POUTRE_NOEXCEPT
     {
         return rhs * v;
     }
@@ -348,7 +348,7 @@ namespace poutre
 
         using parent::operator=;
         using parent::operator==;
-        using parent::operator!=;
+        using parent::operator<=>;
         using parent::operator/=;
         using parent::operator*=;
         using parent::operator%=;
@@ -526,17 +526,17 @@ namespace poutre
         /**@}*/
     };
 
-    //! index equality
-    template <ptrdiff_t Rank>
-    POUTRE_CXX14_CONSTEXPR bool operator==(const index<Rank> &rhs, const index<Rank> &lhs) POUTRE_NOEXCEPT
-    {
-        return lhs.operator==(rhs);
-    }
-    template <ptrdiff_t Rank>
-    POUTRE_CXX14_CONSTEXPR bool operator!=(const index<Rank> &rhs, const index<Rank> &lhs) POUTRE_NOEXCEPT
-    {
-        return lhs.operator!=(rhs);
-    }
+    ////! index equality
+    // template <ptrdiff_t Rank>
+    // POUTRE_CXX14_CONSTEXPR bool operator==(const index<Rank> &rhs, const index<Rank> &lhs) POUTRE_NOEXCEPT
+    //{
+    //    return lhs.operator==(rhs);
+    //}
+    // template <ptrdiff_t Rank>
+    // POUTRE_CXX14_CONSTEXPR bool operator!=(const index<Rank> &rhs, const index<Rank> &lhs) POUTRE_NOEXCEPT
+    //{
+    //    return lhs.operator!=(rhs);
+    //}
 
     //! index arithmetic
     template <ptrdiff_t Rank>
@@ -552,13 +552,13 @@ namespace poutre
     }
 
     template <ptrdiff_t Rank>
-    POUTRE_CXX14_CONSTEXPR index<Rank> operator*(const index<Rank> &rhs, ptrdiff_t v)POUTRE_NOEXCEPT
+    POUTRE_CXX14_CONSTEXPR index<Rank> operator*(const index<Rank> &rhs, ptrdiff_t v) POUTRE_NOEXCEPT
     {
         return (rhs * v);
     }
 
     template <ptrdiff_t Rank>
-    POUTRE_CXX14_CONSTEXPR index<Rank> operator*(ptrdiff_t v, const index<Rank> &rhs)POUTRE_NOEXCEPT
+    POUTRE_CXX14_CONSTEXPR index<Rank> operator*(ptrdiff_t v, const index<Rank> &rhs) POUTRE_NOEXCEPT
     {
         return (rhs * v);
     }
