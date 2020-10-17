@@ -17,10 +17,10 @@ matrix:
       addons:
        apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-9', 'libpq-dev']
+          packages: ['g++-10', 'libpq-dev']
       env: 
-        - CXX=g++-9
-        - GCC=9
+        - CXX=g++-10
+        - GCC=10
         - BUILD_TYPE=Release
     - compiler: clang
       addons:
@@ -39,12 +39,12 @@ matrix:
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-9', 'libpq-dev']
+          packages: ['g++-10', 'libpq-dev']
       env:
-          - CXX=g++-9
+          - CXX=g++-10
           - CXXFLAGS="-O0 --coverage"
           - BUILD_TYPE=Coverage
-          - GCC=9
+          - GCC=10
       #before_install:
         
       # script:

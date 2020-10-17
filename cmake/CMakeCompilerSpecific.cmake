@@ -139,21 +139,7 @@ if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GN
   set(CMAKE_C_FLAGS_RELEASE     "${CMAKE_C_FLAGS_RELEASE} -O3"    )
 
   enable_language(CXX)
-  #CHECK_CXX_COMPILER_FLAG(-std=c++11 COMPILER_SUPPORTS_CXX11)
-  #CHECK_CXX_COMPILER_FLAG(-std=c++14 COMPILER_SUPPORTS_CXX14)
-  #CHECK_CXX_COMPILER_FLAG(-std=c++17 COMPILER_SUPPORTS_CXX17)
-  CHECK_CXX_COMPILER_FLAG(-std=c++20 COMPILER_SUPPORTS_CXX20)
   
-  if(COMPILER_SUPPORTS_CXX20)
-    if(MSVC)
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest")
-    else()
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
-    endif()
-  else()
-    message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no at least C++11/c++14 support. Please use a different C++ compiler.")
-  endif()
-
   if(APPLE)
     set(CMAKE_OSX_ARCHITECTURES "i386;x86_64")
   endif()
