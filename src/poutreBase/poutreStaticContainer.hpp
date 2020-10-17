@@ -35,8 +35,10 @@
 
 #include <stdexcept>
 //#include <array>
+#include <compare>
 #include <iterator>
 #include <sstream>
+
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable : 4425) // 4425 improper support constexpr
