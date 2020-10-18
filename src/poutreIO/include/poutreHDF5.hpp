@@ -172,7 +172,7 @@ namespace poutre
             }
             catch (const H5::Exception &e)
             {
-                POUTRE_RUNTIME_ERROR((boost::format("StoreWithHDF5_helper: HDF5 fail : %s") % e.getDetailMsg()).str());
+                POUTRE_RUNTIME_ERROR(poutre::format("StoreWithHDF5_helper: HDF5 fail : {%s}", e.getDetailMsg()));
             }
         }
 
@@ -211,7 +211,7 @@ namespace poutre
             catch (const H5::Exception &e)
             {
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("StoreWithHDF53Planes_helper: HDF5 fail : %s") % e.getDetailMsg()).str());
+                    (poutre::format("StoreWithHDF53Planes_helper: HDF5 fail : {%s}", e.getDetailMsg())));
             }
         }
 
@@ -250,40 +250,11 @@ namespace poutre
             }
             catch (const H5::Exception &e)
             {
-                POUTRE_RUNTIME_ERROR(
-                    (boost::format("StoreWithHDF54Planes_helper: HDF5 fail : %s") % e.getDetailMsg()).str());
+                    POUTRE_RUNTIME_ERROR(
+                    (poutre::format("StoreWithHDF54Planes_helper: HDF5 fail : {%s}", e.getDetailMsg())));
+           
             }
         }
-
-        /*template <typename T, typename hdf5_data_type>
-        void LoadWithHDF5_helper_buffer(T *buffer, const std::vector<hsize_t> &dimensions, H5::H5File &file,
-                                        const hdf5_data_type &datatype, const std::string &data_set_name)
-        {
-            POUTRE_CHECK(buffer != nullptr, "LoadWithHDF5_helper_buffer null ptr");
-            try
-            {
-                H5::DataSpace dataspace((int)dimensions.size(), dimensions.data());
-
-                H5::DataSet dataset = file.createDataSet(data_set_name, datatype, dataspace);
-
-                dataset.read(buffer, datatype);
-            }
-            catch (const H5::FileIException &e)
-            {
-                POUTRE_RUNTIME_ERROR(
-                    (boost::format("LoadWithHDF5_helper_buffer: createDataSet fail : %s") % e.getDetailMsg()).str());
-            }
-            catch (const H5::GroupIException &e)
-            {
-                POUTRE_RUNTIME_ERROR(
-                    (boost::format("LoadWithHDF5_helper_buffer: createDataSet fail : %s") % e.getDetailMsg()).str());
-            }
-            catch (const H5::LocationException &e)
-            {
-                POUTRE_RUNTIME_ERROR(
-                    (boost::format("LoadWithHDF5_helper_buffer: createDataSet fail : %s") % e.getDetailMsg()).str());
-            }
-        }*/
 
         template <typename T, ptrdiff_t rank> void LoadFromHDF5_helper(IInterface &iimage, const H5::DataSet &data_set)
         {
@@ -303,7 +274,10 @@ namespace poutre
             }
             catch (const H5::Exception &e)
             {
-                POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5_helper: HDF5 fail : %s") % e.getDetailMsg()).str());
+                
+                POUTRE_RUNTIME_ERROR(
+                    (poutre::format("LoadFromHDF5_helper: HDF5 fail : {%s}", e.getDetailMsg())));
+
             }
         }
 
@@ -329,7 +303,7 @@ namespace poutre
             catch (const H5::Exception &e)
             {
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("LoadFromHDF53Planes_helper: HDF5 fail : %s") % e.getDetailMsg()).str());
+                    (poutre::format("LoadFromHDF53Planes_helper: HDF5 fail : {%s}", e.getDetailMsg())));
             }
         }
 
@@ -356,7 +330,7 @@ namespace poutre
             catch (const H5::Exception &e)
             {
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("LoadFromHDF53Planes_helper: HDF5 fail : %s") % e.getDetailMsg()).str());
+                    (poutre::format("LoadFromHDF53Planes_helper: HDF5 fail : {%s}", e.getDetailMsg())));
             }
         }
     } // namespace details

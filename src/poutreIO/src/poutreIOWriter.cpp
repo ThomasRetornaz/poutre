@@ -37,7 +37,7 @@ namespace poutre
         boost::filesystem::path dir = localPath.parent_path();
         if (!(bf::exists(dir)))
         {
-            POUTRE_RUNTIME_ERROR((boost::format("ImageWriter: provided path %s doesn't exists") % dir).str());
+            POUTRE_RUNTIME_ERROR((poutre::format("ImageWriter: provided path {%s} doesn't exists", dir)));
         }
         m_isready = true;
         return *this;

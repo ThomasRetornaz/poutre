@@ -456,7 +456,30 @@ SET(OPENEXR_INCLUDE_DIR
 )
 INCLUDE_DIRECTORIES(${OPENEXR_INCLUDE_DIR})
 
+###########################################################################
+# fmtlib
+include(FetchContent)
+FetchContent_Declare(
+  fmt
+  GIT_REPOSITORY "https://github.com/fmtlib/fmt"
+  # Uncomment and set the following to a specific hash to
+  # lock down to a specific commit and avoid contacting
+  # the remote once we've already cloned/fetched it
+  GIT_TAG 6.1.2
+  )
 
+FetchContent_GetProperties(fmt) #mispelled name in original post
+if(NOT fmt_POPULATED)   # name is lowercased
+  FetchContent_Populate(fmt)
+  message(STATUS "fmt source dir: ${fmt_SOURCE_DIR}")
+  message(STATUS "fmt binary dir: ${fmt_BINARY_DIR}")
+  add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR}) # name is lowercased
+  set (FMT_INCLUDE_DIR "${fmt_SOURCE_DIR}/include")
+  set(CMAKE_PREFIX_PATH ${FMT_INSTALL_DIR})
+  set(FMT_INCLUDES ${FMT_INCLUDE_DIR})
+  set(FMT_INCLUDES ${FMT_INCLUDES} PARENT_SCOPE)
+  #checked_find_package (fmt QUIET)
+endif()
 
 #openImageIO
 set(OpenImageIO_BUILD_TOOLS CACHE BOOL OFF FORCE)

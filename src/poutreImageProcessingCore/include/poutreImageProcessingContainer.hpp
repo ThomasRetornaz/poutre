@@ -181,115 +181,114 @@ namespace poutre
                 m_allocator.deallocate(m_data, m_numelement);
         }
 
-        const coordinate_type bound() const POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR const coordinate_type bound() const POUTRE_NOEXCEPT
         {
             return m_coordinnates;
         }
-        const coordinate_type shape() const POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR const coordinate_type shape() const POUTRE_NOEXCEPT
         {
             return m_coordinnates;
         }
-        const index_type stride() const POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR const index_type stride() const POUTRE_NOEXCEPT
         {
             return m_strides;
         }
-        std::size_t GetNumDims() const POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR std::size_t GetNumDims() const POUTRE_NOEXCEPT
         {
             return m_numdims;
         }
         // std::array like interface
 
         // Capacity
-
-        const size_type size() const POUTRE_NOEXCEPT
+POUTRE_CXX14_CONSTEXPR const size_type size() const POUTRE_NOEXCEPT
         {
             return m_numelement;
         }
 
-        const size_type max_size() const POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR const size_type max_size() const POUTRE_NOEXCEPT
         {
             return this->size();
         }
 
-        const bool empty() const POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR const bool empty() const POUTRE_NOEXCEPT
         {
             return this->size() == 0;
         }
 
         // Element access
 
-        reference operator[](size_type n) POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR reference operator[](size_type n) POUTRE_NOEXCEPT
         {
             POUTRE_ASSERTCHECK(n < m_numelement, "Access out of bound");
             POUTRE_ASSERTCHECK(n >= 0, "Access out of bound");
             return m_data[n];
         }
 
-        const_reference operator[](size_type n) const POUTRE_NOEXCEPT
+       POUTRE_CXX14_CONSTEXPR const_reference operator[](size_type n) const POUTRE_NOEXCEPT
         {
             POUTRE_ASSERTCHECK(n < m_numelement, "Access out of bound");
             // POUTRE_ASSERTCHECK(n >= 0, "Access out of bound");
             return m_data[n];
         }
 
-        reference at(size_type n)
+        POUTRE_CXX14_CONSTEXPR reference at(size_type n)
         {
             if (n >= m_numelement)
                 POUTRE_RUNTIME_ERROR("Access out of bound");
             return m_data[n];
         }
 
-        const_reference at(size_type n) const
+        POUTRE_CXX14_CONSTEXPR const_reference at(size_type n) const
         {
             if (n >= m_numelement)
                 POUTRE_RUNTIME_ERROR("Access out of bound");
             return m_data[n];
         }
 
-        reference front() POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR reference front() POUTRE_NOEXCEPT
         {
             return m_data[0];
         }
 
-        const_reference front() const POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR const_reference front() const POUTRE_NOEXCEPT
         {
             return m_data[0];
         }
 
-        reference back() POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR reference back() POUTRE_NOEXCEPT
         {
             return m_data[m_numelement - 1];
         }
 
-        const_reference back() const POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR const_reference back() const POUTRE_NOEXCEPT
         {
             return m_data[m_numelement - 1];
         }
 
-        pointer data() POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR pointer data() POUTRE_NOEXCEPT
         {
             return m_data;
         }
 
-        const_pointer data() const POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR const_pointer data() const POUTRE_NOEXCEPT
         {
             return m_data;
         }
 
         // Modifiers
 
-        void assign(const value_type &val)
+        POUTRE_CXX14_CONSTEXPR void assign(const value_type &val)
         {
             this->fill(val);
         }
 
-        void fill(const value_type &val)
+        POUTRE_CXX14_CONSTEXPR void fill(const value_type &val)
         {
             // assign value to all elements
             std::fill(this->begin(), this->end(), val);
         }
 
-        void swap(self_type &rhs) // POUTRE_NOEXCEPT(POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR void swap(self_type &rhs) // POUTRE_NOEXCEPT(POUTRE_NOEXCEPT
                                   // (swap(declval<value_type&>( ),
                                   // declval<value_type&>( )))) //wait MSVC2013
                                   // noexcept impl ...
@@ -380,7 +379,7 @@ namespace poutre
 
         // move assignment operator
 
-        self_type &operator=(self_type &&rhs) noexcept
+        POUTRE_CXX14_CONSTEXPR self_type &operator=(self_type &&rhs) noexcept
         {
             if (this != &rhs) // ??
                               // http://scottmeyers.blogspot.fr/2014/06/the-drawbacks-of-implementing-move.html
@@ -627,7 +626,7 @@ namespace poutre
         }
 
         template <ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
-        pointer GetLineBuffer(scoord y) POUTRE_NOEXCEPTONLYNDEBUG
+        POUTRE_CXX14_CONSTEXPR pointer GetLineBuffer(scoord y) POUTRE_NOEXCEPTONLYNDEBUG
         {
 
             POUTRE_ASSERTCHECK(y < this->m_coordinnates[0], "Access out of bound");
@@ -636,7 +635,7 @@ namespace poutre
         }
 
         template <ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
-        const_pointer GetLineBuffer(scoord y) const POUTRE_NOEXCEPTONLYNDEBUG
+        POUTRE_CXX14_CONSTEXPR const_pointer GetLineBuffer(scoord y) const POUTRE_NOEXCEPTONLYNDEBUG
         {
             POUTRE_ASSERTCHECK(y < this->m_coordinnates[0], "Access out of bound");
             POUTRE_ASSERTCHECK(y >= 0, "Access out of bound");
@@ -646,7 +645,7 @@ namespace poutre
         using parent_template::assign;
         using parent_template::fill;
 
-        void swap(self_type &rhs) // POUTRE_NOEXCEPT(POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR void swap(self_type &rhs) // POUTRE_NOEXCEPT(POUTRE_NOEXCEPT
                                   // (swap(declval<value_type&>( ),
                                   // declval<value_type&>( )))) //wait MSVC2013
                                   // noexcept impl ...

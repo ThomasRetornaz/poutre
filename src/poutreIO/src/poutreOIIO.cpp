@@ -16,7 +16,7 @@
 #include <sstream>
 
 #include <boost/filesystem.hpp>
-#include <poutreBase/poutreTrace.hpp>
+//#include <poutreBase/poutreTrace.hpp>
 #include <poutreIO/include/poutreOIIO.hpp>
 
 namespace poutre
@@ -35,7 +35,7 @@ namespace poutre
         bf::path localPath(image_path);
         if (!(bf::exists(localPath)))
         {
-            POUTRE_RUNTIME_ERROR(boost::format("LoadFromOIIO: unable to locate provided path " + localPath.string()));
+            POUTRE_RUNTIME_ERROR(poutre::format("LoadFromOIIO: unable to locate provided path {}",localPath.string()));
         }
 
         auto in(OIIO::ImageInput::open(image_path));
@@ -55,9 +55,9 @@ namespace poutre
             dims.push_back((size_t)spec.width);
         if (spec.depth > 1)
             POUTRE_RUNTIME_ERROR(
-                boost::format("LoadFromOIIO: nD with n >2  format require hdf5 ext, use LoadFromHDF5"));
+                poutre::format("LoadFromOIIO: nD with n >2  format require hdf5 ext, use LoadFromHDF5"));
         if (spec.channelformats.size() != 0)
-            POUTRE_RUNTIME_ERROR(boost::format("LoadFromOIIO: different format over channels is not supported"));
+            POUTRE_RUNTIME_ERROR(poutre::format("LoadFromOIIO: different format over channels is not supported"));
         CompoundType ctype = CompoundType::CompoundType_Undef;
         switch (spec.nchannels)
         {
@@ -358,10 +358,10 @@ namespace poutre
         boost::filesystem::path dir = localPath.parent_path();
         if (!(bf::exists(dir)))
         {
-            POUTRE_RUNTIME_ERROR(boost::format("StoreFromOIIO: provided path %s doesn't exists") % dir);
+            POUTRE_RUNTIME_ERROR(poutre::format("StoreFromOIIO: provided path {%s} doesn't exists", dir));
         }
         if (iimage.GetNumDims() > 2)
-            POUTRE_RUNTIME_ERROR(boost::format("For nd images with n>2 use StoreWithHDF5"));
+            POUTRE_RUNTIME_ERROR(poutre::format("For nd images with n>2 use StoreWithHDF5"));
 
         auto ptype = iimage.GetPType();
         auto ctype = iimage.GetCType();

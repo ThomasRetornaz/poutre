@@ -22,9 +22,9 @@
 #include <poutreBase/poutreBase.hpp>
 #endif
 
-#ifndef POUTRE_TRACE__HPP__
-#include <poutreBase/poutreTrace.hpp>
-#endif
+// #ifndef POUTRE_TRACE__HPP__
+// #include <poutreBase/poutreTrace.hpp>
+// #endif
 
 #include <functional>
 #include <string>
