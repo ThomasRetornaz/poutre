@@ -33,11 +33,11 @@
 #include <poutreBase/poutreDenseIterator.hpp>
 #endif
 
-#include <stdexcept>
 #include <array>
 #include <compare>
 #include <iterator>
 #include <sstream>
+#include <stdexcept>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -70,10 +70,11 @@ namespace poutre
         static_assert(std::is_arithmetic<valuetype>::value, "static_array_base only support arithmetic type");
 
       protected:
-        //valuetype m_array[Rank]; //! actual storage has static sized buffer TODO ALIGNEMENT
-                                 // typename std::aligned_storage<sizeof(valuetype), alignof(valuetype)>::type
-                                 // m_array[Rank];
-        std::array<valuetype,Rank> m_array;     
+        // valuetype m_array[Rank]; //! actual storage has static sized buffer TODO ALIGNEMENT
+        // typename std::aligned_storage<sizeof(valuetype), alignof(valuetype)>::type
+        // m_array[Rank];
+        std::array<valuetype, Rank> m_array;
+
       public:
         POUTRE_STATIC_CONSTEXPR ptrdiff_t rank = Rank;
 
@@ -542,8 +543,8 @@ namespace poutre
         using parent::swap;
 
         using parent::operator=;
-        //using parent::operator==;
-        //using parent::operator<=>;
+        // using parent::operator==;
+        // using parent::operator<=>;
         using parent::operator/=;
         using parent::operator*=;
         using parent::operator%=;

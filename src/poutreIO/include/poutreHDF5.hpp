@@ -250,9 +250,8 @@ namespace poutre
             }
             catch (const H5::Exception &e)
             {
-                    POUTRE_RUNTIME_ERROR(
+                POUTRE_RUNTIME_ERROR(
                     (poutre::format("StoreWithHDF54Planes_helper: HDF5 fail : {%s}", e.getDetailMsg())));
-           
             }
         }
 
@@ -274,10 +273,8 @@ namespace poutre
             }
             catch (const H5::Exception &e)
             {
-                
-                POUTRE_RUNTIME_ERROR(
-                    (poutre::format("LoadFromHDF5_helper: HDF5 fail : {%s}", e.getDetailMsg())));
 
+                POUTRE_RUNTIME_ERROR((poutre::format("LoadFromHDF5_helper: HDF5 fail : {%s}", e.getDetailMsg())));
             }
         }
 

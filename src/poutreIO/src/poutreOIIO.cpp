@@ -35,7 +35,7 @@ namespace poutre
         bf::path localPath(image_path);
         if (!(bf::exists(localPath)))
         {
-            POUTRE_RUNTIME_ERROR(poutre::format("LoadFromOIIO: unable to locate provided path {}",localPath.string()));
+            POUTRE_RUNTIME_ERROR(poutre::format("LoadFromOIIO: unable to locate provided path {}", localPath.string()));
         }
 
         auto in(OIIO::ImageInput::open(image_path));

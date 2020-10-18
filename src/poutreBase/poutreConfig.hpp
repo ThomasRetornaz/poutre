@@ -11,8 +11,8 @@
 
 #include <boost/config.hpp>
 
-#include "fmt/ostream.h"
 #include "fmt/format.h"
+#include "fmt/ostream.h"
 #include "fmt/printf.h"
 
 /**
@@ -58,15 +58,14 @@ namespace poutre
 
 // POUTRE_ALWAYS_INLINE is the strongest version of inline directive, using __forceinline on MSVC/INTEL,and always
 // inline for GCC/clang.
-#  if defined(_MSC_VER)
-#    define POUTRE_ALWAYS_INLINE __forceinline
-#  elif defined(__GNUC__) && __GNUC__ > 3
-     // Clang also defines __GNUC__ (as 4)
-#    define POUTRE_ALWAYS_INLINE inline __attribute__ ((__always_inline__))
-#  else
-#    define POUTRE_ALWAYS_INLINE inline
-#  endif
-
+#if defined(_MSC_VER)
+#define POUTRE_ALWAYS_INLINE __forceinline
+#elif defined(__GNUC__) && __GNUC__ > 3
+    // Clang also defines __GNUC__ (as 4)
+#define POUTRE_ALWAYS_INLINE inline __attribute__((__always_inline__))
+#else
+#define POUTRE_ALWAYS_INLINE inline
+#endif
 
 #if defined(_WIN32) || defined(_WIN64)
 #define poutreDeprecated __declspec(deprecated)
@@ -118,14 +117,13 @@ namespace poutre
 
 #endif
 
-template<typename... Args>
-inline std::string format (const char* fmt, const Args&... args)
-{
-    return ::fmt::format (fmt, args...);
-}
+    template <typename... Args> inline std::string format(const char *fmt, const Args &...args)
+    {
+        return ::fmt::format(fmt, args...);
+    }
 
 #define POUTRE_RUNTIME_ERROR(MSG)                                                                                      \
-    throw std::runtime_error(fmt::format("Throw {} at {} {}", MSG,__FILE__,__LINE__)) //-V1003
+    throw std::runtime_error(fmt::format("Throw {} at {} {}", MSG, __FILE__, __LINE__)) //-V1003
 #define POUTRE_NEVER_REACH_HERE POUTRE_RUNTIME_ERROR("Code should never reach here, WTF Oo")
 #define POUTRE_CHECK(CONDITION, MSG)                                                                                   \
     {                                                                                                                  \

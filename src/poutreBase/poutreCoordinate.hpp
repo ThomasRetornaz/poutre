@@ -274,19 +274,18 @@ namespace poutre
         POUTRE_CXX14_CONSTEXPR auto operator<=>( bounds<Rank> const &rhs) const POUTRE_NOEXCEPT =default;
     };
 
-    template <ptrdiff_t Rank>        
+    template <ptrdiff_t Rank>
     POUTRE_CXX14_CONSTEXPR bounds<Rank> operator*(const bounds<Rank> &rhs, ptrdiff_t v) POUTRE_NOEXCEPT
     {
         return rhs * v;
     }
-    template <ptrdiff_t Rank>        
+    template <ptrdiff_t Rank>
     POUTRE_CXX14_CONSTEXPR bounds<Rank> operator*(ptrdiff_t v, const bounds<Rank> &rhs) POUTRE_NOEXCEPT
     {
         return rhs * v;
     }
 
-    template <ptrdiff_t Rank>        
-    POUTRE_CXX14_CONSTEXPR bounds<Rank> operator/(const bounds<Rank> &rhs, ptrdiff_t v)
+    template <ptrdiff_t Rank> POUTRE_CXX14_CONSTEXPR bounds<Rank> operator/(const bounds<Rank> &rhs, ptrdiff_t v)
     {
         if (v == 0)
             POUTRE_RUNTIME_ERROR("0 division error in bounds<Rank> operator/ (const "
@@ -335,8 +334,8 @@ namespace poutre
         using parent::empty;
 
         using parent::operator=;
-        //using parent::operator==;
-        //using parent::operator<=>;
+        // using parent::operator==;
+        // using parent::operator<=>;
         using parent::operator/=;
         using parent::operator*=;
         using parent::operator%=;
