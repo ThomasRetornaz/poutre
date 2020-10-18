@@ -213,7 +213,7 @@ namespace poutre
 
         /**@{*/
 
-        POUTRE_CXX14_CONSTEXPR auto operator<=>( self_type const &rhs) const POUTRE_NOEXCEPT =default;
+        POUTRE_CXX14_CONSTEXPR auto operator<=>(const static_array_base<valuetype, Rank>& rhs) const POUTRE_NOEXCEPT =default;
         // {
         //     // if (auto cmp = this->size() <=> rhs.size(); cmp != 0)
         //     //     return cmp;
