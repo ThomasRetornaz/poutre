@@ -472,24 +472,24 @@ POUTRE_CXX14_CONSTEXPR const size_type size() const POUTRE_NOEXCEPT
                                      "DenseImage container");
             // std::copy(dims.begin( ), dims.end( ), m_coordinnates.begin( ));
             auto it = dims.begin();
-            for (size_t i = 0; i < parent_template::m_numdims; ++i, ++it)
+            for (size_t i = 0; i < this->m_numdims; ++i, ++it)
             {
-                parent_template::m_coordinnates[i] = *it;
+                this->m_coordinnates[i] = *it;
             }
-            if (!parent_template::m_coordinnates.empty())
+            if (!this->m_coordinnates.empty())
             {
-                parent_template::m_numelement = parent_template::m_coordinnates[0];
-                for (size_t i = 1; i < (size_t)parent_template::m_numdims; i++)
+                this->m_numelement = this->m_coordinnates[0];
+                for (size_t i = 1; i < (size_t)this->m_numdims; i++)
                 {
-                    parent_template::m_numelement *= (parent_template::m_coordinnates[i]);
+                    this->m_numelement *= (this->m_coordinnates[i]);
                 }
-                parent_template::m_data = parent_template::m_allocator.allocate(parent_template::m_numelement);
+                this->m_data = this->m_allocator.allocate(this->m_numelement);
 
                 // fill stride
-                parent_template::m_strides[parent_template::m_numdims - 1] = 1;
-                for (ptrdiff_t dim = parent_template::m_numdims - 2; dim >= 0; --dim)
+                this->m_strides[this->m_numdims - 1] = 1;
+                for (ptrdiff_t dim = this->m_numdims - 2; dim >= 0; --dim)
                 {
-                    parent_template::m_strides[dim] = parent_template::m_strides[dim + 1] * (bound()[dim + 1]);
+                    this->m_strides[dim] = this->m_strides[dim + 1] * (bound()[dim + 1]);
                 }
             }
         }

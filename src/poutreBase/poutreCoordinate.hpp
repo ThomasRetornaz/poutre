@@ -271,7 +271,7 @@ namespace poutre
             return (*this).end();
         }
 
-        POUTRE_CXX14_CONSTEXPR auto operator<=>( bounds<Rank> const &rhs) const POUTRE_NOEXCEPT =default;
+        POUTRE_CXX14_CONSTEXPR auto operator<=>( bounds<Rank> const &rhs) const POUTRE_NOEXCEPT = default;
     };
 
     template <ptrdiff_t Rank>        
