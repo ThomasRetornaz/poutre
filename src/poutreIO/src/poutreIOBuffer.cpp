@@ -11,7 +11,7 @@
 #include <iostream>
 #include <sstream>
 
-#include <poutreBase/poutreTrace.hpp>
+// #include <poutreBase/poutreTrace.hpp>
 #include <poutreIO/include/poutreIOBUFFER.hpp>
 #include <poutreImageProcessing/core/include/poutreImageProcessingContainer.hpp>
 

@@ -34,7 +34,7 @@
 #endif
 
 #include <stdexcept>
-//#include <array>
+#include <array>
 #include <compare>
 #include <iterator>
 #include <sstream>
@@ -70,10 +70,10 @@ namespace poutre
         static_assert(std::is_arithmetic<valuetype>::value, "static_array_base only support arithmetic type");
 
       protected:
-        valuetype m_array[Rank]; //! actual storage has static sized buffer TODO ALIGNEMENT
+        //valuetype m_array[Rank]; //! actual storage has static sized buffer TODO ALIGNEMENT
                                  // typename std::aligned_storage<sizeof(valuetype), alignof(valuetype)>::type
                                  // m_array[Rank];
-
+        std::array<valuetype,Rank> m_array;     
       public:
         POUTRE_STATIC_CONSTEXPR ptrdiff_t rank = Rank;
 
@@ -175,7 +175,7 @@ namespace poutre
         POUTRE_CXX14_CONSTEXPR
         static_array_base(const std::initializer_list<value_type> &rhs) : m_array()
         {
-            POUTRE_CHECK(rhs.size() == rank, "Ill formed initializer list: rhs.size() must equal Rank")
+            POUTRE_CHECK(rhs.size() == rank, "Ill formed initializer list: rhs.size() must equal Rank");
             // details::helper_assign_container_op<self_type, AssignOpType::AssignOp,
             // NumElmnt>::op(rhs, *this);
             // safe but silly behavior if no static assertion
@@ -212,17 +212,17 @@ namespace poutre
 
         /**@{*/
 
-        POUTRE_CXX14_CONSTEXPR std::strong_ordering operator<=>(const self_type &rhs) const POUTRE_NOEXCEPT
-        {
-            if (auto cmp = this->size() <=> rhs.size(); cmp != 0)
-                return cmp;
-            return this->m_array <=> rhs.m_array;
-        }
+        POUTRE_CXX14_CONSTEXPR auto operator<=>( self_type const &rhs) const POUTRE_NOEXCEPT =default;
+        // {
+        //     // if (auto cmp = this->size() <=> rhs.size(); cmp != 0)
+        //     //     return cmp;
+        //     return (this->m_array<=>rhs.m_array);
+        // }
 
-        POUTRE_CXX14_CONSTEXPR bool operator==(const self_type &rhs) const POUTRE_NOEXCEPT
-        {
-            return details::helper_comp_equal_container_op<self_type, Rank>::op(rhs, *this);
-        }
+        // POUTRE_CXX14_CONSTEXPR bool operator==(const self_type &rhs) const POUTRE_NOEXCEPT
+        // {
+        //     return details::helper_comp_equal_container_op<self_type, Rank>::op(rhs, *this);
+        // }
 
         /**@}*/
 
@@ -440,14 +440,14 @@ namespace poutre
 
         POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR pointer data() POUTRE_NOEXCEPT
         {
-            return m_array;
+            return m_array.data();
         }
 
         //! Return pointer to nonmutable data array
 
         POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR const_pointer data() const POUTRE_NOEXCEPT
         {
-            return m_array;
+            return m_array.data();
         }
         /**@}*/
     };
@@ -542,8 +542,8 @@ namespace poutre
         using parent::swap;
 
         using parent::operator=;
-        using parent::operator==;
-        using parent::operator<=>;
+        //using parent::operator==;
+        //using parent::operator<=>;
         using parent::operator/=;
         using parent::operator*=;
         using parent::operator%=;

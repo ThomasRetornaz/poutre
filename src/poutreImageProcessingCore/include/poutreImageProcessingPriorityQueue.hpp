@@ -159,7 +159,7 @@ namespace poutre
             }
             return m_current_highestPriority;
         }
-        int m_current_highestPriority;
+        mutable int m_current_highestPriority;
         int m_maxPriority;
         std::vector<int> p_stack;
         std::vector<queueValue> stack;

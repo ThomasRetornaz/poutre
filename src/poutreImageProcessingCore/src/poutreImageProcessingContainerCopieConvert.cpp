@@ -71,7 +71,7 @@ namespace poutre
         }
         break;
         default:
-            POUTRE_RUNTIME_ERROR((boost::format("Unsupported number of dims %d") % dims).str());
+            POUTRE_RUNTIME_ERROR(poutre::format("Unsupported number of dims {:%D}", dims));
         }
     }
 } // namespace poutre

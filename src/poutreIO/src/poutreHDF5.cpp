@@ -15,7 +15,7 @@
 #include <iostream>
 #include <sstream>
 
-#include <poutreBase/poutreTrace.hpp>
+// #include <poutreBase/poutreTrace.hpp>
 #include <poutreIO/include/poutreHDF5.hpp>
 
 namespace poutre
@@ -61,8 +61,7 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                     break;
                 }
                 break;
@@ -88,8 +87,7 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                     break;
                 }
                 break;
@@ -115,14 +113,12 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                 }
                 break;
             default:
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("StoreWithHDF5: unsupported cTYpe %s") % boost::lexical_cast<std::string>(ctype))
-                        .str());
+                    (poutre::format("StoreWithHDF5: unsupported cTYpe {%s}",boost::lexical_cast<std::string>(ctype))));
             }
         } // case 1
         break;
@@ -151,8 +147,7 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                     break;
                 }
                 break;
@@ -178,8 +173,7 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                     break;
                 }
                 break;
@@ -205,14 +199,12 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                 }
                 break;
             default:
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("StoreWithHDF5: unsupported cTYpe %s") % boost::lexical_cast<std::string>(ctype))
-                        .str());
+                    (poutre::format("StoreWithHDF5: unsupported cTYpe {%s}",boost::lexical_cast<std::string>(ctype))));
             }
             break;
         } // case 2!
@@ -241,8 +233,7 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                     break;
                 }
                 break;
@@ -268,8 +259,7 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                     break;
                 }
                 break;
@@ -295,14 +285,12 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                 }
                 break;
             default:
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("StoreWithHDF5: unsupported cTYpe %s") % boost::lexical_cast<std::string>(ctype))
-                        .str());
+                    (poutre::format("StoreWithHDF5: unsupported cTYpe {%s}",boost::lexical_cast<std::string>(ctype))));
             }
             break;
         } // case 3!
@@ -331,8 +319,7 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                     break;
                 }
                 break;
@@ -358,8 +345,7 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                     break;
                 }
                 break;
@@ -385,19 +371,17 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("StoreWithHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                 }
                 break;
             default:
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("StoreWithHDF5: unsupported cTYpe %s") % boost::lexical_cast<std::string>(ctype))
-                        .str());
+                    (poutre::format("StoreWithHDF5: unsupported cTYpe {%s}",boost::lexical_cast<std::string>(ctype))));
             }
             break;
         } // case 4!
         default:
-            POUTRE_RUNTIME_ERROR((boost::format("StoreWithHDF5: unsupported number of dims %d") % coords.size()).str());
+            POUTRE_RUNTIME_ERROR((poutre::format("StoreWithHDF5: unsupported number of dims {%d}", coords.size())));
         } // dims
     }
 
@@ -438,7 +422,7 @@ namespace poutre
         else
         {
             POUTRE_RUNTIME_ERROR(
-                (boost::format("LoadFromHDF5: unsupported compound type %s") % attrTypeCompound).str());
+                (poutre::format("LoadFromHDF5: unsupported compound type {%s}",attrTypeCompound)));
         }
         // get ptype
         H5std_string attrpType;
@@ -457,7 +441,7 @@ namespace poutre
             ptype = PType::PType_D64;
         else
         {
-            POUTRE_RUNTIME_ERROR((boost::format("LoadFromHDF5: unsupported type %s") % attrpType).str());
+            POUTRE_RUNTIME_ERROR((poutre::format("LoadFromHDF5: unsupported type {%s}",attrpType)));
         }
 
         // Handle type
@@ -485,7 +469,7 @@ namespace poutre
         //    else
         //    {
         //        POUTRE_RUNTIME_ERROR(
-        //            (boost::format("LoadFromHDF5: unsupported type %s") %
+        //            (poutre::format("LoadFromHDF5: unsupported type %s") %
         //            boost::lexical_cast<std::string>(type_class))
         //                .str());
         //    }
@@ -510,7 +494,7 @@ namespace poutre
         //    else
         //    {
         //        POUTRE_RUNTIME_ERROR(
-        //            (boost::format("LoadFromHDF5: unsupported type %s") %
+        //            (poutre::format("LoadFromHDF5: unsupported type %s") %
         //            boost::lexical_cast<std::string>(type_class))
         //                .str());
         //    }
@@ -530,7 +514,7 @@ namespace poutre
         //    if (attrTypeCompound == "Scalar")
         //    {
         //        POUTRE_RUNTIME_ERROR(
-        //            (boost::format("LoadFromHDF5: unsupported type %s") %
+        //            (poutre::format("LoadFromHDF5: unsupported type %s") %
         //            boost::lexical_cast<std::string>(type_class))
         //                .str());
         //    }
@@ -545,7 +529,7 @@ namespace poutre
         //    else
         //    {
         //        POUTRE_RUNTIME_ERROR(
-        //            (boost::format("LoadFromHDF5: unsupported type %s") %
+        //            (poutre::format("LoadFromHDF5: unsupported type %s") %
         //            boost::lexical_cast<std::string>(type_class))
         //                .str());
         //    }
@@ -553,7 +537,7 @@ namespace poutre
         // else
         //{
         //    POUTRE_RUNTIME_ERROR(
-        //        (boost::format("LoadFromHDF5: unsupported type %s") % boost::lexical_cast<std::string>(type_class))
+        //        (poutre::format("LoadFromHDF5: unsupported type {%s}",boost::lexical_cast<std::string>(type_class))
         //            .str());
         //}
         std::vector<size_t> coords(dims_out.size());
@@ -587,8 +571,7 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                     break;
                 }
                 break;
@@ -614,8 +597,7 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                     break;
                 }
                 break;
@@ -641,14 +623,12 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                 }
                 break;
             default:
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("LoadFromHDF5: unsupported cTYpe %s") % boost::lexical_cast<std::string>(ctype))
-                        .str());
+                    (poutre::format("LoadFromHDF5: unsupported cTYpe {%s}",boost::lexical_cast<std::string>(ctype))));
             }
         } // case 1
         break;
@@ -677,8 +657,7 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                 }
                 break;
             case CompoundType::CompoundType_3Planes:
@@ -703,8 +682,7 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                 }
                 break;
             case CompoundType::CompoundType_4Planes:
@@ -729,15 +707,13 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                 }
                 break; // ptype
 
             default:
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("LoadFromHDF5: unsupported cTYpe %s") % boost::lexical_cast<std::string>(ctype))
-                        .str());
+                    (poutre::format("LoadFromHDF5: unsupported cTYpe {%s}",boost::lexical_cast<std::string>(ctype))));
             }
             break;
         } // case 2!
@@ -766,9 +742,7 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
-                }
+                        (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));                }
                 break;
             case CompoundType::CompoundType_3Planes:
                 switch (ptype)
@@ -792,8 +766,7 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                 }
                 break;
             case CompoundType::CompoundType_4Planes:
@@ -818,15 +791,13 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                 }
                 break; // ptype
 
             default:
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("LoadFromHDF5: unsupported cTYpe %s") % boost::lexical_cast<std::string>(ctype))
-                        .str());
+                    (poutre::format("LoadFromHDF5: unsupported cTYpe {%s}",boost::lexical_cast<std::string>(ctype))));
             }
             break;
         } // case 3!
@@ -855,8 +826,7 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                 }
                 break;
             case CompoundType::CompoundType_3Planes:
@@ -881,8 +851,7 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                 }
                 break;
             case CompoundType::CompoundType_4Planes:
@@ -907,20 +876,18 @@ namespace poutre
                     break;
                 default:
                     POUTRE_RUNTIME_ERROR(
-                        (boost::format("LoadFromHDF5: unsupported pTYpe %s") % boost::lexical_cast<std::string>(ptype))
-                            .str());
+                        (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}",boost::lexical_cast<std::string>(ptype))));
                 }
                 break; // ptype
 
             default:
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("LoadFromHDF5: unsupported cTYpe %s") % boost::lexical_cast<std::string>(ctype))
-                        .str());
+                    (poutre::format("LoadFromHDF5: unsupported cTYpe {%s}",boost::lexical_cast<std::string>(ctype))));
             }
             break;
         } // case 4!
         default:
-            POUTRE_RUNTIME_ERROR((boost::format("StoreWithHDF5: unsupported number of dims %d") % coords.size()).str());
+            POUTRE_RUNTIME_ERROR((poutre::format("StoreWithHDF5: unsupported number of dims {}", coords.size())));
         } // dims
 
         return res;

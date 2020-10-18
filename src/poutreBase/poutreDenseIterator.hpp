@@ -20,6 +20,7 @@
 
 #include <iterator>
 
+#include <poutreBase/poutreConfig.hpp>
 #ifndef POUTRE_TYPE_HPP__
 #include <poutreBase/poutreTypes.hpp>
 #endif
@@ -60,100 +61,103 @@ namespace poutre
         {
         }
 
-        operator bool() const
+        POUTRE_CXX14_CONSTEXPR  operator bool() const
         {
             if ((m_ptr) && (m_ptrorig))
                 return true;
             return false;
         }
 
-        bool operator==(const self_type &rhs) const
+        POUTRE_CXX14_CONSTEXPR bool operator==(const self_type &rhs) const
         {
             return (m_ptr == rhs.getConstPtr() && m_ptrorig == rhs.getConstOrigPtr());
         }
-        bool operator!=(const self_type &rhs) const
+        POUTRE_CXX14_CONSTEXPR bool operator!=(const self_type &rhs) const
         {
             return (m_ptr != rhs.getConstPtr() || m_ptrorig != rhs.getConstOrigPtr());
         }
 
-        pdense_iterator<DataType> &operator+=(const std::ptrdiff_t &movement)
+        POUTRE_CXX14_CONSTEXPR pdense_iterator<DataType> &operator+=(const std::ptrdiff_t &movement)
         {
             m_ptr += movement;
             return (*this);
         }
-        pdense_iterator<DataType> &operator-=(const std::ptrdiff_t &movement)
+        POUTRE_CXX14_CONSTEXPR pdense_iterator<DataType> &operator-=(const std::ptrdiff_t &movement)
         {
             m_ptr -= movement;
             return (*this);
         }
-        pdense_iterator<DataType> &operator++()
+        POUTRE_CXX14_CONSTEXPR pdense_iterator<DataType> &operator++()
         {
             ++m_ptr;
             return (*this);
         }
-        pdense_iterator<DataType> &operator--()
+        POUTRE_CXX14_CONSTEXPR pdense_iterator<DataType> &operator--()
         {
             --m_ptr;
             return (*this);
         }
 
-        pdense_iterator<DataType> operator++(int)
+        POUTRE_CXX14_CONSTEXPR pdense_iterator<DataType> operator++(int)
         {
             auto temp(*this);
             ++m_ptr;
             return temp;
         }
-        pdense_iterator<DataType> operator--(int)
+        POUTRE_CXX14_CONSTEXPR pdense_iterator<DataType> operator--(int)
         {
             auto temp(*this);
             --m_ptr;
             return temp;
         }
 
-        ptrdiff_t operator-(const self_type &rawIterator)
+        POUTRE_CXX14_CONSTEXPR ptrdiff_t operator-(const self_type &rawIterator)
         {
             return std::distance(rawIterator.getPtr(), this->getPtr());
         }
 
-        reference operator*()
+        POUTRE_CXX14_CONSTEXPR reference operator*()
         {
             return *m_ptr;
         }
-        const reference operator*() const
+
+        POUTRE_CXX14_CONSTEXPR const reference operator*() const
         {
             return *m_ptr;
         }
-        pointer operator->()
+        
+        POUTRE_CXX14_CONSTEXPR pointer operator->()
         {
             return m_ptr;
         }
 
-        pointer getPtr() const
+        POUTRE_CXX14_CONSTEXPR pointer getPtr() const
         {
             return m_ptr;
         }
-        pointer getOrigPtr() const
+
+        POUTRE_CXX14_CONSTEXPR pointer getOrigPtr() const
         {
             return m_ptrorig;
         }
-        void setPtr(DataType *ptr)
+        POUTRE_CXX14_CONSTEXPR void setPtr(DataType *ptr)
         {
             m_ptr = ptr;
         }
-        void setOrigPtr(DataType *ptr)
+        POUTRE_CXX14_CONSTEXPR void setOrigPtr(DataType *ptr)
         {
             m_ptrorig = ptr;
         }
-        const pointer getConstPtr() const
+        POUTRE_CXX14_CONSTEXPR const pointer getConstPtr() const
         {
             return m_ptr;
         }
-        const pointer getConstOrigPtr() const
+        POUTRE_CXX14_CONSTEXPR const pointer getConstOrigPtr() const
         {
             return m_ptrorig;
         }
 
-        const offset getOffset() const
+        POUTRE_CXX14_CONSTEXPR const offset getOffset() const
         {
             return m_ptr - m_ptrorig;
         }

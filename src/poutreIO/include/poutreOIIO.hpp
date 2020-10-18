@@ -85,8 +85,7 @@ namespace poutre
             if (!(bf::exists(localPath)))
             {
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("FillImageFromOIIOScalar: provided path %s doesn't exists") % localPath.string())
-                        .str());
+                    (poutre::format("FillImageFromOIIOScalar: provided path {%s} doesn't exists", localPath.string())));
             }
             auto in(OIIO::ImageInput::open(path));
             if (!in)
@@ -101,14 +100,12 @@ namespace poutre
             if (spec.nchannels != 1)
             {
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("FillImageFromOIIOScalar: wrong number of channels expected 1 found %d") %
-                     spec.nchannels)
-                        .str());
+                    (poutre::format("FillImageFromOIIOScalar: wrong number of channels expected 1 found {%d}", spec.nchannels)));
             }
             if (spec.depth > 1)
             {
                 POUTRE_RUNTIME_ERROR(
-                    boost::format("FillImageFromOIIOScalar: wrong number of dim expected 2 found depth dim"));
+                    poutre::format("FillImageFromOIIOScalar: wrong number of dim expected 2 found depth dim"));
             }
             FillImageFromOIIOScalar(*in, im);
 
@@ -130,9 +127,7 @@ namespace poutre
             if (spec.nchannels != 3)
             {
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("FillImageFromOIIOCompound3: wrong number of channels expected 3 found %d") %
-                     spec.nchannels)
-                        .str());
+                    (poutre::format("FillImageFromOIIOCompound3: wrong number of channels expected 3 found {%d}", spec.nchannels)));
             }
 
             std::vector<T> tmp;
@@ -163,8 +158,7 @@ namespace poutre
             if (!(bf::exists(localPath)))
             {
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("FillImageFromOIIOCompound3: provided path %s doesn't exists") % localPath.string())
-                        .str());
+                    (poutre::format("FillImageFromOIIOCompound3: provided path {%s} doesn't exists",localPath.string())));
             }
             auto in(OIIO::ImageInput::open(path));
             if (!in)
@@ -179,14 +173,12 @@ namespace poutre
             if (spec.nchannels != 3)
             {
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("FillImageFromOIIOCompound3: wrong number of channels expected 3 found %d") %
-                     spec.nchannels)
-                        .str());
+                    (poutre::format("FillImageFromOIIOCompound3: wrong number of channels expected 3 found {%d}",spec.nchannels)));
             }
             if (spec.depth > 1)
             {
                 POUTRE_RUNTIME_ERROR(
-                    boost::format("FillImageFromOIIOCompound3: wrong number of dim expected 2 found depth dim"));
+                    poutre::format("FillImageFromOIIOCompound3: wrong number of dim expected 2 found depth dim"));
             }
             FillImageFromOIIOCompound3(*in, im);
 
@@ -208,9 +200,8 @@ namespace poutre
             if (spec.nchannels != 4) //-V112
             {
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("FillImageFromOIIOCompound4: wrong number of channels expected 4 found %d") %
-                     spec.nchannels)
-                        .str());
+                    (poutre::format("FillImageFromOIIOCompound4: wrong number of channels expected 4 found %d",
+                     spec.nchannels)));
             }
 
             std::vector<T> tmp;
@@ -243,8 +234,8 @@ namespace poutre
             if (!(bf::exists(localPath)))
             {
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("FillImageFromOIIOCompound4: provided path %s doesn't exists") % localPath.string())
-                        .str());
+                    (poutre::format("FillImageFromOIIOCompound4: provided path {%s} doesn't exists",localPath.string())
+                        ));
             }
             auto in(OIIO::ImageInput::open(path));
             if (!in)
@@ -259,14 +250,13 @@ namespace poutre
             if (spec.nchannels != 4) //-V112
             {
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("FillImageFromOIIOCompound4: wrong number of channels expected 4 found %d") %
-                     spec.nchannels)
-                        .str());
+                    (poutre::format("FillImageFromOIIOCompound4: wrong number of channels expected 4 found {%d}",
+                     spec.nchannels)));
             }
             if (spec.depth > 1)
             {
                 POUTRE_RUNTIME_ERROR(
-                    boost::format("FillImageFromOIIOCompound4: wrong number of dim expected 2 found depth dim"));
+                    poutre::format("FillImageFromOIIOCompound4: wrong number of dim expected 2 found depth dim"));
             }
             FillImageFromOIIOCompound4(*in, im);
 
@@ -371,7 +361,7 @@ namespace poutre
             if (!(bf::exists(dir)))
             {
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("StoreWithOIIOScalar: provided path %s doesn't exists") % dir).str());
+                    (poutre::format("StoreWithOIIOScalar: provided path {%s} doesn't exists", dir)));
             }
             const auto shape = im.shape();
 
@@ -486,7 +476,7 @@ namespace poutre
             if (!(bf::exists(dir)))
             {
                 POUTRE_RUNTIME_ERROR(
-                    (boost::format("StoreWithOIIOCompound3: provided path %s doesn't exists") % dir).str());
+                    (poutre::format("StoreWithOIIOCompound3: provided path {%s} doesn't exists", dir)));
             }
             const auto shape = im.shape();
 

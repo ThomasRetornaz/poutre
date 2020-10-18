@@ -11,7 +11,7 @@ set(PoutreBaseSRC_PUBLICHEADERS
   ${PoutreBaseSubdirectory}/poutreConfig.hpp
   ${PoutreBaseSubdirectory}/poutreTypes.hpp
   ${PoutreBaseSubdirectory}/poutreJsonSerialization.hpp
-  ${PoutreBaseSubdirectory}/poutreTrace.hpp
+  #${PoutreBaseSubdirectory}/poutreTrace.hpp
   ${PoutreBaseSubdirectory}/poutreRegistrar.hpp
   ${PoutreBaseSubdirectory}/poutreChronos.hpp
   ${PoutreBaseSubdirectory}/poutreGeometry.hpp
@@ -24,7 +24,7 @@ set(PoutreBaseSRC_PUBLICHEADERS
 
 set(PoutreBaseSRC_CPP
   ${PoutreBaseSubdirectory}/src/poutreJsonSerialization.cpp
-  ${PoutreBaseSubdirectory}/src/poutreTrace.cpp
+  #${PoutreBaseSubdirectory}/src/poutreTrace.cpp
   ${PoutreBaseSubdirectory}/src/poutreGeometry.cpp
   ${PoutreBaseSubdirectory}/src/poutreCoordinate.cpp
   ${PoutreBaseSubdirectory}/src/poutreType.cpp
@@ -55,6 +55,7 @@ target_link_libraries(PoutreBase
   PUBLIC ${Boost_LOG_LIBRARY}
   PUBLIC ${Boost_LOG_SETUP_LIBRARY}
   PUBLIC jsoncpp_lib 
+  PUBLIC fmt
   INTERFACE xsimd 
   # INTERFACE Eigen  
   # INTERFACE ${SIMD_LIB}

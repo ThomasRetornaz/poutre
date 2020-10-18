@@ -2,7 +2,7 @@
 cmake_minimum_required (VERSION 3.0)
 project(Poutre C CXX)
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 # some global properties
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -17,7 +17,7 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 OPTION(POUTRE_BUILD_TEST "Build Tests Suites" ON)
-OPTION(POUTRE_BUILD_BENCH "Build Benchmark Suites" OFF)
+OPTION(POUTRE_BUILD_BENCH "Build Benchmark Suites" ON)
 OPTION(POUTRE_BUILD_PY "Build python exports" ON)
 
 if(POUTRE_BUILD_TEST)
@@ -149,6 +149,8 @@ add_definitions(-DBOOST_TEST_DYN_LINK)
 include_directories(BEFORE "${SIMD_INLCUDE_DIRECTORY}")
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${JSONCPP_INCLUDE_DIR})
+include_directories(BEFORE ${FMT_INCLUDES})
+#message(FATAL_ERROR "${FMT_INCLUDES}")
 
 # warning the order is important
 include_directories(${POUTRE_SRC_DIR})

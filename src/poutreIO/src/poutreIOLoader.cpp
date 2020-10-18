@@ -51,7 +51,7 @@ namespace poutre
         bf::path localPath(m_imgPath);
         if (!bf::exists(localPath))
         {
-            POUTRE_RUNTIME_ERROR((boost::format("ImageLoader:: path don't exist %s") % m_imgPath).str());
+            POUTRE_RUNTIME_ERROR((poutre::format("ImageLoader:: path don't exist {%s}",m_imgPath)));
         }
         // switch on extension
         auto extension = bf::extension(localPath);
