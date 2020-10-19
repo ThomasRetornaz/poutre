@@ -44,10 +44,13 @@ namespace poutre
     template <typename DataType> class pdense_iterator
     {
       public:
-        using reference = DataType &;
-        using pointer = DataType *;
-        using difference_type = ptrdiff_t;
         using value_type = DataType;
+        using const_value_type = typename std::add_const<value_type>::type;
+        using pointer = typename std::add_pointer<value_type>::type;
+        using reference = typename std::add_lvalue_reference<value_type>::type;
+        using const_pointer = typename std::add_pointer<const_value_type>::type;
+        using const_reference = typename std::add_lvalue_reference<const_value_type>::type;
+        using difference_type = std::ptrdiff_t;
         using iterator_category = contiguous_iterator_tag;
         using self_type = pdense_iterator<DataType>;
 
@@ -121,7 +124,7 @@ namespace poutre
             return *m_ptr;
         }
 
-        POUTRE_CXX14_CONSTEXPR const reference operator*() const
+        POUTRE_CXX14_CONSTEXPR const_reference operator*() const
         {
             return *m_ptr;
         }
@@ -148,11 +151,11 @@ namespace poutre
         {
             m_ptrorig = ptr;
         }
-        POUTRE_CXX14_CONSTEXPR const pointer getConstPtr() const
+        POUTRE_CXX14_CONSTEXPR const_pointer getConstPtr() const
         {
             return m_ptr;
         }
-        POUTRE_CXX14_CONSTEXPR const pointer getConstOrigPtr() const
+        POUTRE_CXX14_CONSTEXPR const_pointer getConstOrigPtr() const
         {
             return m_ptrorig;
         }
@@ -172,11 +175,15 @@ namespace poutre
     {
       public:
         using parent = pdense_iterator<DataType>;
-        using reference = typename parent::reference;
-        using pointer = typename parent::pointer;
-        using difference_type = typename parent::difference_type;
-        using value_type = typename parent::value_type;
-        using iterator_category = typename parent::iterator_category;
+
+        using value_type = typename parent::value_type;;
+        using const_value_type = typename std::add_const<value_type>::type;
+        using pointer = typename std::add_pointer<value_type>::type;
+        using reference = typename std::add_lvalue_reference<value_type>::type;
+        using const_pointer = typename std::add_pointer<const_value_type>::type;
+        using const_reference = typename std::add_lvalue_reference<const_value_type>::type;
+        using difference_type = std::ptrdiff_t;
+
         using parent::m_ptr;
         using parent::m_ptrorig;
         using self_type = pdense_reverse_iterator<DataType>;

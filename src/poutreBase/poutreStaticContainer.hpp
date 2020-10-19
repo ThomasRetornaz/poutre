@@ -35,7 +35,6 @@
 
 #include <stdexcept>
 #include <array>
-#include <compare>
 #include <iterator>
 #include <sstream>
 

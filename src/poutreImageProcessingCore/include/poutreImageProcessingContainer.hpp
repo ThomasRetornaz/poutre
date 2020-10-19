@@ -558,12 +558,12 @@ POUTRE_CXX14_CONSTEXPR const size_type size() const POUTRE_NOEXCEPT
         using parent_template::stride;
 
         template <ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
-        scoord GetYSize() const POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR scoord GetYSize() const POUTRE_NOEXCEPT
         {
             return this->m_coordinnates[0];
         }
         template <ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
-        scoord GetXSize() const POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR scoord GetXSize() const POUTRE_NOEXCEPT
         {
             return this->m_coordinnates[1];
         }
@@ -747,28 +747,28 @@ POUTRE_CXX14_CONSTEXPR const size_type size() const POUTRE_NOEXCEPT
 
     // Linear view, linearize container
     template <class valuetype, std::ptrdiff_t Rank>
-    poutre::array_view<valuetype, 1> lview(DenseImage<valuetype, Rank> &iImg)
+    POUTRE_CXX14_CONSTEXPR array_view<valuetype, 1> lview(DenseImage<valuetype, Rank> &iImg)
     {
         return poutre::array_view<valuetype, 1>(iImg.data(), bd1d{(ptrdiff_t)iImg.size()});
     }
 
     // FIXME convertion loose qualifiers
     template <class valuetype, std::ptrdiff_t Rank>
-    poutre::array_view<valuetype, 1> lview(const DenseImage<valuetype, Rank> &iImg)
+    POUTRE_CXX14_CONSTEXPR poutre::array_view<valuetype, 1> lview(const DenseImage<valuetype, Rank> &iImg)
     { //-V659
         return view(const_cast<DenseImage<valuetype, Rank> &>(iImg));
     }
 
     // Default view
     template <class valuetype, std::ptrdiff_t Rank>
-    poutre::array_view<valuetype, Rank> view(DenseImage<valuetype, Rank> &iImg)
+    POUTRE_CXX14_CONSTEXPR poutre::array_view<valuetype, Rank> view(DenseImage<valuetype, Rank> &iImg)
     {
         return poutre::array_view<valuetype, Rank>(iImg.data(), iImg.shape());
     }
 
     // FIXME convertion loose qualifiers
     template <class valuetype, std::ptrdiff_t Rank>
-    poutre::array_view<valuetype, Rank> view(const DenseImage<valuetype, Rank> &iImg)
+    POUTRE_CXX14_CONSTEXPR poutre::array_view<valuetype, Rank> view(const DenseImage<valuetype, Rank> &iImg)
     {
         return view(const_cast<DenseImage<valuetype, Rank> &>(iImg));
     }
