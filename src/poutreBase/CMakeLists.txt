@@ -29,6 +29,7 @@ set(PoutreBaseSRC_CPP
   ${PoutreBaseSubdirectory}/src/poutreCoordinate.cpp
   ${PoutreBaseSubdirectory}/src/poutreType.cpp
   ${PoutreBaseSubdirectory}/src/poutreChronos.cpp
+  ${PoutreBaseSubdirectory}/src/poutreThreading.cpp
   )
 source_group(details FILES ${PoutreBaseSRC_DETAILS})
 source_group(src FILES ${PoutreBaseSRC_CPP})

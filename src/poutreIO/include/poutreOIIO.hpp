@@ -99,8 +99,8 @@ namespace poutre
             const OIIO::ImageSpec &spec = in->spec();
             if (spec.nchannels != 1)
             {
-                POUTRE_RUNTIME_ERROR(
-                    (poutre::format("FillImageFromOIIOScalar: wrong number of channels expected 1 found {%d}", spec.nchannels)));
+                POUTRE_RUNTIME_ERROR((poutre::format(
+                    "FillImageFromOIIOScalar: wrong number of channels expected 1 found {%d}", spec.nchannels)));
             }
             if (spec.depth > 1)
             {
@@ -126,8 +126,8 @@ namespace poutre
             const OIIO::ImageSpec &spec = input.spec();
             if (spec.nchannels != 3)
             {
-                POUTRE_RUNTIME_ERROR(
-                    (poutre::format("FillImageFromOIIOCompound3: wrong number of channels expected 3 found {%d}", spec.nchannels)));
+                POUTRE_RUNTIME_ERROR((poutre::format(
+                    "FillImageFromOIIOCompound3: wrong number of channels expected 3 found {%d}", spec.nchannels)));
             }
 
             std::vector<T> tmp;
@@ -157,8 +157,8 @@ namespace poutre
             bf::path localPath(path);
             if (!(bf::exists(localPath)))
             {
-                POUTRE_RUNTIME_ERROR(
-                    (poutre::format("FillImageFromOIIOCompound3: provided path {%s} doesn't exists",localPath.string())));
+                POUTRE_RUNTIME_ERROR((poutre::format("FillImageFromOIIOCompound3: provided path {%s} doesn't exists",
+                                                     localPath.string())));
             }
             auto in(OIIO::ImageInput::open(path));
             if (!in)
@@ -172,8 +172,8 @@ namespace poutre
             const OIIO::ImageSpec &spec = in->spec();
             if (spec.nchannels != 3)
             {
-                POUTRE_RUNTIME_ERROR(
-                    (poutre::format("FillImageFromOIIOCompound3: wrong number of channels expected 3 found {%d}",spec.nchannels)));
+                POUTRE_RUNTIME_ERROR((poutre::format(
+                    "FillImageFromOIIOCompound3: wrong number of channels expected 3 found {%d}", spec.nchannels)));
             }
             if (spec.depth > 1)
             {
@@ -199,9 +199,8 @@ namespace poutre
             const OIIO::ImageSpec &spec = input.spec();
             if (spec.nchannels != 4) //-V112
             {
-                POUTRE_RUNTIME_ERROR(
-                    (poutre::format("FillImageFromOIIOCompound4: wrong number of channels expected 4 found %d",
-                     spec.nchannels)));
+                POUTRE_RUNTIME_ERROR((poutre::format(
+                    "FillImageFromOIIOCompound4: wrong number of channels expected 4 found %d", spec.nchannels)));
             }
 
             std::vector<T> tmp;
@@ -233,9 +232,8 @@ namespace poutre
             bf::path localPath(path);
             if (!(bf::exists(localPath)))
             {
-                POUTRE_RUNTIME_ERROR(
-                    (poutre::format("FillImageFromOIIOCompound4: provided path {%s} doesn't exists",localPath.string())
-                        ));
+                POUTRE_RUNTIME_ERROR((poutre::format("FillImageFromOIIOCompound4: provided path {%s} doesn't exists",
+                                                     localPath.string())));
             }
             auto in(OIIO::ImageInput::open(path));
             if (!in)
@@ -249,9 +247,8 @@ namespace poutre
             const OIIO::ImageSpec &spec = in->spec();
             if (spec.nchannels != 4) //-V112
             {
-                POUTRE_RUNTIME_ERROR(
-                    (poutre::format("FillImageFromOIIOCompound4: wrong number of channels expected 4 found {%d}",
-                     spec.nchannels)));
+                POUTRE_RUNTIME_ERROR((poutre::format(
+                    "FillImageFromOIIOCompound4: wrong number of channels expected 4 found {%d}", spec.nchannels)));
             }
             if (spec.depth > 1)
             {
@@ -360,8 +357,7 @@ namespace poutre
             bf::path dir = localPath.parent_path();
             if (!(bf::exists(dir)))
             {
-                POUTRE_RUNTIME_ERROR(
-                    (poutre::format("StoreWithOIIOScalar: provided path {%s} doesn't exists", dir)));
+                POUTRE_RUNTIME_ERROR((poutre::format("StoreWithOIIOScalar: provided path {%s} doesn't exists", dir)));
             }
             const auto shape = im.shape();
 

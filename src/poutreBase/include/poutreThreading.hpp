@@ -18,14 +18,18 @@
  *
  */
 
+#ifndef POUTRE_BASE_HPP__
+#include <poutreBase/poutreBase.hpp>
+#endif
+
 #include <condition_variable>
 #include <future>
 #include <mutex>
+#include <omp.h>
 #include <queue>
 #include <thread>
 #include <utility>
 #include <vector>
-
 namespace poutre
 {
     /**
@@ -35,6 +39,25 @@ namespace poutre
      */
     namespace thread
     {
+
+        // Use max threads-1 as a reasonnable default
+        static unsigned int POUTRE_NUM_THREADS = std::max(std::thread::hardware_concurrency(), 2u) - 1u;
+
+        //! helper class to change the number of thread used by poutre at scope level
+        //@warning We only force if OMP_NUM_THREADS environnement variable is not set by user
+        struct BASE_API ScopedForceNbThreads
+        {
+            ScopedForceNbThreads(unsigned int nbThread);
+            ScopedForceNbThreads(const ScopedForceNbThreads &) = delete;
+            ScopedForceNbThreads operator=(const ScopedForceNbThreads &) = delete;
+            ScopedForceNbThreads(ScopedForceNbThreads &&) = delete;
+            ScopedForceNbThreads operator=(ScopedForceNbThreads &&) = delete;
+            ~ScopedForceNbThreads();
+
+          private:
+            unsigned int nbThreadToRestore;
+            std::mutex m_mutex;
+        };
         /**
          * RAII helpers to automatically joins on dtor
          */
@@ -300,7 +323,8 @@ namespace poutre
 
           public:
             TreadPool(unsigned int threadCount)
-                : m_pool_work_queue(), m_done(false), m_threads(), m_joiner(m_threads), m_thread_count(threadCount)
+                : m_pool_work_queue(), m_done(false), m_threads(), m_joiner(m_threads),
+                  m_thread_count(std::min(POUTRE_NUM_THREADS, threadCount))
             {
                 if (0u == m_thread_count)
                 {
@@ -321,7 +345,7 @@ namespace poutre
                 }
             }
 
-            TreadPool() : TreadPool(std::max(std::thread::hardware_concurrency(), 2u) - 1u)
+            TreadPool() : TreadPool(POUTRE_NUM_THREADS)
             {
             }
 

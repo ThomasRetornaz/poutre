@@ -200,7 +200,7 @@ namespace poutre
         // std::array like interface
 
         // Capacity
-POUTRE_CXX14_CONSTEXPR const size_type size() const POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR const size_type size() const POUTRE_NOEXCEPT
         {
             return m_numelement;
         }
@@ -224,7 +224,7 @@ POUTRE_CXX14_CONSTEXPR const size_type size() const POUTRE_NOEXCEPT
             return m_data[n];
         }
 
-       POUTRE_CXX14_CONSTEXPR const_reference operator[](size_type n) const POUTRE_NOEXCEPT
+        POUTRE_CXX14_CONSTEXPR const_reference operator[](size_type n) const POUTRE_NOEXCEPT
         {
             POUTRE_ASSERTCHECK(n < m_numelement, "Access out of bound");
             // POUTRE_ASSERTCHECK(n >= 0, "Access out of bound");
@@ -289,9 +289,9 @@ POUTRE_CXX14_CONSTEXPR const size_type size() const POUTRE_NOEXCEPT
         }
 
         POUTRE_CXX14_CONSTEXPR void swap(self_type &rhs) // POUTRE_NOEXCEPT(POUTRE_NOEXCEPT
-                                  // (swap(declval<value_type&>( ),
-                                  // declval<value_type&>( )))) //wait MSVC2013
-                                  // noexcept impl ...
+                                                         // (swap(declval<value_type&>( ),
+                                                         // declval<value_type&>( )))) //wait MSVC2013
+                                                         // noexcept impl ...
         {
             if (this != &rhs)
             {
@@ -646,9 +646,9 @@ POUTRE_CXX14_CONSTEXPR const size_type size() const POUTRE_NOEXCEPT
         using parent_template::fill;
 
         POUTRE_CXX14_CONSTEXPR void swap(self_type &rhs) // POUTRE_NOEXCEPT(POUTRE_NOEXCEPT
-                                  // (swap(declval<value_type&>( ),
-                                  // declval<value_type&>( )))) //wait MSVC2013
-                                  // noexcept impl ...
+                                                         // (swap(declval<value_type&>( ),
+                                                         // declval<value_type&>( )))) //wait MSVC2013
+                                                         // noexcept impl ...
         {
             if (this != &rhs)
             {

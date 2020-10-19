@@ -64,7 +64,7 @@ namespace poutre
         {
         }
 
-        POUTRE_CXX14_CONSTEXPR  operator bool() const
+        POUTRE_CXX14_CONSTEXPR operator bool() const
         {
             if ((m_ptr) && (m_ptrorig))
                 return true;
@@ -128,7 +128,7 @@ namespace poutre
         {
             return *m_ptr;
         }
-        
+
         POUTRE_CXX14_CONSTEXPR pointer operator->()
         {
             return m_ptr;
