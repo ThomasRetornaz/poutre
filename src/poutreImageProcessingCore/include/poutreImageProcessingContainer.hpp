@@ -81,10 +81,11 @@ namespace poutre
 
       public:
         using value_type = valuetype; // typename TypeTraits<ptype>::storage_type;
-        using pointer = typename allocator_type_t::pointer;
-        using const_pointer = typename allocator_type_t::const_pointer;
-        using reference = value_type &;
-        using const_reference = value_type const &;
+        using const_value_type = typename std::add_const<value_type>::type;
+        using pointer = typename std::add_pointer<value_type>::type;
+        using reference = typename std::add_lvalue_reference<value_type>::type;
+        using const_pointer = typename std::add_pointer<const_value_type>::type;
+        using const_reference = typename std::add_lvalue_reference<const_value_type>::type;
         using difference_type = std::ptrdiff_t;
 
         using iterator = pdense_iterator<value_type>;
@@ -113,10 +114,10 @@ namespace poutre
         using self_type = DenseTensor<valuetype, NumDims, allocator_type_t>;
 
       protected:
-        DenseTensor() : m_data(nullptr), m_coordinnates(), m_strides(), m_allocator(), m_numelement(0)
+       POUTRE_CXX14_CONSTEXPR DenseTensor() : m_data(nullptr), m_coordinnates(), m_strides(), m_allocator(), m_numelement(0)
         {
         }
-        DenseTensor(const std::vector<size_t> &dims)
+        POUTRE_CXX14_CONSTEXPR DenseTensor(const std::vector<size_t> &dims)
             : m_data(nullptr), m_coordinnates(), m_strides(), m_allocator(), m_numelement(0)
         {
             if (dims.size() != m_numdims)
@@ -145,7 +146,7 @@ namespace poutre
             }
         }
 
-        DenseTensor(const std::initializer_list<size_t> &dims)
+        POUTRE_CXX14_CONSTEXPR DenseTensor(const std::initializer_list<size_t> &dims)
             : m_data(nullptr), m_coordinnates(), m_strides(), m_allocator(), m_numelement(0)
         {
             if (dims.size() != m_numdims)
@@ -349,7 +350,7 @@ namespace poutre
       protected:
         // protected copyctor used through clone
 
-        DenseTensor(const self_type &rhs)
+        POUTRE_CXX14_CONSTEXPR DenseTensor(const self_type &rhs)
             : m_data(nullptr), m_numelement(rhs.m_numelement), m_coordinnates(rhs.m_coordinnates),
               m_strides(rhs.m_strides), m_allocator(rhs.m_allocator)
         {
@@ -363,7 +364,7 @@ namespace poutre
 
         // move constructor
 
-        DenseTensor(self_type &&rhs) noexcept : m_data(nullptr), m_numelement(0), m_coordinnates(), m_allocator()
+        POUTRE_CXX14_CONSTEXPR DenseTensor(self_type &&rhs) noexcept : m_data(nullptr), m_numelement(0), m_coordinnates(), m_allocator()
         {
             m_data = rhs.m_data;
             m_numelement = rhs.m_numelement;
@@ -415,10 +416,12 @@ namespace poutre
         using allocator_type = typename parent_template::allocator_type;
         using value_type = typename parent_template::value_type; // typename
                                                                  // TypeTraits<ptype>::storage_type;
-        using pointer = typename allocator_type_t::pointer;
-        using const_pointer = typename allocator_type_t::const_pointer;
-        using reference = value_type &;
-        using const_reference = value_type const &;
+        using const_value_type = typename std::add_const<value_type>::type;
+        using pointer = typename std::add_pointer<value_type>::type;
+        using reference = typename std::add_lvalue_reference<value_type>::type;
+        using const_pointer = typename std::add_pointer<const_value_type>::type;
+        using const_reference = typename std::add_lvalue_reference<const_value_type>::type;
+
         using difference_type = std::ptrdiff_t;
 
         using iterator = pdense_iterator<value_type>;
@@ -436,8 +439,10 @@ namespace poutre
         static const ImgType m_imgtype = ImgType::ImgType_Dense;
         static const PType m_ptype = TypeTraits<value_type>::pixel_type;
         static const CompoundType m_ctype = TypeTraits<value_type>::compound_type;
-
-        DenseImage(const std::vector<size_t> &dims) : parent_template()
+    protected:
+        using  parent_template::m_coordinnates;
+    public:
+        POUTRE_CXX14_CONSTEXPR DenseImage(const std::vector<size_t> &dims) : parent_template()
         {
             if (dims.size() != parent_template::m_numdims)
                 POUTRE_RUNTIME_ERROR("Invalid input initializer regarding NumDims of "
@@ -465,7 +470,7 @@ namespace poutre
             }
         }
 
-        DenseImage(const std::initializer_list<size_t> &dims) : parent_template()
+        POUTRE_CXX14_CONSTEXPR DenseImage(const std::initializer_list<size_t> &dims) : parent_template()
         {
             if (dims.size() != parent_template::m_numdims)
                 POUTRE_RUNTIME_ERROR("Invalid input initializer regarding NumDims of "
@@ -552,10 +557,18 @@ namespace poutre
             return out.str();
         }
 
-        using parent_template::bound;
-        using parent_template::GetNumDims;
-        using parent_template::shape;
-        using parent_template::stride;
+        POUTRE_CXX14_CONSTEXPR const coordinate_type bound() const POUTRE_NOEXCEPT
+        {
+            return this->m_coordinnates;
+        }
+        POUTRE_CXX14_CONSTEXPR const coordinate_type shape() const POUTRE_NOEXCEPT
+        {
+            return this->bound();
+        }
+        POUTRE_CXX14_CONSTEXPR const index_type stride() const POUTRE_NOEXCEPT
+        {
+            return this->m_strides;
+        }
 
         template <ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
         POUTRE_CXX14_CONSTEXPR scoord GetYSize() const POUTRE_NOEXCEPT
@@ -747,28 +760,28 @@ namespace poutre
 
     // Linear view, linearize container
     template <class valuetype, std::ptrdiff_t Rank>
-    POUTRE_CXX14_CONSTEXPR array_view<valuetype, 1> lview(DenseImage<valuetype, Rank> &iImg)
+    /*POUTRE_CXX14_CONSTEXPR*/ array_view<valuetype, 1> lview(DenseImage<valuetype, Rank> &iImg)
     {
         return poutre::array_view<valuetype, 1>(iImg.data(), bd1d{(ptrdiff_t)iImg.size()});
     }
 
     // FIXME convertion loose qualifiers
     template <class valuetype, std::ptrdiff_t Rank>
-    POUTRE_CXX14_CONSTEXPR poutre::array_view<valuetype, 1> lview(const DenseImage<valuetype, Rank> &iImg)
+    /*POUTRE_CXX14_CONSTEXPR*/ poutre::array_view<valuetype, 1> lview(const DenseImage<valuetype, Rank> &iImg)
     { //-V659
         return view(const_cast<DenseImage<valuetype, Rank> &>(iImg));
     }
 
     // Default view
     template <class valuetype, std::ptrdiff_t Rank>
-    POUTRE_CXX14_CONSTEXPR poutre::array_view<valuetype, Rank> view(DenseImage<valuetype, Rank> &iImg)
+    /*POUTRE_CXX14_CONSTEXPR*/ poutre::array_view<valuetype, Rank> view(DenseImage<valuetype, Rank> &iImg)
     {
         return poutre::array_view<valuetype, Rank>(iImg.data(), iImg.shape());
     }
 
     // FIXME convertion loose qualifiers
     template <class valuetype, std::ptrdiff_t Rank>
-    POUTRE_CXX14_CONSTEXPR poutre::array_view<valuetype, Rank> view(const DenseImage<valuetype, Rank> &iImg)
+    /*POUTRE_CXX14_CONSTEXPR*/ poutre::array_view<valuetype, Rank> view(const DenseImage<valuetype, Rank> &iImg)
     {
         return view(const_cast<DenseImage<valuetype, Rank> &>(iImg));
     }

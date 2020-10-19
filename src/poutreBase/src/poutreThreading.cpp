@@ -13,9 +13,7 @@ namespace poutre
             POUTRE_NUM_THREADS = nbThread;
             if (std::getenv("OMP_NUM_THREADS") == NULL)
             {
-#ifndef MOBILE_BUILD
                 omp_set_num_threads(POUTRE_NUM_THREADS);
-#endif
             }
         }
         ScopedForceNbThreads::~ScopedForceNbThreads()

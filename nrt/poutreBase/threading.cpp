@@ -144,7 +144,7 @@ TEST(threading, threadpool_ThreadsAreReused)
     using namespace std::chrono_literals;
     using namespace poutre::thread;
 
-    const size_t THREAD_COUNT{4u}; //-V112
+    const size_t THREAD_COUNT{2u};
     TreadPool pool{THREAD_COUNT};
     std::vector<poutre::thread::TaskFuture<std::thread::id>> futures;
     std::set<std::thread::id> thread_ids;
