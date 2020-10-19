@@ -306,7 +306,28 @@ namespace poutre
     };
 
     /////Square
-
+    template <typename TIn, typename TOut, class HelperOp> struct NLS_c8_2dErodeDilateCentralPartFunctor
+    {
+        using tmpBuffer = std::vector<TIn, xs::aligned_allocator<TIn, SIMD_IDEAL_MAX_ALIGN_BYTES>>;
+        using lineView = TIn *__restrict;
+        tmpBuffer tempLine, tempLine1, tempLine2, tempLine3;
+        lineView bufTempLine, bufTempLine1, bufTempLine2, bufTempLine3;
+        lineView bufInputPreviousLine;
+        lineView bufInputCurrentLine;
+        lineView bufInputNextLine;
+        lineView bufOuputCurrentLine;
+        scoord m_xsize;
+        explicit NLS_c8_2dErodeDilateCentralPartFunctor(scoord xsize)
+            : tempLine(xsize), tempLine1(xsize), tempLine2(xsize), tempLine3(xsize), bufTempLine(tempLine.data()),
+              bufTempLine1(tempLine1.data()), bufTempLine2(tempLine2.data()), bufTempLine3(tempLine3.data()),
+              m_xsize(xsize)
+        {
+        }
+        void operator()(const lineView lineDataIn, lineView lineDataOut, scoord start, scoord stop)
+        {
+            POUTRE_ASSERTCHECK(start >= 2, "out of bounds");
+        }
+    };
     // FIXME check TIn, Tout equals cv
     template <typename TIn, typename TOut, class HelperOp>
     struct t_ErodeDilateOpispatcher<se::NLS::NLS_c8_2d, TIn, TOut, 2, array_view, array_view, HelperOp>
