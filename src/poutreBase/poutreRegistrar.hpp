@@ -18,9 +18,7 @@
  *
  */
 
-#ifndef POUTRE_BASE_HPP__
 #include <poutreBase/poutreBase.hpp>
-#endif
 
 // #ifndef POUTRE_TRACE__HPP__
 // #include <poutreBase/poutreTrace.hpp>

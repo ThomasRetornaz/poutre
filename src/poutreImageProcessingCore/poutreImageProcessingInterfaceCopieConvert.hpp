@@ -18,13 +18,8 @@
  *
  */
 
-#ifndef POUTRE_IMAGEPROCESSINGCORE_HPP__
 #include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSING_INTERFACE_HPP__
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
-#endif
 
 namespace poutre
 {

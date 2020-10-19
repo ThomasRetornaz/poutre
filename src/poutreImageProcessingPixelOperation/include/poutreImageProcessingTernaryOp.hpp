@@ -20,13 +20,8 @@
  * @copyright Copyright (c) 2020
  *
  */
-#ifndef POUTRE_IMAGEPROCESSINGCORE_HPP__
 #include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSINGTYPE_HPP__
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
-#endif
 
 namespace poutre
 {

@@ -25,13 +25,8 @@
 #include <queue>
 #include <vector>
 
-#ifndef POUTRE_CONFIG__HPP__
 #include <poutreBase/poutreConfig.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSING_TYPE_HPP__
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
-#endif
 
 namespace poutre
 {

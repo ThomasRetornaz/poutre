@@ -62,7 +62,7 @@ macro(add_python_library name sources dependencies)
     set(POUTRE_PYTHON_LIBS_VAR ${PYTHON_LIBRARY})
   endif()
   
-  target_link_libraries(${name} "${dependencies}" ${Boost_PYTHON_LIBRARY} ${POUTRE_PYTHON_LIBS_VAR}) 
+  target_link_libraries(${name} "${dependencies}" ${POUTRE_PYTHON_LIBS_VAR}) 
   set_target_properties(${name} PROPERTIES 
     SUFFIX ${PYTHON_MODULES_EXTENSIONS}
     PREFIX ""
@@ -88,13 +88,6 @@ macro(add_python_library name sources dependencies)
     )
   endif()
   
-  target_compile_definitions(${name} PRIVATE "BOOST_PYTHON_DYNAMIC_LIB")
-  
-  
-  if(POUTRE_USE_DEBUG_PYTHON)
-    target_compile_definitions(${name} PRIVATE "BOOST_DEBUG_PYTHON")
-  endif()
-
 endmacro(add_python_library)
 
 

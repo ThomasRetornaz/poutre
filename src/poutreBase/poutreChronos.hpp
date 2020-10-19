@@ -23,9 +23,7 @@
 #include <iostream>
 #include <sstream>
 
-#ifndef POUTRE_BASE_HPP__
 #include <poutreBase/poutreBase.hpp>
-#endif
 
 namespace poutre
 {

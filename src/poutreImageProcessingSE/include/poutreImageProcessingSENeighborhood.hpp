@@ -10,12 +10,8 @@
 #ifndef POUTRE_IPSENEIGHBORHOOD_HPP__
 #define POUTRE_IPSENEIGHBORHOOD_HPP__
 
-#ifndef POUTRE_IPSEINTERFACE_HPP__
 #include <poutreImageProcessingSE/poutreImageProcessingSEInterface.hpp>
-#endif
-#ifndef POUTRE_COORDINATE_HPP__
-#include <poutreBase/poutreCoordinate.hpp>
-#endif
+
 /**
  * @file   poutreImageProcessingSENeighborhood.hpp
  * @author Thomas Retornaz

@@ -25,9 +25,8 @@
                                 // cast in operator / %  ...
 #endif
 
-#ifndef POUTRE_CONFIG__HPP__
 #include <poutreBase/poutreConfig.hpp>
-#endif
+#include <poutreBase/poutreTypes.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 

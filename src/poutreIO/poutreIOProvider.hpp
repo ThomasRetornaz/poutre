@@ -19,13 +19,8 @@
 
 #include <deque>
 
-#ifndef POUTRE_IO_HPP__
 #include <poutreIO/poutreIO.hpp>
-#endif
-
-#ifndef POUTREIOLOADER_HPP
 #include <poutreIO/poutreIOLoader.hpp>
-#endif
 
 namespace poutre
 {

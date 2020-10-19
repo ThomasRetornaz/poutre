@@ -22,29 +22,12 @@
 #include <stdexcept>
 #include <type_traits>
 
-#ifndef POUTRE_IMAGEPROCESSINGCORE_HPP__
-#include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
-#endif
-
-#ifndef POUTRE_TYPE_HPP__
-#include <poutreBase/poutreTypes.hpp>
-#endif
-
-#ifndef POUTRE_CONFIG__HPP__
-#include <poutreBase/poutreConfig.hpp>
-#endif
-
-#ifndef POUTRE_STATIC_CONTAINER_HPP__
-#include <poutreBase/poutreStaticContainer.hpp>
-#endif
-
-#ifndef POUTRE_SIMD_HPP__
 #include <poutreBase/include/poutreSimd.hpp>
-#endif
-
-#ifndef POUTRE_COORDINATE_HPP__
+#include <poutreBase/poutreConfig.hpp>
 #include <poutreBase/poutreCoordinate.hpp>
-#endif
+#include <poutreBase/poutreStaticContainer.hpp>
+#include <poutreBase/poutreTypes.hpp>
+#include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
 
 namespace poutre
 {

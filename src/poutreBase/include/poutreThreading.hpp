@@ -18,9 +18,7 @@
  *
  */
 
-#ifndef POUTRE_BASE_HPP__
 #include <poutreBase/poutreBase.hpp>
-#endif
 
 #include <condition_variable>
 #include <future>

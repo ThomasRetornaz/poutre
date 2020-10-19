@@ -35,9 +35,7 @@
 #include <fstream>
 #include <ostream>
 
-#ifndef POUTRE_CONFIG__HPP__
 #include <poutreBase/poutreConfig.hpp>
-#endif
 
 /**
  * @addtogroup trace_group Trace facilities

@@ -27,37 +27,14 @@
  * @copyright Copyright (c) 2020
  *
  */
-#ifndef POUTRE_CONFIG__HPP__
-#include <poutreBase/poutreConfig.hpp>
-#endif
-
-#ifndef POUTRE_DENSE_ITERATOR_HPP__
-#include <poutreBase/poutreDenseIterator.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSING_INTERFACE_HPP__
-#include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSING_TYPE_HPP__
-#include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
-#endif
-
-#ifndef POUTRE_COORDINATE_HPP__
-#include <poutreBase/poutreCoordinate.hpp>
-#endif
-
-#ifndef POUTRE_CONTAINER_VIEW_HPP__
-#include <poutreBase/poutreContainerView.hpp>
-#endif
-
-#ifndef POUTRE_GEOMETRY_HPP__
-#include <poutreBase/poutreGeometry.hpp>
-#endif
-
-#ifndef POUTRE_SIMD_HPP__
 #include <poutreBase/include/poutreSimd.hpp>
-#endif
+#include <poutreBase/poutreConfig.hpp>
+#include <poutreBase/poutreContainerView.hpp>
+#include <poutreBase/poutreCoordinate.hpp>
+#include <poutreBase/poutreDenseIterator.hpp>
+#include <poutreBase/poutreGeometry.hpp>
+#include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
+#include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
 
 template <typename valuetype>
 using aligned_allocator =

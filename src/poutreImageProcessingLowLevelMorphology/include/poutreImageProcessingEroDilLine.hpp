@@ -16,37 +16,15 @@
  *
  *
  */
-#ifndef POUTRE_IMAGEPROCESSINGCORE_HPP__
-#include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSINGTYPE_HPP__
-#include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
-#endif
-
-#ifndef POUTRE_CONTAINER_VIEW_HPP__
 #include <poutreBase/poutreContainerView.hpp>
-#endif
-
-#ifndef POUTRE_IPSENL_HPP__
-#include <poutreImageProcessingSE/poutreImageProcessingSENeighborList.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSING_ARITH_HPP__
-#include <poutreImageProcessingPixelOperation/include/poutreImageProcessingArith.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSING_CONTAINER_COPIECONVERT_HPP__
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainerCopieConvert.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSING_INTERFACE_COPIECONVERT_HPP__
+#include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
+#include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterfaceCopieConvert.hpp>
-#endif
+#include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
+#include <poutreImageProcessingPixelOperation/include/poutreImageProcessingArith.hpp>
+#include <poutreImageProcessingSE/poutreImageProcessingSENeighborList.hpp>
 
-#ifndef POUTRE_IMAGEPROCESSING_INTERFACE_HPP__
-#include <poutreImageProcessingCore/include/poutreImageProcessingInterface.hpp>
-#endif
 #include <algorithm>
 #include <numeric>
 

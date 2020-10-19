@@ -18,13 +18,10 @@
  *
  */
 
-#ifndef POUTRE_CONFIG__HPP__
-#include <poutreBase/poutreConfig.hpp>
-#endif
-
-#ifndef POUTRE_SIMD_HPP__
 #include <poutreBase/include/poutreSimd.hpp>
-#endif
+#include <poutreBase/poutreConfig.hpp>
+#include <poutreBase/poutreTypes.hpp>
+#include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
 
 #include <memory>
 #include <stddef.h>

@@ -18,9 +18,7 @@
  *
  */
 
-#ifndef POUTRE_BASE_HPP__
 #include <poutreBase/poutreBase.hpp>
-#endif
 
 #ifndef JSON_FORWARDS_H_INCLUDED
 #include <json/forwards.h>

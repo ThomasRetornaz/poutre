@@ -32,17 +32,9 @@
 #pragma clang diagnostic pop
 #endif
 
-#ifndef POUTRE_IO_HPP__
 #include <poutreIO/poutreIO.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSING_INTERFACE_HPP__
-#include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
-#endif
+#include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
 
 #include <boost/filesystem.hpp>
 #include <memory>

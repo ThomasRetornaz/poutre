@@ -18,9 +18,7 @@
  *
  */
 
-#ifndef POUTRE_TYPE_HPP__
 #include <poutreBase/poutreTypes.hpp>
-#endif
 
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/box.hpp>

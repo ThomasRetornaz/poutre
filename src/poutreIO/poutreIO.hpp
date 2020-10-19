@@ -10,13 +10,8 @@
 #ifndef POUTRE_IO_HPP__
 #define POUTRE_IO_HPP__
 
-#ifndef POUTRE_CONFIG__HPP__
 #include <poutreBase/poutreConfig.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSING_INTERFACE_HPP__
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
-#endif
 
 #ifdef POUTRE_DYNAMIC   // defined if POUTRE is compiled as a DLL
 #ifdef PoutreIO_EXPORTS // defined if we are building the POUTRE DLL (instead of using it)

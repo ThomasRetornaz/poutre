@@ -21,9 +21,7 @@
 #include <iterator>
 
 #include <poutreBase/poutreConfig.hpp>
-#ifndef POUTRE_TYPE_HPP__
 #include <poutreBase/poutreTypes.hpp>
-#endif
 
 namespace poutre
 {

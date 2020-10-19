@@ -17,21 +17,10 @@
  * constexpr, inlining and optimisations  for small array size.
  */
 
-#ifndef POUTRE_CONFIG__HPP__
 #include <poutreBase/poutreConfig.hpp>
-#endif
-
-#ifndef POUTRE_TYPE_HPP__
-#include <poutreBase/poutreTypes.hpp>
-#endif
-
-#ifndef POUTRE_CONTAINER_HELPER_HPP__
 #include <poutreBase/poutreContainerHelper.hpp>
-#endif
-
-#ifndef POUTRE_DENSE_ITERATOR_HPP__
 #include <poutreBase/poutreDenseIterator.hpp>
-#endif
+#include <poutreBase/poutreTypes.hpp>
 
 #include <array>
 #include <iterator>
@@ -212,8 +201,8 @@ namespace poutre
 
         /**@{*/
 
-        /*POUTRE_CXX14_CONSTEXPR*/ auto operator<=>(const static_array_base<valuetype, Rank> &rhs) const
-            POUTRE_NOEXCEPT = default;
+        POUTRE_CXX14_CONSTEXPR auto operator<=>(const static_array_base<valuetype, Rank> &rhs) const POUTRE_NOEXCEPT =
+            default;
         // {
         //     // if (auto cmp = this->size() <=> rhs.size(); cmp != 0)
         //     //     return cmp;

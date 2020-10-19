@@ -20,13 +20,8 @@
  * @copyright Copyright (c) 2020
  *
  */
-#ifndef POUTRE_IMAGEPROCESSINGCORE_HPP__
 #include <poutreImageProcessing/core/poutreImageProcessingCore.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSING_TYPE_HPP__
 #include <poutreImageProcessing/core/poutreImageProcessingType.hpp>
-#endif
 
 //? look lexical compare simd ?
 

@@ -19,35 +19,14 @@
  * @copyright Copyright (c) 2020
  *
  */
-#ifndef POUTRE_IMAGEPROCESSINGCORE_HPP__
-#include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSING_TYPE_HPP__
-#include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
-#endif
-
-#ifndef POUTRE_CONTAINER_VIEW_HPP__
-#include <poutreBase/poutreContainerView.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSING_UNARYOP_HPP__
-#include <poutreImageProcessingPixelOperation/include/poutreImageProcessingUnaryOp.hpp>
-#endif
-#ifndef POUTRE_IMAGEPROCESSING_BINARYOP_HPP__
-#include <poutreImageProcessingPixelOperation/include/poutreImageProcessingBinaryOp.hpp>
-#endif
-#ifndef POUTRE_IMAGEPROCESSING_TERNARYOP_HPP__
-#include <poutreImageProcessingPixelOperation/include/poutreImageProcessingTernaryOp.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSING_QUATERNARYOP_HPP__
-#include <poutreImageProcessingPixelOperation/include/poutreImageProcessingQuaternaryOp.hpp>
-#endif
-
-#ifndef POUTRE_SIMD_ALGORITHM_HPP__
 #include <poutreBase/include/poutreSimdAlgorithm.hpp> //simd transform
-#endif
+#include <poutreBase/poutreContainerView.hpp>
+#include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
+#include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
+#include <poutreImageProcessingPixelOperation/include/poutreImageProcessingBinaryOp.hpp>
+#include <poutreImageProcessingPixelOperation/include/poutreImageProcessingQuaternaryOp.hpp>
+#include <poutreImageProcessingPixelOperation/include/poutreImageProcessingTernaryOp.hpp>
+#include <poutreImageProcessingPixelOperation/include/poutreImageProcessingUnaryOp.hpp>
 
 #include <boost/call_traits.hpp>
 

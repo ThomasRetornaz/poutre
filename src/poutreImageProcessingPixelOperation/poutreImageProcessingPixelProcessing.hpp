@@ -18,9 +18,7 @@
  *
  */
 
-#ifndef POUTRE_CONFIG__HPP__
 #include <poutreBase/poutreConfig.hpp>
-#endif
 
 #ifdef POUTRE_DYNAMIC                               // defined if POUTRE is compiled as a DLL
 #ifdef PoutreImageProcessingPixelProcessing_EXPORTS // defined if we are building the POUTRE DLL (instead of using it)

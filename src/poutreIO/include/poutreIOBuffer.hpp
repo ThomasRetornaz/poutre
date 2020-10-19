@@ -24,9 +24,7 @@
 #include <poutreIO/poutreIO.hpp>
 #endif
 
-#ifndef POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
-#endif
 
 namespace poutre
 {

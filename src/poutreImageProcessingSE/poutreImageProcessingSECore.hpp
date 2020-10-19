@@ -10,9 +10,7 @@
 #ifndef POUTRE_IPSECORE_HPP__
 #define POUTRE_IPSECORE_HPP__
 
-#ifndef POUTRE_CONFIG__HPP__
 #include <poutreBase/poutreConfig.hpp>
-#endif
 
 /**
  * @file   poutreImageProcessingSECore.hpp

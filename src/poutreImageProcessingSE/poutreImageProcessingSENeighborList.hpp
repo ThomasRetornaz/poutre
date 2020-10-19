@@ -10,18 +10,9 @@
 #ifndef POUTRE_IPSENL_HPP__
 #define POUTRE_IPSENL_HPP__
 
-#ifndef POUTRE_IPSECORE_HPP__
-#include <poutreImageProcessingSE/poutreImageProcessingSEInterface.hpp>
-#endif
-#ifndef POUTRE_COORDINATE_HPP__
-#include <poutreBase/poutreCoordinate.hpp>
-#endif
-#ifndef POUTRE_CONTAINER_VIEW_HPP__
 #include <poutreBase/poutreContainerView.hpp>
-#endif
-#ifndef POUTRE_IPSENEIGHBORHOOD_HPP__
 #include <poutreImageProcessingSE/include/poutreImageProcessingSENeighborhood.hpp>
-#endif
+#include <poutreImageProcessingSE/poutreImageProcessingSEInterface.hpp>
 
 /**
  * @file   poutreImageProcessingSENeighborList.hpp

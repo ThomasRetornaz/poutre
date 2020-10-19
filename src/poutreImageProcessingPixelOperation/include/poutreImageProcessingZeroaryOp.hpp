@@ -20,21 +20,9 @@
  * @copyright Copyright (c) 2020
  *
  */
-#ifndef POUTRE_IMAGEPROCESSING_HPP__
-#include <poutreImageProcessing/poutreImageProcessing.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSINGTYPE_HPP__
-#include <poutreImageProcessing/core/poutreImageProcessingType.hpp>
-#endif
-
-// #ifndef POUTRE_TRACE__HPP__
-// #include <poutreBase/poutreTrace.hpp>
-// #endif
-
-#ifndef POUTRE_CONTAINER_VIEW_HPP__
 #include <poutreBase/poutreContainerView.hpp>
-#endif
+#include <poutreImageProcessing/core/poutreImageProcessingType.hpp>
+#include <poutreImageProcessing/poutreImageProcessing.hpp>
 
 #include <algorithm>
 #include <boost/simd/sdk/simd/algorithm.hpp>

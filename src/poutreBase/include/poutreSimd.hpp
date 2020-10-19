@@ -18,12 +18,8 @@
  *
  */
 
-#ifndef POUTRE_CONFIG__HPP__
 #include <poutreBase/poutreConfig.hpp>
-#endif
-#ifndef POUTRE_TYPE_HPP__
 #include <poutreBase/poutreTypes.hpp>
-#endif
 #include <vector>
 #include <xsimd/xsimd.hpp>
 

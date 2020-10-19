@@ -19,13 +19,8 @@
  *
  */
 
-#ifndef POUTRE_CONFIG__HPP__
 #include <poutreBase/poutreConfig.hpp>
-#endif
-
-#ifndef POUTRE_COORDINATE_HPP__
 #include <poutreBase/poutreCoordinate.hpp>
-#endif
 
 #include <type_traits>
 

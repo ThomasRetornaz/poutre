@@ -19,23 +19,12 @@
  * @copyright Copyright (c) 2020
  *
  */
-#ifndef POUTRE_IMAGEPROCESSINGCORE_HPP__
-#include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSINGTYPE_HPP__
-#include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
-#endif
-
-#ifndef POUTRE_CONTAINER_VIEW_HPP__
+#include <poutreBase/include/poutreSimdAlgorithm.hpp> //simd transform
 #include <poutreBase/poutreContainerView.hpp>
-#endif
+#include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
+#include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
 
 #include <algorithm> //transform
-
-#ifndef POUTRE_SIMD_ALGORITHM_HPP__
-#include <poutreBase/include/poutreSimdAlgorithm.hpp> //simd transform
-#endif
 
 // move this in a dedicated here in PoutreCore
 namespace poutre

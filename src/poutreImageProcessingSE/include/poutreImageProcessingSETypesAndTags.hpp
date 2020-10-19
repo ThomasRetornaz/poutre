@@ -10,12 +10,9 @@
 #ifndef POUTRE_IPSETYPES_AND_TAGS_HPP__
 #define POUTRE_IPSETYPES_AND_TAGS_HPP__
 
-#ifndef POUTRE_IPSEINTERFACE_HPP__
-#include <poutreImageProcessingSE/poutreImageProcessingSEInterface.hpp>
-#endif
-#ifndef POUTRE_IPSECORE_HPP__
 #include <poutreImageProcessingSE/poutreImageProcessingSECore.hpp>
-#endif
+#include <poutreImageProcessingSE/poutreImageProcessingSEInterface.hpp>
+
 /**
  * @file   poutreImageProcessingSETypesAndTags.hpp
  * @author Thomas Retornaz
