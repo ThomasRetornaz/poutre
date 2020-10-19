@@ -40,7 +40,8 @@ target_link_libraries(PoutreIPCore
   PUBLIC ${Boost_LOG_LIBRARY}
   PUBLIC ${Boost_LOG_SETUP_LIBRARY}
   PUBLIC jsoncpp_lib 
-  INTERFACE xsimd 	
+  INTERFACE xsimd 
+  PUBLIC fmt
   #INTERFACE Eigen  
   #INTERFACE ${SIMD_LIB} 
   PUBLIC   PoutreBase 

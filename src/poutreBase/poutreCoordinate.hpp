@@ -271,7 +271,7 @@ namespace poutre
             return (*this).end();
         }
 
-        /*POUTRE_CXX14_CONSTEXPR*/ auto operator<=>( bounds<Rank> const &rhs) const POUTRE_NOEXCEPT = default;
+        /*POUTRE_CXX14_CONSTEXPR*/ auto operator<=>(bounds<Rank> const &rhs) const POUTRE_NOEXCEPT = default;
     };
 
     template <ptrdiff_t Rank>
@@ -509,7 +509,7 @@ namespace poutre
         // {
         //     return !details::helper_comp_lexicographic_less_container_op<self_type>::op(*this, rhs);
         // }
-        /*POUTRE_CXX14_CONSTEXPR*/ auto operator<=>(self_type const &rhs) const POUTRE_NOEXCEPT =default;
+        /*POUTRE_CXX14_CONSTEXPR*/ auto operator<=>(self_type const &rhs) const POUTRE_NOEXCEPT = default;
         /**@}*/
     };
 
@@ -670,11 +670,11 @@ namespace poutre
 
         // bool operator!=(const self_type &rhs) const POUTRE_NOEXCEPT
         // {
-         
-        /*POUTRE_CXX14_CONSTEXPR*/ auto operator<=>(const self_type &rhs) const POUTRE_NOEXCEPT =default;
+
+        /*POUTRE_CXX14_CONSTEXPR*/ auto operator<=>(const self_type &rhs) const POUTRE_NOEXCEPT = default;
         // {
         //     return this->m_idx <=> rhs.m_idx;
-        // } 
+        // }
 
         // bool operator<(const self_type &rhs) const POUTRE_NOEXCEPT
         // {

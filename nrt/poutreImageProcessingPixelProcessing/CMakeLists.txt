@@ -29,5 +29,4 @@ add_custom_command(TARGET PoutreIPPixelProcessingTests POST_BUILD COMMAND ${CMAK
 add_test(NAME PoutreIPPixelProcessingTests-1 
          COMMAND PoutreIPPixelProcessingTests)
 set_property(TARGET PoutreIPPixelProcessingTests PROPERTY FOLDER "UnitTests/")
-test_environment_setup(PoutreIPPixelProcessingTests-1)
 

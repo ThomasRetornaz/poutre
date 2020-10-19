@@ -41,7 +41,7 @@ namespace poutre
     {
 
         // Use max threads-1 as a reasonnable default
-        static unsigned int POUTRE_NUM_THREADS = std::max(std::thread::hardware_concurrency()- 2u,1u);
+        static unsigned int POUTRE_NUM_THREADS = std::max(std::thread::hardware_concurrency() - 2u, 1u);
 
         //! helper class to change the number of thread used by poutre at scope level
         //@warning We only force if OMP_NUM_THREADS environnement variable is not set by user

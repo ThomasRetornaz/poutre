@@ -114,7 +114,8 @@ namespace poutre
         using self_type = DenseTensor<valuetype, NumDims, allocator_type_t>;
 
       protected:
-       POUTRE_CXX14_CONSTEXPR DenseTensor() : m_data(nullptr), m_coordinnates(), m_strides(), m_allocator(), m_numelement(0)
+        POUTRE_CXX14_CONSTEXPR DenseTensor()
+            : m_data(nullptr), m_coordinnates(), m_strides(), m_allocator(), m_numelement(0)
         {
         }
         POUTRE_CXX14_CONSTEXPR DenseTensor(const std::vector<size_t> &dims)
@@ -364,7 +365,8 @@ namespace poutre
 
         // move constructor
 
-        POUTRE_CXX14_CONSTEXPR DenseTensor(self_type &&rhs) noexcept : m_data(nullptr), m_numelement(0), m_coordinnates(), m_allocator()
+        POUTRE_CXX14_CONSTEXPR DenseTensor(self_type &&rhs) noexcept
+            : m_data(nullptr), m_numelement(0), m_coordinnates(), m_allocator()
         {
             m_data = rhs.m_data;
             m_numelement = rhs.m_numelement;
@@ -439,9 +441,11 @@ namespace poutre
         static const ImgType m_imgtype = ImgType::ImgType_Dense;
         static const PType m_ptype = TypeTraits<value_type>::pixel_type;
         static const CompoundType m_ctype = TypeTraits<value_type>::compound_type;
-    protected:
-        using  parent_template::m_coordinnates;
-    public:
+
+      protected:
+        using parent_template::m_coordinnates;
+
+      public:
         POUTRE_CXX14_CONSTEXPR DenseImage(const std::vector<size_t> &dims) : parent_template()
         {
             if (dims.size() != parent_template::m_numdims)

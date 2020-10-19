@@ -32,5 +32,4 @@ add_custom_command(TARGET PoutreIPLowLevelMorphologyTests POST_BUILD COMMAND ${C
 add_test(NAME PoutreIPLowLevelMorphologyTests-1 
          COMMAND PoutreIPLowLevelMorphologyTests)
 set_property(TARGET PoutreIPLowLevelMorphologyTests PROPERTY FOLDER "UnitTests/")
-test_environment_setup(PoutreIPLowLevelMorphologyTests-1)
 

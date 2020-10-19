@@ -55,7 +55,6 @@ target_link_libraries(PoutreIO
   PUBLIC ${OpenImageIO_LIBRARIES}
   PUBLIC ${HDF5_LIBRARIES}
   INTERFACE xsimd 
-  
   PUBLIC   PoutreBase 
   PUBLIC   PoutreIPCore 
   )
@@ -63,6 +62,7 @@ set_target_properties(PoutreIO PROPERTIES FOLDER "src/")
 add_dependencies( PoutreIO OpenImageIO OpenImageIO_Util) #gcc warn -- ?
 
 IF(BUILD_SHARED_LIBS)
+  SET_TARGET_PROPERTIES(PoutreIO PROPERTIES COMPILE_FLAGS -DFMT_HEADER_ONLY=OFF)
   SET_TARGET_PROPERTIES(PoutreIO PROPERTIES COMPILE_FLAGS -DJSON_DLL)
   SET_TARGET_PROPERTIES(PoutreIO PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DLL) #FIXME not true should be linked with boost
   SET_TARGET_PROPERTIES(PoutreIO PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DYN_LINK) #FIXME not true should be linked with boost

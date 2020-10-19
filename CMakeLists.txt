@@ -135,7 +135,6 @@ include(CMakeParseArguments)
 include(cmake/CMakeVersion.cmake)
 include(cmake/CMakeInstallUtils.cmake)
 #include(cmake/CMakePythonUtils.cmake)
-include(cmake/CMakeTestUtils.cmake)
 
 # Python packaging
 #message(STATUS "Configuring the python packaging")

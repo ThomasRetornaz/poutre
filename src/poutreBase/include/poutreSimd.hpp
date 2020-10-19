@@ -24,6 +24,7 @@
 #ifndef POUTRE_TYPE_HPP__
 #include <poutreBase/poutreTypes.hpp>
 #endif
+#include <vector>
 #include <xsimd/xsimd.hpp>
 
 namespace xs = xsimd;

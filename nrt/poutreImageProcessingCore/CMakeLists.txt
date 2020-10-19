@@ -29,5 +29,4 @@ add_custom_command(TARGET PoutreIPCoreTests POST_BUILD COMMAND ${CMAKE_COMMAND} 
 add_test(NAME PoutreIPCoreTests-1 
          COMMAND PoutreIPCoreTests)
 set_property(TARGET PoutreIPCoreTests PROPERTY FOLDER "UnitTests/")
-test_environment_setup(PoutreIPCoreTests-1)
 

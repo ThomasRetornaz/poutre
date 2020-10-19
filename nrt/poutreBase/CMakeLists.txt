@@ -41,5 +41,4 @@ add_custom_command(TARGET PoutreBaseTests POST_BUILD COMMAND ${CMAKE_COMMAND} -E
 add_test(NAME PoutreBaseTests-1 
   COMMAND PoutreBaseTests)
 set_property(TARGET PoutreBaseTests PROPERTY FOLDER "UnitTests/")
-test_environment_setup(PoutreBaseTests-1)
 

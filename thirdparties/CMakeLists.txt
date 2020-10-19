@@ -55,9 +55,10 @@ if (MSVC)
   set(CMAKE_SHARED_LINKER_FLAGS
       "${CMAKE_SHARED_LINKER_FLAGS} 
       /ignore:4049 
+      /ignore:4275 #https://docs.microsoft.com/en-us/cpp/error-messages/compiler-warnings/compiler-warning-level-2-c4275?view=vs-2019
       /ignore:4217") #symbol 'symbol' defined in 'filename.obj' is imported and  symbol 'symbol' defined in 'filename_1.obj' is imported by 'filename_2.obj' in function 'function' 
   set(CMAKE_EXE_LINKER_FLAGS
-      "${CMAKE_EXE_LINKER_FLAGS} /ignore:4049 /ignore:4217")
+      "${CMAKE_EXE_LINKER_FLAGS} /ignore:4049 /ignore:4217 /ignore:4275")
 
 else()
 
@@ -284,6 +285,8 @@ set(JSONCPP_WITH_PKGCONFIG_SUPPORT CACHE BOOL OFF FORCE)
 set(JSONCPP_WITH_POST_BUILD_UNITTEST CACHE BOOL OFF FORCE)
 add_subdirectory(jsoncpp)
 set_target_properties(jsoncpp_lib PROPERTIES FOLDER "3rdparties/")
+set_target_properties(jsoncpp_object PROPERTIES FOLDER "3rdparties/")
+set_target_properties(jsoncpp_static PROPERTIES FOLDER "3rdparties/")
 SET(JSONCPP_INCLUDE_DIR "${THIRD_PARTIES_PATH}/jsoncpp/include" PARENT_SCOPE)
 
 # zlib
@@ -473,12 +476,15 @@ if(NOT fmt_POPULATED)   # name is lowercased
   FetchContent_Populate(fmt)
   message(STATUS "fmt source dir: ${fmt_SOURCE_DIR}")
   message(STATUS "fmt binary dir: ${fmt_BINARY_DIR}")
+  SET(FMT_HEADER_ONLY OFF CACHE BOOL "FMT_HEADER_ONLY" FORCE) 
   add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR}) # name is lowercased
   set (FMT_INCLUDE_DIR "${fmt_SOURCE_DIR}/include")
   set(CMAKE_PREFIX_PATH ${FMT_INSTALL_DIR})
   set(FMT_INCLUDES ${FMT_INCLUDE_DIR})
   set(FMT_INCLUDES ${FMT_INCLUDES} PARENT_SCOPE)
   #checked_find_package (fmt QUIET)
+  set_target_properties(fmt PROPERTIES FOLDER "3rdparties/")
+
 endif()
 
 #openImageIO

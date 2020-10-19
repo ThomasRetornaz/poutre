@@ -176,7 +176,8 @@ namespace poutre
       public:
         using parent = pdense_iterator<DataType>;
 
-        using value_type = typename parent::value_type;;
+        using value_type = typename parent::value_type;
+        ;
         using const_value_type = typename std::add_const<value_type>::type;
         using pointer = typename std::add_pointer<value_type>::type;
         using reference = typename std::add_lvalue_reference<value_type>::type;

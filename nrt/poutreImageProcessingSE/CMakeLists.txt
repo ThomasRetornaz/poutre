@@ -23,5 +23,4 @@ add_custom_command(TARGET PoutreIPSETests POST_BUILD COMMAND ${CMAKE_COMMAND} -E
 add_test(NAME PoutreIPSETests-1 
          COMMAND PoutreIPSETests)
 set_property(TARGET PoutreIPSETests PROPERTY FOLDER "UnitTests/")
-test_environment_setup(PoutreIPSETests-1)
 

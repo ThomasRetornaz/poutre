@@ -41,7 +41,8 @@ target_link_libraries(PoutreIPPixelProcessing
   PUBLIC jsoncpp_lib 
   # INTERFACE Eigen  
   INTERFACE xsimd 
-  PUBLIC   PoutreBase 
+  PUBLIC fmt
+  PUBLIC PoutreBase
   PUBLIC   PoutreIPCore 
   )
 set_target_properties(PoutreIPPixelProcessing PROPERTIES FOLDER "src/")

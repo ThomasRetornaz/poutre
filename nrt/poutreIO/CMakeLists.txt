@@ -43,5 +43,4 @@ add_custom_command(TARGET PoutreIOTests POST_BUILD COMMAND ${CMAKE_COMMAND} -E c
 add_test(NAME PoutreIOTests-1 
          COMMAND PoutreIOTests)
 set_property(TARGET PoutreIOTests PROPERTY FOLDER "UnitTests/")
-test_environment_setup(PoutreIOTests-1)
 
