@@ -457,7 +457,7 @@ FetchContent_Declare(
   # Uncomment and set the following to a specific hash to
   # lock down to a specific commit and avoid contacting
   # the remote once we've already cloned/fetched it
-  GIT_TAG 6.1.2
+  GIT_TAG 7.0.3
   )
 
 FetchContent_GetProperties(fmt) #mispelled name in original post
@@ -465,7 +465,7 @@ if(NOT fmt_POPULATED)   # name is lowercased
   FetchContent_Populate(fmt)
   message(STATUS "fmt source dir: ${fmt_SOURCE_DIR}")
   message(STATUS "fmt binary dir: ${fmt_BINARY_DIR}")
-  SET(FMT_HEADER_ONLY OFF CACHE BOOL "FMT_HEADER_ONLY" FORCE) 
+  SET(FMT_HEADER_ONLY ON CACHE BOOL "FMT_HEADER_ONLY" FORCE) 
   add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR}) # name is lowercased
   set (FMT_INCLUDE_DIR "${fmt_SOURCE_DIR}/include")
   set(CMAKE_PREFIX_PATH ${FMT_INSTALL_DIR})
