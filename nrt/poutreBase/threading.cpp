@@ -25,7 +25,7 @@
 TEST(threading, threadpool_ctor)
 {
     poutre::thread::TreadPool pool;
-    EXPECT_EQ(pool.capacity(), std::thread::hardware_concurrency() - 1);
+    EXPECT_EQ(pool.capacity(), std::thread::hardware_concurrency() - 2);
 }
 
 TEST(threading, threadpool_ctor_defaut0)
