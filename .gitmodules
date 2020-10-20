@@ -39,3 +39,6 @@
 [submodule "thirdparties/pybind11"]
 	path = thirdparties/pybind11
 	url = https://github.com/pybind/pybind11.git
+[submodule "thirdparties/spdlog"]
+	path = thirdparties/spdlog
+	url = https://github.com/gabime/spdlog
