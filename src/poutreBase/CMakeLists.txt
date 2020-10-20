@@ -61,6 +61,7 @@ target_link_libraries(PoutreBase
   INTERFACE fmt-header-only
   INTERFACE spdlog_header_only
   INTERFACE xsimd 
+  PUBLIC OpenMP::OpenMP_CXX
   # INTERFACE Eigen  
   # INTERFACE ${SIMD_LIB}
   )
