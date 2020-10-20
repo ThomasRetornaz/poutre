@@ -97,7 +97,11 @@ namespace poutre
         // using parent::size; size overhided with a different behavior
         // using parent::max_size;
         using parent::empty;
-
+#if !defined(__cpp_lib_three_way_comparison)
+#else
+        using parent::operator==;
+        using parent::operator!=;
+#endif
         using parent::operator=;
         using parent::operator/=;
         using parent::operator*=;
@@ -262,10 +266,25 @@ namespace poutre
         {
             return (*this).end();
         }
-
+#if !defined(__cpp_lib_three_way_comparison)
+#else
         POUTRE_CXX14_CONSTEXPR auto operator<=>(bounds<Rank> const &rhs) const POUTRE_NOEXCEPT = default;
+#endif
     };
 
+#if !defined(__cpp_lib_three_way_comparison)
+    //! bounds equality
+    template <ptrdiff_t Rank>
+    POUTRE_CXX14_CONSTEXPR bool operator==(const bounds<Rank> &lhs, const bounds<Rank> &rhs) POUTRE_NOEXCEPT
+    {
+        return lhs.operator==(rhs);
+    }
+    template <ptrdiff_t Rank>
+    POUTRE_CXX14_CONSTEXPR bool operator!=(const bounds<Rank> &lhs, const bounds<Rank> &rhs) POUTRE_NOEXCEPT
+    {
+        return lhs.operator!=(rhs);
+    }
+#endif
     template <ptrdiff_t Rank>
     POUTRE_CXX14_CONSTEXPR bounds<Rank> operator*(const bounds<Rank> &rhs, ptrdiff_t v) POUTRE_NOEXCEPT
     {
@@ -326,8 +345,10 @@ namespace poutre
         using parent::empty;
 
         using parent::operator=;
-        // using parent::operator==;
-        // using parent::operator<=>;
+#if !defined(__cpp_lib_three_way_comparison)
+        using parent::operator==;
+        using parent::operator!=;
+#endif
         using parent::operator/=;
         using parent::operator*=;
         using parent::operator%=;
@@ -481,41 +502,46 @@ namespace poutre
             details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpMinus, Rank>::op(rhs, *this);
             return *this;
         }
-
-        // POUTRE_CXX14_CONSTEXPR bool operator<(const self_type &rhs) const POUTRE_NOEXCEPT
-        // {
-        //     return details::helper_comp_lexicographic_less_container_op<self_type>::op(*this, rhs);
-        // }
-
-        // POUTRE_CXX14_CONSTEXPR bool operator<=(const self_type &rhs) const POUTRE_NOEXCEPT
-        // {
-        //     return !details::helper_comp_lexicographic_sup_container_op<self_type>::op(*this, rhs);
-        // }
-
-        // POUTRE_CXX14_CONSTEXPR bool operator>(const self_type &rhs) const POUTRE_NOEXCEPT
-        // {
-        //     return details::helper_comp_lexicographic_sup_container_op<self_type>::op(*this, rhs);
-        // }
-
-        // POUTRE_CXX14_CONSTEXPR bool operator>=(const self_type &rhs) const POUTRE_NOEXCEPT
-        // {
-        //     return !details::helper_comp_lexicographic_less_container_op<self_type>::op(*this, rhs);
-        // }
+#if defined(__cpp_lib_three_way_comparison)
         POUTRE_CXX14_CONSTEXPR auto operator<=>(self_type const &rhs) const POUTRE_NOEXCEPT = default;
+#else
+        POUTRE_CXX14_CONSTEXPR bool operator<(const self_type &rhs) const POUTRE_NOEXCEPT
+        {
+            return details::helper_comp_lexicographic_less_container_op<self_type>::op(*this, rhs);
+        }
+
+        POUTRE_CXX14_CONSTEXPR bool operator<=(const self_type &rhs) const POUTRE_NOEXCEPT
+        {
+            return !details::helper_comp_lexicographic_sup_container_op<self_type>::op(*this, rhs);
+        }
+
+        POUTRE_CXX14_CONSTEXPR bool operator>(const self_type &rhs) const POUTRE_NOEXCEPT
+        {
+            return details::helper_comp_lexicographic_sup_container_op<self_type>::op(*this, rhs);
+        }
+
+        POUTRE_CXX14_CONSTEXPR bool operator>=(const self_type &rhs) const POUTRE_NOEXCEPT
+        {
+            return !details::helper_comp_lexicographic_less_container_op<self_type>::op(*this, rhs);
+        }
+
+#endif
         /**@}*/
     };
 
     ////! index equality
-    // template <ptrdiff_t Rank>
-    // POUTRE_CXX14_CONSTEXPR bool operator==(const index<Rank> &rhs, const index<Rank> &lhs) POUTRE_NOEXCEPT
-    //{
-    //    return lhs.operator==(rhs);
-    //}
-    // template <ptrdiff_t Rank>
-    // POUTRE_CXX14_CONSTEXPR bool operator!=(const index<Rank> &rhs, const index<Rank> &lhs) POUTRE_NOEXCEPT
-    //{
-    //    return lhs.operator!=(rhs);
-    //}
+#if !defined(__cpp_lib_three_way_comparison)
+    template <ptrdiff_t Rank>
+    POUTRE_CXX14_CONSTEXPR bool operator==(const index<Rank> &rhs, const index<Rank> &lhs) POUTRE_NOEXCEPT
+    {
+        return lhs.operator==(rhs);
+    }
+    template <ptrdiff_t Rank>
+    POUTRE_CXX14_CONSTEXPR bool operator!=(const index<Rank> &rhs, const index<Rank> &lhs) POUTRE_NOEXCEPT
+    {
+        return lhs.operator!=(rhs);
+    }
+#endif
 
     //! index arithmetic
     template <ptrdiff_t Rank>
@@ -654,39 +680,41 @@ namespace poutre
           {
              return (0 != m_bounds.size( ));
           }*/
+#if !defined(__cpp_lib_three_way_comparison)
+        bool operator==(const self_type &rhs) const POUTRE_NOEXCEPT
+        {
+            return (m_idx == rhs.m_idx); // TODO ALSO check bound ?
+        }
 
-        // bool operator==(const self_type &rhs) const POUTRE_NOEXCEPT
-        // {
-        //     return (m_idx == rhs.m_idx); // TODO ALSO check bound ?
-        // }
+        bool operator!=(const self_type &rhs) const POUTRE_NOEXCEPT
+        {
+            return (m_idx != rhs.m_idx);
+        }
+        bool operator<(const self_type &rhs) const POUTRE_NOEXCEPT
+        {
+            return m_idx < rhs.m_idx;
+        }
 
-        // bool operator!=(const self_type &rhs) const POUTRE_NOEXCEPT
-        // {
+        bool operator<=(const self_type &rhs) const POUTRE_NOEXCEPT
+        {
+            return m_idx <= rhs.m_idx;
+        }
 
+        bool operator>(const self_type &rhs) const POUTRE_NOEXCEPT
+        {
+            return m_idx > rhs.m_idx;
+        }
+
+        bool operator>=(const self_type &rhs) const POUTRE_NOEXCEPT
+        {
+            return m_idx >= rhs.m_idx;
+        }
+#else
         POUTRE_CXX14_CONSTEXPR auto operator<=>(const self_type &rhs) const POUTRE_NOEXCEPT = default;
         // {
         //     return this->m_idx <=> rhs.m_idx;
         // }
-
-        // bool operator<(const self_type &rhs) const POUTRE_NOEXCEPT
-        // {
-        //     return m_idx < rhs.m_idx;
-        // }
-
-        // bool operator<=(const self_type &rhs) const POUTRE_NOEXCEPT
-        // {
-        //     return m_idx <= rhs.m_idx;
-        // }
-
-        // bool operator>(const self_type &rhs) const POUTRE_NOEXCEPT
-        // {
-        //     return m_idx > rhs.m_idx;
-        // }
-
-        // bool operator>=(const self_type &rhs) const POUTRE_NOEXCEPT
-        // {
-        //     return m_idx >= rhs.m_idx;
-        // }
+#endif
 
         POUTRE_CXX14_CONSTEXPR bounds_iterator &operator++() POUTRE_NOEXCEPTONLYNDEBUG
         {
@@ -824,42 +852,43 @@ namespace poutre
         auto tmp(rhs);
         return (tmp + n);
     }
+#if !defined(__cpp_lib_three_way_comparison)
+    template <ptrdiff_t Rank>
+    bool operator==(const bounds_iterator<Rank> &lhs, const bounds_iterator<Rank> &rhs) POUTRE_NOEXCEPT
+    {
+        return (lhs == rhs);
+    }
 
-    // template <ptrdiff_t Rank>
-    // bool operator==(const bounds_iterator<Rank> &lhs, const bounds_iterator<Rank> &rhs) POUTRE_NOEXCEPT
-    // {
-    //     return (lhs == rhs);
-    // }
+    template <ptrdiff_t Rank>
+    bool operator!=(const bounds_iterator<Rank> &lhs, const bounds_iterator<Rank> &rhs) POUTRE_NOEXCEPT
+    {
+        return (lhs != rhs);
+    }
 
-    // template <ptrdiff_t Rank>
-    // bool operator!=(const bounds_iterator<Rank> &lhs, const bounds_iterator<Rank> &rhs) POUTRE_NOEXCEPT
-    // {
-    //     return (lhs != rhs);
-    // }
+    template <ptrdiff_t Rank>
+    bool operator<(const bounds_iterator<Rank> &lhs, const bounds_iterator<Rank> &rhs) POUTRE_NOEXCEPT
+    {
+        return lhs < rhs;
+    }
 
-    // template <ptrdiff_t Rank>
-    // bool operator<(const bounds_iterator<Rank> &lhs, const bounds_iterator<Rank> &rhs) POUTRE_NOEXCEPT
-    // {
-    //     return lhs < rhs;
-    // }
+    template <ptrdiff_t Rank>
+    bool operator<=(const bounds_iterator<Rank> &lhs, const bounds_iterator<Rank> &rhs) POUTRE_NOEXCEPT
+    {
+        return lhs <= rhs;
+    }
 
-    // template <ptrdiff_t Rank>
-    // bool operator<=(const bounds_iterator<Rank> &lhs, const bounds_iterator<Rank> &rhs) POUTRE_NOEXCEPT
-    // {
-    //     return lhs <= rhs;
-    // }
+    template <ptrdiff_t Rank>
+    bool operator>(const bounds_iterator<Rank> &lhs, const bounds_iterator<Rank> &rhs) POUTRE_NOEXCEPT
+    {
+        return lhs > rhs;
+    }
 
-    // template <ptrdiff_t Rank>
-    // bool operator>(const bounds_iterator<Rank> &lhs, const bounds_iterator<Rank> &rhs) POUTRE_NOEXCEPT
-    // {
-    //     return lhs > rhs;
-    // }
-
-    // template <ptrdiff_t Rank>
-    // bool operator>=(const bounds_iterator<Rank> &lhs, const bounds_iterator<Rank> &rhs) POUTRE_NOEXCEPT
-    // {
-    //     return lhs >= rhs;
-    // }
+    template <ptrdiff_t Rank>
+    bool operator>=(const bounds_iterator<Rank> &lhs, const bounds_iterator<Rank> &rhs) POUTRE_NOEXCEPT
+    {
+        return lhs >= rhs;
+    }
+#endif
 
     //! @} doxygroup: coordinate_group
 

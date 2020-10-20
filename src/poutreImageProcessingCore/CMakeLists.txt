@@ -39,7 +39,7 @@ target_link_libraries(PoutreIPCore
   PUBLIC ${Boost_FILESYSTEM_LIBRARY}
   PUBLIC jsoncpp_lib 
   INTERFACE xsimd 
-  PUBLIC fmt
+  INTERFACE fmt-header-only
   #INTERFACE Eigen  
   #INTERFACE ${SIMD_LIB} 
   PUBLIC   PoutreBase 

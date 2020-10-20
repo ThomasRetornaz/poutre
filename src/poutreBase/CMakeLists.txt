@@ -53,7 +53,7 @@ target_link_libraries(PoutreBase
   PUBLIC ${Boost_SYSTEM_LIBRARY}
   PUBLIC ${Boost_FILESYSTEM_LIBRARY} 
   PUBLIC jsoncpp_lib 
-  PUBLIC fmt
+  INTERFACE fmt-header-only
   INTERFACE xsimd 
   # INTERFACE Eigen  
   # INTERFACE ${SIMD_LIB}
@@ -62,7 +62,7 @@ set_target_properties(PoutreBase PROPERTIES FOLDER "src/")
 #force custom target before start
 add_dependencies(PoutreBase xsimd jsoncpp_lib)
 #add_dependencies(PoutreBase Eigendep)
-
+target_compile_definitions(PoutreBase INTERFACE FMT_HEADER_ONLY=1)
 IF(BUILD_SHARED_LIBS)
   SET_TARGET_PROPERTIES(PoutreBase PROPERTIES COMPILE_FLAGS -DJSON_DLL)
   SET_TARGET_PROPERTIES(PoutreBase PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DLL) #FIXME not true should be linked with boost

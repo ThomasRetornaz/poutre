@@ -200,20 +200,20 @@ namespace poutre
          */
 
         /**@{*/
-
+#if defined(__cpp_lib_three_way_comparison)
         POUTRE_CXX14_CONSTEXPR auto operator<=>(const static_array_base<valuetype, Rank> &rhs) const POUTRE_NOEXCEPT =
             default;
-        // {
-        //     // if (auto cmp = this->size() <=> rhs.size(); cmp != 0)
-        //     //     return cmp;
-        //     return (this->m_array<=>rhs.m_array);
-        // }
+#else
+        POUTRE_CXX14_CONSTEXPR bool operator==(const self_type &rhs) const POUTRE_NOEXCEPT
+        {
+            return details::helper_comp_equal_container_op<self_type, Rank>::op(rhs, *this);
+        }
 
-        // POUTRE_CXX14_CONSTEXPR bool operator==(const self_type &rhs) const POUTRE_NOEXCEPT
-        // {
-        //     return details::helper_comp_equal_container_op<self_type, Rank>::op(rhs, *this);
-        // }
-
+        POUTRE_CXX14_CONSTEXPR bool operator!=(const self_type &rhs) const POUTRE_NOEXCEPT
+        {
+            return !details::helper_comp_equal_container_op<self_type, Rank>::op(rhs, *this);
+        }
+#endif
         /**@}*/
 
         std::string str() const
@@ -475,8 +475,8 @@ namespace poutre
     {
         (lhs.swap(rhs));
     }
-
-    /*template <typename value_type, ptrdiff_t size>
+#if !defined(__cpp_lib_three_way_comparison)
+    template <typename value_type, ptrdiff_t size>
     POUTRE_CXX14_CONSTEXPR bool operator==(const static_array_base<value_type, size> &lhs,
                                            const static_array_base<value_type, size> &rhs) POUTRE_NOEXCEPT
     {
@@ -488,7 +488,8 @@ namespace poutre
                                            const static_array_base<value_type, size> &rhs) POUTRE_NOEXCEPT
     {
         return lhs.operator!=(rhs);
-    }*/
+    }
+#endif
 
     template <typename value_type, ptrdiff_t size>
     std::ostream &operator<<(std::ostream &os, const static_array_base<value_type, size> &rhs)
@@ -532,8 +533,8 @@ namespace poutre
         using parent::swap;
 
         using parent::operator=;
-        // using parent::operator==;
-        // using parent::operator<=>;
+        using parent::operator==;
+        using parent::operator!=;
         using parent::operator/=;
         using parent::operator*=;
         using parent::operator%=;

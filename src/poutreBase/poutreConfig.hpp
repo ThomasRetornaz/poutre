@@ -10,10 +10,12 @@
 #define POUTRE_CONFIG__HPP__
 
 #include <boost/config.hpp>
-
-#include "fmt/format.h"
-#include "fmt/ostream.h"
-#include "fmt/printf.h"
+#ifndef FMT_HEADER_ONLY
+#define FMT_HEADER_ONLY
+#endif
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+#include <fmt/printf.h>
 
 /**
  * @file   poutreConfig.hpp

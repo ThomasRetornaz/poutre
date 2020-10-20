@@ -39,7 +39,7 @@ target_link_libraries(PoutreIPPixelProcessing
   PUBLIC jsoncpp_lib 
   # INTERFACE Eigen  
   INTERFACE xsimd 
-  PUBLIC fmt
+  INTERFACE fmt-header-only
   PUBLIC PoutreBase
   PUBLIC   PoutreIPCore 
   )

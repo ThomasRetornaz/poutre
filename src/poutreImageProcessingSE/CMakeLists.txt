@@ -37,7 +37,7 @@ target_link_libraries(PoutreIPSE
   PRIVATE jsoncpp_lib
   INTERFACE Eigen
   INTERFACE xsimd
-  PUBLIC fmt
+  INTERFACE fmt-header-only
   PoutreBase
   PoutreIPCore  
   )
