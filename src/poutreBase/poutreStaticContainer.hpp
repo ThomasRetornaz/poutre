@@ -533,8 +533,10 @@ namespace poutre
         using parent::swap;
 
         using parent::operator=;
+#if !defined(__cpp_lib_three_way_comparison)        
         using parent::operator==;
         using parent::operator!=;
+#endif        
         using parent::operator/=;
         using parent::operator*=;
         using parent::operator%=;

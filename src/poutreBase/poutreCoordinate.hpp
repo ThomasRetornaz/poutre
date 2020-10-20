@@ -98,7 +98,6 @@ namespace poutre
         // using parent::max_size;
         using parent::empty;
 #if !defined(__cpp_lib_three_way_comparison)
-#else
         using parent::operator==;
         using parent::operator!=;
 #endif
