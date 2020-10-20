@@ -1,5 +1,10 @@
 set(PoutreBaseSubdirectory ${POUTRE_SRC_DIR}/poutreBase)
 
+
+INCLUDE_DIRECTORIES(BEFORE SYSTEM
+	${SPDLOG_INCLUDES} 
+)
+
 set(PoutreBaseSRC_DETAILS
   ${PoutreBaseSubdirectory}/include/poutreSimd.hpp	
   ${PoutreBaseSubdirectory}/include/poutreSimdAlgorithm.hpp
@@ -11,7 +16,7 @@ set(PoutreBaseSRC_PUBLICHEADERS
   ${PoutreBaseSubdirectory}/poutreConfig.hpp
   ${PoutreBaseSubdirectory}/poutreTypes.hpp
   ${PoutreBaseSubdirectory}/poutreJsonSerialization.hpp
-  #${PoutreBaseSubdirectory}/poutreTrace.hpp
+  ${PoutreBaseSubdirectory}/poutreTrace.hpp
   ${PoutreBaseSubdirectory}/poutreRegistrar.hpp
   ${PoutreBaseSubdirectory}/poutreChronos.hpp
   ${PoutreBaseSubdirectory}/poutreGeometry.hpp
@@ -24,7 +29,7 @@ set(PoutreBaseSRC_PUBLICHEADERS
 
 set(PoutreBaseSRC_CPP
   ${PoutreBaseSubdirectory}/src/poutreJsonSerialization.cpp
-  #${PoutreBaseSubdirectory}/src/poutreTrace.cpp
+  ${PoutreBaseSubdirectory}/src/poutreTrace.cpp
   ${PoutreBaseSubdirectory}/src/poutreGeometry.cpp
   ${PoutreBaseSubdirectory}/src/poutreCoordinate.cpp
   ${PoutreBaseSubdirectory}/src/poutreType.cpp
@@ -54,6 +59,7 @@ target_link_libraries(PoutreBase
   PUBLIC ${Boost_FILESYSTEM_LIBRARY} 
   PUBLIC jsoncpp_lib 
   INTERFACE fmt-header-only
+  INTERFACE spdlog_header_only
   INTERFACE xsimd 
   # INTERFACE Eigen  
   # INTERFACE ${SIMD_LIB}
@@ -63,6 +69,8 @@ set_target_properties(PoutreBase PROPERTIES FOLDER "src/")
 add_dependencies(PoutreBase xsimd jsoncpp_lib)
 #add_dependencies(PoutreBase Eigendep)
 target_compile_definitions(PoutreBase INTERFACE FMT_HEADER_ONLY=1)
+target_compile_definitions(PoutreBase INTERFACE SPDLOG_HEADER_ONLY=1)
+
 IF(BUILD_SHARED_LIBS)
   SET_TARGET_PROPERTIES(PoutreBase PROPERTIES COMPILE_FLAGS -DJSON_DLL)
   SET_TARGET_PROPERTIES(PoutreBase PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DLL) #FIXME not true should be linked with boost

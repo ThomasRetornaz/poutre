@@ -476,6 +476,21 @@ if(NOT fmt_POPULATED)   # name is lowercased
 
 endif()
 
+#spdlog
+SET(SPDLOG_FMT_EXTERNAL OFF CACHE BOOL  "Use external fmt library instead of bundled" FORCE)
+set(SPDLOG_FMT_EXTERNAL_HO ON CACHE BOOL "Use external fmt header-only library instead of bundled" FORCE)
+add_subdirectory(spdlog)
+set_target_properties(spdlog PROPERTIES FOLDER "3rdparties/")
+INCLUDE_DIRECTORIES(
+    ${CMAKE_CURRENT_SOURCE_DIR}/spdlog/include
+    ${CMAKE_CURRENT_BINARY_DIR}/spdlog
+    )
+set(SPDLOG_INCLUDES
+    ${CMAKE_CURRENT_SOURCE_DIR}/spdlog/include
+    ${CMAKE_CURRENT_BINARY_DIR}/spdlog
+    )
+set(SPDLOG_INCLUDES ${SPDLOG_INCLUDES} PARENT_SCOPE)
+
 #openImageIO
 set(OpenImageIO_BUILD_TOOLS CACHE BOOL OFF FORCE)
 set(OpenImageIO_BUILD_TESTS CACHE BOOL OFF FORCE)
