@@ -78,7 +78,7 @@ if(MSVC)
   #4250: 'class1' : inherits 'class2::member' via dominance  polymorphism generate 10^50 warning ....	
   #4702 unreachable code 
   #4715 not all control paths return a value
-  foreach(warning 4250 4702)  
+  foreach(warning 4250 4702 4251)  
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd${warning}")
   endforeach(warning)
  
@@ -152,8 +152,8 @@ ENDIF()
 #openMP for all
 OPTION (USE_OpenMP "Use OpenMP" ON)
 IF(USE_OpenMP)
-  FIND_PACKAGE(OpenMP)
-  IF(OpenMP_CXX_FOUND)
+  FIND_PACKAGE(OpenMP REQUIRED)
+  IF(OpenMP_FOUND)
     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
   ENDIF()

@@ -50,6 +50,7 @@ if (MSVC)
       /wd4101
       /wd4834
       /wd4005 #'_CRT_SECURE_NO_WARNINGS' : redéfinition de macro
+      /wd4251
     )
 
   set(CMAKE_SHARED_LINKER_FLAGS
@@ -300,7 +301,7 @@ set(ZLIB_FOUND TRUE)
 message(STATUS "**************ZLIB: ${ZLIB_INCLUDE_DIR} ${ZLIB_LIBRARIES}")
 
 # libjpeg
-set(BUILD_JPEG_STATIC ON)
+set(BUILD_JPEG_STATIC CACHE BOOL OFF FORCE)
 add_subdirectory(libjpeg)
 set(JPEG_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libjpeg ${CMAKE_CURRENT_BINARY_DIR}/libjpeg) 
 set(JPEG_LIBRARY jpeg)
