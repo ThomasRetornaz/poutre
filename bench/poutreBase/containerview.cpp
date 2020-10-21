@@ -87,7 +87,7 @@ BENCHMARK_REGISTER_F(ViewOnVect1DFixture, Iterator)
     ->Arg(64 * 64)
     ->Arg(128 * 128)
     ->Arg(256 * 256); //->Unit(benchmark::kMillisecond); //-V112
-// 15 times slower ....
+// 6 times slower ....
 BENCHMARK_REGISTER_F(ViewOnVect1DFixture, BoundIterator)
     ->Arg(16 * 16)
     ->Arg(32 * 32) //-V112

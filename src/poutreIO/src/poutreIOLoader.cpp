@@ -21,6 +21,7 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
+#include <poutreBase/poutreTrace.hpp>
 #include <poutreIO/include/poutreOIIO.hpp>
 #include <poutreIO/poutreIO.hpp>
 #include <poutreIO/poutreIOLoader.hpp>
@@ -46,6 +47,7 @@ namespace poutre
 
     std::unique_ptr<IInterface> ImageLoader::Load() const
     {
+        POUTRE_TRACE("Enter ImageLoader::Load()");
         if (!m_isready)
             POUTRE_RUNTIME_ERROR("ImageLoader:  you must set path through SetPath");
         bf::path localPath(m_imgPath);
