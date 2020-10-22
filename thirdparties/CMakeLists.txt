@@ -300,20 +300,31 @@ set(ZLIB_LIBRARY ${ZLIB_LIBRARY})
 set(ZLIB_FOUND TRUE)
 message(STATUS "**************ZLIB: ${ZLIB_INCLUDE_DIR} ${ZLIB_LIBRARIES}")
 
-# libjpeg
-set(BUILD_JPEG_STATIC CACHE BOOL OFF FORCE)
-add_subdirectory(libjpeg)
-set(JPEG_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libjpeg ${CMAKE_CURRENT_BINARY_DIR}/libjpeg) 
-set(JPEG_LIBRARY jpeg)
+# libjpeg-turbo
+add_subdirectory(libjpeg-turbo)
+set(JPEG_INCLUDE_DIR 
+  ${CMAKE_CURRENT_SOURCE_DIR}/libjpeg-turbo
+  ${CMAKE_CURRENT_BINARY_DIR}/libjpeg-turbo
+  ) 
+if(MSVC)
+  set(JPEG_LIBRARY jpeg-static)
+else()
+  set(JPEG_LIBRARY jpeg)
+endif()  
 set(JPEG_INCLUDE_DIRS ${JPEG_INCLUDE_DIR}) 
 set(JPEG_LIBRARIES ${JPEG_LIBRARY})
 INCLUDE_DIRECTORIES(
-    ${CMAKE_CURRENT_SOURCE_DIR}/libjpeg 
-    ${CMAKE_CURRENT_BINARY_DIR}/libjpeg
+     ${CMAKE_CURRENT_SOURCE_DIR}/libjpeg-turbo 
+     ${CMAKE_CURRENT_BINARY_DIR}/libjpeg-turbo
 )
-SET_PROPERTY(TARGET jpeg PROPERTY FOLDER "3rdparties")
 set(JPEG_FOUND TRUE)
 message(STATUS "**************JPEG: ${JPEG_INCLUDE_DIRS} ${JPEG_LIBRARIES}")
+
+if(MSVC)
+  SET_PROPERTY(TARGET jpeg-static PROPERTY FOLDER "3rdparties")
+else()
+  SET_PROPERTY(TARGET jpeg PROPERTY FOLDER "3rdparties")
+endif()
 
 # libpng
 SET(PNG_STATIC ON CACHE BOOL "PNG STATIC BUILD" FORCE)
@@ -349,7 +360,7 @@ SET_PROPERTY(TARGET tiff PROPERTY FOLDER "3rdparties")
 SET_PROPERTY(TARGET tiffxx PROPERTY FOLDER "3rdparties")
 SET_PROPERTY(TARGET port PROPERTY FOLDER "3rdparties")
 message(STATUS "**************TIFF: ${TIFF_INCLUDE_DIR} ${TIFF_LIBRARY}")
-add_dependencies(tiff jpeg png_static)
+add_dependencies(tiff ${JPEG_LIBRARY} png_static)
 
 
 # hdf5
@@ -516,7 +527,7 @@ SET(OIIO_INCLUDE_DIR
   ${fmt_SOURCE_DIR}/include
   PARENT_SCOPE
 )
-add_dependencies(OpenImageIO tiff jpeg png_static hdf5_cpp-shared)
+add_dependencies(OpenImageIO tiff ${JPEG_LIBRARY} png_static hdf5_cpp-shared)
 set(OpenImageIO_LIBRARIES OpenImageIO OpenImageIO_Util PARENT_SCOPE)
 
 

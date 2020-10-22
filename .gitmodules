@@ -42,3 +42,6 @@
 [submodule "thirdparties/spdlog"]
 	path = thirdparties/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "thirdparties/libjpeg-turbo"]
+	path = thirdparties/libjpeg-turbo
+	url = https://github.com/ThomasRetornaz/libjpeg-turbo.git
