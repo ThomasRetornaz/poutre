@@ -18,36 +18,35 @@
 #define POUTREIOSTRING_HPP
 
 #include <memory>
-#include <string>
-
 #include <poutreIO/poutreIO.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
+#include <string>
 
 namespace poutre
 {
-    /**
-     * @addtogroup image_processing_io_group Image Processing IO API
-     * @ingroup image_processing_group
-     *@{
-     */
+  /**
+   * @addtogroup image_processing_io_group Image Processing IO API
+   * @ingroup image_processing_group
+   *@{
+   */
 
-    /**
-     * @brief Convert IInterface to human readable string
-     *
-     * @param i_image
-     * @return std::string
-     */
-    IO_API std::string ImageToString(const IInterface &i_image);
+  /**
+   * @brief Convert IInterface to human readable string
+   *
+   * @param i_image
+   * @return std::string
+   */
+  IO_API std::string ImageToString(const IInterface &i_image);
 
-    /**
-     * @brief From human readable string create an IInterface see @c ImageToString
-     *
-     * @param i_str
-     * @return Image
-     */
-    IO_API std::unique_ptr<IInterface> ImageFromString(const std::string &i_str);
+  /**
+   * @brief From human readable string create an IInterface see @c ImageToString
+   *
+   * @param i_str
+   * @return Image
+   */
+  IO_API std::unique_ptr<IInterface> ImageFromString(const std::string &i_str);
 
-    //! @} doxygroup: image_processing_io_group
+  //! @} doxygroup: image_processing_io_group
 
 } // namespace poutre
 

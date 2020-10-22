@@ -12,37 +12,22 @@
 
 #include <fstream>
 #include <ostream>
-
 #include <poutreBase/poutreTrace.hpp>
 
 namespace poutre
 {
-    std::ostream &operator<<(std::ostream &os, GlobalLogger::LoggerLevel level)
+  std::ostream &operator<<(std::ostream &os, GlobalLogger::LoggerLevel level)
+  {
+    switch( level )
     {
-        switch (level)
-        {
-        case GlobalLogger::LoggerLevel::trace:
-            os << "trace";
-            break;
-        case GlobalLogger::LoggerLevel::critical:
-            os << "critical";
-            break;
-        case GlobalLogger::LoggerLevel::debug:
-            os << "debug";
-            break;
-        case GlobalLogger::LoggerLevel::err:
-            os << "err";
-            break;
-        case GlobalLogger::LoggerLevel::info:
-            os << "info";
-            break;
-        case GlobalLogger::LoggerLevel::warn:
-            os << "trace";
-            break;
-        default:
-            os << "Unknown GlobalLogger::LoggerLevel";
-            break;
-        }
-        return os;
+    case GlobalLogger::LoggerLevel::trace: os << "trace"; break;
+    case GlobalLogger::LoggerLevel::critical: os << "critical"; break;
+    case GlobalLogger::LoggerLevel::debug: os << "debug"; break;
+    case GlobalLogger::LoggerLevel::err: os << "err"; break;
+    case GlobalLogger::LoggerLevel::info: os << "info"; break;
+    case GlobalLogger::LoggerLevel::warn: os << "trace"; break;
+    default: os << "Unknown GlobalLogger::LoggerLevel"; break;
     }
+    return os;
+  }
 } // namespace poutre

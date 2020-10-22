@@ -30,68 +30,67 @@
 
 namespace poutre
 {
+  /*!
+   * @defgroup register_group Register factories of image operations
+   * @ingroup poutre_base_group
+   * @{
+   */
+  /**
+   * @brief Allow to register a set of factories regarding provided type
+   * @note use singleton pattern with lazy construct
+   */
+  template<class Interface> class Registrar
+  {
+    public:
+    using KeyFactoryMap = std::unordered_map<std::string, std::function<Interface *(void)>>;
+    // typedef std::unordered_map< std::string,
+    // std::function<std::unique_ptr<Interface>(void)>>
+    // KeyFactoryMap;
 
-    /*!
-     * @defgroup register_group Register factories of image operations
-     * @ingroup poutre_base_group
-     * @{
+    /** @name Singleton interface
      */
-    /**
-     * @brief Allow to register a set of factories regarding provided type
-     * @note use singleton pattern with lazy construct
-     */
-    template <class Interface> class Registrar
+    //! Get concrete instance (lazy construct)
+    static Registrar &getInstance()
     {
-      public:
-        using KeyFactoryMap = std::unordered_map<std::string, std::function<Interface *(void)>>;
-        // typedef std::unordered_map< std::string,
-        // std::function<std::unique_ptr<Interface>(void)>>
-        // KeyFactoryMap;
+      static Registrar instance; // Guaranteed to be destroyed. AND
+                                 // http://preshing.com/20130930/double-checked-locking-is-fixed-in-cpp11/
+      // Instantiated on first use.
+      return instance;
+    }
 
-        /** @name Singleton interface
-         */
-        //! Get concrete instance (lazy construct)
-        static Registrar &getInstance()
-        {
-            static Registrar instance; // Guaranteed to be destroyed. AND
-                                       // http://preshing.com/20130930/double-checked-locking-is-fixed-in-cpp11/
-            // Instantiated on first use.
-            return instance;
-        }
+    Registrar(const Registrar &) = delete;
+    Registrar &operator=(const Registrar &) = delete;
+    Registrar(Registrar &&other)            = delete;
+    Registrar &operator=(Registrar &&other) = delete;
 
-        Registrar(const Registrar &) = delete;
-        Registrar &operator=(const Registrar &) = delete;
-        Registrar(Registrar &&other) = delete;
-        Registrar &operator=(Registrar &&other) = delete;
+    private:
+    //! Private ctor
+    Registrar() {};
+    /**@}*/
 
-      private:
-        //! Private ctor
-        Registrar(){};
-        /**@}*/
+    KeyFactoryMap m_keyfactory_map; //! container which store factories
+    public:
+    // void Register(const std::string& key,
+    // std::function<std::unique_ptr<Interface>(void)>
+    // ImplFactoryFunction)
 
-        KeyFactoryMap m_keyfactory_map; //! container which store factories
-      public:
-        // void Register(const std::string& key,
-        // std::function<std::unique_ptr<Interface>(void)>
-        // ImplFactoryFunction)
-
-        /**
-         * @brief Register a factory
-         *
-         * @param key name associated with factory
-         * @param ImplFactoryFunction factory has ptr to function
-         * @throw runtime_error if key already used
-         */
-        void Register(const std::string &key, std::function<Interface *(void)> ImplFactoryFunction)
-        {
-            auto it = m_keyfactory_map.find(key);
-            if (it != m_keyfactory_map.end())
-                POUTRE_RUNTIME_ERROR("Registrar::Add key already used");
-            m_keyfactory_map[key] = ImplFactoryFunction;
-        }
-    };
     /**
-    //! @} doxygroup: register_group
-    */
+     * @brief Register a factory
+     *
+     * @param key name associated with factory
+     * @param ImplFactoryFunction factory has ptr to function
+     * @throw runtime_error if key already used
+     */
+    void Register(const std::string &key, std::function<Interface *(void)> ImplFactoryFunction)
+    {
+      auto it = m_keyfactory_map.find(key);
+      if( it != m_keyfactory_map.end() )
+        POUTRE_RUNTIME_ERROR("Registrar::Add key already used");
+      m_keyfactory_map[key] = ImplFactoryFunction;
+    }
+  };
+  /**
+  //! @} doxygroup: register_group
+  */
 } // namespace poutre
 #endif // POUTRE_REGISTRATOR__HPP__

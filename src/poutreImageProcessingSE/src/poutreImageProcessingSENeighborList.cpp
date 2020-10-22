@@ -14,14 +14,14 @@
 #define POUTRE_IPSENL_HPP__
 
 #ifndef POUTRE_IPSECORE_HPP__
-#include <poutreImageProcessingSE/poutreImageProcessingSECore.hpp>
+#  include <poutreImageProcessingSE/poutreImageProcessingSECore.hpp>
 #endif
 
 namespace poutre
 {
-    namespace se
-    {
-    }
+  namespace se
+  {
+  }
 
 } // namespace poutre
 #endif // POUTRE_IPSENL_HPP__

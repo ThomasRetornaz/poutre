@@ -20,26 +20,25 @@
 
 #include <poutreBase/poutreConfig.hpp>
 
-#ifdef POUTRE_DYNAMIC       // defined if POUTRE is compiled as a DLL
-#ifdef PoutreIPCore_EXPORTS // defined if we are building the POUTRE DLL (instead of using it)
-#define IMP_CORE_API MODULE_EXPORT
-#else
-#define IMP_CORE_API MODULE_IMPORT
-#endif // POUTRE_DLL_EXPORTS
-#define IMP_CORE_LOCAL MODULE_LOCAL
+#ifdef POUTRE_DYNAMIC         // defined if POUTRE is compiled as a DLL
+#  ifdef PoutreIPCore_EXPORTS // defined if we are building the POUTRE DLL (instead of using it)
+#    define IMP_CORE_API MODULE_EXPORT
+#  else
+#    define IMP_CORE_API MODULE_IMPORT
+#  endif // POUTRE_DLL_EXPORTS
+#  define IMP_CORE_LOCAL MODULE_LOCAL
 #else // POUTRE_DLL is not defined: this means POUTRE is a static lib.
-#define IMP_CORE_API
-#define IMP_CORE_LOCAL
+#  define IMP_CORE_API
+#  define IMP_CORE_LOCAL
 #endif // POUTRE_DLL
 
 namespace poutre
 {
-
-    /**
-     * @addtogroup image_processing_group Image Processing Group
-     *
-     *@{
-     */
-    //! @} doxygroup: image_processing_group
+  /**
+   * @addtogroup image_processing_group Image Processing Group
+   *
+   *@{
+   */
+  //! @} doxygroup: image_processing_group
 } // namespace poutre
 #endif // POUTRE_IMAGEPROCESSINGCORE_HPP__

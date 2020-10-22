@@ -17,9 +17,8 @@
 
 namespace poutre
 {
-    namespace details
-    {
-
-    }
+  namespace details
+  {
+  }
 
 } // namespace poutre

@@ -27,14 +27,13 @@
 
 namespace poutre
 {
+  /**
+   * @addtogroup image_processing_compare_group Image Processing Template API Compare
+   * @ingroup image_processing_group
+   *@{
+   */
 
-    /**
-     * @addtogroup image_processing_compare_group Image Processing Template API Compare
-     * @ingroup image_processing_group
-     *@{
-     */
-
-    //! @} doxygroup: image_processing_compare_group
+  //! @} doxygroup: image_processing_compare_group
 
 } // namespace poutre
 #endif // POUTRE_IMAGEPROCESSING_COMPARE_T_HPP__

@@ -26,50 +26,54 @@
 
 namespace poutre
 {
-    /**
-     * @addtogroup image_processing_linear_group
-     *@{
-     */
-    /***********************************************************************************************************************************/
-    /*                                                  2D transpose along x */
-    /************************************************************
-     * **********************************************************************/
+  /**
+   * @addtogroup image_processing_linear_group
+   *@{
+   */
+  /***********************************************************************************************************************************/
+  /*                                                  2D transpose along x */
+  /************************************************************
+   * **********************************************************************/
 
-    template <typename T1, typename T2, ptrdiff_t Rank, template <typename, ptrdiff_t> class View1,
-              template <typename, ptrdiff_t> class View2>
-    struct t_transposeDispatcher
+  template<typename T1,
+           typename T2,
+           ptrdiff_t Rank,
+           template<typename, ptrdiff_t>
+           class View1,
+           template<typename, ptrdiff_t>
+           class View2>
+  struct t_transposeDispatcher
+  {
+    // generic case not supported yet
+    // static_assert(false, "To be implemented for generic views");
+  };
+
+  template<typename T> struct t_transposeDispatcher<T, T, 2, array_view, array_view>
+  {
+    void operator()(const array_view<T, 2> &i_vin, array_view<T, 2> &o_vout)
     {
-        // generic case not supported yet
-        // static_assert(false, "To be implemented for generic views");
-    };
+      POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
+      // check bound compatibility
+      auto   ibd    = i_vin.bound();
+      auto   obd    = o_vout.bound();
+      scoord oysize = obd[0];
+      scoord oxsize = obd[1];
+      scoord ysize  = ibd[0];
+      scoord xsize  = ibd[1];
 
-    template <typename T> struct t_transposeDispatcher<T, T, 2, array_view, array_view>
-    {
-        void operator()(const array_view<T, 2> &i_vin, array_view<T, 2> &o_vout)
-        {
-            POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
-            // check bound compatibility
-            auto ibd = i_vin.bound();
-            auto obd = o_vout.bound();
-            scoord oysize = obd[0];
-            scoord oxsize = obd[1];
-            scoord ysize = ibd[0];
-            scoord xsize = ibd[1];
+      scoord oxstep = o_vout.stride()[0];
+      scoord xstep  = i_vin.stride()[0];
 
-            scoord oxstep = o_vout.stride()[0];
-            scoord xstep = i_vin.stride()[0];
+      POUTRE_CHECK(oysize == xsize, "ibd[0]!=obd[1] bound not compatible");
+      POUTRE_CHECK(oxsize == ysize, "ibd[1]!=obd[0] bound not compatible");
 
-            POUTRE_CHECK(oysize == xsize, "ibd[0]!=obd[1] bound not compatible");
-            POUTRE_CHECK(oxsize == ysize, "ibd[1]!=obd[0] bound not compatible");
+      auto i_vinbeg  = i_vin.data();
+      auto o_voutbeg = o_vout.data();
 
-            auto i_vinbeg = i_vin.data();
-            auto o_voutbeg = o_vout.data();
-
-            for (scoord y = 0; y < xsize; y++)
-                for (scoord x = 0; x < ysize; x++)
-                    o_voutbeg[oxstep * y + x] = i_vinbeg[xstep * x + y];
-        }
-    };
+      for( scoord y = 0; y < xsize; y++ )
+        for( scoord x = 0; x < ysize; x++ ) o_voutbeg[oxstep * y + x] = i_vinbeg[xstep * x + y];
+    }
+  };
 
 #ifdef __SSE2__
 /*!
@@ -81,138 +85,138 @@ and do transposition
 * @note
 * @warning
 */
-#define tblock16x16(tmp1, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15)                        \
-    /*FIRST STEP GROUP Byte To Word*/                                                                                  \
-    tmp1 = _mm_unpackhi_epi8(r0, r1);                                                                                  \
-    r1 = _mm_unpacklo_epi8(r0, r1);                                                                                    \
-    r0 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi8(r2, r3);                                                                                  \
-    r3 = _mm_unpacklo_epi8(r2, r3);                                                                                    \
-    r2 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi8(r4, r5);                                                                                  \
-    r5 = _mm_unpacklo_epi8(r4, r5);                                                                                    \
-    r4 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi8(r6, r7);                                                                                  \
-    r7 = _mm_unpacklo_epi8(r6, r7);                                                                                    \
-    r6 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi8(r8, r9);                                                                                  \
-    r9 = _mm_unpacklo_epi8(r8, r9);                                                                                    \
-    r8 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi8(r10, r11);                                                                                \
-    r11 = _mm_unpacklo_epi8(r10, r11);                                                                                 \
-    r10 = tmp1;                                                                                                        \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi8(r12, r13);                                                                                \
-    r13 = _mm_unpacklo_epi8(r12, r13);                                                                                 \
-    r12 = tmp1;                                                                                                        \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi8(r14, r15);                                                                                \
-    r15 = _mm_unpacklo_epi8(r14, r15);                                                                                 \
-    r14 = tmp1;                                                                                                        \
-                                                                                                                       \
-    /*SECOND STEP GROUP Word to DWord*/                                                                                \
-    tmp1 = _mm_unpackhi_epi16(r0, r2);                                                                                 \
-    r2 = _mm_unpacklo_epi16(r0, r2);                                                                                   \
-    r0 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi16(r1, r3);                                                                                 \
-    r3 = _mm_unpacklo_epi16(r1, r3);                                                                                   \
-    r1 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi16(r4, r6);                                                                                 \
-    r6 = _mm_unpacklo_epi16(r4, r6);                                                                                   \
-    r4 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi16(r5, r7);                                                                                 \
-    r7 = _mm_unpacklo_epi16(r5, r7);                                                                                   \
-    r5 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi16(r8, r10);                                                                                \
-    r10 = _mm_unpacklo_epi16(r8, r10);                                                                                 \
-    r8 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi16(r9, r11);                                                                                \
-    r11 = _mm_unpacklo_epi16(r9, r11);                                                                                 \
-    r9 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi16(r12, r14);                                                                               \
-    r14 = _mm_unpacklo_epi16(r12, r14);                                                                                \
-    r12 = tmp1;                                                                                                        \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi16(r13, r15);                                                                               \
-    r15 = _mm_unpacklo_epi16(r13, r15);                                                                                \
-    r13 = tmp1;                                                                                                        \
-                                                                                                                       \
-    /*THIRD STEP GROUP DWord to QWord */                                                                               \
-    tmp1 = _mm_unpackhi_epi32(r0, r4);                                                                                 \
-    r4 = _mm_unpacklo_epi32(r0, r4);                                                                                   \
-    r0 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi32(r1, r5);                                                                                 \
-    r5 = _mm_unpacklo_epi32(r1, r5);                                                                                   \
-    r1 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi32(r2, r6);                                                                                 \
-    r6 = _mm_unpacklo_epi32(r2, r6);                                                                                   \
-    r2 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi32(r3, r7);                                                                                 \
-    r7 = _mm_unpacklo_epi32(r3, r7);                                                                                   \
-    r3 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi32(r8, r12);                                                                                \
-    r12 = _mm_unpacklo_epi32(r8, r12);                                                                                 \
-    r8 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi32(r9, r13);                                                                                \
-    r13 = _mm_unpacklo_epi32(r9, r13);                                                                                 \
-    r9 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi32(r10, r14);                                                                               \
-    r14 = _mm_unpacklo_epi32(r10, r14);                                                                                \
-    r10 = tmp1;                                                                                                        \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi32(r11, r15);                                                                               \
-    r15 = _mm_unpacklo_epi32(r11, r15);                                                                                \
-    r11 = tmp1;                                                                                                        \
-                                                                                                                       \
-    /*FOURTH STEP GROUP QWord to DQWord */                                                                             \
-    tmp1 = _mm_unpackhi_epi64(r0, r8);                                                                                 \
-    r8 = _mm_unpacklo_epi64(r0, r8);                                                                                   \
-    r0 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi64(r1, r9);                                                                                 \
-    r9 = _mm_unpacklo_epi64(r1, r9);                                                                                   \
-    r1 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi64(r2, r10);                                                                                \
-    r10 = _mm_unpacklo_epi64(r2, r10);                                                                                 \
-    r2 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi64(r3, r11);                                                                                \
-    r11 = _mm_unpacklo_epi64(r3, r11);                                                                                 \
-    r3 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi64(r4, r12);                                                                                \
-    r12 = _mm_unpacklo_epi64(r4, r12);                                                                                 \
-    r4 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi64(r5, r13);                                                                                \
-    r13 = _mm_unpacklo_epi64(r5, r13);                                                                                 \
-    r5 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi64(r6, r14);                                                                                \
-    r14 = _mm_unpacklo_epi64(r6, r14);                                                                                 \
-    r6 = tmp1;                                                                                                         \
-                                                                                                                       \
-    tmp1 = _mm_unpackhi_epi64(r7, r15);                                                                                \
-    r15 = _mm_unpacklo_epi64(r7, r15);                                                                                 \
-    r7 = tmp1
+#  define tblock16x16(tmp1, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15)                           \
+    /*FIRST STEP GROUP Byte To Word*/                                                                                       \
+    tmp1 = _mm_unpackhi_epi8(r0, r1);                                                                                       \
+    r1   = _mm_unpacklo_epi8(r0, r1);                                                                                       \
+    r0   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi8(r2, r3);                                                                                       \
+    r3   = _mm_unpacklo_epi8(r2, r3);                                                                                       \
+    r2   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi8(r4, r5);                                                                                       \
+    r5   = _mm_unpacklo_epi8(r4, r5);                                                                                       \
+    r4   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi8(r6, r7);                                                                                       \
+    r7   = _mm_unpacklo_epi8(r6, r7);                                                                                       \
+    r6   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi8(r8, r9);                                                                                       \
+    r9   = _mm_unpacklo_epi8(r8, r9);                                                                                       \
+    r8   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi8(r10, r11);                                                                                     \
+    r11  = _mm_unpacklo_epi8(r10, r11);                                                                                     \
+    r10  = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi8(r12, r13);                                                                                     \
+    r13  = _mm_unpacklo_epi8(r12, r13);                                                                                     \
+    r12  = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi8(r14, r15);                                                                                     \
+    r15  = _mm_unpacklo_epi8(r14, r15);                                                                                     \
+    r14  = tmp1;                                                                                                            \
+                                                                                                                            \
+    /*SECOND STEP GROUP Word to DWord*/                                                                                     \
+    tmp1 = _mm_unpackhi_epi16(r0, r2);                                                                                      \
+    r2   = _mm_unpacklo_epi16(r0, r2);                                                                                      \
+    r0   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi16(r1, r3);                                                                                      \
+    r3   = _mm_unpacklo_epi16(r1, r3);                                                                                      \
+    r1   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi16(r4, r6);                                                                                      \
+    r6   = _mm_unpacklo_epi16(r4, r6);                                                                                      \
+    r4   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi16(r5, r7);                                                                                      \
+    r7   = _mm_unpacklo_epi16(r5, r7);                                                                                      \
+    r5   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi16(r8, r10);                                                                                     \
+    r10  = _mm_unpacklo_epi16(r8, r10);                                                                                     \
+    r8   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi16(r9, r11);                                                                                     \
+    r11  = _mm_unpacklo_epi16(r9, r11);                                                                                     \
+    r9   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi16(r12, r14);                                                                                    \
+    r14  = _mm_unpacklo_epi16(r12, r14);                                                                                    \
+    r12  = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi16(r13, r15);                                                                                    \
+    r15  = _mm_unpacklo_epi16(r13, r15);                                                                                    \
+    r13  = tmp1;                                                                                                            \
+                                                                                                                            \
+    /*THIRD STEP GROUP DWord to QWord */                                                                                    \
+    tmp1 = _mm_unpackhi_epi32(r0, r4);                                                                                      \
+    r4   = _mm_unpacklo_epi32(r0, r4);                                                                                      \
+    r0   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi32(r1, r5);                                                                                      \
+    r5   = _mm_unpacklo_epi32(r1, r5);                                                                                      \
+    r1   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi32(r2, r6);                                                                                      \
+    r6   = _mm_unpacklo_epi32(r2, r6);                                                                                      \
+    r2   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi32(r3, r7);                                                                                      \
+    r7   = _mm_unpacklo_epi32(r3, r7);                                                                                      \
+    r3   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi32(r8, r12);                                                                                     \
+    r12  = _mm_unpacklo_epi32(r8, r12);                                                                                     \
+    r8   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi32(r9, r13);                                                                                     \
+    r13  = _mm_unpacklo_epi32(r9, r13);                                                                                     \
+    r9   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi32(r10, r14);                                                                                    \
+    r14  = _mm_unpacklo_epi32(r10, r14);                                                                                    \
+    r10  = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi32(r11, r15);                                                                                    \
+    r15  = _mm_unpacklo_epi32(r11, r15);                                                                                    \
+    r11  = tmp1;                                                                                                            \
+                                                                                                                            \
+    /*FOURTH STEP GROUP QWord to DQWord */                                                                                  \
+    tmp1 = _mm_unpackhi_epi64(r0, r8);                                                                                      \
+    r8   = _mm_unpacklo_epi64(r0, r8);                                                                                      \
+    r0   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi64(r1, r9);                                                                                      \
+    r9   = _mm_unpacklo_epi64(r1, r9);                                                                                      \
+    r1   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi64(r2, r10);                                                                                     \
+    r10  = _mm_unpacklo_epi64(r2, r10);                                                                                     \
+    r2   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi64(r3, r11);                                                                                     \
+    r11  = _mm_unpacklo_epi64(r3, r11);                                                                                     \
+    r3   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi64(r4, r12);                                                                                     \
+    r12  = _mm_unpacklo_epi64(r4, r12);                                                                                     \
+    r4   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi64(r5, r13);                                                                                     \
+    r13  = _mm_unpacklo_epi64(r5, r13);                                                                                     \
+    r5   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi64(r6, r14);                                                                                     \
+    r14  = _mm_unpacklo_epi64(r6, r14);                                                                                     \
+    r6   = tmp1;                                                                                                            \
+                                                                                                                            \
+    tmp1 = _mm_unpackhi_epi64(r7, r15);                                                                                     \
+    r15  = _mm_unpacklo_epi64(r7, r15);                                                                                     \
+    r7   = tmp1
 
 // https://stackoverflow.com/questions/13257166/print-a-m128i-variable
 // void p128_hex_u8(__m128i in)
@@ -226,258 +230,263 @@ and do transposition
 //      }
 
 // https ://software.intel.com/sites/landingpage/IntrinsicsGuide/
-#include <emmintrin.h>
-    template <> struct t_transposeDispatcher<pUINT8, pUINT8, 2, array_view, array_view>
+#  include <emmintrin.h>
+  template<> struct t_transposeDispatcher<pUINT8, pUINT8, 2, array_view, array_view>
+  {
+    void operator()(const array_view<pUINT8, 2> &i_vin, array_view<pUINT8, 2> &o_vout)
     {
-        void operator()(const array_view<pUINT8, 2> &i_vin, array_view<pUINT8, 2> &o_vout)
+      constexpr scoord loopStep = 16;
+      auto             ibd      = i_vin.bound();
+      auto             obd      = o_vout.bound();
+      POUTRE_CHECK(ibd[0] = obd[1], "ibd[0]!=obd[1] bound not compatible");
+      POUTRE_CHECK(ibd[1] = obd[0], "ibd[1]!=obd[0] bound not compatible");
+      auto   i_vinbeg1     = i_vin.data();
+      auto   o_voutbeg     = o_vout.data();
+      scoord ysize         = ibd[0]; //-V525
+      scoord xsize         = ibd[1];
+      scoord oxsize        = obd[1];
+      scoord oxstep        = o_vout.stride()[0];
+      scoord xstep         = i_vin.stride()[0];
+      scoord ySizeSimdLoop = ysize - (ysize % loopStep);
+      scoord xSizeSimdLoop = xsize - (xsize % loopStep);
+      scoord x, y;
+      // enforce no loop in case one of the two coordinate have size below
+      // loopStep
+      if( ySizeSimdLoop == 0 || xSizeSimdLoop == 0 )
+      {
+        ySizeSimdLoop = 0;
+        xSizeSimdLoop = 0;
+      }
+      __m128i tmp1, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15;
+      for( y = 0; y < ySizeSimdLoop; y += loopStep )
+      {
+        for( x = 0; x < xSizeSimdLoop; x += loopStep )
         {
-            constexpr scoord loopStep = 16;
-            auto ibd = i_vin.bound();
-            auto obd = o_vout.bound();
-            POUTRE_CHECK(ibd[0] = obd[1], "ibd[0]!=obd[1] bound not compatible");
-            POUTRE_CHECK(ibd[1] = obd[0], "ibd[1]!=obd[0] bound not compatible");
-            auto i_vinbeg1 = i_vin.data();
-            auto o_voutbeg = o_vout.data();
-            scoord ysize = ibd[0]; //-V525
-            scoord xsize = ibd[1];
-            scoord oxsize = obd[1];
-            scoord oxstep = o_vout.stride()[0];
-            scoord xstep = i_vin.stride()[0];
-            scoord ySizeSimdLoop = ysize - (ysize % loopStep);
-            scoord xSizeSimdLoop = xsize - (xsize % loopStep);
-            scoord x, y;
-            // enforce no loop in case one of the two coordinate have size below
-            // loopStep
-            if (ySizeSimdLoop == 0 || xSizeSimdLoop == 0)
-            {
-                ySizeSimdLoop = 0;
-                xSizeSimdLoop = 0;
-            }
-            __m128i tmp1, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15;
-            for (y = 0; y < ySizeSimdLoop; y += loopStep)
-            {
-                for (x = 0; x < xSizeSimdLoop; x += loopStep)
-                {
-                    r0 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 0) * xstep + x));
-                    r1 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 1) * xstep + x));
-                    r2 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 2) * xstep + x));
-                    r3 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 3) * xstep + x));
-                    r4 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 4) * xstep + x)); //-V112
-                    r5 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 5) * xstep + x));
-                    r6 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 6) * xstep + x));
-                    r7 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 7) * xstep + x));
-                    r8 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 8) * xstep + x));
-                    r9 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 9) * xstep + x));
-                    r10 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 10) * xstep + x));
-                    r11 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 11) * xstep + x));
-                    r12 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 12) * xstep + x));
-                    r13 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 13) * xstep + x));
-                    r14 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 14) * xstep + x));
-                    r15 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 15) * xstep + x));
-                    // p128_hex_u8(r0);
-                    // p128_hex_u8(r1);
+          r0  = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 0) * xstep + x));
+          r1  = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 1) * xstep + x));
+          r2  = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 2) * xstep + x));
+          r3  = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 3) * xstep + x));
+          r4  = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 4) * xstep + x)); //-V112
+          r5  = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 5) * xstep + x));
+          r6  = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 6) * xstep + x));
+          r7  = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 7) * xstep + x));
+          r8  = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 8) * xstep + x));
+          r9  = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 9) * xstep + x));
+          r10 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 10) * xstep + x));
+          r11 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 11) * xstep + x));
+          r12 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 12) * xstep + x));
+          r13 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 13) * xstep + x));
+          r14 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 14) * xstep + x));
+          r15 = _mm_loadu_si128((__m128i const *)(i_vinbeg1 + (y + 15) * xstep + x));
+          // p128_hex_u8(r0);
+          // p128_hex_u8(r1);
 
-                    tblock16x16(tmp1, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15);
+          tblock16x16(tmp1, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15);
 
-                    // p128_hex_u8(r15);
-                    // p128_hex_u8(r14);
+          // p128_hex_u8(r15);
+          // p128_hex_u8(r14);
 
-                    _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 0) * oxstep + y), r15);
-                    _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 1) * oxstep + y), r7);
-                    _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 2) * oxstep + y), r11);
-                    _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 3) * oxstep + y), r3);
-                    _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 4) * oxstep + y), r13); //-V112
-                    _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 5) * oxstep + y), r5);
-                    _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 6) * oxstep + y), r9);
-                    _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 7) * oxstep + y), r1);
-                    _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 8) * oxstep + y), r14);
-                    _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 9) * oxstep + y), r6);
-                    _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 10) * oxstep + y), r10);
-                    _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 11) * oxstep + y), r2);
-                    _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 12) * oxstep + y), r12);
-                    _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 13) * oxstep + y), r4);
-                    _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 14) * oxstep + y), r8);
-                    _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 15) * oxstep + y), r0);
-                }
-            }
-            // epilogue
-            /*for(scoord y=0;y<xsize;y++)
-               for(scoord x=0;x<ysize;x++)
-                  o_voutbeg[oxsize*y+x] =i_vinbeg1[xsize*x+y];
-            */
-            for (y = ySizeSimdLoop; y < ysize; y++)
-            {
-                for (x = 0; x < xSizeSimdLoop; x++)
-                {
-                    o_voutbeg[oxstep * y + x] = i_vinbeg1[xstep * x + y];
-                }
-            }
-            for (y = 0; y < ySizeSimdLoop; y++)
-            {
-                for (x = xSizeSimdLoop; x < xsize; x++)
-                {
-                    o_voutbeg[oxstep * y + x] = i_vinbeg1[xstep * x + y];
-                }
-            }
-            for (y = ySizeSimdLoop; y < ysize; y++)
-            {
-                for (x = xSizeSimdLoop; x < xsize; x++)
-                {
-                    o_voutbeg[oxstep * y + x] = i_vinbeg1[xstep * x + y];
-                }
-            }
+          _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 0) * oxstep + y), r15);
+          _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 1) * oxstep + y), r7);
+          _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 2) * oxstep + y), r11);
+          _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 3) * oxstep + y), r3);
+          _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 4) * oxstep + y), r13); //-V112
+          _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 5) * oxstep + y), r5);
+          _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 6) * oxstep + y), r9);
+          _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 7) * oxstep + y), r1);
+          _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 8) * oxstep + y), r14);
+          _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 9) * oxstep + y), r6);
+          _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 10) * oxstep + y), r10);
+          _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 11) * oxstep + y), r2);
+          _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 12) * oxstep + y), r12);
+          _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 13) * oxstep + y), r4);
+          _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 14) * oxstep + y), r8);
+          _mm_storeu_si128((__m128i *)(o_voutbeg + (x + 15) * oxstep + y), r0);
         }
-    };
+      }
+      // epilogue
+      /*for(scoord y=0;y<xsize;y++)
+         for(scoord x=0;x<ysize;x++)
+            o_voutbeg[oxsize*y+x] =i_vinbeg1[xsize*x+y];
+      */
+      for( y = ySizeSimdLoop; y < ysize; y++ )
+      {
+        for( x = 0; x < xSizeSimdLoop; x++ )
+        {
+          o_voutbeg[oxstep * y + x] = i_vinbeg1[xstep * x + y];
+        }
+      }
+      for( y = 0; y < ySizeSimdLoop; y++ )
+      {
+        for( x = xSizeSimdLoop; x < xsize; x++ )
+        {
+          o_voutbeg[oxstep * y + x] = i_vinbeg1[xstep * x + y];
+        }
+      }
+      for( y = ySizeSimdLoop; y < ysize; y++ )
+      {
+        for( x = xSizeSimdLoop; x < xsize; x++ )
+        {
+          o_voutbeg[oxstep * y + x] = i_vinbeg1[xstep * x + y];
+        }
+      }
+    }
+  };
 #endif //__SSE2__
        // Note slower than simple double loop due probably to unaligned load
-    // #ifdef __AVX__
+  // #ifdef __AVX__
 
-    //    //see
-    //    https://stackoverflow.com/questions/25622745/transpose-an-8x8-float-using-avx-avx2
-    //    template<>
-    //    struct t_transposeOp<pFLOAT, pFLOAT>
-    //    {
-    //       void operator()(const DenseImage<pFLOAT,2>&
-    //       i_vin1,DenseImage<pFLOAT,2>& o_vout) const
-    //       {
-    //          constexpr scoord loopStep = 8;
-    //          auto ibd = i_vin1.bound();
-    //          auto obd = o_vout.bound();
-    //          POUTRE_CHECK(ibd[0] = obd[1], "ibd[0]!=obd[1] bound not
-    //          compatible"); POUTRE_CHECK(ibd[1] = obd[0], "ibd[1]!=obd[0] bound
-    //          not compatible"); auto i_vinbeg1 = i_vin1.data(); auto o_voutbeg =
-    //          o_vout.data(); scoord ysize = ibd[0]; scoord xsize = ibd[1]; scoord
-    //          oxsize = obd[1]; scoord ySizeSimdLoop = ysize - (ysize%loopStep);
-    //          scoord xSizeSimdLoop = xsize - (xsize%loopStep);
-    //          scoord x, y;
-    //          //enforce no loop in case one of the two coordinate have size below
-    //          loopStep if (ySizeSimdLoop == 0 || xSizeSimdLoop == 0)
-    //          {
-    //             ySizeSimdLoop = 0;
-    //             xSizeSimdLoop = 0;
-    //          }
-    //          __m256  r0, r1, r2, r3, r4, r5, r6, r7;
-    //          __m256  t0, t1, t2, t3, t4, t5, t6, t7;
-    //          for (y = 0; y < ySizeSimdLoop; y += loopStep)
-    //          {
-    //             for (x = 0; x < xSizeSimdLoop; x += loopStep)
-    //             {
+  //    //see
+  //    https://stackoverflow.com/questions/25622745/transpose-an-8x8-float-using-avx-avx2
+  //    template<>
+  //    struct t_transposeOp<pFLOAT, pFLOAT>
+  //    {
+  //       void operator()(const DenseImage<pFLOAT,2>&
+  //       i_vin1,DenseImage<pFLOAT,2>& o_vout) const
+  //       {
+  //          constexpr scoord loopStep = 8;
+  //          auto ibd = i_vin1.bound();
+  //          auto obd = o_vout.bound();
+  //          POUTRE_CHECK(ibd[0] = obd[1], "ibd[0]!=obd[1] bound not
+  //          compatible"); POUTRE_CHECK(ibd[1] = obd[0], "ibd[1]!=obd[0] bound
+  //          not compatible"); auto i_vinbeg1 = i_vin1.data(); auto o_voutbeg =
+  //          o_vout.data(); scoord ysize = ibd[0]; scoord xsize = ibd[1]; scoord
+  //          oxsize = obd[1]; scoord ySizeSimdLoop = ysize - (ysize%loopStep);
+  //          scoord xSizeSimdLoop = xsize - (xsize%loopStep);
+  //          scoord x, y;
+  //          //enforce no loop in case one of the two coordinate have size below
+  //          loopStep if (ySizeSimdLoop == 0 || xSizeSimdLoop == 0)
+  //          {
+  //             ySizeSimdLoop = 0;
+  //             xSizeSimdLoop = 0;
+  //          }
+  //          __m256  r0, r1, r2, r3, r4, r5, r6, r7;
+  //          __m256  t0, t1, t2, t3, t4, t5, t6, t7;
+  //          for (y = 0; y < ySizeSimdLoop; y += loopStep)
+  //          {
+  //             for (x = 0; x < xSizeSimdLoop; x += loopStep)
+  //             {
 
-    //                //todo check loading through avx
-    //                r0 =
-    //                _mm256_insertf128_ps(_mm256_castps128_ps256(_mm_loadu_ps(i_vin1[y
-    //                + 0].data() + x + 0)), _mm_loadu_ps(i_vin1[y + 4].data() + x +
-    //                0), 1); //-V112 r1 =
-    //                _mm256_insertf128_ps(_mm256_castps128_ps256(_mm_loadu_ps(i_vin1[y
-    //                + 1].data() + x + 0)), _mm_loadu_ps(i_vin1[y + 5].data() + x +
-    //                0), 1); r2 =
-    //                _mm256_insertf128_ps(_mm256_castps128_ps256(_mm_loadu_ps(i_vin1[y
-    //                + 2].data() + x + 0)), _mm_loadu_ps(i_vin1[y + 6].data() + x +
-    //                0), 1); r3 =
-    //                _mm256_insertf128_ps(_mm256_castps128_ps256(_mm_loadu_ps(i_vin1[y
-    //                + 3].data() + x + 0)), _mm_loadu_ps(i_vin1[y + 7].data() + x +
-    //                0), 1); r4 =
-    //                _mm256_insertf128_ps(_mm256_castps128_ps256(_mm_loadu_ps(i_vin1[y
-    //                + 0].data() + x + 4)), _mm_loadu_ps(i_vin1[y + 4].data() + x +
-    //                4), 1); //-V112 r5 =
-    //                _mm256_insertf128_ps(_mm256_castps128_ps256(_mm_loadu_ps(i_vin1[y
-    //                + 1].data() + x + 4)), _mm_loadu_ps(i_vin1[y + 5].data() + x +
-    //                4), 1); //-V112 r6 =
-    //                _mm256_insertf128_ps(_mm256_castps128_ps256(_mm_loadu_ps(i_vin1[y
-    //                + 2].data() + x + 4)), _mm_loadu_ps(i_vin1[y + 6].data() + x +
-    //                4), 1); //-V112 r7 =
-    //                _mm256_insertf128_ps(_mm256_castps128_ps256(_mm_loadu_ps(i_vin1[y
-    //                + 3].data() + x + 4)), _mm_loadu_ps(i_vin1[y + 7].data() + x +
-    //                4), 1); //-V112
+  //                //todo check loading through avx
+  //                r0 =
+  //                _mm256_insertf128_ps(_mm256_castps128_ps256(_mm_loadu_ps(i_vin1[y
+  //                + 0].data() + x + 0)), _mm_loadu_ps(i_vin1[y + 4].data() + x +
+  //                0), 1); //-V112 r1 =
+  //                _mm256_insertf128_ps(_mm256_castps128_ps256(_mm_loadu_ps(i_vin1[y
+  //                + 1].data() + x + 0)), _mm_loadu_ps(i_vin1[y + 5].data() + x +
+  //                0), 1); r2 =
+  //                _mm256_insertf128_ps(_mm256_castps128_ps256(_mm_loadu_ps(i_vin1[y
+  //                + 2].data() + x + 0)), _mm_loadu_ps(i_vin1[y + 6].data() + x +
+  //                0), 1); r3 =
+  //                _mm256_insertf128_ps(_mm256_castps128_ps256(_mm_loadu_ps(i_vin1[y
+  //                + 3].data() + x + 0)), _mm_loadu_ps(i_vin1[y + 7].data() + x +
+  //                0), 1); r4 =
+  //                _mm256_insertf128_ps(_mm256_castps128_ps256(_mm_loadu_ps(i_vin1[y
+  //                + 0].data() + x + 4)), _mm_loadu_ps(i_vin1[y + 4].data() + x +
+  //                4), 1); //-V112 r5 =
+  //                _mm256_insertf128_ps(_mm256_castps128_ps256(_mm_loadu_ps(i_vin1[y
+  //                + 1].data() + x + 4)), _mm_loadu_ps(i_vin1[y + 5].data() + x +
+  //                4), 1); //-V112 r6 =
+  //                _mm256_insertf128_ps(_mm256_castps128_ps256(_mm_loadu_ps(i_vin1[y
+  //                + 2].data() + x + 4)), _mm_loadu_ps(i_vin1[y + 6].data() + x +
+  //                4), 1); //-V112 r7 =
+  //                _mm256_insertf128_ps(_mm256_castps128_ps256(_mm_loadu_ps(i_vin1[y
+  //                + 3].data() + x + 4)), _mm_loadu_ps(i_vin1[y + 7].data() + x +
+  //                4), 1); //-V112
 
-    //                t0 = _mm256_unpacklo_ps(r0, r1);
-    //                t1 = _mm256_unpackhi_ps(r0, r1);
-    //                t2 = _mm256_unpacklo_ps(r2, r3);
-    //                t3 = _mm256_unpackhi_ps(r2, r3);
-    //                t4 = _mm256_unpacklo_ps(r4, r5);
-    //                t5 = _mm256_unpackhi_ps(r4, r5);
-    //                t6 = _mm256_unpacklo_ps(r6, r7);
-    //                t7 = _mm256_unpackhi_ps(r6, r7);
+  //                t0 = _mm256_unpacklo_ps(r0, r1);
+  //                t1 = _mm256_unpackhi_ps(r0, r1);
+  //                t2 = _mm256_unpacklo_ps(r2, r3);
+  //                t3 = _mm256_unpackhi_ps(r2, r3);
+  //                t4 = _mm256_unpacklo_ps(r4, r5);
+  //                t5 = _mm256_unpackhi_ps(r4, r5);
+  //                t6 = _mm256_unpacklo_ps(r6, r7);
+  //                t7 = _mm256_unpackhi_ps(r6, r7);
 
-    //                r0 = _mm256_shuffle_ps(t0,t2, 0x44);
-    //                r1 = _mm256_shuffle_ps(t0,t2, 0xEE);
-    //                r2 = _mm256_shuffle_ps(t1,t3, 0x44);
-    //                r3 = _mm256_shuffle_ps(t1,t3, 0xEE);
-    //                r4 = _mm256_shuffle_ps(t4,t6, 0x44);
-    //                r5 = _mm256_shuffle_ps(t4,t6, 0xEE);
-    //                r6 = _mm256_shuffle_ps(t5,t7, 0x44);
-    //                r7 = _mm256_shuffle_ps(t5,t7, 0xEE);
-    //                //__m256 v;
-    //                //v = _mm256_shuffle_ps(t0, t2, 0x4E);
-    //                //r0 = _mm256_blend_ps(t0, v, 0xCC);
-    //                //r1 = _mm256_blend_ps(t2, v, 0x33);
+  //                r0 = _mm256_shuffle_ps(t0,t2, 0x44);
+  //                r1 = _mm256_shuffle_ps(t0,t2, 0xEE);
+  //                r2 = _mm256_shuffle_ps(t1,t3, 0x44);
+  //                r3 = _mm256_shuffle_ps(t1,t3, 0xEE);
+  //                r4 = _mm256_shuffle_ps(t4,t6, 0x44);
+  //                r5 = _mm256_shuffle_ps(t4,t6, 0xEE);
+  //                r6 = _mm256_shuffle_ps(t5,t7, 0x44);
+  //                r7 = _mm256_shuffle_ps(t5,t7, 0xEE);
+  //                //__m256 v;
+  //                //v = _mm256_shuffle_ps(t0, t2, 0x4E);
+  //                //r0 = _mm256_blend_ps(t0, v, 0xCC);
+  //                //r1 = _mm256_blend_ps(t2, v, 0x33);
 
-    //                //v = _mm256_shuffle_ps(t1, t3, 0x4E);
-    //                //r2 = _mm256_blend_ps(t1, v, 0xCC);
-    //                //r3 = _mm256_blend_ps(t3, v, 0x33);
+  //                //v = _mm256_shuffle_ps(t1, t3, 0x4E);
+  //                //r2 = _mm256_blend_ps(t1, v, 0xCC);
+  //                //r3 = _mm256_blend_ps(t3, v, 0x33);
 
-    //                //v = _mm256_shuffle_ps(t4, t6, 0x4E);
-    //                //r4 = _mm256_blend_ps(t4, v, 0xCC);
-    //                //r5 = _mm256_blend_ps(t6, v, 0x33);
+  //                //v = _mm256_shuffle_ps(t4, t6, 0x4E);
+  //                //r4 = _mm256_blend_ps(t4, v, 0xCC);
+  //                //r5 = _mm256_blend_ps(t6, v, 0x33);
 
-    //                //v = _mm256_shuffle_ps(t5, t7, 0x4E);
-    //                //r6 = _mm256_blend_ps(t5, v, 0xCC);
-    //                //r7 = _mm256_blend_ps(t7, v, 0x33);
+  //                //v = _mm256_shuffle_ps(t5, t7, 0x4E);
+  //                //r6 = _mm256_blend_ps(t5, v, 0xCC);
+  //                //r7 = _mm256_blend_ps(t7, v, 0x33);
 
-    //                _mm256_storeu_ps(o_vout[x + 0].data() + y, r0);
-    //                _mm256_storeu_ps(o_vout[x + 1].data() + y, r1);
-    //                _mm256_storeu_ps(o_vout[x + 2].data() + y, r2);
-    //                _mm256_storeu_ps(o_vout[x + 3].data() + y, r3);
-    //                _mm256_storeu_ps(o_vout[x + 4].data() + y, r4); //-V112
-    //                _mm256_storeu_ps(o_vout[x + 5].data() + y, r5);
-    //                _mm256_storeu_ps(o_vout[x + 6].data() + y, r6);
-    //                _mm256_storeu_ps(o_vout[x + 7].data() + y, r7);
-    //             }
-    //          }
+  //                _mm256_storeu_ps(o_vout[x + 0].data() + y, r0);
+  //                _mm256_storeu_ps(o_vout[x + 1].data() + y, r1);
+  //                _mm256_storeu_ps(o_vout[x + 2].data() + y, r2);
+  //                _mm256_storeu_ps(o_vout[x + 3].data() + y, r3);
+  //                _mm256_storeu_ps(o_vout[x + 4].data() + y, r4); //-V112
+  //                _mm256_storeu_ps(o_vout[x + 5].data() + y, r5);
+  //                _mm256_storeu_ps(o_vout[x + 6].data() + y, r6);
+  //                _mm256_storeu_ps(o_vout[x + 7].data() + y, r7);
+  //             }
+  //          }
 
-    //          //epilogue
-    //          for (y = ySizeSimdLoop; y < ysize; y++)
-    //          {
-    //             for (x = 0; x < xSizeSimdLoop; x++)
-    //             {
-    //                o_voutbeg[x*oxsize + y] = i_vinbeg1[x + y * xsize];
-    //             }
-    //          }
-    //          for (y = 0; y < ySizeSimdLoop; y++)
-    //          {
-    //             for (x = xSizeSimdLoop; x < xsize; x++)
-    //             {
-    //                o_voutbeg[x*oxsize + y] = i_vinbeg1[x + y * xsize];
-    //             }
-    //          }
-    //          for (y = ySizeSimdLoop; y < ysize; y++)
-    //          {
-    //             for (x = xSizeSimdLoop; x < xsize; x++)
-    //             {
-    //                o_voutbeg[x*oxsize + y] = i_vinbeg1[x + y * xsize];
-    //             }
-    //          }
-    //       }
-    //    };
-    // #endif //__AVX__
+  //          //epilogue
+  //          for (y = ySizeSimdLoop; y < ysize; y++)
+  //          {
+  //             for (x = 0; x < xSizeSimdLoop; x++)
+  //             {
+  //                o_voutbeg[x*oxsize + y] = i_vinbeg1[x + y * xsize];
+  //             }
+  //          }
+  //          for (y = 0; y < ySizeSimdLoop; y++)
+  //          {
+  //             for (x = xSizeSimdLoop; x < xsize; x++)
+  //             {
+  //                o_voutbeg[x*oxsize + y] = i_vinbeg1[x + y * xsize];
+  //             }
+  //          }
+  //          for (y = ySizeSimdLoop; y < ysize; y++)
+  //          {
+  //             for (x = xSizeSimdLoop; x < xsize; x++)
+  //             {
+  //                o_voutbeg[x*oxsize + y] = i_vinbeg1[x + y * xsize];
+  //             }
+  //          }
+  //       }
+  //    };
+  // #endif //__AVX__
 
-    template <typename TIn, typename TOut, ptrdiff_t Rank, template <typename, ptrdiff_t> class ViewIn,
-              template <typename, ptrdiff_t> class ViewOut>
-    void t_transpose(const ViewIn<TIn, Rank> &i_vin, ViewOut<TOut, Rank> &o_vout)
-    {
-        POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
-        t_transposeDispatcher<TIn, TOut, Rank, ViewIn, ViewOut> dispatcher;
-        dispatcher(i_vin, o_vout);
-    }
-    template <typename TIn, typename TOut, ptrdiff_t Rank>
-    void t_transpose(const DenseImage<TIn, Rank> &i_vin, DenseImage<TOut, Rank> &o_vout)
-    {
-        AssertAsTypesCompatible(i_vin, o_vout, "t_transpose incompatible types");
-        auto viewIn = view(const_cast<DenseImage<TIn, Rank> &>(i_vin));
-        auto viewOut = view(o_vout);
-        t_transpose(viewIn, viewOut);
-    }
-    //! @} doxygroup: image_processing_linear_group
+  template<typename TIn,
+           typename TOut,
+           ptrdiff_t Rank,
+           template<typename, ptrdiff_t>
+           class ViewIn,
+           template<typename, ptrdiff_t>
+           class ViewOut>
+  void t_transpose(const ViewIn<TIn, Rank> &i_vin, ViewOut<TOut, Rank> &o_vout)
+  {
+    POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
+    t_transposeDispatcher<TIn, TOut, Rank, ViewIn, ViewOut> dispatcher;
+    dispatcher(i_vin, o_vout);
+  }
+  template<typename TIn, typename TOut, ptrdiff_t Rank>
+  void t_transpose(const DenseImage<TIn, Rank> &i_vin, DenseImage<TOut, Rank> &o_vout)
+  {
+    AssertAsTypesCompatible(i_vin, o_vout, "t_transpose incompatible types");
+    auto viewIn  = view(const_cast<DenseImage<TIn, Rank> &>(i_vin));
+    auto viewOut = view(o_vout);
+    t_transpose(viewIn, viewOut);
+  }
+  //! @} doxygroup: image_processing_linear_group
 } // namespace poutre
 
 #endif // POUTRE_IMAGEPROCESSING_TRANSPOSE_HPP__

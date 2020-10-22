@@ -15,48 +15,47 @@
 
 namespace poutre
 {
+  bool JsonSerializer::Serialize(InterfaceJsonSerializable *iptrJSObj, std::string &ostr)
+  {
+    if( iptrJSObj == nullptr )
+      return false;
 
-    bool JsonSerializer::Serialize(InterfaceJsonSerializable *iptrJSObj, std::string &ostr)
+    Json::Value serializeRoot;
+    iptrJSObj->Serialize(serializeRoot);
+
+    Json::StreamWriterBuilder builder;
+    Json::Value               settings = Json::nullValue;
+    Json::Value               invalid_settings;
+    builder.setDefaults(&settings);
+
+    if( !builder.validate(&invalid_settings) )
     {
-        if (iptrJSObj == nullptr)
-            return false;
-
-        Json::Value serializeRoot;
-        iptrJSObj->Serialize(serializeRoot);
-
-        Json::StreamWriterBuilder builder;
-        Json::Value settings = Json::nullValue;
-        Json::Value invalid_settings;
-        builder.setDefaults(&settings);
-
-        if (!builder.validate(&invalid_settings))
-        {
-            return false;
-        }
-
-        ostr = Json::writeString(builder, serializeRoot);
-
-        return true;
+      return false;
     }
 
-    bool JsonSerializer::Deserialize(InterfaceJsonSerializable *iptrJSObj, const std::string &istr)
+    ostr = Json::writeString(builder, serializeRoot);
+
+    return true;
+  }
+
+  bool JsonSerializer::Deserialize(InterfaceJsonSerializable *iptrJSObj, const std::string &istr)
+  {
+    if( iptrJSObj == nullptr )
+      return false;
+
+    Json::Value value;
+
+    std::string                             jsonReaderError;
+    Json::CharReaderBuilder                 jsonReaderBuilder;
+    std::unique_ptr<Json::CharReader> const reader(jsonReaderBuilder.newCharReader());
+
+    if( !reader->parse(istr.c_str(), istr.c_str() + istr.size(), &value, &jsonReaderError) )
     {
-        if (iptrJSObj == nullptr)
-            return false;
-
-        Json::Value value;
-
-        std::string jsonReaderError;
-        Json::CharReaderBuilder jsonReaderBuilder;
-        std::unique_ptr<Json::CharReader> const reader(jsonReaderBuilder.newCharReader());
-
-        if (!reader->parse(istr.c_str(), istr.c_str() + istr.size(), &value, &jsonReaderError))
-        {
-            return false;
-        }
-        iptrJSObj->Deserialize(value);
-
-        return true;
+      return false;
     }
+    iptrJSObj->Deserialize(value);
+
+    return true;
+  }
 
 } // namespace poutre
