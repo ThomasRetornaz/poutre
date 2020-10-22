@@ -11,10 +11,11 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <poutreIO/poutreIOString.hpp>
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
+
+#include <boost/lexical_cast.hpp>
+#include <iostream>
 #include <sstream>
 
 namespace poutre

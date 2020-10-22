@@ -18,11 +18,12 @@
  *
  */
 
+#include <poutreBase/poutreBase.hpp>
+
 #include <condition_variable>
 #include <future>
 #include <mutex>
 #include <omp.h>
-#include <poutreBase/poutreBase.hpp>
 #include <queue>
 #include <thread>
 #include <utility>

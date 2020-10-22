@@ -21,10 +21,11 @@
 #ifndef POUTREIOLOADER_HPP
 #define POUTREIOLOADER_HPP
 
-#include <filesystem>
-#include <memory>
 #include <poutreIO/poutreIO.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
+
+#include <filesystem>
+#include <memory>
 #include <string>
 
 namespace poutre

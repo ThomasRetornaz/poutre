@@ -17,9 +17,10 @@
 #ifndef POUTREIOSTRING_HPP
 #define POUTREIOSTRING_HPP
 
-#include <memory>
 #include <poutreIO/poutreIO.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
+
+#include <memory>
 #include <string>
 
 namespace poutre

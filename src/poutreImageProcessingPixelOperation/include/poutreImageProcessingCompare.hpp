@@ -19,7 +19,6 @@
  * @copyright Copyright (c) 2020
  *
  */
-#include <boost/call_traits.hpp>
 #include <poutreBase/include/poutreSimdAlgorithm.hpp> //simd transform
 #include <poutreBase/poutreContainerView.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
@@ -28,6 +27,8 @@
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingQuaternaryOp.hpp>
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingTernaryOp.hpp>
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingUnaryOp.hpp>
+
+#include <boost/call_traits.hpp>
 
 namespace poutre
 {

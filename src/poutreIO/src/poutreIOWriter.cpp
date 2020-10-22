@@ -16,13 +16,14 @@
  *
  * Created on 15 mars 2016
  */
-#include <boost/algorithm/string.hpp>
-#include <boost/filesystem.hpp>
-#include <memory>
 #include <poutreIO/include/poutreOIIO.hpp>
 #include <poutreIO/poutreIO.hpp>
 #include <poutreIO/poutreIOWriter.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
+
+#include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
+#include <memory>
 #include <string>
 
 namespace poutre

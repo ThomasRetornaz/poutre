@@ -18,9 +18,10 @@
  *
  */
 
-#include <memory>
 #include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
+
+#include <memory>
 #include <vector>
 
 namespace poutre

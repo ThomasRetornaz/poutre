@@ -18,13 +18,14 @@
  *
  */
 
-#include <limits>
 #include <poutreBase/include/poutreSimd.hpp>
 #include <poutreBase/poutreConfig.hpp>
 #include <poutreBase/poutreCoordinate.hpp>
 #include <poutreBase/poutreStaticContainer.hpp>
 #include <poutreBase/poutreTypes.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
+
+#include <limits>
 #include <stdexcept>
 #include <type_traits>
 

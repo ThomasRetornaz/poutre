@@ -17,9 +17,10 @@
 #ifndef POUTREIOWRITTER_HPP
 #define POUTREIOWRITTER_HPP
 
-#include <memory>
 #include <poutreIO/poutreIO.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
+
+#include <memory>
 #include <string>
 
 namespace poutre

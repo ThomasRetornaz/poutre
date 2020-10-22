@@ -18,11 +18,12 @@
  *
  */
 
+#include <poutreBase/poutreTypes.hpp>
+
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/box.hpp>
 #include <boost/geometry/geometries/point.hpp>
 #include <boost/geometry/index/rtree.hpp>
-#include <poutreBase/poutreTypes.hpp>
 
 //#ifdef _MSC_VER
 //#pragma warning( push )

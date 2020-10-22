@@ -16,8 +16,6 @@
  *
  *
  */
-#include <algorithm>
-#include <numeric>
 #include <poutreBase/poutreContainerView.hpp>
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainerCopieConvert.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
@@ -26,6 +24,9 @@
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
 #include <poutreImageProcessingPixelOperation/include/poutreImageProcessingArith.hpp>
 #include <poutreImageProcessingSE/poutreImageProcessingSENeighborList.hpp>
+
+#include <algorithm>
+#include <numeric>
 
 namespace poutre
 {

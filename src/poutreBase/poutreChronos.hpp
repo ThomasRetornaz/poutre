@@ -18,10 +18,11 @@
  *
  */
 
+#include <poutreBase/poutreBase.hpp>
+
 #include <chrono>
 #include <ctime>
 #include <iostream>
-#include <poutreBase/poutreBase.hpp>
 #include <sstream>
 
 namespace poutre

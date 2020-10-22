@@ -18,9 +18,10 @@
  *
  */
 
-#include <iterator>
 #include <poutreBase/poutreConfig.hpp>
 #include <poutreBase/poutreTypes.hpp>
+
+#include <iterator>
 
 namespace poutre
 {

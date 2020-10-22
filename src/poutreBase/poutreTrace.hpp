@@ -18,13 +18,14 @@
  *
  */
 
+#include <poutreBase/poutreBase.hpp>
+#include <poutreBase/poutreConfig.hpp>
+
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 #include <boost/lexical_cast.hpp>
 #include <fstream>
 #include <ostream>
-#include <poutreBase/poutreBase.hpp>
-#include <poutreBase/poutreConfig.hpp>
 
 /**
  * @addtogroup trace_group Trace facilities

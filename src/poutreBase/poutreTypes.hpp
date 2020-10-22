@@ -18,8 +18,9 @@
  *
  */
 
-#include <cstdint>
 #include <poutreBase/poutreBase.hpp>
+
+#include <cstdint>
 //#include <string>
 #include <iosfwd>
 

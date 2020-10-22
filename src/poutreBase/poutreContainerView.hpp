@@ -21,6 +21,7 @@
 
 #include <poutreBase/poutreConfig.hpp>
 #include <poutreBase/poutreCoordinate.hpp>
+
 #include <type_traits>
 
 #ifdef _MSC_VER

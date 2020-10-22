@@ -21,9 +21,10 @@
  *
  */
 
-#include <boost/heap/priority_queue.hpp>
 #include <poutreBase/poutreConfig.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
+
+#include <boost/heap/priority_queue.hpp>
 #include <queue>
 #include <vector>
 

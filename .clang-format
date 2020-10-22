@@ -39,7 +39,7 @@ ExperimentalAutoDetectBinPacking: false
 FixNamespaceComments: false
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex:           '^<poutre/'
+  - Regex:           '^<poutre'
     Priority:        0
   - Regex:           '<[[:alnum:].]+>'
     Priority:        1

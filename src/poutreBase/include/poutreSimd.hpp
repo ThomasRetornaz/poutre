@@ -20,6 +20,7 @@
 
 #include <poutreBase/poutreConfig.hpp>
 #include <poutreBase/poutreTypes.hpp>
+
 #include <vector>
 #include <xsimd/xsimd.hpp>
 

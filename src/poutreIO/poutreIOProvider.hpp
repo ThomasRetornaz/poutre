@@ -17,9 +17,10 @@
 #ifndef POUTREIOPROVIDER_HPP
 #define POUTREIOPROVIDER_HPP
 
-#include <deque>
 #include <poutreIO/poutreIO.hpp>
 #include <poutreIO/poutreIOLoader.hpp>
+
+#include <deque>
 
 namespace poutre
 {

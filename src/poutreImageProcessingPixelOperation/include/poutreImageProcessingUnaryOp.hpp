@@ -19,11 +19,12 @@
  * @copyright Copyright (c) 2020
  *
  */
-#include <algorithm>                                  //transform
 #include <poutreBase/include/poutreSimdAlgorithm.hpp> //simd transform
 #include <poutreBase/poutreContainerView.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
+
+#include <algorithm> //transform
 
 // move this in a dedicated here in PoutreCore
 namespace poutre

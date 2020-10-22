@@ -19,11 +19,12 @@
  *
  */
 
-#include <array>
-#include <iostream>
 #include <poutreBase/poutreConfig.hpp>
 #include <poutreBase/poutreStaticContainer.hpp>
 #include <poutreBase/poutreTypes.hpp>
+
+#include <array>
+#include <iostream>
 #include <stdexcept>
 
 #ifdef _MSC_VER

@@ -1,5 +1,6 @@
-#include <cstdlib> // getenv
 #include <poutreBase/include/poutreThreading.hpp>
+
+#include <cstdlib> // getenv
 
 namespace poutre
 {

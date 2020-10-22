@@ -18,11 +18,12 @@
  *
  */
 
-#include <memory>
 #include <poutreBase/include/poutreSimd.hpp>
 #include <poutreBase/poutreConfig.hpp>
 #include <poutreBase/poutreTypes.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
+
+#include <memory>
 #include <stddef.h>
 #include <stdio.h>
 

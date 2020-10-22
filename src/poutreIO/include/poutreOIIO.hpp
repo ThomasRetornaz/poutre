@@ -32,11 +32,12 @@
 #  pragma clang diagnostic pop
 #endif
 
-#include <boost/filesystem.hpp>
-#include <memory>
 #include <poutreIO/poutreIO.hpp>
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
+
+#include <boost/filesystem.hpp>
+#include <memory>
 #include <string>
 
 namespace poutre

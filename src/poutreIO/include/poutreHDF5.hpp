@@ -16,15 +16,16 @@
 #ifndef POUTREOIIO_HPP
 #define POUTREOIIO_HPP
 
+#include <poutreIO/poutreIO.hpp>
+#include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
+#include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
+
 #include "H5pubconf.h"
 #include <H5Cpp.h>
 #include <H5public.h>
 #include <cstdint>
 #include <hdf5_hl.h>
 #include <memory>
-#include <poutreIO/poutreIO.hpp>
-#include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
-#include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
 #include <string>
 
 namespace poutre
