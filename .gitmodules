@@ -12,10 +12,6 @@
 	path = thirdparties/libpng
 	url = https://github.com/ThomasRetornaz/libpng.git
 	branch = cmake_allow_as_submodule
-[submodule "thirdparties/libjpeg"]
-	path = thirdparties/libjpeg
-	url = https://github.com/ThomasRetornaz/libjpeg.git
-	branch = cmake_allow_as_submodule
 [submodule "thirdparties/oiio"]
 	path = thirdparties/oiio
 	url = https://github.com/ThomasRetornaz/oiio.git

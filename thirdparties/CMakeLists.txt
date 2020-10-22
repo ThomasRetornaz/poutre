@@ -306,11 +306,7 @@ set(JPEG_INCLUDE_DIR
   ${CMAKE_CURRENT_SOURCE_DIR}/libjpeg-turbo
   ${CMAKE_CURRENT_BINARY_DIR}/libjpeg-turbo
   ) 
-if(MSVC)
-  set(JPEG_LIBRARY jpeg-static)
-else()
-  set(JPEG_LIBRARY jpeg)
-endif()  
+set(JPEG_LIBRARY jpeg-static)
 set(JPEG_INCLUDE_DIRS ${JPEG_INCLUDE_DIR}) 
 set(JPEG_LIBRARIES ${JPEG_LIBRARY})
 INCLUDE_DIRECTORIES(
@@ -319,12 +315,7 @@ INCLUDE_DIRECTORIES(
 )
 set(JPEG_FOUND TRUE)
 message(STATUS "**************JPEG: ${JPEG_INCLUDE_DIRS} ${JPEG_LIBRARIES}")
-
-if(MSVC)
-  SET_PROPERTY(TARGET jpeg-static PROPERTY FOLDER "3rdparties")
-else()
-  SET_PROPERTY(TARGET jpeg PROPERTY FOLDER "3rdparties")
-endif()
+SET_PROPERTY(TARGET jpeg-static PROPERTY FOLDER "3rdparties")
 
 # libpng
 SET(PNG_STATIC ON CACHE BOOL "PNG STATIC BUILD" FORCE)
