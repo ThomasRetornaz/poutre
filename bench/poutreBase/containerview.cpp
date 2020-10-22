@@ -21,8 +21,8 @@ namespace
 
     decltype(auto) ConstructVector(size_t size)
     {
-        std::vector<unsigned int> m_vect;
-        m_vect.reserve(size);
+        std::vector<unsigned int> m_vect(size);
+        //m_vect.reserve(size);
         /*for (auto i = 0; i < size; ++i) {
             m_vect.push_back(rand() % size);
         }*/
