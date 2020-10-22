@@ -61,6 +61,8 @@ before_install:
     - sudo apt-get install -qq libboost-all-dev ninja-build
     # cppcheck
     - sudo apt-get install -qq cppcheck
+    # openmp force
+    - sudo apt-get install -qq libomp-dev
     #doc
     - sudo apt-get install -qq doxygen graphviz
     - |
@@ -71,6 +73,7 @@ before_install:
         fi
         if [[ "$COMPILER" == "clang" ]]; then
           export CXX=clang++-$CLANG CC=clang-$CLANG;
+          export LD_LIBRARY_PATH='/usr/local/clang/lib';
         fi
       fi
  
@@ -80,8 +83,6 @@ script:
   - mkdir -p build
   - cd build
   - export OMP_NUM_THREADS=4
-  # LD_LIBRARY_PATH workaround to find clang's libomp: https://github.com/travis-ci/travis-ci/issues/8613 
-  - if [[ $CC == "clang" ]]; then export LD_LIBRARY_PATH='/usr/local/clang/lib'; fi;
   - cmake "$POUTRE_CMAKE_EXTRA_ARGS" -DBUILD_SHARED_LIBS=ON -DPOUTRE_BUILD_TEST=ON -DPOUTRE_BUILD_BENCH=ON $POUTRE_CMAKE_EXTRA_ARGS -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
   - cmake --build .
   - ctest . --output-on-failure
