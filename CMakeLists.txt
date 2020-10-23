@@ -86,6 +86,12 @@ include(cmake/AddCXXCompilerFlag.cmake)
 include(cmake/c++-standards.cmake)
 include(cmake/code-coverage.cmake)
 include(cmake/formatting.cmake)
+include(cmake/tidy.cmake)
+
+# FORMAT CMAKE
+file(GLOB_RECURSE CMAKEFILES *.[cmake] CMakeLists.txt)
+poutre_cmake_format(cmake-format ${CMAKEFILES})
+
 include(cmake/CMakeCompilerSpecific.cmake)
 include(cmake/OptimizeForArchitecture.cmake)
 OptimizeForArchitecture()

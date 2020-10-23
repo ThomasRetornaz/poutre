@@ -851,6 +851,7 @@ namespace poutre
     pixel_t()                               = delete;
     pixel_t(const self_type &)              = default;
     pixel_t(self_type &&)                   = default;
+    ~pixel_t()                              = default;
 
     // read only
     POUTRE_CXX14_CONSTEXPR const point_t &point() const POUTRE_NOEXCEPT { return m_point; }

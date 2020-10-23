@@ -49,7 +49,7 @@ namespace poutre
     if( !is.good() )
       return is;
 
-    std::string strType;
+    std::string strType {};
     is >> strType;
     if( is.bad() )
       return is;
@@ -89,7 +89,7 @@ namespace poutre
     if( !is.good() )
       return is;
 
-    std::string strType;
+    std::string strType {};
     is >> strType;
     if( is.bad() )
       return is;

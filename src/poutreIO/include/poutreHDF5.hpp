@@ -55,7 +55,8 @@ namespace poutre
     const H5std_string PFLOAT("pF32");
     const H5std_string PDOUBLE("pD64");
 
-    void CreateAttribute(H5::DataSet &dataSet, const std::string &key, const std::string &value)
+    void
+    CreateAttribute(H5::DataSet &dataSet, const std::string &key, const std::string &value) // NOLINT(misc-unused-parameters)
     {
       H5::StrType   strType(H5::PredType::C_S1, value.size());
       H5::Attribute attr = dataSet.createAttribute(key, strType, H5::DataSpace());
@@ -63,7 +64,10 @@ namespace poutre
       attr.close();
     }
 
-    void CreateAttribute(H5::DataSet &dataSet, const std::string &key, int value, const H5::PredType &type)
+    void CreateAttribute(H5::DataSet &       dataSet,
+                         const std::string & key,
+                         int                 value,
+                         const H5::PredType &type) // NOLINT(misc-unused-parameters)
     {
       H5::Attribute attr = dataSet.createAttribute(key, type, H5::DataSpace());
       attr.write(type, &value);

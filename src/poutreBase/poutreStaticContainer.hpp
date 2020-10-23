@@ -50,7 +50,7 @@ namespace poutre
   template<class valuetype, ptrdiff_t Rank
            // TODO ADD ALIGNEMENT CAPABILITIES ?
            >
-  class static_array_base
+  class static_array_base // NOLINT
   {
     // Static assertion
     static_assert(Rank > 0, "static_array_base requires a Rank>0");

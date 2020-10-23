@@ -17,7 +17,7 @@
 
 namespace poutre
 {
-  std::ostream &operator<<(std::ostream &os, GlobalLogger::LoggerLevel level)
+  std::ostream &operator<<(std::ostream &os, GlobalLogger::LoggerLevel level) // NOLINT(misc-unused-parameters)
   {
     switch( level )
     {

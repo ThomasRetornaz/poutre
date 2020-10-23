@@ -52,9 +52,13 @@ namespace poutre
     using iterator_category = contiguous_iterator_tag;
     using self_type         = pdense_iterator<DataType>;
 
-    pdense_iterator(DataType *ptr = nullptr, DataType *ptrorig = nullptr) : m_ptr(ptr), m_ptrorig(ptrorig) {}
+    explicit pdense_iterator(DataType *ptr = nullptr, DataType *ptrorig = nullptr) : m_ptr(ptr), m_ptrorig(ptrorig) {}
+
     pdense_iterator(const self_type &rhs) = default;
-    self_type &operator=(const self_type &rhs) = default;
+    pdense_iterator &operator=(const self_type &rhs) = default;
+
+    pdense_iterator(self_type &&rhs) noexcept = default;
+    pdense_iterator &operator=(self_type &&rhs) noexcept = default;
 
     ~pdense_iterator() {}
 
@@ -159,8 +163,11 @@ namespace poutre
     //  this->m_ptr = rhs.getPtr( ); this->m_ptrorig = rhs.getOrigPtr( );
     //  }
 
-    pdense_reverse_iterator(const self_type &rhs) = default;
-    self_type &operator=(const self_type &rawReverseIterator) = default;
+    pdense_reverse_iterator(const pdense_reverse_iterator &rhs) = default;
+    pdense_reverse_iterator &operator=(const pdense_reverse_iterator &rawReverseIterator) = default;
+    pdense_reverse_iterator(pdense_reverse_iterator &&rhs) noexcept                       = default;
+    pdense_reverse_iterator &operator=(self_type &&rhs) noexcept = default;
+
     ~pdense_reverse_iterator() {}
 
     // self_type&           operator=(const self_type& rawIterator)
@@ -189,13 +196,13 @@ namespace poutre
       ++this->m_ptr;
       return (*this);
     }
-    self_type operator++(int)
+    const self_type operator++(int) /*const*/
     {
       auto temp(*this);
       --this->m_ptr;
       return temp;
     }
-    self_type operator--(int)
+    const self_type operator--(int) /*const*/
     {
       auto temp(*this);
       ++this->m_ptr;
@@ -207,7 +214,7 @@ namespace poutre
       return std::distance(this->getPtr(), rawReverseIterator.getPtr());
     }
 
-    const offset getOffset() const { return m_ptr - m_ptrorig; }
+    /*const*/ offset getOffset() const { return m_ptr - m_ptrorig; }
 
     pdense_iterator<DataType> base()
     {

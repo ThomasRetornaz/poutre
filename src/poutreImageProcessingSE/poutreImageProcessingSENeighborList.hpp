@@ -82,7 +82,7 @@ namespace poutre
             idx1d{-1},          idx1d{+1},
         }};
     // clang-format on
-    POUTRE_STATIC_CONSTEXPR c2_1D_t c2_1D = {};
+    const POUTRE_STATIC_CONSTEXPR c2_1D_t c2_1D = {};
 
     /************************************************/
     //---2D
@@ -119,7 +119,7 @@ namespace poutre
             idx2d{-1,+0},          idx2d{+1,+0},
         }};
     // clang-format on
-    POUTRE_STATIC_CONSTEXPR c2_2DH_t c2_2DH = {};
+    const POUTRE_STATIC_CONSTEXPR c2_2DH_t c2_2DH = {};
 
     struct c2_2DV_t : neighborhood_t_interface<c2_2DV_t>
     {
@@ -153,7 +153,7 @@ namespace poutre
             idx2d{+0,+1}
         }};
     // clang-format on
-    POUTRE_STATIC_CONSTEXPR c2_2DV_t c2_2DV = {};
+    const POUTRE_STATIC_CONSTEXPR c2_2DV_t c2_2DV = {};
 
     struct c2_2D_Diag45_t : neighborhood_t_interface<c2_2D_Diag45_t>
     {
@@ -188,7 +188,7 @@ namespace poutre
             idx2d{-1,+1}
         }};
     // clang-format on
-    POUTRE_STATIC_CONSTEXPR c2_2D_Diag45_t c2_2D_Diag45 = {};
+    const POUTRE_STATIC_CONSTEXPR c2_2D_Diag45_t c2_2D_Diag45 = {};
 
     struct c2_2D_Diag135_t : neighborhood_t_interface<c2_2D_Diag135_t>
     {
@@ -223,7 +223,7 @@ namespace poutre
                           idx2d{+1,+1}
         }};
     // clang-format on
-    POUTRE_STATIC_CONSTEXPR c2_2D_Diag135_t c2_2D_Diag135 = {};
+    const POUTRE_STATIC_CONSTEXPR c2_2D_Diag135_t c2_2D_Diag135 = {};
 
     struct c4_2D_t : neighborhood_t_interface<c4_2D_t>
     {
@@ -258,7 +258,7 @@ namespace poutre
         }};
     // clang-format on
 
-    POUTRE_STATIC_CONSTEXPR c4_2D_t c4_2D = {};
+    const POUTRE_STATIC_CONSTEXPR c4_2D_t c4_2D = {};
 
     struct c8_2D_t : neighborhood_t_interface<c8_2D_t>
     {
@@ -298,7 +298,7 @@ namespace poutre
         {-1, +1}, {+0, +1}, {+1, +1}
         }};
     // clang-format on
-    POUTRE_STATIC_CONSTEXPR c8_2D_t c8_2D = {};
+    const POUTRE_STATIC_CONSTEXPR c8_2D_t c8_2D = {};
 
     /************************************************/
     //---3D
@@ -333,7 +333,7 @@ namespace poutre
           {+0, +0, -1}, {+0, -1, +0}, {-1, +0, +0},          {+1, +0, +0}, {+0, +1, +0}, {+0, +0, +1}
           }};
     // clang-format on
-    // POUTRE_STATIC_CONSTEXPR c6_3D_t c6_3D = {};
+    const POUTRE_STATIC_CONSTEXPR c6_3D_t c6_3D = {};
 
     struct c26_3D_t : neighborhood_t_interface<c26_3D_t>
     {
@@ -383,7 +383,7 @@ namespace poutre
         // clang-format on
     }};
     // clang-format on
-    POUTRE_STATIC_CONSTEXPR c26_3D_t c26_3D = {};
+    const POUTRE_STATIC_CONSTEXPR c26_3D_t c26_3D = {};
 
     template<NLS> struct NeighborListStaticSETraits
     {

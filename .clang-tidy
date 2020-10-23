@@ -21,12 +21,16 @@ clang-analyzer-*,
 -modernize-avoid-c-arrays,
 -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
 -readability-named-parameter,
--cert-env33-c
+-cert-env33-c,
+-cert-dcl37-c,
+-cert-dcl51-cpp,
+-cppcoreguidelines-avoid-non-const-global-variables,
+-clang-diagnostic-error,
 '
 
 
 WarningsAsErrors: ''
-HeaderFilterRegex: '(poutre[a-zA-Z0-9_]+\.hpp)'
+HeaderFilterRegex: '(poutre[a-zA-Z0-9_/]+\.hpp)'
 AnalyzeTemporaryDtors: false
 FormatStyle:     none
 

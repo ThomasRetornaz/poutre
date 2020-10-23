@@ -55,22 +55,47 @@ namespace poutre
 
     template<typename T> struct extract_value_type
     {
-      typedef T value_type;
+      using value_type = T;
     };
 
     template<template<typename, typename...> class X, typename T, typename... Args>
     struct extract_value_type<X<T, Args...>> // specialization
     {
-      typedef T value_type;
+      using value_type = T;
     };
 
-    template<ptrdiff_t Rank> POUTRE_CXX14_CONSTEXPR ptrdiff_t view_offset(const index<Rank> &idx, const index<Rank> &stride)
+    template<ptrdiff_t Rank>
+    POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t view_offset(const index<Rank> &idx, const index<Rank> &stride)
     {
       ptrdiff_t offset {};
       for( size_t i = 0; i < Rank; ++i )
       {
         offset += idx[i] * stride[i];
       }
+      return offset;
+    }
+
+    template<> POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t view_offset(const index<3> &idx, const index<3> &stride)
+    {
+      ptrdiff_t offset {};
+      offset += idx[0] * stride[0];
+      offset += idx[1] * stride[1];
+      offset += idx[2] * stride[2];
+      return offset;
+    }
+
+    template<> POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t view_offset(const index<2> &idx, const index<2> &stride)
+    {
+      ptrdiff_t offset {};
+      offset += idx[0] * stride[0];
+      offset += idx[1] * stride[1];
+      return offset;
+    }
+
+    template<> POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t view_offset(const index<1> &idx, const index<1> &stride)
+    {
+      ptrdiff_t offset {};
+      offset += idx[0] * stride[0];
       return offset;
     }
 
@@ -410,16 +435,16 @@ namespace poutre
     /**@}*/
   };
 
-  template<class T> class array_view2D : public array_view<T, 2>
-  {
-    public:
-    POUTRE_CXX14_CONSTEXPR T &operator[](const idx2d &idx) const POUTRE_NOEXCEPTONLYNDEBUG
-    {
-      POUTRE_ASSERTCHECK(this->m_bnd.contains(idx) == true, "Out of bound");
-      auto SizeX = this->m_bnd[0];
-      return this->m_data[idx[1] * SizeX + idx[0]];
-    }
-  };
+  // template<class T> class array_view2D : public array_view<T, 2>
+  //{
+  //  public:
+  //  POUTRE_CXX14_CONSTEXPR T &operator[](const idx2d &idx) const POUTRE_NOEXCEPTONLYNDEBUG
+  //  {
+  //    POUTRE_ASSERTCHECK(this->m_bnd.contains(idx) == true, "Out of bound");
+  //    auto SizeX = this->m_bnd[0];
+  //    return this->m_data[idx[1] * SizeX + idx[0]];
+  //  }
+  //};
   /**
    * @brief An strided_array_view is a potentially multidimensional view on a
    * sequence of  strided objects of a uniform type

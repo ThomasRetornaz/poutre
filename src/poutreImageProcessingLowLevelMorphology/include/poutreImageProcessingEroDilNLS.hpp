@@ -306,7 +306,7 @@ namespace poutre
         , m_xsize(xsize)
     {
     }
-    void operator()(const lineView lineDataIn, lineView lineDataOut, scoord start, scoord stop)
+    void operator()(lineView const lineDataIn, lineView lineDataOut, scoord start, scoord stop)
     {
       POUTRE_ASSERTCHECK(start >= 2, "out of bounds");
     }

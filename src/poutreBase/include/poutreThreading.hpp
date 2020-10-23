@@ -38,7 +38,7 @@ namespace poutre
   namespace thread
   {
     // Use max threads-1 as a reasonnable default
-    static unsigned int POUTRE_NUM_THREADS = std::max(std::thread::hardware_concurrency() - 2u, 1u);
+    static unsigned int POUTRE_NUM_THREADS = std::max(std::thread::hardware_concurrency() - 2U, 1U);
 
     //! helper class to change the number of thread used by poutre at scope level
     //@warning We only force if OMP_NUM_THREADS environnement variable is not set by user
@@ -66,7 +66,7 @@ namespace poutre
        *
        * \param threads
        */
-      JoinThreads(std::vector<std::thread> &threads) : m_threads(threads) {}
+      explicit JoinThreads(std::vector<std::thread> &threads) : m_threads(threads) {}
       JoinThreads(const JoinThreads &) = delete;
       JoinThreads &operator=(const JoinThreads &) = delete;
       JoinThreads(JoinThreads &&)                 = delete;
@@ -75,7 +75,7 @@ namespace poutre
        * dtor.
        *
        */
-      ~JoinThreads() // todo C++20 remove this
+      ~JoinThreads() // NOLINT
       {
         for( auto &&t : m_threads )
         {
@@ -91,16 +91,23 @@ namespace poutre
     template<typename T> class ThreadSafeQueue
     {
       private:
-      std::atomic_bool        m_valid {true};
+      std::atomic_bool        m_valid;
       mutable std::mutex      m_mutex;
       std::queue<T>           m_queue;
       std::condition_variable m_condition;
 
       public:
+      ThreadSafeQueue() : m_valid(true), m_mutex(), m_queue(), m_condition() {}
+
+      ThreadSafeQueue(const ThreadSafeQueue &) = delete;
+      ThreadSafeQueue operator=(const ThreadSafeQueue &) = delete;
+      ThreadSafeQueue(ThreadSafeQueue &&)                = delete;
+      ThreadSafeQueue operator=(ThreadSafeQueue &&) = delete;
+
       /**
        * Destructor.
        */
-      ~ThreadSafeQueue(void) { invalidate(); }
+      ~ThreadSafeQueue() { invalidate(); }
 
       /**
        * Check whether or not the queue is empty.
@@ -160,7 +167,7 @@ namespace poutre
       /**
        * Clear all items from the queue.
        */
-      void clear(void)
+      void clear()
       {
         std::lock_guard<std::mutex> lock {m_mutex};
         while( !m_queue.empty() )
@@ -177,7 +184,7 @@ namespace poutre
        * The queue is invalid after calling this method and it is an error
        * to continue using a queue after this method has been called.
        */
-      void invalidate(void)
+      void invalidate()
       {
         std::lock_guard<std::mutex> lock {m_mutex};
         m_valid = false;
@@ -187,7 +194,7 @@ namespace poutre
       /**
        * Returns whether or not this queue is valid.
        */
-      bool isValid(void) const
+      bool isValid() const
       {
         std::lock_guard<std::mutex> lock {m_mutex};
         return m_valid;
@@ -198,8 +205,8 @@ namespace poutre
     class IThreadTask
     {
       public:
-      IThreadTask(void)          = default;
-      virtual ~IThreadTask(void) = default;
+      IThreadTask()          = default;
+      virtual ~IThreadTask() = default;
 
       IThreadTask(const IThreadTask &rhs) = delete;
       IThreadTask &operator=(const IThreadTask &rhs) = delete;
@@ -216,15 +223,15 @@ namespace poutre
     template<typename Func> class ThreadTask : public IThreadTask
     {
       public:
-      ThreadTask(Func &&func) : m_func {std::move(func)} {}
+      explicit ThreadTask(Func &&func) : m_func {std::move(func)} {}
 
-      ~ThreadTask(void) override = default;
+      ~ThreadTask() override = default;
 
       ThreadTask(const ThreadTask &rhs) = delete;
       ThreadTask &operator=(const ThreadTask &rhs) = delete;
 
-      ThreadTask(ThreadTask &&other) = default;
-      ThreadTask &operator=(ThreadTask &&other) = default;
+      ThreadTask(ThreadTask &&other) noexcept = default;
+      ThreadTask &operator=(ThreadTask &&other) noexcept = default;
 
       /**
        * Run the task.
@@ -243,14 +250,14 @@ namespace poutre
     template<typename T> class TaskFuture
     {
       public:
-      TaskFuture(std::future<T> &&future) : m_future {std::move(future)} {}
+      explicit TaskFuture(std::future<T> &&future) : m_future {std::move(future)} {}
 
       TaskFuture(const TaskFuture &rhs) = delete;
       TaskFuture &operator=(const TaskFuture &rhs) = delete;
-      TaskFuture(TaskFuture &&other)               = default;
-      TaskFuture &operator=(TaskFuture &&other) = default;
+      TaskFuture(TaskFuture &&other) noexcept      = default;
+      TaskFuture &operator=(TaskFuture &&other) noexcept = default;
 
-      ~TaskFuture(void)
+      ~TaskFuture()
       {
         if( m_future.valid() )
         {
@@ -258,7 +265,7 @@ namespace poutre
         }
       }
 
-      auto get(void) { return m_future.get(); }
+      auto get() { return m_future.get(); }
 
       private:
       std::future<T> m_future;
@@ -276,7 +283,7 @@ namespace poutre
       /**
        * Invalidates the queue and joins all running threads.
        */
-      void destroy(void)
+      void destroy()
       {
         m_done = true;
         m_pool_work_queue.invalidate();
@@ -292,7 +299,7 @@ namespace poutre
       /**
        * Constantly running function each thread uses to acquire work items from the queue.
        */
-      void worker_thread(void)
+      void worker_thread()
       {
         while( !m_done )
         {
@@ -305,21 +312,21 @@ namespace poutre
       }
 
       public:
-      TreadPool(unsigned int threadCount)
+      explicit TreadPool(unsigned int threadCount)
           : m_pool_work_queue()
           , m_done(false)
           , m_threads()
           , m_joiner(m_threads)
           , m_thread_count(std::min(POUTRE_NUM_THREADS, threadCount))
       {
-        if( 0u == m_thread_count )
+        if( 0U == m_thread_count )
         {
-          m_thread_count = 1u;
+          m_thread_count = 1U;
         }
         m_threads.reserve((size_t)m_thread_count);
         try
         {
-          for( size_t i = 0; i < (size_t)m_thread_count; ++i )
+          for( size_t i = 0; i < static_cast<size_t>(m_thread_count); ++i )
           {
             m_threads.emplace_back(&TreadPool::worker_thread, this);
           }
@@ -332,6 +339,11 @@ namespace poutre
       }
 
       TreadPool() : TreadPool(POUTRE_NUM_THREADS) {}
+
+      TreadPool(const TreadPool &rhs) = delete;
+      TreadPool &operator=(const TreadPool &rhs) = delete;
+      TreadPool(TreadPool &&other) noexcept      = delete;
+      TreadPool &operator=(TreadPool &&other) noexcept = delete;
 
       ~TreadPool() { destroy(); }
 
@@ -362,7 +374,7 @@ namespace poutre
        * Get the default thread pool for the application.
        * This pool is created with std::thread::hardware_concurrency() - 1 threads.
        */
-      inline TreadPool &getThreadPool(void)
+      inline TreadPool &getThreadPool()
       {
         static TreadPool defaultPool;
         return defaultPool;

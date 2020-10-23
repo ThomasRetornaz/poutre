@@ -29,49 +29,49 @@
 
 namespace poutre
 {
-#  define POUTRE_NOEXCEPT BOOST_NOEXCEPT_OR_NOTHROW
+#  define POUTRE_NOEXCEPT BOOST_NOEXCEPT_OR_NOTHROW // NOLINT
 
-#  define POUTRE_NOEXCEPT_IF(Predicate) BOOST_NOEXCEPT_IF((Predicate))
+#  define POUTRE_NOEXCEPT_IF(Predicate) BOOST_NOEXCEPT_IF((Predicate)) // NOLINT
 
-#  define POUTRE_NOEXCEPT_EXPR(Predicate) BOOST_NOEXCEPT_EXPR((Predicate))
+#  define POUTRE_NOEXCEPT_EXPR(Predicate) BOOST_NOEXCEPT_EXPR((Predicate)) // NOLINT
 
 #  ifndef NDEBUG
-#    define POUTRE_NOEXCEPTONLYNDEBUG
+#    define POUTRE_NOEXCEPTONLYNDEBUG // NOLINT
 #  else
-#    define POUTRE_NOEXCEPTONLYNDEBUG POUTRE_NOEXCEPT
+#    define POUTRE_NOEXCEPTONLYNDEBUG POUTRE_NOEXCEPT // NOLINT
 #  endif
 
-#  define POUTRE_STATIC_CONSTEXPR BOOST_STATIC_CONSTEXPR
+#  define POUTRE_STATIC_CONSTEXPR BOOST_STATIC_CONSTEXPR // NOLINT
 
-#  define POUTRE_CONSTEXPR BOOST_CONSTEXPR
+#  define POUTRE_CONSTEXPR BOOST_CONSTEXPR // NOLINT
 
-#  define POUTRE_CONSTEXPR_OR_CONST BOOST_CONSTEXPR_OR_CONST
+#  define POUTRE_CONSTEXPR_OR_CONST BOOST_CONSTEXPR_OR_CONST // NOLINT
 
-#  define POUTRE_CXX14_CONSTEXPR BOOST_CXX14_CONSTEXPR
+#  define POUTRE_CXX14_CONSTEXPR BOOST_CXX14_CONSTEXPR // NOLINT
 
 // POUTRE_STRONG_INLINE is a stronger version of inline directive mostly to enforce inlining for
 // MSVC compiler:using
 // __forceinline on MSVC/INTEL,but still doesn't use GCC's/clang always_inline.
 #  if( defined _MSC_VER ) || (defined(__ICC) || defined(__INTEL_COMPILER))
-#    define POUTRE_STRONG_INLINE __forceinline
+#    define POUTRE_STRONG_INLINE __forceinline // NOLINT
 #  else
-#    define POUTRE_STRONG_INLINE inline
+#    define POUTRE_STRONG_INLINE inline // NOLINT
 #  endif
 
 // POUTRE_ALWAYS_INLINE is the strongest version of inline directive, using __forceinline on
 // MSVC/INTEL,and always inline for GCC/clang.
 #  if defined(_MSC_VER)
-#    define POUTRE_ALWAYS_INLINE __forceinline
+#    define POUTRE_ALWAYS_INLINE __forceinline // NOLINT
 #  elif defined(__GNUC__) && __GNUC__ > 3
   // Clang also defines __GNUC__ (as 4)
-#    define POUTRE_ALWAYS_INLINE inline __attribute__((__always_inline__))
+#    define POUTRE_ALWAYS_INLINE inline __attribute__((__always_inline__)) // NOLINT
 #  else
-#    define POUTRE_ALWAYS_INLINE inline
+#    define POUTRE_ALWAYS_INLINE inline // NOLINT
 #  endif
 
 #  if defined(_WIN32) || defined(_WIN64)
-#    define poutreDeprecated       __declspec(deprecated)
-#    define poutreDeprecatedMSG(x) __declspec(deprecated(x))
+#    define poutreDeprecated       __declspec(deprecated) // NOLINT
+#    define poutreDeprecatedMSG(x) __declspec(deprecated(x)) // NOLINT
 
 #    if defined(_M_X64) || defined(_WIN64)
 #      define POUTRE_64BITS
@@ -89,8 +89,8 @@ namespace poutre
 
   // Generic helper definitions for shared library support
 #  if defined _WIN32 || defined __CYGWIN__
-#    define MODULE_IMPORT __declspec(dllimport)
-#    define MODULE_EXPORT __declspec(dllexport)
+#    define MODULE_IMPORT __declspec(dllimport) // NOLINT
+#    define MODULE_EXPORT __declspec(dllexport) // NOLINT
 #    define MODULE_LOCAL
 #  else
 #    if __GNUC__ >= 4
@@ -104,7 +104,7 @@ namespace poutre
 #    endif
 #  endif
 
-#  define PROJECT_NAME__ Poutre
+#  define PROJECT_NAME__ Poutre // NOLINT
 
   // plateform specific section
 #  if defined(_WIN32) || defined(_WIN64)
@@ -124,9 +124,13 @@ namespace poutre
     return ::fmt::format(fmt, args...);
   }
 
+// NOLINTNEXTLINE
 #  define POUTRE_RUNTIME_ERROR(MSG)                                                                                         \
-    throw std::runtime_error(fmt::format("Throw {} at {} {}", MSG, __FILE__, __LINE__)) //-V1003
-#  define POUTRE_NEVER_REACH_HERE POUTRE_RUNTIME_ERROR("Code should never reach here, WTF Oo")
+    throw std::runtime_error(fmt::format("Throw {} at {} {}", MSG, __FILE__, __LINE__)) //-V1003 //NOLINT
+#  define POUTRE_NEVER_REACH_HERE                                                                                           \
+    POUTRE_RUNTIME_ERROR("Code should never reach here, WTF Oo") // NOLINT
+                                                                 // NOLINTNEXTLINE
+
 #  define POUTRE_CHECK(CONDITION, MSG)                                                                                      \
     {                                                                                                                       \
       if( !(CONDITION) )                                                                                                    \

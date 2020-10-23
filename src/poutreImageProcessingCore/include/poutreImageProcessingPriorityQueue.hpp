@@ -67,6 +67,7 @@ namespace poutre
     // see this later
     PriorityQueue(PriorityQueue &&other) = delete;
     PriorityQueue &operator=(PriorityQueue &&other) = delete;
+    ~PriorityQueue() {}
   };
 
   // specialize for small integral types
@@ -91,6 +92,7 @@ namespace poutre
     // see this later
     PriorityQueue(PriorityQueue &&other) = delete;
     PriorityQueue &operator=(PriorityQueue &&other) = delete;
+    ~PriorityQueue() {}
 
     //! true if the priority queue has no elements
     bool empty() const { return (p_stack[(size_t)getHigherPriority()] == 0); }

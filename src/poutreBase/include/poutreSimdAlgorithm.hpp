@@ -23,9 +23,9 @@
 #include <poutreBase/poutreTypes.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
 
+#include <cstddef>
+#include <cstdio>
 #include <memory>
-#include <stddef.h>
-#include <stdio.h>
 
 namespace poutre
 {

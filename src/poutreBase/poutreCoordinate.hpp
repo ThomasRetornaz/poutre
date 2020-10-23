@@ -61,7 +61,6 @@ namespace poutre
   class bounds : public static_array_base<ptrdiff_t, Rank> // TODO restrain alignement
                                                            // capabilities if any
   {
-    public:
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     public:
     POUTRE_STATIC_CONSTEXPR ptrdiff_t rank = Rank;
@@ -835,15 +834,15 @@ namespace poutre
   // extern template class index <3>;
   // extern template class index <4>;
 
-  typedef bounds<1> bd1d; //! alias bounds 1D
-  typedef bounds<2> bd2d; //! alias bounds 2D
-  typedef bounds<3> bd3d; //! alias bounds 3D
-  typedef bounds<4> bd4d; //! alias bounds 4D
+  using bd1d = bounds<1>; //! alias bounds 1D
+  using bd2d = bounds<2>; //! alias bounds 2D
+  using bd3d = bounds<3>; //! alias bounds 3D
+  using bd4d = bounds<4>; //! alias bounds 4D
 
-  typedef index<1> idx1d; //! alias index 1D
-  typedef index<2> idx2d; //! alias index 2D
-  typedef index<3> idx3d; //! alias index 3D
-  typedef index<4> idx4d; //! alias index 4D
+  using idx1d = index<1>; //! alias index 1D
+  using idx2d = index<2>; //! alias index 2D
+  using idx3d = index<3>; //! alias index 3D
+  using idx4d = index<4>; //! alias index 4D
 
 } // namespace poutre
 

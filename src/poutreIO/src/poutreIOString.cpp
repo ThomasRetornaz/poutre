@@ -297,9 +297,9 @@ namespace poutre
       POUTRE_RUNTIME_ERROR("ImageFromString: unable to read input string");
     }
 
-    ImgType                  imgtype = ImgType::ImgType_Undef;
-    CompoundType             cptype  = CompoundType::CompoundType_Undef;
-    PType                    ptype   = PType::PType_Undef;
+    ImgType                  imgtype {ImgType::ImgType_Undef};
+    CompoundType             cptype {CompoundType::CompoundType_Undef};
+    PType                    ptype {PType::PType_Undef};
     std::ptrdiff_t           NumDims = -1;
     std::vector<std::size_t> dims;
 
@@ -632,7 +632,7 @@ namespace poutre
   }
 
   // IMAGE TO STRING
-  std::string ImageToString(const poutre::IInterface &i_image)
+  std::string ImageToString(const poutre::IInterface &i_image) // NOLINT(misc-unused-parameters)
   {
     std::ostringstream ostrm;
     if( !ostrm.good() )

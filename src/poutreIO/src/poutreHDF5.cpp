@@ -20,7 +20,9 @@
 
 namespace poutre
 {
-  void StoreWithHDF5(const std::string &path, const IInterface &iimage, const std::string &image_name /*= "poutre_img_1"*/)
+  void StoreWithHDF5(const std::string &path,
+                     const IInterface & iimage,
+                     const std::string &image_name /*= "poutre_img_1"*/) // NOLINT(misc-unused-parameters)
   {
     /*
      * Turn off the auto-printing when failure occurs so that we can
@@ -266,7 +268,9 @@ namespace poutre
     } // dims
   }
 
-  std::unique_ptr<IInterface> LoadFromHDF5(const std::string &filename, const std::string &image_name /* = poutre_img_1 */)
+  std::unique_ptr<IInterface>
+  LoadFromHDF5(const std::string &filename,
+               const std::string &image_name /* = poutre_img_1 */) // NOLINT(misc-unused-parameters)
   {
     /*
      * Turn off the auto-printing when failure occurs so that we can

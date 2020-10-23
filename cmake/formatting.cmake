@@ -77,11 +77,11 @@ function(poutre_clang_format TARGET_NAME)
         add_custom_target(${TARGET_NAME} COMMAND ${CLANG_FORMAT_EXE} -i
                                                  -style=file ${FORMAT_FILES})
 
-        if(NOT TARGET poutre-format)
-          add_custom_target(poutre-format)
-        endif()
+        # if(NOT TARGET poutre-format)
+        #   add_custom_target(poutre-format)
+        # endif()
 
-        add_dependencies(poutre-format ${TARGET_NAME})
+        # add_dependencies(poutre-format ${TARGET_NAME})
       endif()
     endif()
 
@@ -132,10 +132,10 @@ function(poutre_cmake_format TARGET_NAME)
         add_custom_target(${TARGET_NAME} COMMAND ${CMAKE_FORMAT_EXE} -i
                                                  ${FORMAT_FILES})
 
-        if(NOT TARGET poutre-cmake-format)
-          add_custom_target(poutre-cmake-format)
-        endif()
-        add_dependencies(poutre-cmake-format ${TARGET_NAME})
+        # if(NOT TARGET poutre-cmake-format)
+          # add_custom_target(poutre-cmake-format)
+        # endif()
+        # add_dependencies(poutre-cmake-format ${TARGET_NAME})
       endif()
     endif()
   endif()

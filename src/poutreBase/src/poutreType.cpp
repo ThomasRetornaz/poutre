@@ -18,7 +18,7 @@ namespace poutre
 {
   // NOTE JUST FOR CONVENIENCE AT INTERFACE LAYER TO USE STRING INSTEAD OF VERBOSE ENUM
 
-  std::ostream &operator<<(std::ostream &os, CompOpType compOpType)
+  std::ostream &operator<<(std::ostream &os, CompOpType compOpType) // NOLINT(misc-unused-parameters)
   {
     switch( compOpType )
     {
@@ -35,7 +35,7 @@ namespace poutre
     return os;
   }
 
-  std::istream &operator>>(std::istream &is, CompOpType &compOpType)
+  std::istream &operator>>(std::istream &is, CompOpType &compOpType) // NOLINT(misc-unused-parameters)
   {
     compOpType = CompOpType::CompOpUndef;
 
@@ -66,7 +66,7 @@ namespace poutre
     return is;
   }
 
-  std::ostream &operator<<(std::ostream &os, ArithOpType arithOpType)
+  std::ostream &operator<<(std::ostream &os, ArithOpType arithOpType) // NOLINT(misc-unused-parameters)
   {
     switch( arithOpType )
     {
@@ -82,7 +82,7 @@ namespace poutre
     return os;
   }
 
-  std::istream &operator>>(std::istream &is, ArithOpType &arithOpType)
+  std::istream &operator>>(std::istream &is, ArithOpType &arithOpType) // NOLINT(misc-unused-parameters)
   {
     arithOpType = ArithOpType::ArithOpUndef;
 
@@ -111,7 +111,7 @@ namespace poutre
     return is;
   }
 
-  std::ostream &operator<<(std::ostream &os, AssignOpType assignOpType)
+  std::ostream &operator<<(std::ostream &os, AssignOpType assignOpType) // NOLINT(misc-unused-parameters)
   {
     switch( assignOpType )
     {
@@ -128,7 +128,7 @@ namespace poutre
     return os;
   }
 
-  std::istream &operator>>(std::istream &is, AssignOpType &assignOpType)
+  std::istream &operator>>(std::istream &is, AssignOpType &assignOpType) // NOLINT(misc-unused-parameters)
   {
     assignOpType = AssignOpType::AssignOpUndef;
 

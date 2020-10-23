@@ -1,55 +1,41 @@
 set(poutreImageProcessingSE ${POUTRE_SRC_DIR}/poutreImageProcessingSE)
 
-set(poutreImageProcessingSE_SRC_DETAILS 
-  ${poutreImageProcessingSE}/include/poutreImageProcessingSENeighborhood.hpp
-  ${poutreImageProcessingSE}/include/poutreImageProcessingSETypesAndTags.hpp
-  )
+set(poutreImageProcessingSE_SRC_DETAILS
+    ${poutreImageProcessingSE}/include/poutreImageProcessingSENeighborhood.hpp
+    ${poutreImageProcessingSE}/include/poutreImageProcessingSETypesAndTags.hpp)
 
-set(poutreImageProcessingSE_PUBLICHEADERS  
-  ${poutreImageProcessingSE}/poutreImageProcessingSECore.hpp
-  ${poutreImageProcessingSE}/poutreImageProcessingSEInterface.hpp
-  ${poutreImageProcessingSE}/poutreImageProcessingSENeighborList.hpp
-  
-)
+set(poutreImageProcessingSE_PUBLICHEADERS
+    ${poutreImageProcessingSE}/poutreImageProcessingSECore.hpp
+    ${poutreImageProcessingSE}/poutreImageProcessingSEInterface.hpp
+    ${poutreImageProcessingSE}/poutreImageProcessingSENeighborList.hpp)
 
 set(poutreImageProcessingSE_CPP
-  ${poutreImageProcessingSE}/src/poutreImageProcessingSEInterface.cpp
-  ${poutreImageProcessingSE}/src/poutreImageProcessingSENeighborList.cpp
-  )
-  
+    ${poutreImageProcessingSE}/src/poutreImageProcessingSEInterface.cpp
+    ${poutreImageProcessingSE}/src/poutreImageProcessingSENeighborList.cpp)
+
 source_group(details FILES ${poutreImageProcessingSE_SRC_DETAILS})
 source_group(src FILES ${poutreImageProcessingSE_CPP})
 source_group(header FILES ${poutreImageProcessingSE_PUBLICHEADERS})
 
 set(poutreImageProcessingSE_SRC
-	${poutreImageProcessingSE_SRC_DETAILS}
-	${poutreImageProcessingSE_PUBLICHEADERS}
-	${poutreImageProcessingSE_CPP}
-	)
+    ${poutreImageProcessingSE_SRC_DETAILS}
+    ${poutreImageProcessingSE_PUBLICHEADERS} ${poutreImageProcessingSE_CPP})
 
 add_library(PoutreIPSE ${poutreImageProcessingSE_SRC})
-target_link_libraries(PoutreIPSE 
-  # PRIVATE ${Boost_GRAPH_LIBRARY} 
-  # PRIVATE ${Boost_DATE_TIME_LIBRARY} 
-  # PRIVATE ${Boost_REGEX_LIBRARY} 
-  # PRIVATE ${Boost_THREAD_LIBRARY} 
+target_link_libraries(
+  PoutreIPSE
+  # PRIVATE ${Boost_GRAPH_LIBRARY} PRIVATE ${Boost_DATE_TIME_LIBRARY} PRIVATE
+  # ${Boost_REGEX_LIBRARY} PRIVATE ${Boost_THREAD_LIBRARY}
   PUBLIC ${Boost_SYSTEM_LIBRARY}
   PRIVATE jsoncpp_lib
   INTERFACE Eigen
   INTERFACE xsimd
-  INTERFACE fmt-header-only
-  PoutreBase
-  PoutreIPCore  
-  )
+  INTERFACE fmt-header-only PoutreBase PoutreIPCore)
 set_target_properties(PoutreIPSE PROPERTIES FOLDER "src/")
 
-IF(BUILD_SHARED_LIBS)
-  SET_TARGET_PROPERTIES(PoutreIPSE PROPERTIES COMPILE_FLAGS -DJSON_DLL)
-ENDIF(BUILD_SHARED_LIBS)
+if(BUILD_SHARED_LIBS)
+  set_target_properties(PoutreIPSE PROPERTIES COMPILE_FLAGS -DJSON_DLL)
+endif(BUILD_SHARED_LIBS)
 
-
-install_POUTRE_targets(
-  TARGET PoutreIPSE 
-  CONFIGURATION Release 
-  HEADER_FILES ${poutreImageProcessingSE_PUBLICHEADERS}
-  )
+install_poutre_targets(TARGET PoutreIPSE CONFIGURATION Release HEADER_FILES
+                       ${poutreImageProcessingSE_PUBLICHEADERS})
