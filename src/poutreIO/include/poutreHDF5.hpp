@@ -59,7 +59,7 @@ namespace poutre
     CreateAttribute(H5::DataSet &dataSet, const std::string &key, const std::string &value) // NOLINT(misc-unused-parameters)
     {
       H5::StrType   strType(H5::PredType::C_S1, value.size());
-      H5::Attribute attr = dataSet.createAttribute(key, strType, H5::DataSpace());
+      H5::Attribute attr {dataSet.createAttribute(key, strType, H5::DataSpace())};
       attr.write(strType, value.c_str());
       attr.close();
     }
@@ -69,7 +69,7 @@ namespace poutre
                          int                 value,
                          const H5::PredType &type) // NOLINT(misc-unused-parameters)
     {
-      H5::Attribute attr = dataSet.createAttribute(key, type, H5::DataSpace());
+      H5::Attribute attr {dataSet.createAttribute(key, type, H5::DataSpace())};
       attr.write(type, &value);
       attr.close();
     }
@@ -123,7 +123,7 @@ namespace poutre
       H5::FloatType type {H5::PredType::NATIVE_DOUBLE};
     };
 
-    std::vector<hsize_t> ImageCoordToHDF5Dim(const std::vector<std::size_t> &s)
+    std::vector<hsize_t> ImageCoordToHDF5Dim(const std::vector<std::size_t> &s) //NOLINT(misc-unused-parameters)
     {
       auto res = std::vector<hsize_t>(s.size());
       std::copy(s.begin(), s.end(), res.begin());

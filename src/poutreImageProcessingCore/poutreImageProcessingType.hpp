@@ -847,10 +847,10 @@ namespace poutre
 
     public:
     self_type &operator=(const self_type &other) = delete;
-    self_type &operator=(self_type &&other) = delete;
+    self_type &operator=(self_type &&other) noexcept = delete;
     pixel_t()                               = delete;
     pixel_t(const self_type &)              = default;
-    pixel_t(self_type &&)                   = default;
+    pixel_t(self_type &&) noexcept                   = default;
     ~pixel_t()                              = default;
 
     // read only

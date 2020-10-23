@@ -353,7 +353,7 @@ namespace poutre
     return iimage;
   }
 
-  void StoreWithOIIO(const std::string &path, const IInterface &iimage)
+  void StoreWithOIIO(const std::string &path, const IInterface &iimage) //NOLINT(misc-unused-parameters)
   {
     const details::StoreWithOIIOOptions options;
     bf::path                            localPath(path);

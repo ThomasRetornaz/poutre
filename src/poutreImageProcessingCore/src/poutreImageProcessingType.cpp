@@ -43,7 +43,7 @@ namespace poutre
     return os;
   }
 
-  std::istream &operator>>(std::istream &is, CompoundType &ct)
+  std::istream &operator>>(std::istream &is, CompoundType &ct) //NOLINT(misc-unused-parameters)
   {
     ct = CompoundType::CompoundType_Undef;
     if( !is.good() )
@@ -82,7 +82,7 @@ namespace poutre
     return os;
   }
 
-  std::istream &operator>>(std::istream &is, ImgType &imgType)
+  std::istream &operator>>(std::istream &is, ImgType &imgType) //NOLINT(misc-unused-parameters)
   {
     imgType = ImgType::ImgType_Undef;
 
@@ -105,7 +105,7 @@ namespace poutre
     return is;
   }
 
-  std::ostream &operator<<(std::ostream &os, PType p)
+  std::ostream &operator<<(std::ostream &os, PType p) //NOLINT(misc-unused-parameters)
   {
     switch( p )
     {
@@ -126,7 +126,7 @@ namespace poutre
     return os;
   }
 
-  std::istream &operator>>(std::istream &is, PType &p)
+  std::istream &operator>>(std::istream &is, PType &p) //NOLINT(misc-unused-parameters)
   {
     p = PType::PType_Undef;
 

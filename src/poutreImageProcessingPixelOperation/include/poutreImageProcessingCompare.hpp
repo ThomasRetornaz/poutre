@@ -42,7 +42,7 @@ namespace poutre
     using simd_t      = typename TypeTraits<T1>::simd_type;
     using simd_mask_t = typename TypeTraits<T1>::simd_mask_type;
     simd_t m_val_pack;
-    OpCompEqualValue(T1 ival) : m_val(ival), m_val_pack(ival) {}
+    explicit OpCompEqualValue(T1 ival) : m_val(ival), m_val_pack(ival) {}
     POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT { return lhs == m_val; }
 
     template<typename U> POUTRE_ALWAYS_INLINE simd_mask_t operator()(const U &lhs) const POUTRE_NOEXCEPT
@@ -58,7 +58,7 @@ namespace poutre
     using simd_t      = typename TypeTraits<T1>::simd_type;
     using simd_mask_t = typename TypeTraits<T1>::simd_mask_type;
     simd_t m_val_pack;
-    OpCompDiffValue(T1 ival) : m_val(ival), m_val_pack(ival) {}
+    explicit OpCompDiffValue(T1 ival) : m_val(ival), m_val_pack(ival) {}
     POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT { return lhs != m_val; }
 
     template<typename U> POUTRE_ALWAYS_INLINE simd_mask_t operator()(const U &lhs) const POUTRE_NOEXCEPT
@@ -74,7 +74,7 @@ namespace poutre
     using simd_t      = typename TypeTraits<T1>::simd_type;
     using simd_mask_t = typename TypeTraits<T1>::simd_mask_type;
     simd_t m_val_pack;
-    OpCompSupValue(T1 ival) : m_val(ival), m_val_pack(ival) {}
+    explicit OpCompSupValue(T1 ival) : m_val(ival), m_val_pack(ival) {}
     POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT { return lhs > m_val; }
 
     template<typename U> POUTRE_ALWAYS_INLINE simd_mask_t operator()(const U &lhs) const POUTRE_NOEXCEPT
@@ -90,7 +90,7 @@ namespace poutre
     using simd_t      = typename TypeTraits<T1>::simd_type;
     using simd_mask_t = typename TypeTraits<T1>::simd_mask_type;
     simd_t m_val_pack;
-    OpCompSupEqualValue(T1 ival) : m_val(ival), m_val_pack(ival) {}
+    explicit OpCompSupEqualValue(T1 ival) : m_val(ival), m_val_pack(ival) {}
     POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT { return lhs >= m_val; }
 
     template<typename U> POUTRE_ALWAYS_INLINE simd_mask_t operator()(const U &lhs) const POUTRE_NOEXCEPT
@@ -106,7 +106,7 @@ namespace poutre
     using simd_t      = typename TypeTraits<T1>::simd_type;
     using simd_mask_t = typename TypeTraits<T1>::simd_mask_type;
     simd_t m_val_pack;
-    OpCompInfValue(T1 ival) : m_val(ival), m_val_pack(ival) {}
+    explicit OpCompInfValue(T1 ival) : m_val(ival), m_val_pack(ival) {}
     POUTRE_ALWAYS_INLINE bool                             operator()(T1 lhs) const POUTRE_NOEXCEPT { return lhs < m_val; }
     template<typename U> POUTRE_ALWAYS_INLINE simd_mask_t operator()(const U &lhs) const POUTRE_NOEXCEPT
     {
@@ -121,7 +121,7 @@ namespace poutre
     using simd_t      = typename TypeTraits<T1>::simd_type;
     using simd_mask_t = typename TypeTraits<T1>::simd_mask_type;
     simd_t m_val_pack;
-    OpCompInfEqualValue(T1 ival) : m_val(ival), m_val_pack(ival) {}
+    explicit OpCompInfEqualValue(T1 ival) : m_val(ival), m_val_pack(ival) {}
     POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT { return lhs <= m_val; }
 
     template<typename U> POUTRE_ALWAYS_INLINE simd_mask_t operator()(const U &lhs) const POUTRE_NOEXCEPT
@@ -401,7 +401,7 @@ namespace poutre
     using param_typetrue  = typename boost::call_traits<Ttrue>::param_type;
     using param_typefalse = typename boost::call_traits<Tfalse>::param_type;
     compare_iii() : cop() {}
-    compare_iii(const CompareOp &op) : cop(op) {}
+    explicit compare_iii(const CompareOp &op) : cop(op) {}
     POUTRE_ALWAYS_INLINE Tout operator()(param_typein   i_val,
                                          param_typecomp i_comp,
                                          param_typetrue i_true,
@@ -546,8 +546,8 @@ namespace poutre
     using param_typein    = typename boost::call_traits<Tin>::param_type;
     using param_typetrue  = typename boost::call_traits<Ttrue>::param_type;
     using param_typefalse = typename boost::call_traits<Tfalse>::param_type;
-    compare_sii(const Tin &i_compval) : cop(), m_compval(i_compval) {}
-    compare_sii(const Tin &i_compval, const CompareOp &op) : cop(op), m_compval(i_compval) {}
+    explicit compare_sii(const Tin &i_compval) : cop(), m_compval(i_compval) {}
+    explicit compare_sii(const Tin &i_compval, const CompareOp &op) : cop(op), m_compval(i_compval) {}
     POUTRE_ALWAYS_INLINE Tout operator()(param_typein    i_val,
                                          param_typetrue  i_true,
                                          param_typefalse i_false) const POUTRE_NOEXCEPT // TODO inline ?
@@ -806,8 +806,8 @@ namespace poutre
     using param_typein    = typename boost::call_traits<Tin>::param_type;
     using param_typecomp  = typename boost::call_traits<Tcomp>::param_type;
     using param_typefalse = typename boost::call_traits<Tfalse>::param_type;
-    compare_isi(const Tout &i_valtrue) : cop(), m_valtrue(i_valtrue) {}
-    compare_isi(const Tout &i_valtrue, const CompareOp &op) : cop(op), m_valtrue(i_valtrue) {}
+    explicit compare_isi(const Tout &i_valtrue) : cop(), m_valtrue(i_valtrue) {}
+    explicit compare_isi(const Tout &i_valtrue, const CompareOp &op) : cop(op), m_valtrue(i_valtrue) {}
     POUTRE_ALWAYS_INLINE Tout operator()(param_typein    i_val,
                                          param_typecomp  i_comp,
                                          param_typefalse i_false) const POUTRE_NOEXCEPT // TODO inline ?
@@ -940,8 +940,8 @@ namespace poutre
     using param_typein   = typename boost::call_traits<Tin>::param_type;
     using param_typecomp = typename boost::call_traits<Tcomp>::param_type;
     using param_typetrue = typename boost::call_traits<Ttrue>::param_type;
-    compare_iis(const Tout &i_valfalse) : cop(), m_valfalse(i_valfalse) {}
-    compare_iis(const Tout &i_valfalse, const CompareOp &op) : cop(op), m_valfalse(i_valfalse) {}
+    explicit compare_iis(const Tout &i_valfalse) : cop(), m_valfalse(i_valfalse) {}
+    explicit compare_iis(const Tout &i_valfalse, const CompareOp &op) : cop(op), m_valfalse(i_valfalse) {}
     POUTRE_ALWAYS_INLINE Tout operator()(param_typein   i_val,
                                          param_typecomp i_comp,
                                          param_typetrue i_true) const POUTRE_NOEXCEPT // TODO inline ?

@@ -629,7 +629,7 @@ namespace poutre
 
     // move assignment operator
 
-    self_type &operator=(self_type &&rhs) noexcept
+    DenseImage &operator=(DenseImage &&rhs) noexcept
     {
       if( this != &rhs ) // http://scottmeyers.blogspot.fr/2014/06/the-drawbacks-of-implementing-move.html
       {
@@ -648,6 +648,10 @@ namespace poutre
         /* m_coordinnates = {};*/
       }
       return *this;
+    }
+
+    ~DenseImage() POUTRE_NOEXCEPT
+    {
     }
   };
 

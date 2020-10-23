@@ -19,7 +19,7 @@ namespace poutre
 {
   std::unique_ptr<IInterface> Clone(const IInterface &i_img1) { return i_img1.Clone(); }
 
-  std::unique_ptr<IInterface> CloneGeometry(const IInterface &i_img1)
+  std::unique_ptr<IInterface> CloneGeometry(const IInterface &i_img1)  //NOLINT(misc-unused-parameters)
   {
     auto imgType = i_img1.GetImgType();
     switch( imgType )
@@ -33,7 +33,7 @@ namespace poutre
     }
   }
 
-  std::unique_ptr<IInterface> ConvertGeometry(const IInterface &i_img1, CompoundType ctype, PType ptype)
+  std::unique_ptr<IInterface> ConvertGeometry(const IInterface &i_img1, CompoundType ctype, PType ptype) //NOLINT(misc-unused-parameters)
   {
     auto imgType = i_img1.GetImgType();
     switch( imgType )
@@ -52,7 +52,7 @@ namespace poutre
     return ConvertGeometry(i_img1, i_img1.GetCType(), ptype);
   }
 
-  void Copy(const IInterface &i_img1, IInterface &i_img2)
+  void Copy(const IInterface &i_img1, IInterface &i_img2) //NOLINT(misc-unused-parameters)
   {
     AssertSizesCompatible(i_img1, i_img2, "Copy images have not compatible sizes");
     AssertAsTypesCompatible(i_img1, i_img2, "Copy images have not compatible types may you have to use convert instead");

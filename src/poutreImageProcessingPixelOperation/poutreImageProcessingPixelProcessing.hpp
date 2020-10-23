@@ -36,7 +36,7 @@
 namespace poutre
 {
   // TODO Doxydoc module
-  IMP_API void dummy(void);
+  IMP_API void dummy();
 
 } // namespace poutre
 #endif // POUTRE_IMAGEPROCESSINGPP_HPP__

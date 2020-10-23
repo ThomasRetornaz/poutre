@@ -157,7 +157,7 @@ namespace poutre
     using parent::m_ptrorig;
     using self_type = pdense_reverse_iterator<DataType>;
 
-    pdense_reverse_iterator(DataType *ptr = nullptr, DataType *ptrorig = nullptr) : parent(ptr, ptrorig) {}
+    explicit pdense_reverse_iterator(DataType *ptr = nullptr, DataType *ptrorig = nullptr) : parent(ptr, ptrorig) {}
     // pdense_reverse_iterator(const self_type& rhs)
     //  {
     //  this->m_ptr = rhs.getPtr( ); this->m_ptrorig = rhs.getOrigPtr( );
@@ -176,47 +176,47 @@ namespace poutre
     //  rawIterator.getOrigPtr( ); return (*this);
     //  }
 
-    self_type &operator+=(const std::ptrdiff_t &movement)
+    POUTRE_CXX14_CONSTEXPR self_type &operator+=(const std::ptrdiff_t &movement)
     {
       this->m_ptr -= movement;
       return (*this);
     }
-    self_type &operator-=(const std::ptrdiff_t &movement)
+    POUTRE_CXX14_CONSTEXPR self_type &operator-=(const std::ptrdiff_t &movement)
     {
       this->m_ptr += movement;
       return (*this);
     }
-    self_type &operator++()
+    POUTRE_CXX14_CONSTEXPR self_type &operator++()
     {
       --this->m_ptr;
       return (*this);
     }
-    self_type &operator--()
+    POUTRE_CXX14_CONSTEXPR self_type &operator--()
     {
       ++this->m_ptr;
       return (*this);
     }
-    const self_type operator++(int) /*const*/
+    POUTRE_CXX14_CONSTEXPR self_type operator++(int) /*const*/
     {
       auto temp(*this);
       --this->m_ptr;
       return temp;
     }
-    const self_type operator--(int) /*const*/
+    POUTRE_CXX14_CONSTEXPR self_type operator--(int) /*const*/
     {
       auto temp(*this);
       ++this->m_ptr;
       return temp;
     }
 
-    ptrdiff_t operator-(const self_type &rawReverseIterator)
+    POUTRE_CXX14_CONSTEXPR ptrdiff_t operator-(const self_type &rawReverseIterator)
     { /*todo assert same orig?*/
       return std::distance(this->getPtr(), rawReverseIterator.getPtr());
     }
 
-    /*const*/ offset getOffset() const { return m_ptr - m_ptrorig; }
+    POUTRE_CXX14_CONSTEXPR offset getOffset() const { return m_ptr - m_ptrorig; }
 
-    pdense_iterator<DataType> base()
+    POUTRE_CXX14_CONSTEXPR pdense_iterator<DataType> base()
     {
       pdense_iterator<DataType> forwardIterator(this->m_ptr, this->m_ptrorig);
       ++forwardIterator;

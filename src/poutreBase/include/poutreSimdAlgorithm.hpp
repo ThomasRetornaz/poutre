@@ -37,7 +37,7 @@ namespace poutre
   namespace simd
   {
     template<typename T, typename U, typename UnOp>
-    U *transform(T const *first, T const *last, U *out, UnOp f) POUTRE_NOEXCEPTONLYNDEBUG
+    U *transform(const T* __restrict first, const T* __restrict last, U* __restrict out, UnOp f) POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ASSERTCHECK(first, "null ptr");
       POUTRE_ASSERTCHECK(last, "null ptr");
@@ -100,7 +100,8 @@ namespace poutre
     }
 
     template<typename T1, typename T2, typename U, typename BinOp>
-    U *transform(T1 const *first1, T1 const *last1, T2 const *first2, U *out, BinOp f) POUTRE_NOEXCEPTONLYNDEBUG
+    U *transform(T1 const *__restrict first1, T1 const *__restrict last1, T2 const *__restrict first2, U *__restrict out, BinOp f)
+        POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ASSERTCHECK(first1, "null ptr");
       POUTRE_ASSERTCHECK(last1, "null ptr");

@@ -65,7 +65,7 @@ namespace poutre
     };
 
     template<ptrdiff_t Rank>
-    POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t view_offset(const index<Rank> &idx, const index<Rank> &stride)
+    POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t view_offset(const index<Rank> &idx, const index<Rank> &stride) //NOLINT(misc-unused-parameters)
     {
       ptrdiff_t offset {};
       for( size_t i = 0; i < Rank; ++i )
@@ -75,7 +75,7 @@ namespace poutre
       return offset;
     }
 
-    template<> POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t view_offset(const index<3> &idx, const index<3> &stride)
+    template<> POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t view_offset(const index<3> &idx, const index<3> &stride) //NOLINT(misc-unused-parameters)
     {
       ptrdiff_t offset {};
       offset += idx[0] * stride[0];
@@ -84,7 +84,7 @@ namespace poutre
       return offset;
     }
 
-    template<> POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t view_offset(const index<2> &idx, const index<2> &stride)
+    template<> POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t view_offset(const index<2> &idx, const index<2> &stride) //NOLINT(misc-unused-parameters)
     {
       ptrdiff_t offset {};
       offset += idx[0] * stride[0];
@@ -92,7 +92,7 @@ namespace poutre
       return offset;
     }
 
-    template<> POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t view_offset(const index<1> &idx, const index<1> &stride)
+    template<> POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t view_offset(const index<1> &idx, const index<1> &stride) //NOLINT(misc-unused-parameters)
     {
       ptrdiff_t offset {};
       offset += idx[0] * stride[0];
@@ -100,7 +100,8 @@ namespace poutre
     }
 
     template<typename T, ptrdiff_t Rank>
-    POUTRE_CXX14_CONSTEXPR T &view_access(T *data, const index<Rank> &idx, const index<Rank> &stride)
+    POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR T &
+                                               view_access(T *data, const index<Rank> &idx, const index<Rank> &stride) // NOLINT(misc-unused-parameters)
     {
       return data[view_offset(idx, stride)];
     }

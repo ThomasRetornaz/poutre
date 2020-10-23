@@ -60,7 +60,7 @@ namespace poutre
     GlobalLogger &operator=(const GlobalLogger &) = delete;
     GlobalLogger(GlobalLogger &&other)            = delete;
     GlobalLogger &operator=(GlobalLogger &&other) = delete;
-    ~GlobalLogger() {}
+    ~GlobalLogger()                               = default;
 
     void setLoggerLevel(LoggerLevel l)
     {

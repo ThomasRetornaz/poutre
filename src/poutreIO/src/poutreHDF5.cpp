@@ -21,7 +21,7 @@
 namespace poutre
 {
   void StoreWithHDF5(const std::string &path,
-                     const IInterface & iimage,
+                     const IInterface & iimage, //NOLINT(misc-unused-parameters)
                      const std::string &image_name /*= "poutre_img_1"*/) // NOLINT(misc-unused-parameters)
   {
     /*
@@ -269,7 +269,7 @@ namespace poutre
   }
 
   std::unique_ptr<IInterface>
-  LoadFromHDF5(const std::string &filename,
+  LoadFromHDF5(const std::string &filename, //NOLINT(misc-unused-parameters)
                const std::string &image_name /* = poutre_img_1 */) // NOLINT(misc-unused-parameters)
   {
     /*

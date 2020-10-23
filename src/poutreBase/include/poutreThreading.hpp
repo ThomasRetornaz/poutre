@@ -359,8 +359,8 @@ namespace poutre
         using PackagedTask = std::packaged_task<ResultType()>;
         using TaskType     = ThreadTask<PackagedTask>;
 
-        PackagedTask           task {std::move(boundTask)};
-        TaskFuture<ResultType> result {task.get_future()};
+        PackagedTask           task {std::move(boundTask)}; //NOLINT
+        TaskFuture<ResultType> result {task.get_future()}; //NOLINT
         m_pool_work_queue.push(std::make_unique<TaskType>(std::move(task)));
         return result;
       }
