@@ -12,7 +12,8 @@
 
 #include <poutreBase/poutreJsonSerialization.hpp>
 
-#include <json/json.h>
+#include <json/reader.h>
+#include <json/writer.h>
 
 namespace poutre
 {
