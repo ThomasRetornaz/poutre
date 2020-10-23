@@ -165,6 +165,7 @@ endif()
 # the poutre core libraries
 add_subdirectory (${POUTRE_SRC_DIR})
 if(POUTRE_BUILD_TEST)
+    include(CTest)
     add_subdirectory (${POUTRE_NRT_DIR})
 endif()
 if(POUTRE_BUILD_BENCH)
