@@ -26,7 +26,7 @@ namespace poutre
     case GlobalLogger::LoggerLevel::debug: os << "debug"; break;
     case GlobalLogger::LoggerLevel::err: os << "err"; break;
     case GlobalLogger::LoggerLevel::info: os << "info"; break;
-    case GlobalLogger::LoggerLevel::warn: os << "trace"; break;
+    case GlobalLogger::LoggerLevel::warn: os << "warn"; break;
     default: os << "Unknown GlobalLogger::LoggerLevel"; break;
     }
     return os;

@@ -122,7 +122,7 @@ namespace poutre
         throw std::runtime_error("Don't call top on empty priority stack");
       }
 #endif
-      return value_type((Key_Type)m_current_highestPriority, stack[m_current_highestPriority].front());
+      return value_type((Key_Type)m_current_highestPriority, stack[static_cast<size_t>(m_current_highestPriority].front()));
     }
 
     //! removes the top element of a priority queue.The top element is greater or at least as great
@@ -137,14 +137,14 @@ namespace poutre
         throw std::runtime_error("Don't call pop on empty priority stack"); //
       }
 #endif
-      p_stack[m_current_highestPriority] -= 1; // record number of element at this level
-      stack[m_current_highestPriority].pop();
+      p_stack[static_cast<size_t>(m_current_highestPriority)] -= 1; // record number of element at this level
+      stack[static_cast<size_t>(m_current_highestPriority)].pop();
     }
 
     private:
     inline int getHigherPriority() const
     {
-      if( p_stack[m_current_highestPriority] == 0 )
+      if( p_stack[static_cast<size_t>(m_current_highestPriority)] == 0 )
       {
         int i;
         for( i = m_current_highestPriority; p_stack[(size_t)i] == 0 && i > 0; i-- ) //-V781

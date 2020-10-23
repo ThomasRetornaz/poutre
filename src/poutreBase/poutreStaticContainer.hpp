@@ -152,8 +152,8 @@ namespace poutre
     POUTRE_CXX14_CONSTEXPR explicit static_array_base(value_type a0, value_type a1, value_type a2, value_type a3)
         POUTRE_NOEXCEPT : m_array()
     {
-      static_assert(Rank == 4,
-                    "static_array_base(value_type,value_type,value_" //-V112
+      static_assert(Rank == 4, //-V112
+                    "static_array_base(value_type,value_type,value_"
                     "type,value_type) is only supported on "
                     "static_array_base<T, 4>");
       m_array[0] = a0;

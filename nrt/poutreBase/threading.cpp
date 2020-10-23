@@ -52,7 +52,7 @@ TEST(threading, threadpool_RunMoreTasksThanThreads)
             std::this_thread::sleep_for(1ms);
             std::lock_guard<std::mutex> l{mutex};
             ++result;
-            thread_ids.insert(std::this_thread::get_id());
+            thread_ids.emplace(std::this_thread::get_id());
         }));
     }
     for (auto &f : futures)

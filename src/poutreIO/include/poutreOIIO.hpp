@@ -497,8 +497,8 @@ namespace poutre
     template<typename T> void StoreWithOIIOCompound4(const DenseImage<compound<T, 4>, 2> &im, OIIO::ImageOutput &out)
     {
       const OIIO::ImageSpec &spec = out.spec();
-      POUTRE_CHECK(spec.nchannels == 4,
-                   "StoreWithOIIOCompound4(): Nb of channels must be 4"); //-V112
+      POUTRE_CHECK(spec.nchannels == 4, //-V112
+                   "StoreWithOIIOCompound4(): Nb of channels must be 4"); 
       std::vector<T> buffer(spec.width * spec.height * spec.nchannels);
       const auto     ptr_buffer = buffer.data();
       auto           ptr_img    = im.data();
