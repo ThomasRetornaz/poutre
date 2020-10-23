@@ -57,8 +57,13 @@ namespace poutre
       using view_t = array_view<const idx, 1>;
 
       private:
-      // bloody visual....
-      static /*POUTRE_CONSTEXPR_OR_CONST*/ const std::array<idx, 2> m_neighboursList;
+
+      static POUTRE_CXX14_CONSTEXPR const std::array<idx, 2> m_neighboursList=
+      // clang-format off
+        {{
+            idx1d{-1},          idx1d{+1},
+        }};
+      // clang-format on
 
       public:
       NLS nlstype        = NLS::NLS_c2_1d;
@@ -77,11 +82,6 @@ namespace poutre
       POUTRE_STATIC_CONSTEXPR ptrdiff_t radial_extent() { return 1; }
     };
 
-    // clang-format off
-        const std::array<idx1d, 2> c2_1D_t::m_neighboursList= {{
-            idx1d{-1},          idx1d{+1},
-        }};
-    // clang-format on
     const POUTRE_STATIC_CONSTEXPR c2_1D_t c2_1D = {};
 
     /************************************************/
@@ -94,8 +94,13 @@ namespace poutre
       using view_t = array_view<const idx2d, 1>;
 
       private:
-      // bloody visual....
-      static /*POUTRE_CONSTEXPR_OR_CONST*/ const std::array<idx2d, 2> m_neighboursList;
+
+      static POUTRE_CXX14_CONSTEXPR const std::array<idx2d, 2> m_neighboursList=
+          // clang-format off
+        {{
+            idx2d{-1,+0},          idx2d{+1,+0},
+        }};
+      // clang-format on
 
       public:
       NLS nlstype        = NLS::NLS_c2_2dH;
@@ -114,11 +119,7 @@ namespace poutre
       POUTRE_STATIC_CONSTEXPR ptrdiff_t radial_extent() { return 1; }
     };
 
-    // clang-format off
-        const std::array<idx2d, 2> c2_2DH_t::m_neighboursList= {{
-            idx2d{-1,+0},          idx2d{+1,+0},
-        }};
-    // clang-format on
+
     const POUTRE_STATIC_CONSTEXPR c2_2DH_t c2_2DH = {};
 
     struct c2_2DV_t : neighborhood_t_interface<c2_2DV_t>
@@ -127,8 +128,14 @@ namespace poutre
       using view_t = array_view<const idx2d, 1>;
 
       private:
-      // bloody visual....
-      static /*POUTRE_CONSTEXPR_OR_CONST*/ const std::array<idx2d, 2> m_neighboursList;
+
+      static POUTRE_CXX14_CONSTEXPR const std::array<idx2d, 2> m_neighboursList=
+          // clang-format off
+        {{
+            idx2d{+0,-1},
+            idx2d{+0,+1}
+        }};
+      // clang-format on
 
       public:
       NLS nlstype        = NLS::NLS_c2_2dV;
@@ -147,12 +154,6 @@ namespace poutre
       POUTRE_STATIC_CONSTEXPR ptrdiff_t radial_extent() { return 1; }
     };
 
-    // clang-format off
-        const std::array<idx2d, 2> c2_2DV_t::m_neighboursList= {{
-            idx2d{+0,-1},
-            idx2d{+0,+1}
-        }};
-    // clang-format on
     const POUTRE_STATIC_CONSTEXPR c2_2DV_t c2_2DV = {};
 
     struct c2_2D_Diag45_t : neighborhood_t_interface<c2_2D_Diag45_t>
@@ -161,8 +162,14 @@ namespace poutre
       using view_t = array_view<const idx2d, 1>;
 
       private:
-      // bloody visual....
-      static /*POUTRE_CONSTEXPR_OR_CONST*/ const std::array<idx2d, 2> m_neighboursList;
+
+      static POUTRE_CXX14_CONSTEXPR const std::array<idx2d, 2> m_neighboursList=
+          // clang-format off
+        {{
+                        idx2d{+1,-1},
+
+            idx2d{-1,+1}
+        }};
 
       public:
       NLS nlstype        = NLS::NLS_c2_2d_Diag45;
@@ -181,12 +188,6 @@ namespace poutre
       POUTRE_STATIC_CONSTEXPR ptrdiff_t radial_extent() { return 1; }
     };
 
-    // clang-format off
-        const std::array<idx2d, 2> c2_2D_Diag45_t::m_neighboursList= {{
-                        idx2d{+1,-1},
-
-            idx2d{-1,+1}
-        }};
     // clang-format on
     const POUTRE_STATIC_CONSTEXPR c2_2D_Diag45_t c2_2D_Diag45 = {};
 
@@ -196,8 +197,14 @@ namespace poutre
       using view_t = array_view<const idx2d, 1>;
 
       private:
-      // bloody visual....
-      static /*POUTRE_CONSTEXPR_OR_CONST*/ const std::array<idx2d, 2> m_neighboursList;
+      static POUTRE_CXX14_CONSTEXPR const std::array<idx2d, 2> m_neighboursList=
+          // clang-format off
+      {{
+            idx2d{-1,-1},
+
+                          idx2d{+1,+1}
+        }};
+      // clang-format on
 
       public:
       NLS nlstype        = NLS::NLS_c2_2d_Diag135;
@@ -216,13 +223,7 @@ namespace poutre
       POUTRE_STATIC_CONSTEXPR ptrdiff_t radial_extent() { return 1; }
     };
 
-    // clang-format off
-        const std::array<idx2d, 2> c2_2D_Diag135_t::m_neighboursList= {{
-            idx2d{-1,-1},
 
-                          idx2d{+1,+1}
-        }};
-    // clang-format on
     const POUTRE_STATIC_CONSTEXPR c2_2D_Diag135_t c2_2D_Diag135 = {};
 
     struct c4_2D_t : neighborhood_t_interface<c4_2D_t>
@@ -231,8 +232,15 @@ namespace poutre
       using view_t = array_view<const idx2d, 1>;
 
       private:
-      // bloody visual....
-      static /*POUTRE_CONSTEXPR_OR_CONST*/ const std::array<idx2d, 4> m_neighboursList;
+
+      static POUTRE_CXX14_CONSTEXPR const std::array<idx2d, 4> m_neighboursList=
+          // clang-format off
+      {{
+                 {+0, -1},
+        {-1, +0},          {+1, +0},
+                 {+0, +1}
+        }};
+      // clang-format on
 
       public:
       NLS nlstype                                    = NLS::NLS_c4_2d;
@@ -250,13 +258,6 @@ namespace poutre
       POUTRE_STATIC_CONSTEXPR ptrdiff_t radial_extent() { return 1; }
     };
 
-    // clang-format off
-        const std::array<idx2d, 4> c4_2D_t::m_neighboursList= {{
-                 {+0, -1},
-        {-1, +0},          {+1, +0},
-                 {+0, +1}
-        }};
-    // clang-format on
 
     const POUTRE_STATIC_CONSTEXPR c4_2D_t c4_2D = {};
 
@@ -266,8 +267,15 @@ namespace poutre
       using view_t = array_view<const idx2d, 1>;
 
       private:
-      // bloody visual....
-      static /*POUTRE_CONSTEXPR_OR_CONST*/ const std::array<idx2d, 8> m_neighboursList;
+
+      static POUTRE_CXX14_CONSTEXPR const std::array<idx2d, 8> m_neighboursList=
+          // clang-format off
+      {{
+        {-1, -1}, {+0, -1}, {+1, -1},
+        {-1, +0},           {+1, +0},
+        {-1, +1}, {+0, +1}, {+1, +1}
+        }};
+      // clang-format on
 
       public:
       NLS nlstype                                    = NLS::NLS_c8_2d;
@@ -290,14 +298,6 @@ namespace poutre
 
       POUTRE_STATIC_CONSTEXPR ptrdiff_t radial_extent() { return 1; }
     };
-
-    // clang-format off
-        const std::array<idx2d, 8> c8_2D_t::m_neighboursList= {{
-        {-1, -1}, {+0, -1}, {+1, -1},
-        {-1, +0},           {+1, +0},
-        {-1, +1}, {+0, +1}, {+1, +1}
-        }};
-    // clang-format on
     const POUTRE_STATIC_CONSTEXPR c8_2D_t c8_2D = {};
 
     /************************************************/
@@ -309,8 +309,13 @@ namespace poutre
       using view_t = array_view<const idx3d, 1>;
 
       private:
-      // bloody visual....
-      static /*POUTRE_CONSTEXPR_OR_CONST*/ const std::array<idx3d, 6> m_neighboursList;
+
+      static POUTRE_CXX14_CONSTEXPR const std::array<idx3d, 6> m_neighboursList=
+        // clang-format off
+      {{
+          {+0, +0, -1}, {+0, -1, +0}, {-1, +0, +0},          {+1, +0, +0}, {+0, +1, +0}, {+0, +0, +1}
+          }};
+      // clang-format on
 
       public:
       NLS nlstype                                    = NLS::NLS_c6_3d;
@@ -328,11 +333,6 @@ namespace poutre
       POUTRE_STATIC_CONSTEXPR ptrdiff_t radial_extent() { return 1; }
     };
 
-    // clang-format off
-        const std::array<idx3d, 6> c6_3D_t::m_neighboursList= {{
-          {+0, +0, -1}, {+0, -1, +0}, {-1, +0, +0},          {+1, +0, +0}, {+0, +1, +0}, {+0, +0, +1}
-          }};
-    // clang-format on
     const POUTRE_STATIC_CONSTEXPR c6_3D_t c6_3D = {};
 
     struct c26_3D_t : neighborhood_t_interface<c26_3D_t>
@@ -341,8 +341,23 @@ namespace poutre
       using view_t = array_view<const idx3d, 1>;
 
       private:
-      // bloody visual....
-      static /*POUTRE_CONSTEXPR_OR_CONST*/ const std::array<idx3d, 26> m_neighboursList;
+
+      static POUTRE_CXX14_CONSTEXPR const std::array<idx3d, 26> m_neighboursList=
+      // clang-format off
+      {{
+        {-1, -1, -1}, {+0, -1, -1}, {+1, -1, -1},
+        {-1, +0, -1}, {+0, +0, -1}, {+1, +0, -1},
+        {-1, +1, -1}, {+0, +1, -1}, {+1, +1, -1},
+        // ----
+        {-1, -1, +0}, {+0, -1, +0}, {+1, -1, +0},
+        {-1, +0, +0},               {+1, +0, +0},
+        {-1, +1, +0}, {+0, +1, +0}, {+1, +1, +0},
+        // ----
+        {-1, -1, +1}, {+0, -1, +1}, {+1, -1, +1},
+        {-1, +0, +1}, {+0, +0, +1}, {+1, +0, +1},
+        {-1, +1, +1}, {+0, +1, +1}, {+1, +1, +1},
+     }};
+      // clang-format on
 
       public:
       NLS nlstype                                    = NLS::NLS_c26_3d;
@@ -366,23 +381,6 @@ namespace poutre
       POUTRE_STATIC_CONSTEXPR ptrdiff_t radial_extent() { return 1; }
     };
 
-    // clang-format off
-        const std::array<idx3d, 26> c26_3D_t::m_neighboursList= {{
-        // clang-format off
-        {-1, -1, -1}, {+0, -1, -1}, {+1, -1, -1},
-        {-1, +0, -1}, {+0, +0, -1}, {+1, +0, -1},
-        {-1, +1, -1}, {+0, +1, -1}, {+1, +1, -1},
-        // ----
-        {-1, -1, +0}, {+0, -1, +0}, {+1, -1, +0},
-        {-1, +0, +0},               {+1, +0, +0},
-        {-1, +1, +0}, {+0, +1, +0}, {+1, +1, +0},
-        // ----
-        {-1, -1, +1}, {+0, -1, +1}, {+1, -1, +1},
-        {-1, +0, +1}, {+0, +0, +1}, {+1, +0, +1},
-        {-1, +1, +1}, {+0, +1, +1}, {+1, +1, +1},
-        // clang-format on
-    }};
-    // clang-format on
     const POUTRE_STATIC_CONSTEXPR c26_3D_t c26_3D = {};
 
     template<NLS> struct NeighborListStaticSETraits

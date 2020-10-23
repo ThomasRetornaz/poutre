@@ -59,7 +59,6 @@ namespace poutre
 
     //! operator<< for IStructuringElement
     //@warning Serialize a description of StructuringElement. Doesn't serialize data. Use @c TODO,@c
-    // TODO
     IPPSE_API std::ostream &operator<<(std::ostream &, const IStructuringElement &ise);
 
   } // namespace se

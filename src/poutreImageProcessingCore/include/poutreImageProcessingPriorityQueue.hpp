@@ -122,10 +122,8 @@ namespace poutre
         throw std::runtime_error("Don't call top on empty priority stack");
       }
 #endif
-      return value_type(
-        static_cast<Key_Type>(m_current_highestPriority), 
-        stack[static_cast<size_t>(m_current_highestPriority)].front()
-        );
+      return value_type(static_cast<Key_Type>(m_current_highestPriority),
+                        stack[static_cast<size_t>(m_current_highestPriority)].front());
     }
 
     //! removes the top element of a priority queue.The top element is greater or at least as great

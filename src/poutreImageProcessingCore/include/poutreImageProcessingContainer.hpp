@@ -650,9 +650,7 @@ namespace poutre
       return *this;
     }
 
-    ~DenseImage() POUTRE_NOEXCEPT
-    {
-    }
+    ~DenseImage() POUTRE_NOEXCEPT {}
   };
 
   ///////////////////////////////////////////////////////////////////////////////////

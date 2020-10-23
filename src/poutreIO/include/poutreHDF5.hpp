@@ -123,7 +123,7 @@ namespace poutre
       H5::FloatType type {H5::PredType::NATIVE_DOUBLE};
     };
 
-    std::vector<hsize_t> ImageCoordToHDF5Dim(const std::vector<std::size_t> &s) //NOLINT(misc-unused-parameters)
+    std::vector<hsize_t> ImageCoordToHDF5Dim(const std::vector<std::size_t> &s) // NOLINT(misc-unused-parameters)
     {
       auto res = std::vector<hsize_t>(s.size());
       std::copy(s.begin(), s.end(), res.begin());

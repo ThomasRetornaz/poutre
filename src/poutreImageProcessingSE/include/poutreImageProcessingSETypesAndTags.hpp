@@ -48,7 +48,6 @@ namespace poutre
       SEType_Undef = 0,      //!< Undefined type
       SEType_NL    = 1 << 0, //!< Neighborlist Type
       SEType_Image = 1 << 1, //!< Image Type
-                             // TODO
                              // BOX,line,amibe
     };
 

@@ -58,8 +58,7 @@ namespace poutre
    */
 
   template<ptrdiff_t Rank>
-  class bounds : public static_array_base<ptrdiff_t, Rank> // TODO restrain alignement
-                                                           // capabilities if any
+  class bounds : public static_array_base<ptrdiff_t, Rank> 
   {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     public:
@@ -650,7 +649,7 @@ namespace poutre
 #if !defined(__cpp_lib_three_way_comparison)
     bool operator==(const self_type &rhs) const POUTRE_NOEXCEPT
     {
-      return (m_idx == rhs.m_idx); // TODO ALSO check bound ?
+      return (m_idx == rhs.m_idx);
     }
 
     bool operator!=(const self_type &rhs) const POUTRE_NOEXCEPT { return (m_idx != rhs.m_idx); }

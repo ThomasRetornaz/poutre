@@ -65,7 +65,8 @@ namespace poutre
     };
 
     template<ptrdiff_t Rank>
-    POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t view_offset(const index<Rank> &idx, const index<Rank> &stride) //NOLINT(misc-unused-parameters)
+    POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t
+    view_offset(const index<Rank> &idx, const index<Rank> &stride) // NOLINT(misc-unused-parameters)
     {
       ptrdiff_t offset {};
       for( size_t i = 0; i < Rank; ++i )
@@ -75,7 +76,9 @@ namespace poutre
       return offset;
     }
 
-    template<> POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t view_offset(const index<3> &idx, const index<3> &stride) //NOLINT(misc-unused-parameters)
+    template<>
+    POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t
+    view_offset(const index<3> &idx, const index<3> &stride) // NOLINT(misc-unused-parameters)
     {
       ptrdiff_t offset {};
       offset += idx[0] * stride[0];
@@ -84,7 +87,9 @@ namespace poutre
       return offset;
     }
 
-    template<> POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t view_offset(const index<2> &idx, const index<2> &stride) //NOLINT(misc-unused-parameters)
+    template<>
+    POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t
+    view_offset(const index<2> &idx, const index<2> &stride) // NOLINT(misc-unused-parameters)
     {
       ptrdiff_t offset {};
       offset += idx[0] * stride[0];
@@ -92,7 +97,9 @@ namespace poutre
       return offset;
     }
 
-    template<> POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t view_offset(const index<1> &idx, const index<1> &stride) //NOLINT(misc-unused-parameters)
+    template<>
+    POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t
+    view_offset(const index<1> &idx, const index<1> &stride) // NOLINT(misc-unused-parameters)
     {
       ptrdiff_t offset {};
       offset += idx[0] * stride[0];
@@ -101,7 +108,7 @@ namespace poutre
 
     template<typename T, ptrdiff_t Rank>
     POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR T &
-                                               view_access(T *data, const index<Rank> &idx, const index<Rank> &stride) // NOLINT(misc-unused-parameters)
+    view_access(T *data, const index<Rank> &idx, const index<Rank> &stride) // NOLINT(misc-unused-parameters)
     {
       return data[view_offset(idx, stride)];
     }
@@ -364,7 +371,6 @@ namespace poutre
     POUTRE_CXX14_CONSTEXPR reference operator[](const index_type &idx) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ASSERTCHECK(m_bnd.contains(idx) == true, "Out of bound");
-      // TODO FIXME add auto stride at ctor level
       return details::view_access(m_data, idx, stride());
     }
     /**@}*/
@@ -614,7 +620,6 @@ namespace poutre
     // index_type idx such that (bounds() - origin).contains(idx) == true.
     section(const index_type &origin, const bounds_type &section_bnd) const
     {
-      // TODO  A REPRENDRE
       POUTRE_ASSERTCHECK(m_bnd.contains(origin), "section(origin,section_bnd) origin is Out of bound");
 
       index_type shifted = section_bnd + origin;
@@ -640,7 +645,6 @@ namespace poutre
     {
       POUTRE_ASSERTCHECK(m_bnd.contains(origin), "section(origin,section_bnd) origin is Out of bound");
       bounds_type section_bnd = m_bnd - origin;
-      // TODO take into account stride ?
       ptrdiff_t shift        = details::view_offset(origin, m_stride_idx);
       pointer   data_section = m_data + shift;
       // std::cout<<"\n"<<" bnd:"<<m_bnd<<" data:"<<*m_data<<"

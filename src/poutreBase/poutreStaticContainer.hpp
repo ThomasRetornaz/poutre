@@ -48,7 +48,6 @@ namespace poutre
    *@ingroup static_array_group
    */
   template<class valuetype, ptrdiff_t Rank
-           // TODO ADD ALIGNEMENT CAPABILITIES ?
            >
   class static_array_base // NOLINT
   {
