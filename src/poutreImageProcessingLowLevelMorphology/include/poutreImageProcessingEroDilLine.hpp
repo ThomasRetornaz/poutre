@@ -274,6 +274,7 @@ namespace poutre
   template<typename TIn, typename TOut, ptrdiff_t Rank>
   void t_DilateX(const DenseImage<TIn, Rank> &i_vin, ptrdiff_t k, DenseImage<TOut, Rank> &o_vout)
   {
+    POUTRE_ENTERING("t_DilateX");
     AssertSizesCompatible(i_vin, o_vout, "t_DilateX incompatible size");
     AssertAsTypesCompatible(i_vin, o_vout, "t_DilateX incompatible types");
     auto viewIn  = view(const_cast<DenseImage<TIn, Rank> &>(i_vin));
@@ -290,6 +291,7 @@ namespace poutre
            class ViewOut>
   void t_DilateY(const ViewIn<TIn, Rank> &i_vin, ptrdiff_t k, ViewOut<TOut, Rank> &o_vout)
   {
+    POUTRE_ENTERING("t_DilateY");
     POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
   }
   template<typename TIn, typename TOut, ptrdiff_t Rank>
@@ -311,6 +313,7 @@ namespace poutre
            class ViewOut>
   void t_ErodeX(const ViewIn<TIn, Rank> &i_vin, ptrdiff_t k, ViewOut<TOut, Rank> &o_vout)
   {
+    POUTRE_ENTERING("t_ErodeX");
     POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
     t_ErodeXOpLineDispatcher<TIn, TOut, Rank, ViewIn, ViewOut> dispatcher;
     dispatcher(i_vin, k, o_vout);
@@ -334,6 +337,7 @@ namespace poutre
            class ViewOut>
   void t_ErodeY(const ViewIn<TIn, Rank> &i_vin, ptrdiff_t k, ViewOut<TOut, Rank> &o_vout)
   {
+    POUTRE_ENTERING("t_ErodeY");
     POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
   }
   template<typename TIn, typename TOut, ptrdiff_t Rank>

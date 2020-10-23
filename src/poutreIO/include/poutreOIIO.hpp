@@ -338,6 +338,7 @@ namespace poutre
     template<typename T>
     void StoreWithOIIOScalar(const DenseImage<T, 2> &im, const std::string &path, StoreWithOIIOOptions const &options)
     {
+      POUTRE_ENTERING("StoreWithOIIOScalar");
       bf::path localPath(path);
       bf::path dir = localPath.parent_path();
       if( !(bf::exists(dir)) )
@@ -455,6 +456,7 @@ namespace poutre
                                 const std::string &                  path,
                                 StoreWithOIIOOptions const &         options)
     {
+      POUTRE_ENTERING("StoreWithOIIOCompound3");
       bf::path localPath(path);
       bf::path dir = localPath.parent_path();
       if( !(bf::exists(dir)) )
@@ -498,7 +500,7 @@ namespace poutre
     {
       const OIIO::ImageSpec &spec = out.spec();
       POUTRE_CHECK(spec.nchannels == 4, //-V112
-                   "StoreWithOIIOCompound4(): Nb of channels must be 4"); 
+                   "StoreWithOIIOCompound4(): Nb of channels must be 4");
       std::vector<T> buffer(spec.width * spec.height * spec.nchannels);
       const auto     ptr_buffer = buffer.data();
       auto           ptr_img    = im.data();
@@ -578,6 +580,7 @@ namespace poutre
                                 const std::string &                  path,
                                 StoreWithOIIOOptions const &         options)
     {
+      POUTRE_ENTERING("StoreWithOIIOCompound4");
       bf::path localPath(path);
       bf::path dir = localPath.parent_path();
       if( !(bf::exists(dir)) )

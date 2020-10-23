@@ -287,7 +287,7 @@ namespace poutre
   {
     using tmpBuffer = std::vector<TIn, xs::aligned_allocator<TIn, SIMD_IDEAL_MAX_ALIGN_BYTES>>;
     using lineView  = TIn *__restrict;
-    using clineView  =  const TIn *__restrict;
+    using clineView = const TIn *__restrict;
 
     tmpBuffer tempLine, tempLine1, tempLine2, tempLine3;
     lineView  bufTempLine, bufTempLine1, bufTempLine2, bufTempLine3;
@@ -422,7 +422,7 @@ namespace poutre
       POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
       using tmpBuffer = std::vector<TIn, xs::aligned_allocator<TIn, SIMD_IDEAL_MAX_ALIGN_BYTES>>;
       // using lineView = array_view<TIn, 1>;
-      using lineView  = TIn *__restrict; // array_view<TIn, 1>;
+      using lineView = TIn *__restrict; // array_view<TIn, 1>;
 
       tmpBuffer tempLine(xsize), tempLine1(xsize), tempLine2(xsize), tempLine3(xsize);
       lineView  bufTempLine(tempLine.data()), bufTempLine1(tempLine1.data()), bufTempLine2(tempLine2.data()),
@@ -549,7 +549,7 @@ namespace poutre
       POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
       using tmpBuffer = std::vector<TIn, xs::aligned_allocator<TIn, SIMD_IDEAL_MAX_ALIGN_BYTES>>;
       // using lineView = array_view<TIn, 1>;
-      using lineView  = TIn *__restrict;
+      using lineView = TIn *__restrict;
       tmpBuffer tempLine(xsize);
       lineView  bufTempLine(tempLine.data());
       lineView  bufInputPreviousLine;
@@ -621,7 +621,7 @@ namespace poutre
       POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
       using tmpBuffer = std::vector<TIn, xs::aligned_allocator<TIn, SIMD_IDEAL_MAX_ALIGN_BYTES>>;
       // using lineView = array_view<TIn, 1>;
-      using lineView  = TIn *__restrict;
+      using lineView = TIn *__restrict;
       tmpBuffer tempLine(xsize), tempLine2(xsize), tempLine3(xsize);
       lineView  bufTempLine(tempLine.data()), bufTempLine2(tempLine2.data()), bufTempLine3(tempLine3.data());
       lineView  bufInputPreviousLine;
@@ -701,7 +701,7 @@ namespace poutre
       POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
       using tmpBuffer = std::vector<TIn, xs::aligned_allocator<TIn, SIMD_IDEAL_MAX_ALIGN_BYTES>>;
       // using lineView = array_view<TIn, 1>;
-      using lineView  = TIn *__restrict;
+      using lineView = TIn *__restrict;
       tmpBuffer tempLine(xsize), tempLine2(xsize), tempLine3(xsize);
       lineView  bufTempLine(tempLine.data()), bufTempLine2(tempLine2.data()), bufTempLine3(tempLine3.data());
       lineView  bufInputPreviousLine;
@@ -775,6 +775,7 @@ namespace poutre
            class ViewOut>
   void t_Dilate(const ViewIn<TIn, Rank> &i_vin, se::NLS nl, ViewOut<TOut, Rank> &o_vout)
   {
+    POUTRE_ENTERING("t_Dilate");
     POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
     switch( nl )
     {
@@ -846,6 +847,7 @@ namespace poutre
            class ViewOut>
   void t_Erode(const ViewIn<TIn, Rank> &i_vin, se::NLS nl, ViewOut<TOut, Rank> &o_vout)
   {
+    POUTRE_ENTERING("t_Erode");
     POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
     switch( nl )
     {

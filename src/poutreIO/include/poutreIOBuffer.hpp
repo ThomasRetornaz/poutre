@@ -17,14 +17,11 @@
 #ifndef POUTREIOBUFFER_HPP
 #define POUTREIOBUFFER_HPP
 
+#include <poutreIO/poutreIO.hpp>
+#include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
+
 #include <memory>
 #include <string>
-
-#ifndef POUTRE_IO_HPP__
-#  include <poutreIO/poutreIO.hpp>
-#endif
-
-#include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 
 namespace poutre
 {
@@ -93,6 +90,7 @@ namespace poutre
                                   const size_t      size_buffer, // Size in bytes!!!
                                   valuetype *       buffer)
     {
+      POUTRE_ENTERING("t_ImageToBufferForceType");
       auto imgType = i_im.GetImgType();
       if( imgType != ImgType::ImgType_Dense )
       {
@@ -192,6 +190,7 @@ namespace poutre
     template<typename valuetype>
     void t_ImageFromBufferWithType(IInterface &o_im, const size_t i_size_buffer, const valuetype *i_buffer)
     {
+      POUTRE_ENTERING("t_ImageFromBufferWithType");
       auto imgType = o_im.GetImgType();
       if( imgType != ImgType::ImgType_Dense )
       {

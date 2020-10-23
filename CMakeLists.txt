@@ -155,6 +155,7 @@ include_directories(BEFORE "${SIMD_INLCUDE_DIRECTORY}")
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${JSONCPP_INCLUDE_DIR})
 include_directories(BEFORE ${FMT_INCLUDES})
+include_directories(BEFORE ${SPDLOG_INCLUDES})
 #message(FATAL_ERROR "${FMT_INCLUDES}")
 
 # warning the order is important

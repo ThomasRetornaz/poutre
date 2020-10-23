@@ -19,6 +19,7 @@
  */
 
 #include <poutreBase/poutreConfig.hpp>
+#include <poutreBase/poutreTrace.hpp>
 
 #ifdef POUTRE_DYNAMIC         // defined if POUTRE is compiled as a DLL
 #  ifdef PoutreIPCore_EXPORTS // defined if we are building the POUTRE DLL (instead of using it)

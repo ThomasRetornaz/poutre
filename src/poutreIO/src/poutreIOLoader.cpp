@@ -47,7 +47,7 @@ namespace poutre
 
   std::unique_ptr<IInterface> ImageLoader::Load() const
   {
-    POUTRE_TRACE("Enter ImageLoader::Load()");
+    POUTRE_ENTERING("ImageLoader::Load()");
     if( !m_isready )
       POUTRE_RUNTIME_ERROR("ImageLoader:  you must set path through SetPath");
     bf::path localPath(m_imgPath);

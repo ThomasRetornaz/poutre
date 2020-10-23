@@ -45,6 +45,7 @@ namespace poutre
 
   void ImageWriter::Write(const IInterface &i_img) const
   {
+    POUTRE_ENTERING("ImageLoader::Write()");
     if( !m_isready )
       POUTRE_RUNTIME_ERROR("ImageWritter:  you must set path through SetPath");
     bf::path localPath(m_imgPath);

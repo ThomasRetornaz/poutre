@@ -474,6 +474,7 @@ and do transposition
            class ViewOut>
   void t_transpose(const ViewIn<TIn, Rank> &i_vin, ViewOut<TOut, Rank> &o_vout)
   {
+    POUTRE_ENTERING("t_transpose");
     POUTRE_CHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
     t_transposeDispatcher<TIn, TOut, Rank, ViewIn, ViewOut> dispatcher;
     dispatcher(i_vin, o_vout);

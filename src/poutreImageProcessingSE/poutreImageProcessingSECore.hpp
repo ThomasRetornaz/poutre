@@ -11,6 +11,7 @@
 #define POUTRE_IPSECORE_HPP__
 
 #include <poutreBase/poutreConfig.hpp>
+#include <poutreBase/poutreTrace.hpp>
 
 /**
  * @file   poutreImageProcessingSECore.hpp

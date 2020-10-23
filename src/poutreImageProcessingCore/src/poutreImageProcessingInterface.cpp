@@ -18,14 +18,15 @@
 
 namespace poutre
 {
-  std::ostream &operator<<(std::ostream &stream, const IInterface &img) //NOLINT(misc-unused-parameters)
+  std::ostream &operator<<(std::ostream &stream, const IInterface &img) // NOLINT(misc-unused-parameters)
   {
     stream << img.str();
     return stream;
   }
 
-  bool AsSizesCompatible(const IInterface &i_img1, const IInterface &i_img2) //NOLINT(misc-unused-parameters)
+  bool AsSizesCompatible(const IInterface &i_img1, const IInterface &i_img2) // NOLINT(misc-unused-parameters)
   {
+    POUTRE_ENTERING("AsSizesCompatible");
     if( i_img1.GetNumDims() != i_img2.GetNumDims() )
       return false;
     const auto &coord1 = i_img1.GetCoords();
@@ -33,8 +34,9 @@ namespace poutre
     return std::equal(coord1.begin(), coord1.end(), coord2.begin());
   }
 
-  bool AsTypesCompatible(const IInterface &i_img1, const IInterface &i_img2) //NOLINT(misc-unused-parameters)
+  bool AsTypesCompatible(const IInterface &i_img1, const IInterface &i_img2) // NOLINT(misc-unused-parameters)
   {
+    POUTRE_ENTERING("AsTypesCompatible");
     if( i_img1.GetImgType() != i_img2.GetImgType() )
       return false;
     if( i_img1.GetCType() != i_img2.GetCType() )
@@ -44,14 +46,20 @@ namespace poutre
     return true;
   }
 
-  void AssertSizesCompatible(const IInterface &i_img1, const IInterface &i_img2, const std::string &i_msg) //NOLINT(misc-unused-parameters)
+  void AssertSizesCompatible(const IInterface & i_img1,
+                             const IInterface & i_img2,
+                             const std::string &i_msg) // NOLINT(misc-unused-parameters)
   {
+    POUTRE_ENTERING("AssertSizesCompatible");
     if( !AsSizesCompatible(i_img1, i_img2) )
       POUTRE_RUNTIME_ERROR(i_msg);
   }
 
-  void AssertAsTypesCompatible(const IInterface &i_img1, const IInterface &i_img2, const std::string &i_msg) //NOLINT(misc-unused-parameters)
+  void AssertAsTypesCompatible(const IInterface & i_img1,
+                               const IInterface & i_img2,
+                               const std::string &i_msg) // NOLINT(misc-unused-parameters)
   {
+    POUTRE_ENTERING("AssertAsTypesCompatible");
     if( !AsTypesCompatible(i_img1, i_img2) )
       POUTRE_RUNTIME_ERROR(i_msg);
   }
@@ -372,8 +380,10 @@ namespace poutre
     }
   }
   // main
-  std::unique_ptr<IInterface> CreateDense(const std::vector<std::size_t> &dims, CompoundType ctype, PType ptype) //NOLINT(misc-unused-parameters)
+  std::unique_ptr<IInterface>
+  CreateDense(const std::vector<std::size_t> &dims, CompoundType ctype, PType ptype) // NOLINT(misc-unused-parameters)
   {
+    POUTRE_ENTERING("CreateDense");
     const auto &numDims = dims.size();
     switch( numDims )
     {

@@ -31,6 +31,7 @@ namespace poutre
    */
   std::unique_ptr<IInterface> LoadFromOIIO(const std::string &image_path)
   {
+    POUTRE_ENTERING("LoadFromOIIO");
     bf::path localPath(image_path);
     if( !(bf::exists(localPath)) )
     {
@@ -353,8 +354,9 @@ namespace poutre
     return iimage;
   }
 
-  void StoreWithOIIO(const std::string &path, const IInterface &iimage) //NOLINT(misc-unused-parameters)
+  void StoreWithOIIO(const std::string &path, const IInterface &iimage) // NOLINT(misc-unused-parameters)
   {
+    POUTRE_ENTERING("StoreWithOIIO");
     const details::StoreWithOIIOOptions options;
     bf::path                            localPath(path);
     boost::filesystem::path             dir = localPath.parent_path();

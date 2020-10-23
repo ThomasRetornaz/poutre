@@ -291,6 +291,7 @@ namespace poutre
 
   std::unique_ptr<IInterface> ImageFromString(const std::string &i_str)
   {
+    POUTRE_ENTERING("ImageFromString");
     std::istringstream istrm(i_str);
     if( !istrm.good() )
     {
@@ -634,6 +635,7 @@ namespace poutre
   // IMAGE TO STRING
   std::string ImageToString(const poutre::IInterface &i_image) // NOLINT(misc-unused-parameters)
   {
+    POUTRE_ENTERING("ImageToString");
     std::ostringstream ostrm;
     if( !ostrm.good() )
     {

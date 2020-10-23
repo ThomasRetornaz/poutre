@@ -19,27 +19,12 @@
  * @copyright Copyright (c) 2020
  *
  */
-#ifndef POUTRE_IMAGEPROCESSINGCORE_HPP__
-#  include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSINGTYPE_HPP__
-#  include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
-#endif
-
-#ifndef POUTRE_CONTAINER_VIEW_HPP__
-#  include <poutreBase/poutreContainerView.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSING_UNARYOP_HPP__
-#  include <poutreImageProcessingPixelOperation/include/poutreImageProcessingUnaryOp.hpp>
-#endif
-
-#ifndef POUTRE_IMAGEPROCESSING_BINARYOP_HPP__
-#  include <poutreImageProcessingPixelOperation/include/poutreImageProcessingBinaryOp.hpp>
-#endif
-
+#include <poutreBase/poutreContainerView.hpp>
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
+#include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
+#include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
+#include <poutreImageProcessingPixelOperation/include/poutreImageProcessingBinaryOp.hpp>
+#include <poutreImageProcessingPixelOperation/include/poutreImageProcessingUnaryOp.hpp>
 
 namespace poutre
 {
@@ -80,6 +65,7 @@ namespace poutre
            class View2>
   void t_ArithNegate(const View1<T1, Rank> &i_vin, View2<T2, Rank> &o_vout)
   {
+    POUTRE_ENTERING("t_ArithNegate");
     PixelWiseUnaryOp<T1, T2, Rank, View1, View2, op_Invert>(i_vin, o_vout);
   }
 
@@ -149,6 +135,7 @@ namespace poutre
            class View3>
   void t_ArithSaturatedSub(const View1<T1, Rank> &i_vin1, const View2<T2, Rank> &i_vin2, View3<T3, Rank> &o_vout)
   {
+    POUTRE_ENTERING("t_ArithSaturatedSub");
     PixelWiseBinaryOp<T1, T2, T3, Rank, View1, View2, View3, op_Saturated_Sub>(i_vin1, i_vin2, o_vout);
   }
 
@@ -217,6 +204,7 @@ namespace poutre
            class View3>
   void t_ArithSaturatedAdd(const View1<T1, Rank> &i_vin1, const View2<T2, Rank> &i_vin2, View3<T3, Rank> &o_vout)
   {
+    POUTRE_ENTERING("t_ArithSaturatedAdd");
     PixelWiseBinaryOp<T1, T2, T3, Rank, View1, View2, View3, op_Saturated_Add>(i_vin1, i_vin2, o_vout);
   }
 
@@ -287,6 +275,7 @@ namespace poutre
   //@warning saturation is related to *View2 type*
   void t_ArithSaturatedAddConstant(const View1<T1, Rank> &i_vin, T2 val, View2<T2, Rank> &o_vout)
   {
+    POUTRE_ENTERING("t_ArithSaturatedAddConstant");
     PixelWiseUnaryOpWithValue<T1, T2, Rank, View1, View2, op_Saturated_Add_Constant>(i_vin, val, o_vout);
   }
 
@@ -359,6 +348,7 @@ namespace poutre
   //@warning saturation is related to *View2 type*
   void t_ArithSaturatedSubConstant(const View1<T1, Rank> &i_vin, T2 val, View2<T2, Rank> &o_vout)
   {
+    POUTRE_ENTERING("t_ArithSaturatedSubConstant");
     PixelWiseUnaryOpWithValue<T1, T2, Rank, View1, View2, op_Saturated_Sub_Constant>(i_vin, val, o_vout);
   }
 
@@ -409,6 +399,7 @@ namespace poutre
            class View3>
   void t_ArithSup(const View1<T1, Rank> &i_vin1, const View2<T2, Rank> &i_vin2, View3<T3, Rank> &o_vout)
   {
+    POUTRE_ENTERING("t_ArithSup");
     PixelWiseBinaryOp<T1, T2, T3, Rank, View1, View2, View3, op_Sup>(i_vin1, i_vin2, o_vout);
   }
 
@@ -492,6 +483,7 @@ namespace poutre
            class View3>
   void t_ArithInf(const View1<T1, Rank> &i_vin1, const View2<T2, Rank> &i_vin2, View3<T3, Rank> &o_vout)
   {
+    POUTRE_ENTERING("t_ArithInf");
     PixelWiseBinaryOp<T1, T2, T3, Rank, View1, View2, View3, op_Inf>(i_vin1, i_vin2, o_vout);
   }
 

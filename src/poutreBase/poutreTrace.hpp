@@ -21,11 +21,11 @@
 #include <poutreBase/poutreBase.hpp>
 #include <poutreBase/poutreConfig.hpp>
 
-#include "spdlog/sinks/stdout_color_sinks.h"
-#include "spdlog/spdlog.h"
 #include <boost/lexical_cast.hpp>
 #include <fstream>
 #include <ostream>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/spdlog.h>
 
 /**
  * @addtogroup trace_group Trace facilities
@@ -129,6 +129,10 @@ namespace poutre
 #define POUTRE_WARN(MSG)                                                                                                    \
   poutre::GlobalLogger::get().call(poutre::format("WARNING: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                 \
                                    GlobalLogger::LoggerLevel::warn)
+// NOLINTNEXTLINE
+#define POUTRE_ENTERING(MSG)                                                                                                \
+  poutre::GlobalLogger::get().call(poutre::format("Entering: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                \
+                                   GlobalLogger::LoggerLevel::trace)
   /**@}*/
 
 } // namespace poutre

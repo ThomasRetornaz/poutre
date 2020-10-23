@@ -19,6 +19,7 @@
  */
 
 #include <poutreBase/poutreConfig.hpp>
+#include <poutreBase/poutreTrace.hpp>
 
 #ifdef POUTRE_DYNAMIC                                 // defined if POUTRE is compiled as a DLL
 #  ifdef PoutreImageProcessingPixelProcessing_EXPORTS // defined if we are building the POUTRE DLL

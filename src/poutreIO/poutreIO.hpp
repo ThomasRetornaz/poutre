@@ -11,6 +11,7 @@
 #define POUTRE_IO_HPP__
 
 #include <poutreBase/poutreConfig.hpp>
+#include <poutreBase/poutreTrace.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
 
 #ifdef POUTRE_DYNAMIC     // defined if POUTRE is compiled as a DLL
