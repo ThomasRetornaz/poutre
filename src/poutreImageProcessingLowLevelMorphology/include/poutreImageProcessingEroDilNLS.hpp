@@ -227,7 +227,7 @@ namespace poutre
 
     static void ApplyArith(const_linePtr lineIn1, const_linePtr lineIn2, scoord size, linePtr lineout)
     {
-      simd::transform(lineIn1, lineIn1 + size, lineIn2, lineout, op_Sup<T, T, T, tag_SIMD_enabled>());
+      simd::transform(lineIn1, lineIn1 + size, lineIn2, lineout, op_Sup<T, T, T>());
     }
     static void ShiftRightLeftAndArith(const_linePtr linein,
                                        scoord        size,
@@ -263,7 +263,7 @@ namespace poutre
 
     static void ApplyArith(const_linePtr lineIn1, const_linePtr lineIn2, scoord size, linePtr lineout)
     {
-      simd::transform(lineIn1, lineIn1 + size, lineIn2, lineout, op_Inf<T, T, T, tag_SIMD_enabled>());
+      simd::transform(lineIn1, lineIn1 + size, lineIn2, lineout, op_Inf<T, T, T>());
     }
     static void ShiftRightLeftAndArith(const_linePtr linein,
                                        scoord        size,

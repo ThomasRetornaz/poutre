@@ -58,7 +58,7 @@ BENCHMARK_DEFINE_F(ArithmeticsFixture, supremum_view)(benchmark::State &state)
     {
         std::vector<poutre::pUINT8> res(m_vect.size());
         auto sizeextent = sqrt(size);
-        auto view2din = poutre::array_view<const poutre::pUINT8, 2>(m_vect, {int(sizeextent), int(sizeextent)});
+        auto view2din = poutre::array_view</*const*/ poutre::pUINT8, 2>(m_vect, {int(sizeextent), int(sizeextent)});
         auto view2dout = poutre::array_view<poutre::pUINT8, 2>(res, {int(sizeextent), int(sizeextent)});
         poutre::t_ArithSup(view2din, view2din, view2dout);
     }
@@ -72,7 +72,7 @@ BENCHMARK_DEFINE_F(ArithmeticsFixture, supremum_strided_view)(benchmark::State &
     {
         std::vector<poutre::pUINT8> res(m_vect.size());
         auto sizeextent = sqrt(size);
-        auto view2din = poutre::array_view<const poutre::pUINT8, 2>(m_vect, {int(sizeextent), int(sizeextent)});
+        auto view2din = poutre::array_view</*const*/ poutre::pUINT8, 2>(m_vect, {int(sizeextent), int(sizeextent)});
         auto view2dout = poutre::array_view<poutre::pUINT8, 2>(res, {int(sizeextent), int(sizeextent)});
         auto stridedview2dout = view2dout.section({0, 0});
         poutre::t_ArithSup(view2din, view2din, stridedview2dout);
@@ -87,7 +87,7 @@ BENCHMARK_DEFINE_F(ArithmeticsFixture, add_const_view)(benchmark::State &state)
     {
         std::vector<poutre::pUINT8> res(m_vect.size());
         auto sizeextent = sqrt(size);
-        auto view2din = poutre::array_view<const poutre::pUINT8, 2>(m_vect, {int(sizeextent), int(sizeextent)});
+        auto view2din = poutre::array_view<poutre::pUINT8, 2>(m_vect, {int(sizeextent), int(sizeextent)});
         auto view2dout = poutre::array_view<poutre::pUINT8, 2>(res, {int(sizeextent), int(sizeextent)});
         poutre::t_ArithSaturatedAddConstant(view2din, (poutre::pUINT8)10, view2dout);
     }
@@ -112,7 +112,7 @@ BENCHMARK_DEFINE_F(ArithmeticsFixture, add_const_strided_view)(benchmark::State 
     {
         std::vector<poutre::pUINT8> res(m_vect.size());
         auto sizeextent = sqrt(size);
-        auto view2din = poutre::array_view<const poutre::pUINT8, 2>(m_vect, {int(sizeextent), int(sizeextent)});
+        auto view2din = poutre::array_view</*const*/ poutre::pUINT8, 2>(m_vect, {int(sizeextent), int(sizeextent)});
         auto view2dout = poutre::array_view<poutre::pUINT8, 2>(res, {int(sizeextent), int(sizeextent)});
         auto stridedview2dout = view2dout.section({0, 0}); // poutre::strided_array_view<unsigned int,
                                                            // 2>(view2dout);

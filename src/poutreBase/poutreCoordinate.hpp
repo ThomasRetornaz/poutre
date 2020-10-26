@@ -57,8 +57,7 @@ namespace poutre
    * @return
    */
 
-  template<ptrdiff_t Rank>
-  class bounds : public static_array_base<ptrdiff_t, Rank> 
+  template<ptrdiff_t Rank> class bounds : public static_array_base<ptrdiff_t, Rank>
   {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     public:
@@ -647,10 +646,7 @@ namespace poutre
          return (0 != m_bounds.size( ));
       }*/
 #if !defined(__cpp_lib_three_way_comparison)
-    bool operator==(const self_type &rhs) const POUTRE_NOEXCEPT
-    {
-      return (m_idx == rhs.m_idx);
-    }
+    bool operator==(const self_type &rhs) const POUTRE_NOEXCEPT { return (m_idx == rhs.m_idx); }
 
     bool operator!=(const self_type &rhs) const POUTRE_NOEXCEPT { return (m_idx != rhs.m_idx); }
     bool operator<(const self_type &rhs) const POUTRE_NOEXCEPT { return m_idx < rhs.m_idx; }

@@ -47,9 +47,7 @@ namespace poutre
    * capabilities, inlining and specializations for small array size.
    *@ingroup static_array_group
    */
-  template<class valuetype, ptrdiff_t Rank
-           >
-  class static_array_base // NOLINT
+  template<class valuetype, ptrdiff_t Rank> class static_array_base // NOLINT
   {
     // Static assertion
     static_assert(Rank > 0, "static_array_base requires a Rank>0");

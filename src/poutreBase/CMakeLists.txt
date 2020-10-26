@@ -59,7 +59,7 @@ set_target_properties(PoutreBase PROPERTIES FOLDER "src/")
 add_dependencies(PoutreBase xsimd jsoncpp_lib)
 # add_dependencies(PoutreBase Eigendep)
 target_compile_definitions(PoutreBase INTERFACE FMT_HEADER_ONLY=1)
-target_compile_definitions(PoutreBase INTERFACE SPDLOG_HEADER_ONLY=1)
+#target_compile_definitions(PoutreBase INTERFACE SPDLOG_HEADER_ONLY=1)
 
 if(BUILD_SHARED_LIBS)
   set_target_properties(PoutreBase PROPERTIES COMPILE_FLAGS -DJSON_DLL)

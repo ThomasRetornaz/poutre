@@ -62,7 +62,8 @@ BENCHMARK_DEFINE_F(CompareFixture, comparesss_view)(benchmark::State &state)
         auto view2dout = poutre::array_view<poutre::pUINT8, 2>(res, {int(sizeextent), int(sizeextent)});
         // poutre::ViewCompare_sss_dispatch<poutre::pUINT8,
         // poutre::pUINT8,2,poutre::array_view,poutre::array_view>()(view2din,poutre::CompOpType::CompOpSup,128,1,0,view2dout);
-        poutre::ViewCompare_sss_func_helper(view2din, poutre::CompOpType::CompOpSup, 128, 1, 0, view2dout);
+        poutre::ViewCompare_sss_func_helper(
+            view2din, poutre::CompOpType::CompOpSup, (poutre::pUINT8)128, (poutre::pUINT8)1, (poutre::pUINT8)0, view2dout);
     }
     state.SetItemsProcessed(state.iterations() * size);
 }
@@ -79,7 +80,12 @@ BENCHMARK_DEFINE_F(CompareFixture, comparesss_strided_view)(benchmark::State &st
         auto stridedview2dout = view2dout.section({0, 0});
         // poutre::ViewCompare_sss_dispatch<poutre::pUINT8, poutre::pUINT8, 2, poutre::array_view,
         // poutre::strided_array_view>()(view2din,poutre::CompOpType::CompOpSup, 128, 1, 0, stridedview2dout);
-        poutre::ViewCompare_sss_func_helper(view2din, poutre::CompOpType::CompOpSup, 128, 1, 0, stridedview2dout);
+        poutre::ViewCompare_sss_func_helper(view2din,
+                                            poutre::CompOpType::CompOpSup,
+                                            (poutre::pUINT8)128,
+                                            (poutre::pUINT8)1,
+                                            (poutre::pUINT8)0,
+                                            stridedview2dout);
     }
     state.SetItemsProcessed(state.iterations() * size);
 }

@@ -291,7 +291,7 @@ TEST(poutreImageProcessingCompareOp,CompareOpisswholeimage_equal)
     imgout.fill(4); //-V112
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_iss_dispatch(v_img1, poutre::CompOpType::CompOpEqual, v_img2,1, 0, v_imgout);
+    poutre::ViewCompare_iss_func_helper(v_img1, poutre::CompOpType::CompOpEqual, v_img2,1, 0, v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 1 1 1 1 1 1 \
@@ -335,7 +335,7 @@ TEST(poutreImageProcessingCompareOp,CompareOpisswholeimage_notequal)
     imgout.fill(4); //-V112
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_iss_dispatch(v_img1, poutre::CompOpType::CompOpDiff, v_img2, 1, 0, v_imgout);
+    poutre::ViewCompare_iss_func_helper(v_img1, poutre::CompOpType::CompOpDiff, v_img2, 1, 0, v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 0 0 0 0 0 0 \
@@ -379,7 +379,7 @@ TEST(poutreImageProcessingCompareOp,CompareOpisswholeimage_sup)
     imgout.fill(4); //-V112
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_iss_dispatch(v_img1, poutre::CompOpType::CompOpSup, v_img2, 1, 0, v_imgout);
+    poutre::ViewCompare_iss_func_helper(v_img1, poutre::CompOpType::CompOpSup, v_img2, 1, 0, v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 0 0 0 0 0 0 \
@@ -423,7 +423,7 @@ TEST(poutreImageProcessingCompareOp,CompareOpisswholeimage_supequal)
     imgout.fill(4); //-V112
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_iss_dispatch(v_img1, poutre::CompOpType::CompOpSupEqual, v_img2, 1, 0, v_imgout);
+    poutre::ViewCompare_iss_func_helper(v_img1, poutre::CompOpType::CompOpSupEqual, v_img2, 1, 0, v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 1 1 1 1 1 1 \
@@ -467,7 +467,7 @@ TEST(poutreImageProcessingCompareOp,CompareOpisswholeimage_inf)
     imgout.fill(4); //-V112
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_iss_dispatch(v_img1, poutre::CompOpType::CompOpInf, v_img2, 1, 0, v_imgout);
+    poutre::ViewCompare_iss_func_helper(v_img1, poutre::CompOpType::CompOpInf, v_img2, 1, 0, v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 0 0 0 0 0 0 \
@@ -511,7 +511,7 @@ TEST(poutreImageProcessingCompareOp,CompareOpisswholeimage_infequal)
     imgout.fill(4); //-V112
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_iss_dispatch(v_img1, poutre::CompOpType::CompOpInfEqual, v_img2, 1, 0, v_imgout);
+    poutre::ViewCompare_iss_func_helper(v_img1, poutre::CompOpType::CompOpInfEqual, v_img2, 1, 0, v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 1 1 1 1 1 1 \
@@ -557,7 +557,12 @@ TEST(poutreImageProcessingCompareOp,CompareOpsiswholeimage_equal)
     imgout.fill(4); //-V112
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_sis_dispatch(v_img, poutre::CompOpType::CompOpEqual,static_cast<poutre::pINT32>(1), v_imgtrue, static_cast<poutre::pINT32>(0),v_imgout);
+    poutre::ViewCompare_sis_func_helper(v_img,
+                                                                poutre::CompOpType::CompOpEqual,
+                                                                static_cast<poutre::pINT32>(1),
+                                                                v_imgtrue,
+                                                                static_cast<poutre::pINT32>(0),
+                                                                v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 2 2 2 2 2 2 \
@@ -601,7 +606,12 @@ TEST(poutreImageProcessingCompareOp,CompareOpsiswholeimage_notequal)
     imgout.fill(4); //-V112
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_sis_dispatch(v_img, poutre::CompOpType::CompOpDiff, static_cast<poutre::pINT32>(1), v_imgtrue, static_cast<poutre::pINT32>(0), v_imgout);
+    poutre::ViewCompare_sis_func_helper(v_img,
+                                        poutre::CompOpType::CompOpDiff,
+                                        static_cast<poutre::pINT32>(1),
+                                        v_imgtrue,
+                                        static_cast<poutre::pINT32>(0),
+                                        v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 0 0 0 0 0 0 \
@@ -645,7 +655,12 @@ TEST(poutreImageProcessingCompareOp,CompareOpsiswholeimage_sup)
     imgout.fill(4); //-V112
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_sis_dispatch(v_img, poutre::CompOpType::CompOpSup, static_cast<poutre::pINT32>(1), v_imgtrue, static_cast<poutre::pINT32>(0), v_imgout);
+    poutre::ViewCompare_sis_func_helper(v_img,
+                                        poutre::CompOpType::CompOpSup,
+                                        static_cast<poutre::pINT32>(1),
+                                        v_imgtrue,
+                                        static_cast<poutre::pINT32>(0),
+                                        v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 0 0 0 0 0 0 \
@@ -689,7 +704,12 @@ TEST(poutreImageProcessingCompareOp,CompareOpsiswholeimage_supequal)
     imgout.fill(4); //-V112
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_sis_dispatch(v_img, poutre::CompOpType::CompOpSupEqual, static_cast<poutre::pINT32>(1), v_imgtrue, static_cast<poutre::pINT32>(0), v_imgout);
+    poutre::ViewCompare_sis_func_helper(v_img,
+                                        poutre::CompOpType::CompOpSupEqual,
+                                        static_cast<poutre::pINT32>(1),
+                                        v_imgtrue,
+                                        static_cast<poutre::pINT32>(0),
+                                        v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 2 2 2 2 2 2 \
@@ -733,7 +753,12 @@ TEST(poutreImageProcessingCompareOp,CompareOpsiswholeimage_inf)
     imgout.fill(4); //-V112
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_sis_dispatch(v_img, poutre::CompOpType::CompOpInf, static_cast<poutre::pINT32>(1), v_imgtrue, static_cast<poutre::pINT32>(0), v_imgout);
+    poutre::ViewCompare_sis_func_helper(v_img,
+                                        poutre::CompOpType::CompOpInf,
+                                        static_cast<poutre::pINT32>(1),
+                                        v_imgtrue,
+                                        static_cast<poutre::pINT32>(0),
+                                        v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 0 0 0 0 0 0 \
@@ -777,7 +802,12 @@ TEST(poutreImageProcessingCompareOp,CompareOpsiswholeimage_infequal)
     imgout.fill(4); //-V112
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_sis_dispatch(v_img, poutre::CompOpType::CompOpInfEqual, static_cast<poutre::pINT32>(1), v_imgtrue, static_cast<poutre::pINT32>(0), v_imgout);
+    poutre::ViewCompare_sis_func_helper(v_img,
+                                        poutre::CompOpType::CompOpInfEqual,
+                                        static_cast<poutre::pINT32>(1),
+                                        v_imgtrue,
+                                        static_cast<poutre::pINT32>(0),
+                                        v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 2 2 2 2 2 2 \
@@ -821,7 +851,12 @@ TEST(poutreImageProcessingCompareOp,CompareOpssiwholeimage_equal)
     imgout.fill(4); //-V112
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_ssi_dispatch(v_img, poutre::CompOpType::CompOpEqual, static_cast<poutre::pINT32>(5), static_cast<poutre::pINT32>(1),v_imgfalse, v_imgout);
+    poutre::ViewCompare_ssi_func_helper(v_img,
+                                                poutre::CompOpType::CompOpEqual,
+                                                static_cast<poutre::pINT32>(5),
+                                                static_cast<poutre::pINT32>(1),
+                                                v_imgfalse,
+                                                v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 2 2 2 2 2 2 \
@@ -866,7 +901,12 @@ TEST(poutreImageProcessingCompareOp,CompareOpssiwholeimage_notequal)
     imgout.fill(4); //-V112
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_ssi_dispatch(v_img, poutre::CompOpType::CompOpDiff, static_cast<poutre::pINT32>(5), static_cast<poutre::pINT32>(1), v_imgfalse, v_imgout);
+    poutre::ViewCompare_ssi_func_helper(v_img,
+                                        poutre::CompOpType::CompOpDiff,
+                                        static_cast<poutre::pINT32>(5),
+                                        static_cast<poutre::pINT32>(1),
+                                        v_imgfalse,
+                                        v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6 \
 1 1 1 1 1 1 \
@@ -910,7 +950,12 @@ TEST(poutreImageProcessingCompareOp,CompareOpssiwholeimage_sup)
     imgout.fill(4); //-V112
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_ssi_dispatch(v_img, poutre::CompOpType::CompOpSup, static_cast<poutre::pINT32>(5), static_cast<poutre::pINT32>(1), v_imgfalse, v_imgout);
+    poutre::ViewCompare_ssi_func_helper(v_img,
+                                        poutre::CompOpType::CompOpSup,
+                                        static_cast<poutre::pINT32>(5),
+                                        static_cast<poutre::pINT32>(1),
+                                        v_imgfalse,
+                                        v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6\
  2 2 2 2 2 2\
@@ -954,7 +999,12 @@ TEST(poutreImageProcessingCompareOp,CompareOpssiwholeimage_supequal)
     imgout.fill(4); //-V112
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_ssi_dispatch(v_img, poutre::CompOpType::CompOpSupEqual, static_cast<poutre::pINT32>(5), static_cast<poutre::pINT32>(1), v_imgfalse, v_imgout);
+    poutre::ViewCompare_ssi_func_helper(v_img,
+                                        poutre::CompOpType::CompOpSupEqual,
+                                        static_cast<poutre::pINT32>(5),
+                                        static_cast<poutre::pINT32>(1),
+                                        v_imgfalse,
+                                        v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6\
  2 2 2 2 2 2\
@@ -999,7 +1049,12 @@ TEST(poutreImageProcessingCompareOp,CompareOpssiwholeimage_inf)
     imgout.fill(4); //-V112
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_ssi_dispatch(v_img, poutre::CompOpType::CompOpInf, static_cast<poutre::pINT32>(5), static_cast<poutre::pINT32>(1), v_imgfalse, v_imgout);
+    poutre::ViewCompare_ssi_func_helper(v_img,
+                                        poutre::CompOpType::CompOpInf,
+                                        static_cast<poutre::pINT32>(5),
+                                        static_cast<poutre::pINT32>(1),
+                                        v_imgfalse,
+                                        v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6\
  1 1 1 1 1 1\
@@ -1043,7 +1098,12 @@ TEST(poutreImageProcessingCompareOp,CompareOpssiwholeimage_infequal)
     imgout.fill(4); //-V112
     auto v_imgout = poutre::view(imgout);
 
-    poutre::ViewCompare_ssi_dispatch(v_img, poutre::CompOpType::CompOpInfEqual, static_cast<poutre::pINT32>(5), static_cast<poutre::pINT32>(1), v_imgfalse, v_imgout);
+    poutre::ViewCompare_ssi_func_helper(v_img,
+                                        poutre::CompOpType::CompOpInfEqual,
+                                        static_cast<poutre::pINT32>(5),
+                                        static_cast<poutre::pINT32>(1),
+                                        v_imgfalse,
+                                        v_imgout);
 
     std::string expected = "Dense Scalar GINT32 2 5 6\
  1 1 1 1 1 1\

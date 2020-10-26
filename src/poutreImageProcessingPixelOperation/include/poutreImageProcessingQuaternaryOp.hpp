@@ -72,6 +72,7 @@ namespace poutre
                     const View4<T4, Rank> &i_vin4,
                     ViewOut<Tout, Rank> &  o_vout) const
     {
+      POUTRE_ENTERING("PixelWiseQuaternaryOpDispatcher generic case");
       // More runtime dispatch
       auto vInbound1  = i_vin1.bound();
       auto vInbound2  = i_vin2.bound();
@@ -137,6 +138,7 @@ namespace poutre
                     const array_view<T4, Rank> &i_vin4,
                     array_view<Tout, Rank> &    o_vout) const
     {
+      POUTRE_ENTERING("PixelWiseQuaternaryOpDispatcher both arrayview");
       auto i_vinbeg1 = i_vin1.data();
       auto i_vinend1 = i_vin1.data() + i_vin1.size();
       auto i_vinbeg2 = i_vin2.data();

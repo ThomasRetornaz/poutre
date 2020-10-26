@@ -644,9 +644,9 @@ namespace poutre
     section(const index_type &origin) const
     {
       POUTRE_ASSERTCHECK(m_bnd.contains(origin), "section(origin,section_bnd) origin is Out of bound");
-      bounds_type section_bnd = m_bnd - origin;
-      ptrdiff_t shift        = details::view_offset(origin, m_stride_idx);
-      pointer   data_section = m_data + shift;
+      bounds_type section_bnd  = m_bnd - origin;
+      ptrdiff_t   shift        = details::view_offset(origin, m_stride_idx);
+      pointer     data_section = m_data + shift;
       // std::cout<<"\n"<<" bnd:"<<m_bnd<<" data:"<<*m_data<<"
       // strided_array_view::section data_section:"<<*data_section<<"
       // section_bnd:"<<section_bnd ;
