@@ -654,7 +654,7 @@ namespace poutre
 
   template<typename Tin, typename Ttrue, typename Tfalse, typename Tout, class CompareOp>
   struct compare_sii<
-      typename Tin,
+      Tin,
       Ttrue,
       Tfalse,
       Tout,
@@ -845,7 +845,7 @@ namespace poutre
     const Tout m_valfalse;
     simd_t     m_valfalse_pack;
 
-    compare_sis(const Tout &i_valfalse) : cop(), m_valfalse(i_valfalse), m_valtrue_pack(i_valfalse) {}
+    compare_sis(const Tout &i_valfalse) : cop(), m_valfalse(i_valfalse), m_valfalse_pack(i_valfalse) {}
     compare_sis(const Tout &i_valfalse, const CompareOp &op) : cop(op), m_valfalse(i_valfalse), m_valfalse_pack(i_valfalse)
     {
     }
@@ -1341,10 +1341,6 @@ namespace poutre
     POUTRE_ALWAYS_INLINE Tout operator()(param_typein i_val, param_typetrue i_false) const POUTRE_NOEXCEPT
     {
       return (cop(i_val) ? m_valtrue : i_false);
-    }
-    template<typename U> U operator()(U i_val, U i_false) const POUTRE_NOEXCEPT
-    {
-      return xs::select(cop(i_val), m_valtrue_pack, i_false);
     }
   };
 

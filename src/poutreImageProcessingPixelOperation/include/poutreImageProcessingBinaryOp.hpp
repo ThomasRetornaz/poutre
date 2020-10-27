@@ -132,7 +132,7 @@ namespace poutre
       {
         *i_voutbeg = static_cast<Tout>(op(*i_vinbeg1, *i_vinbeg2));
       }*/
-      std::transform(i_vinbeg, i_vinend, i_vinbeg2, o_voutbeg,op)
+      std::transform(i_vinbeg1, i_vinend1, i_vinbeg2, o_voutbeg,op);
     }
   };
 
