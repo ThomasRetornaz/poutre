@@ -45,10 +45,10 @@ namespace poutre
   };
 
   template<typename T1, typename T2>
-  struct op_Invert<T1,
-                   T2,
-                   std::enable_if_t<std::is_same<std::remove_const_t<T1>, std::remove_const_t<T2>>::value
-                                    && std::is_arithmetic<T1>::value>>
+  struct op_Invert<
+      T1,
+      T2,
+      std::enable_if_t<std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T2>> && std::is_arithmetic_v<T1>>>
   {
     public:
     op_Invert() {}
@@ -102,12 +102,15 @@ namespace poutre
   };
 
   template<typename T1, typename T2, typename T3>
-  struct op_Saturated_Sub<T1,
-                          T2,
-                          T3,
-                          std::enable_if_t<std::is_same<std::remove_const_t<T1>, std::remove_const_t<T2>>::value
-                                           && std::is_same<std::remove_const_t<T1>, std::remove_const_t<T3>>::value
-                                           && std::is_arithmetic<T1>::value>>
+  struct op_Saturated_Sub<
+      T1,
+      T2,
+      T3,
+      std::enable_if_t<
+          std::is_same_v<
+              std::remove_const_t<T1>,
+              std::remove_const_t<
+                  T2>> && std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T3>> && std::is_arithmetic_v<T1>>>
   {
     private:
     T1 m_minval;
@@ -179,12 +182,15 @@ namespace poutre
   };
 
   template<typename T1, typename T2, typename T3>
-  struct op_Saturated_Add<T1,
-                          T2,
-                          T3,
-                          std::enable_if_t<std::is_same<std::remove_const_t<T1>, std::remove_const_t<T2>>::value
-                                           && std::is_same<std::remove_const_t<T1>, std::remove_const_t<T3>>::value
-                                           && std::is_arithmetic<T1>::value>>
+  struct op_Saturated_Add<
+      T1,
+      T2,
+      T3,
+      std::enable_if_t<
+          std::is_same_v<
+              std::remove_const_t<T1>,
+              std::remove_const_t<
+                  T2>> && std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T3>> && std::is_arithmetic_v<T1>>>
   {
     private:
     T1 m_maxval;
@@ -257,10 +263,10 @@ namespace poutre
   // todo benchmark, if slow specialize boost::simd::transform to load m_val as a
   // pack
   template<typename T1, typename T2>
-  struct op_Saturated_Add_Constant<T1,
-                                   T2,
-                                   std::enable_if_t<std::is_same<std::remove_const_t<T1>, std::remove_const_t<T2>>::value
-                                                    && std::is_arithmetic<T1>::value>>
+  struct op_Saturated_Add_Constant<
+      T1,
+      T2,
+      std::enable_if_t<std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T2>> && std::is_arithmetic_v<T1>>>
   {
     private:
     const T1                                 m_val, m_maxval;
@@ -329,10 +335,10 @@ namespace poutre
   // todo benchmark, if slow specialize boost::simd::transform to load m_val as a
   // pack
   template<typename T1, typename T2>
-  struct op_Saturated_Sub_Constant<T1,
-                                   T2,
-                                   std::enable_if_t<std::is_same<std::remove_const_t<T1>, std::remove_const_t<T2>>::value
-                                                    && std::is_arithmetic<T1>::value>>
+  struct op_Saturated_Sub_Constant<
+      T1,
+      T2,
+      std::enable_if_t<std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T2>> && std::is_arithmetic_v<T1>>>
   {
     private:
     const T1                                 m_val, m_minval;
@@ -394,12 +400,15 @@ namespace poutre
   };
 
   template<typename T1, typename T2, typename T3>
-  struct op_Sup<T1,
-                T2,
-                T3,
-                std::enable_if_t<std::is_same<std::remove_const_t<T1>, std::remove_const_t<T2>>::value
-                                 && std::is_same<std::remove_const_t<T1>, std::remove_const_t<T3>>::value
-                                 && std::is_arithmetic<T1>::value>>
+  struct op_Sup<
+      T1,
+      T2,
+      T3,
+      std::enable_if_t<
+          std::is_same_v<
+              std::remove_const_t<T1>,
+              std::remove_const_t<
+                  T2>> && std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T3>> && std::is_arithmetic_v<T1>>>
   {
     public:
     op_Sup() {}
@@ -452,12 +461,15 @@ namespace poutre
   };
 
   template<typename T1, typename T2, typename T3>
-  struct op_Inf<T1,
-                T2,
-                T3,
-                std::enable_if_t<std::is_same<std::remove_const_t<T1>, std::remove_const_t<T2>>::value
-                                 && std::is_same<std::remove_const_t<T1>, std::remove_const_t<T3>>::value
-                                 && std::is_arithmetic<T1>::value>>
+  struct op_Inf<
+      T1,
+      T2,
+      T3,
+      std::enable_if_t<
+          std::is_same_v<
+              std::remove_const_t<T1>,
+              std::remove_const_t<
+                  T2>> && std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T3>> && std::is_arithmetic_v<T1>>>
   {
     public:
     op_Inf() {}

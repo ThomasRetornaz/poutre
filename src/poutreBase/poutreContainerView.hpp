@@ -159,24 +159,25 @@ namespace poutre
     // stolen
     // https://github.com/wardw/array_view/blob/master/array_view/array_view.h
     template<typename Viewable, typename U, typename View = std::remove_reference_t<Viewable>>
-    using is_viewable_on_u =
-        std::integral_constant<bool,
-                               std::is_convertible<typename View::size_type, ptrdiff_t>::value
-                                   && std::is_convertible<typename View::value_type *, std::add_pointer_t<U>>::value
-                                   && std::is_same<std::remove_cv_t<typename View::value_type>, std::remove_cv_t<U>>::value
+    using is_viewable_on_u = std::integral_constant<
+        bool,
+        std::is_convertible_v<
+            typename View::size_type,
+            ptrdiff_t> && std::is_convertible_v<typename View::value_type *, std::add_pointer_t<U>> && std::is_same_v<std::remove_cv_t<typename View::value_type>, std::remove_cv_t<U>>
 
-                               >;
+        >;
 
     // stolen
     // https://github.com/wardw/array_view/blob/master/array_view/array_view.h
     template<typename T, typename U>
-    using is_viewable_value = std::integral_constant<bool,
-                                                     std::is_convertible<std::add_pointer_t<T>, std::add_pointer_t<U>>::value
-                                                         && std::is_same<std::remove_cv_t<T>, std::remove_cv_t<U>>::value>;
+    using is_viewable_value = std::integral_constant<
+        bool,
+        std::is_convertible_v<std::add_pointer_t<T>,
+                              std::add_pointer_t<U>> && std::is_same_v<std::remove_cv_t<T>, std::remove_cv_t<U>>>;
 
-    template<typename T> using EnableIfArithmetic = typename std::enable_if<std::is_arithmetic<T>::value>::type;
+    template<typename T> using EnableIfArithmetic = typename std::enable_if_t<std::is_arithmetic_v<T>>;
 
-    template<typename T> using EnableIfNotArithmetic = typename std::enable_if<!std::is_arithmetic<T>::value>::type;
+    template<typename T> using EnableIfNotArithmetic = typename std::enable_if_t<!std::is_arithmetic_v<T>>;
 
   } // namespace details
 

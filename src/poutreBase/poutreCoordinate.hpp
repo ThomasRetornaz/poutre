@@ -289,8 +289,7 @@ namespace poutre
    * \image bounds_index.svg
    */
   template<ptrdiff_t Rank>
-  class index : public static_array_base<ptrdiff_t, Rank> // TODO restrain alignement
-                                                          // capabilities if any
+  class index : public static_array_base<ptrdiff_t, Rank>
   {
     public:
     // inherit from parent

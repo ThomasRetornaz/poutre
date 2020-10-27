@@ -36,7 +36,7 @@ namespace poutre
    */
 
   // redef == != < > <= >= to enable simd when available
-  template<typename T1, typename T2> struct OpCompEqual
+  template<typename T1, typename T2, typename = void> struct OpCompEqual
   {
     public:
     OpCompEqual() {}
@@ -45,7 +45,7 @@ namespace poutre
       return static_cast<bool>(a0 == a1);
     }
   };
-  template<typename T> struct OpCompEqual<T, T>
+  template<typename T> struct OpCompEqual<T, T, std::enable_if_t<std::is_arithmetic_v<T>>>
   {
     using simd_t      = typename TypeTraits<T>::simd_type;
     using simd_mask_t = typename TypeTraits<T>::simd_mask_type;
@@ -57,7 +57,7 @@ namespace poutre
     }
   };
 
-  template<typename T1, typename T2> struct OpCompDiff
+  template<typename T1, typename T2, typename = void> struct OpCompDiff
   {
     public:
     OpCompDiff() {}
@@ -66,7 +66,7 @@ namespace poutre
       return static_cast<bool>(a0 != a1);
     }
   };
-  template<typename T> struct OpCompDiff<T, T>
+  template<typename T> struct OpCompDiff<T, T, std::enable_if_t<std::is_arithmetic_v<T>>>
   {
     using simd_t      = typename TypeTraits<T>::simd_type;
     using simd_mask_t = typename TypeTraits<T>::simd_mask_type;
@@ -78,7 +78,7 @@ namespace poutre
     }
   };
 
-  template<typename T1, typename T2> struct OpCompSup
+  template<typename T1, typename T2, typename = void> struct OpCompSup
   {
     public:
     OpCompSup() {}
@@ -87,7 +87,7 @@ namespace poutre
       return static_cast<bool>(a0 > a1);
     }
   };
-  template<typename T> struct OpCompSup<T, T>
+  template<typename T> struct OpCompSup<T, T, std::enable_if_t<std::is_arithmetic_v<T>>>
   {
     using simd_t      = typename TypeTraits<T>::simd_type;
     using simd_mask_t = typename TypeTraits<T>::simd_mask_type;
@@ -99,7 +99,7 @@ namespace poutre
     }
   };
 
-  template<typename T1, typename T2> struct OpCompInf
+  template<typename T1, typename T2, typename = void> struct OpCompInf
   {
     public:
     OpCompInf() {}
@@ -108,7 +108,7 @@ namespace poutre
       return static_cast<bool>(a0 < a1);
     }
   };
-  template<typename T> struct OpCompInf<T, T>
+  template<typename T> struct OpCompInf<T, T, std::enable_if_t<std::is_arithmetic_v<T>>>
   {
     using simd_t      = typename TypeTraits<T>::simd_type;
     using simd_mask_t = typename TypeTraits<T>::simd_mask_type;
@@ -120,7 +120,7 @@ namespace poutre
     }
   };
 
-  template<typename T1, typename T2> struct OpCompSupEqual
+  template<typename T1, typename T2, typename = void> struct OpCompSupEqual
   {
     public:
     OpCompSupEqual() {}
@@ -129,7 +129,7 @@ namespace poutre
       return static_cast<bool>(a0 >= a1);
     }
   };
-  template<typename T> struct OpCompSupEqual<T, T>
+  template<typename T> struct OpCompSupEqual<T, T, std::enable_if_t<std::is_arithmetic_v<T>>>
   {
     using simd_t      = typename TypeTraits<T>::simd_type;
     using simd_mask_t = typename TypeTraits<T>::simd_mask_type;
@@ -141,7 +141,7 @@ namespace poutre
     }
   };
 
-  template<typename T1, typename T2> struct OpCompInfEqual
+  template<typename T1, typename T2, typename = void> struct OpCompInfEqual
   {
     public:
     OpCompInfEqual() {}
@@ -150,7 +150,7 @@ namespace poutre
       return static_cast<bool>(a0 <= a1);
     }
   };
-  template<typename T> struct OpCompInfEqual<T, T>
+  template<typename T> struct OpCompInfEqual<T, T, std::enable_if_t<std::is_arithmetic_v<T>>>
   {
     using simd_t      = typename TypeTraits<T>::simd_type;
     using simd_mask_t = typename TypeTraits<T>::simd_mask_type;
@@ -163,7 +163,14 @@ namespace poutre
   };
 
   // redef == != < > <= >= with value to enable simd when available
-  template<typename T1> struct OpCompEqualValue
+  template<typename T1, typename = void> struct OpCompEqualValue
+  {
+    T1 m_val;
+    explicit OpCompEqualValue(T1 ival) : m_val(ival) {}
+    POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT { return lhs == m_val; }
+  };
+
+  template<typename T1> struct OpCompEqualValue<T1, std::enable_if_t<std::is_arithmetic_v<T1>>>
   {
     T1 m_val;
     using simd_t      = typename TypeTraits<T1>::simd_type;
@@ -179,7 +186,14 @@ namespace poutre
   };
 
   //! Operator diff
-  template<typename T1> struct OpCompDiffValue
+  template<typename T1, typename = void> struct OpCompDiffValue
+  {
+    T1 m_val;
+    explicit OpCompDiffValue(T1 ival) : m_val(ival) {}
+    POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT { return lhs != m_val; }
+  };
+
+  template<typename T1> struct OpCompDiffValue<T1, std::enable_if_t<std::is_arithmetic_v<T1>>>
   {
     T1 m_val;
     using simd_t      = typename TypeTraits<T1>::simd_type;
@@ -195,7 +209,14 @@ namespace poutre
   };
 
   //! Operator Sup
-  template<typename T1> struct OpCompSupValue
+  template<typename T1, typename = void> struct OpCompSupValue
+  {
+    T1 m_val;
+    explicit OpCompSupValue(T1 ival) : m_val(ival) {}
+    POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT { return lhs > m_val; }
+  };
+
+  template<typename T1> struct OpCompSupValue<T1, std::enable_if_t<std::is_arithmetic_v<T1>>>
   {
     T1 m_val;
     using simd_t      = typename TypeTraits<T1>::simd_type;
@@ -211,7 +232,14 @@ namespace poutre
   };
 
   //! Operator SupEqual
-  template<typename T1> struct OpCompSupEqualValue
+  template<typename T1, typename = void> struct OpCompSupEqualValue
+  {
+    T1 m_val;
+    explicit OpCompSupEqualValue(T1 ival) : m_val(ival) {}
+    POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT { return lhs >= m_val; }
+  };
+
+  template<typename T1> struct OpCompSupEqualValue<T1, std::enable_if_t<std::is_arithmetic_v<T1>>>
   {
     T1 m_val;
     using simd_t      = typename TypeTraits<T1>::simd_type;
@@ -227,7 +255,14 @@ namespace poutre
   };
 
   //! Operator Inf
-  template<typename T1> struct OpCompInfValue
+  template<typename T1, typename = void> struct OpCompInfValue
+  {
+    T1 m_val;
+    explicit OpCompInfValue(T1 ival) : m_val(ival) {}
+    POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT { return lhs < m_val; }
+  };
+
+  template<typename T1> struct OpCompInfValue<T1, std::enable_if_t<std::is_arithmetic_v<T1>>>
   {
     T1 m_val;
     using simd_t      = typename TypeTraits<T1>::simd_type;
@@ -242,7 +277,14 @@ namespace poutre
   };
 
   //! Operator InfEqual
-  template<typename T1> struct OpCompInfEqualValue
+  template<typename T1, typename = void> struct OpCompInfEqualValue
+  {
+    T1 m_val;
+    explicit OpCompInfEqualValue(T1 ival) : m_val(ival) {}
+    POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT { return lhs <= m_val; }
+  };
+
+  template<typename T1> struct OpCompInfEqualValue<T1, std::enable_if_t<std::is_arithmetic_v<T1>>>
   {
     T1 m_val;
     using simd_t      = typename TypeTraits<T1>::simd_type;
@@ -260,7 +302,7 @@ namespace poutre
   /*************************************************************************************************************************************/
   /*                                                      SSS */
   /*************************************************************************************************************************************/
-  template<typename Tin, typename Tout, class CompareOp> struct compare_sss
+  template<typename Tin, typename Tout, class CompareOp, typename = void> struct compare_sss
   {
     const CompareOp cop;
     const Tout      m_valtrue, m_valfalse;
@@ -274,14 +316,19 @@ namespace poutre
     POUTRE_ALWAYS_INLINE Tout operator()(Tin i_val) const POUTRE_NOEXCEPT { return (cop(i_val) ? m_valtrue : m_valfalse); }
   };
 
-  template<typename Tin, typename Tout, class CompareOp> struct compare_sss_simd
+  template<typename Tin, typename Tout, class CompareOp>
+  struct compare_sss<
+      Tin,
+      Tout,
+      CompareOp,
+      std::enable_if_t<std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tout>> && std::is_arithmetic_v<Tin>>>
   {
     const CompareOp cop;
     using simd_t      = typename TypeTraits<Tin>::simd_type;
     using simd_mask_t = typename TypeTraits<Tout>::simd_mask_type;
     simd_t m_valtrue_pack, m_valfalse_pack;
     Tout   m_valtrue, m_valfalse;
-    compare_sss_simd(const Tout &i_valtrue, const Tout &i_valfalse)
+    compare_sss(const Tout &i_valtrue, const Tout &i_valfalse)
         : cop()
         , m_valtrue_pack(i_valtrue)
         , m_valfalse_pack(i_valfalse)
@@ -289,7 +336,7 @@ namespace poutre
         , m_valfalse(i_valfalse)
     {
     }
-    compare_sss_simd(const Tout &i_valtrue, const Tout &i_valfalse, const CompareOp &op)
+    compare_sss(const Tout &i_valtrue, const Tout &i_valfalse, const CompareOp &op)
         : cop(op)
         , m_valtrue_pack(i_valtrue)
         , m_valfalse_pack(i_valfalse)
@@ -314,50 +361,21 @@ namespace poutre
            class Op,
            template<typename, ptrdiff_t>
            class ViewOut>
-  struct t_ViewCompare_sss
-  {
-    void operator()(const ViewIn<Tin, Rank> &i_vin, Op i_op, Tout i_valtrue, Tout i_valfalse, ViewOut<Tout, Rank> &o_vout)
+  void t_ViewCompare_sss(const ViewIn<Tin, Rank> &i_vin, Op i_op, Tout i_valtrue, Tout i_valfalse, ViewOut<Tout, Rank> &o_vout)
     {
-      /*std::cout <<
-      "***********************************************************************************"
-      << std::endl; std::cout << "call t_ViewCompare_sss array view template
-      specialization, fall back ptrTime" << std::endl; std::cout <<
-      "***********************************************************************************"
-      << std::endl;*/
-
       using myop = compare_sss<Tin, Tout, Op>;
       myop op(i_valtrue, i_valfalse, i_op);
       PixelWiseUnaryOp(i_vin, op, o_vout);
     }
-  };
 
-  template<typename Tin, typename Tout, ptrdiff_t Rank, class Op> struct t_ViewCompare_sss_simd
-  {
-    void
-    operator()(const array_view<Tin, Rank> &i_vin, Op i_op, Tout i_valtrue, Tout i_valfalse, array_view<Tout, Rank> &o_vout)
-    {
-      static_assert(std::is_same<std::remove_const_t<Tin>, std::remove_const_t<Tout>>::value, "should be same type");
-      using functor = compare_sss_simd<Tin, Tout, Op>;
-      functor f(i_valtrue, i_valfalse, i_op);
-      auto    begin = i_vin.data();
-      auto    end   = i_vin.data() + i_vin.size();
-      auto    out   = o_vout.data();
-      simd::transform(begin, end, out, f);
-    }
-  };
-
-  // primary template
   template<typename Tin,
            typename Tout,
            ptrdiff_t Rank,
            template<typename, ptrdiff_t>
            class ViewIn,
            template<typename, ptrdiff_t>
-           class ViewOut,
-           typename = void>
-  struct ViewCompare_sss_dispatch
-  {
-    void operator()(const ViewIn<Tin, Rank> &i_vin,
+           class ViewOut>
+  void ViewCompare_sss_dispatch(const ViewIn<Tin, Rank> &i_vin,
                     CompOpType               compOpType,
                     Tin                      i_compval,
                     Tout                     i_valtrue,
@@ -369,42 +387,41 @@ namespace poutre
       case CompOpType::CompOpEqual:
       {
         OpCompEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompEqualValue<Tin>, ViewOut>()(
-            i_vin, myop, i_valtrue, i_valfalse, o_vout);
+        return t_ViewCompare_sss(i_vin, myop, i_valtrue, i_valfalse, o_vout);
       }
       break;
       case CompOpType::CompOpDiff:
       {
         OpCompDiffValue<Tin> myop(i_compval);
-        return t_ViewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompDiffValue<Tin>, ViewOut>()(
+        return t_ViewCompare_sss(
             i_vin, myop, i_valtrue, i_valfalse, o_vout);
       }
       break;
       case CompOpType::CompOpSup:
       {
         OpCompSupValue<Tin> myop(i_compval);
-        return t_ViewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompSupValue<Tin>, ViewOut>()(
+        return t_ViewCompare_sss(
             i_vin, myop, i_valtrue, i_valfalse, o_vout);
       }
       break;
       case CompOpType::CompOpSupEqual:
       {
         OpCompSupEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompSupEqualValue<Tin>, ViewOut>()(
+        return t_ViewCompare_sss(
             i_vin, myop, i_valtrue, i_valfalse, o_vout);
       }
       break;
       case CompOpType::CompOpInf:
       {
         OpCompInfValue<Tin> myop(i_compval);
-        return t_ViewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompInfValue<Tin>, ViewOut>()(
+        return t_ViewCompare_sss(
             i_vin, myop, i_valtrue, i_valfalse, o_vout);
       }
       break;
       case CompOpType::CompOpInfEqual:
       {
         OpCompInfEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_sss<Tin, Tout, Rank, ViewIn, OpCompInfEqualValue<Tin>, ViewOut>()(
+        return t_ViewCompare_sss(
             i_vin, myop, i_valtrue, i_valfalse, o_vout);
       }
       break;
@@ -414,74 +431,6 @@ namespace poutre
       }
       }
     }
-  };
-
-  // SIMD Specialization arithmetic type,same type and both array_view
-  template<typename Tin, typename Tout, ptrdiff_t Rank>
-  struct ViewCompare_sss_dispatch<Tin,
-                                  Tout,
-                                  Rank,
-                                  array_view,
-                                  array_view,
-                                  std::enable_if_t<std::is_same<std::remove_const_t<Tin>, std::remove_const_t<Tout>>::value
-                                                   && std::is_arithmetic<Tin>::value>>
-  {
-    void operator()(const array_view<Tin, Rank> &i_vin,
-                    CompOpType                   compOpType,
-                    Tin                          i_compval,
-                    Tout                         i_valtrue,
-                    Tout                         i_valfalse,
-                    array_view<Tout, Rank> &     o_vout)
-
-    {
-      switch( compOpType )
-      {
-      case CompOpType::CompOpEqual:
-      {
-        OpCompEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_sss_simd<Tin, Tout, Rank, OpCompEqualValue<Tin>>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpDiff:
-      {
-        OpCompDiffValue<Tin> myop(i_compval);
-        return t_ViewCompare_sss_simd<Tin, Tout, Rank, OpCompDiffValue<Tin>>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-
-      case CompOpType::CompOpSup:
-      {
-        OpCompSupValue<Tin> myop(i_compval);
-        return t_ViewCompare_sss_simd<Tin, Tout, Rank, OpCompSupValue<Tin>>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpSupEqual:
-      {
-        OpCompSupEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_sss_simd<Tin, Tout, Rank, OpCompSupEqualValue<Tin>>()(
-            i_vin, myop, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpInf:
-      {
-        OpCompInfValue<Tin> myop(i_compval);
-        return t_ViewCompare_sss_simd<Tin, Tout, Rank, OpCompInfValue<Tin>>()(i_vin, myop, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpInfEqual:
-      {
-        OpCompInfEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_sss_simd<Tin, Tout, Rank, OpCompInfEqualValue<Tin>>()(
-            i_vin, myop, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      default:
-      {
-        POUTRE_RUNTIME_ERROR("ViewCompare_sss_dispatch CompOpType not implemented");
-      }
-      }
-    }
-  };
 
   template<typename Tin,
            typename Tout,
@@ -497,18 +446,18 @@ namespace poutre
                                    Tout                     i_valfalse,
                                    ViewOut<Tout, Rank> &    o_vout)
   {
-    ViewCompare_sss_dispatch<Tin, Tout, Rank, ViewIn, ViewOut> op;
-    op(i_vin, compOpType, i_compval, i_valtrue, i_valfalse, o_vout);
+    return ViewCompare_sss_dispatch(i_vin, compOpType, i_compval, i_valtrue, i_valfalse, o_vout);
   }
 
   /*************************************************************************************************************************************/
   /*                                                      III */
   /*************************************************************************************************************************************/
-  template<typename Tin, typename TComp, typename Ttrue, typename Tfalse, typename Tout, class CompareOp> struct compare_iii
+  template<typename Tin, typename Tcomp, typename Ttrue, typename Tfalse, typename Tout, class CompareOp, typename = void>
+  struct compare_iii
   {
     const CompareOp cop;
     using param_typein    = Tin;
-    using param_typecomp  = TComp;
+    using param_typecomp  = Tcomp;
     using param_typetrue  = Ttrue;
     using param_typefalse = Tfalse;
     compare_iii() : cop() {}
@@ -521,6 +470,42 @@ namespace poutre
       return (cop(i_val, i_comp) ? i_true : i_false);
     }
   };
+
+  template<typename Tin, typename Tcomp, typename Ttrue, typename Tfalse, typename Tout, class CompareOp>
+  struct compare_iii<
+      Tin,
+      Tcomp,
+      Ttrue,
+      Tfalse,
+      Tout,
+      CompareOp,
+      std::enable_if_t<
+          std::is_same_v<
+              std::remove_const_t<Tin>,
+              std::remove_const_t<
+                  Tout>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tfalse>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Ttrue>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tcomp>> && std::is_arithmetic_v<Tin>>>
+
+  {
+    const CompareOp cop;
+    using param_typein    = Tin;
+    using param_typecomp  = Tcomp;
+    using param_typetrue  = Ttrue;
+    using param_typefalse = Tfalse;
+    compare_iii() : cop() {}
+    explicit compare_iii(const CompareOp &op) : cop(op) {}
+    POUTRE_ALWAYS_INLINE Tout operator()(param_typein   i_val,
+                                         param_typecomp i_comp,
+                                         param_typetrue i_true,
+                                         param_typetrue i_false) const POUTRE_NOEXCEPT // TODO inline ?
+    {
+      return (cop(i_val, i_comp) ? i_true : i_false);
+    }
+    template<typename U> U operator()(U i_val, U i_comp, U i_true, U i_false) const POUTRE_NOEXCEPT
+    {
+      return xs::select(cop(i_val, i_comp), i_true, i_false);
+    }
+  };
+
   template<typename Tin,
            typename Tcomp,
            typename Ttrue,
@@ -649,7 +634,7 @@ namespace poutre
   /*************************************************************************************************************************************/
   /*                                                      SII */
   /*************************************************************************************************************************************/
-  template<typename Tin, typename Ttrue, typename Tfalse, typename Tout, class CompareOp> struct compare_sii
+  template<typename Tin, typename Ttrue, typename Tfalse, typename Tout, class CompareOp, typename = void> struct compare_sii
   {
     const CompareOp cop;
     const Tin       m_compval;
@@ -661,11 +646,54 @@ namespace poutre
     explicit compare_sii(const Tin &i_compval, const CompareOp &op) : cop(op), m_compval(i_compval) {}
     POUTRE_ALWAYS_INLINE Tout operator()(param_typein    i_val,
                                          param_typetrue  i_true,
-                                         param_typefalse i_false) const POUTRE_NOEXCEPT // TODO inline ?
+                                         param_typefalse i_false) const POUTRE_NOEXCEPT
     {
       return (cop(i_val, m_compval) ? i_true : i_false);
     }
   };
+
+  template<typename Tin, typename Ttrue, typename Tfalse, typename Tout, class CompareOp>
+  struct compare_sii<
+      typename Tin,
+      Ttrue,
+      Tfalse,
+      Tout,
+      CompareOp,
+      std::enable_if_t<
+          std::is_same_v<
+              std::remove_const_t<Tin>,
+              std::remove_const_t<
+                  Tout>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tfalse>> && std::is_arithmetic_v<Tin>>>
+  {
+    const CompareOp cop;
+    using simd_t      = typename TypeTraits<Tin>::simd_type;
+    using simd_mask_t = typename TypeTraits<Tout>::simd_mask_type;
+
+    using param_typein    = Tin;
+    using param_typetrue  = Ttrue;
+    using param_typefalse = Tfalse;
+    const param_typein m_compval;
+    const simd_t       m_compval_pack;
+
+    explicit compare_sii(const Tin &i_compval) : cop(), m_compval(i_compval), m_compval_pack(i_compval) {}
+    explicit compare_sii(const Tin &i_compval, const CompareOp &op)
+        : cop(op)
+        , m_compval(i_compval)
+        , m_compval_pack(i_compval)
+    {
+    }
+    POUTRE_ALWAYS_INLINE Tout operator()(param_typein    i_val,
+                                         param_typetrue  i_true,
+                                         param_typefalse i_false) const POUTRE_NOEXCEPT
+    {
+      return (cop(i_val, m_compval) ? i_true : i_false);
+    }
+    template<typename U> U operator()(U i_val, U i_true, U i_false) const POUTRE_NOEXCEPT
+    {
+      return xs::select(cop(i_val, m_compval_pack), i_true, i_false);
+    }
+  };
+
   template<typename Tin,
            typename Ttrue,
            typename Tfalse,
@@ -783,28 +811,31 @@ namespace poutre
   /*************************************************************************************************************************************/
   /*                                                      SIS */
   /*************************************************************************************************************************************/
-  template<typename Tin, typename Ttrue, typename Tout, class CompareOp> struct compare_sis
+  template<typename Tin, typename Ttrue, typename Tout, class CompareOp, typename = void> struct compare_sis
   {
     const CompareOp cop;
     const Tin       m_compval;
     const Tout      m_valfalse;
 
-    compare_sis(/*const Tin &i_compval,*/ const Tout &i_valfalse) : cop() /*, m_compval(i_compval)*/, m_valfalse(i_valfalse)
-    {
-    }
-    compare_sis(/*const Tin &i_compval, */ const Tout &i_valfalse, const CompareOp &op)
-        : cop(op)
-        //, m_compval(i_compval)
-        , m_valfalse(i_valfalse)
-    {
-    }
+    compare_sis(const Tout &i_valfalse) : cop(), m_valfalse(i_valfalse) {}
+    compare_sis(const Tout &i_valfalse, const CompareOp &op) : cop(op), m_valfalse(i_valfalse) {}
     POUTRE_ALWAYS_INLINE Tout operator()(Tin i_val, Ttrue i_true) const POUTRE_NOEXCEPT
     {
       return (cop(i_val) ? i_true : m_valfalse);
     }
   };
 
-  template<typename Tin, typename Ttrue, typename Tout, class CompareOp> struct compare_sis_simd
+  template<typename Tin, typename Ttrue, typename Tout, class CompareOp>
+  struct compare_sis<
+      Tin,
+      Ttrue,
+      Tout,
+      CompareOp,
+      std::enable_if_t<
+          std::is_same_v<
+              std::remove_const_t<Tin>,
+              std::remove_const_t<
+                  Tout>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Ttrue>> && std::is_arithmetic_v<Tin>>>
   {
     const CompareOp cop;
 
@@ -814,11 +845,8 @@ namespace poutre
     const Tout m_valfalse;
     simd_t     m_valfalse_pack;
 
-    compare_sis_simd(const Tout &i_valfalse) : cop(), m_valfalse(i_valfalse), m_valtrue_pack(i_valfalse) {}
-    compare_sis_simd(const Tout &i_valfalse, const CompareOp &op)
-        : cop(op)
-        , m_valfalse(i_valfalse)
-        , m_valfalse_pack(i_valfalse)
+    compare_sis(const Tout &i_valfalse) : cop(), m_valfalse(i_valfalse), m_valtrue_pack(i_valfalse) {}
+    compare_sis(const Tout &i_valfalse, const CompareOp &op) : cop(op), m_valfalse(i_valfalse), m_valfalse_pack(i_valfalse)
     {
     }
     POUTRE_ALWAYS_INLINE Tout operator()(Tin i_val, Ttrue i_true) const POUTRE_NOEXCEPT
@@ -844,35 +872,15 @@ namespace poutre
            template<typename, ptrdiff_t>
            class ViewOut>
   void t_ViewCompare_sis(const ViewIn<Tin, Rank> &    i_vin,
-                         Op                           i_op,
-                         Tin                          i_compval,
-                         const ViewTrue<Ttrue, Rank> &i_vtrue,
-                         Tout                         i_valfalse,
-                         ViewOut<Tout, Rank> &        o_vout)
-  {
-    using myop = compare_sis<Tin, Ttrue, Tout, Op>;
-    myop op(i_valfalse, i_op);
-    PixelWiseBinaryOp(i_vin, op, i_vtrue, o_vout);
-  }
-
-  template<typename Tin, typename Ttrue, typename Tout, ptrdiff_t Rank, class Op> struct t_ViewCompare_sis_simd
-  {
-    void operator()(const array_view<Tin, Rank> &  i_vin,
-                    Op                             i_op,
-                    const array_view<Ttrue, Rank> &i_vtrue,
-                    Tout                           i_valfalse,
-                    array_view<Tout, Rank> &       o_vout)
+                    Op                           i_op,
+                    const ViewTrue<Ttrue, Rank> &i_vtrue,
+                    Tout                         i_valfalse,
+                    ViewOut<Tout, Rank> &        o_vout)
     {
-      static_assert(std::is_same<std::remove_const_t<Tin>, std::remove_const_t<Tout>>::value, "should be same type");
-      using functor = compare_sis_simd<Tin, Ttrue, Tout, Op>;
-      functor f(i_valfalse, i_op);
-      auto    begin  = i_vin.data();
-      auto    end    = i_vin.data() + i_vin.size();
-      auto    begin2 = i_vtrue.data();
-      auto    out    = o_vout.data();
-      simd::transform(begin, end, begin2, out, f);
+      using myop = compare_sis<Tin, Ttrue, Tout, Op>;
+      myop op(i_valfalse, i_op);
+      PixelWiseBinaryOp(i_vin, op, i_vtrue, o_vout);
     }
-  };
 
   template<typename Tin,
            typename Ttrue,
@@ -885,9 +893,7 @@ namespace poutre
            template<typename, ptrdiff_t>
            class ViewOut,
            typename = void>
-  struct ViewCompare_sis_dispatch
-  {
-    void operator()(const ViewIn<Tin, Rank> &    i_vin,
+  void ViewCompare_sis_dispatch(const ViewIn<Tin, Rank> &    i_vin,
                     CompOpType                   compOpType,
                     Tin                          i_compval,
                     const ViewTrue<Ttrue, Rank> &i_vtrue,
@@ -902,42 +908,42 @@ namespace poutre
       case CompOpType::CompOpEqual:
       {
         OpCompEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_sis<Tin, Ttrue, Tout, Rank, ViewIn, ViewTrue, OpCompEqualValue<Tin>, ViewOut>()(
+        return t_ViewCompare_sis(
             i_vin, myop, i_vtrue, i_valfalse, o_vout);
       }
       break;
       case CompOpType::CompOpDiff:
       {
         OpCompDiffValue<Tin> myop(i_compval);
-        return t_ViewCompare_sis<Tin, Ttrue, Tout, Rank, ViewIn, ViewTrue, OpCompDiffValue<Tin>, ViewOut>()(
+        return t_ViewCompare_sis(
             i_vin, myop, i_vtrue, i_valfalse, o_vout);
       }
       break;
       case CompOpType::CompOpSup:
       {
         OpCompSupValue<Tin> myop(i_compval);
-        return t_ViewCompare_sis<Tin, Ttrue, Tout, Rank, ViewIn, ViewTrue, OpCompSupValue<Tin>, ViewOut>()(
+        return t_ViewCompare_sis(
             i_vin, myop, i_vtrue, i_valfalse, o_vout);
       }
       break;
       case CompOpType::CompOpSupEqual:
       {
         OpCompSupEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_sis<Tin, Ttrue, Tout, Rank, ViewIn, ViewTrue, OpCompSupEqualValue<Tin>, ViewOut>()(
+        return t_ViewCompare_sis(
             i_vin, myop, i_vtrue, i_valfalse, o_vout);
       }
       break;
       case CompOpType::CompOpInf:
       {
         OpCompInfValue<Tin> myop(i_compval);
-        return t_ViewCompare_sis<Tin, Ttrue, Tout, Rank, ViewIn, ViewTrue, OpCompInfValue<Tin>, ViewOut>()(
+        return t_ViewCompare_sis(
             i_vin, myop, i_vtrue, i_valfalse, o_vout);
       }
       break;
       case CompOpType::CompOpInfEqual:
       {
         OpCompInfEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_sis<Tin, Ttrue, Tout, Rank, ViewIn, ViewTrue, OpCompInfEqualValue<Tin>, ViewOut>()(
+        return t_ViewCompare_sis(
             i_vin, myop, i_vtrue, i_valfalse, o_vout);
       }
       break;
@@ -947,83 +953,6 @@ namespace poutre
       }
       }
     }
-  };
-
-  // SIMD Specialization arithmetic type,same type and both array_view
-  template<typename Tin, typename Ttrue, typename Tout, ptrdiff_t Rank>
-  struct ViewCompare_sis_dispatch<
-      Tin,
-      Ttrue,
-      Tout,
-      Rank,
-      array_view,
-      array_view,
-      array_view,
-      std::enable_if_t<std::is_same<std::remove_const_t<Tin>, std::remove_const_t<Tout>>::value
-                       && std::is_same<std::remove_const_t<Tin>, std::remove_const_t<Ttrue>>::value
-                       && std::is_arithmetic<Tin>::value>>
-  {
-    void operator()(const array_view<Tin, Rank> &  i_vin,
-                    CompOpType                     compOpType,
-                    Tin                            i_compval,
-                    const array_view<Ttrue, Rank> &i_vtrue,
-                    Tout                           i_valfalse,
-                    array_view<Tout, Rank> &       o_vout)
-    {
-      static_assert(std::is_convertible<Ttrue, Tout>(),
-                    "ViewCompare_sis_dispatch Ttrue and Tout must be convertible "
-                    "to each other");
-      switch( compOpType )
-      {
-      case CompOpType::CompOpEqual:
-      {
-        OpCompEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_sis_simd<Tin, Ttrue, Tout, Rank, OpCompEqualValue<Tin>>()(
-            i_vin, myop, i_vtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpDiff:
-      {
-        OpCompDiffValue<Tin> myop(i_compval);
-        return t_ViewCompare_sis_simd<Tin, Ttrue, Tout, Rank, OpCompDiffValue<Tin>>()(
-            i_vin, myop, i_vtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpSup:
-      {
-        OpCompSupValue<Tin> myop(i_compval);
-        return t_ViewCompare_sis_simd<Tin, Ttrue, Tout, Rank, OpCompSupValue<Tin>>()(
-            i_vin, myop, i_vtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpSupEqual:
-      {
-        OpCompSupEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_sis_simd<Tin, Ttrue, Tout, Rank, OpCompSupEqualValue<Tin>>()(
-            i_vin, myop, i_vtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpInf:
-      {
-        OpCompInfValue<Tin> myop(i_compval);
-        return t_ViewCompare_sis_simd<Tin, Ttrue, Tout, Rank, OpCompInfValue<Tin>>()(
-            i_vin, myop, i_vtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpInfEqual:
-      {
-        OpCompInfEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_sis_simd<Tin, Ttrue, Tout, Rank, OpCompInfEqualValue<Tin>>()(
-            i_vin, myop, i_vtrue, i_valfalse, o_vout);
-      }
-      break;
-      default:
-      {
-        POUTRE_RUNTIME_ERROR("ViewCompare_sis_dispatch CompOpType not implemented");
-      }
-      }
-    }
-  };
 
   template<typename Tin,
            typename Ttrue,
@@ -1036,20 +965,19 @@ namespace poutre
            template<typename, ptrdiff_t>
            class ViewOut>
   void ViewCompare_sis_func_helper(const ViewIn<Tin, Rank> &    i_vin,
-                                   CompOpType                   compOpType,
+                              CompOpType                   compOpType,
                                    Tin                          i_compval,
                                    const ViewTrue<Ttrue, Rank> &i_vtrue,
                                    Tout                         i_valfalse,
                                    ViewOut<Tout, Rank> &        o_vout)
   {
-    ViewCompare_sis_dispatch<Tin, Ttrue, Tout, Rank, ViewIn, ViewTrue, ViewOut> op;
-    op(i_vin, compOpType, i_compval, i_vtrue, i_valfalse, o_vout);
+    return ViewCompare_sis_dispatch(i_vin, compOpType, i_compval, i_vtrue, i_valfalse, o_vout);
   }
 
   /*************************************************************************************************************************************/
   /*                                                      ISI */
   /*************************************************************************************************************************************/
-  template<typename Tin, typename Tcomp, typename Tfalse, typename Tout, class CompareOp> struct compare_isi
+  template<typename Tin, typename Tcomp, typename Tfalse, typename Tout, class CompareOp, typename = void> struct compare_isi
   {
     const CompareOp cop;
     const Tout      m_valtrue;
@@ -1061,9 +989,49 @@ namespace poutre
     explicit compare_isi(const Tout &i_valtrue, const CompareOp &op) : cop(op), m_valtrue(i_valtrue) {}
     POUTRE_ALWAYS_INLINE Tout operator()(param_typein    i_val,
                                          param_typecomp  i_comp,
-                                         param_typefalse i_false) const POUTRE_NOEXCEPT // TODO inline ?
+                                         param_typefalse i_false) const POUTRE_NOEXCEPT
     {
       return (cop(i_val, i_comp) ? m_valtrue : i_false);
+    }
+  };
+
+  template<typename Tin, typename Tcomp, typename Tfalse, typename Tout, class CompareOp>
+  struct compare_isi<
+      Tin,
+      Tcomp,
+      Tfalse,
+      Tout,
+      CompareOp,
+      std::enable_if_t<
+          std::is_same_v<
+              std::remove_const_t<Tin>,
+              std::remove_const_t<
+                  Tout>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tcomp>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tfalse>> && std::is_arithmetic_v<Tin>>>
+  {
+    const CompareOp cop;
+
+    using simd_t      = typename TypeTraits<Tin>::simd_type;
+    using simd_mask_t = typename TypeTraits<Tout>::simd_mask_type;
+
+    const Tout m_valtrue;
+    simd_t     m_valtrue_pack;
+
+    explicit compare_isi(const Tout &i_valtrue) : cop(), m_valtrue(i_valtrue), m_valtrue_pack(i_valtrue) {}
+    explicit compare_isi(const Tout &i_valtrue, const CompareOp &op)
+        : cop(op)
+        , m_valtrue(i_valtrue)
+        , m_valtrue_pack(i_valtrue)
+    {
+    }
+
+    POUTRE_ALWAYS_INLINE Tout operator()(Tin i_val, Tcomp i_comp, Tfalse i_false) const POUTRE_NOEXCEPT
+    {
+      return (cop(i_val, i_comp) ? m_valtrue : i_false);
+    }
+
+    template<typename U> U operator()(U i_val, U i_comp, U i_false) const POUTRE_NOEXCEPT
+    {
+      return xs::select(cop(i_val, i_comp), m_valtrue_pack, i_false);
     }
   };
 
@@ -1183,7 +1151,7 @@ namespace poutre
   /*************************************************************************************************************************************/
   /*                                                      IIS */
   /*************************************************************************************************************************************/
-  template<typename Tin, typename Tcomp, typename Ttrue, typename Tout, class CompareOp> struct compare_iis
+  template<typename Tin, typename Tcomp, typename Ttrue, typename Tout, class CompareOp, typename = void> struct compare_iis
   {
     const CompareOp cop;
     const Tout      m_valfalse;
@@ -1195,9 +1163,51 @@ namespace poutre
     explicit compare_iis(const Tout &i_valfalse, const CompareOp &op) : cop(op), m_valfalse(i_valfalse) {}
     POUTRE_ALWAYS_INLINE Tout operator()(param_typein   i_val,
                                          param_typecomp i_comp,
-                                         param_typetrue i_true) const POUTRE_NOEXCEPT // TODO inline ?
+                                         param_typetrue i_true) const POUTRE_NOEXCEPT
     {
       return (cop(i_val, i_comp) ? i_true : m_valfalse);
+    }
+  };
+
+  template<typename Tin, typename Tcomp, typename Ttrue, typename Tout, class CompareOp>
+  struct compare_iis<
+      Tin,
+      Tcomp,
+      Ttrue,
+      Tout,
+      CompareOp,
+      std::enable_if_t<
+          std::is_same_v<
+              std::remove_const_t<Tin>,
+              std::remove_const_t<
+                  Tout>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tcomp>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Ttrue>> && std::is_arithmetic_v<Tin>>>
+  {
+    const CompareOp cop;
+    const Tout      m_valfalse;
+
+    using param_typein   = Tin;
+    using param_typecomp = Tcomp;
+    using param_typetrue = Ttrue;
+    using simd_t         = typename TypeTraits<Tin>::simd_type;
+    using simd_mask_t    = typename TypeTraits<Tout>::simd_mask_type;
+    simd_t m_valfalse_pack;
+
+    explicit compare_iis(const Tout &i_valfalse) : cop(), m_valfalse(i_valfalse), m_valfalse_pack(i_valfalse) {}
+    explicit compare_iis(const Tout &i_valfalse, const CompareOp &op)
+        : cop(op)
+        , m_valfalse(i_valfalse)
+        , m_valfalse_pack(i_valfalse)
+    {
+    }
+    POUTRE_ALWAYS_INLINE Tout operator()(param_typein   i_val,
+                                         param_typecomp i_comp,
+                                         param_typetrue i_true) const POUTRE_NOEXCEPT
+    {
+      return (cop(i_val, i_comp) ? i_true : m_valfalse);
+    }
+    template<typename U> U operator()(U i_val, U i_comp, U i_true) const POUTRE_NOEXCEPT
+    {
+      return xs::select(cop(i_val, i_comp), i_true, m_valfalse_pack);
     }
   };
 
@@ -1318,7 +1328,7 @@ namespace poutre
   /*************************************************************************************************************************************/
   /*                                                      SSI */
   /*************************************************************************************************************************************/
-  template<typename Tin, typename Tfalse, typename Tout, class CompareOp> struct compare_ssi
+  template<typename Tin, typename Tfalse, typename Tout, class CompareOp, typename = void> struct compare_ssi
   {
     const CompareOp cop;
     const Tin       m_compval;
@@ -1326,20 +1336,29 @@ namespace poutre
 
     using param_typein   = Tin;
     using param_typetrue = Tfalse;
-    compare_ssi(/*const Tin &i_compval,*/ const Tout &i_valtrue) : cop(), /*m_compval(i_compval),*/ m_valtrue(i_valtrue) {}
-    compare_ssi(/*const Tin &i_compval,*/ const Tout &i_valtrue, const CompareOp &op)
-        : cop(op)
-        //, m_compval(i_compval)
-        , m_valtrue(i_valtrue)
-    {
-    }
+    compare_ssi(const Tout &i_valtrue) : cop(), m_valtrue(i_valtrue) {}
+    compare_ssi(const Tout &i_valtrue, const CompareOp &op) : cop(op), m_valtrue(i_valtrue) {}
     POUTRE_ALWAYS_INLINE Tout operator()(param_typein i_val, param_typetrue i_false) const POUTRE_NOEXCEPT
     {
       return (cop(i_val) ? m_valtrue : i_false);
     }
+    template<typename U> U operator()(U i_val, U i_false) const POUTRE_NOEXCEPT
+    {
+      return xs::select(cop(i_val), m_valtrue_pack, i_false);
+    }
   };
 
-  template<typename Tin, typename Tfalse, typename Tout, class CompareOp> struct compare_ssi_simd
+  template<typename Tin, typename Tfalse, typename Tout, class CompareOp>
+  struct compare_ssi<
+      Tin,
+      Tfalse,
+      Tout,
+      CompareOp,
+      std::enable_if_t<
+          std::is_same_v<
+              std::remove_const_t<Tin>,
+              std::remove_const_t<
+                  Tfalse>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tout>> && std::is_arithmetic_v<Tin>>>
   {
     const CompareOp cop;
 
@@ -1349,16 +1368,14 @@ namespace poutre
     const Tout m_valtrue;
     simd_t     m_valtrue_pack;
 
-    compare_ssi_simd(const Tout &i_valtrue) : cop(), m_valtrue(i_valtrue), m_valtrue_pack(i_valtrue) {}
-    compare_ssi_simd(const Tout &i_valtrue, const CompareOp &op) : cop(op), m_valtrue(i_valtrue), m_valtrue_pack(i_valtrue)
-    {
-    }
+    compare_ssi(const Tout &i_valtrue) : cop(), m_valtrue(i_valtrue), m_valtrue_pack(i_valtrue) {}
+    compare_ssi(const Tout &i_valtrue, const CompareOp &op) : cop(op), m_valtrue(i_valtrue), m_valtrue_pack(i_valtrue) {}
     POUTRE_ALWAYS_INLINE Tout operator()(Tin i_val, Tfalse i_false) const POUTRE_NOEXCEPT
     {
       return (cop(i_val) ? m_valtrue : i_false);
     }
 
-    template<typename U> U operator()(U i_val, U i_false) const POUTRE_NOEXCEPT // TODO inline ?
+    template<typename U> U operator()(U i_val, U i_false) const POUTRE_NOEXCEPT
     {
       return xs::select(cop(i_val), m_valtrue_pack, i_false);
     }
@@ -1370,41 +1387,22 @@ namespace poutre
            ptrdiff_t Rank,
            template<typename, ptrdiff_t>
            class ViewIn,
-           template<typename, ptrdiff_t>
-           class ViewFalse,
            class Op,
            template<typename, ptrdiff_t>
+           class ViewFalse,
+           template<typename, ptrdiff_t>
            class ViewOut>
-  void t_ViewCompare_ssi(const ViewIn<Tin, Rank> &      i_vin,
-                         Op                             i_op,
-                         Tin                            i_compval,
-                         Tout                           i_valtrue,
-                         const ViewFalse<Tfalse, Rank> &i_vfalse,
-                         ViewOut<Tout, Rank> &          o_vout)
-  {
-    using myop = compare_ssi<Tin, Tfalse, Tout, Op>;
-    myop op(i_valtrue, i_op);
-    PixelWiseBinaryOp(i_vin, op, i_vfalse, o_vout);
-  }
-
-  template<typename Tin, typename Tfalse, typename Tout, ptrdiff_t Rank, class Op> struct t_ViewCompare_ssi_simd
-  {
-    void operator()(const array_view<Tin, Rank> &   i_vin,
-                    Op                              i_op,
-                    Tout                            i_valtrue,
-                    const array_view<Tfalse, Rank> &i_vfalse,
-                    array_view<Tout, Rank> &        o_vout)
+  void t_ViewCompare_ssi(const ViewIn<Tin, Rank> &i_vin,
+                    Op                       i_op,
+                    // Tin                            i_compval,
+                    Tout                           i_valtrue,
+                    const ViewFalse<Tfalse, Rank> &i_vfalse,
+                    ViewOut<Tout, Rank> &          o_vout)
     {
-      static_assert(std::is_same<std::remove_const_t<Tin>, std::remove_const_t<Tout>>::value, "should be same type");
-      using functor = compare_ssi_simd<Tin, Tfalse, Tout, Op>;
-      functor f(i_valtrue, i_op);
-      auto    begin  = i_vin.data();
-      auto    end    = i_vin.data() + i_vin.size();
-      auto    begin2 = i_vfalse.data();
-      auto    out    = o_vout.data();
-      simd::transform(begin, end, begin2, out, f);
+      using myop = compare_ssi<Tin, Tfalse, Tout, Op>;
+      myop op(i_valtrue, i_op);
+      PixelWiseBinaryOp(i_vin, op, i_vfalse, o_vout);
     }
-  };
 
   template<typename Tin,
            typename Tfalse,
@@ -1415,11 +1413,8 @@ namespace poutre
            template<typename, ptrdiff_t>
            class ViewFalse,
            template<typename, ptrdiff_t>
-           class ViewOut,
-           typename = void>
-  struct ViewCompare_ssi_dispatch
-  {
-    void operator()(const ViewIn<Tin, Rank> &      i_vin,
+           class ViewOut>
+  void ViewCompare_ssi_dispatch(const ViewIn<Tin, Rank> &      i_vin,
                     CompOpType                     compOpType,
                     Tin                            i_compval,
                     Tout                           i_valtrue,
@@ -1434,38 +1429,42 @@ namespace poutre
       case CompOpType::CompOpEqual:
       {
         OpCompEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_ssi<Tin, Tfalse, Tout, Rank, OpCompEqualValue<Tin>>()(i_vin, myop, i_valtrue, i_vfalse, o_vout);
+        return t_ViewCompare_ssi(
+            i_vin, myop, i_valtrue, i_vfalse, o_vout);
       }
       break;
       case CompOpType::CompOpDiff:
       {
         OpCompDiffValue<Tin> myop(i_compval);
-        return t_ViewCompare_ssi<Tin, Tfalse, Tout, Rank, OpCompDiffValue<Tin>>()(i_vin, myop, i_valtrue, i_vfalse, o_vout);
+        return t_ViewCompare_ssi(
+            i_vin, myop, i_valtrue, i_vfalse, o_vout);
       }
       break;
       case CompOpType::CompOpSup:
       {
         OpCompSupValue<Tin> myop(i_compval);
-        return t_ViewCompare_ssi<Tin, Tfalse, Tout, Rank, OpCompSupValue<Tin>>()(i_vin, myop, i_valtrue, i_vfalse, o_vout);
+        return t_ViewCompare_ssi(
+            i_vin, myop, i_valtrue, i_vfalse, o_vout);
       }
       break;
       case CompOpType::CompOpSupEqual:
       {
         OpCompSupEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_ssi<Tin, Tfalse, Tout, Rank, OpCompSupEqualValue<Tin>>()(
+        return t_ViewCompare_ssi(
             i_vin, myop, i_valtrue, i_vfalse, o_vout);
       }
       break;
       case CompOpType::CompOpInf:
       {
         OpCompInfValue<Tin> myop(i_compval);
-        return t_ViewCompare_ssi<Tin, Tfalse, Tout, Rank, OpCompInfValue<Tin>>()(i_vin, myop, i_valtrue, i_vfalse, o_vout);
+        return t_ViewCompare_ssi(
+            i_vin, myop, i_valtrue, i_vfalse, o_vout);
       }
       break;
       case CompOpType::CompOpInfEqual:
       {
         OpCompInfEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_ssi<Tin, Tfalse, Tout, Rank, OpCompInfEqualValue<Tin>>()(
+        return t_ViewCompare_ssi(
             i_vin, myop, i_valtrue, i_vfalse, o_vout);
       }
       break;
@@ -1475,82 +1474,6 @@ namespace poutre
       }
       }
     }
-  };
-  // SIMD Specialization arithmetic type,same type and both array_view
-  template<typename Tin, typename Tfalse, typename Tout, ptrdiff_t Rank>
-  struct ViewCompare_ssi_dispatch<
-      Tin,
-      Tfalse,
-      Tout,
-      Rank,
-      array_view,
-      array_view,
-      array_view,
-      std::enable_if_t<std::is_same<std::remove_const_t<Tin>, std::remove_const_t<Tout>>::value
-                       && std::is_same<std::remove_const_t<Tin>, std::remove_const_t<Tfalse>>::value
-                       && std::is_arithmetic<Tin>::value>>
-  {
-    void operator()(const array_view<Tin, Rank> &   i_vin,
-                    CompOpType                      compOpType,
-                    Tin                             i_compval,
-                    Tout                            i_valtrue,
-                    const array_view<Tfalse, Rank> &i_vfalse,
-                    array_view<Tout, Rank> &        o_vout)
-    {
-      static_assert(std::is_convertible<Tfalse, Tout>(),
-                    "ViewCompare_ssi_dispatch Ttrue and Tout must be convertible "
-                    "to each other");
-      switch( compOpType )
-      {
-      case CompOpType::CompOpEqual:
-      {
-        OpCompEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_ssi_simd<Tin, Tfalse, Tout, Rank, OpCompEqualValue<Tin>>()(
-            i_vin, myop, i_valtrue, i_vfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpDiff:
-      {
-        OpCompDiffValue<Tin> myop(i_compval);
-        return t_ViewCompare_ssi_simd<Tin, Tfalse, Tout, Rank, OpCompDiffValue<Tin>>()(
-            i_vin, myop, i_valtrue, i_vfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpSup:
-      {
-        OpCompSupValue<Tin> myop(i_compval);
-        return t_ViewCompare_ssi_simd<Tin, Tfalse, Tout, Rank, OpCompSupValue<Tin>>()(
-            i_vin, myop, i_valtrue, i_vfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpSupEqual:
-      {
-        OpCompSupEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_ssi_simd<Tin, Tfalse, Tout, Rank, OpCompSupEqualValue<Tin>>()(
-            i_vin, myop, i_valtrue, i_vfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpInf:
-      {
-        OpCompInfValue<Tin> myop(i_compval);
-        return t_ViewCompare_ssi_simd<Tin, Tfalse, Tout, Rank, OpCompInfValue<Tin>>()(
-            i_vin, myop, i_valtrue, i_vfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpInfEqual:
-      {
-        OpCompInfEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_ssi_simd<Tin, Tfalse, Tout, Rank, OpCompInfEqualValue<Tin>>()(
-            i_vin, myop, i_valtrue, i_vfalse, o_vout);
-      }
-      break;
-      default:
-      {
-        POUTRE_RUNTIME_ERROR("ViewCompare_ssi_dispatch CompOpType not implemented");
-      }
-      }
-    }
-  };
 
   template<typename Tin,
            typename Tfalse,
@@ -1569,13 +1492,12 @@ namespace poutre
                                    const ViewFalse<Tfalse, Rank> &i_vfalse,
                                    ViewOut<Tout, Rank> &          o_vout)
   {
-    ViewCompare_ssi_dispatch<Tin, Tfalse, Tout, Rank, ViewIn, ViewFalse, ViewOut> op;
-    op(i_vin, compOpType, i_compval, i_valtrue, i_vfalse, o_vout);
+    return ViewCompare_ssi_dispatch(i_vin, compOpType, i_compval, i_valtrue, i_vfalse, o_vout);
   }
   /*************************************************************************************************************************************/
   /*                                                      ISS */
   /*************************************************************************************************************************************/
-  template<typename Tin1, typename Tin2, typename Tout, class CompareOp> struct compare_iss
+  template<typename Tin1, typename Tin2, typename Tout, class CompareOp, typename = void> struct compare_iss
   {
     const CompareOp cop;
     const Tout      m_valtrue, m_valfalse;
@@ -1594,7 +1516,17 @@ namespace poutre
     }
   };
 
-  template<typename Tin1, typename Tin2, typename Tout, class CompareOp> struct compare_iss_simd
+  template<typename Tin1, typename Tin2, typename Tout, class CompareOp>
+  struct compare_iss<
+      Tin1,
+      Tin2,
+      Tout,
+      CompareOp,
+      std::enable_if_t<
+          std::is_same_v<
+              std::remove_const_t<Tin1>,
+              std::remove_const_t<
+                  Tin2>> && std::is_same_v<std::remove_const_t<Tin1>, std::remove_const_t<Tout>> && std::is_arithmetic_v<Tin1>>>
   {
     const CompareOp cop;
     using param_type1 = Tin1;
@@ -1603,7 +1535,7 @@ namespace poutre
     using simd_mask_t = typename TypeTraits<Tout>::simd_mask_type;
     simd_t m_valtrue_pack, m_valfalse_pack;
     Tout   m_valtrue, m_valfalse;
-    compare_iss_simd(const Tout &i_valtrue, const Tout &i_valfalse)
+    compare_iss(const Tout &i_valtrue, const Tout &i_valfalse)
         : cop()
         , m_valtrue_pack(i_valtrue)
         , m_valfalse_pack(i_valfalse)
@@ -1611,7 +1543,7 @@ namespace poutre
         , m_valfalse(i_valfalse)
     {
     }
-    compare_iss_simd(const Tout &i_valtrue, const Tout &i_valfalse, const CompareOp &op)
+    compare_iss(const Tout &i_valtrue, const Tout &i_valfalse, const CompareOp &op)
         : cop(op)
         , m_valtrue_pack(i_valtrue)
         , m_valfalse_pack(i_valfalse)
@@ -1654,27 +1586,6 @@ namespace poutre
     PixelWiseBinaryOp(i_vin1, op, i_vin2, o_vout);
   }
 
-  template<typename Tin, typename Tin2, typename Tout, ptrdiff_t Rank, class Op> struct t_ViewCompare_iss_simd
-  {
-    void operator()(const array_view<Tin, Rank> &i_vin,
-                    Op                           i_op,
-                    const array_view<Tin, Rank> &i_vin2,
-                    Tout                         i_valtrue,
-                    Tout                         i_valfalse,
-                    array_view<Tout, Rank> &     o_vout)
-    {
-      static_assert(std::is_same<std::remove_const_t<Tin>, std::remove_const_t<Tout>>::value, "should be same type");
-      static_assert(std::is_same<std::remove_const_t<Tin>, std::remove_const_t<Tin2>>::value, "should be same type");
-
-      using functor = compare_iss_simd<Tin, Tin2, Tout, Op>;
-      functor f(i_valtrue, i_valfalse, i_op);
-      auto    begin  = i_vin.data();
-      auto    end    = i_vin.data() + i_vin.size();
-      auto    begin2 = i_vin2.data();
-      auto    out    = o_vout.data();
-      simd::transform(begin, end, begin2, out, f);
-    }
-  };
   template<typename Tin1,
            typename Tin2,
            typename Tout,
@@ -1686,141 +1597,54 @@ namespace poutre
            template<typename, ptrdiff_t>
            class ViewOut,
            typename = void>
-  struct ViewCompare_iss_dispatch
+  void ViewCompare_iss_dispatch(const ViewIn1<Tin1, Rank> &i_vin1,
+                                CompOpType                 compOpType,
+                                const ViewIn2<Tin2, Rank> &i_vin2,
+                                Tout                       i_valtrue,
+                                Tout                       i_valfalse,
+                                ViewOut<Tout, Rank> &      o_vout)
   {
-    void operator()(const ViewIn1<Tin1, Rank> &i_vin1,
-                    CompOpType                 compOpType,
-                    const ViewIn2<Tin2, Rank> &i_vin2,
-                    Tout                       i_valtrue,
-                    Tout                       i_valfalse,
-                    ViewOut<Tout, Rank> &      o_vout)
+    static_assert(std::is_convertible<Tin1, Tin2>(),
+                  "ViewCompare_iss_dispatch Tin1 and Tin2 must be convertible to "
+                  "each other");
+    switch( compOpType )
     {
-      static_assert(std::is_convertible<Tin1, Tin2>(),
-                    "ViewCompare_iss_dispatch Tin1 and Tin2 must be convertible to "
-                    "each other");
-      switch( compOpType )
-      {
-      case CompOpType::CompOpEqual:
-      {
-        OpCompEqual<Tin1, Tin2> myop;
-        return t_ViewCompare_iss < Tin1, Tin2, Tout, Rank, ViewIn1, ViewIn2, OpCompEqual < Tin1,
-        , Tin2 >, ViewOut > ()(i_vin1, myop, i_vin2, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpDiff:
-      {
-        OpCompDiff<Tin1, Tin2> myop;
-        return t_ViewCompare_iss < Tin1, Tin2, Tout, Rank, ViewIn1, ViewIn2, OpCompDiff < Tin1,
-        , Tin2 >, ViewOut > ()(i_vin1, myop, i_vin2, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpSup:
-      {
-        OpCompSup<Tin1, Tin2> myop;
-        return t_ViewCompare_iss < Tin1, Tin2, Tout, Rank, ViewIn1, ViewIn2, OpCompSup < Tin1,
-        , Tin2 >, ViewOut > ()(i_vin1, myop, i_vin2, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpSupEqual:
-      {
-        OpCompSupEqual<Tin1, Tin2> myop;
-        return t_ViewCompare_iss < Tin1, Tin2, Tout, Rank, ViewIn1, ViewIn2, OpCompSupEqual < Tin1,
-        , Tin2 >, ViewOut > ()(i_vin1, myop, i_vin2, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpInf:
-      {
-        OpCompInf<Tin1, Tin2> myop;
-        return t_ViewCompare_iss < Tin1, Tin2, Tout, Rank, ViewIn1, ViewIn2, OpCompInf < Tin1,
-        , Tin2 >, ViewOut > ()(i_vin1, myop, i_vin2, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpInfEqual:
-      {
-        OpCompInfEqual<Tin1, Tin2> myop;
-        return t_ViewCompare_iss < Tin1, Tin2, Tout, Rank, ViewIn1, ViewIn2, OpCompInfEqual < Tin1,
-        , Tin2 >, ViewOut > ()(i_vin1, myop, i_vin2, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      default:
-      {
-        POUTRE_RUNTIME_ERROR("ViewCompare_iss_dispatch CompOpType not implemented");
-      }
-      } // end case
-    }   // end op
-  };
-
-  template<typename Tin1, typename Tin2, typename Tout, ptrdiff_t Rank>
-  struct ViewCompare_iss_dispatch<
-      Tin1,
-      Tin2,
-      Tout,
-      Rank,
-      array_view,
-      array_view,
-      array_view,
-      std::enable_if_t<std::is_same<std::remove_const_t<Tin1>, std::remove_const_t<Tout>>::value
-                       && std::is_same<std::remove_const_t<Tin1>, std::remove_const_t<Tin2>>::value
-                       && std::is_arithmetic<Tin1>::value>>
-  {
-    void operator()(const array_view<Tin1, Rank> &i_vin1,
-                    CompOpType                    compOpType,
-                    const array_view<Tin2, Rank> &i_vin2,
-                    Tout                          i_valtrue,
-                    Tout                          i_valfalse,
-                    array_view<Tout, Rank> &      o_vout)
+    case CompOpType::CompOpEqual:
     {
-      switch( compOpType )
-      {
-      case CompOpType::CompOpEqual:
-      {
-        OpCompEqual<Tin1, Tin2> myop;
-        return t_ViewCompare_iss_simd<Tin1, Tin2, Tout, Rank, OpCompEqual<Tin1, Tin2>>()(
-            i_vin1, myop, i_vin2, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpDiff:
-      {
-        OpCompDiff<Tin1, Tin2> myop;
-        return t_ViewCompare_iss_simd < Tin1, Tin2, Tout, Rank, OpCompDiff < Tin1
-        , Tin2 >> ()(i_vin1, myop, i_vin2, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpSup:
-      {
-        OpCompSup<Tin1, Tin2> myop;
-        return t_ViewCompare_iss_simd < Tin1, Tin2, Tout, Rank, OpCompSup < Tin1
-        , Tin2 >> ()(i_vin1, myop, i_vin2, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpSupEqual:
-      {
-        OpCompSupEqual<Tin1, Tin2> myop;
-        return t_ViewCompare_iss_simd<Tin1, Tin2, Tout, Rank, OpCompSupEqual<Tin1, Tin2>>()(
-            i_vin1, myop, i_vin2, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpInf:
-      {
-        OpCompInf<Tin1, Tin2> myop;
-        return t_ViewCompare_iss_simd<Tin1, Tin2, Tout, Rank, OpCompInf<Tin1, Tin2>>()(
-            i_vin1, myop, i_vin2, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpInfEqual:
-      {
-        OpCompInfEqual<Tin1, Tin2> myop;
-        return t_ViewCompare_iss_simd<Tin1, Tin2, Tout, Rank, OpCompInfEqual<Tin1, Tin2>>()(
-            i_vin1, myop, i_vin2, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      default:
-      {
-        POUTRE_RUNTIME_ERROR("ViewCompare_iss_dispatch CompOpType not implemented");
-      }
-      } // end switch
-    }   // end op
-  };
+      return t_ViewCompare_iss(i_vin1, OpCompEqual<Tin1, Tin2>(), i_vin2, i_valtrue, i_valfalse, o_vout);
+    }
+    break;
+    case CompOpType::CompOpDiff:
+    {
+      return t_ViewCompare_iss(i_vin1, OpCompDiff<Tin1, Tin2>(), i_vin2, i_valtrue, i_valfalse, o_vout);
+    }
+    break;
+    case CompOpType::CompOpSup:
+    {
+      return t_ViewCompare_iss(i_vin1, OpCompSup<Tin1, Tin2>(), i_vin2, i_valtrue, i_valfalse, o_vout);
+    }
+    break;
+    case CompOpType::CompOpSupEqual:
+    {
+      return t_ViewCompare_iss(i_vin1, OpCompSupEqual<Tin1, Tin2>(), i_vin2, i_valtrue, i_valfalse, o_vout);
+    }
+    break;
+    case CompOpType::CompOpInf:
+    {
+      return t_ViewCompare_iss(i_vin1, OpCompInf<Tin1, Tin2>(), i_vin2, i_valtrue, i_valfalse, o_vout);
+    }
+    break;
+    case CompOpType::CompOpInfEqual:
+    {
+      return t_ViewCompare_iss(i_vin1, OpCompInfEqual<Tin1, Tin2>(), i_vin2, i_valtrue, i_valfalse, o_vout);
+    }
+    break;
+    default:
+    {
+      POUTRE_RUNTIME_ERROR("ViewCompare_iss_dispatch CompOpType not implemented");
+    }
+    } // end case
+  }
 
   template<typename Tin1,
            typename Tin2,
@@ -1839,8 +1663,7 @@ namespace poutre
                                    Tout                       i_valfalse,
                                    ViewOut<Tout, Rank> &      o_vout)
   {
-    ViewCompare_iss_dispatch<Tin1, Tin2, Tout, Rank, ViewIn1, ViewIn2, ViewOut> op;
-    op(i_vin1, compOpType, i_vin2, i_valtrue, i_valfalse, o_vout);
+    return ViewCompare_iss_dispatch(i_vin1, compOpType, i_vin2, i_valtrue, i_valfalse, o_vout);
   }
   //! @} doxygroup: image_processing_linear_group
 } // namespace poutre

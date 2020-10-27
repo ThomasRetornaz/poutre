@@ -50,10 +50,13 @@ namespace poutre
            typename = void>
   struct PixelWiseUnaryOpDispatcher
   {
-    static_assert((std::is_same<ViewIn<TIn, Rank>, strided_array_view<TIn, Rank>>::value
-                   || std::is_same<ViewIn<TIn, Rank>, strided_array_view<const TIn, Rank>>::value
-                   || std::is_same<ViewOut<TOut, Rank>, strided_array_view<TOut, Rank>>::value),
-                  "strided view only specilization fail for arrayview");
+    static_assert(
+        (std::is_same_v<
+             ViewIn<TIn, Rank>,
+             strided_array_view<
+                 TIn,
+                 Rank>> || std::is_same_v<ViewIn<TIn, Rank>, strided_array_view<const TIn, Rank>> || std::is_same_v<ViewOut<TOut, Rank>, strided_array_view<TOut, Rank>>),
+        "strided view only specilization fail for arrayview");
 
     void operator()(const ViewIn<TIn, Rank> &i_vin, UnOp op, ViewOut<TOut, Rank> &o_vout) const
     {
@@ -96,14 +99,13 @@ namespace poutre
            ptrdiff_t Rank,
            /* template<typename, typename>*/
            class UnOp>
-  struct PixelWiseUnaryOpDispatcher<
-      TIn,
-      TOut,
-      Rank,
-      array_view,
-      array_view,
-      UnOp,
-      std::enable_if_t<!std::is_same<std::remove_const_t<TIn>, std::remove_const_t<TOut>>::value>>
+  struct PixelWiseUnaryOpDispatcher<TIn,
+                                    TOut,
+                                    Rank,
+                                    array_view,
+                                    array_view,
+                                    UnOp,
+                                    std::enable_if_t<!std::is_same_v<std::remove_const_t<TIn>, std::remove_const_t<TOut>>>>
   {
     void operator()(const array_view<TIn, Rank> &i_vin, UnOp op, array_view<TOut, Rank> &o_vout) const
     {
@@ -112,23 +114,24 @@ namespace poutre
       // specialization,fall back ptr";
       auto i_vinbeg  = i_vin.data();
       auto i_vinend  = i_vin.data() + i_vin.size();
-      auto i_voutbeg = o_vout.data();
-      for( ; i_vinbeg != i_vinend; i_vinbeg++, i_voutbeg++ )
-      {
+      auto o_voutbeg = o_vout.data();
+      /*for( ; i_vinbeg != i_vinend; i_vinbeg++, i_voutbeg++ )
+      {;
         *i_voutbeg = static_cast<TOut>(op(*i_vinbeg));
-      }
+      }*/
+      std::transform(i_vinbeg, i_vinend, o_voutbeg, op);
     }
   };
 
   template<typename TIn, typename TOut, ptrdiff_t Rank, /*template<typename, typename> */ class UnOp>
-  struct PixelWiseUnaryOpDispatcher<TIn,
-                                    TOut,
-                                    Rank,
-                                    array_view,
-                                    array_view,
-                                    UnOp,
-                                    std::enable_if_t<std::is_same<std::remove_const_t<TIn>, std::remove_const_t<TOut>>::value
-                                                     && std::is_arithmetic<TIn>::value>>
+  struct PixelWiseUnaryOpDispatcher<
+      TIn,
+      TOut,
+      Rank,
+      array_view,
+      array_view,
+      UnOp,
+      std::enable_if_t<std::is_same_v<std::remove_const_t<TIn>, std::remove_const_t<TOut>> && std::is_arithmetic_v<TIn>>>
 
   {
     void operator()(const array_view<TIn, Rank> &i_vin, UnOp op, array_view<TOut, Rank> &o_vout) const

@@ -162,10 +162,10 @@ namespace poutre
 #  endif
 
   // tag to help dispatch
-  //struct tag_SIMD_disabled
+  // struct tag_SIMD_disabled
   //{
   //};
-  //struct tag_SIMD_enabled
+  // struct tag_SIMD_enabled
   //{
   //};
 

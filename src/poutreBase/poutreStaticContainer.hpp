@@ -76,7 +76,6 @@ namespace poutre
 
 #endif //#ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-    public:
     /** @name Construction and Assignment
      */
 

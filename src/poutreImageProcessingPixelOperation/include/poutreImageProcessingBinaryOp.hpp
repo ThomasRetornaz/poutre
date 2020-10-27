@@ -50,11 +50,11 @@ namespace poutre
            typename = void>
   struct PixelWiseBinaryOpDispatcher
   {
-    static_assert((std::is_same<View1<T1, Rank>, strided_array_view<T1, Rank>>::value
-                   || std::is_same<View1<T1, Rank>, strided_array_view<const T1, Rank>>::value
-                   || std::is_same<View2<T2, Rank>, strided_array_view<T2, Rank>>::value
-                   || std::is_same<View2<T2, Rank>, strided_array_view<const T2, Rank>>::value
-                   || std::is_same<ViewOut<Tout, Rank>, strided_array_view<Tout, Rank>>::value),
+    static_assert((std::
+                       is_same_v<View1<T1, Rank>,
+                                 strided_array_view<
+                                     T1,
+                                     Rank>> || std::is_same_v<View1<T1, Rank>, strided_array_view<const T1, Rank>> || std::is_same_v<View2<T2, Rank>, strided_array_view<T2, Rank>> || std::is_same_v<View2<T2, Rank>, strided_array_view<const T2, Rank>> || std::is_same_v<ViewOut<Tout, Rank>, strided_array_view<Tout, Rank>>),
                   "strided view only specialization fail for arrayview");
 
     void operator()(const View1<T1, Rank> &i_vin1,
@@ -112,8 +112,9 @@ namespace poutre
       array_view,
       array_view,
       BinOp,
-      std::enable_if_t<!std::is_same<std::remove_const_t<T1>, std::remove_const_t<T2>>::value
-                       || !std::is_same<std::remove_const_t<T2>, std::remove_const_t<Tout>>::value>>
+      std::enable_if_t<
+          !std::is_same_v<std::remove_const_t<T1>,
+                          std::remove_const_t<T2>> || !std::is_same_v<std::remove_const_t<T2>, std::remove_const_t<Tout>>>>
   {
     void operator()(const array_view<T1, Rank> &i_vin1,
                     const BinOp &               op,
@@ -126,11 +127,12 @@ namespace poutre
       auto i_vinbeg1 = i_vin1.data();
       auto i_vinend1 = i_vin1.data() + i_vin1.size();
       auto i_vinbeg2 = i_vin2.data();
-      auto i_voutbeg = o_vout.data();
-      for( ; i_vinbeg1 != i_vinend1; ++i_vinbeg1, ++i_vinbeg2, ++i_voutbeg )
+      auto o_voutbeg = o_vout.data();
+      /*for( ; i_vinbeg1 != i_vinend1; ++i_vinbeg1, ++i_vinbeg2, ++i_voutbeg )
       {
         *i_voutbeg = static_cast<Tout>(op(*i_vinbeg1, *i_vinbeg2));
-      }
+      }*/
+      std::transform(i_vinbeg, i_vinend, i_vinbeg2, o_voutbeg,op)
     }
   };
 
@@ -145,9 +147,11 @@ namespace poutre
       array_view,
       array_view,
       BinOp,
-      std::enable_if_t<std::is_same<std::remove_const_t<T1>, std::remove_const_t<T2>>::value
-                       && std::is_same<std::remove_const_t<T2>, std::remove_const_t<Tout>>::value
-                       && std::is_arithmetic<T1>::value>>
+      std::enable_if_t<
+          std::is_same_v<
+              std::remove_const_t<T1>,
+              std::remove_const_t<
+                  T2>> && std::is_same_v<std::remove_const_t<T2>, std::remove_const_t<Tout>> && std::is_arithmetic_v<T1>>>
   {
     void operator()(const array_view<T1, Rank> &i_vin1,
                     const BinOp &               op,
