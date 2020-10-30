@@ -361,12 +361,13 @@ namespace poutre
            class Op,
            template<typename, ptrdiff_t>
            class ViewOut>
-  void t_ViewCompare_sss(const ViewIn<Tin, Rank> &i_vin, Op i_op, Tout i_valtrue, Tout i_valfalse, ViewOut<Tout, Rank> &o_vout)
-    {
-      using myop = compare_sss<Tin, Tout, Op>;
-      myop op(i_valtrue, i_valfalse, i_op);
-      PixelWiseUnaryOp(i_vin, op, o_vout);
-    }
+  void
+  t_ViewCompare_sss(const ViewIn<Tin, Rank> &i_vin, Op i_op, Tout i_valtrue, Tout i_valfalse, ViewOut<Tout, Rank> &o_vout)
+  {
+    using myop = compare_sss<Tin, Tout, Op>;
+    myop op(i_valtrue, i_valfalse, i_op);
+    PixelWiseUnaryOp(i_vin, op, o_vout);
+  }
 
   template<typename Tin,
            typename Tout,
@@ -376,61 +377,56 @@ namespace poutre
            template<typename, ptrdiff_t>
            class ViewOut>
   void ViewCompare_sss_dispatch(const ViewIn<Tin, Rank> &i_vin,
-                    CompOpType               compOpType,
-                    Tin                      i_compval,
-                    Tout                     i_valtrue,
-                    Tout                     i_valfalse,
-                    ViewOut<Tout, Rank> &    o_vout)
+                                CompOpType               compOpType,
+                                Tin                      i_compval,
+                                Tout                     i_valtrue,
+                                Tout                     i_valfalse,
+                                ViewOut<Tout, Rank> &    o_vout)
+  {
+    switch( compOpType )
     {
-      switch( compOpType )
-      {
-      case CompOpType::CompOpEqual:
-      {
-        OpCompEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_sss(i_vin, myop, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpDiff:
-      {
-        OpCompDiffValue<Tin> myop(i_compval);
-        return t_ViewCompare_sss(
-            i_vin, myop, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpSup:
-      {
-        OpCompSupValue<Tin> myop(i_compval);
-        return t_ViewCompare_sss(
-            i_vin, myop, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpSupEqual:
-      {
-        OpCompSupEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_sss(
-            i_vin, myop, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpInf:
-      {
-        OpCompInfValue<Tin> myop(i_compval);
-        return t_ViewCompare_sss(
-            i_vin, myop, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpInfEqual:
-      {
-        OpCompInfEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_sss(
-            i_vin, myop, i_valtrue, i_valfalse, o_vout);
-      }
-      break;
-      default:
-      {
-        POUTRE_RUNTIME_ERROR("ViewCompare_sss_dispatch CompOpType not implemented");
-      }
-      }
+    case CompOpType::CompOpEqual:
+    {
+      OpCompEqualValue<Tin> myop(i_compval);
+      return t_ViewCompare_sss(i_vin, myop, i_valtrue, i_valfalse, o_vout);
     }
+    break;
+    case CompOpType::CompOpDiff:
+    {
+      OpCompDiffValue<Tin> myop(i_compval);
+      return t_ViewCompare_sss(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+    }
+    break;
+    case CompOpType::CompOpSup:
+    {
+      OpCompSupValue<Tin> myop(i_compval);
+      return t_ViewCompare_sss(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+    }
+    break;
+    case CompOpType::CompOpSupEqual:
+    {
+      OpCompSupEqualValue<Tin> myop(i_compval);
+      return t_ViewCompare_sss(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+    }
+    break;
+    case CompOpType::CompOpInf:
+    {
+      OpCompInfValue<Tin> myop(i_compval);
+      return t_ViewCompare_sss(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+    }
+    break;
+    case CompOpType::CompOpInfEqual:
+    {
+      OpCompInfEqualValue<Tin> myop(i_compval);
+      return t_ViewCompare_sss(i_vin, myop, i_valtrue, i_valfalse, o_vout);
+    }
+    break;
+    default:
+    {
+      POUTRE_RUNTIME_ERROR("ViewCompare_sss_dispatch CompOpType not implemented");
+    }
+    }
+  }
 
   template<typename Tin,
            typename Tout,
@@ -872,15 +868,15 @@ namespace poutre
            template<typename, ptrdiff_t>
            class ViewOut>
   void t_ViewCompare_sis(const ViewIn<Tin, Rank> &    i_vin,
-                    Op                           i_op,
-                    const ViewTrue<Ttrue, Rank> &i_vtrue,
-                    Tout                         i_valfalse,
-                    ViewOut<Tout, Rank> &        o_vout)
-    {
-      using myop = compare_sis<Tin, Ttrue, Tout, Op>;
-      myop op(i_valfalse, i_op);
-      PixelWiseBinaryOp(i_vin, op, i_vtrue, o_vout);
-    }
+                         Op                           i_op,
+                         const ViewTrue<Ttrue, Rank> &i_vtrue,
+                         Tout                         i_valfalse,
+                         ViewOut<Tout, Rank> &        o_vout)
+  {
+    using myop = compare_sis<Tin, Ttrue, Tout, Op>;
+    myop op(i_valfalse, i_op);
+    PixelWiseBinaryOp(i_vin, op, i_vtrue, o_vout);
+  }
 
   template<typename Tin,
            typename Ttrue,
@@ -894,65 +890,59 @@ namespace poutre
            class ViewOut,
            typename = void>
   void ViewCompare_sis_dispatch(const ViewIn<Tin, Rank> &    i_vin,
-                    CompOpType                   compOpType,
-                    Tin                          i_compval,
-                    const ViewTrue<Ttrue, Rank> &i_vtrue,
-                    Tout                         i_valfalse,
-                    ViewOut<Tout, Rank> &        o_vout)
+                                CompOpType                   compOpType,
+                                Tin                          i_compval,
+                                const ViewTrue<Ttrue, Rank> &i_vtrue,
+                                Tout                         i_valfalse,
+                                ViewOut<Tout, Rank> &        o_vout)
+  {
+    static_assert(std::is_convertible<Ttrue, Tout>(),
+                  "ViewCompare_sis_dispatch Ttrue and Tout must be convertible "
+                  "to each other");
+    switch( compOpType )
     {
-      static_assert(std::is_convertible<Ttrue, Tout>(),
-                    "ViewCompare_sis_dispatch Ttrue and Tout must be convertible "
-                    "to each other");
-      switch( compOpType )
-      {
-      case CompOpType::CompOpEqual:
-      {
-        OpCompEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_sis(
-            i_vin, myop, i_vtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpDiff:
-      {
-        OpCompDiffValue<Tin> myop(i_compval);
-        return t_ViewCompare_sis(
-            i_vin, myop, i_vtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpSup:
-      {
-        OpCompSupValue<Tin> myop(i_compval);
-        return t_ViewCompare_sis(
-            i_vin, myop, i_vtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpSupEqual:
-      {
-        OpCompSupEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_sis(
-            i_vin, myop, i_vtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpInf:
-      {
-        OpCompInfValue<Tin> myop(i_compval);
-        return t_ViewCompare_sis(
-            i_vin, myop, i_vtrue, i_valfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpInfEqual:
-      {
-        OpCompInfEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_sis(
-            i_vin, myop, i_vtrue, i_valfalse, o_vout);
-      }
-      break;
-      default:
-      {
-        POUTRE_RUNTIME_ERROR("ViewCompare_sis_dispatch CompOpType not implemented");
-      }
-      }
+    case CompOpType::CompOpEqual:
+    {
+      OpCompEqualValue<Tin> myop(i_compval);
+      return t_ViewCompare_sis(i_vin, myop, i_vtrue, i_valfalse, o_vout);
     }
+    break;
+    case CompOpType::CompOpDiff:
+    {
+      OpCompDiffValue<Tin> myop(i_compval);
+      return t_ViewCompare_sis(i_vin, myop, i_vtrue, i_valfalse, o_vout);
+    }
+    break;
+    case CompOpType::CompOpSup:
+    {
+      OpCompSupValue<Tin> myop(i_compval);
+      return t_ViewCompare_sis(i_vin, myop, i_vtrue, i_valfalse, o_vout);
+    }
+    break;
+    case CompOpType::CompOpSupEqual:
+    {
+      OpCompSupEqualValue<Tin> myop(i_compval);
+      return t_ViewCompare_sis(i_vin, myop, i_vtrue, i_valfalse, o_vout);
+    }
+    break;
+    case CompOpType::CompOpInf:
+    {
+      OpCompInfValue<Tin> myop(i_compval);
+      return t_ViewCompare_sis(i_vin, myop, i_vtrue, i_valfalse, o_vout);
+    }
+    break;
+    case CompOpType::CompOpInfEqual:
+    {
+      OpCompInfEqualValue<Tin> myop(i_compval);
+      return t_ViewCompare_sis(i_vin, myop, i_vtrue, i_valfalse, o_vout);
+    }
+    break;
+    default:
+    {
+      POUTRE_RUNTIME_ERROR("ViewCompare_sis_dispatch CompOpType not implemented");
+    }
+    }
+  }
 
   template<typename Tin,
            typename Ttrue,
@@ -965,7 +955,7 @@ namespace poutre
            template<typename, ptrdiff_t>
            class ViewOut>
   void ViewCompare_sis_func_helper(const ViewIn<Tin, Rank> &    i_vin,
-                              CompOpType                   compOpType,
+                                   CompOpType                   compOpType,
                                    Tin                          i_compval,
                                    const ViewTrue<Ttrue, Rank> &i_vtrue,
                                    Tout                         i_valfalse,
@@ -1389,16 +1379,16 @@ namespace poutre
            template<typename, ptrdiff_t>
            class ViewOut>
   void t_ViewCompare_ssi(const ViewIn<Tin, Rank> &i_vin,
-                    Op                       i_op,
-                    // Tin                            i_compval,
-                    Tout                           i_valtrue,
-                    const ViewFalse<Tfalse, Rank> &i_vfalse,
-                    ViewOut<Tout, Rank> &          o_vout)
-    {
-      using myop = compare_ssi<Tin, Tfalse, Tout, Op>;
-      myop op(i_valtrue, i_op);
-      PixelWiseBinaryOp(i_vin, op, i_vfalse, o_vout);
-    }
+                         Op                       i_op,
+                         // Tin                            i_compval,
+                         Tout                           i_valtrue,
+                         const ViewFalse<Tfalse, Rank> &i_vfalse,
+                         ViewOut<Tout, Rank> &          o_vout)
+  {
+    using myop = compare_ssi<Tin, Tfalse, Tout, Op>;
+    myop op(i_valtrue, i_op);
+    PixelWiseBinaryOp(i_vin, op, i_vfalse, o_vout);
+  }
 
   template<typename Tin,
            typename Tfalse,
@@ -1411,65 +1401,59 @@ namespace poutre
            template<typename, ptrdiff_t>
            class ViewOut>
   void ViewCompare_ssi_dispatch(const ViewIn<Tin, Rank> &      i_vin,
-                    CompOpType                     compOpType,
-                    Tin                            i_compval,
-                    Tout                           i_valtrue,
-                    const ViewFalse<Tfalse, Rank> &i_vfalse,
-                    ViewOut<Tout, Rank> &          o_vout)
+                                CompOpType                     compOpType,
+                                Tin                            i_compval,
+                                Tout                           i_valtrue,
+                                const ViewFalse<Tfalse, Rank> &i_vfalse,
+                                ViewOut<Tout, Rank> &          o_vout)
+  {
+    static_assert(std::is_convertible<Tfalse, Tout>(),
+                  "ViewCompare_ssi_dispatch Ttrue and Tout must be convertible "
+                  "to each other");
+    switch( compOpType )
     {
-      static_assert(std::is_convertible<Tfalse, Tout>(),
-                    "ViewCompare_ssi_dispatch Ttrue and Tout must be convertible "
-                    "to each other");
-      switch( compOpType )
-      {
-      case CompOpType::CompOpEqual:
-      {
-        OpCompEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_ssi(
-            i_vin, myop, i_valtrue, i_vfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpDiff:
-      {
-        OpCompDiffValue<Tin> myop(i_compval);
-        return t_ViewCompare_ssi(
-            i_vin, myop, i_valtrue, i_vfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpSup:
-      {
-        OpCompSupValue<Tin> myop(i_compval);
-        return t_ViewCompare_ssi(
-            i_vin, myop, i_valtrue, i_vfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpSupEqual:
-      {
-        OpCompSupEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_ssi(
-            i_vin, myop, i_valtrue, i_vfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpInf:
-      {
-        OpCompInfValue<Tin> myop(i_compval);
-        return t_ViewCompare_ssi(
-            i_vin, myop, i_valtrue, i_vfalse, o_vout);
-      }
-      break;
-      case CompOpType::CompOpInfEqual:
-      {
-        OpCompInfEqualValue<Tin> myop(i_compval);
-        return t_ViewCompare_ssi(
-            i_vin, myop, i_valtrue, i_vfalse, o_vout);
-      }
-      break;
-      default:
-      {
-        POUTRE_RUNTIME_ERROR("ViewCompare_ssi_dispatch CompOpType not implemented");
-      }
-      }
+    case CompOpType::CompOpEqual:
+    {
+      OpCompEqualValue<Tin> myop(i_compval);
+      return t_ViewCompare_ssi(i_vin, myop, i_valtrue, i_vfalse, o_vout);
     }
+    break;
+    case CompOpType::CompOpDiff:
+    {
+      OpCompDiffValue<Tin> myop(i_compval);
+      return t_ViewCompare_ssi(i_vin, myop, i_valtrue, i_vfalse, o_vout);
+    }
+    break;
+    case CompOpType::CompOpSup:
+    {
+      OpCompSupValue<Tin> myop(i_compval);
+      return t_ViewCompare_ssi(i_vin, myop, i_valtrue, i_vfalse, o_vout);
+    }
+    break;
+    case CompOpType::CompOpSupEqual:
+    {
+      OpCompSupEqualValue<Tin> myop(i_compval);
+      return t_ViewCompare_ssi(i_vin, myop, i_valtrue, i_vfalse, o_vout);
+    }
+    break;
+    case CompOpType::CompOpInf:
+    {
+      OpCompInfValue<Tin> myop(i_compval);
+      return t_ViewCompare_ssi(i_vin, myop, i_valtrue, i_vfalse, o_vout);
+    }
+    break;
+    case CompOpType::CompOpInfEqual:
+    {
+      OpCompInfEqualValue<Tin> myop(i_compval);
+      return t_ViewCompare_ssi(i_vin, myop, i_valtrue, i_vfalse, o_vout);
+    }
+    break;
+    default:
+    {
+      POUTRE_RUNTIME_ERROR("ViewCompare_ssi_dispatch CompOpType not implemented");
+    }
+    }
+  }
 
   template<typename Tin,
            typename Tfalse,

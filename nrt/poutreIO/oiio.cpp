@@ -18,7 +18,6 @@
 #include <poutreIO/include/poutreOIIO.hpp>
 #include <poutreIO/poutreIOLoader.hpp>
 #include <poutreIO/poutreIOWriter.hpp>
-#include <boost/filesystem.hpp>
 
 namespace fs = std::filesystem;
 

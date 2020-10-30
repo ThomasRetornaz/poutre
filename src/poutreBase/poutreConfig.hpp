@@ -9,7 +9,6 @@
 #ifndef POUTRE_CONFIG__HPP__
 #define POUTRE_CONFIG__HPP__
 
-#include <boost/config.hpp>
 #ifndef FMT_HEADER_ONLY
 #  define FMT_HEADER_ONLY
 #endif
@@ -29,11 +28,11 @@
 
 namespace poutre
 {
-#  define POUTRE_NOEXCEPT BOOST_NOEXCEPT_OR_NOTHROW // NOLINT
+#  define POUTRE_NOEXCEPT noexcept // NOLINT
 
-#  define POUTRE_NOEXCEPT_IF(Predicate) BOOST_NOEXCEPT_IF((Predicate)) // NOLINT
+#  define POUTRE_NOEXCEPT_IF(Predicate) noexcept((Predicate)) // NOLINT
 
-#  define POUTRE_NOEXCEPT_EXPR(Predicate) BOOST_NOEXCEPT_EXPR((Predicate)) // NOLINT
+#  define POUTRE_NOEXCEPT_EXPR(Predicate) noexcept((Predicate)) // NOLINT
 
 #  ifndef NDEBUG
 #    define POUTRE_NOEXCEPTONLYNDEBUG // NOLINT
@@ -41,13 +40,11 @@ namespace poutre
 #    define POUTRE_NOEXCEPTONLYNDEBUG POUTRE_NOEXCEPT // NOLINT
 #  endif
 
-#  define POUTRE_STATIC_CONSTEXPR BOOST_STATIC_CONSTEXPR // NOLINT
+#  define POUTRE_STATIC_CONSTEXPR static constexpr // NOLINT
 
-#  define POUTRE_CONSTEXPR BOOST_CONSTEXPR // NOLINT
+#  define POUTRE_CONSTEXPR constexpr // NOLINT
 
-#  define POUTRE_CONSTEXPR_OR_CONST BOOST_CONSTEXPR_OR_CONST // NOLINT
-
-#  define POUTRE_CXX14_CONSTEXPR BOOST_CXX14_CONSTEXPR // NOLINT
+#  define POUTRE_CONSTEXPR constexpr // NOLINT
 
 // POUTRE_STRONG_INLINE is a stronger version of inline directive mostly to enforce inlining for
 // MSVC compiler:using
@@ -160,14 +157,6 @@ namespace poutre
 #  else
 #    define POUTRE_ASSERTCHECK(CONDITION, MSG)
 #  endif
-
-  // tag to help dispatch
-  // struct tag_SIMD_disabled
-  //{
-  //};
-  // struct tag_SIMD_enabled
-  //{
-  //};
 
 } // namespace poutre
 #endif // DOXYGEN_SHOULD_SKIP_THIS

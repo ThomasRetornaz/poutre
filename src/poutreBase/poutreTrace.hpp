@@ -21,7 +21,6 @@
 #include <poutreBase/poutreBase.hpp>
 #include <poutreBase/poutreConfig.hpp>
 
-#include <boost/lexical_cast.hpp>
 #include <fstream>
 #include <ostream>
 #include <spdlog/sinks/stdout_color_sinks.h>
@@ -72,7 +71,7 @@ namespace poutre
       case LoggerLevel::err: (*m_innerlogger).set_level(spdlog::level::err); break;
       case LoggerLevel::trace: (*m_innerlogger).set_level(spdlog::level::trace); break;
       case LoggerLevel::warn: (*m_innerlogger).set_level(spdlog::level::warn); break;
-      default: POUTRE_RUNTIME_ERROR(poutre::format("Logger unsupported enum case {}", boost::lexical_cast<std::string>(l)));
+      default: POUTRE_RUNTIME_ERROR(poutre::format("Logger unsupported enum case {}", l));
       }
     }
     void call(const char *MSG, LoggerLevel l = LoggerLevel::debug)
@@ -85,7 +84,7 @@ namespace poutre
       case LoggerLevel::err: m_innerlogger->error(MSG); break;
       case LoggerLevel::trace: m_innerlogger->trace(MSG); break;
       case LoggerLevel::warn: m_innerlogger->warn(MSG); break;
-      default: POUTRE_RUNTIME_ERROR(poutre::format("Logger unsupported enum case {}", boost::lexical_cast<std::string>(l)));
+      default: POUTRE_RUNTIME_ERROR(poutre::format("Logger unsupported enum case {}", l));
       }
     }
 

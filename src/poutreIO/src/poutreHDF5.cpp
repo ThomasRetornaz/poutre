@@ -11,12 +11,11 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#include <boost/lexical_cast.hpp>
+#include <poutreBase/poutreTrace.hpp>
+#include <poutreIO/include/poutreHDF5.hpp>
+
 #include <iostream>
 #include <sstream>
-
-// #include <poutreBase/poutreTrace.hpp>
-#include <poutreIO/include/poutreHDF5.hpp>
 
 namespace poutre
 {
@@ -51,10 +50,7 @@ namespace poutre
         case PType::PType_GrayINT64: details::StoreWithHDF5_helper<pINT64, 1>(iimage, path, image_name); break;
         case PType::PType_F32: details::StoreWithHDF5_helper<pFLOAT, 1>(iimage, path, image_name); break;
         case PType::PType_D64: details::StoreWithHDF5_helper<pDOUBLE, 1>(iimage, path, image_name); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
-          break;
+        default: POUTRE_RUNTIME_ERROR((poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", ptype))); break;
         }
         break;
       case CompoundType::CompoundType_3Planes:
@@ -67,10 +63,7 @@ namespace poutre
         case PType::PType_GrayINT64: details::StoreWithHDF53Planes_helper<pINT64, 1>(iimage, path, image_name); break;
         case PType::PType_F32: details::StoreWithHDF53Planes_helper<pFLOAT, 1>(iimage, path, image_name); break;
         case PType::PType_D64: details::StoreWithHDF53Planes_helper<pDOUBLE, 1>(iimage, path, image_name); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
-          break;
+        default: POUTRE_RUNTIME_ERROR((poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", ptype))); break;
         }
         break;
       case CompoundType::CompoundType_4Planes:
@@ -83,14 +76,10 @@ namespace poutre
         case PType::PType_GrayINT64: details::StoreWithHDF54Planes_helper<pINT64, 1>(iimage, path, image_name); break;
         case PType::PType_F32: details::StoreWithHDF54Planes_helper<pFLOAT, 1>(iimage, path, image_name); break;
         case PType::PType_D64: details::StoreWithHDF54Planes_helper<pDOUBLE, 1>(iimage, path, image_name); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
+        default: POUTRE_RUNTIME_ERROR((poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", ptype)));
         }
         break;
-      default:
-        POUTRE_RUNTIME_ERROR(
-            (poutre::format("StoreWithHDF5: unsupported cTYpe {%s}", boost::lexical_cast<std::string>(ctype))));
+      default: POUTRE_RUNTIME_ERROR((poutre::format("StoreWithHDF5: unsupported cTYpe {%s}", ctype)));
       }
     } // case 1
     break;
@@ -108,10 +97,7 @@ namespace poutre
         case PType::PType_GrayINT64: details::StoreWithHDF5_helper<pINT64, 2>(iimage, path, image_name); break;
         case PType::PType_F32: details::StoreWithHDF5_helper<pFLOAT, 2>(iimage, path, image_name); break;
         case PType::PType_D64: details::StoreWithHDF5_helper<pDOUBLE, 2>(iimage, path, image_name); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
-          break;
+        default: POUTRE_RUNTIME_ERROR((poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", ptype))); break;
         }
         break;
       case CompoundType::CompoundType_3Planes:
@@ -124,10 +110,7 @@ namespace poutre
         case PType::PType_GrayINT64: details::StoreWithHDF53Planes_helper<pINT64, 2>(iimage, path, image_name); break;
         case PType::PType_F32: details::StoreWithHDF53Planes_helper<pFLOAT, 2>(iimage, path, image_name); break;
         case PType::PType_D64: details::StoreWithHDF53Planes_helper<pDOUBLE, 2>(iimage, path, image_name); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
-          break;
+        default: POUTRE_RUNTIME_ERROR((poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", ptype))); break;
         }
         break;
       case CompoundType::CompoundType_4Planes:
@@ -140,14 +123,10 @@ namespace poutre
         case PType::PType_GrayINT64: details::StoreWithHDF54Planes_helper<pINT64, 2>(iimage, path, image_name); break;
         case PType::PType_F32: details::StoreWithHDF54Planes_helper<pFLOAT, 2>(iimage, path, image_name); break;
         case PType::PType_D64: details::StoreWithHDF54Planes_helper<pDOUBLE, 2>(iimage, path, image_name); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
+        default: POUTRE_RUNTIME_ERROR((poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", ptype)));
         }
         break;
-      default:
-        POUTRE_RUNTIME_ERROR(
-            (poutre::format("StoreWithHDF5: unsupported cTYpe {%s}", boost::lexical_cast<std::string>(ctype))));
+      default: POUTRE_RUNTIME_ERROR((poutre::format("StoreWithHDF5: unsupported cTYpe {%s}", ctype)));
       }
       break;
     } // case 2!
@@ -165,10 +144,7 @@ namespace poutre
         case PType::PType_GrayINT64: details::StoreWithHDF5_helper<pINT64, 3>(iimage, path, image_name); break;
         case PType::PType_F32: details::StoreWithHDF5_helper<pFLOAT, 3>(iimage, path, image_name); break;
         case PType::PType_D64: details::StoreWithHDF5_helper<pDOUBLE, 3>(iimage, path, image_name); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
-          break;
+        default: POUTRE_RUNTIME_ERROR((poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", ptype))); break;
         }
         break;
       case CompoundType::CompoundType_3Planes:
@@ -181,10 +157,7 @@ namespace poutre
         case PType::PType_GrayINT64: details::StoreWithHDF53Planes_helper<pINT64, 3>(iimage, path, image_name); break;
         case PType::PType_F32: details::StoreWithHDF53Planes_helper<pFLOAT, 3>(iimage, path, image_name); break;
         case PType::PType_D64: details::StoreWithHDF53Planes_helper<pDOUBLE, 3>(iimage, path, image_name); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
-          break;
+        default: POUTRE_RUNTIME_ERROR((poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", ptype))); break;
         }
         break;
       case CompoundType::CompoundType_4Planes:
@@ -197,14 +170,10 @@ namespace poutre
         case PType::PType_GrayINT64: details::StoreWithHDF54Planes_helper<pINT64, 3>(iimage, path, image_name); break;
         case PType::PType_F32: details::StoreWithHDF54Planes_helper<pFLOAT, 3>(iimage, path, image_name); break;
         case PType::PType_D64: details::StoreWithHDF54Planes_helper<pDOUBLE, 3>(iimage, path, image_name); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
+        default: POUTRE_RUNTIME_ERROR((poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", ptype)));
         }
         break;
-      default:
-        POUTRE_RUNTIME_ERROR(
-            (poutre::format("StoreWithHDF5: unsupported cTYpe {%s}", boost::lexical_cast<std::string>(ctype))));
+      default: POUTRE_RUNTIME_ERROR((poutre::format("StoreWithHDF5: unsupported cTYpe {%s}", ctype)));
       }
       break;
     } // case 3!
@@ -222,10 +191,7 @@ namespace poutre
         case PType::PType_GrayINT64: details::StoreWithHDF5_helper<pINT64, 4>(iimage, path, image_name); break;
         case PType::PType_F32: details::StoreWithHDF5_helper<pFLOAT, 4>(iimage, path, image_name); break;
         case PType::PType_D64: details::StoreWithHDF5_helper<pDOUBLE, 4>(iimage, path, image_name); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
-          break;
+        default: POUTRE_RUNTIME_ERROR((poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", ptype))); break;
         }
         break;
       case CompoundType::CompoundType_3Planes:
@@ -238,10 +204,7 @@ namespace poutre
         case PType::PType_GrayINT64: details::StoreWithHDF53Planes_helper<pINT64, 4>(iimage, path, image_name); break;
         case PType::PType_F32: details::StoreWithHDF53Planes_helper<pFLOAT, 4>(iimage, path, image_name); break;
         case PType::PType_D64: details::StoreWithHDF53Planes_helper<pDOUBLE, 4>(iimage, path, image_name); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
-          break;
+        default: POUTRE_RUNTIME_ERROR((poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", ptype))); break;
         }
         break;
       case CompoundType::CompoundType_4Planes:
@@ -254,14 +217,10 @@ namespace poutre
         case PType::PType_GrayINT64: details::StoreWithHDF54Planes_helper<pINT64, 4>(iimage, path, image_name); break;
         case PType::PType_F32: details::StoreWithHDF54Planes_helper<pFLOAT, 4>(iimage, path, image_name); break;
         case PType::PType_D64: details::StoreWithHDF54Planes_helper<pDOUBLE, 4>(iimage, path, image_name); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
+        default: POUTRE_RUNTIME_ERROR((poutre::format("StoreWithHDF5: unsupported pTYpe {%s}", ptype)));
         }
         break;
-      default:
-        POUTRE_RUNTIME_ERROR(
-            (poutre::format("StoreWithHDF5: unsupported cTYpe {%s}", boost::lexical_cast<std::string>(ctype))));
+      default: POUTRE_RUNTIME_ERROR((poutre::format("StoreWithHDF5: unsupported cTYpe {%s}", ctype)));
       }
       break;
     } // case 4!
@@ -329,103 +288,6 @@ namespace poutre
       POUTRE_RUNTIME_ERROR((poutre::format("LoadFromHDF5: unsupported type {%s}", attrpType)));
     }
 
-    // Handle type
-    // H5T_class_t type_class = dataset.getTypeClass();
-    // if (type_class == H5T_INTEGER) //or use attribute ?
-    //{
-    //    H5::IntType intType = dataset.getIntType();
-    //    auto byteSize = intType.getSize();
-    //    auto signType = intType.getSign();
-    //    if ((byteSize == 1) && (signType == H5T_SGN_NONE))
-    //    {
-    //        resp = PType::PType_GrayUINT8;
-    //        resc = CompoundType::CompoundType_Scalar;
-    //    }
-    //    else if ((byteSize == 4) && (signType == H5T_SGN_2))
-    //    {
-    //        resp = PType::PType_GrayINT32;
-    //        resc = CompoundType::CompoundType_Scalar;
-    //    }
-    //    else if ((byteSize == 8) && (signType == H5T_SGN_2))
-    //    {
-    //        resp = PType::PType_GrayINT64;
-    //        resc = CompoundType::CompoundType_Scalar;
-    //    }
-    //    else
-    //    {
-    //        POUTRE_RUNTIME_ERROR(
-    //            (poutre::format("LoadFromHDF5: unsupported type %s") %
-    //            boost::lexical_cast<std::string>(type_class))
-    //                .str());
-    //    }
-    //}
-    // else if (type_class == H5T_FLOAT)
-    //{
-    //    H5::FloatType floaType = dataset.getFloatType();
-    //    auto byteSize = floaType.getSize();
-
-    //    if (byteSize == 4)
-    //    {
-    //        // use PredType::NATIVE_FLOAT to write
-    //        resp = PType::PType_F32;
-    //        resc = CompoundType::CompoundType_Scalar;
-    //    }
-    //    else if (byteSize == 8)
-    //    {
-    //        // use PredType::NATIVE_DOUBLE to write
-    //        resp = PType::PType_D64;
-    //        resc = CompoundType::CompoundType_Scalar;
-    //    }
-    //    else
-    //    {
-    //        POUTRE_RUNTIME_ERROR(
-    //            (poutre::format("LoadFromHDF5: unsupported type %s") %
-    //            boost::lexical_cast<std::string>(type_class))
-    //                .str());
-    //    }
-    //}
-    // else if (type_class == H5T_COMPOUND)
-    //{
-    //    H5std_string attrTypeCompound;
-    //    H5::Attribute resAttr = dataset.openAttribute("IMAGE_SUBCLASS");
-    //    H5::StrType stype = resAttr.getStrType();
-    //    resAttr.read(stype, attrTypeCompound);
-
-    //     H5std_string attrpType;
-    //    resAttr = dataset.openAttribute("IMAGE_P_TYPE");
-    //    stype = resAttr.getStrType();
-    //    resAttr.read(stype, attrpType);
-
-    //    if (attrTypeCompound == "Scalar")
-    //    {
-    //        POUTRE_RUNTIME_ERROR(
-    //            (poutre::format("LoadFromHDF5: unsupported type %s") %
-    //            boost::lexical_cast<std::string>(type_class))
-    //                .str());
-    //    }
-    //    else if (attrTypeCompound == "3Planes")
-    //    {
-    //        resc = CompoundType::CompoundType_3Planes;
-    //    }
-    //    else if (attrTypeCompound == "4Planes")
-    //    {
-    //        resc = CompoundType::CompoundType_4Planes;
-    //    }
-    //    else
-    //    {
-    //        POUTRE_RUNTIME_ERROR(
-    //            (poutre::format("LoadFromHDF5: unsupported type %s") %
-    //            boost::lexical_cast<std::string>(type_class))
-    //                .str());
-    //    }
-    //}
-    // else
-    //{
-    //    POUTRE_RUNTIME_ERROR(
-    //        (poutre::format("LoadFromHDF5: unsupported type
-    //        {%s}",boost::lexical_cast<std::string>(type_class))
-    //            .str());
-    //}
     std::vector<size_t> coords(dims_out.size());
     std::copy(dims_out.begin(), dims_out.end(), coords.begin());
     res = CreateDense(coords, ctype, ptype);
@@ -446,10 +308,7 @@ namespace poutre
         case PType::PType_GrayINT64: details::LoadFromHDF5_helper<pINT64, 1>(*res, dataset); break;
         case PType::PType_F32: details::LoadFromHDF5_helper<pFLOAT, 1>(*res, dataset); break;
         case PType::PType_D64: details::LoadFromHDF5_helper<pDOUBLE, 1>(*res, dataset); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
-          break;
+        default: POUTRE_RUNTIME_ERROR((poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", ptype))); break;
         }
         break;
       case CompoundType::CompoundType_3Planes:
@@ -462,10 +321,7 @@ namespace poutre
         case PType::PType_GrayINT64: details::LoadFromHDF53Planes_helper<pINT64, 1>(*res, dataset); break;
         case PType::PType_F32: details::LoadFromHDF53Planes_helper<pFLOAT, 1>(*res, dataset); break;
         case PType::PType_D64: details::LoadFromHDF53Planes_helper<pDOUBLE, 1>(*res, dataset); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
-          break;
+        default: POUTRE_RUNTIME_ERROR((poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", ptype))); break;
         }
         break;
       case CompoundType::CompoundType_4Planes:
@@ -478,14 +334,10 @@ namespace poutre
         case PType::PType_GrayINT64: details::LoadFromHDF54Planes_helper<pINT64, 1>(*res, dataset); break;
         case PType::PType_F32: details::LoadFromHDF54Planes_helper<pFLOAT, 1>(*res, dataset); break;
         case PType::PType_D64: details::LoadFromHDF54Planes_helper<pDOUBLE, 1>(*res, dataset); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
+        default: POUTRE_RUNTIME_ERROR((poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", ptype)));
         }
         break;
-      default:
-        POUTRE_RUNTIME_ERROR(
-            (poutre::format("LoadFromHDF5: unsupported cTYpe {%s}", boost::lexical_cast<std::string>(ctype))));
+      default: POUTRE_RUNTIME_ERROR((poutre::format("LoadFromHDF5: unsupported cTYpe {%s}", ctype)));
       }
     } // case 1
     break;
@@ -503,9 +355,7 @@ namespace poutre
         case PType::PType_GrayINT64: details::LoadFromHDF5_helper<pINT64, 2>(*res, dataset); break;
         case PType::PType_F32: details::LoadFromHDF5_helper<pFLOAT, 2>(*res, dataset); break;
         case PType::PType_D64: details::LoadFromHDF5_helper<pDOUBLE, 2>(*res, dataset); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
+        default: POUTRE_RUNTIME_ERROR((poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", ptype)));
         }
         break;
       case CompoundType::CompoundType_3Planes:
@@ -518,9 +368,7 @@ namespace poutre
         case PType::PType_GrayINT64: details::LoadFromHDF53Planes_helper<pINT64, 2>(*res, dataset); break;
         case PType::PType_F32: details::LoadFromHDF53Planes_helper<pFLOAT, 2>(*res, dataset); break;
         case PType::PType_D64: details::LoadFromHDF53Planes_helper<pDOUBLE, 2>(*res, dataset); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
+        default: POUTRE_RUNTIME_ERROR((poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", ptype)));
         }
         break;
       case CompoundType::CompoundType_4Planes:
@@ -533,15 +381,11 @@ namespace poutre
         case PType::PType_GrayINT64: details::LoadFromHDF54Planes_helper<pINT64, 2>(*res, dataset); break;
         case PType::PType_F32: details::LoadFromHDF54Planes_helper<pFLOAT, 2>(*res, dataset); break;
         case PType::PType_D64: details::LoadFromHDF54Planes_helper<pDOUBLE, 2>(*res, dataset); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
+        default: POUTRE_RUNTIME_ERROR((poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", ptype)));
         }
         break; // ptype
 
-      default:
-        POUTRE_RUNTIME_ERROR(
-            (poutre::format("LoadFromHDF5: unsupported cTYpe {%s}", boost::lexical_cast<std::string>(ctype))));
+      default: POUTRE_RUNTIME_ERROR((poutre::format("LoadFromHDF5: unsupported cTYpe {%s}", ctype)));
       }
       break;
     } // case 2!
@@ -559,9 +403,7 @@ namespace poutre
         case PType::PType_GrayINT64: details::LoadFromHDF5_helper<pINT64, 3>(*res, dataset); break;
         case PType::PType_F32: details::LoadFromHDF5_helper<pFLOAT, 3>(*res, dataset); break;
         case PType::PType_D64: details::LoadFromHDF5_helper<pDOUBLE, 3>(*res, dataset); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
+        default: POUTRE_RUNTIME_ERROR((poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", ptype)));
         }
         break;
       case CompoundType::CompoundType_3Planes:
@@ -574,9 +416,7 @@ namespace poutre
         case PType::PType_GrayINT64: details::LoadFromHDF53Planes_helper<pINT64, 3>(*res, dataset); break;
         case PType::PType_F32: details::LoadFromHDF53Planes_helper<pFLOAT, 3>(*res, dataset); break;
         case PType::PType_D64: details::LoadFromHDF53Planes_helper<pDOUBLE, 3>(*res, dataset); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
+        default: POUTRE_RUNTIME_ERROR((poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", ptype)));
         }
         break;
       case CompoundType::CompoundType_4Planes:
@@ -589,15 +429,11 @@ namespace poutre
         case PType::PType_GrayINT64: details::LoadFromHDF54Planes_helper<pINT64, 3>(*res, dataset); break;
         case PType::PType_F32: details::LoadFromHDF54Planes_helper<pFLOAT, 3>(*res, dataset); break;
         case PType::PType_D64: details::LoadFromHDF54Planes_helper<pDOUBLE, 3>(*res, dataset); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
+        default: POUTRE_RUNTIME_ERROR((poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", ptype)));
         }
         break; // ptype
 
-      default:
-        POUTRE_RUNTIME_ERROR(
-            (poutre::format("LoadFromHDF5: unsupported cTYpe {%s}", boost::lexical_cast<std::string>(ctype))));
+      default: POUTRE_RUNTIME_ERROR((poutre::format("LoadFromHDF5: unsupported cTYpe {%s}", ctype)));
       }
       break;
     } // case 3!
@@ -615,9 +451,7 @@ namespace poutre
         case PType::PType_GrayINT64: details::LoadFromHDF5_helper<pINT64, 4>(*res, dataset); break;
         case PType::PType_F32: details::LoadFromHDF5_helper<pFLOAT, 4>(*res, dataset); break;
         case PType::PType_D64: details::LoadFromHDF5_helper<pDOUBLE, 4>(*res, dataset); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
+        default: POUTRE_RUNTIME_ERROR((poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", ptype)));
         }
         break;
       case CompoundType::CompoundType_3Planes:
@@ -630,9 +464,7 @@ namespace poutre
         case PType::PType_GrayINT64: details::LoadFromHDF53Planes_helper<pINT64, 4>(*res, dataset); break;
         case PType::PType_F32: details::LoadFromHDF53Planes_helper<pFLOAT, 4>(*res, dataset); break;
         case PType::PType_D64: details::LoadFromHDF53Planes_helper<pDOUBLE, 4>(*res, dataset); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
+        default: POUTRE_RUNTIME_ERROR((poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", ptype)));
         }
         break;
       case CompoundType::CompoundType_4Planes:
@@ -645,15 +477,11 @@ namespace poutre
         case PType::PType_GrayINT64: details::LoadFromHDF54Planes_helper<pINT64, 4>(*res, dataset); break;
         case PType::PType_F32: details::LoadFromHDF54Planes_helper<pFLOAT, 4>(*res, dataset); break;
         case PType::PType_D64: details::LoadFromHDF54Planes_helper<pDOUBLE, 4>(*res, dataset); break;
-        default:
-          POUTRE_RUNTIME_ERROR(
-              (poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", boost::lexical_cast<std::string>(ptype))));
+        default: POUTRE_RUNTIME_ERROR((poutre::format("LoadFromHDF5: unsupported pTYpe {%s}", ptype)));
         }
         break; // ptype
 
-      default:
-        POUTRE_RUNTIME_ERROR(
-            (poutre::format("LoadFromHDF5: unsupported cTYpe {%s}", boost::lexical_cast<std::string>(ctype))));
+      default: POUTRE_RUNTIME_ERROR((poutre::format("LoadFromHDF5: unsupported cTYpe {%s}", ctype)));
       }
       break;
     } // case 4!

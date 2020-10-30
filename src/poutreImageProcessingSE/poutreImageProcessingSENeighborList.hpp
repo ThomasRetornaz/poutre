@@ -57,7 +57,7 @@ namespace poutre
       using view_t = array_view<const idx, 1>;
 
       private:
-      static POUTRE_CXX14_CONSTEXPR const std::array<idx, 2> m_neighboursList =
+      static POUTRE_CONSTEXPR const std::array<idx, 2> m_neighboursList =
           // clang-format off
         {{
             idx1d{-1},          idx1d{+1},
@@ -93,7 +93,7 @@ namespace poutre
       using view_t = array_view<const idx2d, 1>;
 
       private:
-      static POUTRE_CXX14_CONSTEXPR const std::array<idx2d, 2> m_neighboursList =
+      static POUTRE_CONSTEXPR const std::array<idx2d, 2> m_neighboursList =
           // clang-format off
         {{
             idx2d{-1,+0},          idx2d{+1,+0},
@@ -125,7 +125,7 @@ namespace poutre
       using view_t = array_view<const idx2d, 1>;
 
       private:
-      static POUTRE_CXX14_CONSTEXPR const std::array<idx2d, 2> m_neighboursList =
+      static POUTRE_CONSTEXPR const std::array<idx2d, 2> m_neighboursList =
           // clang-format off
         {{
             idx2d{+0,-1},
@@ -158,7 +158,7 @@ namespace poutre
       using view_t = array_view<const idx2d, 1>;
 
       private:
-      static POUTRE_CXX14_CONSTEXPR const std::array<idx2d, 2> m_neighboursList =
+      static POUTRE_CONSTEXPR const std::array<idx2d, 2> m_neighboursList =
           // clang-format off
         {{
                         idx2d{+1,-1},
@@ -192,7 +192,7 @@ namespace poutre
       using view_t = array_view<const idx2d, 1>;
 
       private:
-      static POUTRE_CXX14_CONSTEXPR const std::array<idx2d, 2> m_neighboursList =
+      static POUTRE_CONSTEXPR const std::array<idx2d, 2> m_neighboursList =
           // clang-format off
       {{
             idx2d{-1,-1},
@@ -226,7 +226,7 @@ namespace poutre
       using view_t = array_view<const idx2d, 1>;
 
       private:
-      static POUTRE_CXX14_CONSTEXPR const std::array<idx2d, 4> m_neighboursList =
+      static POUTRE_CONSTEXPR const std::array<idx2d, 4> m_neighboursList =
           // clang-format off
       {{
                  {+0, -1},
@@ -259,7 +259,7 @@ namespace poutre
       using view_t = array_view<const idx2d, 1>;
 
       private:
-      static POUTRE_CXX14_CONSTEXPR const std::array<idx2d, 8> m_neighboursList =
+      static POUTRE_CONSTEXPR const std::array<idx2d, 8> m_neighboursList =
           // clang-format off
       {{
         {-1, -1}, {+0, -1}, {+1, -1},
@@ -300,7 +300,7 @@ namespace poutre
       using view_t = array_view<const idx3d, 1>;
 
       private:
-      static POUTRE_CXX14_CONSTEXPR const std::array<idx3d, 6> m_neighboursList =
+      static POUTRE_CONSTEXPR const std::array<idx3d, 6> m_neighboursList =
           // clang-format off
       {{
           {+0, +0, -1}, {+0, -1, +0}, {-1, +0, +0},          {+1, +0, +0}, {+0, +1, +0}, {+0, +0, +1}
@@ -331,7 +331,7 @@ namespace poutre
       using view_t = array_view<const idx3d, 1>;
 
       private:
-      static POUTRE_CXX14_CONSTEXPR const std::array<idx3d, 26> m_neighboursList =
+      static POUTRE_CONSTEXPR const std::array<idx3d, 26> m_neighboursList =
           // clang-format off
       {{
         {-1, -1, -1}, {+0, -1, -1}, {+1, -1, -1},

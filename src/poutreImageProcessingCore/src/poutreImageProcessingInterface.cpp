@@ -13,7 +13,6 @@
 
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 
-#include <boost/lexical_cast.hpp>
 #include <string>
 
 namespace poutre
@@ -80,8 +79,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<pDOUBLE, numDims>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(
-          ("CreateDenseDispatchPTypeScalar:: Unsupported scalar type:" + boost::lexical_cast<std::string>(ptype)));
+      POUTRE_RUNTIME_ERROR(poutre::format("CreateDenseDispatchPTypeScalar:: Unsupported scalar type:{}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -100,8 +98,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<compound<pDOUBLE, 3>, numDims>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(
-          ("CreateDenseDispatchPType3PLanes:: Unsupported compound type 3 with " + boost::lexical_cast<std::string>(ptype)));
+      POUTRE_RUNTIME_ERROR(("CreateDenseDispatchPType3PLanes:: Unsupported compound type 3 with {}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -120,8 +117,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<compound<pDOUBLE, 4>, numDims>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(
-          ("CreateDenseDispatchPType3PLanes:: Unsupported compound type 3 with " + boost::lexical_cast<std::string>(ptype)));
+      POUTRE_RUNTIME_ERROR(("CreateDenseDispatchPType3PLanes:: Unsupported compound type 3 with {}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -149,7 +145,7 @@ namespace poutre
     break;
     default:
     {
-      POUTRE_RUNTIME_ERROR(("Unsupported compound type:" + boost::lexical_cast<std::string>(ctype)));
+      POUTRE_RUNTIME_ERROR(("Unsupported compound type:{}", ctype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -169,8 +165,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<pDOUBLE, 1>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(
-          ("CreateImage1DDispatchPTypeScalar:: Unsupported scalar type:" + boost::lexical_cast<std::string>(ptype)));
+      POUTRE_RUNTIME_ERROR(("CreateImage1DDispatchPTypeScalar:: Unsupported scalar type:{}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -196,7 +191,7 @@ namespace poutre
     //   }break;
     default:
     {
-      POUTRE_RUNTIME_ERROR(("Unsupported compound type:" + boost::lexical_cast<std::string>(ctype)));
+      POUTRE_RUNTIME_ERROR(("Unsupported compound type:{}", ctype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -216,8 +211,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<pDOUBLE, 2>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(
-          ("CreateImage2DDispatchPTypeScalar:: Unsupported scalar type:" + boost::lexical_cast<std::string>(ptype)));
+      POUTRE_RUNTIME_ERROR(("CreateImage2DDispatchPTypeScalar:: Unsupported scalar type:{}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -236,8 +230,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<compound<pDOUBLE, 3>, 2>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(
-          ("CreateImage2DDispatchPType3PLanes:: Unsupported scalar type:" + boost::lexical_cast<std::string>(ptype)));
+      POUTRE_RUNTIME_ERROR(("CreateImage2DDispatchPType3PLanes:: Unsupported scalar type:{}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -256,8 +249,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<compound<pDOUBLE, 4>, 2>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(
-          ("CreateImage2DDispatchPType4PLanes:: Unsupported scalar type:" + boost::lexical_cast<std::string>(ptype)));
+      POUTRE_RUNTIME_ERROR(("CreateImage2DDispatchPType4PLanes:: Unsupported scalar type:{}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -285,7 +277,7 @@ namespace poutre
     break;
     default:
     {
-      POUTRE_RUNTIME_ERROR(("Unsupported compound type:" + boost::lexical_cast<std::string>(ctype)));
+      POUTRE_RUNTIME_ERROR(("Unsupported compound type:{}", ctype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -305,8 +297,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<pDOUBLE, 3>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(
-          ("CreateImage3DDispatchPTypeScalar:: Unsupported scalar type:" + boost::lexical_cast<std::string>(ptype)));
+      POUTRE_RUNTIME_ERROR(("CreateImage3DDispatchPTypeScalar:: Unsupported scalar type:{}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -325,8 +316,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<compound<pDOUBLE, 3>>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(
-          ("CreateImage3DDispatchPType3PLanes:: Unsupported scalar type:" + boost::lexical_cast<std::string>(ptype)));
+      POUTRE_RUNTIME_ERROR(("CreateImage3DDispatchPType3PLanes:: Unsupported scalar type:{}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -345,8 +335,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<compound<pDOUBLE, 4>>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(
-          ("CreateImage3DDispatchPType4PLanes:: Unsupported scalar type:" + boost::lexical_cast<std::string>(ptype)));
+      POUTRE_RUNTIME_ERROR(("CreateImage3DDispatchPType4PLanes:: Unsupported scalar type:{}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -374,7 +363,7 @@ namespace poutre
     break;
     default:
     {
-      POUTRE_RUNTIME_ERROR(("Unsupported compound type:" + boost::lexical_cast<std::string>(ctype)));
+      POUTRE_RUNTIME_ERROR(("Unsupported compound type:{}", ctype));
       return std::unique_ptr<IInterface>();
     }
     }

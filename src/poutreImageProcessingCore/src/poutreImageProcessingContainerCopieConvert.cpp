@@ -13,8 +13,6 @@
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainerCopieConvert.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterfaceCopieConvert.hpp>
 
-#include <boost/lexical_cast.hpp>
-
 namespace poutre
 {
   std::unique_ptr<IInterface> Clone(const IInterface &i_img1)
@@ -34,7 +32,7 @@ namespace poutre
       return CreateDense(i_img1.GetCoords(), i_img1.GetCType(), i_img1.GetPType());
     }
     break;
-    default: POUTRE_RUNTIME_ERROR(("CloneGeometry:: unsupported img type" + boost::lexical_cast<std::string>(imgType)));
+    default: POUTRE_RUNTIME_ERROR(poutre::format("CloneGeometry:: unsupported img type {}", imgType));
     }
   }
 
@@ -50,7 +48,7 @@ namespace poutre
       return CreateDense(i_img1.GetCoords(), ctype, ptype);
     }
     break;
-    default: POUTRE_RUNTIME_ERROR(("ConvertGeometry:: unsupported img type" + boost::lexical_cast<std::string>(imgType)));
+    default: POUTRE_RUNTIME_ERROR(("ConvertGeometry:: unsupported img type{}", imgType));
     }
   }
 

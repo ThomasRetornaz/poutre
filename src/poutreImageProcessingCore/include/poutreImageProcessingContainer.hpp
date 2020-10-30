@@ -91,8 +91,8 @@ namespace poutre
     using self_type = DenseTensor<valuetype, NumDims, allocator_type_t>;
 
     protected:
-    POUTRE_CXX14_CONSTEXPR DenseTensor() : m_data(nullptr), m_coordinnates(), m_strides(), m_allocator(), m_numelement(0) {}
-    POUTRE_CXX14_CONSTEXPR DenseTensor(const std::vector<size_t> &dims)
+    POUTRE_CONSTEXPR DenseTensor() : m_data(nullptr), m_coordinnates(), m_strides(), m_allocator(), m_numelement(0) {}
+    POUTRE_CONSTEXPR DenseTensor(const std::vector<size_t> &dims)
         : m_data(nullptr)
         , m_coordinnates()
         , m_strides()
@@ -125,7 +125,7 @@ namespace poutre
       }
     }
 
-    POUTRE_CXX14_CONSTEXPR DenseTensor(const std::initializer_list<size_t> &dims)
+    POUTRE_CONSTEXPR DenseTensor(const std::initializer_list<size_t> &dims)
         : m_data(nullptr)
         , m_coordinnates()
         , m_strides()
@@ -165,75 +165,75 @@ namespace poutre
         m_allocator.deallocate(m_data, m_numelement);
     }
 
-    POUTRE_CXX14_CONSTEXPR const coordinate_type bound() const POUTRE_NOEXCEPT { return m_coordinnates; }
-    POUTRE_CXX14_CONSTEXPR const coordinate_type shape() const POUTRE_NOEXCEPT { return m_coordinnates; }
-    POUTRE_CXX14_CONSTEXPR const index_type      stride() const POUTRE_NOEXCEPT { return m_strides; }
-    POUTRE_CXX14_CONSTEXPR std::size_t GetNumDims() const POUTRE_NOEXCEPT { return m_numdims; }
+    POUTRE_CONSTEXPR const coordinate_type bound() const POUTRE_NOEXCEPT { return m_coordinnates; }
+    POUTRE_CONSTEXPR const coordinate_type shape() const POUTRE_NOEXCEPT { return m_coordinnates; }
+    POUTRE_CONSTEXPR const index_type      stride() const POUTRE_NOEXCEPT { return m_strides; }
+    POUTRE_CONSTEXPR std::size_t GetNumDims() const POUTRE_NOEXCEPT { return m_numdims; }
     // std::array like interface
 
     // Capacity
-    POUTRE_CXX14_CONSTEXPR const size_type size() const POUTRE_NOEXCEPT { return m_numelement; }
+    POUTRE_CONSTEXPR const size_type size() const POUTRE_NOEXCEPT { return m_numelement; }
 
-    POUTRE_CXX14_CONSTEXPR const size_type max_size() const POUTRE_NOEXCEPT { return this->size(); }
+    POUTRE_CONSTEXPR const size_type max_size() const POUTRE_NOEXCEPT { return this->size(); }
 
-    POUTRE_CXX14_CONSTEXPR const bool empty() const POUTRE_NOEXCEPT { return this->size() == 0; }
+    POUTRE_CONSTEXPR const bool empty() const POUTRE_NOEXCEPT { return this->size() == 0; }
 
     // Element access
 
-    POUTRE_CXX14_CONSTEXPR reference operator[](size_type n) POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR reference operator[](size_type n) POUTRE_NOEXCEPT
     {
       POUTRE_ASSERTCHECK(n < m_numelement, "Access out of bound");
       POUTRE_ASSERTCHECK(n >= 0, "Access out of bound");
       return m_data[n];
     }
 
-    POUTRE_CXX14_CONSTEXPR const_reference operator[](size_type n) const POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR const_reference operator[](size_type n) const POUTRE_NOEXCEPT
     {
       POUTRE_ASSERTCHECK(n < m_numelement, "Access out of bound");
       // POUTRE_ASSERTCHECK(n >= 0, "Access out of bound");
       return m_data[n];
     }
 
-    POUTRE_CXX14_CONSTEXPR reference at(size_type n)
+    POUTRE_CONSTEXPR reference at(size_type n)
     {
       if( n >= m_numelement )
         POUTRE_RUNTIME_ERROR("Access out of bound");
       return m_data[n];
     }
 
-    POUTRE_CXX14_CONSTEXPR const_reference at(size_type n) const
+    POUTRE_CONSTEXPR const_reference at(size_type n) const
     {
       if( n >= m_numelement )
         POUTRE_RUNTIME_ERROR("Access out of bound");
       return m_data[n];
     }
 
-    POUTRE_CXX14_CONSTEXPR reference front() POUTRE_NOEXCEPT { return m_data[0]; }
+    POUTRE_CONSTEXPR reference front() POUTRE_NOEXCEPT { return m_data[0]; }
 
-    POUTRE_CXX14_CONSTEXPR const_reference front() const POUTRE_NOEXCEPT { return m_data[0]; }
+    POUTRE_CONSTEXPR const_reference front() const POUTRE_NOEXCEPT { return m_data[0]; }
 
-    POUTRE_CXX14_CONSTEXPR reference back() POUTRE_NOEXCEPT { return m_data[m_numelement - 1]; }
+    POUTRE_CONSTEXPR reference back() POUTRE_NOEXCEPT { return m_data[m_numelement - 1]; }
 
-    POUTRE_CXX14_CONSTEXPR const_reference back() const POUTRE_NOEXCEPT { return m_data[m_numelement - 1]; }
+    POUTRE_CONSTEXPR const_reference back() const POUTRE_NOEXCEPT { return m_data[m_numelement - 1]; }
 
-    POUTRE_CXX14_CONSTEXPR pointer data() POUTRE_NOEXCEPT { return m_data; }
+    POUTRE_CONSTEXPR pointer data() POUTRE_NOEXCEPT { return m_data; }
 
-    POUTRE_CXX14_CONSTEXPR const_pointer data() const POUTRE_NOEXCEPT { return m_data; }
+    POUTRE_CONSTEXPR const_pointer data() const POUTRE_NOEXCEPT { return m_data; }
 
     // Modifiers
 
-    POUTRE_CXX14_CONSTEXPR void assign(const value_type &val) { this->fill(val); }
+    POUTRE_CONSTEXPR void assign(const value_type &val) { this->fill(val); }
 
-    POUTRE_CXX14_CONSTEXPR void fill(const value_type &val)
+    POUTRE_CONSTEXPR void fill(const value_type &val)
     {
       // assign value to all elements
       std::fill(this->begin(), this->end(), val);
     }
 
-    POUTRE_CXX14_CONSTEXPR void swap(self_type &rhs) // POUTRE_NOEXCEPT(POUTRE_NOEXCEPT
-                                                     // (swap(declval<value_type&>( ),
-                                                     // declval<value_type&>( )))) //wait MSVC2013
-                                                     // noexcept impl ...
+    POUTRE_CONSTEXPR void swap(self_type &rhs) // POUTRE_NOEXCEPT(POUTRE_NOEXCEPT
+                                               // (swap(declval<value_type&>( ),
+                                               // declval<value_type&>( )))) //wait MSVC2013
+                                               // noexcept impl ...
     {
       if( this != &rhs )
       {
@@ -270,7 +270,7 @@ namespace poutre
     protected:
     // protected copyctor used through clone
 
-    POUTRE_CXX14_CONSTEXPR DenseTensor(const self_type &rhs)
+    POUTRE_CONSTEXPR DenseTensor(const self_type &rhs)
         : m_data(nullptr)
         , m_numelement(rhs.m_numelement)
         , m_coordinnates(rhs.m_coordinnates)
@@ -287,7 +287,7 @@ namespace poutre
 
     // move constructor
 
-    POUTRE_CXX14_CONSTEXPR DenseTensor(self_type &&rhs) noexcept
+    POUTRE_CONSTEXPR DenseTensor(self_type &&rhs) noexcept
         : m_data(nullptr)
         , m_numelement(0)
         , m_coordinnates()
@@ -307,7 +307,7 @@ namespace poutre
 
     // move assignment operator
 
-    POUTRE_CXX14_CONSTEXPR self_type &operator=(self_type &&rhs) noexcept
+    POUTRE_CONSTEXPR self_type &operator=(self_type &&rhs) noexcept
     {
       if( this != &rhs ) // ??
                          // http://scottmeyers.blogspot.fr/2014/06/the-drawbacks-of-implementing-move.html
@@ -372,7 +372,7 @@ namespace poutre
     using parent_template::m_coordinnates;
 
     public:
-    POUTRE_CXX14_CONSTEXPR DenseImage(const std::vector<size_t> &dims) : parent_template()
+    POUTRE_CONSTEXPR DenseImage(const std::vector<size_t> &dims) : parent_template()
     {
       if( dims.size() != parent_template::m_numdims )
         POUTRE_RUNTIME_ERROR("Invalid input initializer regarding NumDims of "
@@ -400,7 +400,7 @@ namespace poutre
       }
     }
 
-    POUTRE_CXX14_CONSTEXPR DenseImage(const std::initializer_list<size_t> &dims) : parent_template()
+    POUTRE_CONSTEXPR DenseImage(const std::initializer_list<size_t> &dims) : parent_template()
     {
       if( dims.size() != parent_template::m_numdims )
         POUTRE_RUNTIME_ERROR("Invalid input initializer regarding NumDims of "
@@ -472,17 +472,17 @@ namespace poutre
       return out.str();
     }
 
-    POUTRE_CXX14_CONSTEXPR const coordinate_type bound() const POUTRE_NOEXCEPT { return this->m_coordinnates; }
-    POUTRE_CXX14_CONSTEXPR const coordinate_type shape() const POUTRE_NOEXCEPT { return this->bound(); }
-    POUTRE_CXX14_CONSTEXPR const index_type      stride() const POUTRE_NOEXCEPT { return this->m_strides; }
+    POUTRE_CONSTEXPR const coordinate_type bound() const POUTRE_NOEXCEPT { return this->m_coordinnates; }
+    POUTRE_CONSTEXPR const coordinate_type shape() const POUTRE_NOEXCEPT { return this->bound(); }
+    POUTRE_CONSTEXPR const index_type      stride() const POUTRE_NOEXCEPT { return this->m_strides; }
 
     template<ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
-    POUTRE_CXX14_CONSTEXPR scoord GetYSize() const POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR scoord GetYSize() const POUTRE_NOEXCEPT
     {
       return this->m_coordinnates[0];
     }
     template<ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
-    POUTRE_CXX14_CONSTEXPR scoord GetXSize() const POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR scoord GetXSize() const POUTRE_NOEXCEPT
     {
       return this->m_coordinnates[1];
     }
@@ -501,7 +501,7 @@ namespace poutre
     using parent_template::front;
 
     template<ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
-    POUTRE_CXX14_CONSTEXPR void SetPixel(scoord x, scoord y, value_type value) POUTRE_NOEXCEPTONLYNDEBUG
+    POUTRE_CONSTEXPR void SetPixel(scoord x, scoord y, value_type value) POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ASSERTCHECK(x < this->m_coordinnates[1], "Access out of bound");
       POUTRE_ASSERTCHECK(x >= 0, "Access out of bound");
@@ -511,19 +511,19 @@ namespace poutre
     }
 
     template<ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
-    POUTRE_CXX14_CONSTEXPR void SetPixel(idx2d index, value_type value) POUTRE_NOEXCEPTONLYNDEBUG
+    POUTRE_CONSTEXPR void SetPixel(idx2d index, value_type value) POUTRE_NOEXCEPTONLYNDEBUG
     {
       this->SetPixel(index[1], index[0], value);
     }
 
     template<ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
-    POUTRE_CXX14_CONSTEXPR void SetPixel(pt2D_scoord pt2D, value_type value) POUTRE_NOEXCEPTONLYNDEBUG
+    POUTRE_CONSTEXPR void SetPixel(pt2D_scoord pt2D, value_type value) POUTRE_NOEXCEPTONLYNDEBUG
     {
       this->SetPixel(pt2D.get<0>(), pt2D.get<1>(), value);
     }
 
     template<ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
-    POUTRE_CXX14_CONSTEXPR value_type GetPixel(scoord x, scoord y) const POUTRE_NOEXCEPTONLYNDEBUG
+    POUTRE_CONSTEXPR value_type GetPixel(scoord x, scoord y) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ASSERTCHECK(x < this->m_coordinnates[1], "Access out of bound");
       POUTRE_ASSERTCHECK(x >= 0, "Access out of bound");
@@ -533,19 +533,19 @@ namespace poutre
     }
 
     template<ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
-    POUTRE_CXX14_CONSTEXPR value_type GetPixel(idx2d index) const POUTRE_NOEXCEPTONLYNDEBUG
+    POUTRE_CONSTEXPR value_type GetPixel(idx2d index) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       return this->GetPixel(index[1], index[0]);
     }
 
     template<ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
-    POUTRE_CXX14_CONSTEXPR value_type GetPixel(pt2D_scoord pt2D) const POUTRE_NOEXCEPTONLYNDEBUG
+    POUTRE_CONSTEXPR value_type GetPixel(pt2D_scoord pt2D) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       return this->GetPixel(pt2D.get<0>(), pt2D.get<1>());
     }
 
     template<ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
-    POUTRE_CXX14_CONSTEXPR pointer GetLineBuffer(scoord y) POUTRE_NOEXCEPTONLYNDEBUG
+    POUTRE_CONSTEXPR pointer GetLineBuffer(scoord y) POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ASSERTCHECK(y < this->m_coordinnates[0], "Access out of bound");
       POUTRE_ASSERTCHECK(y >= 0, "Access out of bound");
@@ -553,7 +553,7 @@ namespace poutre
     }
 
     template<ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
-    POUTRE_CXX14_CONSTEXPR const_pointer GetLineBuffer(scoord y) const POUTRE_NOEXCEPTONLYNDEBUG
+    POUTRE_CONSTEXPR const_pointer GetLineBuffer(scoord y) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ASSERTCHECK(y < this->m_coordinnates[0], "Access out of bound");
       POUTRE_ASSERTCHECK(y >= 0, "Access out of bound");
@@ -563,10 +563,10 @@ namespace poutre
     using parent_template::assign;
     using parent_template::fill;
 
-    POUTRE_CXX14_CONSTEXPR void swap(self_type &rhs) // POUTRE_NOEXCEPT(POUTRE_NOEXCEPT
-                                                     // (swap(declval<value_type&>( ),
-                                                     // declval<value_type&>( )))) //wait MSVC2013
-                                                     // noexcept impl ...
+    POUTRE_CONSTEXPR void swap(self_type &rhs) // POUTRE_NOEXCEPT(POUTRE_NOEXCEPT
+                                               // (swap(declval<value_type&>( ),
+                                               // declval<value_type&>( )))) //wait MSVC2013
+                                               // noexcept impl ...
     {
       if( this != &rhs )
       {
@@ -658,28 +658,28 @@ namespace poutre
 
   // Linear view, linearize container
   template<class valuetype, std::ptrdiff_t Rank>
-  /*POUTRE_CXX14_CONSTEXPR*/ array_view<valuetype, 1> lview(DenseImage<valuetype, Rank> &iImg)
+  /*POUTRE_CONSTEXPR*/ array_view<valuetype, 1> lview(DenseImage<valuetype, Rank> &iImg)
   {
     return poutre::array_view<valuetype, 1>(iImg.data(), bd1d {(ptrdiff_t)iImg.size()});
   }
 
   // FIXME convertion loose qualifiers
   template<class valuetype, std::ptrdiff_t Rank>
-  /*POUTRE_CXX14_CONSTEXPR*/ poutre::array_view<valuetype, 1> lview(const DenseImage<valuetype, Rank> &iImg)
+  /*POUTRE_CONSTEXPR*/ poutre::array_view<valuetype, 1> lview(const DenseImage<valuetype, Rank> &iImg)
   { //-V659
     return view(const_cast<DenseImage<valuetype, Rank> &>(iImg));
   }
 
   // Default view
   template<class valuetype, std::ptrdiff_t Rank>
-  /*POUTRE_CXX14_CONSTEXPR*/ poutre::array_view<valuetype, Rank> view(DenseImage<valuetype, Rank> &iImg)
+  /*POUTRE_CONSTEXPR*/ poutre::array_view<valuetype, Rank> view(DenseImage<valuetype, Rank> &iImg)
   {
     return poutre::array_view<valuetype, Rank>(iImg.data(), iImg.shape());
   }
 
   // FIXME convertion loose qualifiers
   template<class valuetype, std::ptrdiff_t Rank>
-  /*POUTRE_CXX14_CONSTEXPR*/ poutre::array_view<valuetype, Rank> view(const DenseImage<valuetype, Rank> &iImg)
+  /*POUTRE_CONSTEXPR*/ poutre::array_view<valuetype, Rank> view(const DenseImage<valuetype, Rank> &iImg)
   {
     return view(const_cast<DenseImage<valuetype, Rank> &>(iImg));
   }

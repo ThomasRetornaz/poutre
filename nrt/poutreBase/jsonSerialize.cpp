@@ -17,7 +17,6 @@
 #include <iostream>
 #include <json/json.h>
 #include <poutreBase/poutreJsonSerialization.hpp>
-#include <boost/algorithm/string/trim_all.hpp>
 
 class TestClassA : public poutre::InterfaceJsonSerializable
 {
@@ -88,14 +87,7 @@ TEST(json, serializer)
 \"m_nTestInt\" : 42\n\
 }\n";
 
-    boost::algorithm::trim_all(output);
-    boost::algorithm::trim_all(expected);
-    //output.erase(output.begin(), std::find_if(output.begin(), output.end(), std::bind(std::not_equal_to<char>(), ' ')));
-    //expected.erase(expected.begin(),
-    //               std::find_if(expected.begin(), expected.end(), std::bind(&std::not_equal_to<char>(), ' ')));
+    output.erase(remove_if(output.begin(), output.end(), isspace), output.end());
+    expected.erase(remove_if(expected.begin(), expected.end(), isspace), expected.end());
     EXPECT_STREQ(expected.c_str(), output.c_str());
-
-    /*std::cout << "testClass Serialized expected\n" << expected<< "\n\n\n";
-
-    std::cout << "testClass Serialized Output\n" << output << "\n\n\n";*/
 }

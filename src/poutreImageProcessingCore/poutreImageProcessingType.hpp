@@ -854,15 +854,15 @@ namespace poutre
     ~pixel_t()                                       = default;
 
     // read only
-    POUTRE_CXX14_CONSTEXPR const point_t &point() const POUTRE_NOEXCEPT { return m_point; }
-    // POUTRE_CXX14_CONSTEXPR const point_t &point() const POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR const point_t &point() const POUTRE_NOEXCEPT { return m_point; }
+    // POUTRE_CONSTEXPR const point_t &point() const POUTRE_NOEXCEPT
     //{
     //    return m_point;
     //}
     // read only
-    POUTRE_CXX14_CONSTEXPR const value_type &value() const POUTRE_NOEXCEPT { return m_value; }
+    POUTRE_CONSTEXPR const value_type &value() const POUTRE_NOEXCEPT { return m_value; }
     // write allowed
-    POUTRE_CXX14_CONSTEXPR value_type &value() POUTRE_NOEXCEPT { return m_value; }
+    POUTRE_CONSTEXPR value_type &value() POUTRE_NOEXCEPT { return m_value; }
   };
 
   // pixel 1D

@@ -62,76 +62,76 @@ namespace poutre
 
     ~pdense_iterator() {}
 
-    POUTRE_CXX14_CONSTEXPR operator bool() const
+    POUTRE_CONSTEXPR operator bool() const
     {
       if( (m_ptr) && (m_ptrorig) )
         return true;
       return false;
     }
 
-    POUTRE_CXX14_CONSTEXPR bool operator==(const self_type &rhs) const
+    POUTRE_CONSTEXPR bool operator==(const self_type &rhs) const
     {
       return (m_ptr == rhs.getConstPtr() && m_ptrorig == rhs.getConstOrigPtr());
     }
-    POUTRE_CXX14_CONSTEXPR bool operator!=(const self_type &rhs) const
+    POUTRE_CONSTEXPR bool operator!=(const self_type &rhs) const
     {
       return (m_ptr != rhs.getConstPtr() || m_ptrorig != rhs.getConstOrigPtr());
     }
 
-    POUTRE_CXX14_CONSTEXPR pdense_iterator<DataType> &operator+=(const std::ptrdiff_t &movement)
+    POUTRE_CONSTEXPR pdense_iterator<DataType> &operator+=(const std::ptrdiff_t &movement)
     {
       m_ptr += movement;
       return (*this);
     }
-    POUTRE_CXX14_CONSTEXPR pdense_iterator<DataType> &operator-=(const std::ptrdiff_t &movement)
+    POUTRE_CONSTEXPR pdense_iterator<DataType> &operator-=(const std::ptrdiff_t &movement)
     {
       m_ptr -= movement;
       return (*this);
     }
-    POUTRE_CXX14_CONSTEXPR pdense_iterator<DataType> &operator++()
+    POUTRE_CONSTEXPR pdense_iterator<DataType> &operator++()
     {
       ++m_ptr;
       return (*this);
     }
-    POUTRE_CXX14_CONSTEXPR pdense_iterator<DataType> &operator--()
+    POUTRE_CONSTEXPR pdense_iterator<DataType> &operator--()
     {
       --m_ptr;
       return (*this);
     }
 
-    POUTRE_CXX14_CONSTEXPR pdense_iterator<DataType> operator++(int)
+    POUTRE_CONSTEXPR pdense_iterator<DataType> operator++(int)
     {
       auto temp(*this);
       ++m_ptr;
       return temp;
     }
-    POUTRE_CXX14_CONSTEXPR pdense_iterator<DataType> operator--(int)
+    POUTRE_CONSTEXPR pdense_iterator<DataType> operator--(int)
     {
       auto temp(*this);
       --m_ptr;
       return temp;
     }
 
-    POUTRE_CXX14_CONSTEXPR ptrdiff_t operator-(const self_type &rawIterator)
+    POUTRE_CONSTEXPR ptrdiff_t operator-(const self_type &rawIterator)
     {
       return std::distance(rawIterator.getPtr(), this->getPtr());
     }
 
-    POUTRE_CXX14_CONSTEXPR reference operator*() { return *m_ptr; }
+    POUTRE_CONSTEXPR reference operator*() { return *m_ptr; }
 
-    POUTRE_CXX14_CONSTEXPR const_reference operator*() const { return *m_ptr; }
+    POUTRE_CONSTEXPR const_reference operator*() const { return *m_ptr; }
 
-    POUTRE_CXX14_CONSTEXPR pointer operator->() { return m_ptr; }
+    POUTRE_CONSTEXPR pointer operator->() { return m_ptr; }
 
-    POUTRE_CXX14_CONSTEXPR pointer getPtr() const { return m_ptr; }
+    POUTRE_CONSTEXPR pointer getPtr() const { return m_ptr; }
 
-    POUTRE_CXX14_CONSTEXPR pointer       getOrigPtr() const { return m_ptrorig; }
-    POUTRE_CXX14_CONSTEXPR void          setPtr(DataType *ptr) { m_ptr = ptr; }
-    POUTRE_CXX14_CONSTEXPR void          setOrigPtr(DataType *ptr) { m_ptrorig = ptr; }
-    POUTRE_CXX14_CONSTEXPR const_pointer getConstPtr() const { return m_ptr; }
-    POUTRE_CXX14_CONSTEXPR const_pointer getConstOrigPtr() const { return m_ptrorig; }
+    POUTRE_CONSTEXPR pointer       getOrigPtr() const { return m_ptrorig; }
+    POUTRE_CONSTEXPR void          setPtr(DataType *ptr) { m_ptr = ptr; }
+    POUTRE_CONSTEXPR void          setOrigPtr(DataType *ptr) { m_ptrorig = ptr; }
+    POUTRE_CONSTEXPR const_pointer getConstPtr() const { return m_ptr; }
+    POUTRE_CONSTEXPR const_pointer getConstOrigPtr() const { return m_ptrorig; }
 
-    POUTRE_CXX14_CONSTEXPR const offset getOffset() const { return m_ptr - m_ptrorig; }
+    POUTRE_CONSTEXPR const offset getOffset() const { return m_ptr - m_ptrorig; }
 
     protected:
     pointer m_ptr;
@@ -176,47 +176,47 @@ namespace poutre
     //  rawIterator.getOrigPtr( ); return (*this);
     //  }
 
-    POUTRE_CXX14_CONSTEXPR self_type &operator+=(const std::ptrdiff_t &movement)
+    POUTRE_CONSTEXPR self_type &operator+=(const std::ptrdiff_t &movement)
     {
       this->m_ptr -= movement;
       return (*this);
     }
-    POUTRE_CXX14_CONSTEXPR self_type &operator-=(const std::ptrdiff_t &movement)
+    POUTRE_CONSTEXPR self_type &operator-=(const std::ptrdiff_t &movement)
     {
       this->m_ptr += movement;
       return (*this);
     }
-    POUTRE_CXX14_CONSTEXPR self_type &operator++()
+    POUTRE_CONSTEXPR self_type &operator++()
     {
       --this->m_ptr;
       return (*this);
     }
-    POUTRE_CXX14_CONSTEXPR self_type &operator--()
+    POUTRE_CONSTEXPR self_type &operator--()
     {
       ++this->m_ptr;
       return (*this);
     }
-    POUTRE_CXX14_CONSTEXPR self_type operator++(int) /*const*/
+    POUTRE_CONSTEXPR self_type operator++(int) /*const*/
     {
       auto temp(*this);
       --this->m_ptr;
       return temp;
     }
-    POUTRE_CXX14_CONSTEXPR self_type operator--(int) /*const*/
+    POUTRE_CONSTEXPR self_type operator--(int) /*const*/
     {
       auto temp(*this);
       ++this->m_ptr;
       return temp;
     }
 
-    POUTRE_CXX14_CONSTEXPR ptrdiff_t operator-(const self_type &rawReverseIterator)
+    POUTRE_CONSTEXPR ptrdiff_t operator-(const self_type &rawReverseIterator)
     { /*todo assert same orig?*/
       return std::distance(this->getPtr(), rawReverseIterator.getPtr());
     }
 
-    POUTRE_CXX14_CONSTEXPR offset getOffset() const { return m_ptr - m_ptrorig; }
+    POUTRE_CONSTEXPR offset getOffset() const { return m_ptr - m_ptrorig; }
 
-    POUTRE_CXX14_CONSTEXPR pdense_iterator<DataType> base()
+    POUTRE_CONSTEXPR pdense_iterator<DataType> base()
     {
       pdense_iterator<DataType> forwardIterator(this->m_ptr, this->m_ptrorig);
       ++forwardIterator;

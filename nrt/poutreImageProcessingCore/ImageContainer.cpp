@@ -13,7 +13,6 @@
 
 #include "main.hpp"
 #include "poutreBase/poutreGeometry.hpp"
-#include <boost/lexical_cast.hpp>
 #include <iostream>
 #include <poutreBase/poutreContainerView.hpp>
 #include <poutreIO/poutreIOString.hpp>

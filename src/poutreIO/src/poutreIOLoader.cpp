@@ -22,14 +22,14 @@
 #include <poutreIO/poutreIOLoader.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
 
-#include <boost/algorithm/string.hpp>
-#include <boost/filesystem.hpp>
+#include <cctype>
+#include <filesystem>
 #include <memory>
 #include <string>
 
 namespace poutre
 {
-  namespace bf = boost::filesystem;
+  namespace fs = std::filesystem;
 
   ImageLoader &ImageLoader::SetPath(std::string &&i_imgpath)
   {
@@ -50,14 +50,14 @@ namespace poutre
     POUTRE_ENTERING("ImageLoader::Load()");
     if( !m_isready )
       POUTRE_RUNTIME_ERROR("ImageLoader:  you must set path through SetPath");
-    bf::path localPath(m_imgPath);
-    if( !bf::exists(localPath) )
+    fs::path localPath(m_imgPath);
+    if( !fs::exists(localPath) )
     {
       POUTRE_RUNTIME_ERROR((poutre::format("ImageLoader:: path don't exist {%s}", m_imgPath)));
     }
     // switch on extension
-    auto extension = bf::extension(localPath);
-    boost::algorithm::to_lower(extension);
+    auto extension = localPath.extension().string();
+    std::for_each(extension.begin(), extension.end(), [](char &c) { c = ::tolower(c); });
     if( extension == ".h5" )
       return LoadFromHDF5(localPath.string());
     return LoadFromOIIO(localPath.string());

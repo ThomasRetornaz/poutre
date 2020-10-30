@@ -13,7 +13,7 @@ set(PoutreBaseTestSRC
   ${PoutreBaseTestSubdirectory}/chronos.cpp
   ${PoutreBaseTestSubdirectory}/jsonSerialize.cpp
   ${PoutreBaseTestSubdirectory}/registrar.cpp
-  ${PoutreBaseTestSubdirectory}/geometry.cpp
+  #${PoutreBaseTestSubdirectory}/geometry.cpp
   ${PoutreBaseTestSubdirectory}/coordinate.cpp
   ${PoutreBaseTestSubdirectory}/static_array.cpp
   ${PoutreBaseTestSubdirectory}/types.cpp

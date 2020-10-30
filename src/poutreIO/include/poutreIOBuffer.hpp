@@ -101,7 +101,7 @@ namespace poutre
       {
         POUTRE_RUNTIME_ERROR("t_ImageToBufferForceType : only scalar type is supported");
       }
-      typedef typename boost::remove_cv<typename boost::remove_pointer<valuetype>::type>::type inputType;
+      typedef typename std::remove_cv_t<typename std::remove_pointer_t<valuetype>> inputType;
       if( TypeTraits<inputType>::pixel_type != i_im.GetPType() )
       {
         POUTRE_RUNTIME_ERROR("Image and buffer doesn't share the same scalar type");
@@ -201,7 +201,8 @@ namespace poutre
       {
         POUTRE_RUNTIME_ERROR("t_ImageFromBufferWithType : only scalar type is supported");
       }
-      typedef typename boost::remove_cv<typename boost::remove_pointer<valuetype>::type>::type inputType;
+
+      typedef typename std::remove_cv_t<typename std::remove_pointer_t<valuetype>> inputType;
       if( TypeTraits<inputType>::pixel_type != o_im.GetPType() )
       {
         POUTRE_RUNTIME_ERROR("Image and buffer doesn't share the same scalar type");

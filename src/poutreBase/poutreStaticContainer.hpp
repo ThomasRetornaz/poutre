@@ -116,7 +116,7 @@ namespace poutre
     //
     //
 
-    POUTRE_CXX14_CONSTEXPR explicit static_array_base(value_type a) POUTRE_NOEXCEPT : m_array()
+    POUTRE_CONSTEXPR explicit static_array_base(value_type a) POUTRE_NOEXCEPT : m_array()
     {
       static_assert(Rank == 1,
                     "static_array_base(value_type) is only supported "
@@ -124,7 +124,7 @@ namespace poutre
       m_array[0] = value_type(a);
     }
 
-    POUTRE_CXX14_CONSTEXPR explicit static_array_base(value_type a0, value_type a1) POUTRE_NOEXCEPT : m_array()
+    POUTRE_CONSTEXPR explicit static_array_base(value_type a0, value_type a1) POUTRE_NOEXCEPT : m_array()
     {
       static_assert(Rank == 2,
                     "static_array_base(value_type,value_type) is only "
@@ -133,8 +133,7 @@ namespace poutre
       m_array[1] = value_type(a1);
     }
 
-    POUTRE_CXX14_CONSTEXPR explicit static_array_base(value_type a0, value_type a1, value_type a2) POUTRE_NOEXCEPT
-        : m_array()
+    POUTRE_CONSTEXPR explicit static_array_base(value_type a0, value_type a1, value_type a2) POUTRE_NOEXCEPT : m_array()
     {
       static_assert(Rank == 3,
                     "static_array_base(value_type,value_type,value_"
@@ -145,8 +144,8 @@ namespace poutre
       m_array[2] = a2;
     }
 
-    POUTRE_CXX14_CONSTEXPR explicit static_array_base(value_type a0, value_type a1, value_type a2, value_type a3)
-        POUTRE_NOEXCEPT : m_array()
+    POUTRE_CONSTEXPR explicit static_array_base(value_type a0, value_type a1, value_type a2, value_type a3) POUTRE_NOEXCEPT
+        : m_array()
     {
       static_assert(Rank == 4, //-V112
                     "static_array_base(value_type,value_type,value_"
@@ -158,7 +157,7 @@ namespace poutre
       m_array[3] = a3;
     }
 
-    POUTRE_CXX14_CONSTEXPR
+    POUTRE_CONSTEXPR
     static_array_base(const std::initializer_list<value_type> &rhs) : m_array()
     {
       POUTRE_CHECK(rhs.size() == rank, "Ill formed initializer list: rhs.size() must equal Rank");
@@ -170,18 +169,18 @@ namespace poutre
       std::copy(rhs.begin(), rhs.end(), &m_array[0]);
     }
 
-    POUTRE_CXX14_CONSTEXPR explicit static_array_base(const value_type (&rhs)[Rank]) POUTRE_NOEXCEPT : m_array()
+    POUTRE_CONSTEXPR explicit static_array_base(const value_type (&rhs)[Rank]) POUTRE_NOEXCEPT : m_array()
     {
       details::helper_assign_container_op<self_type, AssignOpType::AssignOp, Rank>::op(rhs, *this);
     }
 
-    POUTRE_CXX14_CONSTEXPR
+    POUTRE_CONSTEXPR
     static_array_base(const self_type &rhs) POUTRE_NOEXCEPT : m_array()
     {
       details::helper_assign_container_op<self_type, AssignOpType::AssignOp, Rank>::op(rhs, *this);
     }
 
-    POUTRE_CXX14_CONSTEXPR self_type &operator=(const self_type &rhs) POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR self_type &operator=(const self_type &rhs) POUTRE_NOEXCEPT
     {
       if( this != &rhs )
       {
@@ -198,14 +197,14 @@ namespace poutre
 
     /**@{*/
 #if defined(__cpp_lib_three_way_comparison)
-    POUTRE_CXX14_CONSTEXPR auto operator<=>(const static_array_base<valuetype, Rank> &rhs) const POUTRE_NOEXCEPT = default;
+    POUTRE_CONSTEXPR auto operator<=>(const static_array_base<valuetype, Rank> &rhs) const POUTRE_NOEXCEPT = default;
 #else
-    POUTRE_CXX14_CONSTEXPR bool operator==(const self_type &rhs) const POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR bool operator==(const self_type &rhs) const POUTRE_NOEXCEPT
     {
       return details::helper_comp_equal_container_op<self_type, Rank>::op(rhs, *this);
     }
 
-    POUTRE_CXX14_CONSTEXPR bool operator!=(const self_type &rhs) const POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR bool operator!=(const self_type &rhs) const POUTRE_NOEXCEPT
     {
       return !details::helper_comp_equal_container_op<self_type, Rank>::op(rhs, *this);
     }
@@ -235,13 +234,13 @@ namespace poutre
      */
 
     /**@{*/
-    POUTRE_CXX14_CONSTEXPR static_array_base &operator+=(const value_type &rhs) POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR static_array_base &operator+=(const value_type &rhs) POUTRE_NOEXCEPT
     {
       details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpAdd, Rank>::op(rhs, *this);
       return *this;
     }
 
-    POUTRE_CXX14_CONSTEXPR static_array_base &operator-=(const value_type &rhs) POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR static_array_base &operator-=(const value_type &rhs) POUTRE_NOEXCEPT
     {
       details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpMinus, Rank>::op(rhs, *this);
       return *this;
@@ -254,7 +253,7 @@ namespace poutre
 
     /**@{*/
     template<typename ArithmeticType, typename std::enable_if<std::is_arithmetic<ArithmeticType>::value>::type * = nullptr>
-    POUTRE_CXX14_CONSTEXPR static_array_base operator*(ArithmeticType v) const POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR static_array_base operator*(ArithmeticType v) const POUTRE_NOEXCEPT
     {
       self_type tmp(*this); // return a fresh new object
       details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpMul, Rank>::op(v, tmp);
@@ -262,7 +261,7 @@ namespace poutre
     }
 
     template<typename ArithmeticType, typename std::enable_if<std::is_arithmetic<ArithmeticType>::value>::type * = nullptr>
-    POUTRE_CXX14_CONSTEXPR static_array_base operator/(ArithmeticType v) const POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR static_array_base operator/(ArithmeticType v) const POUTRE_NOEXCEPT
     {
       self_type tmp(*this); // return a fresh new object
       details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpDiv, Rank>::op(v, tmp);
@@ -270,7 +269,7 @@ namespace poutre
     }
 
     template<typename ArithmeticType, typename std::enable_if<std::is_arithmetic<ArithmeticType>::value>::type * = nullptr>
-    POUTRE_CXX14_CONSTEXPR static_array_base operator%(ArithmeticType v) POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR static_array_base operator%(ArithmeticType v) POUTRE_NOEXCEPT
     {
       self_type tmp(*this); // return a fresh new object
       details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpMod, Rank>::op(v, tmp);
@@ -278,21 +277,21 @@ namespace poutre
     }
 
     template<typename ArithmeticType, typename std::enable_if<std::is_arithmetic<ArithmeticType>::value>::type * = nullptr>
-    POUTRE_CXX14_CONSTEXPR static_array_base &operator*=(ArithmeticType v) POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR static_array_base &operator*=(ArithmeticType v) POUTRE_NOEXCEPT
     {
       details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpMul, Rank>::op(v, *this);
       return *this;
     }
 
     template<typename ArithmeticType, typename std::enable_if<std::is_arithmetic<ArithmeticType>::value>::type * = nullptr>
-    POUTRE_CXX14_CONSTEXPR static_array_base &operator/=(ArithmeticType v) POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR static_array_base &operator/=(ArithmeticType v) POUTRE_NOEXCEPT
     {
       details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpDiv, Rank>::op(v, *this);
       return *this;
     }
 
     template<typename ArithmeticType, typename std::enable_if<std::is_arithmetic<ArithmeticType>::value>::type * = nullptr>
-    POUTRE_CXX14_CONSTEXPR static_array_base &operator%=(ArithmeticType v) POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR static_array_base &operator%=(ArithmeticType v) POUTRE_NOEXCEPT
     {
       details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpMod, Rank>::op(v, *this);
       return *this;
@@ -342,7 +341,7 @@ namespace poutre
 
     /**@{*/
     //! Access element
-    POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR reference operator[](difference_type n) POUTRE_NOEXCEPTONLYNDEBUG
+    POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR reference operator[](difference_type n) POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ASSERTCHECK(n < rank, "static_array_base[n] n must be in [0,rank)");
       POUTRE_ASSERTCHECK(n >= 0, "static_array_base[n] n must be in [0,rank)");
@@ -359,7 +358,7 @@ namespace poutre
 
     //! Access element with bound checking
 
-    POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR reference at(difference_type n)
+    POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR reference at(difference_type n)
     {
       POUTRE_CHECK(n < rank, "static_array_base.at(n) n must be in [0,rank)");
       POUTRE_CHECK(n >= 0, "static_array_base.at(n) n must be in [0,rank)");
@@ -377,7 +376,7 @@ namespace poutre
 
     //! Return first element of mutable sequence
 
-    POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR reference front() POUTRE_NOEXCEPT { return m_array[0]; }
+    POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR reference front() POUTRE_NOEXCEPT { return m_array[0]; }
 
     //! Return first element of nonmutable sequence
 
@@ -385,7 +384,7 @@ namespace poutre
 
     //! Return last element of mutable sequence
 
-    POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR reference back() POUTRE_NOEXCEPT { return m_array[rank - 1]; }
+    POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR reference back() POUTRE_NOEXCEPT { return m_array[rank - 1]; }
 
     //! Return last element of nonmutable sequence
 
@@ -393,7 +392,7 @@ namespace poutre
 
     //! Return pointer to mutable data array
 
-    POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR pointer data() POUTRE_NOEXCEPT { return m_array.data(); }
+    POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR pointer data() POUTRE_NOEXCEPT { return m_array.data(); }
 
     //! Return pointer to nonmutable data array
 
@@ -405,8 +404,8 @@ namespace poutre
            ptrdiff_t size,
            typename ArithmeticType,
            typename std::enable_if<std::is_arithmetic<ArithmeticType>::value>::type * = nullptr>
-  POUTRE_CXX14_CONSTEXPR static_array_base<value_type, size>
-                         operator*(ArithmeticType v, const static_array_base<value_type, size> &rhs) POUTRE_NOEXCEPT
+  POUTRE_CONSTEXPR static_array_base<value_type, size>
+                   operator*(ArithmeticType v, const static_array_base<value_type, size> &rhs) POUTRE_NOEXCEPT
   {
     static_array_base<value_type, size> tmp(rhs);
     return (tmp * v);
@@ -416,8 +415,8 @@ namespace poutre
            ptrdiff_t size,
            typename ArithmeticType,
            typename std::enable_if<std::is_arithmetic<ArithmeticType>::value>::type * = nullptr>
-  POUTRE_CXX14_CONSTEXPR static_array_base<value_type, size>
-                         operator/(ArithmeticType v, const static_array_base<value_type, size> &rhs) POUTRE_NOEXCEPT
+  POUTRE_CONSTEXPR static_array_base<value_type, size>
+                   operator/(ArithmeticType v, const static_array_base<value_type, size> &rhs) POUTRE_NOEXCEPT
   {
     static_array_base<value_type, size> tmp(rhs);
     return (tmp / v);
@@ -427,30 +426,30 @@ namespace poutre
            ptrdiff_t size,
            typename ArithmeticType,
            typename std::enable_if<std::is_arithmetic<ArithmeticType>::value>::type * = nullptr>
-  POUTRE_CXX14_CONSTEXPR static_array_base<value_type, size>
-                         operator%(ArithmeticType v, const static_array_base<value_type, size> &rhs) POUTRE_NOEXCEPT
+  POUTRE_CONSTEXPR static_array_base<value_type, size>
+                   operator%(ArithmeticType v, const static_array_base<value_type, size> &rhs) POUTRE_NOEXCEPT
   {
     static_array_base<value_type, size> tmp(rhs);
     return (tmp % v);
   }
 
   template<typename value_type, ptrdiff_t size>
-  POUTRE_CXX14_CONSTEXPR void swap(static_array_base<value_type, size> &lhs, static_array_base<value_type, size> &rhs)
-      POUTRE_NOEXCEPT // POUTRE_NOEXCEPT_IF(lhs.swap(rhs))
+  POUTRE_CONSTEXPR void swap(static_array_base<value_type, size> &lhs,
+                             static_array_base<value_type, size> &rhs) POUTRE_NOEXCEPT // POUTRE_NOEXCEPT_IF(lhs.swap(rhs))
   {
     (lhs.swap(rhs));
   }
 #if !defined(__cpp_lib_three_way_comparison)
   template<typename value_type, ptrdiff_t size>
-  POUTRE_CXX14_CONSTEXPR bool operator==(const static_array_base<value_type, size> &lhs,
-                                         const static_array_base<value_type, size> &rhs) POUTRE_NOEXCEPT
+  POUTRE_CONSTEXPR bool operator==(const static_array_base<value_type, size> &lhs,
+                                   const static_array_base<value_type, size> &rhs) POUTRE_NOEXCEPT
   {
     return lhs.operator==(rhs);
   }
 
   template<typename value_type, ptrdiff_t size>
-  POUTRE_CXX14_CONSTEXPR bool operator!=(const static_array_base<value_type, size> &lhs,
-                                         const static_array_base<value_type, size> &rhs) POUTRE_NOEXCEPT
+  POUTRE_CONSTEXPR bool operator!=(const static_array_base<value_type, size> &lhs,
+                                   const static_array_base<value_type, size> &rhs) POUTRE_NOEXCEPT
   {
     return lhs.operator!=(rhs);
   }
@@ -546,7 +545,7 @@ namespace poutre
     {
     }
 
-    POUTRE_CXX14_CONSTEXPR
+    POUTRE_CONSTEXPR
     static_array(const std::initializer_list<value_type> &rhs) : parent(rhs) {}
 
     POUTRE_CONSTEXPR explicit static_array(const value_type (&rhs)[Rank])

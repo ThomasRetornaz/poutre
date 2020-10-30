@@ -36,13 +36,13 @@
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
 
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <memory>
 #include <string>
 
 namespace poutre
 {
-  namespace bf = boost::filesystem;
+  namespace fs = std::filesystem;
   /**
    * @addtogroup image_processing_io_group_details Image Processing IO API details
    * @ingroup image_processing_io_group
@@ -74,8 +74,8 @@ namespace poutre
      */
     template<typename T> void FillImageFromOIIOScalar(const std::string &path, DenseImage<T, 2> &im)
     {
-      bf::path localPath(path);
-      if( !(bf::exists(localPath)) )
+      fs::path localPath(path);
+      if( !(fs::exists(localPath)) )
       {
         POUTRE_RUNTIME_ERROR(
             (poutre::format("FillImageFromOIIOScalar: provided path {%s} doesn't exists", localPath.string())));
@@ -145,8 +145,8 @@ namespace poutre
      */
     template<typename T> void FillImageFromOIIOCompound3(const std::string &path, DenseImage<compound<T, 3>, 2> &im)
     {
-      bf::path localPath(path);
-      if( !(bf::exists(localPath)) )
+      fs::path localPath(path);
+      if( !(fs::exists(localPath)) )
       {
         POUTRE_RUNTIME_ERROR(
             (poutre::format("FillImageFromOIIOCompound3: provided path {%s} doesn't exists", localPath.string())));
@@ -218,8 +218,8 @@ namespace poutre
      */
     template<typename T> void FillImageFromOIIOCompound4(const std::string &path, DenseImage<compound<T, 4>, 2> &im)
     {
-      bf::path localPath(path);
-      if( !(bf::exists(localPath)) )
+      fs::path localPath(path);
+      if( !(fs::exists(localPath)) )
       {
         POUTRE_RUNTIME_ERROR(
             (poutre::format("FillImageFromOIIOCompound4: provided path {%s} doesn't exists", localPath.string())));
@@ -339,9 +339,9 @@ namespace poutre
     void StoreWithOIIOScalar(const DenseImage<T, 2> &im, const std::string &path, StoreWithOIIOOptions const &options)
     {
       POUTRE_ENTERING("StoreWithOIIOScalar");
-      bf::path localPath(path);
-      bf::path dir = localPath.parent_path();
-      if( !(bf::exists(dir)) )
+      fs::path localPath(path);
+      fs::path dir = localPath.parent_path();
+      if( !(fs::exists(dir)) )
       {
         POUTRE_RUNTIME_ERROR((poutre::format("StoreWithOIIOScalar: provided path {%s} doesn't exists", dir)));
       }
@@ -457,9 +457,9 @@ namespace poutre
                                 StoreWithOIIOOptions const &         options)
     {
       POUTRE_ENTERING("StoreWithOIIOCompound3");
-      bf::path localPath(path);
-      bf::path dir = localPath.parent_path();
-      if( !(bf::exists(dir)) )
+      fs::path localPath(path);
+      fs::path dir = localPath.parent_path();
+      if( !(fs::exists(dir)) )
       {
         POUTRE_RUNTIME_ERROR((poutre::format("StoreWithOIIOCompound3: provided path {%s} doesn't exists", dir)));
       }
@@ -581,9 +581,9 @@ namespace poutre
                                 StoreWithOIIOOptions const &         options)
     {
       POUTRE_ENTERING("StoreWithOIIOCompound4");
-      bf::path localPath(path);
-      bf::path dir = localPath.parent_path();
-      if( !(bf::exists(dir)) )
+      fs::path localPath(path);
+      fs::path dir = localPath.parent_path();
+      if( !(fs::exists(dir)) )
       {
         std::ostringstream errorstream;
         errorstream << " StoreWithOIIOCompound4(): Error opening file '";

@@ -11,17 +11,16 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
+#include <poutreBase/poutreConfig.hpp>
 #include <poutreIO/poutreIOString.hpp>
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
+#include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
 
-#include <boost/lexical_cast.hpp>
 #include <iostream>
 #include <sstream>
 
 namespace poutre
 {
-  // TODO HAVE A LOOK AT boost::dispatch for dispatch ...
-
   /***********************************************************************************************************************/
   /*                                       IMAGE FROM STRING */
   /***********************************************************************************************************************/
@@ -177,8 +176,7 @@ namespace poutre
     break;
     default:
     {
-      POUTRE_RUNTIME_ERROR(
-          ("ImageFromStringDenseScalarDispatchPType::Unsupported ptype:" + boost::lexical_cast<std::string>(ptype)));
+      POUTRE_RUNTIME_ERROR(poutre::format("ImageFromStringDenseScalarDispatchPType::Unsupported ptype:{}", ptype));
     }
     } // switch (ptype)
   }
@@ -215,8 +213,7 @@ namespace poutre
     break;
     default:
     {
-      POUTRE_RUNTIME_ERROR(
-          ("ImageFromStringDenseScalarDispatchPType::Unsupported ptype:" + boost::lexical_cast<std::string>(ptype)));
+      POUTRE_RUNTIME_ERROR(poutre::format("ImageFromStringDenseScalarDispatchPType::Unsupported ptype:{}", ptype));
     }
     } // switch (ptype)
   }
@@ -253,8 +250,7 @@ namespace poutre
     break;
     default:
     {
-      POUTRE_RUNTIME_ERROR(
-          ("ImageFromStringDenseScalarDispatchPType::Unsupported ptype:" + boost::lexical_cast<std::string>(ptype)));
+      POUTRE_RUNTIME_ERROR(poutre::format("ImageFromStringDenseScalarDispatchPType::Unsupported ptype:{}", ptype));
     }
     } // switch (ptype)
   }
@@ -283,8 +279,7 @@ namespace poutre
     break;
     default:
     {
-      POUTRE_RUNTIME_ERROR(
-          ("ImageFromStringDispatch::Unsupported compound type:" + boost::lexical_cast<std::string>(cptype)));
+      POUTRE_RUNTIME_ERROR(poutre::format("ImageFromStringDispatch::Unsupported compound type:{}", cptype));
     }
     } // switch (cptype)
   }
@@ -513,8 +508,7 @@ namespace poutre
 
     default:
     {
-      POUTRE_RUNTIME_ERROR(
-          ("ImageToStringDenseScalarDispatchPType::Unsupported pixel type:" + boost::lexical_cast<std::string>(ptype)));
+      POUTRE_RUNTIME_ERROR(poutre::format("ImageToStringDenseScalarDispatchPType::Unsupported pixel type:{}", ptype));
     }
     } // switch (ptype)
   }
@@ -554,8 +548,7 @@ namespace poutre
 
     default:
     {
-      POUTRE_RUNTIME_ERROR(
-          ("ImageToStringDenseScalarDispatchPType::Unsupported pixel type:" + boost::lexical_cast<std::string>(ptype)));
+      POUTRE_RUNTIME_ERROR(("ImageToStringDenseScalarDispatchPType::Unsupported pixel type:{}", ptype));
     }
     } // switch (ptype)
   }
@@ -595,8 +588,7 @@ namespace poutre
 
     default:
     {
-      POUTRE_RUNTIME_ERROR(
-          ("ImageToStringDenseScalarDispatchPType::Unsupported pixel type:" + boost::lexical_cast<std::string>(ptype)));
+      POUTRE_RUNTIME_ERROR(("ImageToStringDenseScalarDispatchPType::Unsupported pixel type:{}", ptype));
     }
     } // switch (ptype)
   }
@@ -626,8 +618,7 @@ namespace poutre
 
     default:
     {
-      POUTRE_RUNTIME_ERROR(
-          ("ImageFromStringDispatch::Unsupported compound type:" + boost::lexical_cast<std::string>(cptype)));
+      POUTRE_RUNTIME_ERROR(("ImageFromStringDispatch::Unsupported compound type:{}", cptype));
     }
     } // switch (cptype)
   }
@@ -645,9 +636,7 @@ namespace poutre
     // TODO dispatch sparse type ?
     if( imgtype != ImgType::ImgType_Dense )
     {
-      std::string err =
-          "ImageToString: ImgType unknown or not supported yet from" + boost::lexical_cast<std::string>(imgtype);
-      POUTRE_RUNTIME_ERROR(err);
+      POUTRE_RUNTIME_ERROR(poutre::format("ImageToString: ImgType unknown or not supported yet from {}", imgtype));
     }
 
     auto cptype = i_image.GetCType();

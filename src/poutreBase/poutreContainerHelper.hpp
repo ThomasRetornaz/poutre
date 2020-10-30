@@ -55,7 +55,7 @@ namespace poutre
     // todo macro ?
     template<typename value_type> struct helper_arith_op<value_type, ArithOpType::ArithOpPlus>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void
       op(const value_type &A0, const value_type &A1, value_type &res) POUTRE_NOEXCEPT
       {
         res = (A0 + A1);
@@ -64,7 +64,7 @@ namespace poutre
 
     template<typename value_type> struct helper_arith_op<value_type, ArithOpType::ArithOpMinus>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void
       op(const value_type &A0, const value_type &A1, value_type &res) POUTRE_NOEXCEPT
       {
         res = (A0 - A1);
@@ -73,7 +73,7 @@ namespace poutre
 
     template<typename value_type> struct helper_arith_op<value_type, ArithOpType::ArithOpMul>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void
       op(const value_type &A0, const value_type &A1, value_type &res) POUTRE_NOEXCEPT
       {
         res = (A0 * A1);
@@ -82,7 +82,7 @@ namespace poutre
 
     template<typename value_type> struct helper_arith_op<value_type, ArithOpType::ArithOpDiv>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void
       op(const value_type &A0, const value_type &A1, value_type &res) POUTRE_NOEXCEPT
       {
         res = (A0 / A1);
@@ -96,37 +96,37 @@ namespace poutre
     // todo macro ?
     template<typename t1, typename t2> struct helper_assign_op<t1, t2, AssignOpType::AssignOp>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(const t1 &A0, t2 &result) POUTRE_NOEXCEPT { result = A0; }
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(const t1 &A0, t2 &result) POUTRE_NOEXCEPT { result = A0; }
     };
 
     template<typename t1, typename t2> struct helper_assign_op<t1, t2, AssignOpType::AssignOpAdd>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(const t1 &A0, t2 &result) POUTRE_NOEXCEPT { result += A0; }
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(const t1 &A0, t2 &result) POUTRE_NOEXCEPT { result += A0; }
     };
 
     template<typename t1, typename t2> struct helper_assign_op<t1, t2, AssignOpType::AssignOpMinus>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(const t1 &A0, t2 &result) POUTRE_NOEXCEPT { result -= A0; }
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(const t1 &A0, t2 &result) POUTRE_NOEXCEPT { result -= A0; }
     };
 
     template<typename t1, typename t2> struct helper_assign_op<t1, t2, AssignOpType::AssignOpMul>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(const t1 &A0, t2 &result) POUTRE_NOEXCEPT { result *= A0; }
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(const t1 &A0, t2 &result) POUTRE_NOEXCEPT { result *= A0; }
     };
 
     template<typename t1, typename t2> struct helper_assign_op<t1, t2, AssignOpType::AssignOpDiv>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(const t1 &A0, t2 &result) POUTRE_NOEXCEPT { result /= A0; }
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(const t1 &A0, t2 &result) POUTRE_NOEXCEPT { result /= A0; }
     };
 
     template<typename t1, typename t2> struct helper_assign_op<t1, t2, AssignOpType::AssignOpMod>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(const t1 &A0, t2 &result) POUTRE_NOEXCEPT { result %= A0; }
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(const t1 &A0, t2 &result) POUTRE_NOEXCEPT { result %= A0; }
     };
 
     template<typename t1, typename t2> struct helper_assign_op<t1, t2, AssignOpType::AssignOpNegate>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(const t1 &A0, t2 &result) POUTRE_NOEXCEPT { result = -A0; }
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(const t1 &A0, t2 &result) POUTRE_NOEXCEPT { result = -A0; }
     };
 
     template<typename value_type, CompOpType op> struct helper_comp_op
@@ -136,7 +136,7 @@ namespace poutre
     // todo macro ?
     template<typename value_type> struct helper_comp_op<value_type, CompOpType::CompOpEqual>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(const value_type &A0, const value_type &A1) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(const value_type &A0, const value_type &A1) POUTRE_NOEXCEPT
       {
         return (A0 == A1);
       }
@@ -144,7 +144,7 @@ namespace poutre
 
     template<typename value_type> struct helper_comp_op<value_type, CompOpType::CompOpDiff>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(const value_type &A0, const value_type &A1) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(const value_type &A0, const value_type &A1) POUTRE_NOEXCEPT
       {
         return (A0 != A1);
       }
@@ -152,7 +152,7 @@ namespace poutre
 
     template<typename value_type> struct helper_comp_op<value_type, CompOpType::CompOpInf>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(const value_type &A0, const value_type &A1) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(const value_type &A0, const value_type &A1) POUTRE_NOEXCEPT
       {
         return (A0 < A1);
       }
@@ -160,7 +160,7 @@ namespace poutre
 
     template<typename value_type> struct helper_comp_op<value_type, CompOpType::CompOpSup>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(const value_type &A0, const value_type &A1) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(const value_type &A0, const value_type &A1) POUTRE_NOEXCEPT
       {
         return (A0 > A1);
       }
@@ -168,7 +168,7 @@ namespace poutre
 
     template<typename value_type> struct helper_comp_op<value_type, CompOpType::CompOpSupEqual>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(const value_type &A0, const value_type &A1) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(const value_type &A0, const value_type &A1) POUTRE_NOEXCEPT
       {
         return (A0 >= A1);
       }
@@ -176,7 +176,7 @@ namespace poutre
 
     template<typename value_type> struct helper_comp_op<value_type, CompOpType::CompOpInfEqual>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(const value_type &A0, const value_type &A1) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(const value_type &A0, const value_type &A1) POUTRE_NOEXCEPT
       {
         return (A0 <= A1);
       }
@@ -185,7 +185,7 @@ namespace poutre
     template<class container, ptrdiff_t Rank = container::rank> struct helper_comp_lexicographic_less_container_op
     {
       using value_type = typename container::value_type;
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(container const &A0, container const &A1) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(container const &A0, container const &A1) POUTRE_NOEXCEPT
       {
         for( ptrdiff_t i = Rank - 1; i >= 0; --i )
         {
@@ -199,7 +199,7 @@ namespace poutre
 
     template<class container, ptrdiff_t Rank = container::rank> struct helper_comp_lexicographic_sup_container_op
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(container const &A0, container const &A1) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(container const &A0, container const &A1) POUTRE_NOEXCEPT
       {
         for( ptrdiff_t i = Rank - 1; i >= 0; i-- )
         {
@@ -214,7 +214,7 @@ namespace poutre
     template<class container, ptrdiff_t Rank = container::rank> struct helper_comp_equal_container_op
     {
       using value_type = typename container::value_type;
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(container const &A0, container const &A1) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(container const &A0, container const &A1) POUTRE_NOEXCEPT
       {
         for( size_t i = 0; i < Rank; i++ )
         {
@@ -228,7 +228,7 @@ namespace poutre
     template<class container> struct helper_comp_equal_container_op<container, 1>
     {
       using value_type = typename container::value_type;
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(container const &A0, container const &A1) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(container const &A0, container const &A1) POUTRE_NOEXCEPT
       {
         return A0[0] == A1[0];
       }
@@ -237,7 +237,7 @@ namespace poutre
     template<class container> struct helper_comp_equal_container_op<container, 2>
     {
       using value_type = typename container::value_type;
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(container const &A0, container const &A1) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(container const &A0, container const &A1) POUTRE_NOEXCEPT
       {
         return ((A0[0] == A1[0]) && (A0[1] == A1[1]));
       }
@@ -246,7 +246,7 @@ namespace poutre
     template<class container> struct helper_comp_equal_container_op<container, 3>
     {
       using value_type = typename container::value_type;
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(container const &A0, container const &A1) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(container const &A0, container const &A1) POUTRE_NOEXCEPT
       {
         return ((A0[0] == A1[0]) && (A0[1] == A1[1]) && (A0[2] == A1[2]));
       }
@@ -255,8 +255,7 @@ namespace poutre
     template<class container, ArithOpType arithop, ptrdiff_t Rank = container::rank> struct helper_arith_container_op
     {
       using value_type = typename container::value_type;
-      POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR void
-      op(container const &A0, container const &A1, container &res) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR void op(container const &A0, container const &A1, container &res) POUTRE_NOEXCEPT
       {
         for( size_t i = 0; i < Rank; i++ )
         {
@@ -269,7 +268,7 @@ namespace poutre
     template<class container, ArithOpType arithop> struct helper_arith_container_op<container, arithop, 1>
     {
       using value_type = typename container::value_type;
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void
       op(container const &A0, container const &A1, container &res) POUTRE_NOEXCEPT
       {
         helper_arith_op<value_type, arithop>::op(A0[0], A1[0], res[0]);
@@ -279,7 +278,7 @@ namespace poutre
     template<class container, ArithOpType arithop> struct helper_arith_container_op<container, arithop, 2>
     {
       using value_type = typename container::value_type;
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void
       op(container const &A0, container const &A1, container &res) POUTRE_NOEXCEPT
       {
         helper_arith_op<value_type, arithop>::op(A0[0], A1[0], res[0]);
@@ -290,7 +289,7 @@ namespace poutre
     template<class container, ArithOpType arithop> struct helper_arith_container_op<container, arithop, 3>
     {
       using value_type = typename container::value_type;
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void
       op(container const &A0, container const &A1, container &res) POUTRE_NOEXCEPT
       {
         helper_arith_op<value_type, arithop>::op(A0[0], A1[0], res[0]);
@@ -302,7 +301,7 @@ namespace poutre
     template<class container, ArithOpType arithop> struct helper_arith_container_op<container, arithop, 4>
     {
       using value_type = typename container::value_type;
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void
       op(container const &A0, container const &A1, container &res) POUTRE_NOEXCEPT
       {
         helper_arith_op<value_type, arithop>::op(A0[0], A1[0], res[0]);
@@ -316,7 +315,7 @@ namespace poutre
     {
       using value_type = typename container::value_type;
       template<class containerother>
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(containerother const &A0, container &res) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(containerother const &A0, container &res) POUTRE_NOEXCEPT
       {
         for( size_t i = 0; i < Rank; i++ )
         {
@@ -330,7 +329,7 @@ namespace poutre
     {
       using value_type = typename container::value_type;
       template<class containerother>
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(containerother const &A0, container &res) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(containerother const &A0, container &res) POUTRE_NOEXCEPT
       {
         helper_assign_op<typename containerother::value_type, value_type, assignop>::op(A0[0], res[0]);
       }
@@ -340,7 +339,7 @@ namespace poutre
     {
       using value_type = typename container::value_type;
       template<class containerother>
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(containerother const &A0, container &res) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(containerother const &A0, container &res) POUTRE_NOEXCEPT
       {
         helper_assign_op<typename containerother::value_type, value_type, assignop>::op(A0[0], res[0]);
         helper_assign_op<typename containerother::value_type, value_type, assignop>::op(A0[1], res[1]);
@@ -351,7 +350,7 @@ namespace poutre
     {
       using value_type = typename container::value_type;
       template<class containerother>
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(containerother const &A0, container &res) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(containerother const &A0, container &res) POUTRE_NOEXCEPT
       {
         helper_assign_op<typename containerother::value_type, value_type, assignop>::op(A0[0], res[0]);
         helper_assign_op<typename containerother::value_type, value_type, assignop>::op(A0[1], res[1]);
@@ -363,7 +362,7 @@ namespace poutre
     {
       using value_type = typename container::value_type;
       template<class containerother>
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(containerother const &A0, container &res) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(containerother const &A0, container &res) POUTRE_NOEXCEPT
       {
         helper_assign_op<typename containerother::value_type, value_type, assignop>::op(A0[0], res[0]);
         helper_assign_op<typename containerother::value_type, value_type, assignop>::op(A0[1], res[1]);
@@ -376,7 +375,7 @@ namespace poutre
     {
       using value_type = typename container::value_type;
       template<typename othervaluetype>
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(othervaluetype const &A0, container &res) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(othervaluetype const &A0, container &res) POUTRE_NOEXCEPT
       {
         for( size_t i = 0; i < Rank; i++ )
         {
@@ -389,7 +388,7 @@ namespace poutre
     {
       using value_type = typename container::value_type;
       template<typename othervaluetype>
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(othervaluetype const &A0, container &res) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(othervaluetype const &A0, container &res) POUTRE_NOEXCEPT
       {
         helper_assign_op<othervaluetype, value_type, assignop>::op(A0, res[0]);
       }
@@ -399,7 +398,7 @@ namespace poutre
     {
       using value_type = typename container::value_type;
       template<typename othervaluetype>
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(othervaluetype const &A0, container &res) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(othervaluetype const &A0, container &res) POUTRE_NOEXCEPT
       {
         helper_assign_op<othervaluetype, value_type, assignop>::op(A0, res[0]);
         helper_assign_op<othervaluetype, value_type, assignop>::op(A0, res[1]);
@@ -410,7 +409,7 @@ namespace poutre
     {
       using value_type = typename container::value_type;
       template<typename othervaluetype>
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(othervaluetype const &A0, container &res) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(othervaluetype const &A0, container &res) POUTRE_NOEXCEPT
       {
         helper_assign_op<othervaluetype, value_type, assignop>::op(A0, res[0]);
         helper_assign_op<othervaluetype, value_type, assignop>::op(A0, res[1]);
@@ -422,7 +421,7 @@ namespace poutre
     {
       using value_type = typename container::value_type;
       template<typename othervaluetype>
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void op(othervaluetype const &A0, container &res) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(othervaluetype const &A0, container &res) POUTRE_NOEXCEPT
       {
         helper_assign_op<othervaluetype, value_type, assignop>::op(A0, res[0]);
         helper_assign_op<othervaluetype, value_type, assignop>::op(A0, res[1]);
@@ -433,7 +432,7 @@ namespace poutre
 
     template<class bnds, class idx, ptrdiff_t Rank = bnds::rank> struct helper_contains_container_op
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(bnds const &bnd, idx const &id) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(bnds const &bnd, idx const &id) POUTRE_NOEXCEPT
       {
         static_assert(bnds::rank == idx::rank, "helper_contains_container_op: all provided container must share same rank");
         for( size_t i = 0; i < Rank; i++ )
@@ -449,7 +448,7 @@ namespace poutre
 
     template<class bnds, class idx> struct helper_contains_container_op<bnds, idx, 1>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(bnds const &bnd, idx const &id) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(bnds const &bnd, idx const &id) POUTRE_NOEXCEPT
       {
         return (id[0] >= 0) && (id[0] < bnd[0]);
       }
@@ -457,7 +456,7 @@ namespace poutre
 
     template<class bnds, class idx> struct helper_contains_container_op<bnds, idx, 2>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(bnds const &bnd, idx const &id) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(bnds const &bnd, idx const &id) POUTRE_NOEXCEPT
       {
         return ((id[0] >= 0) && (id[0] < bnd[0]) && (id[1] >= 0) && (id[1] < bnd[1]));
       }
@@ -465,7 +464,7 @@ namespace poutre
 
     template<class bnds, class idx> struct helper_contains_container_op<bnds, idx, 3>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR bool op(bnds const &bnd, idx const &id) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(bnds const &bnd, idx const &id) POUTRE_NOEXCEPT
       {
         return (id[0] >= 0) && (id[0] < bnd[0]) && (id[1] >= 0) && (id[1] < bnd[1]) && (id[2] >= 0) && (id[2] < bnd[2]);
       }
@@ -473,7 +472,7 @@ namespace poutre
 
     template<class bnds, class idx, ptrdiff_t Rank = bnds::rank> struct get_offset_from_coord_nostride
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR offset op(bnds const &i_bnd, idx const &i_idx) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR offset op(bnds const &i_bnd, idx const &i_idx) POUTRE_NOEXCEPT
       {
         static_assert(bnds::rank == idx::rank, "get_offset: all provided container must share same rank");
         offset    current_offset = i_idx[Rank - 1]; // at least rank==1
@@ -490,7 +489,7 @@ namespace poutre
     // specialize 1D
     template<class bnds, class idx> struct get_offset_from_coord_nostride<bnds, idx, 1>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR offset op(bnds const &i_bnd, idx const &i_idx) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR offset op(bnds const &i_bnd, idx const &i_idx) POUTRE_NOEXCEPT
       {
         return i_idx[0];
       }
@@ -499,7 +498,7 @@ namespace poutre
     // specialize 2D
     template<class bnds, class idx> struct get_offset_from_coord_nostride<bnds, idx, 2>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR offset op(const bnds &i_bnd, const idx &i_idx) POUTRE_NOEXCEPT
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR offset op(const bnds &i_bnd, const idx &i_idx) POUTRE_NOEXCEPT
       {
         return (i_idx[1] + i_idx[0] * i_bnd[1]);
       }
@@ -507,7 +506,7 @@ namespace poutre
 
     template<class bnds, class idx, ptrdiff_t Rank = bnds::rank> struct get_coord_from_offset_nostride
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void
       op(bnds const &i_bnd, offset off, idx &o_idx) POUTRE_NOEXCEPTONLYNDEBUG
       {
         static_assert(bnds::rank == idx::rank, "get_offset: all provided container must share same rank");
@@ -534,7 +533,7 @@ namespace poutre
 
     template<class bnds, class idx> struct get_coord_from_offset_nostride<bnds, idx, 1>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void
       op(bnds const &i_bnd, offset off, idx &o_idx) POUTRE_NOEXCEPTONLYNDEBUG
       {
         POUTRE_ASSERTCHECK(off >= 0, "get_offset: provided offset must be >0");
@@ -545,7 +544,7 @@ namespace poutre
 
     template<class bnds, class idx> struct get_coord_from_offset_nostride<bnds, idx, 2>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void
       op(bnds const &i_bnd, offset off, idx &o_idx) POUTRE_NOEXCEPTONLYNDEBUG
       {
         POUTRE_ASSERTCHECK(off >= 0, "get_offset: provided offset must be >0");
@@ -558,7 +557,7 @@ namespace poutre
 
     template<class bnds, class idx, ptrdiff_t Rank = bnds::rank> struct shift_op
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CXX14_CONSTEXPR void
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void
       op(bnds const &i_bnd, idx const &i_idx, offset shift, idx &o_idx) POUTRE_NOEXCEPT
       {
         static_assert(bnds::rank == idx::rank, "shift_op: all provided container must share same rank");

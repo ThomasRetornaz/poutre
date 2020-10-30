@@ -12,7 +12,6 @@
 
 #include <poutreImageProcessingSE/poutreImageProcessingSEInterface.hpp>
 
-#include <boost/lexical_cast.hpp>
 #include <string>
 
 namespace poutre

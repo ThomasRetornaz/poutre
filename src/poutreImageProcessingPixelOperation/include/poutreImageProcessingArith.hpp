@@ -129,8 +129,7 @@ namespace poutre
 
     template<typename U> POUTRE_ALWAYS_INLINE U operator()(U const &a0, U const &a1) const POUTRE_NOEXCEPT
     {
-      return ssub(a0,
-                  a1); // FIXME//boost::simd::saturated_(boost::simd::minus)(a0, a1);
+      return ssub(a0, a1);
     }
   };
 
@@ -260,8 +259,6 @@ namespace poutre
     }
   };
 
-  // todo benchmark, if slow specialize boost::simd::transform to load m_val as a
-  // pack
   template<typename T1, typename T2>
   struct op_Saturated_Add_Constant<
       T1,
@@ -332,8 +329,6 @@ namespace poutre
     }
   };
 
-  // todo benchmark, if slow specialize boost::simd::transform to load m_val as a
-  // pack
   template<typename T1, typename T2>
   struct op_Saturated_Sub_Constant<
       T1,

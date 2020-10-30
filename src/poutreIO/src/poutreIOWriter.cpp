@@ -21,21 +21,20 @@
 #include <poutreIO/poutreIOWriter.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
 
-#include <boost/algorithm/string.hpp>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <memory>
 #include <string>
 
 namespace poutre
 {
-  namespace bf = boost::filesystem;
+  namespace fs = std::filesystem;
 
   ImageWriter &ImageWriter::SetPath(const std::string &i_imgpath)
   {
     m_imgPath = i_imgpath;
-    bf::path                localPath(m_imgPath);
-    boost::filesystem::path dir = localPath.parent_path();
-    if( !(bf::exists(dir)) )
+    fs::path localPath(m_imgPath);
+    fs::path dir = localPath.parent_path();
+    if( !(fs::exists(dir)) )
     {
       POUTRE_RUNTIME_ERROR((poutre::format("ImageWriter: provided path {%s} doesn't exists", dir)));
     }
@@ -48,10 +47,10 @@ namespace poutre
     POUTRE_ENTERING("ImageLoader::Write()");
     if( !m_isready )
       POUTRE_RUNTIME_ERROR("ImageWritter:  you must set path through SetPath");
-    bf::path localPath(m_imgPath);
+    fs::path localPath(m_imgPath);
     // switch on extension
-    auto extension = bf::extension(localPath);
-    boost::algorithm::to_lower(extension);
+    auto extension = localPath.extension().string();
+    std::for_each(extension.begin(), extension.end(), [](char &c) { c = ::tolower(c); });
     if( extension == ".h5" )
       return StoreWithHDF5(localPath.string(), i_img);
     StoreWithOIIO(localPath.string(), i_img);

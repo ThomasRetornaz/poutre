@@ -11,8 +11,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#include <boost/filesystem.hpp>
-#include <boost/lexical_cast.hpp>
+#include <filesystem>
 #include <iostream>
 #include <sstream>
 //#include <poutreBase/poutreTrace.hpp>
@@ -20,7 +19,7 @@
 
 namespace poutre
 {
-  namespace bf = boost::filesystem;
+  namespace fs = std::filesystem;
   /**
    * Load an image from file at filename.
    * Storage format is deduced from file.
@@ -32,8 +31,8 @@ namespace poutre
   std::unique_ptr<IInterface> LoadFromOIIO(const std::string &image_path)
   {
     POUTRE_ENTERING("LoadFromOIIO");
-    bf::path localPath(image_path);
-    if( !(bf::exists(localPath)) )
+    fs::path localPath(image_path);
+    if( !(fs::exists(localPath)) )
     {
       POUTRE_RUNTIME_ERROR(poutre::format("LoadFromOIIO: unable to locate provided path {}", localPath.string()));
     }
@@ -358,9 +357,9 @@ namespace poutre
   {
     POUTRE_ENTERING("StoreWithOIIO");
     const details::StoreWithOIIOOptions options;
-    bf::path                            localPath(path);
-    boost::filesystem::path             dir = localPath.parent_path();
-    if( !(bf::exists(dir)) )
+    fs::path                            localPath(path);
+    fs::path                            dir = localPath.parent_path();
+    if( !(fs::exists(dir)) )
     {
       POUTRE_RUNTIME_ERROR(poutre::format("StoreFromOIIO: provided path {%s} doesn't exists", dir));
     }

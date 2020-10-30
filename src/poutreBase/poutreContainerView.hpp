@@ -65,8 +65,8 @@ namespace poutre
     };
 
     template<ptrdiff_t Rank>
-    POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t
-    view_offset(const index<Rank> &idx, const index<Rank> &stride) // NOLINT(misc-unused-parameters)
+    POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR ptrdiff_t view_offset(const index<Rank> &idx,
+                                                                const index<Rank> &stride) // NOLINT(misc-unused-parameters)
     {
       ptrdiff_t offset {};
       for( size_t i = 0; i < Rank; ++i )
@@ -77,8 +77,8 @@ namespace poutre
     }
 
     template<>
-    POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t
-    view_offset(const index<3> &idx, const index<3> &stride) // NOLINT(misc-unused-parameters)
+    POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR ptrdiff_t view_offset(const index<3> &idx,
+                                                                const index<3> &stride) // NOLINT(misc-unused-parameters)
     {
       ptrdiff_t offset {};
       offset += idx[0] * stride[0];
@@ -88,8 +88,8 @@ namespace poutre
     }
 
     template<>
-    POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t
-    view_offset(const index<2> &idx, const index<2> &stride) // NOLINT(misc-unused-parameters)
+    POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR ptrdiff_t view_offset(const index<2> &idx,
+                                                                const index<2> &stride) // NOLINT(misc-unused-parameters)
     {
       ptrdiff_t offset {};
       offset += idx[0] * stride[0];
@@ -98,8 +98,8 @@ namespace poutre
     }
 
     template<>
-    POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR ptrdiff_t
-    view_offset(const index<1> &idx, const index<1> &stride) // NOLINT(misc-unused-parameters)
+    POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR ptrdiff_t view_offset(const index<1> &idx,
+                                                                const index<1> &stride) // NOLINT(misc-unused-parameters)
     {
       ptrdiff_t offset {};
       offset += idx[0] * stride[0];
@@ -107,14 +107,14 @@ namespace poutre
     }
 
     template<typename T, ptrdiff_t Rank>
-    POUTRE_ALWAYS_INLINE POUTRE_CXX14_CONSTEXPR T &
+    POUTRE_ALWAYS_INLINE POUTRE_CONSTEXPR T &
     view_access(T *data, const index<Rank> &idx, const index<Rank> &stride) // NOLINT(misc-unused-parameters)
     {
       return data[view_offset(idx, stride)];
     }
 
     // template <ptrdiff_t Rank>
-    // POUTRE_CXX14_CONSTEXPR index<Rank> init_default_stride(const bounds<Rank>&
+    // POUTRE_CONSTEXPR index<Rank> init_default_stride(const bounds<Rank>&
     // bound)
     //{
     // index<Rank> stride = {};
@@ -229,7 +229,7 @@ namespace poutre
 
     //! Default ctor
 
-    POUTRE_CXX14_CONSTEXPR array_view()
+    POUTRE_CONSTEXPR array_view()
         POUTRE_NOEXCEPT_IF(POUTRE_NOEXCEPT_EXPR(bounds_type()) && POUTRE_NOEXCEPT_EXPR(index_type()))
         : m_bnd()
         , m_data(nullptr)
@@ -245,8 +245,8 @@ namespace poutre
     //! ctor from viewable object, mainly contiguous container C providing
     //! C.data(),C.size() interface and using the same value_type
     // @warning only available for rank==1
-    POUTRE_CXX14_CONSTEXPR array_view(Viewable &&vw) : m_bnd(vw.size())
-                                                     , m_data(vw.data())
+    POUTRE_CONSTEXPR array_view(Viewable &&vw) : m_bnd(vw.size())
+                                               , m_data(vw.data())
     {
       static_assert(Rank == 1, "array_view(Viewable&& vw) is only allowed for rank=1 view");
     }
@@ -270,7 +270,7 @@ namespace poutre
     //! ctor from C_Array
     //@warning only available for rank==1
     template<size_t Extent, ptrdiff_t rank = Rank, class = typename std::enable_if<details::IsRankEqual1<rank>::value>::type>
-    POUTRE_CXX14_CONSTEXPR array_view(value_type (&arr)[Extent]) POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR array_view(value_type (&arr)[Extent]) POUTRE_NOEXCEPT
         : m_bnd(Extent)
         , m_data(nullptr)
     {
@@ -295,8 +295,8 @@ namespace poutre
     //! ctor from an other view
     //@note This constructor may be used to create an array_view with a different
     // rank and/or bounds than the original array_view, i.e. reshape the view.
-    POUTRE_CXX14_CONSTEXPR array_view(Viewable &&vw, bounds_type bound) : m_bnd(bound)
-                                                                        , m_data(vw.data())
+    POUTRE_CONSTEXPR array_view(Viewable &&vw, bounds_type bound) : m_bnd(bound)
+                                                                  , m_data(vw.data())
     {
       if( vw.size() < bound.size() )
       {
@@ -308,7 +308,7 @@ namespace poutre
     //! ctor from nude ptr
     //@warning Requires: [ptr, ptr + bounds.size()) is a valid range.
 
-    POUTRE_CXX14_CONSTEXPR
+    POUTRE_CONSTEXPR
     array_view(pointer ptr, bounds_type bound) : m_bnd(bound), m_data(ptr)
     {
       if( !m_data && bound.size() != 0 )
@@ -325,7 +325,7 @@ namespace poutre
                                      && std::is_same<typename std::remove_cv<U>::type,
                                                      typename std::remove_cv<value_type>::type>::value>::type * = nullptr>
     //! Assignement operator
-    POUTRE_CXX14_CONSTEXPR self_type &operator=(const array_view<U, Rank> &rhs) POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR self_type &operator=(const array_view<U, Rank> &rhs) POUTRE_NOEXCEPT
     {
       this->m_bnd        = rhs.m_bnd;
       this->m_stride_idx = rhs.m_stride_idx;
@@ -347,7 +347,7 @@ namespace poutre
     POUTRE_CONSTEXPR size_type size() const POUTRE_NOEXCEPT { return m_bnd.size(); }
 
     //! Getter stride of view
-    POUTRE_CXX14_CONSTEXPR index_type stride() const POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR index_type stride() const POUTRE_NOEXCEPT
     {
       index<Rank> stride {};
       stride[rank - 1] = 1;
@@ -369,7 +369,7 @@ namespace poutre
     /**@{*/
     //! Accessor to underlying data through indexing
 
-    POUTRE_CXX14_CONSTEXPR reference operator[](const index_type &idx) const POUTRE_NOEXCEPTONLYNDEBUG
+    POUTRE_CONSTEXPR reference operator[](const index_type &idx) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ASSERTCHECK(m_bnd.contains(idx) == true, "Out of bound");
       return details::view_access(m_data, idx, stride());
@@ -383,7 +383,7 @@ namespace poutre
     //! 0}], and the bounds are {bounds()[1], bounds()[2], �..., bounds()[Rank -
     //! 1]}.
 
-    POUTRE_CXX14_CONSTEXPR array_view<T, Rank - 1> operator[](difference_type slice) const POUTRE_NOEXCEPTONLYNDEBUG
+    POUTRE_CONSTEXPR array_view<T, Rank - 1> operator[](difference_type slice) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       static_assert(Rank > 1, "Slicing is only allowed if Rank>1");
       POUTRE_ASSERTCHECK(0 <= slice, "Slicing slice must be  >=0");
@@ -405,7 +405,7 @@ namespace poutre
       return array_view<T, Rank - 1>(data_slice, bnd_slice);
     }
 
-    POUTRE_CXX14_CONSTEXPR strided_array_view<T, Rank>
+    POUTRE_CONSTEXPR strided_array_view<T, Rank>
     //! A strided view such that the initial element is (*this)[origin], the
     //! stride is stride(), and the bounds are section_bnd.
     //@warning Requires: bounds().contains(origin + idx) == true for any
@@ -424,7 +424,7 @@ namespace poutre
       return strided_array_view<T, Rank>(data_section, section_bnd, stride());
     }
 
-    POUTRE_CXX14_CONSTEXPR strided_array_view<T, Rank>
+    POUTRE_CONSTEXPR strided_array_view<T, Rank>
     //! A strided view such that the initial element is (*this)[origin], the
     //! stride is stride(), and the bounds are (bounds() - origin).
     //@warning Requires: bounds().contains(origin + idx) == true for any
@@ -446,7 +446,7 @@ namespace poutre
   // template<class T> class array_view2D : public array_view<T, 2>
   //{
   //  public:
-  //  POUTRE_CXX14_CONSTEXPR T &operator[](const idx2d &idx) const POUTRE_NOEXCEPTONLYNDEBUG
+  //  POUTRE_CONSTEXPR T &operator[](const idx2d &idx) const POUTRE_NOEXCEPTONLYNDEBUG
   //  {
   //    POUTRE_ASSERTCHECK(this->m_bnd.contains(idx) == true, "Out of bound");
   //    auto SizeX = this->m_bnd[0];
@@ -489,7 +489,7 @@ namespace poutre
     /**@{*/
     //! Empty ctor
 
-    POUTRE_CXX14_CONSTEXPR strided_array_view()
+    POUTRE_CONSTEXPR strided_array_view()
         POUTRE_NOEXCEPT_IF(POUTRE_NOEXCEPT_EXPR(bounds_type()) && POUTRE_NOEXCEPT_EXPR(index_type()))
         : m_bnd()
         , m_stride_idx()
@@ -520,7 +520,7 @@ namespace poutre
 
     //! ctor from nude ptr
     //@warning Requires: [ptr, ptr + bounds.size()) is a valid range.
-    POUTRE_CXX14_CONSTEXPR
+    POUTRE_CONSTEXPR
     strided_array_view(pointer ptr, bounds_type bounds, index_type stride) : m_bnd(bounds), m_stride_idx(stride), m_data(ptr)
     {
       if( !m_data && bounds.size() != 0 )
@@ -541,7 +541,7 @@ namespace poutre
                                      && std::is_same<typename std::remove_cv<U>::type,
                                                      typename std::remove_cv<value_type>::type>::value>::type * = nullptr>
     //! Assignement operator
-    POUTRE_CXX14_CONSTEXPR self_type &operator=(const strided_array_view<U, Rank> &rhs) POUTRE_NOEXCEPT
+    POUTRE_CONSTEXPR self_type &operator=(const strided_array_view<U, Rank> &rhs) POUTRE_NOEXCEPT
     {
       m_bnd        = rhs.m_bnd;
       m_stride_idx = rhs.m_stride_idx;
@@ -572,7 +572,7 @@ namespace poutre
     /**@{*/
     //! Accessor to underlying data through indexing
 
-    POUTRE_CXX14_CONSTEXPR reference operator[](const index_type &idx) const POUTRE_NOEXCEPTONLYNDEBUG
+    POUTRE_CONSTEXPR reference operator[](const index_type &idx) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ASSERTCHECK(m_bnd.contains(idx) == true, "Out of bound");
       return details::view_access(m_data, idx, m_stride_idx);
@@ -588,7 +588,7 @@ namespace poutre
     //! �...,stride()[Rank - 1] }
     //@warning Requires: 0<=slice<bound()[0]
 
-    POUTRE_CXX14_CONSTEXPR strided_array_view<T, Rank - 1> operator[](difference_type slice) const
+    POUTRE_CONSTEXPR strided_array_view<T, Rank - 1> operator[](difference_type slice) const
     {
       static_assert(Rank > 1, "Slicing is only allowed if Rank>1");
       POUTRE_ASSERTCHECK(0 <= slice, "Slicing slice must be  >=0");
@@ -614,7 +614,7 @@ namespace poutre
       return strided_array_view<T, Rank - 1>(data_slice, bnd_slice, stride_slice);
     }
 
-    POUTRE_CXX14_CONSTEXPR strided_array_view<T, Rank>
+    POUTRE_CONSTEXPR strided_array_view<T, Rank>
     //! A strided view such that the initial element is (*this)[origin], the
     //! stride is stride(), and the bounds are section_bnd.
     //@warning Requires: bounds().contains(origin + idx) == true for any
@@ -637,7 +637,7 @@ namespace poutre
       return strided_array_view<T, Rank>(data_section, section_bnd, m_stride_idx);
     }
 
-    POUTRE_CXX14_CONSTEXPR strided_array_view<T, Rank>
+    POUTRE_CONSTEXPR strided_array_view<T, Rank>
     //! A strided view such that the initial element is (*this)[origin], the
     //! stride is stride(), and the bounds are (bounds() - origin).
     // @warning Requires: bounds().contains(origin + idx) == true for any

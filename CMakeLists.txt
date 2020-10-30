@@ -166,7 +166,7 @@ include_directories(${POUTRE_PYTHONEXT_DIR})
 
 
 if(CODE_COVERAGE)
-   add_code_coverage_all_targets(EXCLUDE */boost/* */7/*)
+   add_code_coverage_all_targets()# EXCLUDE */boost/* */7/*)
 endif()
 
 # the poutre core libraries
