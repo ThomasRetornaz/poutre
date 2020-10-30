@@ -123,7 +123,7 @@ namespace poutre
 
 // NOLINTNEXTLINE
 #  define POUTRE_RUNTIME_ERROR(MSG)                                                                                         \
-    throw std::runtime_error(fmt::format("Throw {} at {} {}", MSG, __FILE__, __LINE__)) //-V1003 //NOLINT
+    throw std::runtime_error(fmt::format("Throw {%s} at {%s} {%S}", MSG, __FILE__, __LINE__)) //-V1003 //NOLINT
 // NOLINTNEXTLINE
 #  define POUTRE_NEVER_REACH_HERE                                                                                           \
     POUTRE_RUNTIME_ERROR("Code should never reach here, WTF Oo") // NOLINT

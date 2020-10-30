@@ -48,7 +48,7 @@ namespace poutre
       return CreateDense(i_img1.GetCoords(), ctype, ptype);
     }
     break;
-    default: POUTRE_RUNTIME_ERROR(("ConvertGeometry:: unsupported img type{}", imgType));
+    default: POUTRE_RUNTIME_ERROR(poutre::format("ConvertGeometry:: unsupported img type{}", imgType));
     }
   }
 

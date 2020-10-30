@@ -548,7 +548,7 @@ namespace poutre
 
     default:
     {
-      POUTRE_RUNTIME_ERROR(("ImageToStringDenseScalarDispatchPType::Unsupported pixel type:{}", ptype));
+      POUTRE_RUNTIME_ERROR(poutre::format("ImageToStringDenseScalarDispatchPType::Unsupported pixel type:{}", ptype));
     }
     } // switch (ptype)
   }
@@ -588,7 +588,7 @@ namespace poutre
 
     default:
     {
-      POUTRE_RUNTIME_ERROR(("ImageToStringDenseScalarDispatchPType::Unsupported pixel type:{}", ptype));
+      POUTRE_RUNTIME_ERROR(poutre::format("ImageToStringDenseScalarDispatchPType::Unsupported pixel type:{}", ptype));
     }
     } // switch (ptype)
   }
