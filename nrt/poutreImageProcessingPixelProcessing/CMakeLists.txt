@@ -13,6 +13,14 @@ set(poutreIPPixelOperationTestSRC
 
 add_executable(PoutreIPPixelProcessingTests ${poutreIPPixelOperationTestSRC})
 
+IF(BUILD_SHARED_LIBS)
+  SET_TARGET_PROPERTIES(PoutreIPPixelProcessingTests PROPERTIES COMPILE_FLAGS -DJSON_DLL)
+ENDIF(BUILD_SHARED_LIBS)
+
+IF(POUTRE_CI)
+	SET_TARGET_PROPERTIES(PoutreIPPixelProcessingTests PROPERTIES COMPILE_FLAGS -DPOUTRE_CI)
+ENDIF()
+
 target_link_libraries(PoutreIPPixelProcessingTests
     PRIVATE gtest  
     PRIVATE gtest_main

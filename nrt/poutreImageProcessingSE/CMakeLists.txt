@@ -8,9 +8,14 @@ set(PoutreImageProcessingSETestSRC
 )
 
 add_executable(PoutreIPSETests ${PoutreImageProcessingSETestSRC})
-set_target_properties(PoutreIPSETests PROPERTIES 
-                      DEFINE_SYMBOL "JSON_DLL"
-					 )
+IF(BUILD_SHARED_LIBS)
+  SET_TARGET_PROPERTIES(PoutreIPSETests PROPERTIES COMPILE_FLAGS -DJSON_DLL)
+ENDIF(BUILD_SHARED_LIBS)
+
+IF(POUTRE_CI)
+	SET_TARGET_PROPERTIES(PoutreIPSETests PROPERTIES COMPILE_FLAGS -DPOUTRE_CI)
+ENDIF()
+
 
 target_link_libraries(PoutreIPSETests
     PRIVATE gtest  

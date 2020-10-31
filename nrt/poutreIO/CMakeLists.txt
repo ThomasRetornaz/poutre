@@ -24,8 +24,14 @@ set(POUTREIO_NRT_DATAS "\"${CMAKE_CURRENT_SOURCE_DIR}/Datas\"")
 add_definitions(-DPOUTREIO_NRT_DATAS=${POUTREIO_NRT_DATAS})
 
 add_executable(PoutreIOTests ${PoutreIOTestSRC})
-set_target_properties(PoutreIOTests PROPERTIES 
-                      DEFINE_SYMBOL "JSON_DLL")
+
+IF(BUILD_SHARED_LIBS)
+  SET_TARGET_PROPERTIES(PoutreIOTests PROPERTIES COMPILE_FLAGS -DJSON_DLL)
+ENDIF(BUILD_SHARED_LIBS)
+
+IF(POUTRE_CI)
+	SET_TARGET_PROPERTIES(PoutreIOTests PROPERTIES COMPILE_FLAGS -DPOUTRE_CI)
+ENDIF()
 
 target_link_libraries(PoutreIOTests
     PUBLIC PoutreBase 

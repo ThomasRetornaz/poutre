@@ -17,6 +17,7 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 OPTION(POUTRE_BUILD_TEST "Build Tests Suites" ON)
+OPTION(POUTRE_CI "Build on CI desactivated some tests" OFF)
 OPTION(POUTRE_BUILD_BENCH "Build Benchmark Suites" ON)
 OPTION(POUTRE_BUILD_PY "Build python exports" ON)
 

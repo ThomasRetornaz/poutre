@@ -11,9 +11,14 @@ set(PoutreImageProcessingLLMTestSRC
 )
 
 add_executable(PoutreIPLowLevelMorphologyTests ${PoutreImageProcessingLLMTestSRC})
-set_target_properties(PoutreIPLowLevelMorphologyTests PROPERTIES 
-                      DEFINE_SYMBOL "JSON_DLL"
-                      )
+
+IF(BUILD_SHARED_LIBS)
+  SET_TARGET_PROPERTIES(PoutreIPLowLevelMorphologyTests PROPERTIES COMPILE_FLAGS -DJSON_DLL)
+ENDIF(BUILD_SHARED_LIBS)
+
+IF(POUTRE_CI)
+	SET_TARGET_PROPERTIES(PoutreIPLowLevelMorphologyTests PROPERTIES COMPILE_FLAGS -DPOUTRE_CI)
+ENDIF()
 
 target_link_libraries(PoutreIPLowLevelMorphologyTests
     PUBLIC PoutreBase 

@@ -13,6 +13,14 @@ set(poutreIPCoreTestSRC
 
 add_executable(PoutreIPCoreTests ${poutreIPCoreTestSRC})
 
+IF(BUILD_SHARED_LIBS)
+  SET_TARGET_PROPERTIES(PoutreIPCoreTests PROPERTIES COMPILE_FLAGS -DJSON_DLL)
+ENDIF(BUILD_SHARED_LIBS)
+
+IF(POUTRE_CI)
+	SET_TARGET_PROPERTIES(PoutreIPCoreTests PROPERTIES COMPILE_FLAGS -DPOUTRE_CI)
+ENDIF()
+
 target_link_libraries(PoutreIPCoreTests
     PRIVATE gtest  
     PRIVATE gtest_main
@@ -21,6 +29,7 @@ target_link_libraries(PoutreIPCoreTests
     PUBLIC PoutreIO
     PUBLIC ${OpenImageIO_LIBRARIES}
 )
+
 
 
 add_custom_command(TARGET PoutreIPCoreTests POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:gtest> $<TARGET_FILE_DIR:PoutreIPCoreTests>)
