@@ -128,9 +128,6 @@ namespace poutre
     static const PType        pixel_type    = PType::PType_GrayUINT8;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
-    // POUTRE_STATIC_CONSTEXPR size_t default_padding_size =
-    // (size_t)BOOST_SIMD_CONFIG_ALIGNMENT / sizeof(storage_type);
-
     POUTRE_STATIC_CONSTEXPR size_t alignment      = SIMD_IDEAL_MAX_ALIGN_BYTES;
     POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = SIMD_BATCH_INT8_SIZE;
     using simd_type                               = typename xs::batch<storage_type, simd_loop_step>;

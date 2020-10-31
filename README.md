@@ -19,8 +19,7 @@ It is released under the very permissive **Boost license**.
 
 ## Dependencies ##
 
-* Boost is required
-* Other dependencies are downloaded during configure thanks to cmake ExternalProject facility
+* Dependencies are downloaded during configure thanks to cmake ExternalProject facility
 
 ## Status ##
 

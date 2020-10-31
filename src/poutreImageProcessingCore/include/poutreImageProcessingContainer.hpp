@@ -32,7 +32,6 @@
 #include <poutreBase/poutreContainerView.hpp>
 #include <poutreBase/poutreCoordinate.hpp>
 #include <poutreBase/poutreDenseIterator.hpp>
-#include <poutreBase/poutreGeometry.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
 
@@ -516,11 +515,11 @@ namespace poutre
       this->SetPixel(index[1], index[0], value);
     }
 
-    template<ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
+    /*template<ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
     POUTRE_CONSTEXPR void SetPixel(pt2D_scoord pt2D, value_type value) POUTRE_NOEXCEPTONLYNDEBUG
     {
       this->SetPixel(pt2D.get<0>(), pt2D.get<1>(), value);
-    }
+    }*/
 
     template<ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
     POUTRE_CONSTEXPR value_type GetPixel(scoord x, scoord y) const POUTRE_NOEXCEPTONLYNDEBUG
@@ -538,11 +537,11 @@ namespace poutre
       return this->GetPixel(index[1], index[0]);
     }
 
-    template<ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
-    POUTRE_CONSTEXPR value_type GetPixel(pt2D_scoord pt2D) const POUTRE_NOEXCEPTONLYNDEBUG
-    {
-      return this->GetPixel(pt2D.get<0>(), pt2D.get<1>());
-    }
+    //template<ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
+    //POUTRE_CONSTEXPR value_type GetPixel(pt2D_scoord pt2D) const POUTRE_NOEXCEPTONLYNDEBUG
+    //{
+    //  return this->GetPixel(pt2D.get<0>(), pt2D.get<1>());
+    //}
 
     template<ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
     POUTRE_CONSTEXPR pointer GetLineBuffer(scoord y) POUTRE_NOEXCEPTONLYNDEBUG

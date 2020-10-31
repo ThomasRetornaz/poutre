@@ -23,9 +23,6 @@ add_library(PoutreIPLowLevelMorphology ${PoutreIPLLMSRC})
 
 target_link_libraries(
   PoutreIPLowLevelMorphology
-  PUBLIC ${Boost_THREAD_LIBRARY}
-  PUBLIC ${Boost_SYSTEM_LIBRARY}
-  PUBLIC ${Boost_FILESYSTEM_LIBRARY}
   PUBLIC jsoncpp_lib
          # INTERFACE Eigen
   INTERFACE xsimd
@@ -38,12 +35,6 @@ set_target_properties(PoutreIPLowLevelMorphology PROPERTIES FOLDER "src/")
 if(BUILD_SHARED_LIBS)
   set_target_properties(PoutreIPLowLevelMorphology PROPERTIES COMPILE_FLAGS
                                                               -DJSON_DLL)
-  set_target_properties(
-    PoutreIPLowLevelMorphology PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DLL
-  )# FIXME not true should be linked with boost
-  set_target_properties(
-    PoutreIPLowLevelMorphology PROPERTIES COMPILE_FLAGS -DBOOST_LOG_DYN_LINK
-  )# FIXME not true should be linked with boost
 endif(BUILD_SHARED_LIBS)
 
 install_poutre_targets(TARGET PoutreIPLowLevelMorphology CONFIGURATION Release

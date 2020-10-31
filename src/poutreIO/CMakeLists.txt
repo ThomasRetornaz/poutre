@@ -41,8 +41,6 @@ set(PoutreIOSRC ${PoutreIOSRC_PUBLICHEADERS} ${PoutreIOSRC_DETAILS}
 add_library(PoutreIO ${PoutreIOSRC})
 target_link_libraries(
   PoutreIO
-  PUBLIC ${Boost_SYSTEM_LIBRARY}
-  PUBLIC ${Boost_FILESYSTEM_LIBRARY}
   PRIVATE jsoncpp_lib
   PUBLIC ${OpenImageIO_LIBRARIES}
   PUBLIC ${HDF5_LIBRARIES}

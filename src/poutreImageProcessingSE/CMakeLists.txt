@@ -24,9 +24,6 @@ set(poutreImageProcessingSE_SRC
 add_library(PoutreIPSE ${poutreImageProcessingSE_SRC})
 target_link_libraries(
   PoutreIPSE
-  # PRIVATE ${Boost_GRAPH_LIBRARY} PRIVATE ${Boost_DATE_TIME_LIBRARY} PRIVATE
-  # ${Boost_REGEX_LIBRARY} PRIVATE ${Boost_THREAD_LIBRARY}
-  PUBLIC ${Boost_SYSTEM_LIBRARY}
   PRIVATE jsoncpp_lib
   INTERFACE Eigen
   INTERFACE xsimd

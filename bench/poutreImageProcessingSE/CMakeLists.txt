@@ -21,14 +21,12 @@ target_link_libraries(PoutreIPSEBenchs
   PUBLIC benchmark_main 
   PUBLIC shlwapi.lib
   #PUBLIC PoutreIPSE
-  PUBLIC ${Boost_SYSTEM_LIBRARY} 
   )
 ELSE()
 target_link_libraries(PoutreIPSEBenchs 
   PUBLIC benchmark  
   PUBLIC benchmark_main 
   #PUBLIC PoutreIPSE 
-  PUBLIC ${Boost_SYSTEM_LIBRARY}   
   )
 ENDIF()
 

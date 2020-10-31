@@ -1,10 +1,5 @@
 os: Visual Studio 2019
 
-# Boost is already installed on AppVeyor.
-environment:
-  BOOST_ROOT: C:\Libraries\boost_1_73_0
-  #BOOST_LIBRARYDIR: C:\Libraries\boost_1_73_0\lib64-msvc-16.0
-
 clone_script:
   - cmd: >-
       git clone -q --branch=%APPVEYOR_REPO_BRANCH% https://github.com/%APPVEYOR_REPO_NAME%.git %APPVEYOR_BUILD_FOLDER%

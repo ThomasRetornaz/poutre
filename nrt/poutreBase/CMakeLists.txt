@@ -7,13 +7,9 @@ set(PoutreBaseTestSubdirectory ${POUTRE_NRT_DIR}/poutreBase)
 set(PoutreBaseTestSRC
   ${PoutreBaseTestSubdirectory}/main.hpp
   ${PoutreBaseTestSubdirectory}/main.cpp
-  #dummy tests to validate proper import of third parties dependencies
-  #${PoutreBaseTestSubdirectory}/nt2TablePlayground.cpp
-  #${PoutreBaseTestSubdirectory}/eigenCleanImport.cpp
   ${PoutreBaseTestSubdirectory}/chronos.cpp
   ${PoutreBaseTestSubdirectory}/jsonSerialize.cpp
   ${PoutreBaseTestSubdirectory}/registrar.cpp
-  #${PoutreBaseTestSubdirectory}/geometry.cpp
   ${PoutreBaseTestSubdirectory}/coordinate.cpp
   ${PoutreBaseTestSubdirectory}/static_array.cpp
   ${PoutreBaseTestSubdirectory}/types.cpp

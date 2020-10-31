@@ -49,7 +49,7 @@ elseif(DOXYGEN_CONFIG_FILE)
   set(DOXY_IMAGE_PATH    \"${POUTRE_HTML_FILES_DIR}\" \"${POUTRE_DOXYGEN_PATH}/misc\" CACHE FILEPATH  "Doxygen image path")
   set(DOXY_UNIT_TEST_PATH \"${POUTRE_HTML_FILES_DIR}\" \"${POUTRE_ROOT_DIR}/coreTests\" CACHE FILEPATH  "Doxygen unit tests path")
   set(DOXY_LOGO_PATH    "${POUTRE_ROOT_DIR}/doc/Doxygen/misc/yun_5048_small.jpg" CACHE FILEPATH  "Doxygen logo")
-  set(DOXY_INCLUDE_PATH \"${JPEG_LIB_SRC}\" \"${PNG_LIB_SRC}\" \"${ZLIB_SRC_DIR}\" \"${Boost_INCLUDE_DIRS}\" CACHE FILEPATH "Doxygen preprocessor paths")
+  set(DOXY_INCLUDE_PATH \"${JPEG_LIB_SRC}\" \"${PNG_LIB_SRC}\" \"${ZLIB_SRC_DIR}\" CACHE FILEPATH "Doxygen preprocessor paths")
   set(DOXY_BIB_FILE "${POUTRE_DOCUMENTATION_ROOT}/Bib/bib_full.bib")
 
   string(REGEX REPLACE ";" " \\\\ \n" DOXY_FILES_PATTERN    "${DOXY_FILES_PATTERN}")

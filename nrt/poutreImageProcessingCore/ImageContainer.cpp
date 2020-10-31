@@ -12,7 +12,6 @@
 //==============================================================================
 
 #include "main.hpp"
-#include "poutreBase/poutreGeometry.hpp"
 #include <iostream>
 #include <poutreBase/poutreContainerView.hpp>
 #include <poutreIO/poutreIOString.hpp>
@@ -239,7 +238,7 @@ TEST(poutreImageProcessingContainer,SetPixelGetPixel) {
   (*img).SetPixel(2, 0, 10);  // x then y //-V522
   poutre::idx2d pix = {3, 0}; // y then x //-V522
   (*img).SetPixel(pix, 8);
-  poutre::pt2D_scoord pix2 = {5, 3}; // x then y
+  poutre::idx2d pix2 = {5, 3}; // x then y
   (*img).SetPixel(pix2, 9);
 
 //  std::string expected = "Dense Scalar GINT32 2 5 6\
@@ -254,7 +253,7 @@ TEST(poutreImageProcessingContainer,SetPixelGetPixel) {
   poutre::idx2d p = {3, 0}; // y then x
   auto val2 = (*img).GetPixel(p);
   EXPECT_EQ(val2, 8);
-  poutre::pt2D_scoord p2 = {5, 3}; // x then y
+  poutre::idx2d p2   = {5, 3}; // x then y
   auto val3 = (*img).GetPixel(p2);
   EXPECT_EQ(val3, 9);
 }

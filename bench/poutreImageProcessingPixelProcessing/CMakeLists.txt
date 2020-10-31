@@ -26,7 +26,6 @@ target_link_libraries(PoutreIPPixelProcessingBenchs
   #INTERFACE ${SIMD_LIB}
   PUBLIC shlwapi.lib
   PUBLIC PoutreIPPixelProcessing
-  PUBLIC ${Boost_SYSTEM_LIBRARY}
   )
 ELSE()
 target_link_libraries(PoutreIPPixelProcessingBenchs 
@@ -35,6 +34,5 @@ target_link_libraries(PoutreIPPixelProcessingBenchs
   PUBLIC benchmark_main 
   #INTERFACE ${SIMD_LIB}
   PUBLIC PoutreIPPixelProcessing 
-  PUBLIC ${Boost_SYSTEM_LIBRARY}   
   )
 ENDIF()

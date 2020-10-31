@@ -13,7 +13,6 @@
 #include <poutreImageProcessingCore/include/poutreImageProcessingPriorityQueue.hpp>
 
 #include "benchmark/benchmark.h"
-#include <boost/heap/priority_queue.hpp>
 #include <cstdlib>
 #include <queue>
 #include <vector>

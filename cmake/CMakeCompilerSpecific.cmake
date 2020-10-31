@@ -109,13 +109,6 @@ if(MSVC)
     message(STATUS "Set /MP on for msvc")
   endif()
 
-
-  
- 
-  # Boost specific
-  remove_definitions(-DBOOST_TEST_DYN_LINK)
-  add_definitions(-DBOOST_ALL_NO_LIB)
-  #add_definitions(-DBOOST_TEST_NO_LIB)
 endif(MSVC)
 
 # Require C++17

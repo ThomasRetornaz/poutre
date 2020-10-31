@@ -25,13 +25,10 @@
 #include <poutreImageProcessing/poutreImageProcessing.hpp>
 
 #include <algorithm>
-#include <boost/simd/sdk/simd/algorithm.hpp>
 
 // move this in a dedicated here in PoutreCore
 namespace poutre
 {
-  namespace bs = boost::simd;
-
   /**
    * @addtogroup image_processing_linear_group
    *@{

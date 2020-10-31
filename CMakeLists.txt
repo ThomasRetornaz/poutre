@@ -148,11 +148,9 @@ include(cmake/CMakeInstallUtils.cmake)
 
 # Third parties
 add_subdirectory(${THIRD_PARTIES_PATH})
-add_definitions(-DBOOST_TEST_DYN_LINK)
 
 #FIXME
-include_directories(BEFORE "${SIMD_INLCUDE_DIRECTORY}")
-include_directories(${Boost_INCLUDE_DIRS})
+include_directories(BEFORE ${SIMD_INLCUDE_DIRECTORY})
 include_directories(${JSONCPP_INCLUDE_DIR})
 include_directories(BEFORE ${FMT_INCLUDES})
 include_directories(BEFORE ${SPDLOG_INCLUDES})
@@ -166,7 +164,7 @@ include_directories(${POUTRE_PYTHONEXT_DIR})
 
 
 if(CODE_COVERAGE)
-   add_code_coverage_all_targets()# EXCLUDE */boost/* */7/*)
+   add_code_coverage_all_targets()
 endif()
 
 # the poutre core libraries

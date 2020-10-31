@@ -21,7 +21,6 @@ extraction:
       packages: 
         - build-essential
         - cmake
-        - libboost-all-dev
     configure:
       command:
         - mkdir build
