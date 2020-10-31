@@ -14,13 +14,11 @@
 #include <poutreImageProcessingCore/include/poutreImageProcessingPriorityQueue.hpp>
 
 TEST(poutreImageProcessingPriorityQueue,ctor)
-{
-    poutre::PriorityQueue<unsigned char, poutre::offset> pq;
-}
+{ poutre::poutre_pq<unsigned char, poutre::offset> pq; }
 
 TEST(poutreImageProcessingPriorityQueue,increase_nostable)
 {
-    poutre::PriorityQueue<unsigned char, poutre::offset> pq;
+  poutre::poutre_pq<unsigned char, poutre::offset> pq;
     pq.emplace(0, 1); //-V525
     pq.emplace(50, 1);
     pq.emplace(0, 2);
@@ -37,19 +35,13 @@ TEST(poutreImageProcessingPriorityQueue,increase_nostable)
         results.push_back(pq.top());
         pq.pop();
     }
-    //EXPECT_EQ_COLLECTIONS(results.begin(), results.end(), expected.begin(), expected.end());
-    EXPECT_TRUE(expected.size() == results.size());
-    for (size_t i = 0u; i < expected.size(); i++)
-    {
-        EXPECT_EQ(expected[i].first, results[i].first);
-        EXPECT_EQ(expected[i].second, results[i].second);
-    }
+    EXPECT_EQ(results.size(), expected.size());
+    EXPECT_TRUE(CheckEqualCollections(results.begin(), results.end(), expected.begin()));
 }
-
 
 TEST(poutreImageProcessingPriorityQueue,increase_stable)
 {
-    poutre::PriorityQueue<unsigned char, poutre::offset, poutre::lesserKey<unsigned char, poutre::offset>, true> pq;
+  poutre::poutre_pq_stable<unsigned char, poutre::offset> pq;
     pq.emplace(0, 1); //-V525
     pq.emplace(50, 1);
     pq.emplace(0, 2);
@@ -66,19 +58,13 @@ TEST(poutreImageProcessingPriorityQueue,increase_stable)
         results.push_back(pq.top());
         pq.pop();
     }
-    //EXPECT_EQ_COLLECTIONS(results.begin(), results.end(), expected.begin(), expected.end());
-    EXPECT_TRUE(expected.size() == results.size());
-    for (size_t i = 0u; i < expected.size(); i++)
-    {
-        EXPECT_EQ(expected[i].first, results[i].first);
-        EXPECT_EQ(expected[i].second, results[i].second);
-    }
+    EXPECT_EQ(results.size(), expected.size());
+    EXPECT_TRUE(CheckEqualCollections(results.begin(), results.end(), expected.begin()));
 }
-
-
 TEST(poutreImageProcessingPriorityQueue,decrease_nostable)
 {
-    poutre::PriorityQueue<unsigned char, poutre::offset, poutre::greaterKey<unsigned char, poutre::offset>> pq;
+  poutre::poutre_rpq<unsigned char,
+                    poutre::offset> pq;
     pq.emplace(0, 1); //-V525
     pq.emplace(50, 1);
     pq.emplace(0, 2);
@@ -94,19 +80,12 @@ TEST(poutreImageProcessingPriorityQueue,decrease_nostable)
         results.push_back(pq.top());
         pq.pop();
     }
-    //EXPECT_EQ_COLLECTIONS(results.begin(), results.end(), expected.begin(), expected.end());
-    EXPECT_TRUE(expected.size() == results.size());
-    for (size_t i = 0; i < expected.size(); i++)
-    {
-        EXPECT_EQ(expected[i].first, results[i].first);
-        EXPECT_EQ(expected[i].second, results[i].second);
-    }
+    EXPECT_EQ(results.size(), expected.size());
+    EXPECT_TRUE(CheckEqualCollections(results.begin(), results.end(), expected.begin()));
 }
-
-
 TEST(poutreImageProcessingPriorityQueue,decrease_stable)
 {
-    poutre::PriorityQueue<unsigned char, poutre::offset, poutre::greaterKey<unsigned char, poutre::offset>, true> pq;
+  poutre::poutre_rpq_stable<unsigned char, poutre::offset> pq;
     pq.emplace(0, 1); //-V525
     pq.emplace(50, 1);
     pq.emplace(0, 2);
@@ -122,13 +101,6 @@ TEST(poutreImageProcessingPriorityQueue,decrease_stable)
         results.push_back(pq.top());
         pq.pop();
     }
-    //EXPECT_EQ_COLLECTIONS(results.begin(), results.end(), expected.begin(), expected.end());
-    EXPECT_TRUE(expected.size() == results.size());
-    for (size_t i = 0; i < expected.size(); i++)
-    {
-        EXPECT_EQ(expected[i].first, results[i].first);
-        EXPECT_EQ(expected[i].second, results[i].second);
-    }
+    EXPECT_EQ(results.size(), expected.size());
+    EXPECT_TRUE(CheckEqualCollections(results.begin(), results.end(), expected.begin()));
 }
-
-

@@ -10,9 +10,9 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#include "benchmark/benchmark.h"
 #include <poutreImageProcessingCore/include/poutreImageProcessingPriorityQueue.hpp>
 
+#include "benchmark/benchmark.h"
 #include <boost/heap/priority_queue.hpp>
 #include <cstdlib>
 #include <queue>
@@ -20,258 +20,166 @@
 
 namespace
 {
-
-    decltype(auto) ConstructVector(poutre::offset size)
+  decltype(auto) ConstructVector(poutre::offset size)
+  {
+    std::vector<std::pair<poutre::offset, poutre::offset>> m_vect;
+    m_vect.reserve(size);
+    for( poutre::offset i = 0u; i < size; ++i )
     {
-        std::vector<std::pair<unsigned char, poutre::offset>> m_vect;
-        m_vect.reserve(size);
-        for (poutre::offset i = 0u; i < size; ++i)
-        {
-            m_vect.push_back({rand() % 255,i});
-        }
-        return m_vect;
+      m_vect.push_back({rand() % 255, i});
     }
+    return m_vect;
+  }
 
-    template <typename T> class STDPriorityQueueReserve : public std::priority_queue<T>
+  decltype(auto) ConstructVectorUint8(poutre::offset size)
+  {
+    std::vector<std::pair<poutre::pUINT8, poutre::offset>> m_vect;
+    m_vect.reserve(size);
+    for( poutre::offset i = 0u; i < size; ++i )
     {
-      public:
-        STDPriorityQueueReserve(poutre::offset size) : std::priority_queue<T>()
-        {
-            (this->c).reserve(size);
-        }
-    };
-
-    template <typename T, bool stable = false>
-    class BoostPriorityQueueReserve : public boost::heap::priority_queue<T, boost::heap::stable<stable>>
-    {
-      public:
-        BoostPriorityQueueReserve(poutre::offset size) : boost::heap::priority_queue<T, boost::heap::stable<stable>>()
-        {
-            this->reserve(size);
-        }
-    };
-
+      m_vect.push_back({rand() % 255, i});
+    }
+    return m_vect;
+  }
 } // namespace
 
 class PriorityQueueFixture : public ::benchmark::Fixture
 {
   public:
-    void SetUp(const ::benchmark::State &st)
-    {
-        m_vect = ConstructVector(st.range(0));
-    }
-    void TearDown(const ::benchmark::State &)
-    {
-        m_vect.clear();
-    }
-    std::vector<std::pair<unsigned char, poutre::offset>> m_vect;
+  void SetUp(const ::benchmark::State &st) { m_vect = ConstructVector(st.range(0)); }
+  void TearDown(const ::benchmark::State &) { m_vect.clear(); }
+  std::vector<std::pair<poutre::offset, poutre::offset>> m_vect;
 };
 
-BENCHMARK_DEFINE_F(PriorityQueueFixture, stlpriorityqueue)(benchmark::State &state)
+class PriorityQueueFixtureUint8 : public ::benchmark::Fixture
 {
-    const auto size = state.range(0);
-    for (auto _ : state)
-    {
-        std::priority_queue<std::pair<unsigned char, poutre::offset>> pqueue;
+  public:
+  void SetUp(const ::benchmark::State &st) { m_vect = ConstructVectorUint8(st.range(0)); }
+  void TearDown(const ::benchmark::State &) { m_vect.clear(); }
+  std::vector<std::pair<poutre::pUINT8, poutre::offset>> m_vect;
+};
 
-        for (const auto &val : m_vect)
-        {
-            pqueue.push(val);
-        }
-        while (!pqueue.empty())
-        {
-            auto top = pqueue.top(); //-V808
-            pqueue.pop();
-        }
+BENCHMARK_DEFINE_F(PriorityQueueFixture, priorityqueue)(benchmark::State &state)
+{
+  const auto size = state.range(0);
+  for( auto _ : state )
+  {
+    poutre::poutre_pq<poutre::offset, poutre::offset> pqueue;
+
+    for( const auto &val : m_vect )
+    {
+      pqueue.push(val);
     }
-    state.SetItemsProcessed(state.iterations() * size);
+    while( !pqueue.empty() )
+    {
+      auto top = pqueue.top(); //-V808
+      pqueue.pop();
+    }
+  }
+  state.SetItemsProcessed(state.iterations() * size);
 }
 
-BENCHMARK_DEFINE_F(PriorityQueueFixture, stlpriorityqueue_reserve)(benchmark::State &state)
+BENCHMARK_DEFINE_F(PriorityQueueFixture, priorityqueue_reserve)(benchmark::State &state)
 {
-    const auto size = state.range(0);
-    for (auto _ : state)
+  const auto size = state.range(0);
+  for( auto _ : state )
+  {
+    poutre::poutre_pq<poutre::offset, poutre::offset> pqueue(m_vect.size());
+    for( const auto &val : m_vect )
     {
-        STDPriorityQueueReserve<std::pair<unsigned char, poutre::offset>> pqueue(m_vect.size());
-        for (const auto &val : m_vect)
-        {
-            pqueue.push(val);
-        }
-        while (!pqueue.empty())
-        {
-            auto top = pqueue.top();
-            pqueue.pop();
-        }
+      pqueue.push(val);
     }
-    state.SetItemsProcessed(state.iterations() * size);
+    while( !pqueue.empty() )
+    {
+      auto top = pqueue.top();
+      pqueue.pop();
+    }
+  }
+  state.SetItemsProcessed(state.iterations() * size);
 }
 
-BENCHMARK_DEFINE_F(PriorityQueueFixture, boostpriorityqueue)(benchmark::State &state)
+BENCHMARK_DEFINE_F(PriorityQueueFixture, priorityqueue_respectfifoorder)(benchmark::State &state)
 {
-    const auto size = state.range(0);
-    for (auto _ : state)
-    {
-        boost::heap::priority_queue<std::pair<unsigned char, poutre::offset>> pqueue;
+  const auto size = state.range(0);
+  for( auto _ : state )
+  {
+    poutre::poutre_pq_stable<poutre::offset, poutre::offset> pqueue(m_vect.size());
 
-        for (const auto &val : m_vect)
-        {
-            pqueue.push(val);
-        }
-        while (!pqueue.empty())
-        {
-            auto top = pqueue.top(); //-V808
-            pqueue.pop();
-        }
+    for( const auto &val : m_vect )
+    {
+      pqueue.push(val);
     }
-    state.SetItemsProcessed(state.iterations() * size);
+    while( !pqueue.empty() )
+    {
+      auto top = pqueue.top(); //-V808
+      pqueue.pop();
+    }
+  }
+  state.SetItemsProcessed(state.iterations() * size);
 }
 
-BENCHMARK_DEFINE_F(PriorityQueueFixture, boostpriorityqueue_reserve)(benchmark::State &state)
+BENCHMARK_DEFINE_F(PriorityQueueFixtureUint8, priorityqueue_uint8)(benchmark::State &state)
 {
-    const auto size = state.range(0);
-    for (auto _ : state)
-    {
-        BoostPriorityQueueReserve<std::pair<unsigned char, poutre::offset>> pqueue(m_vect.size());
+  const auto size = state.range(0);
+  for( auto _ : state )
+  {
+    poutre::poutre_pq<poutre::pUINT8, poutre::offset> pqueue;
 
-        for (const auto &val : m_vect)
-        {
-            pqueue.push(val);
-        }
-        while (!pqueue.empty())
-        {
-            auto top = pqueue.top(); //-V808
-            pqueue.pop();
-        }
+    for( const auto &val : m_vect )
+    {
+      pqueue.push(val);
     }
-    state.SetItemsProcessed(state.iterations() * size);
+    while( !pqueue.empty() )
+    {
+      auto top = pqueue.top(); //-V808
+      pqueue.pop();
+    }
+  }
+  state.SetItemsProcessed(state.iterations() * size);
 }
 
-BENCHMARK_DEFINE_F(PriorityQueueFixture, boostpriorityqueue_respectfifoorder)(benchmark::State &state)
+BENCHMARK_DEFINE_F(PriorityQueueFixtureUint8, priorityqueue_respectfifoorder_uint8)(benchmark::State &state)
 {
-    const auto size = state.range(0);
-    for (auto _ : state)
-    {
-        boost::heap::priority_queue<std::pair<unsigned char, poutre::offset>, boost::heap::stable<true>> pqueue;
+  const auto size = state.range(0);
+  for( auto _ : state )
+  {
+    poutre::poutre_pq_stable<poutre::pUINT8, poutre::offset> pqueue;
 
-        for (const auto &val : m_vect)
-        {
-            pqueue.push(val);
-        }
-        while (!pqueue.empty())
-        {
-            auto top = pqueue.top(); //-V808
-            pqueue.pop();
-        }
+    for( const auto &val : m_vect )
+    {
+      pqueue.push(val);
     }
-    state.SetItemsProcessed(state.iterations() * size);
+    while( !pqueue.empty() )
+    {
+      auto top = pqueue.top(); //-V808
+      pqueue.pop();
+    }
+  }
+  state.SetItemsProcessed(state.iterations() * size);
 }
 
-BENCHMARK_DEFINE_F(PriorityQueueFixture, boostpriorityqueue_reserve_respectfifoorder)(benchmark::State &state)
-{
-    const auto size = state.range(0);
-    for (auto _ : state)
-    {
-        BoostPriorityQueueReserve<std::pair<unsigned char, poutre::offset>, true> pqueue(m_vect.size());
 
-        for (const auto &val : m_vect)
-        {
-            pqueue.push(val);
-        }
-        while (!pqueue.empty())
-        {
-            auto top = pqueue.top(); //-V808
-            pqueue.pop();
-        }
-    }
-    state.SetItemsProcessed(state.iterations() * size);
-}
-
-BENCHMARK_DEFINE_F(PriorityQueueFixture, hand_made_respect_fifo_oder_optim_quant)(benchmark::State &state)
-{
-    const auto size = state.range(0);
-    for (auto _ : state)
-    {
-        poutre::PriorityQueue<poutre::pUINT8,poutre::offset> pqueue;
-
-        for (const auto &val : m_vect)
-        {
-            pqueue.push(val);
-        }
-        while (!pqueue.empty())
-        {
-            auto top = pqueue.top();
-            pqueue.pop();
-        }
-    }
-    state.SetItemsProcessed(state.iterations() * size);
-}
-
-BENCHMARK_DEFINE_F(PriorityQueueFixture, hand_made_respect_fifo_oder)(benchmark::State &state)
-{
-    const auto size = state.range(0);
-    for (auto _ : state)
-    {
-        poutre::PriorityQueue < poutre::pUINT32, poutre::offset,
-            poutre::lesserKey<poutre::pUINT32, poutre::offset>,true> pqueue;
-
-        for (const auto &val : m_vect)
-        {
-            pqueue.push(val);
-        }
-        while (!pqueue.empty())
-        {
-            auto top = pqueue.top();
-            pqueue.pop();
-        }
-    }
-    state.SetItemsProcessed(state.iterations() * size);
-}
-/*STL priority queue*/
-BENCHMARK_REGISTER_F(PriorityQueueFixture, stlpriorityqueue)
+BENCHMARK_REGISTER_F(PriorityQueueFixture, priorityqueue)
     ->Arg(16 * 16)
     ->Arg(32 * 32) //-V112
     ->Arg(64 * 64)
     ->Unit(benchmark::kMicrosecond); //-V112
-// 5% gain with visual 2015 SP3
-BENCHMARK_REGISTER_F(PriorityQueueFixture, stlpriorityqueue_reserve)
+BENCHMARK_REGISTER_F(PriorityQueueFixture, priorityqueue_reserve)
     ->Arg(16 * 16)
     ->Arg(32 * 32) //-V112
     ->Arg(64 * 64)
     ->Unit(benchmark::kMicrosecond); //-V112
-
-/*boost priority queue*/
-BENCHMARK_REGISTER_F(PriorityQueueFixture, boostpriorityqueue)
+BENCHMARK_REGISTER_F(PriorityQueueFixtureUint8, priorityqueue_uint8)
     ->Arg(16 * 16)
     ->Arg(32 * 32) //-V112
     ->Arg(64 * 64)
     ->Unit(benchmark::kMicrosecond); //-V112
-// AT least 5% gain with visual 2015 SP3
-BENCHMARK_REGISTER_F(PriorityQueueFixture, boostpriorityqueue_reserve)
+BENCHMARK_REGISTER_F(PriorityQueueFixture, priorityqueue_respectfifoorder)
     ->Arg(16 * 16)
     ->Arg(32 * 32) //-V112
     ->Arg(64 * 64)
     ->Unit(benchmark::kMicrosecond); //-V112
-// 2.5 times slower
-BENCHMARK_REGISTER_F(PriorityQueueFixture, boostpriorityqueue_respectfifoorder)
-    ->Arg(16 * 16)
-    ->Arg(32 * 32) //-V112
-    ->Arg(64 * 64)
-    ->Unit(benchmark::kMicrosecond); //-V112
-// AT least 5% gain with visual 2015 SP3
-BENCHMARK_REGISTER_F(PriorityQueueFixture, boostpriorityqueue_reserve_respectfifoorder)
-    ->Arg(16 * 16)
-    ->Arg(32 * 32) //-V112
-    ->Arg(64 * 64)
-    ->Unit(benchmark::kMicrosecond); //-V112
-
-//2* speedup under visual 2019
-BENCHMARK_REGISTER_F(PriorityQueueFixture, hand_made_respect_fifo_oder_optim_quant)
-    ->Arg(16 * 16)
-    ->Arg(32 * 32) //-V112
-    ->Arg(64 * 64)
-    ->Unit(benchmark::kMicrosecond); //-V112
-//fall back to boost
-BENCHMARK_REGISTER_F(PriorityQueueFixture, hand_made_respect_fifo_oder)
+BENCHMARK_REGISTER_F(PriorityQueueFixtureUint8, priorityqueue_respectfifoorder_uint8)
     ->Arg(16 * 16)
     ->Arg(32 * 32) //-V112
     ->Arg(64 * 64)
