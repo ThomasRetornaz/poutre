@@ -197,6 +197,19 @@ namespace poutre
       }
     };
 
+    template<class container, ptrdiff_t Rank = container::rank> struct helper_comp_lexicographic_less_equal_container_op
+    {
+      using value_type = typename container::value_type;
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(container const &A0, container const &A1) POUTRE_NOEXCEPT
+      {
+        for( ptrdiff_t i = Rank - 1; i >= 0; --i )
+        {
+          if (A0[i] > A1[i]) return false;
+        }
+        return true;
+      }
+    };
+
     template<class container, ptrdiff_t Rank = container::rank> struct helper_comp_lexicographic_sup_container_op
     {
       POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(container const &A0, container const &A1) POUTRE_NOEXCEPT
@@ -208,6 +221,18 @@ namespace poutre
           return (A0[i] > A1[i]);
         }
         return false;
+      }
+    };
+
+     template<class container, ptrdiff_t Rank = container::rank> struct helper_comp_lexicographic_sup_equal_container_op
+    {
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(container const &A0, container const &A1) POUTRE_NOEXCEPT
+      {
+        for( ptrdiff_t i = Rank - 1; i >= 0; i-- )
+        {
+          if (A0[i] < A1[i]) return false;
+        }
+        return true;
       }
     };
 

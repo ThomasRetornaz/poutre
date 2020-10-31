@@ -469,7 +469,7 @@ namespace poutre
     }
 #if HAVE_THREE_WAY_OPERATOR
     POUTRE_CONSTEXPR auto operator<=>(self_type const &rhs) const POUTRE_NOEXCEPT = default;
-#else
+#endif
     POUTRE_CONSTEXPR bool operator<(const self_type &rhs) const POUTRE_NOEXCEPT
     {
       return details::helper_comp_lexicographic_less_container_op<self_type>::op(*this, rhs);
@@ -477,7 +477,7 @@ namespace poutre
 
     POUTRE_CONSTEXPR bool operator<=(const self_type &rhs) const POUTRE_NOEXCEPT
     {
-      return !details::helper_comp_lexicographic_sup_container_op<self_type>::op(*this, rhs);
+      return details::helper_comp_lexicographic_less_equal_container_op<self_type>::op(*this, rhs);
     }
 
     POUTRE_CONSTEXPR bool operator>(const self_type &rhs) const POUTRE_NOEXCEPT
@@ -487,10 +487,8 @@ namespace poutre
 
     POUTRE_CONSTEXPR bool operator>=(const self_type &rhs) const POUTRE_NOEXCEPT
     {
-      return !details::helper_comp_lexicographic_less_container_op<self_type>::op(*this, rhs);
+      return details::helper_comp_lexicographic_sup_equal_container_op<self_type>::op(*this, rhs);
     }
-
-#endif
     /**@}*/
   };
 
