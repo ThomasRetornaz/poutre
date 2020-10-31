@@ -32,7 +32,7 @@
 #  pragma warning(disable : 4425) // 4425 improper support constexpr
 #endif
 #ifndef __clang__
-#include <compare>
+#  include <compare>
 #endif
 namespace poutre
 {
@@ -97,7 +97,7 @@ namespace poutre
     // using parent::max_size;
     using parent::empty;
 #  if HAVE_THREE_WAY_OPERATOR
-#else
+#  else
     using parent::operator==;
     using parent::operator!=;
 #  endif
@@ -638,7 +638,7 @@ namespace poutre
       {
          return (0 != m_bounds.size( ));
       }*/
-#if HAVE_THREE_WAY_OPERATOR     
+#if HAVE_THREE_WAY_OPERATOR
     POUTRE_CONSTEXPR auto operator<=>(const self_type &rhs) const POUTRE_NOEXCEPT = default;
     // {
     //     return this->m_idx <=> rhs.m_idx;
@@ -774,7 +774,7 @@ namespace poutre
     auto tmp(rhs);
     return (tmp + n);
   }
-#  if HAVE_THREE_WAY_OPERATOR
+#if HAVE_THREE_WAY_OPERATOR
 #else
   template<ptrdiff_t Rank>
   bool operator==(const bounds_iterator<Rank> &lhs, const bounds_iterator<Rank> &rhs) POUTRE_NOEXCEPT

@@ -28,7 +28,7 @@
 #include <stdexcept>
 
 #ifndef __clang__
-#include <compare>
+#  include <compare>
 #endif
 
 #define HAVE_THREE_WAY_OPERATOR                                                                                             \
@@ -203,7 +203,7 @@ namespace poutre
      */
 
     /**@{*/
-#  if HAVE_THREE_WAY_OPERATOR
+#if HAVE_THREE_WAY_OPERATOR
     POUTRE_CONSTEXPR auto operator<=>(const static_array_base<valuetype, Rank> &rhs) const POUTRE_NOEXCEPT = default;
 #else
     POUTRE_CONSTEXPR bool operator==(const self_type &rhs) const POUTRE_NOEXCEPT
@@ -447,7 +447,7 @@ namespace poutre
     (lhs.swap(rhs));
   }
 
-#if  HAVE_THREE_WAY_OPERATOR
+#if HAVE_THREE_WAY_OPERATOR
 #else
   template<typename value_type, ptrdiff_t size>
   POUTRE_CONSTEXPR bool operator==(const static_array_base<value_type, size> &lhs,
@@ -507,7 +507,7 @@ namespace poutre
 
     using parent::operator=;
 #if HAVE_THREE_WAY_OPERATOR
-#else 
+#else
     using parent::operator==;
     using parent::operator!=;
 #endif

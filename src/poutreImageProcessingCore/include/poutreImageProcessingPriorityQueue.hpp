@@ -70,7 +70,7 @@ namespace poutre
       this->c.push_back(stableT(std::move(value), counter_++));
       std::push_heap(this->c.begin(), this->c.end(), this->comp);
     }
-    template<class... Args> void emplace(Args &&... args)
+    template<class... Args> void emplace(Args &&...args)
     {
       this->c.emplace_back(T(std::forward<Args>(args)...), counter_++);
       std::push_heap(this->c.begin(), this->c.end(), this->comp);
@@ -159,12 +159,12 @@ namespace poutre
     ~PriorityQueueStable() {}
   };
 
-  #  if(0) //TODO FIXME
+#if( 0 ) // TODO FIXME
   // specialize for small integral types
   template<class key,
            class value,
            class container /*= std::vector<stable_element<std::pair<key, value>>>*/,
-           class order     /*= std::less<typename container::value_type>*/>
+           class order /*= std::less<typename container::value_type>*/>
   class PriorityQueueStable<key, value, container, order, std::enable_if_t<(TypeTraits<key>::quant <= 16)>>
   {
     public:
@@ -252,7 +252,7 @@ namespace poutre
     std::vector<int>        p_stack;
     std::vector<queueValue> stack;
   };
-  #endif
+#endif
 
   template<typename key, typename value> using poutre_pq = PriorityQueue<key, value>;
 

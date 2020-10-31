@@ -537,8 +537,8 @@ namespace poutre
       return this->GetPixel(index[1], index[0]);
     }
 
-    //template<ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
-    //POUTRE_CONSTEXPR value_type GetPixel(pt2D_scoord pt2D) const POUTRE_NOEXCEPTONLYNDEBUG
+    // template<ptrdiff_t Rank = NumDims, class = typename std::enable_if<details::IsRankEqual2<Rank>::value>::type>
+    // POUTRE_CONSTEXPR value_type GetPixel(pt2D_scoord pt2D) const POUTRE_NOEXCEPTONLYNDEBUG
     //{
     //  return this->GetPixel(pt2D.get<0>(), pt2D.get<1>());
     //}
