@@ -31,6 +31,9 @@
 #include <compare>
 #endif
 
+#define HAVE_THREE_WAY_OPERATOR                                                                                             \
+  defined(__cpp_lib_three_way_comparison) || (__cpp_impl_three_way_comparison >= 201711) && !_MSC_VER
+
 #ifdef _MSC_VER
 #  pragma warning(push)
 #  pragma warning(disable : 4425) // 4425 improper support constexpr
@@ -200,7 +203,7 @@ namespace poutre
      */
 
     /**@{*/
-#  if defined(__cpp_lib_three_way_comparison) || (__cpp_impl_three_way_comparison >= 201711) 
+#  if HAVE_THREE_WAY_OPERATOR
     POUTRE_CONSTEXPR auto operator<=>(const static_array_base<valuetype, Rank> &rhs) const POUTRE_NOEXCEPT = default;
 #else
     POUTRE_CONSTEXPR bool operator==(const self_type &rhs) const POUTRE_NOEXCEPT
@@ -444,7 +447,7 @@ namespace poutre
     (lhs.swap(rhs));
   }
 
-#  if defined(__cpp_lib_three_way_comparison) || (__cpp_impl_three_way_comparison >= 201711) 
+#if  HAVE_THREE_WAY_OPERATOR
 #else
   template<typename value_type, ptrdiff_t size>
   POUTRE_CONSTEXPR bool operator==(const static_array_base<value_type, size> &lhs,
@@ -503,7 +506,7 @@ namespace poutre
     using parent::swap;
 
     using parent::operator=;
-#  if defined(__cpp_lib_three_way_comparison) || (__cpp_impl_three_way_comparison >= 201711)
+#if HAVE_THREE_WAY_OPERATOR
 #else 
     using parent::operator==;
     using parent::operator!=;

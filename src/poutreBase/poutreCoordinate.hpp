@@ -96,7 +96,7 @@ namespace poutre
     // using parent::size; size overhided with a different behavior
     // using parent::max_size;
     using parent::empty;
-#  if defined(__cpp_lib_three_way_comparison) || (__cpp_impl_three_way_comparison >= 201711)
+#  if HAVE_THREE_WAY_OPERATOR
 #else
     using parent::operator==;
     using parent::operator!=;
@@ -247,12 +247,12 @@ namespace poutre
     const_iterator cbegin() const POUTRE_NOEXCEPT { return (*this).begin(); }
 
     const_iterator cend() const POUTRE_NOEXCEPT { return (*this).end(); }
-#  if defined(__cpp_lib_three_way_comparison) || (__cpp_impl_three_way_comparison >= 201711)
+#if HAVE_THREE_WAY_OPERATOR
     POUTRE_CONSTEXPR auto operator<=>(bounds<Rank> const &rhs) const POUTRE_NOEXCEPT = default;
 #endif
   };
 
-#  if defined(__cpp_lib_three_way_comparison) || (__cpp_impl_three_way_comparison >= 201711)
+#if HAVE_THREE_WAY_OPERATOR
 #else
   //! bounds equality
   template<ptrdiff_t Rank> POUTRE_CONSTEXPR bool operator==(const bounds<Rank> &lhs, const bounds<Rank> &rhs) POUTRE_NOEXCEPT
@@ -320,7 +320,7 @@ namespace poutre
     using parent::empty;
 
     using parent::operator=;
-#  if defined(__cpp_lib_three_way_comparison) || (__cpp_impl_three_way_comparison >= 201711)
+#if HAVE_THREE_WAY_OPERATOR
 #else
     using parent::operator==;
     using parent::operator!=;
@@ -467,7 +467,7 @@ namespace poutre
       details::helper_assign_container_valueop<self_type, AssignOpType::AssignOpMinus, Rank>::op(rhs, *this);
       return *this;
     }
-#if defined(__cpp_lib_three_way_comparison) || (__cpp_impl_three_way_comparison >= 201711)
+#if HAVE_THREE_WAY_OPERATOR
     POUTRE_CONSTEXPR auto operator<=>(self_type const &rhs) const POUTRE_NOEXCEPT = default;
 #else
     POUTRE_CONSTEXPR bool operator<(const self_type &rhs) const POUTRE_NOEXCEPT
@@ -495,7 +495,7 @@ namespace poutre
   };
 
   ////! index equality
-#  if defined(__cpp_lib_three_way_comparison) || (__cpp_impl_three_way_comparison >= 201711)
+#if HAVE_THREE_WAY_OPERATOR
 #else
   template<ptrdiff_t Rank> POUTRE_CONSTEXPR bool operator==(const index<Rank> &rhs, const index<Rank> &lhs) POUTRE_NOEXCEPT
   {
@@ -638,7 +638,7 @@ namespace poutre
       {
          return (0 != m_bounds.size( ));
       }*/
-#  if defined(__cpp_lib_three_way_comparison) || (__cpp_impl_three_way_comparison >= 201711)      
+#if HAVE_THREE_WAY_OPERATOR     
     POUTRE_CONSTEXPR auto operator<=>(const self_type &rhs) const POUTRE_NOEXCEPT = default;
     // {
     //     return this->m_idx <=> rhs.m_idx;
@@ -774,7 +774,7 @@ namespace poutre
     auto tmp(rhs);
     return (tmp + n);
   }
-#  if defined(__cpp_lib_three_way_comparison) || (__cpp_impl_three_way_comparison >= 201711) 
+#  if HAVE_THREE_WAY_OPERATOR
 #else
   template<ptrdiff_t Rank>
   bool operator==(const bounds_iterator<Rank> &lhs, const bounds_iterator<Rank> &rhs) POUTRE_NOEXCEPT
