@@ -101,6 +101,26 @@ namespace poutre
   using c4pINT64  = compound<pINT64, 4>;
   using c4pDOUBLE = compound<pDOUBLE, 4>;
 
+  template<typename T> POUTRE_CONSTEXPR bool operator==(const compound<T, 3> &lhs, const compound<T, 3> &rhs) POUTRE_NOEXCEPT
+  {
+    return details::helper_comp_equal_container_op<compound<T,3>>::op(lhs, rhs);
+  }
+
+  template<typename T> POUTRE_CONSTEXPR bool operator!=(const compound<T, 3> &lhs, const compound<T, 3> &rhs) POUTRE_NOEXCEPT
+  {
+    return !details::helper_comp_equal_container_op<compound<T, 3>>::op(lhs, rhs);
+  }
+
+  template<typename T> POUTRE_CONSTEXPR bool operator==(const compound<T, 4> &lhs, const compound<T, 4> &rhs) POUTRE_NOEXCEPT
+  {
+    return details::helper_comp_equal_container_op<compound<T, 4>>::op(lhs, rhs);
+  }
+
+  template<typename T> POUTRE_CONSTEXPR bool operator!=(const compound<T, 4> &lhs, const compound<T, 4> &rhs) POUTRE_NOEXCEPT
+  {
+    return !details::helper_comp_equal_container_op<compound<T, 4>>::op(lhs, rhs);
+  }
+
   //! Helper to retrieve dim off pixel storage type
   template<class storagetype> struct get_dim
   {
