@@ -32,7 +32,7 @@
 #endif
 
 #define HAVE_THREE_WAY_OPERATOR                                                                                             \
-  defined(__cpp_lib_three_way_comparison) || (__cpp_impl_three_way_comparison >= 201711) && !_MSC_VER
+   __cpp_lib_three_way_comparison && __cpp_lib_concepts && !_MSC_VER
 
 #ifdef _MSC_VER
 #  pragma warning(push)
