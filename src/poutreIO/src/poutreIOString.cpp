@@ -618,7 +618,7 @@ namespace poutre
 
     default:
     {
-      POUTRE_RUNTIME_ERROR(("ImageFromStringDispatch::Unsupported compound type:{}", cptype));
+      POUTRE_RUNTIME_ERROR(poutre::format("ImageFromStringDispatch::Unsupported compound type:{}", cptype));
     }
     } // switch (cptype)
   }
