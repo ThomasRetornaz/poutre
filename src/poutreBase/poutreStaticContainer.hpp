@@ -167,12 +167,16 @@ namespace poutre
     static_array_base(const std::initializer_list<value_type> &rhs) : m_array()
     {
       POUTRE_CHECK(rhs.size() == rank, "Ill formed initializer list: rhs.size() must equal Rank");
-      // details::helper_assign_container_op<self_type, AssignOpType::AssignOp,
-      // NumElmnt>::op(rhs, *this);
+      auto it    = std::begin(rhs);
+      auto itend = std::end(rhs);
+      for( size_t i = 0; i < Rank && it != itend; i++, ++it )
+      {
+        m_array[i] = *it;
+      }
       // safe but silly behavior if no static assertion
       // std::copy_n(rhs.begin( ), std::min<ptrdiff_t>((ptrdiff_t)rank, rhs.size(
       // )), m_size_list.begin( ));
-      std::copy(rhs.begin(), rhs.end(), &m_array[0]);
+      // std::copy(rhs.begin(), rhs.end(), &m_array[0]);
     }
 
     POUTRE_CONSTEXPR explicit static_array_base(const value_type (&rhs)[Rank]) POUTRE_NOEXCEPT : m_array()
