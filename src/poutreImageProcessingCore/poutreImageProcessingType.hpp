@@ -103,7 +103,7 @@ namespace poutre
 
   template<typename T> POUTRE_CONSTEXPR bool operator==(const compound<T, 3> &lhs, const compound<T, 3> &rhs) POUTRE_NOEXCEPT
   {
-    return details::helper_comp_equal_container_op<compound<T,3>>::op(lhs, rhs);
+    return details::helper_comp_equal_container_op<compound<T, 3>>::op(lhs, rhs);
   }
 
   template<typename T> POUTRE_CONSTEXPR bool operator!=(const compound<T, 3> &lhs, const compound<T, 3> &rhs) POUTRE_NOEXCEPT
@@ -119,6 +119,18 @@ namespace poutre
   template<typename T> POUTRE_CONSTEXPR bool operator!=(const compound<T, 4> &lhs, const compound<T, 4> &rhs) POUTRE_NOEXCEPT
   {
     return !details::helper_comp_equal_container_op<compound<T, 4>>::op(lhs, rhs);
+  }
+
+  template<typename T, ptrdiff_t rank>
+  POUTRE_CONSTEXPR bool operator==(const compound<T, rank> &lhs, const compound<T, rank> &rhs) POUTRE_NOEXCEPT
+  {
+    return details::helper_comp_equal_container_op<compound<T, rank>>::op(lhs, rhs);
+  }
+
+  template<typename T, ptrdiff_t rank>
+  POUTRE_CONSTEXPR bool operator!=(const compound<T, rank> &lhs, const compound<T, rank> &rhs) POUTRE_NOEXCEPT
+  {
+    return !details::helper_comp_equal_container_op<compound<T, rank>>::op(lhs, rhs);
   }
 
   //! Helper to retrieve dim off pixel storage type

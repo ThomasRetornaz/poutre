@@ -31,8 +31,7 @@
 #  include <compare>
 #endif
 
-#define HAVE_THREE_WAY_OPERATOR                                                                                             \
-   __cpp_lib_three_way_comparison && __cpp_lib_concepts && !_MSC_VER
+#define HAVE_THREE_WAY_OPERATOR __cpp_lib_three_way_comparison &&__cpp_lib_concepts && !_MSC_VER
 
 #ifdef _MSC_VER
 #  pragma warning(push)

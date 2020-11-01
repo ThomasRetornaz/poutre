@@ -204,7 +204,8 @@ namespace poutre
       {
         for( ptrdiff_t i = Rank - 1; i >= 0; --i )
         {
-          if (A0[i] > A1[i]) return false;
+          if( A0[i] > A1[i] )
+            return false;
         }
         return true;
       }
@@ -224,13 +225,14 @@ namespace poutre
       }
     };
 
-     template<class container, ptrdiff_t Rank = container::rank> struct helper_comp_lexicographic_sup_equal_container_op
+    template<class container, ptrdiff_t Rank = container::rank> struct helper_comp_lexicographic_sup_equal_container_op
     {
       POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR bool op(container const &A0, container const &A1) POUTRE_NOEXCEPT
       {
         for( ptrdiff_t i = Rank - 1; i >= 0; i-- )
         {
-          if (A0[i] < A1[i]) return false;
+          if( A0[i] < A1[i] )
+            return false;
         }
         return true;
       }
