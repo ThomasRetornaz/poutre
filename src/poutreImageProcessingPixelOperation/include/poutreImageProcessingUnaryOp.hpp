@@ -20,6 +20,7 @@
  *
  */
 #include <poutreBase/include/poutreSimdAlgorithm.hpp> //simd transform
+#include <poutreBase/include/poutreThreading.hpp>
 #include <poutreBase/poutreContainerView.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
@@ -139,10 +140,35 @@ namespace poutre
       POUTRE_ENTERING("PixelWiseUnaryOpDispatcher both array view same types");
       // specialization same type,fall back ptr + SIMD";
 
-      auto i_vinbeg  = i_vin.data();
-      auto i_vinend  = i_vin.data() + i_vin.size();
-      auto i_voutbeg = o_vout.data();
+      TIn *      i_vinbeg  = i_vin.data();
+      TIn *      i_vinend  = i_vin.data() + i_vin.size();
+      TOut *     i_voutbeg = o_vout.data();
+      /*
+      const auto length    = i_vin.size();
+      if( !length )
+        return;
 
+      const auto block_size = 25 * poutre::TypeTraits<TIn>::simd_loop_step; // FIXME make this configurable
+      const auto                                    num_blocks = (length + block_size - 1) / block_size;
+      std::vector<poutre::thread::TaskFuture<TOut*>> futures(num_blocks - 1);
+      poutre::thread::TreadPool                     pool {poutre::thread::POUTRE_NUM_THREADS - 1};
+
+      TIn * block_start    = i_vinbeg;
+      TOut *block_startout = i_voutbeg;
+      for( size_t i = 0; i < (num_blocks - 1); ++i ) // FIXME make this configurable
+      {
+        TIn *block_end = block_start;
+        std::advance(block_end, block_size);
+        futures[i]=pool.submit([&] {return simd::transform(block_start, block_end, i_voutbeg, op); });
+        block_start = block_end;
+        std::advance(block_startout, block_size);
+      }
+      simd::transform(block_start, i_vinend, block_startout, op);
+      for( auto &f : futures )
+      {
+        f.get();
+      }
+      */
       simd::transform(i_vinbeg, i_vinend, i_voutbeg, op);
     }
   };
