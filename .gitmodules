@@ -41,3 +41,6 @@
 [submodule "thirdparties/libjpeg-turbo"]
 	path = thirdparties/libjpeg-turbo
 	url = https://github.com/ThomasRetornaz/libjpeg-turbo.git
+[submodule "thirdparties/range-v3"]
+	path = thirdparties/range-v3
+	url = https://github.com/ericniebler/range-v3
