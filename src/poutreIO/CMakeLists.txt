@@ -14,9 +14,8 @@ include_directories(
 
 set(PoutreIOSRC_DETAILS
     ${PoutreIOSubdirectory}/include/poutreIOBuffer.hpp
-    ${PoutreIOSubdirectory}/include/poutreOIIO.hpp
-    ${PoutreIOSubdirectory}/include/poutreHDF5.hpp)
-
+)
+    
 set(PoutreIOSRC_PUBLICHEADERS
     ${PoutreIOSubdirectory}/poutreIO.hpp
     ${PoutreIOSubdirectory}/poutreIOString.hpp
@@ -28,9 +27,20 @@ set(PoutreIOSRC_CPP
     ${PoutreIOSubdirectory}/src/poutreIOString.cpp
     ${PoutreIOSubdirectory}/src/poutreIOLoader.cpp
     ${PoutreIOSubdirectory}/src/poutreIOWriter.cpp
-    ${PoutreIOSubdirectory}/src/poutreIOProvider.cpp
-    ${PoutreIOSubdirectory}/src/poutreOIIO.cpp
-    ${PoutreIOSubdirectory}/src/poutreHDF5.cpp)
+    ${PoutreIOSubdirectory}/src/poutreIOProvider.cpp)
+
+if(POUTRE_USE_HDF5)
+  list (APPEND PoutreIOSRC_DETAILS ${PoutreIOSubdirectory}/include/poutreHDF5.hpp) 
+  list (APPEND PoutreIOSRC_CPP ${PoutreIOSubdirectory}/src/poutreHDF5.cpp) 
+  add_definitions(-DPOUTRE_USE_HDF5)
+endif()
+
+if(POUTRE_USE_OIIO)
+  list (APPEND PoutreIOSRC_DETAILS ${PoutreIOSubdirectory}/include/poutreOIIO.hpp)
+  list (APPEND PoutreIOSRC_CPP ${PoutreIOSubdirectory}/src/poutreOIIO.cpp)
+  add_definitions(-DPOUTRE_USE_OIIO)
+endif()
+
 source_group(details FILES ${PoutreIOSRC_DETAILS})
 source_group(src FILES ${PoutreIOSRC_CPP})
 source_group(header FILES ${PoutreIOSRC_PUBLICHEADERS})
@@ -39,17 +49,36 @@ set(PoutreIOSRC ${PoutreIOSRC_PUBLICHEADERS} ${PoutreIOSRC_DETAILS}
                 ${PoutreIOSRC_CPP})
 
 add_library(PoutreIO ${PoutreIOSRC})
-target_link_libraries(
-  PoutreIO
-  PRIVATE jsoncpp_lib
-  PUBLIC ${OpenImageIO_LIBRARIES}
-  PUBLIC ${HDF5_LIBRARIES}
-  INTERFACE xsimd
-  INTERFACE fmt-header-only
-  PUBLIC PoutreBase
-  PUBLIC PoutreIPCore)
+
+
+if(POUTRE_USE_HDF5)
+  list (APPEND PoutreIOSRC_CPP ${PoutreIOSubdirectory}/src/poutreHDF5.cpp) 
+endif()
+
+if(POUTRE_USE_OIIO)
+  list (APPEND PoutreIOSRC_CPP ${PoutreIOSubdirectory}/src/poutreOIIO.cpp)
+endif()
+
+set(POUTREIO_LINK_LIBRAIRIES
+PRIVATE jsoncpp_lib
+INTERFACE xsimd
+INTERFACE fmt-header-only
+PUBLIC PoutreBase
+PUBLIC PoutreIPCore)
+
+if(POUTRE_USE_OIIO)
+  list (APPEND POUTREIO_LINK_LIBRAIRIES PUBLIC ${OpenImageIO_LIBRARIES})
+  add_dependencies(PoutreIO OpenImageIO) # gcc warn -- ?
+endif()
+
+if(POUTRE_USE_HDF5)
+  list (APPEND POUTREIO_LINK_LIBRAIRIES PUBLIC ${HDF5_LIBRARIES})
+endif()
+
+target_link_libraries(PoutreIO ${POUTREIO_LINK_LIBRAIRIES})
+
 set_target_properties(PoutreIO PROPERTIES FOLDER "src/")
-add_dependencies(PoutreIO OpenImageIO) # gcc warn -- ?
+
 
 if(BUILD_SHARED_LIBS)
   set_target_properties(PoutreIO PROPERTIES COMPILE_FLAGS -DJSON_DLL)

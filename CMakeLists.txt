@@ -1,7 +1,16 @@
 #Most of the initial cmake skeleton  was heavely inspired from yayi project see https://bitbucket.org/renficiaud/yayi.git. and rapidjosn
-cmake_minimum_required (VERSION 3.0)
-project(Poutre C CXX)
-#set(CMAKE_C_STANDARD 11)
+cmake_minimum_required (VERSION 3.14)
+
+project(Poutre
+DESCRIPTION "Generic ImageProcessing Library"
+LANGUAGES C CXX)
+
+#current version
+set(POUTRE_MAJOR    0 )
+set(POUTRE_MINOR    1 )
+set(POUTRE_SUBMINOR 0 )
+set(POUTRE_VERSION ${POUTRE_MAJOR}.${POUTRE_MINOR}.${POUTRE_SUBMINOR})
+
 set(CMAKE_CXX_STANDARD 20)
 
 # some global properties
@@ -20,22 +29,15 @@ OPTION(POUTRE_BUILD_TEST "Build Tests Suites" ON)
 OPTION(POUTRE_CI "Build on CI desactivated some tests" OFF)
 OPTION(POUTRE_BUILD_BENCH "Build Benchmark Suites" ON)
 OPTION(POUTRE_BUILD_PY "Build python exports" ON)
+OPTION(POUTRE_USE_NUMPY "Enable NumPy support for IOPython (should be installed in your python distribution" ON)
+OPTION(POUTRE_USE_HDF5 "Add IO HDF5" OFF)
+OPTION(POUTRE_USE_OIIO "Add IO OpenImageIO" OFF)
+option(BUILD_SHARED_LIBS "Build Shared Libraries" ON)
+
 
 if(POUTRE_BUILD_TEST)
     enable_testing()
 endif()
-
-
-# current version
-set(POUTRE_MAJOR    0 )
-set(POUTRE_MINOR    1 )
-set(POUTRE_SUBMINOR 0 )
-set(POUTRE_VERSION ${POUTRE_MAJOR}.${POUTRE_MINOR}.${POUTRE_SUBMINOR})
-
-
-option(BUILD_SHARED_LIBS "Build Shared Libraries" ON)
-
-set(ENABLE_NUMPY FALSE CACHE BOOL "Enable NumPy support for IOPython (should be installed in your python distribution")
 
 set(POUTRE_SOURCE_DIR         ${CMAKE_CURRENT_SOURCE_DIR}   CACHE PATH "Base of the input directory")
 set(POUTRE_ROOT_DIR         ${POUTRE_SOURCE_DIR}   CACHE PATH "Base of the input directory")
@@ -88,6 +90,7 @@ include(cmake/c++-standards.cmake)
 include(cmake/code-coverage.cmake)
 include(cmake/formatting.cmake)
 include(cmake/tidy.cmake)
+include(cmake/sanitize.cmake)
 
 # FORMAT CMAKE
 file(GLOB_RECURSE CMAKEFILES *.[cmake] CMakeLists.txt)
@@ -133,7 +136,7 @@ endif()
 if(CMAKE_BUILD_TYPE)
     string(TOLOWER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_LOWER)
     if (${CMAKE_BUILD_TYPE_LOWER} MATCHES "coverage")
-        set(CODE_COVERAGE cache bool ON)
+        set(POUTRE_CODE_COVERAGE cache bool ON)
     endif()
 endif()
 
@@ -155,6 +158,8 @@ include_directories(BEFORE ${SIMD_INLCUDE_DIRECTORY})
 include_directories(${JSONCPP_INCLUDE_DIR})
 include_directories(BEFORE ${FMT_INCLUDES})
 include_directories(BEFORE ${SPDLOG_INCLUDES})
+include_directories(BEFORE ${RANGE_INCLUDES})
+
 #message(FATAL_ERROR "${FMT_INCLUDES}")
 
 # warning the order is important
@@ -164,7 +169,7 @@ include_directories(${POUTRE_PYTHONEXT_DIR})
 
 
 
-if(CODE_COVERAGE)
+if(POUTRE_CODE_COVERAGE)
    add_code_coverage_all_targets()
 endif()
 

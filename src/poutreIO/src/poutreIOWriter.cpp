@@ -16,7 +16,9 @@
  *
  * Created on 15 mars 2016
  */
-#include <poutreIO/include/poutreOIIO.hpp>
+#ifdef POUTRE_USE_OIIO
+#  include <poutreIO/include/poutreOIIO.hpp>
+#endif
 #include <poutreIO/poutreIO.hpp>
 #include <poutreIO/poutreIOWriter.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
@@ -51,9 +53,14 @@ namespace poutre
     // switch on extension
     auto extension = localPath.extension().string();
     std::for_each(extension.begin(), extension.end(), [](char &c) { c = ::tolower(c); });
+#ifdef POUTRE_USE_HDF5
     if( extension == ".h5" )
       return StoreWithHDF5(localPath.string(), i_img);
+#endif
+#ifdef POUTRE_USE_OIIO
     StoreWithOIIO(localPath.string(), i_img);
+#endif
+    throw std::runtime_error("ImageWrite::Write() no plugins found");
   }
 
 } // namespace poutre

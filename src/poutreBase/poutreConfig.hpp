@@ -26,8 +26,78 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-namespace poutre
-{
+
+  /* clang-format off */
+  /* ------------------------------------------------------------------------- */
+  /* Compiler detection (order matters https://stackoverflow.com/a/28166605)   */
+
+#  if defined(_MSC_VER)
+#    define POUTRE_IS_MSVC
+#  elif defined(__HIPCC__)
+#    define POUTRE_IS_HIPCC
+#  elif defined(__INTEL_CLANG_COMPILER) || defined(__INTEL_LLVM_COMPILER)
+#    define POUTRE_IS_DPCPP
+#  elif defined(__NVCC__) || defined(__CUDACC__)
+#    define POUTRE_IS_NVCC
+#  elif defined(__INTEL_COMPILER)
+#    define POUTRE_IS_ICC
+#  elif defined(__clang__)
+#    define POUTRE_IS_CLANG
+#  elif defined(__GNUC__) || defined(__GNUG__)
+#    define POUTRE_IS_GCC
+#  endif
+  
+/* ------------------------------------------------------------------------- */
+  /* C++ standard detection */
+
+#  ifdef POUTRE_IS_MSVC
+#    define POUTRE__cplusplus _MSVC_LANG
+#  else
+#    ifdef __cplusplus
+#      define POUTRE__cplusplus __cplusplus
+#    else
+#      define POUTRE__cplusplus 0
+#    endif
+#  endif
+
+#  if POUTRE__cplusplus > 0 && POUTRE__cplusplus < 201103L
+#    define POUTRE_CXX 1998
+#  elif POUTRE__cplusplus >= 201103L && POUTRE__cplusplus < 201402L
+#    define POUTRE_CXX 2011
+#  elif POUTRE__cplusplus >= 201402L && POUTRE__cplusplus < 201703L
+#    define POUTRE_CXX 2014
+#  elif POUTRE__cplusplus == 201703L
+#    define POUTRE_CXX 2017
+#  elif POUTRE__cplusplus >= 201704L
+#    define POUTRE_CXX 2020
+#  else
+#    define POUTRE_CXX 0
+#  endif
+
+  /* ------------------------------------------------------------------------- */
+/* Architecture detection */
+
+#if defined(i386) || defined(__i386__) || defined(__i486__) ||                \
+    defined(__i586__) || defined(__i686__) || defined(__i386) ||              \
+    defined(_M_IX86) || defined(_X86_) || defined(__THW_INTEL__) ||           \
+    defined(__I86__) || defined(__INTEL__) || defined(__x86_64) ||            \
+    defined(__x86_64__) || defined(__amd64__) || defined(__amd64) ||          \
+    defined(_M_X64)
+  #define POUTRE_X86
+#elif defined(__arm__) || defined(__arm64) || defined(__thumb__) ||           \
+    defined(__TARGET_ARCH_ARM) || defined(__TARGET_ARCH_THUMB) ||             \
+    defined(_M_ARM) || defined(_M_ARM64) || defined(__arch64__)
+  #define POUTRE_ARM
+#elif defined(__ppc__) || defined(__powerpc__) || defined(__PPC__)
+  #define POUTRE_POWERPC
+#else
+  #define POUTRE_CPU
+#endif
+
+#  if POUTRE_CXX >= 2020
+#    include <concepts>
+#  endif
+
 #  define POUTRE_NOEXCEPT noexcept // NOLINT
 
 #  define POUTRE_NOEXCEPT_IF(Predicate) noexcept((Predicate)) // NOLINT
@@ -65,6 +135,17 @@ namespace poutre
 #  else
 #    define POUTRE_ALWAYS_INLINE inline // NOLINT
 #  endif
+
+//   NOINLINE 
+#if defined(__GNUC__)
+#define POUTRE_NOINLINE __attribute__((noinline))
+#elif defined(_MSC_VER)
+#define POUTRE_NOINLINE __declspec(noinline)
+#else
+#define POUTRE_NOINLINE
+#endif
+
+#define POUTRE_MAYBE_UNUSED [[maybe_unused]]
 
 #  if defined(_WIN32) || defined(_WIN64)
 #    define poutreDeprecated       __declspec(deprecated) // NOLINT
@@ -116,6 +197,8 @@ namespace poutre
 
 #  endif
 
+namespace poutre
+{
   template<typename... Args> inline std::string format(const char *fmt, const Args &...args)
   {
     return ::fmt::format(fmt, args...);
@@ -158,6 +241,68 @@ namespace poutre
 #    define POUTRE_ASSERTCHECK(CONDITION, MSG)
 #  endif
 
-} // namespace poutre
+
+  typedef float  f32;
+  typedef double f64;
+
+  #ifdef POUTRE_IS_MSVC
+  typedef unsigned __int8  u8;
+  typedef signed   __int8  i8;
+  typedef unsigned __int16 u16;
+  typedef signed   __int16 i16;
+  typedef unsigned __int32 u32;
+  typedef signed   __int32 i32;
+  typedef unsigned __int64 u64;
+  typedef signed   __int64 i64;
+#else
+  typedef unsigned char  u8;
+  typedef signed   char  i8;
+  typedef unsigned short u16;
+  typedef signed   short i16;
+  typedef unsigned int   u32;
+  typedef signed   int   i32;
+  #if POUTRE_WORD_SIZE == 64
+    typedef unsigned long u64;
+    typedef signed long   i64;
+  #else
+    #if defined(POUTRE_IS_GCC) || defined(POUTRE_IS_CLANG)
+      __extension__ typedef POUTRE_ulonglong u64;
+      __extension__ typedef POUTRE_longlong i64;
+    #else
+      typedef unsigned long long u64;
+      typedef signed long long   i64;
+    #endif
+  #endif
+#endif
+
+#ifdef POUTRE_NATIVE_FP16
+  typedef __fp16 f16;
+#elif defined(POUTRE_CUDA_COMPILING_FOR_DEVICE) || \
+      defined(POUTRE_ROCM_COMPILING_FOR_DEVICE)
+  typedef __half f16;
+#elif defined(POUTRE_ONEAPI_COMPILING_FOR_DEVICE)
+  typedef half f16;
+#else
+  typedef struct { u16 u; } f16;
+#endif
+
+  
+#if POUTRE_CXX >= 2020
+  template <typename T> concept base_value_type_c =
+      std::is_same_v<std::remove_const_t<T>, u8> || std::is_same_v<std::remove_const_t<T>, i8> ||
+      std::is_same_v<std::remove_const_t<T>, u16> || std::is_same_v<std::remove_const_t<T>, i16> ||
+      std::is_same_v<std::remove_const_t<T>, u32> || std::is_same_v<std::remove_const_t<T>, i32> ||
+      std::is_same_v<std::remove_const_t<T>, u64> || std::is_same_v<std::remove_const_t<T>, i64> ||
+      std::is_same_v<std::remove_const_t<T>, f16> || std::is_same_v<std::remove_const_t<T>, f32> ||
+      std::is_same_v<std::remove_const_t<T>, f64>;
+  #define POUTRE_CONCEPT_BASE_VALUE_TYPE poutre::base_value_type_c
+
+  #  define POUTRE_REQUIRES(cond) requires(cond)
+  #else
+#  define POUTRE_CONCEPT_VALUE_TYPE         typename
+#  define POUTRE_REQUIRES(cond)
+#endif
+  }
+  /* clang-format on */
 #endif // DOXYGEN_SHOULD_SKIP_THIS
 #endif
