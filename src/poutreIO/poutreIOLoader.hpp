@@ -18,8 +18,7 @@
  *
  */
 
-#ifndef POUTREIOLOADER_HPP
-#define POUTREIOLOADER_HPP
+#pragma once
 
 #include <poutreIO/poutreIO.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
@@ -103,5 +102,3 @@ namespace poutre
 
   //! @} doxygroup: image_processing_io_group
 } // namespace poutre
-
-#endif /* POUTREIOLOADER_HPP */

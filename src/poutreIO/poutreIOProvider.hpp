@@ -14,8 +14,7 @@
  * Created on 25 Juillet 2016
  */
 
-#ifndef POUTREIOPROVIDER_HPP
-#define POUTREIOPROVIDER_HPP
+#pragma once
 
 #include <poutreIO/poutreIO.hpp>
 #include <poutreIO/poutreIOLoader.hpp>
@@ -98,5 +97,3 @@ namespace poutre
 
   //! @} doxygroup: image_processing_io_group
 } // namespace poutre
-
-#endif /* POUTREIOPROVIDER_HPP */

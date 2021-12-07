@@ -7,8 +7,8 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IMAGEPROCESSING_UNARYOP_HPP__
-#define POUTRE_IMAGEPROCESSING_UNARYOP_HPP__
+#pragma once
+
 /**
  * @file poutreImageProcessingUnaryOp.hpp
  * @author thomas.retornaz@mines-paris.org
@@ -19,8 +19,8 @@
  * @copyright Copyright (c) 2020
  *
  */
-#include <poutreBase/include/poutreSimdAlgorithm.hpp> //simd transform
-#include <poutreBase/include/poutreThreading.hpp>
+#include <poutreBase/include/simd/poutreSimdAlgorithm.hpp> //simd transform
+#include <poutreBase/include/threading/poutreThreading.hpp>
 #include <poutreBase/poutreContainerView.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
@@ -59,7 +59,7 @@ namespace poutre
                  Rank>> || std::is_same_v<ViewIn<TIn, Rank>, strided_array_view<const TIn, Rank>> || std::is_same_v<ViewOut<TOut, Rank>, strided_array_view<TOut, Rank>>),
         "strided view only specilization fail for arrayview");
 
-    void operator()(const ViewIn<TIn, Rank> &i_vin, UnOp op, ViewOut<TOut, Rank> &o_vout) const
+    void operator()(const ViewIn<TIn, Rank> &i_vin, UnOp op, ViewOut<TOut, Rank> &o_vout) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ENTERING("PixelWiseUnaryOpDispatcher generic case");
       // std::cout << "\n" << "call PixelWiseUnaryOpDispatcher strided view";
@@ -108,7 +108,8 @@ namespace poutre
                                     UnOp,
                                     std::enable_if_t<!std::is_same_v<std::remove_const_t<TIn>, std::remove_const_t<TOut>>>>
   {
-    void operator()(const array_view<TIn, Rank> &i_vin, UnOp op, array_view<TOut, Rank> &o_vout) const
+    void
+    operator()(const array_view<TIn, Rank> &i_vin, UnOp op, array_view<TOut, Rank> &o_vout) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ENTERING("PixelWiseUnaryOpDispatcher both array view != types");
       // std::cout << "\n" << "call PixelWiseUnaryOpDispatcher array view template
@@ -124,7 +125,10 @@ namespace poutre
     }
   };
 
-  template<typename TIn, typename TOut, ptrdiff_t Rank, /*template<typename, typename> */ class UnOp>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE TIn,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE TOut,
+           ptrdiff_t                      Rank,
+           /*template<typename, typename> */ class UnOp>
   struct PixelWiseUnaryOpDispatcher<
       TIn,
       TOut,
@@ -135,14 +139,15 @@ namespace poutre
       std::enable_if_t<std::is_same_v<std::remove_const_t<TIn>, std::remove_const_t<TOut>> && std::is_arithmetic_v<TIn>>>
 
   {
-    void operator()(const array_view<TIn, Rank> &i_vin, UnOp op, array_view<TOut, Rank> &o_vout) const
+    void
+    operator()(const array_view<TIn, Rank> &i_vin, UnOp op, array_view<TOut, Rank> &o_vout) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ENTERING("PixelWiseUnaryOpDispatcher both array view same types");
       // specialization same type,fall back ptr + SIMD";
 
-      TIn *      i_vinbeg  = i_vin.data();
-      TIn *      i_vinend  = i_vin.data() + i_vin.size();
-      TOut *     i_voutbeg = o_vout.data();
+      TIn * i_vinbeg  = i_vin.data();
+      TIn * i_vinend  = i_vin.data() + i_vin.size();
+      TOut *i_voutbeg = o_vout.data();
       /*
       const auto length    = i_vin.size();
       if( !length )
@@ -191,4 +196,3 @@ namespace poutre
   //! @} doxygroup: image_processing_linear_group
 } // namespace poutre
 
-#endif // POUTRE_IMAGEPROCESSING_UNARYOP_HPP__

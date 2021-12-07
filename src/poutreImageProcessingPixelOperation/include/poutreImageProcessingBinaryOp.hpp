@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IMAGEPROCESSING_BINARYOP_HPP__
-#define POUTRE_IMAGEPROCESSING_BINARYOP_HPP__
+#pragma once
 
 /**
  * @file poutreImageProcessingBinaryOp.hpp
@@ -20,7 +19,7 @@
  * @copyright Copyright (c) 2020
  *
  */
-#include <poutreBase/include/poutreSimdAlgorithm.hpp> //simd transform
+#include <poutreBase/include/simd/poutreSimdAlgorithm.hpp> //simd transform
 #include <poutreBase/poutreContainerView.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
 
@@ -60,7 +59,7 @@ namespace poutre
     void operator()(const View1<T1, Rank> &i_vin1,
                     const BinOp &          op,
                     const View2<T2, Rank> &i_vin2,
-                    ViewOut<Tout, Rank> &  o_vout) const
+                    ViewOut<Tout, Rank> &  o_vout) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ENTERING("PixelWiseBinaryOpDispatcher generic case");
       // std::cout << "\n" << "call PixelWiseBinaryOpDispatcher strided view";
@@ -119,7 +118,7 @@ namespace poutre
     void operator()(const array_view<T1, Rank> &i_vin1,
                     const BinOp &               op,
                     const array_view<T2, Rank> &i_vin2,
-                    array_view<Tout, Rank> &    o_vout) const
+                    array_view<Tout, Rank> &    o_vout) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ENTERING("PixelWiseBinaryOpDispatcher both array view != types");
       POUTRE_ASSERTCHECK(i_vin1.size() == i_vin2.size(), "Incompatible views size");
@@ -137,7 +136,11 @@ namespace poutre
   };
 
   // template specialization both array_view and same type, use simd counterpart
-  template<typename T1, typename T2, typename Tout, ptrdiff_t Rank, class BinOp>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T1,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE T2,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Tout,
+           ptrdiff_t                      Rank,
+           class BinOp>
   struct PixelWiseBinaryOpDispatcher<
       T1,
       T2,
@@ -156,7 +159,7 @@ namespace poutre
     void operator()(const array_view<T1, Rank> &i_vin1,
                     const BinOp &               op,
                     const array_view<T2, Rank> &i_vin2,
-                    array_view<Tout, Rank> &    o_vout) const
+                    array_view<Tout, Rank> &    o_vout) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ENTERING("PixelWiseBinaryOpDispatcher both array view same types");
       // specialization same type,fall back ptr + SIMD";
@@ -193,4 +196,3 @@ namespace poutre
   }
   //! @} doxygroup: image_processing_linear_group
 } // namespace poutre
-#endif // POUTRE_IMAGEPROCESSING_BINARYOP_HPP__

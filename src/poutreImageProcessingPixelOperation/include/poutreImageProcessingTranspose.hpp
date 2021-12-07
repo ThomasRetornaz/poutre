@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IMAGEPROCESSING_TRANSPOSE_HPP__
-#define POUTRE_IMAGEPROCESSING_TRANSPOSE_HPP__
+#pragma once
 
 /**
  * @file poutreImageProcessingTranspose.hpp
@@ -490,4 +489,3 @@ and do transposition
   //! @} doxygroup: image_processing_linear_group
 } // namespace poutre
 
-#endif // POUTRE_IMAGEPROCESSING_TRANSPOSE_HPP__

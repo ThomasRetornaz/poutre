@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IPSENL_HPP__
-#define POUTRE_IPSENL_HPP__
+#pragma once
 
 #include <poutreBase/poutreContainerView.hpp>
 #include <poutreImageProcessingSE/include/poutreImageProcessingSENeighborhood.hpp>
@@ -417,4 +416,3 @@ namespace poutre
   } // namespace se
 
 } // namespace poutre
-#endif // POUTRE_IPSENL_HPP__

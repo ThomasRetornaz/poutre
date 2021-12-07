@@ -18,7 +18,7 @@
  */
 #include <poutreBase/poutreTrace.hpp>
 #ifdef POUTRE_USE_OIIO
-#include <poutreIO/include/poutreOIIO.hpp>
+#  include <poutreIO/include/poutreOIIO.hpp>
 #endif
 #include <poutreIO/poutreIO.hpp>
 #include <poutreIO/poutreIOLoader.hpp>

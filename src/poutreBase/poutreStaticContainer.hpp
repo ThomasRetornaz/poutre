@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_STATIC_CONTAINER_HPP__
-#define POUTRE_STATIC_CONTAINER_HPP__
+#pragma once
 
 /**
  * @file   poutreStaticContainer.hpp
@@ -644,5 +643,3 @@ namespace poutre
   };
 
 } // namespace poutre
-
-#endif // POUTRE_STATIC_CONTAINER_HPP__

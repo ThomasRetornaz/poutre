@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IMAGEPROCESSING_INTERFACE_HPP__
-#define POUTRE_IMAGEPROCESSING_INTERFACE_HPP__
+#pragma once
 
 /**
  * @file   poutreImageProcessingInterface.hpp
@@ -104,4 +103,3 @@ namespace poutre
   //! @} doxygroup: image_processing_interface_group
 
 } // namespace poutre
-#endif // POUTRE_IMAGEPROCESSING_INTERFACE_HPP__

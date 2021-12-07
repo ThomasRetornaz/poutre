@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IPSECORE_HPP__
-#define POUTRE_IPSECORE_HPP__
+#pragma once
 
 #include <poutreBase/poutreConfig.hpp>
 #include <poutreBase/poutreTrace.hpp>
@@ -37,4 +36,3 @@ namespace poutre
 {
   // TODO Doxydoc group
 }
-#endif // POUTRE_IPSECORE_HPP__

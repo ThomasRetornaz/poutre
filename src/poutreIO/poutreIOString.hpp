@@ -14,8 +14,7 @@
  * Created on 2 octobre 2015, 21:15
  */
 
-#ifndef POUTREIOSTRING_HPP
-#define POUTREIOSTRING_HPP
+#pragma once
 
 #include <poutreIO/poutreIO.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingInterface.hpp>
@@ -51,4 +50,3 @@ namespace poutre
 
 } // namespace poutre
 
-#endif /* POUTREIOSTRING_HPP */

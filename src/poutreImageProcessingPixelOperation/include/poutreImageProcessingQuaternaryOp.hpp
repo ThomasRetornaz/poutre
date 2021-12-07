@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IMAGEPROCESSING_QUATERNARYOP_HPP__
-#define POUTRE_IMAGEPROCESSING_QUATERNARYOP_HPP__
+#pragma once
 
 /**
  * @file poutreImageProcessingQuaternaryOp.hpp
@@ -67,7 +66,7 @@ namespace poutre
                     const View2<T2, Rank> &i_vin2,
                     const View3<T3, Rank> &i_vin3,
                     const View4<T4, Rank> &i_vin4,
-                    ViewOut<Tout, Rank> &  o_vout) const
+                    ViewOut<Tout, Rank> &  o_vout) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ENTERING("PixelWiseQuaternaryOpDispatcher generic case");
       // More runtime dispatch
@@ -139,7 +138,7 @@ namespace poutre
                     const array_view<T2, Rank> &i_vin2,
                     const array_view<T3, Rank> &i_vin3,
                     const array_view<T4, Rank> &i_vin4,
-                    array_view<Tout, Rank> &    o_vout) const
+                    array_view<Tout, Rank> &    o_vout) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ENTERING("PixelWiseQuaternaryOpDispatcher both arrayview");
       auto i_vinbeg1 = i_vin1.data();
@@ -155,7 +154,13 @@ namespace poutre
     }
   };
 
-  template<typename T1, typename T2, typename T3, typename T4, typename Tout, ptrdiff_t Rank, class QuaterOp>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T1,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE T2,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE T3,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE T4,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Tout,
+           ptrdiff_t                      Rank,
+           class QuaterOp>
   struct PixelWiseQuaternaryOpDispatcher<
       T1,
       T2,
@@ -180,7 +185,7 @@ namespace poutre
                     const array_view<T2, Rank> &i_vin2,
                     const array_view<T3, Rank> &i_vin3,
                     const array_view<T4, Rank> &i_vin4,
-                    array_view<Tout, Rank> &    o_vout) const
+                    array_view<Tout, Rank> &    o_vout) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ENTERING("PixelWiseQuaternaryOpDispatcher both arrayview");
       auto i_vinbeg1 = i_vin1.data();
@@ -226,4 +231,3 @@ namespace poutre
   }
   //! @} doxygroup: image_processing_linear_group
 } // namespace poutre
-#endif // POUTRE_IMAGEPROCESSING_QUATERNARYOP_HPP__

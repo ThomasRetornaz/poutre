@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_CONTAINER_VIEW_HPP__
-#define POUTRE_CONTAINER_VIEW_HPP__
+#pragma once
 
 /**
  * @file   poutreContainerView.hpp
@@ -681,5 +680,3 @@ namespace poutre
 #ifdef _MSC_VER
 #  pragma warning(pop)
 #endif
-
-#endif // POUTRE_CONTAINER_VIEW_HPP__

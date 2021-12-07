@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_REGISTRATOR__HPP__
-#define POUTRE_REGISTRATOR__HPP__
+#pragma once
 
 /**
  * @file   poutreRegistrar.hpp
@@ -93,4 +92,3 @@ namespace poutre
   //! @} doxygroup: register_group
   */
 } // namespace poutre
-#endif // POUTRE_REGISTRATOR__HPP__

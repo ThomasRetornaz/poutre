@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_COORDINATE_HPP__
-#define POUTRE_COORDINATE_HPP__
+#pragma once
 
 /**
  * @file   poutreCoordinate.hpp
@@ -836,5 +835,3 @@ namespace poutre
 #ifdef _MSC_VER
 #  pragma warning(pop)
 #endif
-
-#endif // POUTRE_COORDINATE_HPP__

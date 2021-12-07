@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IMAGEPROCESSING_CONTAINER_COPIECONVERT_HPP__
-#define POUTRE_IMAGEPROCESSING_CONTAINER_COPIECONVERT_HPP__
+#pragma once
 
 /**
  * @file poutreImageProcessingContainerCopieConvert.hpp
@@ -132,4 +131,4 @@ namespace poutre
   }
   //! @} doxygroup: image_processing_copy_group
 } // namespace poutre
-#endif // POUTRE_IMAGEPROCESSING_CONTAINER_COPIECONVERT_HPP__
+

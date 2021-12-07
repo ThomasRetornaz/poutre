@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_JSON_SERIALIZATION_HPP__
-#define POUTRE_JSON_SERIALIZATION_HPP__
+#pragma once
 
 /**
  * @file   poutreJsonSerialization.hpp
@@ -67,4 +66,3 @@ namespace poutre
   */
 
 } // namespace poutre
-#endif // POUTRE_JSON_SERIALIZATION_HPP__

@@ -6,8 +6,8 @@
 //                 See accompanying file LICENSE.txt or copy at               //
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
-#ifndef POUTRE_CONFIG__HPP__
-#define POUTRE_CONFIG__HPP__
+
+#pragma once
 
 #ifndef FMT_HEADER_ONLY
 #  define FMT_HEADER_ONLY
@@ -26,8 +26,7 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-
-  /* clang-format off */
+/* clang-format off */
   /* ------------------------------------------------------------------------- */
   /* Compiler detection (order matters https://stackoverflow.com/a/28166605)   */
 
@@ -242,48 +241,48 @@ namespace poutre
 #  endif
 
 
-  typedef float  f32;
-  typedef double f64;
+  using f32 = float;
+  using f64 = double;
 
   #ifdef POUTRE_IS_MSVC
-  typedef unsigned __int8  u8;
-  typedef signed   __int8  i8;
-  typedef unsigned __int16 u16;
-  typedef signed   __int16 i16;
-  typedef unsigned __int32 u32;
-  typedef signed   __int32 i32;
-  typedef unsigned __int64 u64;
-  typedef signed   __int64 i64;
+  using u8  = unsigned __int8;
+  using i8  = signed   __int8;
+  using u16 = unsigned __int16;
+  using i16 = signed   __int16;
+  using u32 = unsigned __int32;
+  using i32 = signed   __int32;
+  using u64 = unsigned __int64;
+  using i64 = signed   __int64;
 #else
-  typedef unsigned char  u8;
-  typedef signed   char  i8;
-  typedef unsigned short u16;
-  typedef signed   short i16;
-  typedef unsigned int   u32;
-  typedef signed   int   i32;
+  using u8  = unsigned char;
+  using i8  = signed   char;
+  using u16 = unsigned short;
+  using i16 = signed   short;
+  using u32 = unsigned int;
+  using i32 = signed   int;
   #if POUTRE_WORD_SIZE == 64
-    typedef unsigned long u64;
-    typedef signed long   i64;
+    using u64 = unsigned long;
+    using i64 = signed long;
   #else
     #if defined(POUTRE_IS_GCC) || defined(POUTRE_IS_CLANG)
       __extension__ typedef POUTRE_ulonglong u64;
       __extension__ typedef POUTRE_longlong i64;
     #else
-      typedef unsigned long long u64;
-      typedef signed long long   i64;
+      using u64 = unsigned long long;
+      using i64 = signed long long;
     #endif
   #endif
 #endif
 
 #ifdef POUTRE_NATIVE_FP16
-  typedef __fp16 f16;
+  using f16 = __fp16;
 #elif defined(POUTRE_CUDA_COMPILING_FOR_DEVICE) || \
       defined(POUTRE_ROCM_COMPILING_FOR_DEVICE)
-  typedef __half f16;
+  using f16 = __half;
 #elif defined(POUTRE_ONEAPI_COMPILING_FOR_DEVICE)
-  typedef half f16;
+  using f16 = half;
 #else
-  typedef struct { u16 u; } f16;
+  using f16 = struct { u16 u; };
 #endif
 
   
@@ -303,6 +302,5 @@ namespace poutre
 #  define POUTRE_REQUIRES(cond)
 #endif
   }
-  /* clang-format on */
+/* clang-format on */
 #endif // DOXYGEN_SHOULD_SKIP_THIS
-#endif

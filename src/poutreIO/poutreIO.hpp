@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IO_HPP__
-#define POUTRE_IO_HPP__
+#pragma once
 
 #include <poutreBase/poutreConfig.hpp>
 #include <poutreBase/poutreTrace.hpp>
@@ -79,4 +78,3 @@ namespace poutre
   StoreWithHDF5(const std::string &path, const IInterface &iimage, const std::string &image_name = "poutre_img_1");
   //! @} doxygroup: image_processing_io_group
 } // namespace poutre
-#endif /* POUTRE_IO_HPP */

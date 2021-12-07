@@ -1,4 +1,4 @@
-#include <poutreBase/include/poutreThreading.hpp>
+#include <poutreBase/include/threading/poutreThreading.hpp>
 
 #include <cstdlib> // getenv
 

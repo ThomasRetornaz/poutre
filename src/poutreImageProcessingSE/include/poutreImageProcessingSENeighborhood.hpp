@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IPSENEIGHBORHOOD_HPP__
-#define POUTRE_IPSENEIGHBORHOOD_HPP__
+#pragma once
 
 #include <poutreImageProcessingSE/poutreImageProcessingSEInterface.hpp>
 
@@ -173,4 +172,3 @@ namespace poutre
   } // namespace se
 
 } // namespace poutre
-#endif // POUTRE_IPSENEIGHBORHOOD_HPP__

@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
-#define POUTRE_IMAGEPROCESSING_CONTAINER_HPP__
+#pragma once
 
 #include <array>
 #include <cstring>
@@ -27,7 +26,7 @@
  * @copyright Copyright (c) 2020
  *
  */
-#include <poutreBase/include/poutreSimd.hpp>
+#include <poutreBase/include/simd/poutreSimd.hpp>
 #include <poutreBase/poutreConfig.hpp>
 #include <poutreBase/poutreContainerView.hpp>
 #include <poutreBase/poutreCoordinate.hpp>
@@ -47,8 +46,6 @@ namespace poutre
    *@{
    */
 
-  // Maybe inherit/compose with nt2::table or blaze::DenseMatrix or
-  // Eigen::Tensor would be more effective depending on algorithms
   //! TODO dispatch on coord and allow unset dims
   template<class valuetype, std::ptrdiff_t NumDims = 2, class allocator_type_t = aligned_allocator<valuetype>>
   class DenseTensor
@@ -65,10 +62,10 @@ namespace poutre
     using difference_type  = std::ptrdiff_t;
 
     using iterator       = pdense_iterator<value_type>;
-    using const_iterator = pdense_iterator<const value_type>;
+    using const_iterator = pdense_iterator<value_type, true>;
 
     using reverse_iterator       = pdense_reverse_iterator<value_type>;
-    using const_reverse_iterator = pdense_reverse_iterator<const value_type>;
+    using const_reverse_iterator = pdense_reverse_iterator<value_type, true>;
 
     using coordinate_type = bounds<NumDims>;
     using index_type      = index<NumDims>;
@@ -723,4 +720,3 @@ namespace poutre
 
   //! @} doxygroup: image_processing_container_group
 } // namespace poutre
-#endif // POUTRE_IMAGEPROCESSING_CONTAINER_HPP__

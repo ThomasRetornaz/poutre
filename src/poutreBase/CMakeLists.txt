@@ -3,9 +3,9 @@ set(PoutreBaseSubdirectory ${POUTRE_SRC_DIR}/poutreBase)
 include_directories(BEFORE SYSTEM ${SPDLOG_INCLUDES})
 
 set(PoutreBaseSRC_DETAILS
-    ${PoutreBaseSubdirectory}/include/poutreSimd.hpp
-    ${PoutreBaseSubdirectory}/include/poutreSimdAlgorithm.hpp
-    ${PoutreBaseSubdirectory}/include/poutreThreading.hpp)
+    ${PoutreBaseSubdirectory}/include/simd/poutreSimd.hpp
+    ${PoutreBaseSubdirectory}/include/simd/poutreSimdAlgorithm.hpp
+    ${PoutreBaseSubdirectory}/include/threading/poutreThreading.hpp)
 
 set(PoutreBaseSRC_PUBLICHEADERS
     ${PoutreBaseSubdirectory}/poutreBase.hpp

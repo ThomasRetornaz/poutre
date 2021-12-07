@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_THREADING_HPP__
-#define POUTRE_THREADING_HPP__
+#pragma once
 
 /**
  * @file   poutreThreading.hpp
@@ -391,4 +390,3 @@ namespace poutre
   }   // namespace thread
       //! @} doxygroup: threading_group
 } // namespace poutre
-#endif // POUTRE_THREADING_HPP__

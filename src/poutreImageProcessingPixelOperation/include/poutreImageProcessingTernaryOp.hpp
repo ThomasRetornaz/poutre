@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IMAGEPROCESSING_TERNARYOP_HPP__
-#define POUTRE_IMAGEPROCESSING_TERNARYOP_HPP__
+#pragma once
 
 /**
  * @file poutreImageProcessingTernaryOp.hpp
@@ -62,7 +61,7 @@ namespace poutre
                     const TerOp &          op,
                     const View2<T2, Rank> &i_vin2,
                     const View3<T3, Rank> &i_vin3,
-                    ViewOut<Tout, Rank> &  o_vout) const
+                    ViewOut<Tout, Rank> &  o_vout) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ENTERING("PixelWiseTernaryOpDispatcher generic case");
       // More runtime dispatch
@@ -127,7 +126,7 @@ namespace poutre
                     const TerOp &               op,
                     const array_view<T2, Rank> &i_vin2,
                     const array_view<T3, Rank> &i_vin3,
-                    array_view<Tout, Rank> &    o_vout) const
+                    array_view<Tout, Rank> &    o_vout) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ENTERING("PixelWiseTernaryOpDispatcher both array view");
       auto i_vinbeg1 = i_vin1.data();
@@ -143,7 +142,12 @@ namespace poutre
   };
 
   // template specialization both array_view, same type and arithmetic type
-  template<typename T1, typename T2, typename T3, typename Tout, ptrdiff_t Rank, class TerOp>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T1,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE T2,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE T3,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Tout,
+           ptrdiff_t                      Rank,
+           class TerOp>
   struct PixelWiseTernaryOpDispatcher<
       T1,
       T2,
@@ -165,7 +169,7 @@ namespace poutre
                     const TerOp &               op,
                     const array_view<T2, Rank> &i_vin2,
                     const array_view<T3, Rank> &i_vin3,
-                    array_view<Tout, Rank> &    o_vout) const
+                    array_view<Tout, Rank> &    o_vout) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ENTERING("PixelWiseTernaryOpDispatcher both array view arithemic same type");
       auto i_vinbeg1 = i_vin1.data();
@@ -206,4 +210,3 @@ namespace poutre
   //! @} doxygroup: image_processing_linear_group
 } // namespace poutre
 
-#endif // POUTRE_IMAGEPROCESSING_TERNARYOP_HPP__

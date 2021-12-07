@@ -6,8 +6,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IMAGEPROCESSING_ERO_DIL_LINE_HPP__
-#define POUTRE_IMAGEPROCESSING_ERO_DIL_LINE_HPP__
+#pragma once
 
 /**
  * @file   poutreImageProcessingEroDil.hpp
@@ -44,7 +43,7 @@ namespace poutre
    */
 
   // stolen from pylene todo propagate __restrict everywhere
-  template<class T, class BinaryFunction>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T, class BinaryFunction>
   void running_max_min_1d(T *__restrict f,
                           T *__restrict g,
                           T *__restrict h,
@@ -352,4 +351,3 @@ namespace poutre
   //! @} doxygroup: image_processing_erodil_group
   //! @} doxygroup: image_processing_group
 } // namespace poutre
-#endif // POUTRE_IMAGEPROCESSING_ERO_DIL_LINE_HPP__

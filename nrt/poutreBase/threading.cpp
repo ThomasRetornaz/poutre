@@ -20,7 +20,7 @@
 
 #include "main.hpp"
 #include <gtest/gtest.h>
-#include <poutreBase/include/poutreThreading.hpp>
+#include <poutreBase/include/threading/poutreThreading.hpp>
 
 #ifndef POUTRE_CI //tests hang on TRAVIS
 

@@ -6,8 +6,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IMAGEPROCESSING_ERO_DIL_HPP__
-#define POUTRE_IMAGEPROCESSING_ERO_DIL_HPP__
+#pragma once
 
 /**
  * @file   poutreImageProcessingEroDil.hpp
@@ -108,4 +107,3 @@ namespace poutre
 // specialization for line case
 #include <poutreImageProcessingLowLevelMorphology/include/poutreImageProcessingEroDilLine.hpp>
 
-#endif // POUTRE_IMAGEPROCESSING_ERO_DIL_HPP__

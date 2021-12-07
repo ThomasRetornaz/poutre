@@ -6,8 +6,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IMAGEPROCESSING_ERO_DIL_NLS_HPP__
-#define POUTRE_IMAGEPROCESSING_ERO_DIL_NLS_HPP__
+#pragma once
 
 /**
  * @file   poutreImageProcessingEroDil.hpp
@@ -912,4 +911,3 @@ namespace poutre
   //! @} doxygroup: image_processing_erodil_group
   //! @} doxygroup: image_processing_group
 } // namespace poutre
-#endif // POUTRE_IMAGEPROCESSING_ERO_DIL_NLS_HPP__

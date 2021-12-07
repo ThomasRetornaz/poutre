@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_TYPE_HPP__
-#define POUTRE_TYPE_HPP__
+#pragma once
 
 /**
  * @file   poutreTypes.hpp
@@ -31,14 +30,14 @@ namespace poutre
    * @ingroup poutre_base_group
    * @{
    */
-  using pbool  = bool;          //! boolean type
-  using pUINT8 = u8; //! UINT8 type
+  using pbool  = bool; //! boolean type
+  using pUINT8 = u8;   //! UINT8 type
   // using  pINT8 = signed char; //!INT8 type
   using pUINT32 = u32; //! UINT32 type
-  using pINT32  = i32;  //! INT32 type
-  using pFLOAT  = f32;  //! Float/Real type (default real type)
-  using pDOUBLE = f64;  //! Float/Real type
-  using pINT64  = i64;  //! INT64 type
+  using pINT32  = i32; //! INT32 type
+  using pFLOAT  = f32; //! Float/Real type (default real type)
+  using pDOUBLE = f64; //! Float/Real type
+  using pINT64  = i64; //! INT64 type
   using pUINT64 = u64; //! UINT64 type
 
   using scoord = std::ptrdiff_t; //! scalar coordinate
@@ -113,4 +112,3 @@ namespace poutre
   BASE_API std::istream &operator>>(std::istream &, AssignOpType &);
   // !@} doxygroup: types_group
 } // namespace poutre
-#endif // POUTRE_TYPE_HPP__

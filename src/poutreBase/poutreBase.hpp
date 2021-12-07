@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_BASE_HPP__
-#define POUTRE_BASE_HPP__
+#pragma once
 
 /**
  * @file   poutreBase.hpp
@@ -40,4 +39,3 @@ namespace poutre
    */
   //! @} doxygroup: poutre_base_group
 } // namespace poutre
-#endif // POUTRE_BASE_HPP__

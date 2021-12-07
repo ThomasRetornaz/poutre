@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IPSEINTERFACE_HPP__
-#define POUTRE_IPSEINTERFACE_HPP__
+#pragma once
 
 #include <poutreImageProcessingSE/include/poutreImageProcessingSETypesAndTags.hpp>
 #include <poutreImageProcessingSE/poutreImageProcessingSECore.hpp>
@@ -64,4 +63,3 @@ namespace poutre
   } // namespace se
     //! @} // se_grp
 } // namespace poutre
-#endif // POUTRE_IPSEINTERFACE_HPP__

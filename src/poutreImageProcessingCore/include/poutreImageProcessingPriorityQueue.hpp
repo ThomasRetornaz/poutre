@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_PRIORITYQUEUE_HPP__
-#define POUTRE_PRIORITYQUEUE_HPP__
+#pragma once
 
 /**
  * @file poutreImageProcessingPriorityQueue.hpp
@@ -159,12 +158,9 @@ namespace poutre
     ~PriorityQueueStable() {}
   };
 
-  #  if(0)
+#if( 0 )
   // specialize for small integral types
-  template<class key,
-           class value,
-           class container,
-           class order>
+  template<class key, class value, class container, class order>
   class PriorityQueueStable<key, value, container, order, std::enable_if_t<(TypeTraits<key>::quant <= 16)>>
   {
     public:
@@ -193,13 +189,13 @@ namespace poutre
     //! adds an element to the priority queue
     void push(value_type &&rhs)
     {
-       Key_Type priority = rhs.first;
+      Key_Type priority = rhs.first;
 
       if( m_current_highestPriority < priority )
       {
         m_current_highestPriority = priority; // update current_highestPriority
       }
-      p_stack[priority] += 1;           // record number of element at this level
+      p_stack[priority] += 1;                      // record number of element at this level
       stack[priority].push(std::move(rhs.second)); // push element
     }
 
@@ -211,12 +207,10 @@ namespace poutre
       {
         m_current_highestPriority = priority; // update current_highestPriority
       }
-      p_stack[priority] += 1;                      // record number of element at this level
+      p_stack[priority] += 1;           // record number of element at this level
       stack[priority].push(rhs.second); // push element
     }
-    template<class... Args> void emplace(Args &&... args)
-    { this->push(value_type(std::forward<Args>(args)...));
-    }
+    template<class... Args> void emplace(Args &&...args) { this->push(value_type(std::forward<Args>(args)...)); }
 
     //! returns the top element of the priority queue.The top element is greater or at least as
     //! great as any other element in the priority queue.
@@ -267,7 +261,7 @@ namespace poutre
     std::vector<int>        p_stack;
     std::vector<queueValue> stack;
   };
-  #endif
+#endif
 
   template<typename key, typename value> using poutre_pq = PriorityQueue<key, value>;
 
@@ -275,7 +269,6 @@ namespace poutre
   using poutre_rpq = PriorityQueue<key, value, std::vector<std::pair<key, value>>, greaterKey<key, value>>;
 
   template<typename key, typename value> using poutre_pq_stable = PriorityQueueStable<key, value>;
-
 
   template<typename key, typename value>
   using poutre_rpq_stable = PriorityQueueStable<key,
@@ -285,4 +278,3 @@ namespace poutre
 
   //! @} doxygroup: image_processing_pqueue_group
 } // namespace poutre
-#endif // POUTRE_PRIORITYQUEUE_HPP__

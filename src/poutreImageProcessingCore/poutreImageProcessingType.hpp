@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IMAGEPROCESSING_TYPE_HPP__
-#define POUTRE_IMAGEPROCESSING_TYPE_HPP__
+#pragma once
 
 /**
  * @file   poutreImageProcessingType.hpp
@@ -18,7 +17,7 @@
  *
  */
 
-#include <poutreBase/include/poutreSimd.hpp>
+#include <poutreBase/include/simd/poutreSimd.hpp>
 #include <poutreBase/poutreConfig.hpp>
 #include <poutreBase/poutreCoordinate.hpp>
 #include <poutreBase/poutreStaticContainer.hpp>
@@ -144,9 +143,32 @@ namespace poutre
   {
     POUTRE_STATIC_CONSTEXPR ptrdiff_t dim = Rank;
   };
+  /* clang-format off */
+
+  #if POUTRE_CXX >= 2020
+  template <typename T> concept compound_value_type_c =
+      std::is_same_v<std::remove_const_t<T>, compound<u8,3>> || std::is_same_v<std::remove_const_t<T>, compound<i8,3>> ||
+      std::is_same_v<std::remove_const_t<T>, compound<u16,3>> || std::is_same_v<std::remove_const_t<T>, compound<i16,3>> ||
+      std::is_same_v<std::remove_const_t<T>, compound<u32,3>> || std::is_same_v<std::remove_const_t<T>, compound<i32,3>> ||
+      std::is_same_v<std::remove_const_t<T>, compound<u64,3>> || std::is_same_v<std::remove_const_t<T>, compound<i64,3>> ||
+      std::is_same_v<std::remove_const_t<T>, compound<f16,3>> || std::is_same_v<std::remove_const_t<T>, compound<f32,3>> ||
+      std::is_same_v<std::remove_const_t<T>, compound<f64,3>>||
+      std::is_same_v<std::remove_const_t<T>, compound<u8,4>> || std::is_same_v<std::remove_const_t<T>, compound<i8,4>> ||
+      std::is_same_v<std::remove_const_t<T>, compound<u16,4>> || std::is_same_v<std::remove_const_t<T>, compound<i16,4>> ||
+      std::is_same_v<std::remove_const_t<T>, compound<u32,4>> || std::is_same_v<std::remove_const_t<T>, compound<i32,4>> ||
+      std::is_same_v<std::remove_const_t<T>, compound<u64,4>> || std::is_same_v<std::remove_const_t<T>, compound<i64,4>> ||
+      std::is_same_v<std::remove_const_t<T>, compound<f16,4>> || std::is_same_v<std::remove_const_t<T>, compound<f32,4>> ||
+      std::is_same_v<std::remove_const_t<T>, compound<f64,4>>;
+  #define POUTRE_CONCEPT_COMPOUND_VALUE_TYPE poutre::compound_value_type_c
+   template<typename T> concept base_value_type_or_compound_c = compound_value_type_c<T> || base_value_type_c<T>;
+  #define POUTRE_CONCEPT_BASE_OR_COMPOUND_VALUE_TYPE poutre::base_value_type_or_compound_c
+  #else
+#  define POUTRE_CONCEPT_BASE_OR_COMPOUND_VALUE_TYPE         typename
+#endif
+    /* clang-format off */
 
   //! Define TypeTraits
-  template<class valuetype> struct TypeTraits
+  template<POUTRE_CONCEPT_BASE_OR_COMPOUND_VALUE_TYPE value_type> struct TypeTraits
   {
   };
 
@@ -157,13 +179,14 @@ namespace poutre
     using safe_signed_type                  = pINT32;
     using str_type                          = pUINT32;
     using accu_type                         = pINT64;
+    using batch_type                        = xs::batch<storage_type, xsimd::default_arch>;
     static const PType        pixel_type    = PType::PType_GrayUINT8;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
     POUTRE_STATIC_CONSTEXPR size_t alignment      = SIMD_IDEAL_MAX_ALIGN_BYTES;
-    POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = SIMD_BATCH_INT8_SIZE;
-    using simd_type                               = typename xs::batch<storage_type, simd_loop_step>;
-    using simd_mask_type                          = typename xs::batch_bool<storage_type, simd_loop_step>;
+    POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = batch_type::size;
+    using simd_type                               = typename batch_type;
+    using simd_mask_type                          = typename xs::batch_bool<storage_type>;
     POUTRE_STATIC_CONSTEXPR size_t quant          = sizeof(storage_type) * 8;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
@@ -193,14 +216,15 @@ namespace poutre
     using safe_signed_type = pINT64;
     using str_type         = pINT32;
     using accu_type        = pINT64;
+    using batch_type                        = xs::batch<storage_type, xsimd::default_arch>;
 
     static const PType        pixel_type    = PType::PType_GrayINT32;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
     POUTRE_STATIC_CONSTEXPR size_t alignment      = SIMD_IDEAL_MAX_ALIGN_BYTES;
-    POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = SIMD_BATCH_INT32_SIZE;
-    using simd_type                               = typename xs::batch<storage_type, simd_loop_step>;
-    using simd_mask_type                          = typename xs::batch_bool<storage_type, simd_loop_step>;
+    POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = batch_type::size;
+    using simd_type                               = typename batch_type;
+    using simd_mask_type                          = typename xs::batch_bool<storage_type>;
     POUTRE_STATIC_CONSTEXPR size_t quant          = sizeof(storage_type) * 8;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
@@ -230,14 +254,15 @@ namespace poutre
     using safe_signed_type = pFLOAT;
     using str_type         = pFLOAT;
     using accu_type        = pDOUBLE;
+    using batch_type                        = xs::batch<storage_type, xsimd::default_arch>;
 
     static const PType        pixel_type    = PType::PType_F32;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
     POUTRE_STATIC_CONSTEXPR size_t alignment      = SIMD_IDEAL_MAX_ALIGN_BYTES;
-    POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = SIMD_BATCH_FLOAT_SIZE;
-    using simd_type                               = typename xs::batch<storage_type, simd_loop_step>;
-    using simd_mask_type                          = typename xs::batch_bool<storage_type, simd_loop_step>;
+    POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = batch_type::size;
+    using simd_type                               = typename batch_type;
+    using simd_mask_type                          = typename xs::batch_bool<storage_type>;
 
     POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pFLOAT) * 8;
 
@@ -268,14 +293,15 @@ namespace poutre
     using safe_signed_type = pDOUBLE;
     using str_type         = pDOUBLE;
     using accu_type        = pDOUBLE;
+    using batch_type                        = xs::batch<storage_type, xsimd::default_arch>;
 
     static const PType        pixel_type    = PType::PType_D64;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
     POUTRE_STATIC_CONSTEXPR size_t alignment      = SIMD_IDEAL_MAX_ALIGN_BYTES;
-    POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = SIMD_BATCH_DOUBLE_SIZE;
-    using simd_type                               = typename xs::batch<storage_type, simd_loop_step>;
-    using simd_mask_type                          = typename xs::batch_bool<storage_type, simd_loop_step>;
+    POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = batch_type::size;
+    using simd_type                               = typename batch_type;
+    using simd_mask_type                          = typename xs::batch_bool<storage_type>;
 
     POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pDOUBLE) * 8;
 
@@ -306,15 +332,16 @@ namespace poutre
     using safe_signed_type = pINT64;
     using str_type         = pINT64;
     using accu_type        = pINT64;
+    using batch_type                        = xs::batch<storage_type, xsimd::default_arch>;
 
     static const PType        pixel_type    = PType::PType_GrayINT64;
     static const CompoundType compound_type = CompoundType::CompoundType_Scalar;
 
     POUTRE_STATIC_CONSTEXPR size_t alignment      = SIMD_IDEAL_MAX_ALIGN_BYTES;
-    POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = SIMD_BATCH_INT64_SIZE;
+    POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = batch_type::size;
+    using simd_type                               = typename batch_type;
+    using simd_mask_type                          = typename xs::batch_bool<storage_type>;
     POUTRE_STATIC_CONSTEXPR size_t quant          = sizeof(pINT64) * 8;
-    using simd_type                               = typename xs::batch<storage_type, simd_loop_step>;
-    using simd_mask_type                          = typename xs::batch_bool<storage_type, simd_loop_step>;
 
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
     {
@@ -971,4 +998,3 @@ namespace poutre
   using px4dc4D   = pixel_t<c4pDOUBLE, 4>; //! alias compund pixel 4D 4*FLOAT
                                            //! @} doxygroup:
 } // namespace poutre
-#endif // POUTRE_IMAGEPROCESSING_TYPE_HPP__

@@ -6,8 +6,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IMAGEPROCESSING_COMPARE_HPP__
-#define POUTRE_IMAGEPROCESSING_COMPARE_HPP__
+#pragma once
 
 /**
  * @file poutreImageProcessingCompare.hpp
@@ -19,7 +18,7 @@
  * @copyright Copyright (c) 2020
  *
  */
-#include <poutreBase/include/poutreSimdAlgorithm.hpp> //simd transform
+#include <poutreBase/include/simd/poutreSimdAlgorithm.hpp> //simd transform
 #include <poutreBase/poutreContainerView.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
@@ -45,7 +44,7 @@ namespace poutre
       return static_cast<bool>(a0 == a1);
     }
   };
-  template<typename T> struct OpCompEqual<T, T, std::enable_if_t<std::is_arithmetic_v<T>>>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T> struct OpCompEqual<T, T, std::enable_if_t<std::is_arithmetic_v<T>>>
   {
     using simd_t      = typename TypeTraits<T>::simd_type;
     using simd_mask_t = typename TypeTraits<T>::simd_mask_type;
@@ -66,7 +65,7 @@ namespace poutre
       return static_cast<bool>(a0 != a1);
     }
   };
-  template<typename T> struct OpCompDiff<T, T, std::enable_if_t<std::is_arithmetic_v<T>>>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T> struct OpCompDiff<T, T, std::enable_if_t<std::is_arithmetic_v<T>>>
   {
     using simd_t      = typename TypeTraits<T>::simd_type;
     using simd_mask_t = typename TypeTraits<T>::simd_mask_type;
@@ -87,7 +86,7 @@ namespace poutre
       return static_cast<bool>(a0 > a1);
     }
   };
-  template<typename T> struct OpCompSup<T, T, std::enable_if_t<std::is_arithmetic_v<T>>>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T> struct OpCompSup<T, T, std::enable_if_t<std::is_arithmetic_v<T>>>
   {
     using simd_t      = typename TypeTraits<T>::simd_type;
     using simd_mask_t = typename TypeTraits<T>::simd_mask_type;
@@ -108,7 +107,7 @@ namespace poutre
       return static_cast<bool>(a0 < a1);
     }
   };
-  template<typename T> struct OpCompInf<T, T, std::enable_if_t<std::is_arithmetic_v<T>>>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T> struct OpCompInf<T, T, std::enable_if_t<std::is_arithmetic_v<T>>>
   {
     using simd_t      = typename TypeTraits<T>::simd_type;
     using simd_mask_t = typename TypeTraits<T>::simd_mask_type;
@@ -129,7 +128,7 @@ namespace poutre
       return static_cast<bool>(a0 >= a1);
     }
   };
-  template<typename T> struct OpCompSupEqual<T, T, std::enable_if_t<std::is_arithmetic_v<T>>>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T> struct OpCompSupEqual<T, T, std::enable_if_t<std::is_arithmetic_v<T>>>
   {
     using simd_t      = typename TypeTraits<T>::simd_type;
     using simd_mask_t = typename TypeTraits<T>::simd_mask_type;
@@ -150,7 +149,7 @@ namespace poutre
       return static_cast<bool>(a0 <= a1);
     }
   };
-  template<typename T> struct OpCompInfEqual<T, T, std::enable_if_t<std::is_arithmetic_v<T>>>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T> struct OpCompInfEqual<T, T, std::enable_if_t<std::is_arithmetic_v<T>>>
   {
     using simd_t      = typename TypeTraits<T>::simd_type;
     using simd_mask_t = typename TypeTraits<T>::simd_mask_type;
@@ -170,7 +169,7 @@ namespace poutre
     POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT { return lhs == m_val; }
   };
 
-  template<typename T1> struct OpCompEqualValue<T1, std::enable_if_t<std::is_arithmetic_v<T1>>>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T1> struct OpCompEqualValue<T1, std::enable_if_t<std::is_arithmetic_v<T1>>>
   {
     T1 m_val;
     using simd_t      = typename TypeTraits<T1>::simd_type;
@@ -193,7 +192,7 @@ namespace poutre
     POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT { return lhs != m_val; }
   };
 
-  template<typename T1> struct OpCompDiffValue<T1, std::enable_if_t<std::is_arithmetic_v<T1>>>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T1> struct OpCompDiffValue<T1, std::enable_if_t<std::is_arithmetic_v<T1>>>
   {
     T1 m_val;
     using simd_t      = typename TypeTraits<T1>::simd_type;
@@ -216,7 +215,7 @@ namespace poutre
     POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT { return lhs > m_val; }
   };
 
-  template<typename T1> struct OpCompSupValue<T1, std::enable_if_t<std::is_arithmetic_v<T1>>>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T1> struct OpCompSupValue<T1, std::enable_if_t<std::is_arithmetic_v<T1>>>
   {
     T1 m_val;
     using simd_t      = typename TypeTraits<T1>::simd_type;
@@ -239,7 +238,7 @@ namespace poutre
     POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT { return lhs >= m_val; }
   };
 
-  template<typename T1> struct OpCompSupEqualValue<T1, std::enable_if_t<std::is_arithmetic_v<T1>>>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T1> struct OpCompSupEqualValue<T1, std::enable_if_t<std::is_arithmetic_v<T1>>>
   {
     T1 m_val;
     using simd_t      = typename TypeTraits<T1>::simd_type;
@@ -262,7 +261,7 @@ namespace poutre
     POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT { return lhs < m_val; }
   };
 
-  template<typename T1> struct OpCompInfValue<T1, std::enable_if_t<std::is_arithmetic_v<T1>>>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T1> struct OpCompInfValue<T1, std::enable_if_t<std::is_arithmetic_v<T1>>>
   {
     T1 m_val;
     using simd_t      = typename TypeTraits<T1>::simd_type;
@@ -284,7 +283,7 @@ namespace poutre
     POUTRE_ALWAYS_INLINE bool operator()(T1 lhs) const POUTRE_NOEXCEPT { return lhs <= m_val; }
   };
 
-  template<typename T1> struct OpCompInfEqualValue<T1, std::enable_if_t<std::is_arithmetic_v<T1>>>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T1> struct OpCompInfEqualValue<T1, std::enable_if_t<std::is_arithmetic_v<T1>>>
   {
     T1 m_val;
     using simd_t      = typename TypeTraits<T1>::simd_type;
@@ -316,7 +315,7 @@ namespace poutre
     POUTRE_ALWAYS_INLINE Tout operator()(Tin i_val) const POUTRE_NOEXCEPT { return (cop(i_val) ? m_valtrue : m_valfalse); }
   };
 
-  template<typename Tin, typename Tout, class CompareOp>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE Tin, POUTRE_CONCEPT_BASE_VALUE_TYPE Tout, class CompareOp>
   struct compare_sss<
       Tin,
       Tout,
@@ -467,7 +466,12 @@ namespace poutre
     }
   };
 
-  template<typename Tin, typename Tcomp, typename Ttrue, typename Tfalse, typename Tout, class CompareOp>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE Tin,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Tcomp,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Ttrue,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Tfalse,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Tout,
+           class CompareOp>
   struct compare_iii<
       Tin,
       Tcomp,
@@ -648,7 +652,11 @@ namespace poutre
     }
   };
 
-  template<typename Tin, typename Ttrue, typename Tfalse, typename Tout, class CompareOp>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE Tin,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Ttrue,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Tfalse,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Tout,
+           class CompareOp>
   struct compare_sii<
       Tin,
       Ttrue,
@@ -821,7 +829,10 @@ namespace poutre
     }
   };
 
-  template<typename Tin, typename Ttrue, typename Tout, class CompareOp>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE Tin,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Ttrue,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Tout,
+           class CompareOp>
   struct compare_sis<
       Tin,
       Ttrue,
@@ -985,7 +996,11 @@ namespace poutre
     }
   };
 
-  template<typename Tin, typename Tcomp, typename Tfalse, typename Tout, class CompareOp>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE Tin,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Tcomp,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Tfalse,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Tout,
+           class CompareOp>
   struct compare_isi<
       Tin,
       Tcomp,
@@ -1159,7 +1174,11 @@ namespace poutre
     }
   };
 
-  template<typename Tin, typename Tcomp, typename Ttrue, typename Tout, class CompareOp>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE Tin,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Tcomp,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Ttrue,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Tout,
+           class CompareOp>
   struct compare_iis<
       Tin,
       Tcomp,
@@ -1334,7 +1353,10 @@ namespace poutre
     }
   };
 
-  template<typename Tin, typename Tfalse, typename Tout, class CompareOp>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE Tin,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Tfalse,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Tout,
+           class CompareOp>
   struct compare_ssi<
       Tin,
       Tfalse,
@@ -1496,7 +1518,10 @@ namespace poutre
     }
   };
 
-  template<typename Tin1, typename Tin2, typename Tout, class CompareOp>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE Tin1,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Tin2,
+           POUTRE_CONCEPT_BASE_VALUE_TYPE Tout,
+           class CompareOp>
   struct compare_iss<
       Tin1,
       Tin2,
@@ -1647,4 +1672,3 @@ namespace poutre
   }
   //! @} doxygroup: image_processing_linear_group
 } // namespace poutre
-#endif // POUTRE_IMAGEPROCESSING_COMPARE_HPP__

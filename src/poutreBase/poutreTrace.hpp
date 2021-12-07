@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_TRACE__HPP__
-#define POUTRE_TRACE__HPP__
+#pragma once
 
 /**
  * @file   poutreTrace.hpp
@@ -137,5 +136,3 @@ namespace poutre
 } // namespace poutre
 
 // !@} doxygroup: trace_group
-
-#endif // POUTRE_TRACE__HPP__

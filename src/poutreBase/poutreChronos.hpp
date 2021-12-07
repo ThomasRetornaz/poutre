@@ -7,8 +7,7 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_CHRONOS_HPP__
-#define POUTRE_CHRONOS_HPP__
+#pragma once
 
 /**
  * @file   poutreChronos.hpp
@@ -111,4 +110,3 @@ namespace poutre
 /**
 //! @} doxygroup: timer_group
 */
-#endif // POUTRE_CHRONOS_HPP__

@@ -7,8 +7,8 @@
 //                     http://www.boost.org/LICENSE_1_0.txt                   //
 //==============================================================================
 
-#ifndef POUTRE_IMAGEPROCESSING_ARITH_HPP__
-#define POUTRE_IMAGEPROCESSING_ARITH_HPP__
+#pragma once
+
 /**
  * @file poutreImageProcessingArith.hpp
  * @author thomas.retornaz@mines_paris.org
@@ -44,7 +44,7 @@ namespace poutre
     POUTRE_ALWAYS_INLINE T2 operator()(T1 const &a0) const POUTRE_NOEXCEPT { return -a0; }
   };
 
-  template<typename T1, typename T2>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T1, POUTRE_CONCEPT_BASE_VALUE_TYPE T2>
   struct op_Invert<
       T1,
       T2,
@@ -101,7 +101,7 @@ namespace poutre
     }
   };
 
-  template<typename T1, typename T2, typename T3>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T1, POUTRE_CONCEPT_BASE_VALUE_TYPE T2, POUTRE_CONCEPT_BASE_VALUE_TYPE T3>
   struct op_Saturated_Sub<
       T1,
       T2,
@@ -180,7 +180,7 @@ namespace poutre
     }
   };
 
-  template<typename T1, typename T2, typename T3>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T1, POUTRE_CONCEPT_BASE_VALUE_TYPE T2, POUTRE_CONCEPT_BASE_VALUE_TYPE T3>
   struct op_Saturated_Add<
       T1,
       T2,
@@ -259,7 +259,7 @@ namespace poutre
     }
   };
 
-  template<typename T1, typename T2>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T1, POUTRE_CONCEPT_BASE_VALUE_TYPE T2>
   struct op_Saturated_Add_Constant<
       T1,
       T2,
@@ -329,7 +329,7 @@ namespace poutre
     }
   };
 
-  template<typename T1, typename T2>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T1, POUTRE_CONCEPT_BASE_VALUE_TYPE T2>
   struct op_Saturated_Sub_Constant<
       T1,
       T2,
@@ -394,7 +394,7 @@ namespace poutre
     }
   };
 
-  template<typename T1, typename T2, typename T3>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T1, POUTRE_CONCEPT_BASE_VALUE_TYPE T2, POUTRE_CONCEPT_BASE_VALUE_TYPE T3>
   struct op_Sup<
       T1,
       T2,
@@ -455,7 +455,7 @@ namespace poutre
     }
   };
 
-  template<typename T1, typename T2, typename T3>
+  template<POUTRE_CONCEPT_BASE_VALUE_TYPE T1, POUTRE_CONCEPT_BASE_VALUE_TYPE T2, POUTRE_CONCEPT_BASE_VALUE_TYPE T3>
   struct op_Inf<
       T1,
       T2,
@@ -506,4 +506,3 @@ namespace poutre
   //! @} doxygroup: image_processing_linear_group
 } // namespace poutre
 
-#endif // POUTRE_IMAGEPROCESSING_ARITH_HPP__
