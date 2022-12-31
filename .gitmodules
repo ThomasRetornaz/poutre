@@ -17,3 +17,25 @@
 [submodule "thirdparties/range-v3"]
 	path = thirdparties/range-v3
 	url = https://github.com/ericniebler/range-v3
+[submodule "thirdparties/hdf5"]
+	path = thirdparties/hdf5
+	url = https://github.com/HDFGroup/hdf5.git
+[submodule "thirdparties/libjpeg-turbo"]
+	path = thirdparties/libjpeg-turbo
+	url = https://github.com/libjpeg-turbo/libjpeg-turbo.git
+[submodule "thirdparties/libpng"]
+	path = thirdparties/libpng
+	url = https://github.com/glennrp/libpng.git
+	branch = master
+[submodule "thirdparties/oiio"]
+	path = thirdparties/oiio
+	url = https://github.com/OpenImageIO/oiio.git
+[submodule "thirdparties/tiff"]
+	path = thirdparties/tiff
+	url = https://github.com/ThomasRetornaz/tiff.git
+[submodule "thirdparties/zlib"]
+	path = thirdparties/zlib
+	url = https://github.com/madler/zlib.git
+[submodule "thirdparties/kiwaku"]
+	path = thirdparties/kiwaku
+	url = https://github.com/jfalcou/kiwaku.git
