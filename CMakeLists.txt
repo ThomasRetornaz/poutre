@@ -96,9 +96,13 @@ include(cmake/sanitize.cmake)
 file(GLOB_RECURSE CMAKEFILES *.[cmake] CMakeLists.txt)
 poutre_cmake_format(cmake-format ${CMAKEFILES})
 
-include(cmake/CMakeCompilerSpecific.cmake)
 include(cmake/OptimizeForArchitecture.cmake)
 OptimizeForArchitecture()
+
+# Third parties
+add_subdirectory(${THIRD_PARTIES_PATH})
+
+include(cmake/CMakeCompilerSpecific.cmake)
 foreach(flag ${Vc_ARCHITECTURE_FLAGS})
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flag}")
 endforeach()
@@ -150,8 +154,6 @@ include(cmake/CMakeInstallUtils.cmake)
 #message(STATUS "Configuring the python packaging")
 #include(cmake/CMakePythonPackage.cmake)
 
-# Third parties
-add_subdirectory(${THIRD_PARTIES_PATH})
 
 #FIXME
 include_directories(BEFORE ${SIMD_INLCUDE_DIRECTORY})
@@ -166,8 +168,6 @@ include_directories(BEFORE ${RANGE_INCLUDES})
 include_directories(${POUTRE_SRC_DIR})
 include_directories(${POUTRE_NRT_DIR})
 include_directories(${POUTRE_PYTHONEXT_DIR})
-
-
 
 if(POUTRE_CODE_COVERAGE)
    add_code_coverage_all_targets()

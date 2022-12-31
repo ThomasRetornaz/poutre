@@ -11,7 +11,7 @@ find_package(git REQUIRED)
 ExternalProject_Add(NSimdDep
   GIT_REPOSITORY https://github.com/agenium-scale/nsimd.git
   #GIT_TAG issue_519
-  GIT_TAG master  
+  GIT_TAG v3.0.1  
   PREFIX ${CMAKE_CURRENT_BINARY_DIR}
   #--Update/Patch step----------
 	UPDATE_COMMAND ""

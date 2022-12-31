@@ -19,7 +19,7 @@ include(ExternalProject)
 
 # archive approach
 ExternalProject_Add(Eigendep #see http://www.cmake.org/cmake/help/v3.0/module/ExternalProject.html
-  URL http://bitbucket.org/eigen/eigen/get/3.3.4.zip
+  URL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.zip
   PREFIX ${CMAKE_CURRENT_BINARY_DIR}
   CONFIGURE_COMMAND ""
   BUILD_COMMAND ""

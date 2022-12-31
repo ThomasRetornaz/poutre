@@ -4,30 +4,6 @@
 [submodule "thirdparties/jsoncpp"]
 	path = thirdparties/jsoncpp
 	url = https://github.com/open-source-parsers/jsoncpp.git
-[submodule "thirdparties/zlib"]
-	path = thirdparties/zlib
-	url = https://github.com/ThomasRetornaz/zlib.git
-	branch = cmake_allow_as_submodule
-[submodule "thirdparties/libpng"]
-	path = thirdparties/libpng
-	url = https://github.com/ThomasRetornaz/libpng.git
-	branch = cmake_allow_as_submodule
-[submodule "thirdparties/oiio"]
-	path = thirdparties/oiio
-	url = https://github.com/ThomasRetornaz/oiio.git
-	branch = cmake_allow_as_submodule
-[submodule "thirdparties/openexr"]
-	path = thirdparties/openexr
-	url = https://github.com/ThomasRetornaz/openexr.git
-	branch = cmake_allow_as_submodule
-[submodule "thirdparties/tiff"]
-	path = thirdparties/tiff
-	url = https://github.com/ThomasRetornaz/tiff.git
-	branch = cmake_allow_as_submodule
-[submodule "thirdparties/hdf5"]
-	path = thirdparties/hdf5
-	url = https://github.com/ThomasRetornaz/hdf5.git
-	branch = cmake_allow_as_submodule
 [submodule "thirdparties/googletest"]
 	path = thirdparties/googletest
 	url = https://github.com/google/googletest.git
@@ -38,9 +14,6 @@
 [submodule "thirdparties/spdlog"]
 	path = thirdparties/spdlog
 	url = https://github.com/gabime/spdlog
-[submodule "thirdparties/libjpeg-turbo"]
-	path = thirdparties/libjpeg-turbo
-	url = https://github.com/ThomasRetornaz/libjpeg-turbo.git
 [submodule "thirdparties/range-v3"]
 	path = thirdparties/range-v3
 	url = https://github.com/ericniebler/range-v3
