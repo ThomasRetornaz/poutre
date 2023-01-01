@@ -265,14 +265,15 @@ namespace poutre
     using i64 = signed long;
   #else
     #if defined(POUTRE_IS_GCC) || defined(POUTRE_IS_CLANG)
-      __extension__ typedef POUTRE_ulonglong u64;
-      __extension__ typedef POUTRE_longlong i64;
+      __extension__ typedef __signed__ long long i64;
+      __extension__ typedef unsigned long long u64;
     #else
-      using u64 = unsigned long long;
-      using i64 = signed long long;
+      typedef __signed__ long long i64;
+      typedef unsigned long long u64;
     #endif
   #endif
 #endif
+
 
 #ifdef POUTRE_NATIVE_FP16
   using f16 = __fp16;

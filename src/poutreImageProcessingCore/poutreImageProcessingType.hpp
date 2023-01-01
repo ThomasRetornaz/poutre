@@ -185,7 +185,7 @@ namespace poutre
 
     POUTRE_STATIC_CONSTEXPR size_t alignment      = SIMD_IDEAL_MAX_ALIGN_BYTES;
     POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = batch_type::size;
-    using simd_type                               = typename batch_type;
+    using simd_type                               = batch_type;
     using simd_mask_type                          = typename xs::batch_bool<storage_type>;
     POUTRE_STATIC_CONSTEXPR size_t quant          = sizeof(storage_type) * 8;
 
@@ -223,7 +223,7 @@ namespace poutre
 
     POUTRE_STATIC_CONSTEXPR size_t alignment      = SIMD_IDEAL_MAX_ALIGN_BYTES;
     POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = batch_type::size;
-    using simd_type                               = typename batch_type;
+    using simd_type                               = batch_type;
     using simd_mask_type                          = typename xs::batch_bool<storage_type>;
     POUTRE_STATIC_CONSTEXPR size_t quant          = sizeof(storage_type) * 8;
 
@@ -261,7 +261,7 @@ namespace poutre
 
     POUTRE_STATIC_CONSTEXPR size_t alignment      = SIMD_IDEAL_MAX_ALIGN_BYTES;
     POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = batch_type::size;
-    using simd_type                               = typename batch_type;
+    using simd_type                               = batch_type;
     using simd_mask_type                          = typename xs::batch_bool<storage_type>;
 
     POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pFLOAT) * 8;
@@ -300,7 +300,7 @@ namespace poutre
 
     POUTRE_STATIC_CONSTEXPR size_t alignment      = SIMD_IDEAL_MAX_ALIGN_BYTES;
     POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = batch_type::size;
-    using simd_type                               = typename batch_type;
+    using simd_type                               = batch_type;
     using simd_mask_type                          = typename xs::batch_bool<storage_type>;
 
     POUTRE_STATIC_CONSTEXPR size_t quant = sizeof(pDOUBLE) * 8;
@@ -339,7 +339,7 @@ namespace poutre
 
     POUTRE_STATIC_CONSTEXPR size_t alignment      = SIMD_IDEAL_MAX_ALIGN_BYTES;
     POUTRE_STATIC_CONSTEXPR size_t simd_loop_step = batch_type::size;
-    using simd_type                               = typename batch_type;
+    using simd_type                               = batch_type;
     using simd_mask_type                          = typename xs::batch_bool<storage_type>;
     POUTRE_STATIC_CONSTEXPR size_t quant          = sizeof(pINT64) * 8;
 

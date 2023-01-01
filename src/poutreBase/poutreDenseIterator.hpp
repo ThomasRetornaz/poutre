@@ -49,7 +49,6 @@ namespace poutre
 
     using difference_type   = std::ptrdiff_t;
     using iterator_category = contiguous_iterator_tag;
-    using self_type         = pdense_iterator<DataType, Const>;
 
     explicit pdense_iterator(DataType *ptr = nullptr, DataType *ptrorig = nullptr) : m_ptr(ptr), m_ptrorig(ptrorig) {}
 
