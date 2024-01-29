@@ -39,3 +39,6 @@
 [submodule "thirdparties/kiwaku"]
 	path = thirdparties/kiwaku
 	url = https://github.com/jfalcou/kiwaku.git
+[submodule "thirdparties/raberu"]
+	path = thirdparties/raberu
+	url = https://github.com/jfalcou/raberu
