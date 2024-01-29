@@ -193,7 +193,7 @@ TEST(poutreImageProcessingType,compound_pixel_container)
   using c5G8 = poutre::compound<poutre::pUINT8, 5>;
   EXPECT_TRUE(poutre::get_dim<c5G8>::dim == 5);
   c5G8 p00;
-  p00.assign(10);
+  std::fill(p00.begin(), p00.end(),10);
   c5G8 p0 = {10, 10, 10, 10, 10};
   EXPECT_EQ(p00, p0);
   EXPECT_EQ(p00[0], 10);
@@ -213,7 +213,7 @@ TEST(poutreImageProcessingType,compound_pixel_3)
 {
   using c3G8 = poutre::compound<poutre::pUINT8, 3>;
   EXPECT_TRUE(poutre::get_dim<c3G8>::dim == 3);
-  c3G8 p00(0, 1, 2);
+  c3G8 p00 = {0, 1, 2};
   EXPECT_TRUE(p00[0] == 0);
   EXPECT_TRUE(p00[1] == 1);
   EXPECT_TRUE(p00[2] == 2);
@@ -224,7 +224,7 @@ TEST(poutreImageProcessingType,compound_pixel_3)
   EXPECT_TRUE(p0[1] == 12);
   EXPECT_TRUE(p0[2] == 12);
 
-  c3G8 p(1, 2, 3);
+  c3G8 p = {1, 2, 3};
   EXPECT_TRUE(p0 != p);
   EXPECT_TRUE(p[0] == 1);
   EXPECT_TRUE(p[1] == 2);
@@ -253,19 +253,14 @@ TEST(poutreImageProcessingType,compound_pixel_4)
 {
   using c4G8 = poutre::compound<poutre::pUINT8, 4>;
   EXPECT_TRUE(poutre::get_dim<c4G8>::dim == 4); //-V112
-  c4G8 p00(0, 1, 2, 3);
+  c4G8 p00 = {0, 1, 2, 3};
   EXPECT_TRUE(p00[0] == 0);
   EXPECT_TRUE(p00[1] == 1);
   EXPECT_TRUE(p00[2] == 2);
   EXPECT_TRUE(p00[3] == 3);
 
-  c4G8 p0; //default uninitialized
-  p0.assign(0);
-  p0 += 12;
-  EXPECT_TRUE(p0[0] == 12);
-  EXPECT_TRUE(p0[1] == 12);
-  EXPECT_TRUE(p0[2] == 12);
-  EXPECT_TRUE(p0[3] == 12);
+  c4G8 p0 = {0}; // default uninitialized
+  p0.fill(0);
 
   c4G8 p = {1, 2, 3, 4}; //-V112
   EXPECT_TRUE(p0 != p);

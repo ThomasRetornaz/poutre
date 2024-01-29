@@ -62,7 +62,6 @@ endif()
 set(POUTREIO_LINK_LIBRAIRIES
 PRIVATE jsoncpp_lib
 INTERFACE xsimd
-INTERFACE fmt-header-only
 PUBLIC PoutreBase
 PUBLIC PoutreIPCore)
 

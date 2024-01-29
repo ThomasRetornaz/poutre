@@ -14,5 +14,9 @@
 
 namespace poutre
 {
-  void dummy() { size_t a = 0; }
+  void dummy()
+  {
+    size_t a = 0;
+    a++;
+  }
 } // namespace poutre

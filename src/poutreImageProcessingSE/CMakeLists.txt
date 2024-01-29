@@ -27,7 +27,7 @@ target_link_libraries(
   PRIVATE jsoncpp_lib
   INTERFACE Eigen
   INTERFACE xsimd
-  INTERFACE fmt-header-only PoutreBase PoutreIPCore)
+  PoutreBase PoutreIPCore)
 set_target_properties(PoutreIPSE PROPERTIES FOLDER "src/")
 
 if(BUILD_SHARED_LIBS)

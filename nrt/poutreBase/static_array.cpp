@@ -34,7 +34,8 @@ TEST(static_container,static_array_init)
     {
     //init from carray
     int tab[3] = { 1, 2, 3 };
-    auto array3(tab);
+    poutre::static_array<int, 3> array3(tab);
+    EXPECT_EQ(array3.size(), 3);
     }
   }
 

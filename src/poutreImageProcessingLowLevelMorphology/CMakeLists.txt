@@ -24,9 +24,7 @@ add_library(PoutreIPLowLevelMorphology ${PoutreIPLLMSRC})
 target_link_libraries(
   PoutreIPLowLevelMorphology
   PUBLIC jsoncpp_lib
-         # INTERFACE Eigen
   INTERFACE xsimd
-  INTERFACE fmt-header-only
   PUBLIC PoutreBase
   PUBLIC PoutreIPCore
   PUBLIC PoutreIPPixelProcessing)

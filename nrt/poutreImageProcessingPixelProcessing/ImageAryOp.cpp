@@ -648,7 +648,7 @@ decltype(auto) ConstructVector(size_t size) {
       m_vect;
   m_vect.reserve(size);
   for (size_t i = 0u; i < size; ++i) {
-    m_vect.push_back(dis(gen));
+    m_vect.push_back(static_cast<poutre::pUINT8>(dis(gen)));
   }
   return m_vect;
 }
@@ -657,86 +657,86 @@ decltype(auto) ConstructVector(size_t size) {
 #if 0
 TEST(poutreImageProcessingArithOp,benchmark)
 {
-	const auto size = 1000 * 1000;
-	const auto inputVect1 = ConstructVector(size);
-	const auto inputVect2 = ConstructVector(size);
-	std::vector<poutre::pUINT8,poutre::aligned_allocator<poutre::pUINT8>> ouputVect(size);
+  const auto size = 1000 * 1000;
+  const auto inputVect1 = ConstructVector(size);
+  const auto inputVect2 = ConstructVector(size);
+  std::vector<poutre::pUINT8,poutre::aligned_allocator<poutre::pUINT8>> ouputVect(size);
 
-	auto v_img1 = poutre::array_view< const poutre::pUINT8, 2>(inputVect1, { int(1000),int(1000) });
-	auto v_img2 = poutre::array_view< const poutre::pUINT8, 2>(inputVect2, { int(1000),int(1000) });
-	auto v_imgout = poutre::array_view< poutre::pUINT8, 2>(ouputVect, { int(1000),int(1000) });
+  auto v_img1 = poutre::array_view< const poutre::pUINT8, 2>(inputVect1, { int(1000),int(1000) });
+  auto v_img2 = poutre::array_view< const poutre::pUINT8, 2>(inputVect2, { int(1000),int(1000) });
+  auto v_imgout = poutre::array_view< poutre::pUINT8, 2>(ouputVect, { int(1000),int(1000) });
 
 
 
-	std::cout << std::endl;
-	std::cout << std::endl;
-	std::cout << std::endl;
-	std::cout << std::endl;
-	std::cout << std::endl;
-	auto iteration = 10000;
-	std::cout << "********************************" << std::endl;
-	poutre::Timer timer;
-	
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << std::endl;
+  auto iteration = 10000;
+  std::cout << "********************************" << std::endl;
+  poutre::Timer timer;
+
     /*timer.Start();
-	for (auto i = 0; i<iteration; ++i)
-		poutre::t_ArithNegate(v_img1,v_imgout);
-	timer.Stop();
-	std::cout << "Time t_ArithNegate " << timer << std::endl;
-	timer.Reset();
-	std::cout << "********************************" << std::endl;*/
+  for (auto i = 0; i<iteration; ++i)
+    poutre::t_ArithNegate(v_img1,v_imgout);
+  timer.Stop();
+  std::cout << "Time t_ArithNegate " << timer << std::endl;
+  timer.Reset();
+  std::cout << "********************************" << std::endl;*/
 
-	std::cout << "********************************"<<std::endl;
-	timer.Start();
-	for (auto i = 0; i<iteration; ++i)
-		poutre::t_ArithSaturatedSub(v_img1,v_img2,v_imgout);
-	timer.Stop();
-	std::cout << "Time t_ArithSaturatedSub " << timer << std::endl;
-	timer.Reset();
-	std::cout << "********************************" << std::endl;
+  std::cout << "********************************"<<std::endl;
+  timer.Start();
+  for (auto i = 0; i<iteration; ++i)
+    poutre::t_ArithSaturatedSub(v_img1,v_img2,v_imgout);
+  timer.Stop();
+  std::cout << "Time t_ArithSaturatedSub " << timer << std::endl;
+  timer.Reset();
+  std::cout << "********************************" << std::endl;
 
-	std::cout << "********************************" << std::endl;
-	timer.Start();
-	for (auto i = 0; i<iteration; ++i)
-		poutre::t_ArithSaturatedAdd(v_img1, v_img2, v_imgout);
-	timer.Stop();
-	std::cout << "Time t_ArithSaturatedAdd " << timer << std::endl;
-	timer.Reset();
-	std::cout << "********************************" << std::endl;
+  std::cout << "********************************" << std::endl;
+  timer.Start();
+  for (auto i = 0; i<iteration; ++i)
+    poutre::t_ArithSaturatedAdd(v_img1, v_img2, v_imgout);
+  timer.Stop();
+  std::cout << "Time t_ArithSaturatedAdd " << timer << std::endl;
+  timer.Reset();
+  std::cout << "********************************" << std::endl;
 
-	std::cout << "********************************" << std::endl;
-	timer.Start();
-	for (auto i = 0; i<iteration; ++i)
-		poutre::t_ArithSaturatedAddConstant(v_img1,static_cast<poutre::pUINT8>(10),v_imgout);
-	timer.Stop();
-	std::cout << "Time t_ArithSaturatedAddConstant " << timer << std::endl;
-	timer.Reset();
-	std::cout << "********************************" << std::endl;
+  std::cout << "********************************" << std::endl;
+  timer.Start();
+  for (auto i = 0; i<iteration; ++i)
+    poutre::t_ArithSaturatedAddConstant(v_img1,static_cast<poutre::pUINT8>(10),v_imgout);
+  timer.Stop();
+  std::cout << "Time t_ArithSaturatedAddConstant " << timer << std::endl;
+  timer.Reset();
+  std::cout << "********************************" << std::endl;
 
-	std::cout << "********************************" << std::endl;
-	timer.Start();
-	for (auto i = 0; i<iteration; ++i)
-		poutre::t_ArithSaturatedSubConstant(v_img1, static_cast<poutre::pUINT8>(10), v_imgout);
-	timer.Stop();
-	std::cout << "Time t_ArithSaturatedSubConstant " << timer << std::endl;
-	timer.Reset();
-	std::cout << "********************************" << std::endl;
+  std::cout << "********************************" << std::endl;
+  timer.Start();
+  for (auto i = 0; i<iteration; ++i)
+    poutre::t_ArithSaturatedSubConstant(v_img1, static_cast<poutre::pUINT8>(10), v_imgout);
+  timer.Stop();
+  std::cout << "Time t_ArithSaturatedSubConstant " << timer << std::endl;
+  timer.Reset();
+  std::cout << "********************************" << std::endl;
 
-	std::cout << "********************************" << std::endl;
-	timer.Start();
-	for (auto i = 0; i<iteration; ++i)
-		poutre::t_ArithSup(v_img1,v_img2, v_imgout);
-	timer.Stop();
-	std::cout << "Time t_ArithSup " << timer << std::endl;
-	timer.Reset();
-	std::cout << "********************************" << std::endl;
+  std::cout << "********************************" << std::endl;
+  timer.Start();
+  for (auto i = 0; i<iteration; ++i)
+    poutre::t_ArithSup(v_img1,v_img2, v_imgout);
+  timer.Stop();
+  std::cout << "Time t_ArithSup " << timer << std::endl;
+  timer.Reset();
+  std::cout << "********************************" << std::endl;
 
-	std::cout << "********************************" << std::endl;
-	timer.Start();
-	for (auto i = 0; i<iteration; ++i)
-		poutre::t_ArithInf(v_img1, v_img2, v_imgout);
-	timer.Stop();
-	std::cout << "Time t_ArithInf " << timer << std::endl;
-	timer.Reset();
-	std::cout << "********************************" << std::endl;
+  std::cout << "********************************" << std::endl;
+  timer.Start();
+  for (auto i = 0; i<iteration; ++i)
+    poutre::t_ArithInf(v_img1, v_img2, v_imgout);
+  timer.Stop();
+  std::cout << "Time t_ArithInf " << timer << std::endl;
+  timer.Reset();
+  std::cout << "********************************" << std::endl;
 }
 #endif

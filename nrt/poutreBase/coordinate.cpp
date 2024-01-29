@@ -33,7 +33,7 @@ TEST(coordinate,bounds)
   EXPECT_EQ(bnd2[2], 4); //-V112
   EXPECT_EQ(bnd2.size(),0);
 
-  bnd1 -= idx;  // bnd1 is { 1, 2, 4 } 
+  bnd1 -= idx;  // bnd1 is { 1, 2, 4 }
   EXPECT_EQ(bnd1[0], 1);
   EXPECT_EQ(bnd1[1], 2);
   EXPECT_EQ(bnd1[2], 4); //-V112
@@ -75,7 +75,7 @@ TEST(coordinate,index)
   {
   //Scaling
   poutre::index<2> idx{ 2, 3 };
-  
+
   EXPECT_EQ(idx[0], 2);
   EXPECT_EQ(idx[1], 3);
 
@@ -86,11 +86,11 @@ TEST(coordinate,index)
 
 TEST(coordinate,index_ordering)
   {
-      
+
   poutre::index<2> idx{ 2, 3 };
   poutre::index<2> idx2{ 1, 3 };
   poutre::index<2> idx3{ 3, 3 };
-  
+
   EXPECT_TRUE(idx2<idx);
   EXPECT_TRUE(idx2<=idx);
   EXPECT_TRUE(idx3>idx);
@@ -124,11 +124,11 @@ TEST(coordinate,bounds_iterator_1d)
   EXPECT_EQ(it5 - bnd1D.begin( ), 5);
   --it5;
   EXPECT_EQ(it5 - bnd1D.begin( ), 4); //-V112
-  
+
   idx res;
   poutre::details::get_coord_from_offset_nostride<bnd,idx>::op(bnd1D,4,res); //-V112
   EXPECT_TRUE(res==idx{4}); //-V112
-    
+
   auto off=poutre::details::get_offset_from_coord_nostride<bnd, idx>::op(bnd1D, res);
   EXPECT_EQ(off, 4); //-V112
 
@@ -147,7 +147,7 @@ TEST(coordinate,bounds_iterator_2d)
   std::vector<idx> expected = { idx{ 0, 0 }, idx{ 0, 1 }, idx{ 0, 2 }, idx{ 0, 3 }, idx{ 1, 0 }, idx{ 1, 1 }, idx{ 1, 2 }, idx{ 1, 3 } };
   EXPECT_TRUE(CheckEqualCollections(bnd2D.cbegin( ), bnd2D.cend( ), expected.begin( )));
   EXPECT_TRUE(CheckEqualCollections(cbegin(bnd2D), cend(bnd2D), expected.begin( )));
-  
+
   iterator it(bnd2D);
   ++it;
   idx test{ 0, 1 };
@@ -174,8 +174,8 @@ TEST(coordinate,bounds_iterator_2d)
   idx outofbound = { 15,15 };
   iterator itFromOut(bnd2D, outofbound);
   EXPECT_TRUE(itFromOut == bnd2D.end( ));
-  
-  
+
+
   auto b  =  bnd{3, 2};
   auto it2d = iterator(b,idx{0,0});
   //std::vector<idx> expected = {{0, 1}, {1, 0}, {1, 1}, {2, 0}, {2, 1}};
@@ -199,7 +199,7 @@ TEST(coordinate,bounds_iterator_3d)
   using iterator = poutre::bounds_iterator< 3 >;
 
   bound bnd{ 1, 2, 3 };
- 
+
 
   std::vector<idx> expected = { idx{0, 0, 0}, idx{0, 0, 1}, idx{0, 0, 2}, idx{0, 1, 0}, idx{0, 1, 1}, idx{0, 1, 2} };
   EXPECT_TRUE(CheckEqualCollections(bnd.cbegin( ), bnd.cend( ), expected.begin( )));

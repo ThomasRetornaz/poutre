@@ -32,8 +32,6 @@ target_link_libraries(
   PoutreIPCore
   PUBLIC jsoncpp_lib
   INTERFACE xsimd
-  INTERFACE fmt-header-only
-            # INTERFACE Eigen INTERFACE ${SIMD_LIB}
   PUBLIC PoutreBase)
 set_target_properties(PoutreIPCore PROPERTIES FOLDER "src/")
 

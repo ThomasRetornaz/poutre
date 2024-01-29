@@ -31,7 +31,7 @@ namespace
         m_vect.reserve(size);
         for (size_t i = 0; i < size; ++i)
         {
-            m_vect.push_back(dis(gen));
+          m_vect.push_back(static_cast<poutre::pUINT8>(dis(gen)));
         }
         return m_vect;
     }

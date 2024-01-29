@@ -17,8 +17,8 @@ set(PoutreBaseSRC_PUBLICHEADERS
     ${PoutreBaseSubdirectory}/poutreChronos.hpp
     ${PoutreBaseSubdirectory}/poutreCoordinate.hpp
     ${PoutreBaseSubdirectory}/poutreContainerHelper.hpp
-    ${PoutreBaseSubdirectory}/poutreDenseIterator.hpp
     ${PoutreBaseSubdirectory}/poutreStaticContainer.hpp
+    ${PoutreBaseSubdirectory}/poutreDenseIterator.hpp
     ${PoutreBaseSubdirectory}/poutreContainerView.hpp)
 
 set(PoutreBaseSRC_CPP
@@ -43,11 +43,9 @@ add_library(PoutreBase ${PoutreBaseSRC})
 target_link_libraries(
   PoutreBase
   PUBLIC jsoncpp_lib
-  INTERFACE fmt-header-only
   INTERFACE spdlog_header_only
   INTERFACE xsimd
   PUBLIC OpenMP::OpenMP_CXX
-         # INTERFACE Eigen INTERFACE ${SIMD_LIB}
 )
 set_target_properties(PoutreBase PROPERTIES FOLDER "src/")
 # force custom target before start

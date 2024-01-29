@@ -424,8 +424,7 @@ namespace poutre
       using lineView = TIn *__restrict; // array_view<TIn, 1>;
 
       tmpBuffer tempLine(xsize), tempLine1(xsize), tempLine2(xsize), tempLine3(xsize);
-      lineView  bufTempLine(tempLine.data()), bufTempLine1(tempLine1.data()), bufTempLine2(tempLine2.data()),
-          bufTempLine3(tempLine3.data());
+      lineView  bufTempLine(tempLine.data()), bufTempLine2(tempLine2.data());
       lineView bufInputPreviousLine;
       lineView bufInputCurrentLine;
       lineView bufInputNextLine;

@@ -1,17 +1,16 @@
 #Most of the initial cmake skeleton  was heavely inspired from yayi project see https://bitbucket.org/renficiaud/yayi.git. and rapidjosn
-cmake_minimum_required (VERSION 3.14)
+cmake_minimum_required (VERSION 3.5)
 
 project(Poutre
 DESCRIPTION "Generic ImageProcessing Library"
-LANGUAGES C CXX)
+LANGUAGES C CXX ASM ASM_MASM)
+set(CMAKE_CPP_STANDARD 20)
 
 #current version
 set(POUTRE_MAJOR    0 )
 set(POUTRE_MINOR    1 )
 set(POUTRE_SUBMINOR 0 )
 set(POUTRE_VERSION ${POUTRE_MAJOR}.${POUTRE_MINOR}.${POUTRE_SUBMINOR})
-
-set(CMAKE_CXX_STANDARD 20)
 
 # some global properties
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -24,6 +23,17 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   # Set the possible values of build type for cmake-gui
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
+
+# Ask the Makefile and Ninja generators to create a compile_commands.json file with exact compiler calls for debug purpose
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+
+# Newbie check
+if (CMAKE_CURRENT_BINARY_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+  message(FATAL_ERROR "Do not generate CMake at the root of the project")
+endif()
+
+# Path to additions to CMake
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 OPTION(POUTRE_BUILD_TEST "Build Tests Suites" ON)
 OPTION(POUTRE_CI "Build on CI desactivated some tests" OFF)
@@ -54,7 +64,7 @@ set(POUTRE_NRT_DIR
     "Root path of the Core of POUTRE's tests")
 
 set(POUTRE_BENCH_DIR
-	${POUTRE_ROOT_DIR}/bench
+  ${POUTRE_ROOT_DIR}/bench
     CACHE PATH
     "Root path of the Core of POUTRE's bench")
 
@@ -84,28 +94,23 @@ set(POUTRE_DOCUMENTATION_INSTALLATION_RELATIVE_PATH   "documentation" CACHE PATH
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 # Compiler specific configurations
-include(cmake/AddCompilerFlag.cmake)
-include(cmake/AddCXXCompilerFlag.cmake)
-include(cmake/c++-standards.cmake)
-include(cmake/code-coverage.cmake)
-include(cmake/formatting.cmake)
-include(cmake/tidy.cmake)
-include(cmake/sanitize.cmake)
+include(AddCompilerFlag)
+include(AddCXXCompilerFlag)
+include(c++-standards)
+include(code-coverage)
+include(formatting)
+include(tidy)
+include(sanitize)
 
 # FORMAT CMAKE
 file(GLOB_RECURSE CMAKEFILES *.[cmake] CMakeLists.txt)
 poutre_cmake_format(cmake-format ${CMAKEFILES})
 
-include(cmake/OptimizeForArchitecture.cmake)
-OptimizeForArchitecture()
-
 # Third parties
 add_subdirectory(${THIRD_PARTIES_PATH})
 
-include(cmake/CMakeCompilerSpecific.cmake)
-foreach(flag ${Vc_ARCHITECTURE_FLAGS})
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flag}")
-endforeach()
+include(CMakePlatformDetection)
+include(CMakeCompilerSpecific)
 
 message(STATUS "")
 message(STATUS "******** Summary ********")
@@ -146,8 +151,8 @@ endif()
 
 # Some useful functions
 include(CMakeParseArguments)
-include(cmake/CMakeVersion.cmake)
-include(cmake/CMakeInstallUtils.cmake)
+include(CMakeVersion)
+include(CMakeInstallUtils)
 #include(cmake/CMakePythonUtils.cmake)
 
 # Python packaging
@@ -181,11 +186,11 @@ if(POUTRE_BUILD_TEST)
 endif()
 if(POUTRE_BUILD_BENCH)
     add_subdirectory (${POUTRE_BENCH_DIR})
-endif()    
+endif()
 if(POUTRE_BUILD_PY)
     # creates the python package
     #create_python_package()
-endif()    
+endif()
 
 message(STATUS "Configuring the documentation")
 include(cmake/CMakeDoc.cmake)

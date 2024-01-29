@@ -30,7 +30,7 @@ if (MSVC)
               #      narrowing conversion
       /wd4267 # (3): Conversion of size_t to smaller type. Same as 4244.
       /wd4244
-      /wd4273 # (1): inconsistent dll linkage. 
+      /wd4273 # (1): inconsistent dll linkage.
       /wd4090
       /wd4311
       /wd26451
@@ -54,10 +54,10 @@ if (MSVC)
     )
 
   set(CMAKE_SHARED_LINKER_FLAGS
-      "${CMAKE_SHARED_LINKER_FLAGS} 
-      /ignore:4049 
+      "${CMAKE_SHARED_LINKER_FLAGS}
+      /ignore:4049
       /ignore:4275 #https://docs.microsoft.com/en-us/cpp/error-messages/compiler-warnings/compiler-warning-level-2-c4275?view=vs-2019
-      /ignore:4217") #symbol 'symbol' defined in 'filename.obj' is imported and  symbol 'symbol' defined in 'filename_1.obj' is imported by 'filename_2.obj' in function 'function' 
+      /ignore:4217") #symbol 'symbol' defined in 'filename.obj' is imported and  symbol 'symbol' defined in 'filename_1.obj' is imported by 'filename_2.obj' in function 'function'
   set(CMAKE_EXE_LINKER_FLAGS
       "${CMAKE_EXE_LINKER_FLAGS} /ignore:4049 /ignore:4217 /ignore:4275")
 
@@ -160,38 +160,10 @@ if(POUTRE_BUILD_TEST)
     SET(GTEST_INCLUDE_DIR "${THIRD_PARTIES_PATH}/googletest/include" PARENT_SCOPE)
 endif()
 
-
-###########################################################################
-# fmtlib
-include(FetchContent)
-FetchContent_Declare(
-  fmt
-  GIT_REPOSITORY "https://github.com/fmtlib/fmt"
-  # Uncomment and set the following to a specific hash to
-  # lock down to a specific commit and avoid contacting
-  # the remote once we've already cloned/fetched it
-  GIT_TAG 7.0.3
-  )
-
-FetchContent_GetProperties(fmt) #mispelled name in original post
-if(NOT fmt_POPULATED)   # name is lowercased
-  FetchContent_Populate(fmt)
-  message(STATUS "fmt source dir: ${fmt_SOURCE_DIR}")
-  message(STATUS "fmt binary dir: ${fmt_BINARY_DIR}")
-  SET(FMT_HEADER_ONLY ON CACHE BOOL "FMT_HEADER_ONLY" FORCE) 
-  add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR}) # name is lowercased
-  set (FMT_INCLUDE_DIR "${fmt_SOURCE_DIR}/include")
-  set(CMAKE_PREFIX_PATH ${FMT_INSTALL_DIR})
-  set(FMT_INCLUDES ${FMT_INCLUDE_DIR})
-  set(FMT_INCLUDES ${FMT_INCLUDES} PARENT_SCOPE)
-  #checked_find_package (fmt QUIET)
-  set_target_properties(fmt PROPERTIES FOLDER "3rdparties/")
-
-endif()
-
 #spdlog
 SET(SPDLOG_FMT_EXTERNAL OFF CACHE BOOL  "Use external fmt library instead of bundled" FORCE)
-set(SPDLOG_FMT_EXTERNAL_HO ON CACHE BOOL "Use external fmt header-only library instead of bundled" FORCE)
+set(SPDLOG_FMT_EXTERNAL_HO OFF CACHE BOOL "Use external fmt header-only library instead of bundled" FORCE)
+set(SPDLOG_USE_STD_FORMAT ON CACHE BOOL "Use std::format require C++20" FORCE)
 add_subdirectory(spdlog)
 set_target_properties(spdlog PROPERTIES FOLDER "3rdparties/")
 INCLUDE_DIRECTORIES(
@@ -250,15 +222,15 @@ if(POUTRE_USE_OIIO)
 
   # libjpeg-turbo
   add_subdirectory(libjpeg-turbo)
-  set(JPEG_INCLUDE_DIR 
+  set(JPEG_INCLUDE_DIR
     ${CMAKE_CURRENT_SOURCE_DIR}/libjpeg-turbo
     ${CMAKE_CURRENT_BINARY_DIR}/libjpeg-turbo
-    ) 
+    )
   set(JPEG_LIBRARY jpeg-static)
-  set(JPEG_INCLUDE_DIRS ${JPEG_INCLUDE_DIR}) 
+  set(JPEG_INCLUDE_DIRS ${JPEG_INCLUDE_DIR})
   set(JPEG_LIBRARIES ${JPEG_LIBRARY})
   INCLUDE_DIRECTORIES(
-      ${CMAKE_CURRENT_SOURCE_DIR}/libjpeg-turbo 
+      ${CMAKE_CURRENT_SOURCE_DIR}/libjpeg-turbo
       ${CMAKE_CURRENT_BINARY_DIR}/libjpeg-turbo
   )
   set(JPEG_FOUND TRUE)
@@ -270,10 +242,10 @@ if(POUTRE_USE_OIIO)
   SET(PNG_STATIC ON CACHE BOOL "PNG STATIC BUILD" FORCE)
   set(HAVE_LD_VERSION_SCRIPT OFF CACHE BOOL "PNG STATIC BUILD WORKAROUND" FORCE)
   add_subdirectory(libpng)
-  set(PNG_PNG_INCLUDE_DIR 
+  set(PNG_PNG_INCLUDE_DIR
     ${CMAKE_CURRENT_SOURCE_DIR}/libpng
     ${CMAKE_CURRENT_BINARY_DIR}/libpng)
-  set(PNG_INCLUDE_DIR  ${PNG_PNG_INCLUDE_DIR}) 
+  set(PNG_INCLUDE_DIR  ${PNG_PNG_INCLUDE_DIR})
   # set(PNG_LIBRARY png${PNG_LIB_TARGETS})
   set(PNG_LIBRARY png_static)
   set(PNG_LIBRARIES ${PNG_LIBRARY})
@@ -289,9 +261,9 @@ if(POUTRE_USE_OIIO)
 
   # libtiff
   add_subdirectory(tiff)
-  set(TIFF_INCLUDE_DIR 
+  set(TIFF_INCLUDE_DIR
     ${CMAKE_CURRENT_SOURCE_DIR}/tiff/libtiff
-    ${CMAKE_CURRENT_BINARY_DIR}/tiff/libtiff) 
+    ${CMAKE_CURRENT_BINARY_DIR}/tiff/libtiff)
   set(TIFF_LIBRARY tiff)
   INCLUDE_DIRECTORIES(
       ${TIFF_INCLUDE_DIR}
@@ -336,7 +308,7 @@ if(POUTRE_USE_OIIO)
   SET_PROPERTY(TARGET IlmThread PROPERTY FOLDER "3rdparties")
   SET_PROPERTY(TARGET IexMath PROPERTY FOLDER "3rdparties")
   SET_PROPERTY(TARGET IlmImfUtil PROPERTY FOLDER "3rdparties")
-  SET(OPENEXR_INCLUDE_DIR 
+  SET(OPENEXR_INCLUDE_DIR
   ${OPENEXR_INCLUDE_PATH}
   ${ILMBASE_INCLUDE_PATH}
   ${ILMBASE_INCLUDE_PATH}/Iex
@@ -363,7 +335,7 @@ if(POUTRE_USE_OIIO)
   add_subdirectory(oiio)
   SET_PROPERTY(TARGET OpenImageIO PROPERTY FOLDER "3rdparties")
   #MESSAGE(FATAL_ERROR ${CMAKE_CURRENT_BINARY_DIR}/include/OpenImageIO)
-  SET(OIIO_INCLUDE_DIR 
+  SET(OIIO_INCLUDE_DIR
     ${CMAKE_CURRENT_SOURCE_DIR}/oiio/src/include
     ${CMAKE_CURRENT_BINARY_DIR}/include
     ${CMAKE_BINARY_DIR}/include/OpenImageIO
@@ -389,7 +361,7 @@ if(POUTRE_USE_HDF5)
 
   set(HDF5_FOUND TRUE)
   set(HDF5_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/hdf5")
-  set(HDF5_INCLUDE_DIRS 
+  set(HDF5_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/hdf5/hl/c++/src
     ${CMAKE_CURRENT_SOURCE_DIR}/hdf5/hl/src
     ${CMAKE_CURRENT_SOURCE_DIR}/hdf5/c++/src
@@ -397,13 +369,13 @@ if(POUTRE_USE_HDF5)
     ${CMAKE_CURRENT_BINARY_DIR}/hdf5
     ${CMAKE_CURRENT_BINARY_DIR}
   )
-  set(HDF5_LIBRARIES 
+  set(HDF5_LIBRARIES
     hdf5_cpp-shared
     hdf5-shared
     hdf5_hl_cpp-shared
     hdf5_hl-shared
   )
-  set(HDF5_LIBRARIES 
+  set(HDF5_LIBRARIES
     ${HDF5_LIBRARIES} PARENT_SCOPE
   )
   set(HDF5_INCLUDE_DIRS
@@ -417,9 +389,6 @@ if(POUTRE_USE_HDF5)
   SET_PROPERTY(TARGET gen_hdf5-shared PROPERTY FOLDER "3rdparties")
   add_dependencies(hdf5_cpp-shared zlib zlibstatic)
 endif()
-
-
-
 
 # bench
 if(POUTRE_BUILD_BENCH)
@@ -436,9 +405,28 @@ if(POUTRE_BUILD_BENCH)
   set_target_properties(benchmark_main PROPERTIES FOLDER "3rdparties/")
 endif()
 
-# range 
+# range
 set(RANGE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/range-v3/include)
 set(RANGE_INCLUDES ${RANGE_INCLUDE_DIR} PARENT_SCOPE)
+
+#raberu
+add_library(raberu INTERFACE)
+target_include_directories(raberu INTERFACE
+  $<BUILD_INTERFACE:${SOURCE_DIR}/raberu> #we can do better
+  $<INSTALL_INTERFACE:include/raberu>
+)
+target_compile_features(raberu INTERFACE cxx_std_20)
+set_target_properties(raberu PROPERTIES FOLDER "3rdparties/")
+
+#kiwaku
+add_library(kiwaku INTERFACE)
+target_include_directories(kiwaku INTERFACE
+  $<BUILD_INTERFACE:${SOURCE_DIR}/kiwaku> #we can do better
+  $<INSTALL_INTERFACE:include/kiwaku>
+)
+target_compile_features(kiwaku INTERFACE cxx_std_20)
+set_target_properties(raberu PROPERTIES FOLDER "3rdparties/")
+
 
 
 # Python libraries

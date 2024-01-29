@@ -21,7 +21,7 @@
 #include <poutreBase/poutreTrace.hpp>
 
 #ifdef POUTRE_DYNAMIC                                 // defined if POUTRE is compiled as a DLL
-#  ifdef PoutreImageProcessingPixelProcessing_EXPORTS // defined if we are building the POUTRE DLL
+#  ifdef PoutreIPPixelProcessing_EXPORTS // defined if we are building the POUTRE DLL
                                                       // (instead of using it)
 #    define IMP_API MODULE_EXPORT
 #  else

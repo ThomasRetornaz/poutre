@@ -12,9 +12,7 @@
 #ifndef FMT_HEADER_ONLY
 #  define FMT_HEADER_ONLY
 #endif
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/printf.h>
+#include <format>
 
 /**
  * @file   poutreConfig.hpp
@@ -45,7 +43,7 @@
 #  elif defined(__GNUC__) || defined(__GNUG__)
 #    define POUTRE_IS_GCC
 #  endif
-  
+
 /* ------------------------------------------------------------------------- */
   /* C++ standard detection */
 
@@ -135,7 +133,7 @@
 #    define POUTRE_ALWAYS_INLINE inline // NOLINT
 #  endif
 
-//   NOINLINE 
+//   NOINLINE
 #if defined(__GNUC__)
 #define POUTRE_NOINLINE __attribute__((noinline))
 #elif defined(_MSC_VER)
@@ -198,14 +196,10 @@
 
 namespace poutre
 {
-  template<typename... Args> inline std::string format(const char *fmt, const Args &...args)
-  {
-    return ::fmt::format(fmt, args...);
-  }
 
 // NOLINTNEXTLINE
 #  define POUTRE_RUNTIME_ERROR(MSG)                                                                                         \
-    throw std::runtime_error(fmt::format("Throw {%s} at {%s} {%S}", MSG, __FILE__, __LINE__)) //-V1003 //NOLINT
+    throw std::runtime_error(std::format("Throw {} at {} {}", MSG, __FILE__, __LINE__)) //-V1003 //NOLINT
 // NOLINTNEXTLINE
 #  define POUTRE_NEVER_REACH_HERE                                                                                           \
     POUTRE_RUNTIME_ERROR("Code should never reach here, WTF Oo") // NOLINT
@@ -286,7 +280,7 @@ namespace poutre
   using f16 = struct { u16 u; };
 #endif
 
-  
+
 #if POUTRE_CXX >= 2020
   template <typename T> concept base_value_type_c =
       std::is_same_v<std::remove_const_t<T>, u8> || std::is_same_v<std::remove_const_t<T>, i8> ||

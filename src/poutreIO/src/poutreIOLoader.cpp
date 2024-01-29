@@ -55,11 +55,16 @@ namespace poutre
     fs::path localPath(m_imgPath);
     if( !fs::exists(localPath) )
     {
-      POUTRE_RUNTIME_ERROR((poutre::format("ImageLoader:: path don't exist {%s}", m_imgPath)));
+      POUTRE_RUNTIME_ERROR((std::format("ImageLoader:: path don't exist {}", m_imgPath)));
     }
     // switch on extension
     auto extension = localPath.extension().string();
-    std::for_each(extension.begin(), extension.end(), [](char &c) { c = ::tolower(c); });
+    std::transform(extension.begin(),
+                   extension.end(),
+                   extension.begin(),
+                   [](unsigned char c) {
+      return std::tolower(c); } // correct
+    );
 #ifdef POUTRE_USE_HDF5
     if( extension == ".h5" )
       return LoadFromHDF5(localPath.string());

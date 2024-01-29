@@ -38,7 +38,7 @@ namespace poutre
     fs::path dir = localPath.parent_path();
     if( !(fs::exists(dir)) )
     {
-      POUTRE_RUNTIME_ERROR((poutre::format("ImageWriter: provided path {%s} doesn't exists", dir)));
+      POUTRE_RUNTIME_ERROR(std::format("ImageWriter: provided path {} doesn't exists", i_imgpath));
     }
     m_isready = true;
     return *this;
@@ -51,8 +51,12 @@ namespace poutre
       POUTRE_RUNTIME_ERROR("ImageWritter:  you must set path through SetPath");
     fs::path localPath(m_imgPath);
     // switch on extension
-    auto extension = localPath.extension().string();
-    std::for_each(extension.begin(), extension.end(), [](char &c) { c = ::tolower(c); });
+    std::string extension = localPath.extension().string();
+    std::transform(extension.begin(),
+                   extension.end(),
+                   extension.begin(),
+                   [](unsigned char c) { return std::tolower(c); } // correct
+    );
 #ifdef POUTRE_USE_HDF5
     if( extension == ".h5" )
       return StoreWithHDF5(localPath.string(), i_img);

@@ -20,7 +20,6 @@
 #include <poutreBase/include/simd/poutreSimd.hpp>
 #include <poutreBase/poutreConfig.hpp>
 #include <poutreBase/poutreCoordinate.hpp>
-#include <poutreBase/poutreStaticContainer.hpp>
 #include <poutreBase/poutreTypes.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingCore.hpp>
 
@@ -86,7 +85,7 @@ namespace poutre
   //! operator>> for PType
   IMP_CORE_API std::istream &operator>>(std::istream &, PType &);
 
-  template<typename value_type, ptrdiff_t Rank> using compound = static_array<value_type, Rank>;
+  template<typename value_type, ptrdiff_t Rank> using compound = std::array<value_type, Rank>;
 
   using c3pUINT8  = compound<pUINT8, 3>;
   using c3pINT32  = compound<pINT32, 3>;
@@ -430,23 +429,23 @@ namespace poutre
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
     {
-      return compound<pUINT8, 3>(std::numeric_limits<pUINT8>::lowest(),
+      return compound<pUINT8, 3>({std::numeric_limits<pUINT8>::lowest(),
                                  std::numeric_limits<pUINT8>::lowest(),
-                                 std::numeric_limits<pUINT8>::lowest());
+                                 std::numeric_limits<pUINT8>::lowest()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
     {
       return compound<pUINT8, 3>(
-          std::numeric_limits<pUINT8>::min(), std::numeric_limits<pUINT8>::min(), std::numeric_limits<pUINT8>::min());
+          {std::numeric_limits<pUINT8>::min(), std::numeric_limits<pUINT8>::min(), std::numeric_limits<pUINT8>::min()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
     {
       return compound<pUINT8, 3>(
-          std::numeric_limits<pUINT8>::max(), std::numeric_limits<pUINT8>::max(), std::numeric_limits<pUINT8>::max());
+          {std::numeric_limits<pUINT8>::max(), std::numeric_limits<pUINT8>::max(), std::numeric_limits<pUINT8>::max()});
     }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
@@ -472,23 +471,23 @@ namespace poutre
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
     {
-      return compound<pINT32, 3>(std::numeric_limits<pINT32>::lowest(),
+      return compound<pINT32, 3>({std::numeric_limits<pINT32>::lowest(),
                                  std::numeric_limits<pINT32>::lowest(),
-                                 std::numeric_limits<pINT32>::lowest());
+                                 std::numeric_limits<pINT32>::lowest()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
     {
       return compound<pINT32, 3>(
-          std::numeric_limits<pINT32>::min(), std::numeric_limits<pINT32>::min(), std::numeric_limits<pINT32>::min());
+          {std::numeric_limits<pINT32>::min(), std::numeric_limits<pINT32>::min(), std::numeric_limits<pINT32>::min()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
     {
       return compound<pINT32, 3>(
-          std::numeric_limits<pINT32>::max(), std::numeric_limits<pINT32>::max(), std::numeric_limits<pINT32>::max());
+          {std::numeric_limits<pINT32>::max(), std::numeric_limits<pINT32>::max(), std::numeric_limits<pINT32>::max()});
     }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
@@ -512,23 +511,23 @@ namespace poutre
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
     {
-      return compound<pINT64, 3>(std::numeric_limits<pINT64>::lowest(),
+      return compound<pINT64, 3>({std::numeric_limits<pINT64>::lowest(),
                                  std::numeric_limits<pINT64>::lowest(),
-                                 std::numeric_limits<pINT64>::lowest());
+                                 std::numeric_limits<pINT64>::lowest()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
     {
       return compound<pINT64, 3>(
-          std::numeric_limits<pINT64>::min(), std::numeric_limits<pINT64>::min(), std::numeric_limits<pINT64>::min());
+          {std::numeric_limits<pINT64>::min(), std::numeric_limits<pINT64>::min(), std::numeric_limits<pINT64>::min()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
     {
       return compound<pINT64, 3>(
-          std::numeric_limits<pINT64>::max(), std::numeric_limits<pINT64>::max(), std::numeric_limits<pINT64>::max());
+          {std::numeric_limits<pINT64>::max(), std::numeric_limits<pINT64>::max(), std::numeric_limits<pINT64>::max()});
     }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
@@ -552,23 +551,23 @@ namespace poutre
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
     {
-      return compound<pFLOAT, 3>(std::numeric_limits<pFLOAT>::lowest(),
+      return compound<pFLOAT, 3>({std::numeric_limits<pFLOAT>::lowest(),
                                  std::numeric_limits<pFLOAT>::lowest(),
-                                 std::numeric_limits<pFLOAT>::lowest());
+                                 std::numeric_limits<pFLOAT>::lowest()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
     {
       return compound<pFLOAT, 3>(
-          std::numeric_limits<pFLOAT>::min(), std::numeric_limits<pFLOAT>::min(), std::numeric_limits<pFLOAT>::min());
+          {std::numeric_limits<pFLOAT>::min(), std::numeric_limits<pFLOAT>::min(), std::numeric_limits<pFLOAT>::min()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
     {
       return compound<pFLOAT, 3>(
-          std::numeric_limits<pFLOAT>::max(), std::numeric_limits<pFLOAT>::max(), std::numeric_limits<pFLOAT>::max());
+          {std::numeric_limits<pFLOAT>::max(), std::numeric_limits<pFLOAT>::max(), std::numeric_limits<pFLOAT>::max()});
     }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
@@ -592,23 +591,23 @@ namespace poutre
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
     {
-      return compound<pDOUBLE, 3>(std::numeric_limits<pDOUBLE>::lowest(),
+      return compound<pDOUBLE, 3>({std::numeric_limits<pDOUBLE>::lowest(),
                                   std::numeric_limits<pDOUBLE>::lowest(),
-                                  std::numeric_limits<pDOUBLE>::lowest());
+                                  std::numeric_limits<pDOUBLE>::lowest()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
     {
       return compound<pDOUBLE, 3>(
-          std::numeric_limits<pDOUBLE>::min(), std::numeric_limits<pDOUBLE>::min(), std::numeric_limits<pDOUBLE>::min());
+         { std::numeric_limits<pDOUBLE>::min(), std::numeric_limits<pDOUBLE>::min(), std::numeric_limits<pDOUBLE>::min()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
     {
       return compound<pDOUBLE, 3>(
-          std::numeric_limits<pDOUBLE>::max(), std::numeric_limits<pDOUBLE>::max(), std::numeric_limits<pDOUBLE>::max());
+          {std::numeric_limits<pDOUBLE>::max(), std::numeric_limits<pDOUBLE>::max(), std::numeric_limits<pDOUBLE>::max()});
     }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
@@ -678,28 +677,28 @@ namespace poutre
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
     {
-      return compound<pUINT8, 4>(std::numeric_limits<pUINT8>::lowest(),
+      return compound<pUINT8, 4>({std::numeric_limits<pUINT8>::lowest(),
                                  std::numeric_limits<pUINT8>::lowest(),
                                  std::numeric_limits<pUINT8>::lowest(),
-                                 std::numeric_limits<pUINT8>::lowest());
+                                 std::numeric_limits<pUINT8>::lowest()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
     {
-      return compound<pUINT8, 4>(std::numeric_limits<pUINT8>::min(),
+      return compound<pUINT8, 4>({std::numeric_limits<pUINT8>::min(),
                                  std::numeric_limits<pUINT8>::min(),
                                  std::numeric_limits<pUINT8>::min(),
-                                 std::numeric_limits<pUINT8>::min());
+                                 std::numeric_limits<pUINT8>::min()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
     {
-      return compound<pUINT8, 4>(std::numeric_limits<pUINT8>::max(),
+      return compound<pUINT8, 4>({std::numeric_limits<pUINT8>::max(),
                                  std::numeric_limits<pUINT8>::max(),
                                  std::numeric_limits<pUINT8>::max(),
-                                 std::numeric_limits<pUINT8>::max());
+                                 std::numeric_limits<pUINT8>::max()});
     }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
@@ -725,28 +724,28 @@ namespace poutre
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
     {
-      return compound<pINT32, 4>(std::numeric_limits<pINT32>::lowest(),
+      return compound<pINT32, 4>({std::numeric_limits<pINT32>::lowest(),
                                  std::numeric_limits<pINT32>::lowest(),
                                  std::numeric_limits<pINT32>::lowest(),
-                                 std::numeric_limits<pINT32>::lowest());
+                                 std::numeric_limits<pINT32>::lowest()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
     {
-      return compound<pINT32, 4>(std::numeric_limits<pINT32>::min(),
+      return compound<pINT32, 4>({std::numeric_limits<pINT32>::min(),
                                  std::numeric_limits<pINT32>::min(),
                                  std::numeric_limits<pINT32>::min(),
-                                 std::numeric_limits<pINT32>::min());
+                                 std::numeric_limits<pINT32>::min()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
     {
-      return compound<pINT32, 4>(std::numeric_limits<pINT32>::max(),
+      return compound<pINT32, 4>({std::numeric_limits<pINT32>::max(),
                                  std::numeric_limits<pINT32>::max(),
                                  std::numeric_limits<pINT32>::max(),
-                                 std::numeric_limits<pINT32>::max());
+                                 std::numeric_limits<pINT32>::max()});
     }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
@@ -770,28 +769,28 @@ namespace poutre
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
     {
-      return compound<pINT64, 4>(std::numeric_limits<pINT64>::lowest(),
+      return compound<pINT64, 4>({std::numeric_limits<pINT64>::lowest(),
                                  std::numeric_limits<pINT64>::lowest(),
                                  std::numeric_limits<pINT64>::lowest(),
-                                 std::numeric_limits<pINT64>::lowest());
+                                 std::numeric_limits<pINT64>::lowest()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
     {
-      return compound<pINT64, 4>(std::numeric_limits<pINT64>::min(),
+      return compound<pINT64, 4>({std::numeric_limits<pINT64>::min(),
                                  std::numeric_limits<pINT64>::min(),
                                  std::numeric_limits<pINT64>::min(),
-                                 std::numeric_limits<pINT64>::min());
+                                 std::numeric_limits<pINT64>::min()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
     {
-      return compound<pINT64, 4>(std::numeric_limits<pINT64>::max(),
+      return compound<pINT64, 4>({std::numeric_limits<pINT64>::max(),
                                  std::numeric_limits<pINT64>::max(),
                                  std::numeric_limits<pINT64>::max(),
-                                 std::numeric_limits<pINT64>::max());
+                                 std::numeric_limits<pINT64>::max()});
     }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
@@ -815,28 +814,28 @@ namespace poutre
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
     {
-      return compound<pFLOAT, 4>(std::numeric_limits<pFLOAT>::lowest(),
+      return compound<pFLOAT, 4>({std::numeric_limits<pFLOAT>::lowest(),
                                  std::numeric_limits<pFLOAT>::lowest(),
                                  std::numeric_limits<pFLOAT>::lowest(),
-                                 std::numeric_limits<pFLOAT>::lowest());
+                                 std::numeric_limits<pFLOAT>::lowest()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
     {
-      return compound<pFLOAT, 4>(std::numeric_limits<pFLOAT>::min(),
+      return compound<pFLOAT, 4>({std::numeric_limits<pFLOAT>::min(),
                                  std::numeric_limits<pFLOAT>::min(),
                                  std::numeric_limits<pFLOAT>::min(),
-                                 std::numeric_limits<pFLOAT>::min());
+                                 std::numeric_limits<pFLOAT>::min()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
     {
-      return compound<pFLOAT, 4>(std::numeric_limits<pFLOAT>::max(),
+      return compound<pFLOAT, 4>({std::numeric_limits<pFLOAT>::max(),
                                  std::numeric_limits<pFLOAT>::max(),
                                  std::numeric_limits<pFLOAT>::max(),
-                                 std::numeric_limits<pFLOAT>::max());
+                                 std::numeric_limits<pFLOAT>::max()});
     }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
@@ -860,28 +859,28 @@ namespace poutre
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type lowest() POUTRE_NOEXCEPT
     {
-      return compound<pDOUBLE, 4>(std::numeric_limits<pDOUBLE>::lowest(),
+      return compound<pDOUBLE, 4>({std::numeric_limits<pDOUBLE>::lowest(),
                                   std::numeric_limits<pDOUBLE>::lowest(),
                                   std::numeric_limits<pDOUBLE>::lowest(),
-                                  std::numeric_limits<pDOUBLE>::lowest());
+                                  std::numeric_limits<pDOUBLE>::lowest()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type min() POUTRE_NOEXCEPT
     {
-      return compound<pDOUBLE, 4>(std::numeric_limits<pDOUBLE>::min(),
+      return compound<pDOUBLE, 4>({std::numeric_limits<pDOUBLE>::min(),
                                   std::numeric_limits<pDOUBLE>::min(),
                                   std::numeric_limits<pDOUBLE>::min(),
-                                  std::numeric_limits<pDOUBLE>::min());
+                                  std::numeric_limits<pDOUBLE>::min()});
     }
 
     // todo decltype
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type max() POUTRE_NOEXCEPT
     {
-      return compound<pDOUBLE, 4>(std::numeric_limits<pDOUBLE>::max(),
+      return compound<pDOUBLE, 4>({std::numeric_limits<pDOUBLE>::max(),
                                   std::numeric_limits<pDOUBLE>::max(),
                                   std::numeric_limits<pDOUBLE>::max(),
-                                  std::numeric_limits<pDOUBLE>::max());
+                                  std::numeric_limits<pDOUBLE>::max()});
     }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type inf() { return min(); }
     POUTRE_ALWAYS_INLINE POUTRE_STATIC_CONSTEXPR storage_type sup() { return max(); }
@@ -998,3 +997,59 @@ namespace poutre
   using px4dc4D   = pixel_t<c4pDOUBLE, 4>; //! alias compund pixel 4D 4*FLOAT
                                            //! @} doxygroup:
 } // namespace poutre
+
+
+namespace std
+{
+  template<> struct std::formatter<poutre::ImgType> : std::formatter<const char*>
+  {
+    template<typename Context> auto format(const poutre::ImgType state, Context &context) const
+    {
+      switch( state )
+      {
+      case poutre::ImgType::ImgType_Dense: return formatter<const char*>::format("Dense", context);
+      case poutre::ImgType::ImgType_Sparse: return formatter<const char*>::format("Sparse", context);
+      case poutre::ImgType::ImgType_Undef: return formatter<const char*>::format("Unknown", context);
+      }
+
+      // unreachable
+      return context.out();
+    }
+  };
+
+  template<> struct std::formatter<poutre::CompoundType> : std::formatter<const char*>
+  {
+    template<typename Context> auto format(const poutre::CompoundType state, Context &context) const
+    {
+      switch( state )
+      {
+      case poutre::CompoundType::CompoundType_Scalar: return formatter<const char*>::format("Scalar", context);
+      case poutre::CompoundType::CompoundType_3Planes: return formatter<const char*>::format("3planes", context);
+      case poutre::CompoundType::CompoundType_4Planes: return formatter<const char*>::format("4planes", context);
+      case poutre::CompoundType::CompoundType_Undef: return formatter<const char*>::format("Unknown", context);
+      }
+
+      // unreachable
+      return context.out();
+    }
+  };
+
+   template<> struct std::formatter<poutre::PType> : std::formatter<const char*>
+  {
+    template<typename Context> auto format(const poutre::PType state, Context &context) const
+    {
+      switch( state )
+      {
+      case poutre::PType::PType_Undef: return formatter<const char*>::format("Unknown", context);
+      case poutre::PType::PType_GrayUINT8: return formatter<const char*>::format("u8", context);
+      case poutre::PType::PType_GrayINT32: return formatter<const char*>::format("i32", context);
+      case poutre::PType::PType_GrayINT64: return formatter<const char*>::format("i64", context);
+      case poutre::PType::PType_F32: return formatter<const char*>::format("f32", context);
+      case poutre::PType::PType_D64: return formatter<const char*>::format("d64", context);
+      }
+
+      // unreachable
+      return context.out();
+    }
+  };
+}

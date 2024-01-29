@@ -11,6 +11,10 @@ set(poutreIPCoreTestSRC
     ${poutreIPCoreTestSubdirectory}/PriorityQueue.cpp
 )
 
+if(MSVC)
+    add_definitions(/wd4388) # in gtests '!=': signed/unsigned mismatch)
+endif()
+
 add_executable(PoutreIPCoreTests ${poutreIPCoreTestSRC})
 
 IF(BUILD_SHARED_LIBS)

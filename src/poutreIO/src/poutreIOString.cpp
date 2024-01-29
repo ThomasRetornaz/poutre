@@ -44,7 +44,7 @@ namespace poutre
                           + istrm.str();
         POUTRE_RUNTIME_ERROR(err);
       }
-      it = tmp;
+      it = static_cast<typename TypeTraits<ptype>::storage_type>(tmp);
     }
   } // namespace poutre
 
@@ -176,7 +176,7 @@ namespace poutre
     break;
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("ImageFromStringDenseScalarDispatchPType::Unsupported ptype:{}", ptype));
+      POUTRE_RUNTIME_ERROR(std::format("ImageFromStringDenseScalarDispatchPType::Unsupported ptype:{}", ptype));
     }
     } // switch (ptype)
   }
@@ -213,7 +213,7 @@ namespace poutre
     break;
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("ImageFromStringDenseScalarDispatchPType::Unsupported ptype:{}", ptype));
+      POUTRE_RUNTIME_ERROR(std::format("ImageFromStringDenseScalarDispatchPType::Unsupported ptype:{}", ptype));
     }
     } // switch (ptype)
   }
@@ -250,7 +250,7 @@ namespace poutre
     break;
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("ImageFromStringDenseScalarDispatchPType::Unsupported ptype:{}", ptype));
+      POUTRE_RUNTIME_ERROR(std::format("ImageFromStringDenseScalarDispatchPType::Unsupported ptype:{}", ptype));
     }
     } // switch (ptype)
   }
@@ -279,7 +279,7 @@ namespace poutre
     break;
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("ImageFromStringDispatch::Unsupported compound type:{}", cptype));
+      POUTRE_RUNTIME_ERROR(std::format("ImageFromStringDispatch::Unsupported compound type:{}", cptype));
     }
     } // switch (cptype)
   }
@@ -508,7 +508,7 @@ namespace poutre
 
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("ImageToStringDenseScalarDispatchPType::Unsupported pixel type:{}", ptype));
+      POUTRE_RUNTIME_ERROR(std::format("ImageToStringDenseScalarDispatchPType::Unsupported pixel type:{}", ptype));
     }
     } // switch (ptype)
   }
@@ -548,7 +548,7 @@ namespace poutre
 
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("ImageToStringDenseScalarDispatchPType::Unsupported pixel type:{}", ptype));
+      POUTRE_RUNTIME_ERROR(std::format("ImageToStringDenseScalarDispatchPType::Unsupported pixel type:{}", ptype));
     }
     } // switch (ptype)
   }
@@ -588,7 +588,7 @@ namespace poutre
 
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("ImageToStringDenseScalarDispatchPType::Unsupported pixel type:{}", ptype));
+      POUTRE_RUNTIME_ERROR(std::format("ImageToStringDenseScalarDispatchPType::Unsupported pixel type:{}", ptype));
     }
     } // switch (ptype)
   }
@@ -618,7 +618,7 @@ namespace poutre
 
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("ImageFromStringDispatch::Unsupported compound type:{}", cptype));
+      POUTRE_RUNTIME_ERROR(std::format("ImageFromStringDispatch::Unsupported compound type:{}", cptype));
     }
     } // switch (cptype)
   }
@@ -636,7 +636,7 @@ namespace poutre
     // TODO dispatch sparse type ?
     if( imgtype != ImgType::ImgType_Dense )
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("ImageToString: ImgType unknown or not supported yet from {}", imgtype));
+      POUTRE_RUNTIME_ERROR(std::format("ImageToString: ImgType unknown or not supported yet from {}", imgtype));
     }
 
     auto cptype = i_image.GetCType();

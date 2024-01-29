@@ -32,7 +32,7 @@ namespace poutre
       return CreateDense(i_img1.GetCoords(), i_img1.GetCType(), i_img1.GetPType());
     }
     break;
-    default: POUTRE_RUNTIME_ERROR(poutre::format("CloneGeometry:: unsupported img type {}", imgType));
+    default: POUTRE_RUNTIME_ERROR(std::format("CloneGeometry:: unsupported img type {}", imgType));
     }
   }
 
@@ -48,7 +48,7 @@ namespace poutre
       return CreateDense(i_img1.GetCoords(), ctype, ptype);
     }
     break;
-    default: POUTRE_RUNTIME_ERROR(poutre::format("ConvertGeometry:: unsupported img type{}", imgType));
+    default: POUTRE_RUNTIME_ERROR(std::format("ConvertGeometry:: unsupported img type{}", imgType));
     }
   }
 
@@ -74,7 +74,7 @@ namespace poutre
     {
     }
     break;
-    default: POUTRE_RUNTIME_ERROR(poutre::format("Unsupported number of dims {:%D}", dims));
+    default: POUTRE_RUNTIME_ERROR(std::format("Unsupported number of dims {}", dims));
     }
   }
 } // namespace poutre

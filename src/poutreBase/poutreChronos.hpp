@@ -79,7 +79,7 @@ namespace poutre
     void Reset() POUTRE_NOEXCEPT;
 
     private:
-    std::chrono::high_resolution_clock::time_point m_start;         //! start wall time
+    high_resolution_clock::time_point              m_start;         //! start wall time
     timerep                                        m_accu;          //! accumulate wall time over all iteration
     std::clock_t                                   m_start_cputime; //! start cpu time
     std::clock_t                                   m_accu_cputime;  //! accumulate cpu time
@@ -106,6 +106,8 @@ namespace poutre
     ~ScopedTimer(void);
   };
 } // namespace poutre
+
+  // EXPIMP_TEMPLATE template class BASE_API std::chrono::high_resolution_clock::time_point;
 
 /**
 //! @} doxygroup: timer_group

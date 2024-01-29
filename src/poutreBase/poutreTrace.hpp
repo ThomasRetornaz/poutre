@@ -70,7 +70,7 @@ namespace poutre
       case LoggerLevel::err: (*m_innerlogger).set_level(spdlog::level::err); break;
       case LoggerLevel::trace: (*m_innerlogger).set_level(spdlog::level::trace); break;
       case LoggerLevel::warn: (*m_innerlogger).set_level(spdlog::level::warn); break;
-      default: POUTRE_RUNTIME_ERROR(poutre::format("Logger unsupported enum case {}", l));
+      default: POUTRE_RUNTIME_ERROR("Logger unsupported enum case");
       }
     }
     void call(const char *MSG, LoggerLevel l = LoggerLevel::debug)
@@ -83,7 +83,7 @@ namespace poutre
       case LoggerLevel::err: m_innerlogger->error(MSG); break;
       case LoggerLevel::trace: m_innerlogger->trace(MSG); break;
       case LoggerLevel::warn: m_innerlogger->warn(MSG); break;
-      default: POUTRE_RUNTIME_ERROR(poutre::format("Logger unsupported enum case {}", l));
+      default: POUTRE_RUNTIME_ERROR("Logger unsupported enum case");
       }
     }
 
@@ -105,31 +105,31 @@ namespace poutre
   /**@{*/
 // NOLINTNEXTLINE
 #define POUTRE_DEBUG(MSG)                                                                                                   \
-  poutre::GlobalLogger::get().call(poutre::format("DEBUG: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                   \
+  poutre::GlobalLogger::get().call(std::format("DEBUG: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                   \
                                    GlobalLogger::LoggerLevel::debug)
 // NOLINTNEXTLINE
 #define POUTRE_INFO(MSG)                                                                                                    \
-  poutre::GlobalLogger::get().call(poutre::format("INFO: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                    \
+  poutre::GlobalLogger::get().call(std::format("INFO: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                    \
                                    GlobalLogger::LoggerLevel::info)
 // NOLINTNEXTLINE
 #define POUTRE_CRITICAL(MSG)                                                                                                \
-  poutre::GlobalLogger::get().call(poutre::format("CRITICAL: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                \
+  poutre::GlobalLogger::get().call(std::format("CRITICAL: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                \
                                    GlobalLogger::LoggerLevel::critical)
 // NOLINTNEXTLINE
 #define POUTRE_ERROR(MSG)                                                                                                   \
-  poutre::GlobalLogger::get().call(poutre::format("ERROR: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                   \
+  poutre::GlobalLogger::get().call(std::format("ERROR: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                   \
                                    GlobalLogger::LoggerLevel::err)
 // NOLINTNEXTLINE
 #define POUTRE_TRACE(MSG)                                                                                                   \
-  poutre::GlobalLogger::get().call(poutre::format("TRACE: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                   \
+  poutre::GlobalLogger::get().call(std::format("TRACE: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                   \
                                    GlobalLogger::LoggerLevel::trace)
 // NOLINTNEXTLINE
 #define POUTRE_WARN(MSG)                                                                                                    \
-  poutre::GlobalLogger::get().call(poutre::format("WARNING: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                 \
+  poutre::GlobalLogger::get().call(std::format("WARNING: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                 \
                                    GlobalLogger::LoggerLevel::warn)
 // NOLINTNEXTLINE
 #define POUTRE_ENTERING(MSG)                                                                                                \
-  poutre::GlobalLogger::get().call(poutre::format("Entering: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                \
+  poutre::GlobalLogger::get().call(std::format("Entering: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                \
                                    GlobalLogger::LoggerLevel::trace)
   /**@}*/
 

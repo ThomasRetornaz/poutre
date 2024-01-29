@@ -270,7 +270,7 @@ namespace poutre
       std::future<T> m_future;
     };
 
-    class TreadPool
+    class BASE_API TreadPool
     { // https://codereview.stackexchange.com/questions/221626/c17-thread-pool
       private:
       ThreadSafeQueue<std::unique_ptr<IThreadTask>> m_pool_work_queue;

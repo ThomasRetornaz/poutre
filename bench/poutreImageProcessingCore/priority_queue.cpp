@@ -36,7 +36,7 @@ namespace
     m_vect.reserve(size);
     for( poutre::offset i = 0u; i < size; ++i )
     {
-      m_vect.push_back({rand() % 255, i});
+      m_vect.push_back({static_cast<poutre::pUINT8>(rand() % 255), i});
     }
     return m_vect;
   }

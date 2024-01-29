@@ -12,7 +12,7 @@
 //==============================================================================
 
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
-
+#include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
 #include <string>
 
 namespace poutre
@@ -79,7 +79,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<pDOUBLE, numDims>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("CreateDenseDispatchPTypeScalar:: Unsupported scalar type:{}", ptype));
+      POUTRE_RUNTIME_ERROR(std::format("CreateDenseDispatchPTypeScalar:: Unsupported scalar type:{}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -98,7 +98,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<compound<pDOUBLE, 3>, numDims>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("CreateDenseDispatchPType3PLanes:: Unsupported compound type 3 with {}", ptype));
+      POUTRE_RUNTIME_ERROR(std::format("CreateDenseDispatchPType3PLanes:: Unsupported compound type 3 with {}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -117,7 +117,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<compound<pDOUBLE, 4>, numDims>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("CreateDenseDispatchPType3PLanes:: Unsupported compound type 3 with {}", ptype));
+      POUTRE_RUNTIME_ERROR(std::format("CreateDenseDispatchPType3PLanes:: Unsupported compound type 3 with {}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -145,7 +145,7 @@ namespace poutre
     break;
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("Unsupported compound type:{}", ctype));
+      POUTRE_RUNTIME_ERROR(std::format("Unsupported compound type:{}", ctype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -165,7 +165,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<pDOUBLE, 1>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("CreateImage1DDispatchPTypeScalar:: Unsupported scalar type:{}", ptype));
+      POUTRE_RUNTIME_ERROR(std::format("CreateImage1DDispatchPTypeScalar:: Unsupported scalar type:{}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -191,7 +191,7 @@ namespace poutre
     //   }break;
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("Unsupported compound type:{}", ctype));
+      //POUTRE_RUNTIME_ERROR(std::format("Unsupported compound type:{}", ctype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -211,7 +211,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<pDOUBLE, 2>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("CreateImage2DDispatchPTypeScalar:: Unsupported scalar type:{}", ptype));
+      POUTRE_RUNTIME_ERROR(std::format("CreateImage2DDispatchPTypeScalar:: Unsupported scalar type:{}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -230,7 +230,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<compound<pDOUBLE, 3>, 2>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("CreateImage2DDispatchPType3PLanes:: Unsupported scalar type:{}", ptype));
+      POUTRE_RUNTIME_ERROR(std::format("CreateImage2DDispatchPType3PLanes:: Unsupported scalar type:{}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -249,7 +249,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<compound<pDOUBLE, 4>, 2>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("CreateImage2DDispatchPType4PLanes:: Unsupported scalar type:{}", ptype));
+      POUTRE_RUNTIME_ERROR(std::format("CreateImage2DDispatchPType4PLanes:: Unsupported scalar type:{}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -277,7 +277,7 @@ namespace poutre
     break;
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("Unsupported compound type:{}", ctype));
+      POUTRE_RUNTIME_ERROR(std::format("Unsupported compound type:{}", ctype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -297,7 +297,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<pDOUBLE, 3>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("CreateImage3DDispatchPTypeScalar:: Unsupported scalar type:{}", ptype));
+      POUTRE_RUNTIME_ERROR(std::format("CreateImage3DDispatchPTypeScalar:: Unsupported scalar type:{}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -316,7 +316,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<compound<pDOUBLE, 3>>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("CreateImage3DDispatchPType3PLanes:: Unsupported scalar type:{}", ptype));
+      POUTRE_RUNTIME_ERROR(std::format("CreateImage3DDispatchPType3PLanes:: Unsupported scalar type:{}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -335,7 +335,7 @@ namespace poutre
     case PType::PType_D64: return std::make_unique<DenseImage<compound<pDOUBLE, 4>>>(dims);
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("CreateImage3DDispatchPType4PLanes:: Unsupported scalar type:{}", ptype));
+      POUTRE_RUNTIME_ERROR(std::format("CreateImage3DDispatchPType4PLanes:: Unsupported scalar type:{}", ptype));
       return std::unique_ptr<IInterface>();
     }
     }
@@ -363,7 +363,7 @@ namespace poutre
     break;
     default:
     {
-      POUTRE_RUNTIME_ERROR(poutre::format("Unsupported compound type:{}", ctype));
+      POUTRE_RUNTIME_ERROR(std::format("Unsupported compound type:{}", ctype));
       return std::unique_ptr<IInterface>();
     }
     }
