@@ -110,12 +110,12 @@ namespace poutre
 
     template<typename t1, typename t2> struct helper_assign_op<t1, t2, AssignOpType::AssignOpMul>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(const t1 &A0, t2 &result) POUTRE_NOEXCEPT { result *= A0; }
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(const t1 &A0, t2 &result) POUTRE_NOEXCEPT { result *= (t2)A0; }
     };
 
     template<typename t1, typename t2> struct helper_assign_op<t1, t2, AssignOpType::AssignOpDiv>
     {
-      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(const t1 &A0, t2 &result) POUTRE_NOEXCEPT { result /= A0; }
+      POUTRE_ALWAYS_INLINE static POUTRE_CONSTEXPR void op(const t1 &A0, t2 &result) POUTRE_NOEXCEPT { result /= (t2)A0; }
     };
 
     template<typename t1, typename t2> struct helper_assign_op<t1, t2, AssignOpType::AssignOpMod>

@@ -115,7 +115,7 @@ namespace poutre
 
 namespace std
 {
-  template<> struct std::formatter<poutre::CompOpType> : std::formatter<const char*>
+  template<> struct formatter<poutre::CompOpType> : std::formatter<const char*>
   {
     template<typename Context> auto format(const poutre::CompOpType state, Context &context) const
     {

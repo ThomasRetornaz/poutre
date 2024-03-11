@@ -1001,7 +1001,7 @@ namespace poutre
 
 namespace std
 {
-  template<> struct std::formatter<poutre::ImgType> : std::formatter<const char*>
+  template<> struct formatter<poutre::ImgType> : std::formatter<const char*>
   {
     template<typename Context> auto format(const poutre::ImgType state, Context &context) const
     {
@@ -1017,7 +1017,7 @@ namespace std
     }
   };
 
-  template<> struct std::formatter<poutre::CompoundType> : std::formatter<const char*>
+  template<> struct formatter<poutre::CompoundType> : std::formatter<const char*>
   {
     template<typename Context> auto format(const poutre::CompoundType state, Context &context) const
     {
@@ -1034,7 +1034,7 @@ namespace std
     }
   };
 
-   template<> struct std::formatter<poutre::PType> : std::formatter<const char*>
+   template<> struct formatter<poutre::PType> : std::formatter<const char*>
   {
     template<typename Context> auto format(const poutre::PType state, Context &context) const
     {

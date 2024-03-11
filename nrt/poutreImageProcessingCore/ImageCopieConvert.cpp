@@ -42,7 +42,7 @@ TEST(poutreImageProcessingCopyConvert,Clone) {
   EXPECT_EQ((*getSame).GetNumDims(), 2);
   EXPECT_TRUE(!(*getSame).empty());
   auto getSamecoords = (*getSame).GetCoords();
-  auto getSameexpectedcoords = {3, 4}; //-V112
+  std::vector<std::size_t> getSameexpectedcoords = {3, 4}; //-V112
   EXPECT_TRUE(CheckEqualCollections(getSamecoords.begin(), getSamecoords.end(), getSameexpectedcoords.begin()));
 
   for (const auto &var : (*getSame)) {
@@ -71,7 +71,7 @@ TEST(poutreImageProcessingCopyConvert,getsamecoord) {
   EXPECT_EQ((*getSame).GetYSize(), 3);
   EXPECT_EQ((*getSame).GetNumDims(), 2);
   auto getSamecoords = (*getSame).GetCoords();
-  auto getSameexpectedcoords = {3, 4}; //-V112
+  std::vector<std::size_t> getSameexpectedcoords = {3, 4}; //-V112
   EXPECT_TRUE(CheckEqualCollections(getSamecoords.begin(), getSamecoords.end(), getSameexpectedcoords.begin()));
 }
 

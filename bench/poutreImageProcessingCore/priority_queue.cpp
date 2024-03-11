@@ -71,7 +71,7 @@ BENCHMARK_DEFINE_F(PriorityQueueFixture, priorityqueue)(benchmark::State &state)
     }
     while( !pqueue.empty() )
     {
-      auto top = pqueue.top(); //-V808
+      // auto top = pqueue.top(); //-V808
       pqueue.pop();
     }
   }
@@ -90,7 +90,7 @@ BENCHMARK_DEFINE_F(PriorityQueueFixture, priorityqueue_reserve)(benchmark::State
     }
     while( !pqueue.empty() )
     {
-      auto top = pqueue.top();
+      // auto top = pqueue.top();
       pqueue.pop();
     }
   }
@@ -110,7 +110,7 @@ BENCHMARK_DEFINE_F(PriorityQueueFixture, priorityqueue_respectfifoorder)(benchma
     }
     while( !pqueue.empty() )
     {
-      auto top = pqueue.top(); //-V808
+      // auto top = pqueue.top(); //-V808
       pqueue.pop();
     }
   }
@@ -130,7 +130,7 @@ BENCHMARK_DEFINE_F(PriorityQueueFixtureUint8, priorityqueue_uint8)(benchmark::St
     }
     while( !pqueue.empty() )
     {
-      auto top = pqueue.top(); //-V808
+      // auto top = pqueue.top(); //-V808
       pqueue.pop();
     }
   }
@@ -150,7 +150,7 @@ BENCHMARK_DEFINE_F(PriorityQueueFixtureUint8, priorityqueue_respectfifoorder_uin
     }
     while( !pqueue.empty() )
     {
-      auto top = pqueue.top(); //-V808
+      // auto top = pqueue.top(); //-V808
       pqueue.pop();
     }
   }

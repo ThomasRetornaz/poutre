@@ -109,7 +109,6 @@ poutre_cmake_format(cmake-format ${CMAKEFILES})
 # Third parties
 add_subdirectory(${THIRD_PARTIES_PATH})
 
-include(CMakePlatformDetection)
 include(CMakeCompilerSpecific)
 
 message(STATUS "")

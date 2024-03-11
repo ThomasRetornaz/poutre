@@ -243,7 +243,7 @@ and do transposition
       auto   o_voutbeg     = o_vout.data();
       scoord ysize         = ibd[0]; //-V525
       scoord xsize         = ibd[1];
-      scoord oxsize        = obd[1];
+      // scoord oxsize        = obd[1];
       scoord oxstep        = o_vout.stride()[0];
       scoord xstep         = i_vin.stride()[0];
       scoord ySizeSimdLoop = ysize - (ysize % loopStep);

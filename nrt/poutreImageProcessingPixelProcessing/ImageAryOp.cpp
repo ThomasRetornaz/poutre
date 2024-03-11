@@ -638,23 +638,23 @@ TEST(poutreImageProcessingArithOp,unaryopviewDispatchContiguousSamePtrType_sub) 
   EXPECT_EQ(imgstr, expected);
 }
 
-namespace {
-decltype(auto) ConstructVector(size_t size) {
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_int_distribution<> dis(0, 255);
-  std::vector<poutre::pUINT8,
-              xs::aligned_allocator<poutre::pUINT8, SIMD_IDEAL_MAX_ALIGN_BYTES>>
-      m_vect;
-  m_vect.reserve(size);
-  for (size_t i = 0u; i < size; ++i) {
-    m_vect.push_back(static_cast<poutre::pUINT8>(dis(gen)));
-  }
-  return m_vect;
-}
-} // namespace
-
 #if 0
+  namespace {
+  decltype(auto) ConstructVector(size_t size) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, 255);
+    std::vector<poutre::pUINT8,
+                xs::aligned_allocator<poutre::pUINT8, SIMD_IDEAL_MAX_ALIGN_BYTES>>
+        m_vect;
+    m_vect.reserve(size);
+    for (size_t i = 0u; i < size; ++i) {
+      m_vect.push_back(static_cast<poutre::pUINT8>(dis(gen)));
+    }
+    return m_vect;
+  }
+  } // namespace
+
 TEST(poutreImageProcessingArithOp,benchmark)
 {
   const auto size = 1000 * 1000;

@@ -29,7 +29,7 @@ TEST(poutreImageProcessingContainer,ctor) {
   EXPECT_EQ(img.GetNumDims(), 2);
   EXPECT_TRUE(!img.empty());
   auto coords = img.GetCoords();
-  auto expectedcoords = {3, 4}; //-V112
+  std::vector<std::size_t> expectedcoords = {3, 4}; //-V112
   EXPECT_TRUE(CheckEqualCollections(coords.begin(), coords.end(), expectedcoords.begin()));
 
   /*std::cout << "**************************************************" <<
@@ -61,7 +61,7 @@ TEST(poutreImageProcessingContainer,clone) {
   EXPECT_EQ((*cloned).GetNumDims(), 2);
   EXPECT_TRUE(!(*cloned).empty());
   auto coords = (*cloned).GetCoords();
-  auto expectedcoords = {3, 4}; //-V112
+  std::vector<std::size_t> expectedcoords = {3, 4}; //-V112
   EXPECT_TRUE(CheckEqualCollections(coords.begin(), coords.end(), expectedcoords.begin()));
   for (const auto &var : (*cloned)) {
     EXPECT_EQ(var, 10);
@@ -83,7 +83,7 @@ TEST(poutreImageProcessingContainer,Factory) {
                       poutre::CompoundType::CompoundType_Scalar);
     EXPECT_EQ((*img).GetPType(), poutre::PType::PType_GrayUINT8);
     auto coords = (*img).GetCoords();
-    auto expectedcoords = {3, 4}; //-V112
+    std::vector<std::size_t> expectedcoords = {3, 4}; //-V112
     EXPECT_TRUE(CheckEqualCollections(coords.begin(), coords.end(), expectedcoords.begin()));
     EXPECT_TRUE(dynamic_cast<poutre::DenseImage<poutre::pUINT8> *>(img.get()));
   }
@@ -98,7 +98,7 @@ TEST(poutreImageProcessingContainer,Factory) {
                       poutre::CompoundType::CompoundType_Scalar);
     EXPECT_EQ((*img).GetPType(), poutre::PType::PType_GrayINT32);
     auto coords = (*img).GetCoords();
-    auto expectedcoords = {3, 4}; //-V112
+    std::vector<std::size_t> expectedcoords = {3, 4}; //-V112
     EXPECT_TRUE(CheckEqualCollections(coords.begin(), coords.end(), expectedcoords.begin()));
     EXPECT_TRUE(dynamic_cast<poutre::DenseImage<poutre::pINT32> *>(img.get()));
   }
@@ -112,7 +112,7 @@ TEST(poutreImageProcessingContainer,Factory) {
                       poutre::CompoundType::CompoundType_Scalar);
     EXPECT_EQ((*img).GetPType(), poutre::PType::PType_F32);
     auto coords = (*img).GetCoords();
-    auto expectedcoords = {3, 4}; //-V112
+    std::vector<std::size_t> expectedcoords = {3, 4}; //-V112
     EXPECT_TRUE(CheckEqualCollections(coords.begin(), coords.end(), expectedcoords.begin()));
     EXPECT_TRUE(dynamic_cast<poutre::DenseImage<poutre::pFLOAT> *>(img.get()));
   }
@@ -126,7 +126,7 @@ TEST(poutreImageProcessingContainer,Factory) {
     EXPECT_EQ((*img).GetCType(),
                       poutre::CompoundType::CompoundType_Scalar);
     auto coords = (*img).GetCoords();
-    auto expectedcoords = {3, 4}; //-V112
+    std::vector<std::size_t> expectedcoords = {3, 4}; //-V112
     EXPECT_TRUE(CheckEqualCollections(coords.begin(), coords.end(), expectedcoords.begin()));
     EXPECT_TRUE(dynamic_cast<poutre::DenseImage<poutre::pINT64> *>(img.get()));
   }
@@ -194,7 +194,7 @@ TEST(poutreImageProcessingContainer,move) {
   EXPECT_EQ(img.GetCType(), poutre::CompoundType::CompoundType_Scalar);
 
   auto coords = img.GetCoords();
-  auto expectedcoords = {3, 4}; //-V112
+  std::vector<std::size_t> expectedcoords = {3, 4}; //-V112
   EXPECT_TRUE(CheckEqualCollections(coords.begin(), coords.end(), expectedcoords.begin()));
 
   poutre::DenseImage<poutre::pUINT8> img2({2, 3});
@@ -202,7 +202,7 @@ TEST(poutreImageProcessingContainer,move) {
   EXPECT_EQ(img2.GetPType(), poutre::PType::PType_GrayUINT8);
   EXPECT_EQ(img2.GetCType(), poutre::CompoundType::CompoundType_Scalar);
   auto coords2 = img2.GetCoords();
-  auto expectedcoords2 = {2, 3};
+  std::vector<std::size_t> expectedcoords2 = {2, 3};
   EXPECT_TRUE(CheckEqualCollections(coords2.begin(), coords2.end(), expectedcoords2.begin()));
 
   // move
@@ -211,7 +211,7 @@ TEST(poutreImageProcessingContainer,move) {
   EXPECT_EQ(img2.GetPType(), poutre::PType::PType_GrayUINT8);
   EXPECT_EQ(img2.GetCType(), poutre::CompoundType::CompoundType_Scalar);
   auto coordsmove = img2.GetCoords();
-  auto expectedcoordsmove = {3, 4}; //-V112
+  std::vector<std::size_t> expectedcoordsmove = {3, 4}; //-V112
   EXPECT_TRUE(CheckEqualCollections(coordsmove.begin(), coordsmove.end(), expectedcoordsmove.begin()));
 }
 
@@ -241,13 +241,14 @@ TEST(poutreImageProcessingContainer,SetPixelGetPixel) {
   poutre::idx2d pix2 = {5, 3}; // x then y
   (*img).SetPixel(pix2, 9);
 
-//  std::string expected = "Dense Scalar GINT32 2 5 6\
-// 1 1 10 1 1 1\
-// 1 1 1 1 1 1\
-// 1 1 1 1 1 1\
-// 8 1 1 5 5 9\
-// 1 1 1 5 5 5\
-//";
+//    std::string expected = "Dense Scalar GINT32 2 5 6
+// 1 1 10 1 1 1
+// 1 1 1 1 1 1
+// 1 1 1 1 1 1
+// 8 1 1 5 5 9
+// 1 1 1 5 5 5
+// ";
+
   auto val = (*img).GetPixel(2, 0); // x then y
   EXPECT_EQ(val, 10);
   poutre::idx2d p = {3, 0}; // y then x

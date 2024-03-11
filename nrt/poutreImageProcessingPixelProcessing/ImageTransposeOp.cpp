@@ -52,13 +52,13 @@ TEST(poutreImageProcessingTransposeOp,stridedview)
 {
 // TODO
 //   using ImageType = const poutre::DenseImage < poutre::pINT32>;
-//   const auto imgIn = poutre::ImageFromString("Dense Scalar GINT32 2 5 6\
-// 1 2 3 4 5 6\
-// 7 8 9 10 11 12\
-// 13 14 15 16 17 18\
-// 19 20 21 22 23 24\
-// 25 26 27 28 29 30\
-//");
+//   const auto imgIn = poutre::ImageFromString("Dense Scalar GINT32 2 5 6
+// 1 2 3 4 5 6
+// 7 8 9 10 11 12
+// 13 14 15 16 17 18
+// 19 20 21 22 23 24
+// 25 26 27 28 29 30
+//")
 //   ImageType* img = dynamic_cast<ImageType*> (imgIn.get());
 //   EXPECT_TRUE(img);
 //   auto v_img1 = poutre::view(*img); //-V522
@@ -80,11 +80,11 @@ TEST(poutreImageProcessingTransposeOp,stridedview)
 //
 //   poutre::t_transpose(section2din, section2dout);
 //
-//   std::string expected = "Dense Scalar GINT32 2 5 6 \
-//1 1 1 1 1 1 \
-//1 1 14 20 26 1\
-//1 1 15 21 27 1 1\
-//1 1 1  1 1 1\
+//   std::string expected = "Dense Scalar GINT32 2 5 6 
+//1 1 1 1 1 1 
+//1 1 14 20 26 1
+//1 1 15 21 27 1 1
+//1 1 1  1 1 1
 //1 1 1 1 1 1";
 //   auto imgstr = poutre::ImageToString(imgOut);
 //   EXPECT_EQ(imgstr, expected);

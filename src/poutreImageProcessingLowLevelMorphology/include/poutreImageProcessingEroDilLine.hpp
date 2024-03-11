@@ -143,9 +143,9 @@ namespace poutre
     {
       POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
       auto   ibd     = i_vin.bound();
-      auto   obd     = o_vout.bound();
-      auto   istride = i_vin.stride();
-      auto   ostride = o_vout.stride();
+      // auto   obd     = o_vout.bound();
+      // auto   istride = i_vin.stride();
+      // auto   ostride = o_vout.stride();
       scoord ysize   = ibd[0];
       scoord xsize   = ibd[1];
       POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
@@ -224,9 +224,9 @@ namespace poutre
     {
       POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
       auto   ibd     = i_vin.bound();
-      auto   obd     = o_vout.bound();
-      auto   istride = i_vin.stride();
-      auto   ostride = o_vout.stride();
+      // auto   obd     = o_vout.bound();
+      // auto   istride = i_vin.stride();
+      // auto   ostride = o_vout.stride();
       scoord ysize   = ibd[0];
       scoord xsize   = ibd[1];
       POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");

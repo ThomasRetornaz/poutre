@@ -20,6 +20,7 @@
 #include <poutreBase/poutreBase.hpp>
 
 #include <condition_variable>
+#include <functional>
 #include <future>
 #include <mutex>
 #include <omp.h>

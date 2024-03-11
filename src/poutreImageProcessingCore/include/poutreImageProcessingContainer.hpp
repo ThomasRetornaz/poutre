@@ -265,13 +265,12 @@ namespace poutre
     // end std::array like interface
     protected:
     // protected copyctor used through clone
-
     POUTRE_CONSTEXPR DenseTensor(const self_type &rhs)
         : m_data(nullptr)
-        , m_numelement(rhs.m_numelement)
         , m_coordinnates(rhs.m_coordinnates)
         , m_strides(rhs.m_strides)
         , m_allocator(rhs.m_allocator)
+        , m_numelement(rhs.m_numelement)
     {
       m_data = m_allocator.allocate(m_numelement);
       std::copy(rhs.m_data, rhs.m_data + m_numelement, m_data);
@@ -285,9 +284,9 @@ namespace poutre
 
     POUTRE_CONSTEXPR DenseTensor(self_type &&rhs) noexcept
         : m_data(nullptr)
-        , m_numelement(0)
         , m_coordinnates()
         , m_allocator()
+        , m_numelement(0)
     {
       m_data         = rhs.m_data;
       m_numelement   = rhs.m_numelement;

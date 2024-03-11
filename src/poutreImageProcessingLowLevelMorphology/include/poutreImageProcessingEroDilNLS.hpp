@@ -320,9 +320,9 @@ namespace poutre
     {
       POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
       auto   ibd     = i_vin.bound();
-      auto   obd     = o_vout.bound();
-      auto   istride = i_vin.stride();
-      auto   ostride = o_vout.stride();
+      // auto   obd     = o_vout.bound();
+      // auto   istride = i_vin.stride();
+      // auto   ostride = o_vout.stride();
       scoord ysize   = ibd[0];
       scoord xsize   = ibd[1];
       POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
@@ -334,8 +334,6 @@ namespace poutre
       lineView  bufTempLine(tempLine.data()), bufTempLine1(tempLine1.data()), bufTempLine2(tempLine2.data()),
           bufTempLine3(tempLine3.data());
       lineView bufInputPreviousLine;
-      lineView bufInputCurrentLine;
-      lineView bufInputNextLine;
       lineView bufOuputCurrentLine;
 
       // quick run one line
@@ -347,7 +345,8 @@ namespace poutre
         HelperOp::ShiftRightLeftAndArith(bufInputPreviousLine, xsize, 1, 1, bufTempLine, bufOuputCurrentLine);
         return;
       }
-
+      // lineView bufInputCurrentLine;
+      lineView bufInputNextLine;
       // compute first line
       // translate to clipped connection
       // x . x
@@ -364,7 +363,7 @@ namespace poutre
       // sup(dilate line 1,dilate line 0) or inf(erode line 1,erode line 0)
       HelperOp::ApplyArith(bufTempLine1, bufTempLine2, xsize, bufOuputCurrentLine);
 
-      bufInputCurrentLine = bufInputNextLine;
+      // bufInputCurrentLine = bufInputNextLine;
       // then loop
       for( scoord y = 2; y < ysize; y++ )
       {
@@ -412,9 +411,9 @@ namespace poutre
     {
       POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
       auto   ibd     = i_vin.bound();
-      auto   obd     = o_vout.bound();
-      auto   istride = i_vin.stride();
-      auto   ostride = o_vout.stride();
+      // auto   obd     = o_vout.bound();
+      // auto   istride = i_vin.stride();
+      // auto   ostride = o_vout.stride();
       scoord ysize   = ibd[0];
       scoord xsize   = ibd[1];
       POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
@@ -426,8 +425,6 @@ namespace poutre
       tmpBuffer tempLine(xsize), tempLine1(xsize), tempLine2(xsize), tempLine3(xsize);
       lineView  bufTempLine(tempLine.data()), bufTempLine2(tempLine2.data());
       lineView bufInputPreviousLine;
-      lineView bufInputCurrentLine;
-      lineView bufInputNextLine;
       lineView bufOuputCurrentLine;
 
       // quick run one line
@@ -439,6 +436,9 @@ namespace poutre
         HelperOp::ShiftRightLeftAndArith(bufInputPreviousLine, xsize, 1, 1, bufTempLine, bufOuputCurrentLine);
         return;
       }
+
+      lineView bufInputCurrentLine;
+      lineView bufInputNextLine;
 
       // compute first line
       // translate to clipped connection
@@ -497,9 +497,9 @@ namespace poutre
     {
       POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
       auto   ibd     = i_vin.bound();
-      auto   obd     = o_vout.bound();
-      auto   istride = i_vin.stride();
-      auto   ostride = o_vout.stride();
+      // auto   obd     = o_vout.bound();
+      // auto   istride = i_vin.stride();
+      // auto   ostride = o_vout.stride();
       scoord ysize   = ibd[0];
       scoord xsize   = ibd[1];
       POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
@@ -538,9 +538,9 @@ namespace poutre
     {
       POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
       auto   ibd     = i_vin.bound();
-      auto   obd     = o_vout.bound();
-      auto   istride = i_vin.stride();
-      auto   ostride = o_vout.stride();
+      // auto   obd     = o_vout.bound();
+      // auto   istride = i_vin.stride();
+      // auto   ostride = o_vout.stride();
       scoord ysize   = ibd[0];
       scoord xsize   = ibd[1];
       POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
@@ -548,12 +548,6 @@ namespace poutre
       using tmpBuffer = std::vector<TIn, xs::aligned_allocator<TIn, SIMD_IDEAL_MAX_ALIGN_BYTES>>;
       // using lineView = array_view<TIn, 1>;
       using lineView = TIn *__restrict;
-      tmpBuffer tempLine(xsize);
-      lineView  bufTempLine(tempLine.data());
-      lineView  bufInputPreviousLine;
-      lineView  bufInputCurrentLine;
-      lineView  bufInputNextLine;
-      lineView  bufOuputCurrentLine;
 
       // quick run one line
       if( ysize == 1 )
@@ -561,6 +555,13 @@ namespace poutre
         t_Copy(i_vin, o_vout);
         return;
       }
+
+      tmpBuffer tempLine(xsize);
+      lineView  bufTempLine(tempLine.data());
+      lineView  bufInputPreviousLine;
+      lineView  bufInputCurrentLine;
+      lineView  bufInputNextLine;
+      lineView  bufOuputCurrentLine;
 
       // compute first line
       // translate to clipped connection
@@ -610,9 +611,9 @@ namespace poutre
     {
       POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
       auto   ibd     = i_vin.bound();
-      auto   obd     = o_vout.bound();
-      auto   istride = i_vin.stride();
-      auto   ostride = o_vout.stride();
+      // auto   obd     = o_vout.bound();
+      // auto   istride = i_vin.stride();
+      // auto   ostride = o_vout.stride();
       scoord ysize   = ibd[0];
       scoord xsize   = ibd[1];
       POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
@@ -690,9 +691,9 @@ namespace poutre
     {
       POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
       auto   ibd     = i_vin.bound();
-      auto   obd     = o_vout.bound();
-      auto   istride = i_vin.stride();
-      auto   ostride = o_vout.stride();
+      // auto   obd     = o_vout.bound();
+      // auto   istride = i_vin.stride();
+      // auto   ostride = o_vout.stride();
       scoord ysize   = ibd[0];
       scoord xsize   = ibd[1];
       POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
