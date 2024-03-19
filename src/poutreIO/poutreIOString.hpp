@@ -49,4 +49,3 @@ namespace poutre
   //! @} doxygroup: image_processing_io_group
 
 } // namespace poutre
-

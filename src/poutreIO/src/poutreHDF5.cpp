@@ -20,7 +20,7 @@
 namespace poutre
 {
   void StoreWithHDF5(const std::string &path,
-                     const IInterface & iimage,                          // NOLINT(misc-unused-parameters)
+                     const IInterface  &iimage,                          // NOLINT(misc-unused-parameters)
                      const std::string &image_name /*= "poutre_img_1"*/) // NOLINT(misc-unused-parameters)
   {
     POUTRE_ENTERING("StoreWithHDF5");

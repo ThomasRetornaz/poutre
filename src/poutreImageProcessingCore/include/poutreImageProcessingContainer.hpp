@@ -168,11 +168,11 @@ namespace poutre
     // std::array like interface
 
     // Capacity
-    POUTRE_CONSTEXPR const size_type size() const POUTRE_NOEXCEPT { return m_numelement; }
+    POUTRE_CONSTEXPR size_type size() const POUTRE_NOEXCEPT { return m_numelement; }
 
-    POUTRE_CONSTEXPR const size_type max_size() const POUTRE_NOEXCEPT { return this->size(); }
+    POUTRE_CONSTEXPR size_type max_size() const POUTRE_NOEXCEPT { return this->size(); }
 
-    POUTRE_CONSTEXPR const bool empty() const POUTRE_NOEXCEPT { return this->size() == 0; }
+    POUTRE_CONSTEXPR bool empty() const POUTRE_NOEXCEPT { return this->size() == 0; }
 
     // Element access
 

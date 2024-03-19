@@ -106,11 +106,8 @@ namespace poutre
       T1,
       T2,
       T3,
-      std::enable_if_t<
-          std::is_same_v<
-              std::remove_const_t<T1>,
-              std::remove_const_t<
-                  T2>> && std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T3>> && std::is_arithmetic_v<T1>>>
+      std::enable_if_t<std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T2>>
+                       && std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T3>> && std::is_arithmetic_v<T1>>>
   {
     private:
     T1 m_minval;
@@ -185,11 +182,8 @@ namespace poutre
       T1,
       T2,
       T3,
-      std::enable_if_t<
-          std::is_same_v<
-              std::remove_const_t<T1>,
-              std::remove_const_t<
-                  T2>> && std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T3>> && std::is_arithmetic_v<T1>>>
+      std::enable_if_t<std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T2>>
+                       && std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T3>> && std::is_arithmetic_v<T1>>>
   {
     private:
     T1 m_maxval;
@@ -399,11 +393,8 @@ namespace poutre
       T1,
       T2,
       T3,
-      std::enable_if_t<
-          std::is_same_v<
-              std::remove_const_t<T1>,
-              std::remove_const_t<
-                  T2>> && std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T3>> && std::is_arithmetic_v<T1>>>
+      std::enable_if_t<std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T2>>
+                       && std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T3>> && std::is_arithmetic_v<T1>>>
   {
     public:
     op_Sup() {}
@@ -460,11 +451,8 @@ namespace poutre
       T1,
       T2,
       T3,
-      std::enable_if_t<
-          std::is_same_v<
-              std::remove_const_t<T1>,
-              std::remove_const_t<
-                  T2>> && std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T3>> && std::is_arithmetic_v<T1>>>
+      std::enable_if_t<std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T2>>
+                       && std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T3>> && std::is_arithmetic_v<T1>>>
   {
     public:
     op_Inf() {}
@@ -505,4 +493,3 @@ namespace poutre
   }
   //! @} doxygroup: image_processing_linear_group
 } // namespace poutre
-

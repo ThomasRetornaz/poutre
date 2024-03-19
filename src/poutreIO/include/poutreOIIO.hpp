@@ -453,8 +453,8 @@ namespace poutre
      */
     template<typename T>
     void StoreWithOIIOCompound3(const DenseImage<compound<T, 3>, 2> &im,
-                                const std::string &                  path,
-                                StoreWithOIIOOptions const &         options)
+                                const std::string                   &path,
+                                StoreWithOIIOOptions const          &options)
     {
       POUTRE_ENTERING("StoreWithOIIOCompound3");
       fs::path localPath(path);
@@ -577,8 +577,8 @@ namespace poutre
      */
     template<typename T>
     void StoreWithOIIOCompound4(const DenseImage<compound<T, 4>, 2> &im,
-                                const std::string &                  path,
-                                StoreWithOIIOOptions const &         options)
+                                const std::string                   &path,
+                                StoreWithOIIOOptions const          &options)
     {
       POUTRE_ENTERING("StoreWithOIIOCompound4");
       fs::path localPath(path);

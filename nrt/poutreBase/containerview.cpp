@@ -18,8 +18,6 @@
 TEST(view, ctor)
 {
     using view1DINt = poutre::array_view<int, 1>;
-    using view2DINt = poutre::array_view<int, 2>;
-    using view1DFLOAT = poutre::array_view<float, 1>;
 
     view1DINt dummyview;
     EXPECT_EQ(dummyview.size(), 0);
@@ -28,8 +26,6 @@ TEST(view, ctor)
 
     // on 1D
     using sview1DINt = poutre::strided_array_view<int, 1>;
-    using sview2DINt = poutre::strided_array_view<int, 2>;
-    using sview1DFLOAT = poutre::strided_array_view<float, 1>;
 
     sview1DINt dummysview;
     EXPECT_EQ(dummysview.size(), 0);
@@ -40,8 +36,6 @@ TEST(view, ctor)
 TEST(view, basic_usage_view_over_vector)
 {
     using view1DINt = poutre::array_view<int, 1>;
-    using view2DINt = poutre::array_view<int, 2>;
-    using view1DFLOAT = poutre::array_view<float, 1>;
 
     std::vector<int> mif = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     EXPECT_EQ(mif.size(), 10);
@@ -86,8 +80,6 @@ TEST(view, basic_usage_view_over_vector)
 TEST(view, basic_usage_strided_view_over_vector)
 {
     using sview1DINt = poutre::strided_array_view<int, 1>;
-    using sview2DINt = poutre::strided_array_view<int, 2>;
-    using sview1DFLOAT = poutre::strided_array_view<float, 1>;
 
     std::vector<int> mif = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     EXPECT_EQ(mif.size(), 10);
@@ -107,10 +99,6 @@ TEST(view, basic_usage_strided_view_over_vector)
 
 TEST(view, section_and_slice_1d)
 {
-    using view1DINt = poutre::array_view<int, 1>;
-    using view2DINt = poutre::array_view<int, 2>;
-    using view1DFLOAT = poutre::array_view<float, 1>;
-
     std::vector<int> mif = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     EXPECT_EQ(mif.size(), 10);
     auto view = poutre::array_view<int, 1>(mif);

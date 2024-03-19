@@ -40,7 +40,7 @@ namespace poutre
     template<typename valuetype, std::ptrdiff_t NumDims = 2> // default dim == 2
     void t_ImageToTypedBufferScalar(const DenseImage<valuetype, NumDims> &im,
                                     const size_t                          size_buffer, // Size in bytes!!!
-                                    valuetype *                           buffer)
+                                    valuetype                            *buffer)
     {
       const auto bytesperpixel = sizeof(valuetype); // return size in bytes,byte == octet == 8*bits
       const auto bound         = im.bound();
@@ -58,7 +58,7 @@ namespace poutre
     template<typename valuetype, std::ptrdiff_t NumDims = 2> // default dim == 2
     void t_ImageToBufferCompound3(const DenseImage<compound<valuetype, 3>, NumDims> &im,
                                   const size_t                                       size_buffer, // Size in bytes!!!
-                                  valuetype *                                        buffer)
+                                  valuetype                                         *buffer)
     {
       const auto bytesperpixel = sizeof(valuetype) * 3;
       const auto bound         = im.bound();
@@ -73,7 +73,7 @@ namespace poutre
     template<typename valuetype, std::ptrdiff_t NumDims = 2> // default dim == 2
     void t_ImageToBufferCompound4(const DenseImage<compound<valuetype, 4>, NumDims> &im,
                                   const size_t                                       size_buffer, // Size in bytes!!!
-                                  valuetype *                                        buffer)
+                                  valuetype                                         *buffer)
     {
       const auto bytesperpixel = sizeof(valuetype) * 4;
       const auto bound         = im.bound();
@@ -87,7 +87,7 @@ namespace poutre
     template<typename valuetype>
     void t_ImageToBufferForceType(const IInterface &i_im,
                                   const size_t      size_buffer, // Size in bytes!!!
-                                  valuetype *       buffer)
+                                  valuetype        *buffer)
     {
       POUTRE_ENTERING("t_ImageToBufferForceType");
       auto imgType = i_im.GetImgType();

@@ -54,8 +54,8 @@ namespace poutre
   class BASE_API JsonSerializer
   {
     public:
-    JsonSerializer()                       = default;
-    JsonSerializer(const JsonSerializer &) = delete; // cannot be copy constructed
+    JsonSerializer()                                      = default;
+    JsonSerializer(const JsonSerializer &)                = delete; // cannot be copy constructed
     JsonSerializer &operator=(const JsonSerializer &orig) = delete;
 
     static bool Serialize(InterfaceJsonSerializable *iptrJSObj, std::string &ostr);

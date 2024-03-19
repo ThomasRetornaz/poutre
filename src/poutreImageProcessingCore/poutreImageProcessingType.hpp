@@ -87,17 +87,17 @@ namespace poutre
 
   template<typename value_type, ptrdiff_t Rank> using compound = std::array<value_type, Rank>;
 
-  using c3pUINT8  = compound<pUINT8, 3>;
-  using c3pINT32  = compound<pINT32, 3>;
-  using c3pFLOAT  = compound<pFLOAT, 3>;
-  using c3pINT64  = compound<pINT64, 3>;
-  using c3pDOUBLE = compound<pDOUBLE, 3>;
+  using c3pUINT8  = compound<poutre::pUINT8, 3>;
+  using c3pINT32  = compound<poutre::pINT32, 3>;
+  using c3pFLOAT  = compound<poutre::pFLOAT, 3>;
+  using c3pINT64  = compound<poutre::pINT64, 3>;
+  using c3pDOUBLE = compound<poutre::pDOUBLE, 3>;
 
-  using c4pUINT8  = compound<pUINT8, 4>;
-  using c4pINT32  = compound<pINT32, 4>;
-  using c4pFLOAT  = compound<pFLOAT, 4>;
-  using c4pINT64  = compound<pINT64, 4>;
-  using c4pDOUBLE = compound<pDOUBLE, 4>;
+  using c4pUINT8  = compound<poutre::pUINT8, 4>;
+  using c4pINT32  = compound<poutre::pINT32, 4>;
+  using c4pFLOAT  = compound<poutre::pFLOAT, 4>;
+  using c4pINT64  = compound<poutre::pINT64, 4>;
+  using c4pDOUBLE = compound<poutre::pDOUBLE, 4>;
 
   template<typename T> POUTRE_CONSTEXPR bool operator==(const compound<T, 3> &lhs, const compound<T, 3> &rhs) POUTRE_NOEXCEPT
   {

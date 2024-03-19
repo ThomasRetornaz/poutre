@@ -37,7 +37,7 @@
 #  pragma warning(disable : 4425) // 4425 improper support constexpr
 #endif
 
-//#include <amp.h>
+// #include <amp.h>
 
 namespace poutre
 {
@@ -79,7 +79,7 @@ namespace poutre
     using difference_type  = std::ptrdiff_t;
     using self_type        = static_array_base<valuetype, rank>;
 
-#endif //#ifndef DOXYGEN_SHOULD_SKIP_THIS
+#endif // #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
     /** @name Construction and Assignment
      */

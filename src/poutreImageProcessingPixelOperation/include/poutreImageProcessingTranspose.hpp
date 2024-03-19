@@ -239,10 +239,10 @@ and do transposition
       auto             obd      = o_vout.bound();
       POUTRE_CHECK(ibd[0] = obd[1], "ibd[0]!=obd[1] bound not compatible");
       POUTRE_CHECK(ibd[1] = obd[0], "ibd[1]!=obd[0] bound not compatible");
-      auto   i_vinbeg1     = i_vin.data();
-      auto   o_voutbeg     = o_vout.data();
-      scoord ysize         = ibd[0]; //-V525
-      scoord xsize         = ibd[1];
+      auto   i_vinbeg1 = i_vin.data();
+      auto   o_voutbeg = o_vout.data();
+      scoord ysize     = ibd[0]; //-V525
+      scoord xsize     = ibd[1];
       // scoord oxsize        = obd[1];
       scoord oxstep        = o_vout.stride()[0];
       scoord xstep         = i_vin.stride()[0];
@@ -488,4 +488,3 @@ and do transposition
   }
   //! @} doxygroup: image_processing_linear_group
 } // namespace poutre
-

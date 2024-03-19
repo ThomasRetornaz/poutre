@@ -59,11 +59,8 @@ namespace poutre
     }
     // switch on extension
     auto extension = localPath.extension().string();
-    std::transform(extension.begin(),
-                   extension.end(),
-                   extension.begin(),
-                   [](unsigned char c) {
-      return std::tolower(c); } // correct
+    std::transform(
+        extension.begin(), extension.end(), extension.begin(), [](unsigned char c) { return std::tolower(c); } // correct
     );
 #ifdef POUTRE_USE_HDF5
     if( extension == ".h5" )

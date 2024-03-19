@@ -45,10 +45,10 @@ namespace poutre
     struct BASE_API ScopedForceNbThreads
     {
       ScopedForceNbThreads(unsigned int nbThread);
-      ScopedForceNbThreads(const ScopedForceNbThreads &) = delete;
+      ScopedForceNbThreads(const ScopedForceNbThreads &)           = delete;
       ScopedForceNbThreads operator=(const ScopedForceNbThreads &) = delete;
       ScopedForceNbThreads(ScopedForceNbThreads &&)                = delete;
-      ScopedForceNbThreads operator=(ScopedForceNbThreads &&) = delete;
+      ScopedForceNbThreads operator=(ScopedForceNbThreads &&)      = delete;
       ~ScopedForceNbThreads();
 
       private:
@@ -67,10 +67,10 @@ namespace poutre
        * \param threads
        */
       explicit JoinThreads(std::vector<std::thread> &threads) : m_threads(threads) {}
-      JoinThreads(const JoinThreads &) = delete;
+      JoinThreads(const JoinThreads &)            = delete;
       JoinThreads &operator=(const JoinThreads &) = delete;
       JoinThreads(JoinThreads &&)                 = delete;
-      JoinThreads &operator=(JoinThreads &&) = delete;
+      JoinThreads &operator=(JoinThreads &&)      = delete;
       /**
        * dtor.
        *
@@ -99,10 +99,10 @@ namespace poutre
       public:
       ThreadSafeQueue() : m_valid(true), m_mutex(), m_queue(), m_condition() {}
 
-      ThreadSafeQueue(const ThreadSafeQueue &) = delete;
+      ThreadSafeQueue(const ThreadSafeQueue &)           = delete;
       ThreadSafeQueue operator=(const ThreadSafeQueue &) = delete;
       ThreadSafeQueue(ThreadSafeQueue &&)                = delete;
-      ThreadSafeQueue operator=(ThreadSafeQueue &&) = delete;
+      ThreadSafeQueue operator=(ThreadSafeQueue &&)      = delete;
 
       /**
        * Destructor.
@@ -208,10 +208,10 @@ namespace poutre
       IThreadTask()          = default;
       virtual ~IThreadTask() = default;
 
-      IThreadTask(const IThreadTask &rhs) = delete;
+      IThreadTask(const IThreadTask &rhs)            = delete;
       IThreadTask &operator=(const IThreadTask &rhs) = delete;
 
-      IThreadTask(IThreadTask &&other) = default;
+      IThreadTask(IThreadTask &&other)            = default;
       IThreadTask &operator=(IThreadTask &&other) = default;
 
       /**
@@ -227,10 +227,10 @@ namespace poutre
 
       ~ThreadTask() override = default;
 
-      ThreadTask(const ThreadTask &rhs) = delete;
+      ThreadTask(const ThreadTask &rhs)            = delete;
       ThreadTask &operator=(const ThreadTask &rhs) = delete;
 
-      ThreadTask(ThreadTask &&other) noexcept = default;
+      ThreadTask(ThreadTask &&other) noexcept            = default;
       ThreadTask &operator=(ThreadTask &&other) noexcept = default;
 
       /**
@@ -252,9 +252,9 @@ namespace poutre
       public:
       explicit TaskFuture(std::future<T> &&future) : m_future {std::move(future)} {}
 
-      TaskFuture(const TaskFuture &rhs) = delete;
-      TaskFuture &operator=(const TaskFuture &rhs) = delete;
-      TaskFuture(TaskFuture &&other) noexcept      = default;
+      TaskFuture(const TaskFuture &rhs)                  = delete;
+      TaskFuture &operator=(const TaskFuture &rhs)       = delete;
+      TaskFuture(TaskFuture &&other) noexcept            = default;
       TaskFuture &operator=(TaskFuture &&other) noexcept = default;
 
       ~TaskFuture()
@@ -340,9 +340,9 @@ namespace poutre
 
       TreadPool() : TreadPool(POUTRE_NUM_THREADS) {}
 
-      TreadPool(const TreadPool &rhs) = delete;
-      TreadPool &operator=(const TreadPool &rhs) = delete;
-      TreadPool(TreadPool &&other) noexcept      = delete;
+      TreadPool(const TreadPool &rhs)                  = delete;
+      TreadPool &operator=(const TreadPool &rhs)       = delete;
+      TreadPool(TreadPool &&other) noexcept            = delete;
       TreadPool &operator=(TreadPool &&other) noexcept = delete;
 
       ~TreadPool() { destroy(); }

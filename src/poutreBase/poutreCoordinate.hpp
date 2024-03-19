@@ -110,7 +110,7 @@ namespace poutre
     using parent::operator*;
     using parent::operator%;
 
-#endif //#ifndef DOXYGEN_SHOULD_SKIP_THIS
+#endif // #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
     protected:
     using parent::m_array;
@@ -626,7 +626,7 @@ namespace poutre
       }
     }
 
-    bounds_iterator(const self_type &rhs) = default;
+    bounds_iterator(const self_type &rhs)      = default;
     self_type &operator=(const self_type &rhs) = default;
 
     ~bounds_iterator() {}

@@ -54,7 +54,7 @@ namespace poutre
       return instance;
     }
 
-    GlobalLogger(const GlobalLogger &) = delete;
+    GlobalLogger(const GlobalLogger &)            = delete;
     GlobalLogger &operator=(const GlobalLogger &) = delete;
     GlobalLogger(GlobalLogger &&other)            = delete;
     GlobalLogger &operator=(GlobalLogger &&other) = delete;
@@ -105,31 +105,31 @@ namespace poutre
   /**@{*/
 // NOLINTNEXTLINE
 #define POUTRE_DEBUG(MSG)                                                                                                   \
-  poutre::GlobalLogger::get().call(std::format("DEBUG: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                   \
+  poutre::GlobalLogger::get().call(std::format("DEBUG: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                      \
                                    GlobalLogger::LoggerLevel::debug)
 // NOLINTNEXTLINE
 #define POUTRE_INFO(MSG)                                                                                                    \
-  poutre::GlobalLogger::get().call(std::format("INFO: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                    \
+  poutre::GlobalLogger::get().call(std::format("INFO: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                       \
                                    GlobalLogger::LoggerLevel::info)
 // NOLINTNEXTLINE
 #define POUTRE_CRITICAL(MSG)                                                                                                \
-  poutre::GlobalLogger::get().call(std::format("CRITICAL: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                \
+  poutre::GlobalLogger::get().call(std::format("CRITICAL: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                   \
                                    GlobalLogger::LoggerLevel::critical)
 // NOLINTNEXTLINE
 #define POUTRE_ERROR(MSG)                                                                                                   \
-  poutre::GlobalLogger::get().call(std::format("ERROR: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                   \
+  poutre::GlobalLogger::get().call(std::format("ERROR: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                      \
                                    GlobalLogger::LoggerLevel::err)
 // NOLINTNEXTLINE
 #define POUTRE_TRACE(MSG)                                                                                                   \
-  poutre::GlobalLogger::get().call(std::format("TRACE: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                   \
+  poutre::GlobalLogger::get().call(std::format("TRACE: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                      \
                                    GlobalLogger::LoggerLevel::trace)
 // NOLINTNEXTLINE
 #define POUTRE_WARN(MSG)                                                                                                    \
-  poutre::GlobalLogger::get().call(std::format("WARNING: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                 \
+  poutre::GlobalLogger::get().call(std::format("WARNING: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                    \
                                    GlobalLogger::LoggerLevel::warn)
 // NOLINTNEXTLINE
 #define POUTRE_ENTERING(MSG)                                                                                                \
-  poutre::GlobalLogger::get().call(std::format("Entering: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                \
+  poutre::GlobalLogger::get().call(std::format("Entering: {} at {} {}", MSG, __FILE__, __LINE__).c_str(),                   \
                                    GlobalLogger::LoggerLevel::trace)
   /**@}*/
 

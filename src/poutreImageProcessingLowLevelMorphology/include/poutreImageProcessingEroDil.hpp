@@ -106,4 +106,3 @@ namespace poutre
 #include <poutreImageProcessingLowLevelMorphology/include/poutreImageProcessingEroDilNLS.hpp>
 // specialization for line case
 #include <poutreImageProcessingLowLevelMorphology/include/poutreImageProcessingEroDilLine.hpp>
-

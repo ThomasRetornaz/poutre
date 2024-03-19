@@ -380,7 +380,7 @@ namespace poutre
                                 Tin                      i_compval,
                                 Tout                     i_valtrue,
                                 Tout                     i_valfalse,
-                                ViewOut<Tout, Rank> &    o_vout)
+                                ViewOut<Tout, Rank>     &o_vout)
   {
     switch( compOpType )
     {
@@ -439,7 +439,7 @@ namespace poutre
                                    Tin                      i_compval,
                                    Tout                     i_valtrue,
                                    Tout                     i_valfalse,
-                                   ViewOut<Tout, Rank> &    o_vout)
+                                   ViewOut<Tout, Rank>     &o_vout)
   {
     return ViewCompare_sss_dispatch(i_vin, compOpType, i_compval, i_valtrue, i_valfalse, o_vout);
   }
@@ -479,11 +479,10 @@ namespace poutre
       Tfalse,
       Tout,
       CompareOp,
-      std::enable_if_t<
-          std::is_same_v<
-              std::remove_const_t<Tin>,
-              std::remove_const_t<
-                  Tout>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tfalse>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Ttrue>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tcomp>> && std::is_arithmetic_v<Tin>>>
+      std::enable_if_t<std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tout>>
+                       && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tfalse>>
+                       && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Ttrue>>
+                       && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tcomp>> && std::is_arithmetic_v<Tin>>>
 
   {
     const CompareOp cop;
@@ -523,12 +522,12 @@ namespace poutre
            class Op,
            template<typename, ptrdiff_t>
            class ViewOut>
-  void t_ViewCompare_iii(const ViewIn<Tin, Rank> &      i_vin,
+  void t_ViewCompare_iii(const ViewIn<Tin, Rank>       &i_vin,
                          Op                             i_op,
-                         const ViewComp<Tcomp, Rank> &  i_vcomp,
-                         const ViewTrue<Ttrue, Rank> &  i_vtrue,
+                         const ViewComp<Tcomp, Rank>   &i_vcomp,
+                         const ViewTrue<Ttrue, Rank>   &i_vtrue,
                          const ViewFalse<Tfalse, Rank> &i_vfalse,
-                         ViewOut<Tout, Rank> &          o_vout)
+                         ViewOut<Tout, Rank>           &o_vout)
   {
     using myop = compare_iii<Tin, Tcomp, Ttrue, Tfalse, Tout, Op>;
     myop op(i_op);
@@ -551,12 +550,12 @@ namespace poutre
            class ViewFalse,
            template<typename, ptrdiff_t>
            class ViewOut>
-  void ViewCompare_iii_dispatch(const ViewIn<Tin, Rank> &      i_vin,
+  void ViewCompare_iii_dispatch(const ViewIn<Tin, Rank>       &i_vin,
                                 CompOpType                     compOpType,
-                                const ViewComp<Tcomp, Rank> &  i_vcomp,
-                                const ViewTrue<Ttrue, Rank> &  i_vtrue,
+                                const ViewComp<Tcomp, Rank>   &i_vcomp,
+                                const ViewTrue<Ttrue, Rank>   &i_vtrue,
                                 const ViewFalse<Tfalse, Rank> &i_vfalse,
-                                ViewOut<Tout, Rank> &          o_vout)
+                                ViewOut<Tout, Rank>           &o_vout)
   {
     static_assert(std::is_convertible<Ttrue, Tout>(),
                   "ViewCompare_iii_dispatch Ttrue and Tout must be convertible "
@@ -622,12 +621,12 @@ namespace poutre
            class ViewFalse,
            template<typename, ptrdiff_t>
            class ViewOut>
-  void ViewCompare_iii_func_helper(const ViewIn<Tin, Rank> &      i_vin,
+  void ViewCompare_iii_func_helper(const ViewIn<Tin, Rank>       &i_vin,
                                    CompOpType                     compOpType,
-                                   const ViewComp<Tcomp, Rank> &  i_vcomp,
-                                   const ViewTrue<Ttrue, Rank> &  i_vtrue,
+                                   const ViewComp<Tcomp, Rank>   &i_vcomp,
+                                   const ViewTrue<Ttrue, Rank>   &i_vtrue,
                                    const ViewFalse<Tfalse, Rank> &i_vfalse,
-                                   ViewOut<Tout, Rank> &          o_vout)
+                                   ViewOut<Tout, Rank>           &o_vout)
   {
     return ViewCompare_iii_dispatch(i_vin, compOpType, i_vcomp, i_vtrue, i_vfalse, o_vout);
   }
@@ -657,17 +656,14 @@ namespace poutre
            POUTRE_CONCEPT_BASE_VALUE_TYPE Tfalse,
            POUTRE_CONCEPT_BASE_VALUE_TYPE Tout,
            class CompareOp>
-  struct compare_sii<
-      Tin,
-      Ttrue,
-      Tfalse,
-      Tout,
-      CompareOp,
-      std::enable_if_t<
-          std::is_same_v<
-              std::remove_const_t<Tin>,
-              std::remove_const_t<
-                  Tout>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tfalse>> && std::is_arithmetic_v<Tin>>>
+  struct compare_sii<Tin,
+                     Ttrue,
+                     Tfalse,
+                     Tout,
+                     CompareOp,
+                     std::enable_if_t<std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tout>>
+                                      && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tfalse>>
+                                      && std::is_arithmetic_v<Tin>>>
   {
     const CompareOp cop;
     using simd_t      = typename TypeTraits<Tin>::simd_type;
@@ -712,12 +708,12 @@ namespace poutre
            class Op,
            template<typename, ptrdiff_t>
            class ViewOut>
-  void t_ViewCompare_sii(const ViewIn<Tin, Rank> &      i_vin,
+  void t_ViewCompare_sii(const ViewIn<Tin, Rank>       &i_vin,
                          Op                             i_op,
                          Tin                            i_compval,
-                         const ViewTrue<Ttrue, Rank> &  i_vtrue,
+                         const ViewTrue<Ttrue, Rank>   &i_vtrue,
                          const ViewFalse<Tfalse, Rank> &i_vfalse,
-                         ViewOut<Tout, Rank> &          o_vout)
+                         ViewOut<Tout, Rank>           &o_vout)
   {
     using myop = compare_sii<Tin, Ttrue, Tfalse, Tout, Op>;
     myop op(i_compval, i_op);
@@ -737,12 +733,12 @@ namespace poutre
            class ViewFalse,
            template<typename, ptrdiff_t>
            class ViewOut>
-  void ViewCompare_sii_dispatch(const ViewIn<Tin, Rank> &      i_vin,
+  void ViewCompare_sii_dispatch(const ViewIn<Tin, Rank>       &i_vin,
                                 CompOpType                     compOpType,
                                 Tin                            i_compval,
-                                const ViewTrue<Ttrue, Rank> &  i_vtrue,
+                                const ViewTrue<Ttrue, Rank>   &i_vtrue,
                                 const ViewFalse<Tfalse, Rank> &i_vfalse,
-                                ViewOut<Tout, Rank> &          o_vout)
+                                ViewOut<Tout, Rank>           &o_vout)
   {
     static_assert(std::is_convertible<Ttrue, Tout>(),
                   "ViewCompare_sii_dispatch Ttrue and Tout must be convertible "
@@ -802,12 +798,12 @@ namespace poutre
            class ViewFalse,
            template<typename, ptrdiff_t>
            class ViewOut>
-  void ViewCompare_sii_func_helper(const ViewIn<Tin, Rank> &      i_vin,
+  void ViewCompare_sii_func_helper(const ViewIn<Tin, Rank>       &i_vin,
                                    CompOpType                     compOpType,
                                    Tin                            i_compval,
-                                   const ViewTrue<Ttrue, Rank> &  i_vtrue,
+                                   const ViewTrue<Ttrue, Rank>   &i_vtrue,
                                    const ViewFalse<Tfalse, Rank> &i_vfalse,
-                                   ViewOut<Tout, Rank> &          o_vout)
+                                   ViewOut<Tout, Rank>           &o_vout)
   {
     return ViewCompare_sii_dispatch(i_vin, compOpType, i_compval, i_vtrue, i_vfalse, o_vout);
   }
@@ -838,11 +834,8 @@ namespace poutre
       Ttrue,
       Tout,
       CompareOp,
-      std::enable_if_t<
-          std::is_same_v<
-              std::remove_const_t<Tin>,
-              std::remove_const_t<
-                  Tout>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Ttrue>> && std::is_arithmetic_v<Tin>>>
+      std::enable_if_t<std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tout>>
+                       && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Ttrue>> && std::is_arithmetic_v<Tin>>>
   {
     const CompareOp cop;
 
@@ -878,11 +871,11 @@ namespace poutre
            class Op,
            template<typename, ptrdiff_t>
            class ViewOut>
-  void t_ViewCompare_sis(const ViewIn<Tin, Rank> &    i_vin,
+  void t_ViewCompare_sis(const ViewIn<Tin, Rank>     &i_vin,
                          Op                           i_op,
                          const ViewTrue<Ttrue, Rank> &i_vtrue,
                          Tout                         i_valfalse,
-                         ViewOut<Tout, Rank> &        o_vout)
+                         ViewOut<Tout, Rank>         &o_vout)
   {
     using myop = compare_sis<Tin, Ttrue, Tout, Op>;
     myop op(i_valfalse, i_op);
@@ -900,12 +893,12 @@ namespace poutre
            template<typename, ptrdiff_t>
            class ViewOut,
            typename = void>
-  void ViewCompare_sis_dispatch(const ViewIn<Tin, Rank> &    i_vin,
+  void ViewCompare_sis_dispatch(const ViewIn<Tin, Rank>     &i_vin,
                                 CompOpType                   compOpType,
                                 Tin                          i_compval,
                                 const ViewTrue<Ttrue, Rank> &i_vtrue,
                                 Tout                         i_valfalse,
-                                ViewOut<Tout, Rank> &        o_vout)
+                                ViewOut<Tout, Rank>         &o_vout)
   {
     static_assert(std::is_convertible<Ttrue, Tout>(),
                   "ViewCompare_sis_dispatch Ttrue and Tout must be convertible "
@@ -965,12 +958,12 @@ namespace poutre
            class ViewTrue,
            template<typename, ptrdiff_t>
            class ViewOut>
-  void ViewCompare_sis_func_helper(const ViewIn<Tin, Rank> &    i_vin,
+  void ViewCompare_sis_func_helper(const ViewIn<Tin, Rank>     &i_vin,
                                    CompOpType                   compOpType,
                                    Tin                          i_compval,
                                    const ViewTrue<Ttrue, Rank> &i_vtrue,
                                    Tout                         i_valfalse,
-                                   ViewOut<Tout, Rank> &        o_vout)
+                                   ViewOut<Tout, Rank>         &o_vout)
   {
     return ViewCompare_sis_dispatch(i_vin, compOpType, i_compval, i_vtrue, i_valfalse, o_vout);
   }
@@ -1001,17 +994,15 @@ namespace poutre
            POUTRE_CONCEPT_BASE_VALUE_TYPE Tfalse,
            POUTRE_CONCEPT_BASE_VALUE_TYPE Tout,
            class CompareOp>
-  struct compare_isi<
-      Tin,
-      Tcomp,
-      Tfalse,
-      Tout,
-      CompareOp,
-      std::enable_if_t<
-          std::is_same_v<
-              std::remove_const_t<Tin>,
-              std::remove_const_t<
-                  Tout>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tcomp>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tfalse>> && std::is_arithmetic_v<Tin>>>
+  struct compare_isi<Tin,
+                     Tcomp,
+                     Tfalse,
+                     Tout,
+                     CompareOp,
+                     std::enable_if_t<std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tout>>
+                                      && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tcomp>>
+                                      && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tfalse>>
+                                      && std::is_arithmetic_v<Tin>>>
   {
     const CompareOp cop;
 
@@ -1054,12 +1045,12 @@ namespace poutre
            class Op,
            template<typename, ptrdiff_t>
            class ViewOut>
-  void t_ViewCompare_isi(const ViewIn<Tin, Rank> &      i_vin,
+  void t_ViewCompare_isi(const ViewIn<Tin, Rank>       &i_vin,
                          Op                             i_op,
-                         const ViewComp<Tcomp, Rank> &  i_vcomp,
+                         const ViewComp<Tcomp, Rank>   &i_vcomp,
                          Tout                           i_valtrue,
                          const ViewFalse<Tfalse, Rank> &i_vfalse,
-                         ViewOut<Tout, Rank> &          o_vout)
+                         ViewOut<Tout, Rank>           &o_vout)
   {
     using myop = compare_isi<Tin, Tcomp, Tfalse, Tout, Op>;
     myop op(i_valtrue, i_op);
@@ -1079,12 +1070,12 @@ namespace poutre
            class ViewTrue,
            template<typename, ptrdiff_t>
            class ViewOut>
-  void ViewCompare_isi_dispatch(const ViewIn<Tin, Rank> &     i_vin,
+  void ViewCompare_isi_dispatch(const ViewIn<Tin, Rank>      &i_vin,
                                 CompOpType                    compOpType,
-                                const ViewComp<Tcomp, Rank> & i_vcomp,
+                                const ViewComp<Tcomp, Rank>  &i_vcomp,
                                 Tout                          i_valtrue,
                                 const ViewTrue<Tfalse, Rank> &i_vfalse,
-                                ViewOut<Tout, Rank> &         o_vout)
+                                ViewOut<Tout, Rank>          &o_vout)
   {
     static_assert(std::is_convertible<Tfalse, Tout>(),
                   "ViewCompare_isi_dispatch Tfalse and Tout must be convertible "
@@ -1144,12 +1135,12 @@ namespace poutre
            class ViewTrue,
            template<typename, ptrdiff_t>
            class ViewOut>
-  void ViewCompare_isi_func_helper(const ViewIn<Tin, Rank> &     i_vin,
+  void ViewCompare_isi_func_helper(const ViewIn<Tin, Rank>      &i_vin,
                                    CompOpType                    compOpType,
-                                   const ViewComp<Tcomp, Rank> & i_vcomp,
+                                   const ViewComp<Tcomp, Rank>  &i_vcomp,
                                    Tout                          i_valtrue,
                                    const ViewTrue<Tfalse, Rank> &i_vfalse,
-                                   ViewOut<Tout, Rank> &         o_vout)
+                                   ViewOut<Tout, Rank>          &o_vout)
   {
     return ViewCompare_isi_dispatch(i_vin, compOpType, i_vcomp, i_valtrue, i_vfalse, o_vout);
   }
@@ -1185,11 +1176,9 @@ namespace poutre
       Ttrue,
       Tout,
       CompareOp,
-      std::enable_if_t<
-          std::is_same_v<
-              std::remove_const_t<Tin>,
-              std::remove_const_t<
-                  Tout>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tcomp>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Ttrue>> && std::is_arithmetic_v<Tin>>>
+      std::enable_if_t<std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tout>>
+                       && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tcomp>>
+                       && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Ttrue>> && std::is_arithmetic_v<Tin>>>
   {
     const CompareOp cop;
     const Tout      m_valfalse;
@@ -1234,12 +1223,12 @@ namespace poutre
            class Op,
            template<typename, ptrdiff_t>
            class ViewOut>
-  void t_ViewCompare_iis(const ViewIn<Tin, Rank> &    i_vin,
+  void t_ViewCompare_iis(const ViewIn<Tin, Rank>     &i_vin,
                          Op                           i_op,
                          const ViewComp<Tcomp, Rank> &i_vcomp,
                          const ViewTrue<Ttrue, Rank> &i_vtrue,
                          Tout                         i_valfalse,
-                         ViewOut<Tout, Rank> &        o_vout)
+                         ViewOut<Tout, Rank>         &o_vout)
   {
     using myop = compare_iis<Tin, Tcomp, Ttrue, Tout, Op>;
     myop op(i_valfalse, i_op);
@@ -1259,12 +1248,12 @@ namespace poutre
            class ViewTrue,
            template<typename, ptrdiff_t>
            class ViewOut>
-  void ViewCompare_iis_dispatch(const ViewIn<Tin, Rank> &    i_vin,
+  void ViewCompare_iis_dispatch(const ViewIn<Tin, Rank>     &i_vin,
                                 CompOpType                   compOpType,
                                 const ViewComp<Tcomp, Rank> &i_vcomp,
                                 const ViewTrue<Ttrue, Rank> &i_vtrue,
                                 Tout                         i_valfalse,
-                                ViewOut<Tout, Rank> &        o_vout)
+                                ViewOut<Tout, Rank>         &o_vout)
   {
     static_assert(std::is_convertible<Ttrue, Tout>(),
                   "ViewCompare_iis_dispatch Ttrue and Tout must be convertible "
@@ -1324,12 +1313,12 @@ namespace poutre
            class ViewTrue,
            template<typename, ptrdiff_t>
            class ViewOut>
-  void ViewCompare_iis_func_helper(const ViewIn<Tin, Rank> &    i_vin,
+  void ViewCompare_iis_func_helper(const ViewIn<Tin, Rank>     &i_vin,
                                    CompOpType                   compOpType,
                                    const ViewComp<Tcomp, Rank> &i_vcomp,
                                    const ViewTrue<Ttrue, Rank> &i_vtrue,
                                    Tout                         i_valfalse,
-                                   ViewOut<Tout, Rank> &        o_vout)
+                                   ViewOut<Tout, Rank>         &o_vout)
   {
     return ViewCompare_iis_dispatch(i_vin, compOpType, i_vcomp, i_vtrue, i_valfalse, o_vout);
   }
@@ -1362,11 +1351,8 @@ namespace poutre
       Tfalse,
       Tout,
       CompareOp,
-      std::enable_if_t<
-          std::is_same_v<
-              std::remove_const_t<Tin>,
-              std::remove_const_t<
-                  Tfalse>> && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tout>> && std::is_arithmetic_v<Tin>>>
+      std::enable_if_t<std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tfalse>>
+                       && std::is_same_v<std::remove_const_t<Tin>, std::remove_const_t<Tout>> && std::is_arithmetic_v<Tin>>>
   {
     const CompareOp cop;
 
@@ -1405,7 +1391,7 @@ namespace poutre
                          // Tin                            i_compval,
                          Tout                           i_valtrue,
                          const ViewFalse<Tfalse, Rank> &i_vfalse,
-                         ViewOut<Tout, Rank> &          o_vout)
+                         ViewOut<Tout, Rank>           &o_vout)
   {
     using myop = compare_ssi<Tin, Tfalse, Tout, Op>;
     myop op(i_valtrue, i_op);
@@ -1422,12 +1408,12 @@ namespace poutre
            class ViewFalse,
            template<typename, ptrdiff_t>
            class ViewOut>
-  void ViewCompare_ssi_dispatch(const ViewIn<Tin, Rank> &      i_vin,
+  void ViewCompare_ssi_dispatch(const ViewIn<Tin, Rank>       &i_vin,
                                 CompOpType                     compOpType,
                                 Tin                            i_compval,
                                 Tout                           i_valtrue,
                                 const ViewFalse<Tfalse, Rank> &i_vfalse,
-                                ViewOut<Tout, Rank> &          o_vout)
+                                ViewOut<Tout, Rank>           &o_vout)
   {
     static_assert(std::is_convertible<Tfalse, Tout>(),
                   "ViewCompare_ssi_dispatch Ttrue and Tout must be convertible "
@@ -1487,12 +1473,12 @@ namespace poutre
            class ViewFalse,
            template<typename, ptrdiff_t>
            class ViewOut>
-  void ViewCompare_ssi_func_helper(const ViewIn<Tin, Rank> &      i_vin,
+  void ViewCompare_ssi_func_helper(const ViewIn<Tin, Rank>       &i_vin,
                                    CompOpType                     compOpType,
                                    Tin                            i_compval,
                                    Tout                           i_valtrue,
                                    const ViewFalse<Tfalse, Rank> &i_vfalse,
-                                   ViewOut<Tout, Rank> &          o_vout)
+                                   ViewOut<Tout, Rank>           &o_vout)
   {
     return ViewCompare_ssi_dispatch(i_vin, compOpType, i_compval, i_valtrue, i_vfalse, o_vout);
   }
@@ -1522,16 +1508,13 @@ namespace poutre
            POUTRE_CONCEPT_BASE_VALUE_TYPE Tin2,
            POUTRE_CONCEPT_BASE_VALUE_TYPE Tout,
            class CompareOp>
-  struct compare_iss<
-      Tin1,
-      Tin2,
-      Tout,
-      CompareOp,
-      std::enable_if_t<
-          std::is_same_v<
-              std::remove_const_t<Tin1>,
-              std::remove_const_t<
-                  Tin2>> && std::is_same_v<std::remove_const_t<Tin1>, std::remove_const_t<Tout>> && std::is_arithmetic_v<Tin1>>>
+  struct compare_iss<Tin1,
+                     Tin2,
+                     Tout,
+                     CompareOp,
+                     std::enable_if_t<std::is_same_v<std::remove_const_t<Tin1>, std::remove_const_t<Tin2>>
+                                      && std::is_same_v<std::remove_const_t<Tin1>, std::remove_const_t<Tout>>
+                                      && std::is_arithmetic_v<Tin1>>>
   {
     const CompareOp cop;
     using param_type1 = Tin1;
@@ -1584,7 +1567,7 @@ namespace poutre
                          const ViewIn2<Tin2, Rank> &i_vin2,
                          Tout                       i_valtrue,
                          Tout                       i_valfalse,
-                         ViewOut<Tout, Rank> &      o_vout)
+                         ViewOut<Tout, Rank>       &o_vout)
   {
     using myop = compare_iss<Tin1, Tin2, Tout, Op>;
     myop op(i_valtrue, i_valfalse, i_op);
@@ -1607,7 +1590,7 @@ namespace poutre
                                 const ViewIn2<Tin2, Rank> &i_vin2,
                                 Tout                       i_valtrue,
                                 Tout                       i_valfalse,
-                                ViewOut<Tout, Rank> &      o_vout)
+                                ViewOut<Tout, Rank>       &o_vout)
   {
     static_assert(std::is_convertible<Tin1, Tin2>(),
                   "ViewCompare_iss_dispatch Tin1 and Tin2 must be convertible to "
@@ -1666,7 +1649,7 @@ namespace poutre
                                    const ViewIn2<Tin2, Rank> &i_vin2,
                                    Tout                       i_valtrue,
                                    Tout                       i_valfalse,
-                                   ViewOut<Tout, Rank> &      o_vout)
+                                   ViewOut<Tout, Rank>       &o_vout)
   {
     return ViewCompare_iss_dispatch(i_vin1, compOpType, i_vin2, i_valtrue, i_valfalse, o_vout);
   }

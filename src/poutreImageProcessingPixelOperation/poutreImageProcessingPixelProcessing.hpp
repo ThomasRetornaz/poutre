@@ -20,9 +20,9 @@
 #include <poutreBase/poutreConfig.hpp>
 #include <poutreBase/poutreTrace.hpp>
 
-#ifdef POUTRE_DYNAMIC                                 // defined if POUTRE is compiled as a DLL
+#ifdef POUTRE_DYNAMIC                    // defined if POUTRE is compiled as a DLL
 #  ifdef PoutreIPPixelProcessing_EXPORTS // defined if we are building the POUTRE DLL
-                                                      // (instead of using it)
+                                         // (instead of using it)
 #    define IMP_API MODULE_EXPORT
 #  else
 #    define IMP_API MODULE_IMPORT

@@ -14,7 +14,7 @@
 #include <filesystem>
 #include <iostream>
 #include <sstream>
-//#include <poutreBase/poutreTrace.hpp>
+// #include <poutreBase/poutreTrace.hpp>
 #include <poutreIO/include/poutreOIIO.hpp>
 
 namespace poutre
@@ -46,7 +46,7 @@ namespace poutre
       POUTRE_RUNTIME_ERROR(errorstream.str());
     }
 
-    const OIIO::ImageSpec &  spec = in->spec();
+    const OIIO::ImageSpec   &spec = in->spec();
     std::vector<std::size_t> dims;
     if( spec.height > 1 )
       dims.push_back((size_t)spec.height);
@@ -140,7 +140,7 @@ namespace poutre
     }
     break;
 #ifdef _WIN32
-      //#FIXME translate to long under minux which no supported by OIIO
+      // #FIXME translate to long under minux which no supported by OIIO
 
     case PType::PType_GrayINT32:
     {

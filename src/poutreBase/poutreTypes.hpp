@@ -115,18 +115,20 @@ namespace poutre
 
 namespace std
 {
-  template<> struct formatter<poutre::CompOpType> : std::formatter<const char*>
+  template<> struct formatter<poutre::CompOpType> : std::formatter<const char *>
   {
     template<typename Context> auto format(const poutre::CompOpType state, Context &context) const
     {
       switch( state )
       {
-      case poutre::CompOpType::CompOpDiff: return formatter<const char*>::format("!=", context);
-      case poutre::CompOpType::CompOpEqual: return formatter<const char*>::format("==", context);
-      case poutre::CompOpType::CompOpInf: return formatter<const char*>::format("<", context);
-      case poutre::CompOpType::CompOpInfEqual: return formatter<const char*>::format("<=", context);
-      case poutre::CompOpType::CompOpSup: return formatter<const char*>::format(">", context);
-      case poutre::CompOpType::CompOpSupEqual: return formatter<const char*>::format(">=", context);
+      case poutre::CompOpType::CompOpDiff: return formatter<const char *>::format("!=", context);
+      case poutre::CompOpType::CompOpEqual: return formatter<const char *>::format("==", context);
+      case poutre::CompOpType::CompOpInf: return formatter<const char *>::format("<", context);
+      case poutre::CompOpType::CompOpInfEqual: return formatter<const char *>::format("<=", context);
+      case poutre::CompOpType::CompOpSup: return formatter<const char *>::format(">", context);
+      case poutre::CompOpType::CompOpSupEqual: return formatter<const char *>::format(">=", context);
+      default:
+        return formatter<const char *>::format("Unknown", context);
       }
 
       // unreachable

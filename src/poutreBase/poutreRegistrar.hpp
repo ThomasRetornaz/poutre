@@ -57,7 +57,7 @@ namespace poutre
       return instance;
     }
 
-    Registrar(const Registrar &) = delete;
+    Registrar(const Registrar &)            = delete;
     Registrar &operator=(const Registrar &) = delete;
     Registrar(Registrar &&other)            = delete;
     Registrar &operator=(Registrar &&other) = delete;

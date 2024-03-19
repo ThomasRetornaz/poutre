@@ -64,8 +64,8 @@ namespace poutre
       attr.close();
     }
 
-    void CreateAttribute(H5::DataSet &       dataSet,
-                         const std::string & key,
+    void CreateAttribute(H5::DataSet        &dataSet,
+                         const std::string  &key,
                          int                 value,
                          const H5::PredType &type) // NOLINT(misc-unused-parameters)
     {
@@ -142,7 +142,7 @@ namespace poutre
       nativeTypeToAttrStr<T>    str_type;
       auto                      file       = H5::H5File(file_name,
                              H5F_ACC_TRUNC); // H5F_ACC_TRUNC : Overwrite existing files,H5F_ACC_EXCL fail if exist
-      const auto &              dimensions = ImageCoordToHDF5Dim((*im_t).GetCoords());
+      const auto               &dimensions = ImageCoordToHDF5Dim((*im_t).GetCoords());
 
       try
       {

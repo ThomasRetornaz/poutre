@@ -13,6 +13,7 @@
 
 #include <poutreImageProcessingCore/include/poutreImageProcessingContainer.hpp>
 #include <poutreImageProcessingCore/poutreImageProcessingType.hpp>
+
 #include <string>
 
 namespace poutre
@@ -45,8 +46,8 @@ namespace poutre
     return true;
   }
 
-  void AssertSizesCompatible(const IInterface & i_img1,
-                             const IInterface & i_img2,
+  void AssertSizesCompatible(const IInterface  &i_img1,
+                             const IInterface  &i_img2,
                              const std::string &i_msg) // NOLINT(misc-unused-parameters)
   {
     POUTRE_ENTERING("AssertSizesCompatible");
@@ -54,8 +55,8 @@ namespace poutre
       POUTRE_RUNTIME_ERROR(i_msg);
   }
 
-  void AssertAsTypesCompatible(const IInterface & i_img1,
-                               const IInterface & i_img2,
+  void AssertAsTypesCompatible(const IInterface  &i_img1,
+                               const IInterface  &i_img2,
                                const std::string &i_msg) // NOLINT(misc-unused-parameters)
   {
     POUTRE_ENTERING("AssertAsTypesCompatible");
@@ -191,7 +192,7 @@ namespace poutre
     //   }break;
     default:
     {
-      //POUTRE_RUNTIME_ERROR(std::format("Unsupported compound type:{}", ctype));
+      // POUTRE_RUNTIME_ERROR(std::format("Unsupported compound type:{}", ctype));
       return std::unique_ptr<IInterface>();
     }
     }

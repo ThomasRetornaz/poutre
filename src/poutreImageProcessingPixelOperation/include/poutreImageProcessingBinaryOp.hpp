@@ -49,17 +49,17 @@ namespace poutre
            typename = void>
   struct PixelWiseBinaryOpDispatcher
   {
-    static_assert((std::
-                       is_same_v<View1<T1, Rank>,
-                                 strided_array_view<
-                                     T1,
-                                     Rank>> || std::is_same_v<View1<T1, Rank>, strided_array_view<const T1, Rank>> || std::is_same_v<View2<T2, Rank>, strided_array_view<T2, Rank>> || std::is_same_v<View2<T2, Rank>, strided_array_view<const T2, Rank>> || std::is_same_v<ViewOut<Tout, Rank>, strided_array_view<Tout, Rank>>),
+    static_assert((std::is_same_v<View1<T1, Rank>, strided_array_view<T1, Rank>>
+                   || std::is_same_v<View1<T1, Rank>, strided_array_view<const T1, Rank>>
+                   || std::is_same_v<View2<T2, Rank>, strided_array_view<T2, Rank>>
+                   || std::is_same_v<View2<T2, Rank>, strided_array_view<const T2, Rank>>
+                   || std::is_same_v<ViewOut<Tout, Rank>, strided_array_view<Tout, Rank>>),
                   "strided view only specialization fail for arrayview");
 
     void operator()(const View1<T1, Rank> &i_vin1,
-                    const BinOp &          op,
+                    const BinOp           &op,
                     const View2<T2, Rank> &i_vin2,
-                    ViewOut<Tout, Rank> &  o_vout) const POUTRE_NOEXCEPTONLYNDEBUG
+                    ViewOut<Tout, Rank>   &o_vout) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ENTERING("PixelWiseBinaryOpDispatcher generic case");
       // std::cout << "\n" << "call PixelWiseBinaryOpDispatcher strided view";
@@ -111,14 +111,13 @@ namespace poutre
       array_view,
       array_view,
       BinOp,
-      std::enable_if_t<
-          !std::is_same_v<std::remove_const_t<T1>,
-                          std::remove_const_t<T2>> || !std::is_same_v<std::remove_const_t<T2>, std::remove_const_t<Tout>>>>
+      std::enable_if_t<!std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T2>>
+                       || !std::is_same_v<std::remove_const_t<T2>, std::remove_const_t<Tout>>>>
   {
     void operator()(const array_view<T1, Rank> &i_vin1,
-                    const BinOp &               op,
+                    const BinOp                &op,
                     const array_view<T2, Rank> &i_vin2,
-                    array_view<Tout, Rank> &    o_vout) const POUTRE_NOEXCEPTONLYNDEBUG
+                    array_view<Tout, Rank>     &o_vout) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ENTERING("PixelWiseBinaryOpDispatcher both array view != types");
       POUTRE_ASSERTCHECK(i_vin1.size() == i_vin2.size(), "Incompatible views size");
@@ -150,16 +149,13 @@ namespace poutre
       array_view,
       array_view,
       BinOp,
-      std::enable_if_t<
-          std::is_same_v<
-              std::remove_const_t<T1>,
-              std::remove_const_t<
-                  T2>> && std::is_same_v<std::remove_const_t<T2>, std::remove_const_t<Tout>> && std::is_arithmetic_v<T1>>>
+      std::enable_if_t<std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T2>>
+                       && std::is_same_v<std::remove_const_t<T2>, std::remove_const_t<Tout>> && std::is_arithmetic_v<T1>>>
   {
     void operator()(const array_view<T1, Rank> &i_vin1,
-                    const BinOp &               op,
+                    const BinOp                &op,
                     const array_view<T2, Rank> &i_vin2,
-                    array_view<Tout, Rank> &    o_vout) const POUTRE_NOEXCEPTONLYNDEBUG
+                    array_view<Tout, Rank>     &o_vout) const POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ENTERING("PixelWiseBinaryOpDispatcher both array view same types");
       // specialization same type,fall back ptr + SIMD";
@@ -185,9 +181,9 @@ namespace poutre
            class View3,
            class BinOp>
   void PixelWiseBinaryOp(const View1<T1, Rank> &i_vin1,
-                         const BinOp &          op,
+                         const BinOp           &op,
                          const View2<T2, Rank> &i_vin2,
-                         View3<Tout, Rank> &    o_vout) POUTRE_NOEXCEPTONLYNDEBUG
+                         View3<Tout, Rank>     &o_vout) POUTRE_NOEXCEPTONLYNDEBUG
   {
     POUTRE_ASSERTCHECK(i_vin1.size() == i_vin2.size(), "Incompatible views size");
     POUTRE_ASSERTCHECK(o_vout.size() == i_vin2.size(), "Incompatible views size");

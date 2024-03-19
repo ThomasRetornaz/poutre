@@ -142,12 +142,12 @@ namespace poutre
     void operator()(const array_view<T, 2> &i_vin, ptrdiff_t k, array_view<T, 2> &o_vout)
     {
       POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
-      auto   ibd     = i_vin.bound();
+      auto ibd = i_vin.bound();
       // auto   obd     = o_vout.bound();
       // auto   istride = i_vin.stride();
       // auto   ostride = o_vout.stride();
-      scoord ysize   = ibd[0];
-      scoord xsize   = ibd[1];
+      scoord ysize = ibd[0];
+      scoord xsize = ibd[1];
       POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
       POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
       if( xsize == 0 || ysize == 0 )
@@ -223,12 +223,12 @@ namespace poutre
     void operator()(const array_view<T, 2> &i_vin, ptrdiff_t k, array_view<T, 2> &o_vout)
     {
       POUTRE_ASSERTCHECK(i_vin.size() == o_vout.size(), "Incompatible views size");
-      auto   ibd     = i_vin.bound();
+      auto ibd = i_vin.bound();
       // auto   obd     = o_vout.bound();
       // auto   istride = i_vin.stride();
       // auto   ostride = o_vout.stride();
-      scoord ysize   = ibd[0];
-      scoord xsize   = ibd[1];
+      scoord ysize = ibd[0];
+      scoord xsize = ibd[1];
       POUTRE_ASSERTCHECK(ibd == obd, "bound not compatible");
       POUTRE_ASSERTCHECK(istride == ostride, "stride not compatible");
       if( xsize == 0 || ysize == 0 )

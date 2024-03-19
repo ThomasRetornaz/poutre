@@ -52,10 +52,10 @@ namespace poutre
 
     explicit pdense_iterator(DataType *ptr = nullptr, DataType *ptrorig = nullptr) : m_ptr(ptr), m_ptrorig(ptrorig) {}
 
-    pdense_iterator(const self_type &rhs) = default;
+    pdense_iterator(const self_type &rhs)            = default;
     pdense_iterator &operator=(const self_type &rhs) = default;
 
-    pdense_iterator(self_type &&rhs) noexcept = default;
+    pdense_iterator(self_type &&rhs) noexcept            = default;
     pdense_iterator &operator=(self_type &&rhs) noexcept = default;
 
     ~pdense_iterator() {}
@@ -123,7 +123,7 @@ namespace poutre
 
     template<bool _Const = Const> std::enable_if_t<!_Const, pointer> POUTRE_CONSTEXPR operator->() { return m_ptr; }
 
-    POUTRE_CONSTEXPR const offset getOffset() const { return m_ptr - m_ptrorig; }
+    [[nodiscard]] POUTRE_CONSTEXPR offset getOffset() const { return m_ptr - m_ptrorig; }
 
     protected:
     pointer m_ptr;
@@ -150,10 +150,10 @@ namespace poutre
     //  this->m_ptr = rhs.getPtr( ); this->m_ptrorig = rhs.getOrigPtr( );
     //  }
 
-    pdense_reverse_iterator(const pdense_reverse_iterator &rhs) = default;
+    pdense_reverse_iterator(const pdense_reverse_iterator &rhs)                           = default;
     pdense_reverse_iterator &operator=(const pdense_reverse_iterator &rawReverseIterator) = default;
     pdense_reverse_iterator(pdense_reverse_iterator &&rhs) noexcept                       = default;
-    pdense_reverse_iterator &operator=(self_type &&rhs) noexcept = default;
+    pdense_reverse_iterator &operator=(self_type &&rhs) noexcept                          = default;
 
     ~pdense_reverse_iterator() {}
 

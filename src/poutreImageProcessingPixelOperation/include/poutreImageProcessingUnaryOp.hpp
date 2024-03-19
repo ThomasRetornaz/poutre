@@ -51,13 +51,10 @@ namespace poutre
            typename = void>
   struct PixelWiseUnaryOpDispatcher
   {
-    static_assert(
-        (std::is_same_v<
-             ViewIn<TIn, Rank>,
-             strided_array_view<
-                 TIn,
-                 Rank>> || std::is_same_v<ViewIn<TIn, Rank>, strided_array_view<const TIn, Rank>> || std::is_same_v<ViewOut<TOut, Rank>, strided_array_view<TOut, Rank>>),
-        "strided view only specilization fail for arrayview");
+    static_assert((std::is_same_v<ViewIn<TIn, Rank>, strided_array_view<TIn, Rank>>
+                   || std::is_same_v<ViewIn<TIn, Rank>, strided_array_view<const TIn, Rank>>
+                   || std::is_same_v<ViewOut<TOut, Rank>, strided_array_view<TOut, Rank>>),
+                  "strided view only specilization fail for arrayview");
 
     void operator()(const ViewIn<TIn, Rank> &i_vin, UnOp op, ViewOut<TOut, Rank> &o_vout) const POUTRE_NOEXCEPTONLYNDEBUG
     {
@@ -145,8 +142,8 @@ namespace poutre
       POUTRE_ENTERING("PixelWiseUnaryOpDispatcher both array view same types");
       // specialization same type,fall back ptr + SIMD";
 
-      TIn * i_vinbeg  = i_vin.data();
-      TIn * i_vinend  = i_vin.data() + i_vin.size();
+      TIn  *i_vinbeg  = i_vin.data();
+      TIn  *i_vinend  = i_vin.data() + i_vin.size();
       TOut *i_voutbeg = o_vout.data();
       /*
       const auto length    = i_vin.size();
@@ -195,4 +192,3 @@ namespace poutre
 
   //! @} doxygroup: image_processing_linear_group
 } // namespace poutre
-

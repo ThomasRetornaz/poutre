@@ -24,7 +24,7 @@
 #    define BASE_API MODULE_EXPORT
 #    define EXPIMP_TEMPLATE
 #  else
-#    define BASE_API MODULE_IMPORT
+#    define BASE_API        MODULE_IMPORT
 #    define EXPIMP_TEMPLATE extern
 #  endif // POUTRE_DLL_EXPORTS
 #  define BASE_LOCAL MODULE_LOCAL

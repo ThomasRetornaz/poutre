@@ -131,4 +131,3 @@ namespace poutre
   }
   //! @} doxygroup: image_processing_copy_group
 } // namespace poutre
-

@@ -90,7 +90,7 @@ namespace poutre
     }
 
     template<typename T>
-    POUTRE_ALWAYS_INLINE T *t_ReachNextAligned(T *         ptr,
+    POUTRE_ALWAYS_INLINE T *t_ReachNextAligned(T          *ptr,
                                                std::size_t alignment = SIMD_IDEAL_MAX_ALIGN_BYTES) POUTRE_NOEXCEPTONLYNDEBUG
     {
       POUTRE_ASSERTCHECK(((alignment & (alignment - 1)) == 0), "bad alignment value");

@@ -115,10 +115,10 @@ namespace poutre
     PriorityQueue(size_t SizeReserve = 0) : base() { (this->c).reserve(SizeReserve); }
 
     // see this later
-    PriorityQueue(const PriorityQueue &rhs) = delete;
+    PriorityQueue(const PriorityQueue &rhs)            = delete;
     PriorityQueue &operator=(const PriorityQueue &rhs) = delete;
     // see this later
-    PriorityQueue(PriorityQueue &&other) = delete;
+    PriorityQueue(PriorityQueue &&other)            = delete;
     PriorityQueue &operator=(PriorityQueue &&other) = delete;
     ~PriorityQueue() {}
   };
@@ -150,10 +150,10 @@ namespace poutre
     PriorityQueueStable(size_t SizeReserve = 0) : base() { (this->c).reserve(SizeReserve); }
 
     // see this later
-    PriorityQueueStable(const PriorityQueueStable &rhs) = delete;
+    PriorityQueueStable(const PriorityQueueStable &rhs)            = delete;
     PriorityQueueStable &operator=(const PriorityQueueStable &rhs) = delete;
     // see this later
-    PriorityQueueStable(PriorityQueueStable &&other) = delete;
+    PriorityQueueStable(PriorityQueueStable &&other)            = delete;
     PriorityQueueStable &operator=(PriorityQueueStable &&other) = delete;
     ~PriorityQueueStable() {}
   };
@@ -176,10 +176,10 @@ namespace poutre
     {
     }
     // see this later
-    PriorityQueueStable(const PriorityQueueStable &rhs) = delete;
+    PriorityQueueStable(const PriorityQueueStable &rhs)            = delete;
     PriorityQueueStable &operator=(const PriorityQueueStable &rhs) = delete;
     // see this later
-    PriorityQueueStable(PriorityQueueStable &&other) = delete;
+    PriorityQueueStable(PriorityQueueStable &&other)            = delete;
     PriorityQueueStable &operator=(PriorityQueueStable &&other) = delete;
     ~PriorityQueueStable() {}
 
