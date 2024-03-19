@@ -143,10 +143,6 @@ else()
   set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_STATIC_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -O0")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-math-errno")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-trapping-math")
-  check_cxx_compiler_flag("-Werror=format" HAS_WERROR_FORMAT)
-  if(HAS_WERROR_FORMAT)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=format")
-  endif()
 endif()
 
 #test
