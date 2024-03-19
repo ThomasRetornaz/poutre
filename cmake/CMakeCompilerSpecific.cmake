@@ -3,8 +3,8 @@
 #
 
 cmake_minimum_required (VERSION 3.5)
-include(AddCXXCompilerFlag)
-include(CheckCXXCompilerFlag)
+# include(AddCXXCompilerFlag)
+# include(CheckCXXCompilerFlag)
 message(STATUS "host processor " ${CMAKE_HOST_SYSTEM_PROCESSOR} " target processor " ${CMAKE_SYSTEM_PROCESSOR})
 
 # C version setting
@@ -217,12 +217,12 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /LARGEADDRESSAWARE")
   endif()
  
-  if(X86_64)
+  if(CMAKE_SYSTEM_PROCESSOR MATCHES "amd64.*|x86_64.*|AMD64.*|AMD64")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:AVX2")
-  elseif(X86)
+  elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "i686.*|i386.*|x86.*")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
   else()
-    #todo ? AVX612
+    #todo ? AVX512
   endif()
 endif() # MSVC flags
 
@@ -244,9 +244,11 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang") # for Clang and AppleClang
   set(ADDITIONAL_CLANG_FLAGS "${ADDITIONAL_CLANG_FLAGS} -Wno-missing-braces")
   set(ADDITIONAL_CLANG_FLAGS "${ADDITIONAL_CLANG_FLAGS} -Wno-deprecated-declarations")
 
-  if(X86_64)
+  set(ADDITIONAL_CLANG_FLAGS "${ADDITIONAL_CLANG_FLAGS} -Wno-float-conversion")
+
+  if(CMAKE_SYSTEM_PROCESSOR MATCHES "amd64.*|x86_64.*|AMD64.*|AMD64")
     set(ADDITIONAL_CLANG_FLAGS "${ADDITIONAL_CLANG_FLAGS} -mavx2")
-  elseif(X86)
+  elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "i686.*|i386.*|x86.*")
     set(ADDITIONAL_CLANG_FLAGS "${ADDITIONAL_CLANG_FLAGS} -msse2")
   else()
     #todo ? AVX512/NEON/SVE
@@ -284,10 +286,10 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   set(ADDITIONAL_GCC_FLAGS "${ADDITIONAL_GCC_FLAGS} -fno-omit-frame-pointer")
   set(ADDITIONAL_GCC_FLAGS "${ADDITIONAL_GCC_FLAGS} -fdiagnostics-show-option")
 
-  if(X86_64)
-    set(ADDITIONAL_GCC_FLAGS "${ADDITIONAL_GCC_FLAGS} -mavx2")
-  elseif(X86)
-    set(ADDITIONAL_GCC_FLAGS "${ADDITIONAL_GCC_FLAGS} -msse2")
+  if(CMAKE_SYSTEM_PROCESSOR MATCHES "amd64.*|x86_64.*|AMD64.*|AMD64")
+    set(ADDITIONAL_CLANG_FLAGS "${ADDITIONAL_CLANG_FLAGS} -mavx2")
+  elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "i686.*|i386.*|x86.*")
+    set(ADDITIONAL_CLANG_FLAGS "${ADDITIONAL_CLANG_FLAGS} -msse2")
   else()
     #todo ? AVX512/NEON/SVE
   endif()
