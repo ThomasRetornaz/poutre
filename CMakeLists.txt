@@ -94,8 +94,6 @@ set(POUTRE_DOCUMENTATION_INSTALLATION_RELATIVE_PATH   "documentation" CACHE PATH
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 # Compiler specific configurations
-include(AddCompilerFlag)
-include(AddCXXCompilerFlag)
 include(c++-standards)
 include(code-coverage)
 include(formatting)
